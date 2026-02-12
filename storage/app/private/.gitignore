@@ -1,0 +1,5 @@
+*
+!.gitignore
+# Incluir plano maestro y JSON de tenants en el repo (respaldo inicial)
+!tenants/
+!tenants/*.json

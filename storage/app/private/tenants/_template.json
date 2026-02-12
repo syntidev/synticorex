@@ -1,0 +1,54 @@
+{
+    "plan": "basico",
+    "settings": {
+        "nombre_negocio": "Mi Negocio",
+        "color_primario": "#3B82F6",
+        "color_secundario": "#1E40AF",
+        "logo": "",
+        "favicon": ""
+    },
+    "secciones": {
+        "header": {
+            "nombre_sitio": "Mi Negocio",
+            "logo_url": "",
+            "menu": []
+        },
+        "hero_banner": {
+            "titulo": "Bienvenido a tu espacio",
+            "subtitulo": "Texto de ejemplo para el banner principal.",
+            "imagen_fondo": "",
+            "cta_texto": "Ver más",
+            "cta_link": "#servicios"
+        },
+        "acerca": {
+            "titulo": "Acerca de Nosotros",
+            "descripcion": "Descripción de ejemplo.",
+            "imagen": ""
+        },
+        "footer": {
+            "direccion": "",
+            "telefono": "",
+            "email": "",
+            "redes_sociales": {
+                "instagram": "",
+                "facebook": "",
+                "whatsapp": ""
+            }
+        }
+    },
+    "productos": [],
+    "servicios": [
+        {
+            "id": 1,
+            "nombre": "Servicio de ejemplo",
+            "descripcion": "Descripción del servicio.",
+            "icono": "icono-servicio"
+        }
+    ],
+    "faq": [
+        {
+            "pregunta": "¿Pregunta de ejemplo?",
+            "respuesta": "Respuesta de ejemplo."
+        }
+    ]
+}
