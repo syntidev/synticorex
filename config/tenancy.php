@@ -27,5 +27,15 @@ return [
         'syntiweb.com',
         'app.syntiweb.com',
         'tablero.syntiweb.com',
+        'app.syntiweb.test', // Panel en local (Laragon/Valet)
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Dominio del panel (Login, Dashboard, Breeze)
+    |--------------------------------------------------------------------------
+    | Solo este host sirve las rutas de administración; evita duplicar nombres.
+    | En local: app.syntiweb.test | En producción: app.syntiweb.com
+    */
+    'panel_domain' => env('PANEL_DOMAIN', 'app.syntiweb.test'),
 ];

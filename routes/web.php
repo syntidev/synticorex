@@ -1,16 +1,16 @@
 <?php
+// C:\laragon\www\synticorex\routes\web.php
 
-use App\Http\Controllers\LandingController;
 use Illuminate\Support\Facades\Route;
 
-/*
-| Landings: middleware tenant resuelve el tenant por host (central_domains o dominio).
-| Solo se alcanza el controlador si hay un tenant activo; si no, el middleware hace abort(404).
-*/
-Route::middleware('tenant')->group(function (): void {
-    Route::get('/', [LandingController::class, 'show'])->name('landing.show');
-});
+Route::domain('app.synticorex.test')->group(function () {
+    Route::get('/', fn() => redirect()->route('login'));
 
-Route::get('/welcome', function () {
-    return view('welcome');
+    Route::middleware(['auth', 'verified'])->group(function () {
+        Route::get('/dashboard', function () {
+            return view('dashboard'); // Volveremos al dashboard original por ahora
+        })->name('dashboard');
+    });
+
+    require __DIR__ . '/auth.php';
 });
