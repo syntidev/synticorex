@@ -4,22 +4,35 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Plan extends Model
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+
+class User extends Authenticatable
 {
+    use HasFactory, Notifiable;
+
     /**
      * The attributes that are mass assignable.
      *
-     * @var list<string>
+        'name',
+        'email',
+        'email_verified_at',
+        'password',
+        'remember_token',
+    ];
+
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+
+     * @var array<int, string>
      */
-    protected $fillable = [
-        'slug',
-        'nombre',
-        'precio',
-        'limites_json',
-        'default_template',
+    protected $hidden = [
+        'password',
+        'remember_token',
     ];
 
     /**
@@ -30,13 +43,11 @@ class Plan extends Model
     protected function casts(): array
     {
         return [
-            'precio' => 'decimal:2',
-            'limites_json' => 'array',
         ];
     }
 
     /**
-     * Tenants that belong to this plan.
+     * Get the tenants for the user.
      *
      * @return HasMany<Tenant, $this>
      */

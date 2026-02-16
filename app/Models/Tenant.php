@@ -4,25 +4,47 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Tenant extends Model
 {
     /**
      * The attributes that are mass assignable.
      *
-     * @var list<string>
+     * @var array<int, string>
      */
     protected $fillable = [
-        'slug',
-        'nombre',
+        'user_id',
         'plan_id',
-        'dominio',
-        'activo',
-        'visits_count',
-        'template',
+        'subdomain',
+        'base_domain',
+        'custom_domain',
+        'domain_verified',
+        'business_name',
+        'business_segment',
+        'slogan',
+        'description',
+        'phone',
+        'whatsapp_sales',
+        'whatsapp_support',
+        'email',
+        'address',
+        'city',
+        'country',
+        'business_hours',
+        'is_open',
+        'edit_pin',
+        'currency_display',
+        'color_palette_id',
+        'meta_title',
+        'meta_description',
+        'meta_keywords',
+        'status',
+        'trial_ends_at',
+        'subscription_ends_at',
     ];
 
     /**
@@ -33,13 +55,28 @@ class Tenant extends Model
     protected function casts(): array
     {
         return [
-            'activo' => 'boolean',
-            'visits_count' => 'integer',
+            'domain_verified' => 'boolean',
+            'business_hours' => 'array',
+            'is_open' => 'boolean',
+            'trial_ends_at' => 'datetime',
+            'subscription_ends_at' => 'datetime',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
         ];
     }
 
     /**
-     * Plan that the tenant belongs to.
+     * Get the user that owns the tenant.
+     *
+     * @return BelongsTo<User, $this>
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get the plan that the tenant belongs to.
      *
      * @return BelongsTo<Plan, $this>
      */
@@ -49,13 +86,62 @@ class Tenant extends Model
     }
 
     /**
-     * Scope: only active tenants.
+     * Get the color palette that the tenant uses.
      *
-     * @param  Builder<Tenant>  $query
-     * @return Builder<Tenant>
+     * @return BelongsTo<ColorPalette, $this>
      */
-    public function scopeActivo(Builder $query): Builder
+    public function colorPalette(): BelongsTo
     {
-        return $query->where('activo', true);
+        return $this->belongsTo(ColorPalette::class);
+    }
+
+    /**
+     * Get the products for the tenant.
+     *
+     * @return HasMany<Product, $this>
+     */
+    public function products(): HasMany
+    {
+        return $this->hasMany(Product::class);
+    }
+
+    /**
+     * Get the services for the tenant.
+     *
+     * @return HasMany<Service, $this>
+     */
+    public function services(): HasMany
+    {
+        return $this->hasMany(Service::class);
+    }
+
+    /**
+     * Get the analytics events for the tenant.
+     *
+     * @return HasMany<AnalyticsEvent, $this>
+     */
+    public function analyticsEvents(): HasMany
+    {
+        return $this->hasMany(AnalyticsEvent::class);
+    }
+
+    /**
+     * Get the invoices for the tenant.
+     *
+     * @return HasMany<Invoice, $this>
+     */
+    public function invoices(): HasMany
+    {
+        return $this->hasMany(Invoice::class);
+    }
+
+    /**
+     * Get the customization for the tenant.
+     *
+     * @return HasOne<TenantCustomization, $this>
+     */
+    public function customization(): HasOne
+    {
+        return $this->hasOne(TenantCustomization::class);
     }
 }

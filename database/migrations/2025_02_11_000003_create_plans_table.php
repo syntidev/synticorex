@@ -15,11 +15,33 @@ return new class extends Migration
     {
         Schema::create('plans', function (Blueprint $table) {
             $table->id();
-            $table->string('slug', 32)->unique();
-            $table->string('nombre', 64);
-            $table->decimal('precio', 10, 2)->unsigned()->default(0);
-            $table->json('limites_json')->nullable();
-            $table->string('default_template', 64)->nullable();
+            $table->string('slug', 32)->unique()->index();
+            $table->string('name', 64);
+            $table->decimal('price_usd', 10, 2)->unsigned();
+            
+            // Límites de productos y servicios
+            $table->unsignedSmallInteger('products_limit')->default(6);
+            $table->unsignedSmallInteger('services_limit')->default(4);
+            $table->unsignedTinyInteger('images_limit')->default(10);
+            $table->unsignedTinyInteger('color_palettes')->default(5);
+            $table->unsignedTinyInteger('social_networks_limit')->nullable(); // ✅ NULLABLE
+            
+            // Features booleanas
+            $table->boolean('show_dollar_rate')->default(false);
+            $table->boolean('show_header_top')->default(false);
+            $table->boolean('show_about_section')->default(false);
+            $table->boolean('show_payment_methods')->default(false);
+            $table->boolean('show_faq')->default(false);
+            $table->boolean('show_cta_special')->default(false);
+            
+            // Niveles de analytics y SEO
+            $table->enum('analytics_level', ['basic', 'medium', 'advanced'])->default('basic');
+            $table->enum('seo_level', ['basic', 'medium', 'advanced'])->default('basic');
+            
+            // Límites de WhatsApp
+            $table->unsignedTinyInteger('whatsapp_numbers')->default(1);
+            $table->boolean('whatsapp_hour_filter')->default(false);
+            
             $table->timestamps();
         });
     }
