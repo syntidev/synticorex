@@ -37,7 +37,7 @@ class DollarRate extends Model
     protected function casts(): array
     {
         return [
-            'rate' => 'decimal:2',
+            'rate' => 'decimal:4',
             'effective_from' => 'datetime',
             'effective_until' => 'datetime',
             'is_active' => 'boolean',

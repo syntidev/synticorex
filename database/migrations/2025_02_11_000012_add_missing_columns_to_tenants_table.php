@@ -59,6 +59,7 @@ return new class extends Migration
             $table->string('status', 20)->default('active')->after('meta_keywords'); // 'active', 'suspended', 'cancelled'
             $table->timestamp('trial_ends_at')->nullable()->after('status');
             $table->timestamp('subscription_ends_at')->nullable()->after('trial_ends_at');
+            $table->json('settings')->nullable()->after('subscription_ends_at');
             
             // Índices adicionales
             $table->index(['subdomain', 'base_domain']);
@@ -128,6 +129,7 @@ return new class extends Migration
                 'status',
                 'trial_ends_at',
                 'subscription_ends_at',
+                'settings',
             ]);
         });
     }

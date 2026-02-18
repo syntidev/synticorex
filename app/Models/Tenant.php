@@ -45,6 +45,7 @@ class Tenant extends Model
         'status',
         'trial_ends_at',
         'subscription_ends_at',
+        'settings',
     ];
 
     /**
@@ -57,6 +58,7 @@ class Tenant extends Model
         return [
             'domain_verified' => 'boolean',
             'business_hours' => 'array',
+            'settings' => 'array',
             'is_open' => 'boolean',
             'trial_ends_at' => 'datetime',
             'subscription_ends_at' => 'datetime',
