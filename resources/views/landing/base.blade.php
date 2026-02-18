@@ -23,17 +23,49 @@
     
     {{-- Theme Colors CSS Variables --}}
     <style>
-        :root {
-            --color-primary: {{ $themeColors['primary'] }};
-            --color-secondary: {{ $themeColors['secondary'] }};
-            --color-accent: {{ $themeColors['accent'] }};
-            --color-background: {{ $themeColors['background'] }};
-            --color-text: {{ $themeColors['text'] }};
-            --color-header-bg: {{ $themeColors['header_bg'] }};
-            --color-footer-bg: {{ $themeColors['footer_bg'] }};
-            --color-button-bg: {{ $themeColors['button_bg'] }};
-            --color-button-text: {{ $themeColors['button_text'] }};
-        }
+:root {
+    --color-primary: {{ $colors['primary'] }};
+    --color-secondary: {{ $colors['secondary'] }};
+    --color-accent: {{ $colors['accent'] }};
+    --color-text: {{ $colors['text'] }};
+    --color-text-muted: {{ $colors['textMuted'] }};
+    --color-bg: {{ $colors['background'] }};
+    --color-bg-alt: {{ $colors['backgroundAlt'] }};
+    --color-button-bg: {{ $colors['buttonBg'] }};
+    --color-button-text: {{ $colors['buttonText'] }};
+    --color-button-hover: {{ $colors['buttonHoverBg'] }};
+    --color-link: {{ $colors['linkColor'] }};
+    --color-link-hover: {{ $colors['linkHover'] }};
+    --font-heading: '{{ $fonts['heading'] }}', sans-serif;
+    --font-body: '{{ $fonts['body'] }}', sans-serif;
+}
+
+body {
+    font-family: var(--font-body);
+    color: var(--color-text);
+    background-color: var(--color-bg);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+}
+
+.btn-primary {
+    background-color: var(--color-button-bg);
+    color: var(--color-button-text);
+}
+
+.btn-primary:hover {
+    background-color: var(--color-button-hover);
+}
+
+a {
+    color: var(--color-link);
+}
+
+a:hover {
+    color: var(--color-link-hover);
+}
     </style>
     
     {{-- Tailwind CSS (CDN for demo, replace with compiled in production) --}}
@@ -42,7 +74,7 @@
     {{-- Custom Styles --}}
     @stack('styles')
 </head>
-<body class="min-h-screen" style="background-color: var(--color-background); color: var(--color-text);">
+<body class="min-h-screen" style="background-color: var(--color-bg); color: var(--color-text);">
     
     {{-- Preview Banner --}}
     @isset($isPreview)

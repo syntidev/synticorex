@@ -60,40 +60,73 @@ class TenantRendererController extends Controller
                 return $this->render404($subdomain);
             }
 
+            $plan = $tenant->plan;
+
+            // Obtener paleta de colores
+            $paletteCode = data_get($tenant->settings, 'engine_settings.visual.theme.palette_code', 'energia-roja');
+            $palette = \App\Models\ColorPalette::where('code', $paletteCode)->first();
+
+            if (!$palette) {
+                $palette = \App\Models\ColorPalette::where('code', 'energia-roja')->first();
+            }
+
+            $colors = [
+                'primary' => $palette->primary_color,
+                'secondary' => $palette->secondary_color,
+                'accent' => $palette->accent_color,
+                'text' => $palette->text_color,
+                'textMuted' => $palette->text_muted,
+                'background' => $palette->background_color,
+                'backgroundAlt' => $palette->background_alt,
+                'buttonBg' => $palette->button_bg,
+                'buttonText' => $palette->button_text,
+                'buttonHoverBg' => $palette->button_hover_bg,
+                'linkColor' => $palette->link_color,
+                'linkHover' => $palette->link_hover,
+            ];
+
+            $fonts = [
+                'heading' => $palette->font_primary ?? 'Inter',
+                'body' => $palette->font_secondary ?? 'Inter',
+            ];
+
             // Get current dollar rate
             $dollarRate = $this->dollarRateService->getCurrentRate() ?? $this->getDefaultRate($tenant);
 
             // Calculate price_bs for each product
             $products = $this->calculateProductPrices($tenant->products, $dollarRate);
 
-            // Extract theme colors from settings
-            $themeColors = $this->extractThemeColors($tenant);
-
-            // Extract currency display settings
-            $currencySettings = $this->extractCurrencySettings($tenant);
-
-            // Build view data
-            $viewData = [
-                'tenant' => $tenant,
-                'products' => $products,
-                'services' => $tenant->services,
-                'dollarRate' => $dollarRate,
-                'themeColors' => $themeColors,
-                'currencySettings' => $currencySettings,
-                'plan' => $tenant->plan,
-                'customization' => $tenant->customization,
-                'colorPalette' => $tenant->colorPalette,
-                'meta' => $this->buildMetaTags($tenant),
-            ];
+            // Extract services
+            $services = $tenant->services;
 
             Log::info('TenantRendererController: Rendering landing page', [
                 'subdomain' => $subdomain,
                 'tenant_id' => $tenant->id,
                 'products_count' => $products->count(),
-                'services_count' => $tenant->services->count(),
+                'services_count' => $services->count(),
             ]);
 
-            return view('landing.base', $viewData);
+            $meta = [
+                'title' => $tenant->meta_title ?? $tenant->business_name,
+                'description' => $tenant->meta_description ?? $tenant->description,
+                'keywords' => $tenant->meta_keywords ?? '',
+                'canonical' => url('/' . $tenant->subdomain),
+                'og_title' => $tenant->meta_title ?? $tenant->business_name,
+                'og_description' => $tenant->meta_description ?? $tenant->description,
+                'og_image' => $tenant->logo_url ?? asset('images/default-og.jpg'),
+                'og_url' => url('/' . $tenant->subdomain),
+            ];
+
+            $customization = $tenant->customization;
+
+            $currencySettings = [
+                'show_conversion_button' => data_get($tenant->settings, 'engine_settings.currency.display.show_conversion_button', true),
+                'mode' => data_get($tenant->settings, 'engine_settings.currency.display.mode', 'toggle'),
+                'default_currency' => data_get($tenant->settings, 'engine_settings.currency.display.default_currency', 'REF'),
+                'symbols' => data_get($tenant->settings, 'engine_settings.currency.display.symbols', ['reference' => 'REF', 'bolivares' => 'Bs.']),
+            ];
+
+            return view('landing.base', compact('tenant', 'plan', 'products', 'services', 'dollarRate', 'colors', 'fonts', 'meta', 'customization', 'currencySettings'));
         } catch (Throwable $e) {
             Log::error('TenantRendererController: Error rendering landing page', [
                 'subdomain' => $subdomain,
