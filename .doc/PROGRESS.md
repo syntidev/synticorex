@@ -16,7 +16,7 @@
 
 ---
 
-## SEMANA 1 (50% - 8/13 tareas)
+## SEMANA 1 (63% - 9/13 tareas)
 
 ### ✅ Completadas:
 - [x] Laravel 12 + Git
@@ -29,7 +29,7 @@
 - [x] Dashboard progreso (PHP)
 
 ### ⏳ Pendientes:
-- [ ] DollarRateService
+- [x] DollarRateService
 - [ ] TenantContentService
 - [ ] Middleware IdentifyTenant
 - [ ] Routes básicas
