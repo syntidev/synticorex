@@ -10,6 +10,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class TenantCustomization extends Model
 {
     /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'tenant_customization';
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>

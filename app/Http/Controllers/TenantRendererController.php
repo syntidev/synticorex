@@ -1,0 +1,380 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Http\Controllers;
+
+use App\Models\Tenant;
+use App\Services\DollarRateService;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
+use Throwable;
+
+class TenantRendererController extends Controller
+{
+    /**
+     * @param DollarRateService $dollarRateService
+     */
+    public function __construct(
+        private readonly DollarRateService $dollarRateService
+    ) {}
+
+    /**
+     * Render tenant landing page by subdomain.
+     *
+     * @param string $subdomain
+     * @return View|Response|JsonResponse
+     */
+    public function show(string $subdomain): View|Response|JsonResponse
+    {
+        try {
+            // Normalize subdomain
+            $subdomain = strtolower(trim($subdomain));
+
+            // Find tenant by subdomain
+            $tenant = Tenant::with([
+                'plan',
+                'colorPalette',
+                'customization',
+                'products' => fn($q) => $q
+                    ->where('is_active', true)
+                    ->orderBy('position')
+                    ->orderByDesc('created_at'),
+                'services' => fn($q) => $q
+                    ->where('is_active', true)
+                    ->orderBy('position')
+                    ->orderByDesc('created_at'),
+            ])
+            ->where('subdomain', $subdomain)
+            ->where('status', 'active')
+            ->first();
+
+            // Tenant not found or inactive
+            if ($tenant === null) {
+                Log::debug('TenantRendererController: Tenant not found', [
+                    'subdomain' => $subdomain,
+                ]);
+
+                return $this->render404($subdomain);
+            }
+
+            // Get current dollar rate
+            $dollarRate = $this->dollarRateService->getCurrentRate() ?? $this->getDefaultRate($tenant);
+
+            // Calculate price_bs for each product
+            $products = $this->calculateProductPrices($tenant->products, $dollarRate);
+
+            // Extract theme colors from settings
+            $themeColors = $this->extractThemeColors($tenant);
+
+            // Extract currency display settings
+            $currencySettings = $this->extractCurrencySettings($tenant);
+
+            // Build view data
+            $viewData = [
+                'tenant' => $tenant,
+                'products' => $products,
+                'services' => $tenant->services,
+                'dollarRate' => $dollarRate,
+                'themeColors' => $themeColors,
+                'currencySettings' => $currencySettings,
+                'plan' => $tenant->plan,
+                'customization' => $tenant->customization,
+                'colorPalette' => $tenant->colorPalette,
+                'meta' => $this->buildMetaTags($tenant),
+            ];
+
+            Log::info('TenantRendererController: Rendering landing page', [
+                'subdomain' => $subdomain,
+                'tenant_id' => $tenant->id,
+                'products_count' => $products->count(),
+                'services_count' => $tenant->services->count(),
+            ]);
+
+            return view('landing.base', $viewData);
+        } catch (Throwable $e) {
+            Log::error('TenantRendererController: Error rendering landing page', [
+                'subdomain' => $subdomain,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            return $this->renderError($e->getMessage());
+        }
+    }
+
+    /**
+     * Render tenant by custom domain.
+     *
+     * @param string $domain
+     * @return View|Response|JsonResponse
+     */
+    public function showByDomain(string $domain): View|Response|JsonResponse
+    {
+        try {
+            $domain = strtolower(trim($domain));
+
+            $tenant = Tenant::with([
+                'plan',
+                'colorPalette',
+                'customization',
+                'products' => fn($q) => $q
+                    ->where('is_active', true)
+                    ->orderBy('position'),
+                'services' => fn($q) => $q
+                    ->where('is_active', true)
+                    ->orderBy('position'),
+            ])
+            ->where('custom_domain', $domain)
+            ->where('domain_verified', true)
+            ->where('status', 'active')
+            ->first();
+
+            if ($tenant === null) {
+                Log::debug('TenantRendererController: Tenant not found by domain', [
+                    'domain' => $domain,
+                ]);
+
+                return $this->render404($domain);
+            }
+
+            // Reuse show logic
+            $dollarRate = $this->dollarRateService->getCurrentRate() ?? $this->getDefaultRate($tenant);
+            $products = $this->calculateProductPrices($tenant->products, $dollarRate);
+            $themeColors = $this->extractThemeColors($tenant);
+            $currencySettings = $this->extractCurrencySettings($tenant);
+
+            $viewData = [
+                'tenant' => $tenant,
+                'products' => $products,
+                'services' => $tenant->services,
+                'dollarRate' => $dollarRate,
+                'themeColors' => $themeColors,
+                'currencySettings' => $currencySettings,
+                'plan' => $tenant->plan,
+                'customization' => $tenant->customization,
+                'colorPalette' => $tenant->colorPalette,
+                'meta' => $this->buildMetaTags($tenant),
+            ];
+
+            Log::info('TenantRendererController: Rendering by custom domain', [
+                'domain' => $domain,
+                'tenant_id' => $tenant->id,
+            ]);
+
+            return view('landing.base', $viewData);
+        } catch (Throwable $e) {
+            Log::error('TenantRendererController: Error rendering by domain', [
+                'domain' => $domain,
+                'error' => $e->getMessage(),
+            ]);
+
+            return $this->renderError($e->getMessage());
+        }
+    }
+
+    /**
+     * Preview tenant (for admin/owner).
+     *
+     * @param int $tenantId
+     * @return View|Response|JsonResponse
+     */
+    public function preview(int $tenantId): View|Response|JsonResponse
+    {
+        try {
+            $tenant = Tenant::with([
+                'plan',
+                'colorPalette',
+                'customization',
+                'products' => fn($q) => $q->orderBy('position'),
+                'services' => fn($q) => $q->orderBy('position'),
+            ])->find($tenantId);
+
+            if ($tenant === null) {
+                return $this->render404("Tenant #{$tenantId}");
+            }
+
+            $dollarRate = $this->dollarRateService->getCurrentRate() ?? $this->getDefaultRate($tenant);
+            $products = $this->calculateProductPrices($tenant->products, $dollarRate);
+            $themeColors = $this->extractThemeColors($tenant);
+            $currencySettings = $this->extractCurrencySettings($tenant);
+
+            $viewData = [
+                'tenant' => $tenant,
+                'products' => $products,
+                'services' => $tenant->services,
+                'dollarRate' => $dollarRate,
+                'themeColors' => $themeColors,
+                'currencySettings' => $currencySettings,
+                'plan' => $tenant->plan,
+                'customization' => $tenant->customization,
+                'colorPalette' => $tenant->colorPalette,
+                'meta' => $this->buildMetaTags($tenant),
+                'isPreview' => true,
+            ];
+
+            Log::debug('TenantRendererController: Preview mode', [
+                'tenant_id' => $tenantId,
+            ]);
+
+            return view('landing.base', $viewData);
+        } catch (Throwable $e) {
+            Log::error('TenantRendererController: Error in preview', [
+                'tenant_id' => $tenantId,
+                'error' => $e->getMessage(),
+            ]);
+
+            return $this->renderError($e->getMessage());
+        }
+    }
+
+    /**
+     * Calculate price_bs for each product.
+     *
+     * @param \Illuminate\Database\Eloquent\Collection $products
+     * @param float $dollarRate
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    private function calculateProductPrices($products, float $dollarRate)
+    {
+        return $products->map(function ($product) use ($dollarRate) {
+            $product->price_bs_calculated = $product->price_usd
+                ? round((float) $product->price_usd * $dollarRate, 2)
+                : null;
+            $product->exchange_rate = $dollarRate;
+            return $product;
+        });
+    }
+
+    /**
+     * Extract theme colors from tenant settings or color palette.
+     *
+     * @param Tenant $tenant
+     * @return array
+     */
+    private function extractThemeColors(Tenant $tenant): array
+    {
+        $settings = $tenant->settings ?? [];
+        $palette = $tenant->colorPalette;
+
+        // Try to get from settings first
+        $visualSettings = data_get($settings, 'engine_settings.visual', []);
+
+        // Fallback to color palette
+        return [
+            'primary' => $visualSettings['primary_color'] ?? $palette?->primary_color ?? '#0066CC',
+            'secondary' => $visualSettings['secondary_color'] ?? $palette?->secondary_color ?? '#FFFFFF',
+            'accent' => $visualSettings['accent_color'] ?? $palette?->accent_color ?? '#FF6600',
+            'background' => $visualSettings['background_color'] ?? $palette?->background_color ?? '#FFFFFF',
+            'text' => $visualSettings['text_color'] ?? $palette?->text_color ?? '#000000',
+            'header_bg' => $visualSettings['header_bg'] ?? $palette?->primary_color ?? '#0066CC',
+            'footer_bg' => $visualSettings['footer_bg'] ?? '#1a1a1a',
+            'button_bg' => $visualSettings['button_bg'] ?? $palette?->primary_color ?? '#0066CC',
+            'button_text' => $visualSettings['button_text'] ?? '#FFFFFF',
+        ];
+    }
+
+    /**
+     * Extract currency display settings.
+     *
+     * @param Tenant $tenant
+     * @return array
+     */
+    private function extractCurrencySettings(Tenant $tenant): array
+    {
+        $settings = $tenant->settings ?? [];
+        $currencyConfig = data_get($settings, 'engine_settings.currency', []);
+        $displayConfig = data_get($currencyConfig, 'display', []);
+
+        return [
+            'mode' => $displayConfig['mode'] ?? 'toggle',
+            'default_currency' => $displayConfig['default_currency'] ?? 'REF',
+            'show_conversion_button' => $displayConfig['show_conversion_button'] ?? true,
+            'symbols' => [
+                'reference' => $displayConfig['symbols']['reference'] ?? 'REF',
+                'bolivares' => $displayConfig['symbols']['bolivares'] ?? 'Bs.',
+            ],
+            'decimals' => $displayConfig['decimals'] ?? 2,
+            'exchange_rate' => $currencyConfig['exchange_rate'] ?? null,
+            'last_update' => $currencyConfig['last_update'] ?? null,
+        ];
+    }
+
+    /**
+     * Build meta tags for SEO.
+     *
+     * @param Tenant $tenant
+     * @return array
+     */
+    private function buildMetaTags(Tenant $tenant): array
+    {
+        $businessName = $tenant->business_name;
+
+        return [
+            'title' => $tenant->meta_title ?? $businessName,
+            'description' => $tenant->meta_description ?? $tenant->description ?? "Bienvenido a {$businessName}",
+            'keywords' => $tenant->meta_keywords ?? $tenant->business_segment ?? '',
+            'og_title' => $tenant->meta_title ?? $businessName,
+            'og_description' => $tenant->meta_description ?? $tenant->slogan ?? '',
+            'og_image' => $tenant->customization?->hero_filename ?? null,
+            'canonical' => $this->buildCanonicalUrl($tenant),
+        ];
+    }
+
+    /**
+     * Build canonical URL for tenant.
+     *
+     * @param Tenant $tenant
+     * @return string
+     */
+    private function buildCanonicalUrl(Tenant $tenant): string
+    {
+        if ($tenant->custom_domain && $tenant->domain_verified) {
+            return "https://{$tenant->custom_domain}";
+        }
+
+        $baseDomain = $tenant->base_domain ?? 'menu.vip';
+        return "https://{$tenant->subdomain}.{$baseDomain}";
+    }
+
+    /**
+     * Get default exchange rate from tenant settings.
+     *
+     * @param Tenant $tenant
+     * @return float
+     */
+    private function getDefaultRate(Tenant $tenant): float
+    {
+        $settings = $tenant->settings ?? [];
+        return (float) data_get($settings, 'engine_settings.currency.exchange_rate', 36.50);
+    }
+
+    /**
+     * Render 404 page.
+     *
+     * @param string $identifier
+     * @return Response
+     */
+    private function render404(string $identifier): Response
+    {
+        return response()->view('errors.tenant-not-found', [
+            'identifier' => $identifier,
+        ], 404);
+    }
+
+    /**
+     * Render error page.
+     *
+     * @param string $message
+     * @return JsonResponse
+     */
+    private function renderError(string $message = 'Server Error'): JsonResponse
+    {
+        return response()->json([
+            'error' => $message,
+            'tenant' => 'Error loading tenant'
+        ], 500);
+    }
+}
