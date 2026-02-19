@@ -38,3 +38,13 @@ Route::post('/tenant/{tenantId}/toggle-status', [TenantRendererController::class
 // Tenant dashboard
 Route::get('/tenant/{tenantId}/dashboard',      [DashboardController::class, 'index']);
 Route::post('/tenant/{tenantId}/update-info',   [DashboardController::class, 'updateInfo']);
+
+// Products CRUD
+Route::post('/tenant/{tenantId}/products',          [DashboardController::class, 'createProduct']);
+Route::put('/tenant/{tenantId}/products/{productId}', [DashboardController::class, 'updateProduct']);
+Route::delete('/tenant/{tenantId}/products/{productId}', [DashboardController::class, 'deleteProduct']);
+
+// Services CRUD
+Route::post('/tenant/{tenantId}/services',          [DashboardController::class, 'createService']);
+Route::put('/tenant/{tenantId}/services/{serviceId}', [DashboardController::class, 'updateService']);
+Route::delete('/tenant/{tenantId}/services/{serviceId}', [DashboardController::class, 'deleteService']);
