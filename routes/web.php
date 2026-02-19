@@ -29,3 +29,7 @@ Route::prefix('tenant/{tenantId}/upload')->group(function () {
     Route::post('/product/{productId}',     [ImageUploadController::class, 'uploadProduct']);
     Route::post('/service/{serviceId}',     [ImageUploadController::class, 'uploadService']);
 });
+
+// Tenant panel actions
+Route::post('/tenant/{tenantId}/verify-pin',    [TenantRendererController::class, 'verifyPin']);
+Route::post('/tenant/{tenantId}/toggle-status', [TenantRendererController::class, 'toggleStatus']);

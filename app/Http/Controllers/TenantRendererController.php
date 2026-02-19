@@ -8,7 +8,9 @@ use App\Models\Tenant;
 use App\Services\DollarRateService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Throwable;
 
@@ -457,5 +459,69 @@ class TenantRendererController extends Controller
             'error' => $message,
             'tenant' => 'Error loading tenant'
         ], 500);
+    }
+
+    /**
+     * Verify tenant PIN.
+     *
+     * @param Request $request
+     * @param int $tenantId
+     * @return JsonResponse
+     */
+    public function verifyPin(Request $request, int $tenantId): JsonResponse
+    {
+        try {
+            // Find tenant and verify status
+            $tenant = Tenant::where('id', $tenantId)
+                ->where('status', 'active')
+                ->firstOrFail();
+
+            // Get PIN from request
+            $pin = $request->input('pin');
+
+            // Verify PIN
+            if (Hash::check($pin, $tenant->edit_pin)) {
+                return response()->json(['success' => true]);
+            }
+
+            return response()->json([
+                'success' => false,
+                'message' => 'PIN incorrecto'
+            ], 401);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al verificar PIN'
+            ], 500);
+        }
+    }
+
+    /**
+     * Toggle tenant open/closed status.
+     *
+     * @param Request $request
+     * @param int $tenantId
+     * @return JsonResponse
+     */
+    public function toggleStatus(Request $request, int $tenantId): JsonResponse
+    {
+        try {
+            // Find tenant
+            $tenant = Tenant::findOrFail($tenantId);
+
+            // Toggle status
+            $tenant->is_open = !$tenant->is_open;
+            $tenant->save();
+
+            return response()->json([
+                'success' => true,
+                'is_open' => $tenant->is_open
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al cambiar estado'
+            ], 500);
+        }
     }
 }

@@ -34,12 +34,12 @@
             {{-- Open/Closed Badge --}}
             <div class="flex items-center">
                 @if($tenant->is_open)
-                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-500 text-white">
+                    <span id="open-status-badge" class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-500 text-white">
                         <span class="w-2 h-2 bg-white rounded-full mr-2 animate-pulse"></span>
                         Abierto
                     </span>
                 @else
-                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-500 text-white">
+                    <span id="open-status-badge" class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-500 text-white">
                         Cerrado
                     </span>
                 @endif
