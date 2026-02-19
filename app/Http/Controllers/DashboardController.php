@@ -7,6 +7,8 @@ namespace App\Http\Controllers;
 use App\Models\Tenant;
 use App\Services\DollarRateService;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class DashboardController extends Controller
@@ -63,6 +65,49 @@ class DashboardController extends Controller
             ));
         } catch (\Exception $e) {
             return response()->view('errors.404', [], 404);
+        }
+    }
+
+    /**
+     * Update tenant information.
+     *
+     * @param Request $request
+     * @param int $tenantId
+     * @return JsonResponse
+     */
+    public function updateInfo(Request $request, int $tenantId): JsonResponse
+    {
+        try {
+            // Find tenant and verify status
+            $tenant = Tenant::where('id', $tenantId)
+                ->where('status', 'active')
+                ->firstOrFail();
+
+            // Validate input
+            $validated = $request->validate([
+                'business_name' => 'required|string|max:255',
+                'slogan' => 'nullable|string|max:255',
+                'phone' => 'nullable|string|max:20',
+                'whatsapp_sales' => 'nullable|string|max:20',
+                'email' => 'nullable|email|max:255',
+                'address' => 'nullable|string|max:255',
+                'city' => 'nullable|string|max:100',
+                'description' => 'nullable|string|max:500',
+                'is_open' => 'nullable|boolean',
+            ]);
+
+            // Update tenant
+            $tenant->update($validated);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Información actualizada'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al actualizar información: ' . $e->getMessage()
+            ], 422);
         }
     }
 }

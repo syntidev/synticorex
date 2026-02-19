@@ -37,3 +37,4 @@ Route::post('/tenant/{tenantId}/toggle-status', [TenantRendererController::class
 
 // Tenant dashboard
 Route::get('/tenant/{tenantId}/dashboard',      [DashboardController::class, 'index']);
+Route::post('/tenant/{tenantId}/update-info',   [DashboardController::class, 'updateInfo']);
