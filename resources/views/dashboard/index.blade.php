@@ -1027,9 +1027,87 @@
 
         <!-- Tab: Analytics -->
         <div id="tab-analytics" class="tab-content">
-            <div class="placeholder-content">
-                <h3>🚧 Módulo de Analytics</h3>
-                <p>En construcción...</p>
+            <!-- Sección: El Radar -->
+            <div class="form-section">
+                <h2 class="table-title">📊 El Radar</h2>
+                <p class="table-subtitle" style="margin-bottom: 24px;">Métricas básicas de tu negocio</p>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 32px;">
+                    <!-- KPI: Visitas hoy -->
+                    <div style="background: #0f1c32; border-radius: 12px; padding: 20px; text-align: center;">
+                        <div style="font-size: 36px; font-weight: 700; color: #2B6FFF; margin-bottom: 8px;">0</div>
+                        <div style="font-size: 13px; color: rgba(255,255,255,0.6);">Visitas hoy</div>
+                    </div>
+
+                    <!-- KPI: Clicks WhatsApp -->
+                    <div style="background: #0f1c32; border-radius: 12px; padding: 20px; text-align: center;">
+                        <div style="font-size: 36px; font-weight: 700; color: #2B6FFF; margin-bottom: 8px;">0</div>
+                        <div style="font-size: 13px; color: rgba(255,255,255,0.6);">Clicks WhatsApp</div>
+                    </div>
+
+                    <!-- KPI: Escaneos QR -->
+                    <div style="background: #0f1c32; border-radius: 12px; padding: 20px; text-align: center;">
+                        <div style="font-size: 36px; font-weight: 700; color: #2B6FFF; margin-bottom: 8px;">0</div>
+                        <div style="font-size: 13px; color: rgba(255,255,255,0.6);">Escaneos QR</div>
+                    </div>
+
+                    <!-- KPI: Productos vistos -->
+                    <div style="background: #0f1c32; border-radius: 12px; padding: 20px; text-align: center;">
+                        <div style="font-size: 36px; font-weight: 700; color: #2B6FFF; margin-bottom: 8px;">0</div>
+                        <div style="font-size: 13px; color: rgba(255,255,255,0.6);">Productos vistos</div>
+                    </div>
+                </div>
+
+                <!-- Nota informativa -->
+                <div style="background: rgba(43, 111, 255, 0.1); border-left: 3px solid #2B6FFF; padding: 16px; border-radius: 8px; margin-bottom: 32px;">
+                    <p style="font-size: 14px; color: rgba(255,255,255,0.8); margin: 0;">
+                        ℹ️ El sistema de analítica detallada estará disponible próximamente. Por ahora puedes ver el pulso básico en tu panel flotante.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Sección: Herramientas -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px;">
+                <!-- Card: Tasa del Dólar -->
+                <div style="background: #0f1c32; border-radius: 12px; padding: 24px;">
+                    <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 16px;">💵 Tasa del Dólar</h3>
+                    
+                    <div style="background: #07101F; border-radius: 8px; padding: 20px; text-align: center; margin-bottom: 16px;">
+                        <div style="font-size: 28px; font-weight: 700; color: #2B6FFF; margin-bottom: 4px;">
+                            Bs. <span id="dollar-rate-value">{{ $dollarRate }}</span>
+                        </div>
+                        <div style="font-size: 12px; color: rgba(255,255,255,0.5);">por 1 USD</div>
+                    </div>
+
+                    <button onclick="updateDollarRate()" class="btn-primary" style="width: 100%;">
+                        🔄 Actualizar
+                    </button>
+                </div>
+
+                <!-- Card: Estado actual -->
+                <div style="background: #0f1c32; border-radius: 12px; padding: 24px;">
+                    <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 16px;">🔴 Estado actual</h3>
+                    
+                    <div style="background: #07101F; border-radius: 8px; padding: 20px; text-align: center;">
+                        <div style="margin-bottom: 16px;">
+                            <label class="toggle-switch" style="display: inline-block;">
+                                <input 
+                                    type="checkbox" 
+                                    id="status-toggle-large"
+                                    {{ $tenant->is_open ? 'checked' : '' }}
+                                    onchange="toggleBusinessStatusLarge()">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div style="font-size: 14px; color: rgba(255,255,255,0.7);">
+                            Actualmente: 
+                            <span style="color: #00cc66; font-weight: 600;">
+                                {{ $tenant->is_open ? '🟢 Abierto' : '🔴 Cerrado' }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -1510,6 +1588,60 @@
             } catch (error) {
                 console.error('Error:', error);
                 alert('✗ Error al subir la imagen hero');
+            }
+        }
+
+        // Analytics Tab: Update Dollar Rate
+        async function updateDollarRate() {
+            try {
+                const response = await fetch('/api/dollar-rate');
+                const result = await response.json();
+
+                if (result.success && result.rate) {
+                    // Actualizar el valor en pantalla
+                    document.getElementById('dollar-rate-value').textContent = result.rate.toFixed(2);
+                    alert('✓ Tasa del dólar actualizada correctamente');
+                } else {
+                    alert('✗ No se pudo actualizar la tasa del dólar');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('✗ Error al actualizar la tasa');
+            }
+        }
+
+        // Analytics Tab: Toggle Business Status (Large)
+        async function toggleBusinessStatusLarge() {
+            const toggle = document.getElementById('status-toggle-large');
+            const tenantId = {{ $tenant->id }};
+            
+            try {
+                const response = await fetch(`/tenant/${tenantId}/toggle-status`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    }
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    // Actualizar UI
+                    const statusText = document.querySelector('#tab-analytics span[style*="color: #00cc66"]');
+                    if (statusText) {
+                        const isOpen = toggle.checked;
+                        statusText.textContent = isOpen ? '🟢 Abierto' : '🔴 Cerrado';
+                    }
+                } else {
+                    // Revertir el toggle si falla
+                    toggle.checked = !toggle.checked;
+                    alert('✗ Error al cambiar estado');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                toggle.checked = !toggle.checked;
+                alert('✗ Error al cambiar el estado');
             }
         }
 
