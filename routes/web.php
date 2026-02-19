@@ -3,6 +3,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TenantRendererController;
+use App\Http\Controllers\ImageUploadController;
 
 Route::domain('app.synticorex.test')->group(function () {
     Route::get('/', fn() => redirect()->route('login'));
@@ -20,3 +21,11 @@ Route::domain('app.synticorex.test')->group(function () {
 Route::get('/{subdomain}', [TenantRendererController::class, 'show'])
     ->where('subdomain', '[a-z0-9-]+')
     ->name('tenant.landing');
+
+// Image upload routes
+Route::prefix('tenant/{tenantId}/upload')->group(function () {
+    Route::post('/logo',                    [ImageUploadController::class, 'uploadLogo']);
+    Route::post('/hero',                    [ImageUploadController::class, 'uploadHero']);
+    Route::post('/product/{productId}',     [ImageUploadController::class, 'uploadProduct']);
+    Route::post('/service/{serviceId}',     [ImageUploadController::class, 'uploadService']);
+});
