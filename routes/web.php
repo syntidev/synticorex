@@ -2,6 +2,7 @@
 // C:\laragon\www\synticorex\routes\web.php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TenantRendererController;
 use App\Http\Controllers\ImageUploadController;
 
@@ -33,3 +34,6 @@ Route::prefix('tenant/{tenantId}/upload')->group(function () {
 // Tenant panel actions
 Route::post('/tenant/{tenantId}/verify-pin',    [TenantRendererController::class, 'verifyPin']);
 Route::post('/tenant/{tenantId}/toggle-status', [TenantRendererController::class, 'toggleStatus']);
+
+// Tenant dashboard
+Route::get('/tenant/{tenantId}/dashboard',      [DashboardController::class, 'index']);
