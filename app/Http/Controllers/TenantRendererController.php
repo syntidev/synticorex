@@ -83,6 +83,13 @@ class TenantRendererController extends Controller
                 'buttonHoverBg' => $palette->button_hover_bg,
                 'linkColor' => $palette->link_color,
                 'linkHover' => $palette->link_hover,
+                'header_bg' => $palette->primary_color,
+                'header_text' => $this->getContrastColor($palette->primary_color),
+                'section_bg' => $palette->background_color ?? '#FFFFFF',
+                'section_bg_alt' => $palette->background_alt ?? '#F5F5F5',
+                'footer_bg' => $palette->background_alt ?? '#1a1a1a',
+                'footer_text' => $this->getContrastColor($palette->background_alt ?? '#1a1a1a'),
+                'footer_text_muted' => $this->getContrastColor($palette->background_alt ?? '#1a1a1a'),
             ];
 
             $fonts = [
@@ -282,6 +289,35 @@ class TenantRendererController extends Controller
     }
 
     /**
+     * Calculate contrast color (black or white) based on background luminosity.
+     * Uses WCAG relative luminance formula.
+     *
+     * @param string $hexColor
+     * @return string
+     */
+    private function getContrastColor(string $hexColor): string
+    {
+        // Remove # if present
+        $hex = ltrim($hexColor, '#');
+        
+        // Convert to RGB
+        $r = hexdec(substr($hex, 0, 2)) / 255;
+        $g = hexdec(substr($hex, 2, 2)) / 255;
+        $b = hexdec(substr($hex, 4, 2)) / 255;
+        
+        // Apply gamma correction
+        $r = ($r <= 0.03928) ? $r / 12.92 : pow(($r + 0.055) / 1.055, 2.4);
+        $g = ($g <= 0.03928) ? $g / 12.92 : pow(($g + 0.055) / 1.055, 2.4);
+        $b = ($b <= 0.03928) ? $b / 12.92 : pow(($b + 0.055) / 1.055, 2.4);
+        
+        // Calculate relative luminance (WCAG formula)
+        $luminance = 0.2126 * $r + 0.7152 * $g + 0.0722 * $b;
+        
+        // Return dark or light color based on luminance
+        return $luminance > 0.5 ? '#1a1a1a' : '#FFFFFF';
+    }
+
+    /**
      * Extract theme colors from tenant settings or color palette.
      *
      * @param Tenant $tenant
@@ -295,15 +331,27 @@ class TenantRendererController extends Controller
         // Try to get from settings first
         $visualSettings = data_get($settings, 'engine_settings.visual', []);
 
+        // Calculate footer background
+        $footerBg = $visualSettings['footer_bg'] ?? $palette?->background_alt ?? '#1a1a1a';
+        $footerText = $this->getContrastColor($footerBg);
+
         // Fallback to color palette
+        $headerBg = $visualSettings['header_bg'] ?? $palette?->primary_color ?? '#0066CC';
+        $headerText = $this->getContrastColor($headerBg);
+        
         return [
             'primary' => $visualSettings['primary_color'] ?? $palette?->primary_color ?? '#0066CC',
             'secondary' => $visualSettings['secondary_color'] ?? $palette?->secondary_color ?? '#FFFFFF',
             'accent' => $visualSettings['accent_color'] ?? $palette?->accent_color ?? '#FF6600',
             'background' => $visualSettings['background_color'] ?? $palette?->background_color ?? '#FFFFFF',
             'text' => $visualSettings['text_color'] ?? $palette?->text_color ?? '#000000',
-            'header_bg' => $visualSettings['header_bg'] ?? $palette?->primary_color ?? '#0066CC',
-            'footer_bg' => $visualSettings['footer_bg'] ?? '#1a1a1a',
+            'header_bg' => $headerBg,
+            'header_text' => $headerText,
+            'section_bg' => $visualSettings['background_color'] ?? $palette?->background_color ?? '#FFFFFF',
+            'section_bg_alt' => $visualSettings['background_alt'] ?? $palette?->background_alt ?? '#F5F5F5',
+            'footer_bg' => $footerBg,
+            'footer_text' => $footerText,
+            'footer_text_muted' => $footerText,
             'button_bg' => $visualSettings['button_bg'] ?? $palette?->primary_color ?? '#0066CC',
             'button_text' => $visualSettings['button_text'] ?? '#FFFFFF',
         ];

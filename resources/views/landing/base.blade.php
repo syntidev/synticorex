@@ -36,6 +36,13 @@
     --color-button-hover: {{ $colors['buttonHoverBg'] }};
     --color-link: {{ $colors['linkColor'] }};
     --color-link-hover: {{ $colors['linkHover'] }};
+    --color-header-text: {{ $colors['header_text'] }};
+    --color-header-bg: {{ $colors['primary'] }};
+    --color-section-bg: {{ $colors['section_bg'] }};
+    --color-section-bg-alt: {{ $colors['section_bg_alt'] }};
+    --color-footer-bg: {{ $colors['footer_bg'] }};
+    --color-footer-text: {{ $colors['footer_text'] }};
+    --color-footer-text-muted: {{ $colors['footer_text_muted'] }};
     --font-heading: '{{ $fonts['heading'] }}', sans-serif;
     --font-body: '{{ $fonts['body'] }}', sans-serif;
 }
@@ -112,6 +119,11 @@ a:hover {
     {{-- CTA Section (if plan allows) --}}
     @if($plan?->show_cta_special && $customization?->cta_title)
         @include('landing.partials.cta')
+    @endif
+    
+    {{-- Payment Methods Section --}}
+    @if($plan?->show_payment_methods)
+        @include('landing.partials.payment-methods')
     @endif
     
     {{-- Contact/Footer --}}

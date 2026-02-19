@@ -1,5 +1,5 @@
 {{-- Services Section Partial --}}
-<section id="servicios" class="py-16 px-4" style="background-color: var(--color-secondary);">
+<section id="servicios" class="py-16 px-4" style="background-color: var(--color-section-bg-alt);">
     <div class="container mx-auto">
         <h2 class="text-3xl font-bold text-center mb-12" style="color: var(--color-primary);">
             Nuestros Servicios

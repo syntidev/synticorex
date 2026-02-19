@@ -1,5 +1,5 @@
 {{-- About Section Partial --}}
-<section id="nosotros" class="py-16 px-4">
+<section id="nosotros" class="py-16 px-4" style="background-color: var(--color-section-bg);">
     <div class="container mx-auto max-w-4xl">
         <h2 class="text-3xl font-bold text-center mb-8" style="color: var(--color-primary);">
             Sobre Nosotros
@@ -39,8 +39,19 @@
                     <div class="text-3xl mb-3">🕐</div>
                     <h3 class="font-semibold text-gray-900 mb-1">Horario</h3>
                     <div class="text-gray-600 text-sm">
-                        @foreach($tenant->business_hours as $day => $hours)
-                            <div>{{ ucfirst($day) }}: {{ $hours }}</div>
+                        @php
+                            $hours_data = is_string($tenant->business_hours) 
+                                ? json_decode($tenant->business_hours, true) 
+                                : $tenant->business_hours;
+                        @endphp
+                        @foreach(($hours_data ?? []) as $day => $hours)
+                            <div>{{ ucfirst($day) }}: 
+                                @if($hours)
+                                    {{ $hours['open'] ?? '' }} - {{ $hours['close'] ?? 'Cerrado' }}
+                                @else
+                                    Cerrado
+                                @endif
+                            </div>
                         @endforeach
                     </div>
                 </div>

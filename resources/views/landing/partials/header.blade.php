@@ -12,9 +12,9 @@
                     >
                 @endif
                 <div>
-                    <h1 class="text-xl font-bold text-white">{{ $tenant->business_name }}</h1>
+                    <h1 class="text-xl font-bold" style="color: var(--color-header-text)">{{ $tenant->business_name }}</h1>
                     @if($tenant->slogan)
-                        <p class="text-sm text-white/80">{{ $tenant->slogan }}</p>
+                        <p class="text-sm" style="color: var(--color-header-text); opacity: 0.8;">{{ $tenant->slogan }}</p>
                     @endif
                 </div>
             </div>
@@ -25,7 +25,7 @@
                     id="currency-toggle-btn"
                     onclick="toggleCurrency()"
                     class="px-4 py-2 rounded-lg text-sm font-medium transition-colors"
-                    style="background-color: var(--color-secondary); color: var(--color-primary);"
+                    style="background-color: var(--color-header-text); color: var(--color-header-bg);"
                 >
                     Ver en Bs.
                 </button>
