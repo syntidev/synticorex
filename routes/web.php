@@ -38,6 +38,7 @@ Route::post('/tenant/{tenantId}/toggle-status', [TenantRendererController::class
 // Tenant dashboard
 Route::get('/tenant/{tenantId}/dashboard',      [DashboardController::class, 'index']);
 Route::post('/tenant/{tenantId}/update-info',   [DashboardController::class, 'updateInfo']);
+Route::post('/tenant/{tenantId}/update-palette', [DashboardController::class, 'updatePalette']);
 
 // Products CRUD
 Route::post('/tenant/{tenantId}/products',          [DashboardController::class, 'createProduct']);

@@ -100,7 +100,7 @@ class TenantRendererController extends Controller
             ];
 
             // Get current dollar rate
-            $dollarRate = $this->dollarRateService->getCurrentRate() ?? $this->getDefaultRate($tenant);
+            $dollarRate = $this->dollarRateService->getCurrentRate();
 
             // Calculate price_bs for each product
             $products = $this->calculateProductPrices($tenant->products, $dollarRate);
@@ -183,7 +183,7 @@ class TenantRendererController extends Controller
             }
 
             // Reuse show logic
-            $dollarRate = $this->dollarRateService->getCurrentRate() ?? $this->getDefaultRate($tenant);
+            $dollarRate = $this->dollarRateService->getCurrentRate();
             $products = $this->calculateProductPrices($tenant->products, $dollarRate);
             $themeColors = $this->extractThemeColors($tenant);
             $currencySettings = $this->extractCurrencySettings($tenant);
@@ -238,7 +238,7 @@ class TenantRendererController extends Controller
                 return $this->render404("Tenant #{$tenantId}");
             }
 
-            $dollarRate = $this->dollarRateService->getCurrentRate() ?? $this->getDefaultRate($tenant);
+            $dollarRate = $this->dollarRateService->getCurrentRate();
             $products = $this->calculateProductPrices($tenant->products, $dollarRate);
             $themeColors = $this->extractThemeColors($tenant);
             $currencySettings = $this->extractCurrencySettings($tenant);

@@ -932,9 +932,96 @@
 
         <!-- Tab: Diseño -->
         <div id="tab-diseno" class="tab-content">
-            <div class="placeholder-content">
-                <h3>🚧 Módulo de Diseño</h3>
-                <p>En construcción...</p>
+            <!-- Sección: Paleta de Colores -->
+            <div class="form-section">
+                <h2 class="table-title">🎨 Paleta de Colores</h2>
+                <p class="table-subtitle" style="margin-bottom: 16px;">Selecciona el estilo visual de tu landing page</p>
+                
+                <div id="palette-success-message" style="display: none; padding: 12px; background: rgba(0,204,102,0.2); border-radius: 8px; margin-bottom: 16px; color: #00cc66; font-size: 14px;">
+                    ✓ Paleta actualizada correctamente
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px;">
+                    @foreach($colorPalettes as $palette)
+                    <div 
+                        class="palette-card" 
+                        data-id="{{ $palette->id }}"
+                        onclick="updatePalette({{ $palette->id }})"
+                        style="cursor: pointer; padding: 12px; background: #0f1c32; border-radius: 8px; border: 2px solid {{ $tenant->color_palette_id == $palette->id ? '#2B6FFF' : 'transparent' }}; transition: all 0.2s; position: relative;">
+                        <!-- Color Preview -->
+                        <div style="display: flex; height: 80px; border-radius: 6px; overflow: hidden; margin-bottom: 8px;">
+                            <div style="flex: 1; background: {{ $palette->primary_color }};"></div>
+                            <div style="flex: 1; background: {{ $palette->secondary_color }};"></div>
+                            <div style="flex: 1; background: {{ $palette->background_color }};"></div>
+                        </div>
+                        
+                        <div style="display: flex; align-items: center; justify-content: space-between;">
+                            <span style="font-size: 14px; font-weight: 500;">{{ $palette->name }}</span>
+                            @if($tenant->color_palette_id == $palette->id)
+                                <span class="palette-check" style="color: #2B6FFF; font-size: 18px;">✓</span>
+                            @endif
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+
+            <!-- Sección: Imágenes -->
+            <div class="form-section" style="margin-top: 32px;">
+                <h2 class="table-title">📸 Imágenes</h2>
+                <p class="table-subtitle" style="margin-bottom: 16px;">Personaliza el logo y la imagen principal</p>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px;">
+                    <!-- Card: Logo -->
+                    <div style="background: #0f1c32; border-radius: 12px; padding: 20px;">
+                        <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 16px;">Logo del Negocio</h3>
+                        
+                        <div style="background: #07101F; border-radius: 8px; height: 200px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px;">
+                            @if($customization && $customization->logo_filename)
+                                <img 
+                                    id="logo-preview" 
+                                    src="{{ asset('storage/tenants/' . $tenant->id . '/' . $customization->logo_filename) }}" 
+                                    alt="Logo"
+                                    style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                            @else
+                                <div id="logo-placeholder" style="text-align: center; color: rgba(255,255,255,0.3);">
+                                    <div style="font-size: 48px; margin-bottom: 8px;">🖼️</div>
+                                    <p style="font-size: 14px;">Sin logo</p>
+                                </div>
+                            @endif
+                        </div>
+                        
+                        <input type="file" id="logo-file" accept="image/*" style="display: none;" onchange="uploadLogo(event)">
+                        <button onclick="document.getElementById('logo-file').click()" class="btn-primary" style="width: 100%;">
+                            📤 Cambiar Logo
+                        </button>
+                    </div>
+
+                    <!-- Card: Hero -->
+                    <div style="background: #0f1c32; border-radius: 12px; padding: 20px;">
+                        <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 16px;">Imagen Principal (Hero)</h3>
+                        
+                        <div style="background: #07101F; border-radius: 8px; height: 200px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px;">
+                            @if($customization && $customization->hero_filename)
+                                <img 
+                                    id="hero-preview" 
+                                    src="{{ asset('storage/tenants/' . $tenant->id . '/' . $customization->hero_filename) }}" 
+                                    alt="Hero"
+                                    style="max-width: 100%; max-height: 100%; object-fit: cover; border-radius: 8px;">
+                            @else
+                                <div id="hero-placeholder" style="text-align: center; color: rgba(255,255,255,0.3);">
+                                    <div style="font-size: 48px; margin-bottom: 8px;">🌄</div>
+                                    <p style="font-size: 14px;">Sin imagen hero</p>
+                                </div>
+                            @endif
+                        </div>
+                        
+                        <input type="file" id="hero-file" accept="image/*" style="display: none;" onchange="uploadHero(event)">
+                        <button onclick="document.getElementById('hero-file').click()" class="btn-primary" style="width: 100%;">
+                            📤 Cambiar Hero
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -1302,6 +1389,127 @@
             } catch (error) {
                 console.error('Error:', error);
                 alert('✗ Error al eliminar el servicio');
+            }
+        }
+
+        // Design Tab: Palette Update
+        function updatePalette(paletteId) {
+            const tenantId = {{ $tenant->id }};
+            
+            fetch(`/tenant/${tenantId}/update-palette`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                },
+                body: JSON.stringify({palette_id: paletteId})
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    // Limpiar TODOS los checks y bordes
+                    document.querySelectorAll('.palette-card').forEach(card => {
+                        card.style.border = '2px solid transparent';
+                        const chk = card.querySelector('.palette-check');
+                        if (chk) chk.remove();
+                    });
+                    // Activar la seleccionada
+                    const selected = document.querySelector(
+                        `.palette-card[data-id="${paletteId}"]`
+                    );
+                    if (selected) {
+                        selected.style.border = '2px solid #2B6FFF';
+                        const chk = document.createElement('span');
+                        chk.className = 'palette-check';
+                        chk.textContent = '✓';
+                        chk.style.cssText = 'position:absolute;top:6px;right:8px;color:#2B6FFF;font-weight:700;font-size:14px;';
+                        selected.appendChild(chk);
+                    }
+                    // Mensaje éxito
+                    const msg = document.getElementById('palette-success-message');
+                    if (msg) { msg.style.display='block'; setTimeout(()=>msg.style.display='none', 3000); }
+                }
+            })
+            .catch(e => console.error('Error:', e));
+        }
+
+        // Design Tab: Upload Logo
+        async function uploadLogo(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const formData = new FormData();
+            formData.append('image', file);
+
+            try {
+                const response = await fetch('/tenant/{{ $tenant->id }}/upload/logo', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content
+                    },
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    // Update preview
+                    const preview = document.getElementById('logo-preview');
+                    const placeholder = document.getElementById('logo-placeholder');
+                    
+                    if (preview) {
+                        preview.src = result.url + '?t=' + new Date().getTime();
+                    } else if (placeholder) {
+                        placeholder.parentElement.innerHTML = `<img id="logo-preview" src="${result.url}" alt="Logo" style="max-width: 100%; max-height: 100%; object-fit: contain;">`;
+                    }
+                    
+                    alert('✓ Logo actualizado correctamente');
+                } else {
+                    alert('✗ Error al subir logo: ' + (result.message || 'Error desconocido'));
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('✗ Error al subir el logo');
+            }
+        }
+
+        // Design Tab: Upload Hero
+        async function uploadHero(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const formData = new FormData();
+            formData.append('image', file);
+
+            try {
+                const response = await fetch('/tenant/{{ $tenant->id }}/upload/hero', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content
+                    },
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    // Update preview
+                    const preview = document.getElementById('hero-preview');
+                    const placeholder = document.getElementById('hero-placeholder');
+                    
+                    if (preview) {
+                        preview.src = result.url + '?t=' + new Date().getTime();
+                    } else if (placeholder) {
+                        placeholder.parentElement.innerHTML = `<img id="hero-preview" src="${result.url}" alt="Hero" style="max-width: 100%; max-height: 100%; object-fit: cover; border-radius: 8px;">`;
+                    }
+                    
+                    alert('✓ Imagen Hero actualizada correctamente');
+                } else {
+                    alert('✗ Error al subir hero: ' + (result.message || 'Error desconocido'));
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('✗ Error al subir la imagen hero');
             }
         }
 

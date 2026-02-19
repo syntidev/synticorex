@@ -51,7 +51,12 @@ class DashboardController extends Controller
             $services = $tenant->services;
 
             // Get current dollar rate
-            $dollarRate = $this->dollarRateService->getCurrentRate() ?? 36.50;
+            $dollarRate = $this->dollarRateService->getCurrentRate();
+
+            // Get available color palettes
+            $colorPalettes = \App\Models\ColorPalette::where('is_active', true)
+                ->orderBy('name')
+                ->get();
 
             return view('dashboard.index', compact(
                 'tenant',
@@ -59,7 +64,8 @@ class DashboardController extends Controller
                 'customization',
                 'products',
                 'services',
-                'dollarRate'
+                'dollarRate',
+                'colorPalettes'
             ));
         } catch (\Exception $e) {
             return response()->view('errors.404', [], 404);
@@ -389,6 +395,62 @@ class DashboardController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Error al eliminar servicio: ' . $e->getMessage()
+            ], 422);
+        }
+    }
+
+    /**
+     * Update tenant color palette.
+     *
+     * @param Request $request
+     * @param int $tenantId
+     * @return JsonResponse
+     */
+    public function updatePalette(Request $request, int $tenantId): JsonResponse
+    {
+        try {
+            // Find tenant and verify status
+            $tenant = Tenant::where('id', $tenantId)
+                ->where('status', 'active')
+                ->firstOrFail();
+
+            // Validate input
+            $validated = $request->validate([
+                'palette_id' => 'required|integer|exists:color_palettes,id'
+            ]);
+
+            // Verify palette is active
+            $palette = \App\Models\ColorPalette::where('id', $validated['palette_id'])
+                ->where('is_active', true)
+                ->firstOrFail();
+
+            // Update tenant palette and settings
+            $tenant->color_palette_id = $validated['palette_id'];
+            
+            // Update settings JSON
+            $settings = $tenant->settings ?? [];
+            if (!isset($settings['engine_settings'])) {
+                $settings['engine_settings'] = [];
+            }
+            if (!isset($settings['engine_settings']['visual'])) {
+                $settings['engine_settings']['visual'] = [];
+            }
+            if (!isset($settings['engine_settings']['visual']['theme'])) {
+                $settings['engine_settings']['visual']['theme'] = [];
+            }
+            
+            $settings['engine_settings']['visual']['theme']['palette_code'] = $palette->slug ?? $palette->id;
+            $tenant->settings = $settings;
+            $tenant->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Paleta actualizada correctamente'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al actualizar paleta: ' . $e->getMessage()
             ], 422);
         }
     }

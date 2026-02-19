@@ -42,20 +42,20 @@ class DollarRateService
     /**
      * Get the current dollar rate with cache.
      *
-     * @return float|null
+     * @return float
      */
-    public function getCurrentRate(): ?float
+    public function getCurrentRate(): float
     {
         try {
-            return Cache::remember(self::CACHE_KEY, self::CACHE_TTL, function (): ?float {
+            return Cache::remember(self::CACHE_KEY, self::CACHE_TTL, function (): float {
                 $rate = DollarRate::query()
                     ->where('is_active', true)
                     ->orderByDesc('effective_from')
                     ->first();
 
                 if ($rate === null) {
-                    Log::warning('DollarRateService: No active rate found in database');
-                    return null;
+                    Log::warning('DollarRateService: No active rate found in database, using fallback');
+                    return 36.50;
                 }
 
                 Log::debug('DollarRateService: Rate retrieved from database', [
@@ -67,11 +67,11 @@ class DollarRateService
                 return (float) $rate->rate;
             });
         } catch (Throwable $e) {
-            Log::error('DollarRateService: Failed to get current rate', [
+            Log::warning('DollarRateService: Failed to get current rate, using fallback', [
                 'error' => $e->getMessage(),
             ]);
 
-            return null;
+            return 36.50;
         }
     }
 
