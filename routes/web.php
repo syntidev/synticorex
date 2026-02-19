@@ -49,3 +49,7 @@ Route::delete('/tenant/{tenantId}/products/{productId}', [DashboardController::c
 Route::post('/tenant/{tenantId}/services',          [DashboardController::class, 'createService']);
 Route::put('/tenant/{tenantId}/services/{serviceId}', [DashboardController::class, 'updateService']);
 Route::delete('/tenant/{tenantId}/services/{serviceId}', [DashboardController::class, 'deleteService']);
+
+// Config actions
+Route::post('/tenant/{tenantId}/update-currency-config', [DashboardController::class, 'updateCurrencyConfig']);
+Route::post('/tenant/{tenantId}/update-pin',             [DashboardController::class, 'updatePin']);

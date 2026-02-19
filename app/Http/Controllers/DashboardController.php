@@ -454,4 +454,99 @@ class DashboardController extends Controller
             ], 422);
         }
     }
+
+    /**
+     * Update currency configuration settings.
+     */
+    public function updateCurrencyConfig(Request $request, int $tenantId): JsonResponse
+    {
+        try {
+            $tenant = Tenant::where('id', $tenantId)
+                ->where('status', 'active')
+                ->firstOrFail();
+
+            $settings = $tenant->settings ?? [];
+            
+            // Ensure currency structure exists
+            if (!isset($settings['engine_settings'])) {
+                $settings['engine_settings'] = [];
+            }
+            if (!isset($settings['engine_settings']['currency'])) {
+                $settings['engine_settings']['currency'] = [];
+            }
+            if (!isset($settings['engine_settings']['currency']['display'])) {
+                $settings['engine_settings']['currency']['display'] = [];
+            }
+
+            // Get request values
+            $displayMode = $request->input('display_mode', 'reference_only');
+            $symbol = $request->input('symbol', 'REF');
+
+            // Mapear display_mode a flags booleanos
+            $showReference = in_array($displayMode, ['reference_only', 'both_toggle']);
+            $showBolivares = in_array($displayMode, ['bolivares_only', 'both_toggle']);
+            $hidePrice     = $displayMode === 'hidden';
+            $hasToggle     = $displayMode === 'both_toggle';
+
+            $settings['engine_settings']['currency']['display']['show_reference'] = $showReference;
+            $settings['engine_settings']['currency']['display']['show_bolivares'] = $showBolivares;
+            $settings['engine_settings']['currency']['display']['hide_price']     = $hidePrice;
+            $settings['engine_settings']['currency']['display']['has_toggle']     = $hasToggle;
+            $settings['engine_settings']['currency']['display']['symbols']['reference'] = $symbol;
+            $settings['engine_settings']['currency']['display']['saved_display_mode'] = $displayMode;
+
+            $tenant->settings = $settings;
+            $tenant->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Configuración actualizada correctamente'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al actualizar configuración: ' . $e->getMessage()
+            ], 422);
+        }
+    }
+
+    /**
+     * Update tenant PIN.
+     */
+    public function updatePin(Request $request, int $tenantId): JsonResponse
+    {
+        try {
+            $validated = $request->validate([
+                'current_pin' => 'required|string|size:4|regex:/^[0-9]{4}$/',
+                'new_pin' => 'required|string|size:4|regex:/^[0-9]{4}$/',
+                'new_pin_confirmation' => 'required|string|same:new_pin'
+            ]);
+
+            $tenant = Tenant::where('id', $tenantId)
+                ->where('status', 'active')
+                ->firstOrFail();
+
+            // Verify current PIN
+            if (!\Illuminate\Support\Facades\Hash::check($validated['current_pin'], $tenant->pin_hash)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'El PIN actual es incorrecto'
+                ], 422);
+            }
+
+            // Update PIN
+            $tenant->pin_hash = \Illuminate\Support\Facades\Hash::make($validated['new_pin']);
+            $tenant->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'PIN actualizado correctamente'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al actualizar PIN: ' . $e->getMessage()
+            ], 422);
+        }
+    }
 }

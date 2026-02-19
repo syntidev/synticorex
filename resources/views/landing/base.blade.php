@@ -133,6 +133,13 @@ a:hover {
     {{-- WhatsApp Floating Button --}}
     @include('landing.partials.whatsapp-button')
     
+    {{-- Currency Configuration --}}
+    <script>
+        const CURRENCY_MODE = '{{ data_get($tenant->settings, "engine_settings.currency.display.saved_display_mode", "reference_only") }}';
+        const CURRENCY_SYMBOL = '{{ data_get($tenant->settings, "engine_settings.currency.display.symbols.reference", "REF") }}';
+        const DOLLAR_RATE = {{ $dollarRate ?? 36.50 }};
+    </script>
+    
     {{-- Currency Toggle Script --}}
     <script>
         const CLIENT_DATA = {
@@ -147,11 +154,24 @@ a:hover {
         let currentCurrency = CLIENT_DATA.currency.settings.default_currency;
         
         function formatPrice(priceUSD) {
-            const rate = CLIENT_DATA.currency.exchange_rate;
+            const rate = DOLLAR_RATE;
             const settings = CLIENT_DATA.currency.settings;
             
-            if (currentCurrency === 'REF' || currentCurrency === 'USD') {
-                return `${settings.symbols.reference} ${parseFloat(priceUSD).toFixed(settings.decimals)}`;
+            // Handle 'hidden' mode
+            if (CURRENCY_MODE === 'hidden') {
+                return 'Más Info';
+            }
+            
+            // Determine currency to display based on mode
+            let displayCurrency = currentCurrency;
+            if (CURRENCY_MODE === 'reference_only') {
+                displayCurrency = CURRENCY_SYMBOL;
+            } else if (CURRENCY_MODE === 'bolivares_only') {
+                displayCurrency = 'Bs.';
+            }
+            
+            if (displayCurrency === CURRENCY_SYMBOL || displayCurrency === 'REF' || displayCurrency === 'USD') {
+                return `${CURRENCY_SYMBOL} ${parseFloat(priceUSD).toFixed(settings.decimals)}`;
             } else {
                 const priceBS = parseFloat(priceUSD) * rate;
                 return `${settings.symbols.bolivares} ${formatNumber(priceBS, settings.decimals)}`;
@@ -163,7 +183,10 @@ a:hover {
         }
         
         function toggleCurrency() {
-            currentCurrency = (currentCurrency === 'REF' || currentCurrency === 'USD') ? 'Bs.' : 'REF';
+            // Only allow toggling in 'both_toggle' mode
+            if (CURRENCY_MODE !== 'both_toggle') return;
+            
+            currentCurrency = (currentCurrency === CURRENCY_SYMBOL || currentCurrency === 'REF' || currentCurrency === 'USD') ? 'Bs.' : CURRENCY_SYMBOL;
             renderAllPrices();
             updateToggleButton();
         }
@@ -178,12 +201,28 @@ a:hover {
         function updateToggleButton() {
             const btn = document.getElementById('currency-toggle-btn');
             if (btn) {
-                btn.textContent = currentCurrency === 'REF' ? 'Ver en Bs.' : 'Ver en REF';
+                // Hide button if mode is not 'both_toggle'
+                if (CURRENCY_MODE !== 'both_toggle') {
+                    btn.style.display = 'none';
+                } else {
+                    btn.style.display = '';
+                    btn.textContent = (currentCurrency === CURRENCY_SYMBOL || currentCurrency === 'REF') ? 'Ver en Bs.' : `Ver en ${CURRENCY_SYMBOL}`;
+                }
             }
         }
         
         // Initialize on load
-        document.addEventListener('DOMContentLoaded', renderAllPrices);
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set initial currency based on mode
+            if (CURRENCY_MODE === 'bolivares_only') {
+                currentCurrency = 'Bs.';
+            } else {
+                currentCurrency = CURRENCY_SYMBOL;
+            }
+            
+            renderAllPrices();
+            updateToggleButton();
+        });
     </script>
     
     {{-- Floating Panel --}}

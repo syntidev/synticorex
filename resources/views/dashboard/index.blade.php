@@ -1113,10 +1113,145 @@
 
         <!-- Tab: Config -->
         <div id="tab-config" class="tab-content">
-            <div class="placeholder-content">
-                <h3>🚧 Módulo de Configuración</h3>
-                <p>En construcción...</p>
+            
+            <!-- Section 1: Currency Configuration -->
+            <div class="config-section" style="background: #0f1c32; border-radius: 12px; padding: 24px; margin-bottom: 24px;">
+                <h3 style="color: #fff; font-size: 18px; font-weight: 600; margin-bottom: 24px;">Configuración de Moneda</h3>
+                
+                <!-- Currency Symbol Switch -->
+                <div style="margin-bottom: 32px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+                        <label style="color: #fff; font-size: 15px; font-weight: 500;">Símbolo de Precio</label>
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <span id="symbol-ref-label" style="color: #2B6FFF; font-size: 14px; font-weight: 600;">REF</span>
+                            <label style="position: relative; display: inline-block; width: 50px; height: 24px;">
+                                <input type="checkbox" id="currency-symbol-switch" style="opacity: 0; width: 0; height: 0;">
+                                <span style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #1e2a42; border-radius: 24px; transition: .3s;"></span>
+                                <span id="currency-slider" style="position: absolute; content: ''; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: #6b7280; border-radius: 50%; transition: .3s;"></span>
+                            </label>
+                            <span id="symbol-dollar-label" style="color: #6b7280; font-size: 14px; font-weight: 600;">$</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Display Mode Options -->
+                <div>
+                    <label style="color: #fff; font-size: 15px; font-weight: 500; display: block; margin-bottom: 16px;">Mostrar Precios en</label>
+                    
+                    @php $savedMode = $tenant->settings['engine_settings']['currency']['display']['saved_display_mode'] ?? 'reference_only'; @endphp
+                    
+                    <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px;">
+                        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                            <input type="radio" name="display_mode" value="reference_only" {{ $savedMode === 'reference_only' ? 'checked' : '' }} style="width: 18px; height: 18px; accent-color: #2B6FFF;">
+                            <span style="color: #e5e7eb; font-size: 14px;">Solo Referencia (REF/$)</span>
+                        </label>
+                        
+                        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                            <input type="radio" name="display_mode" value="bolivares_only" {{ $savedMode === 'bolivares_only' ? 'checked' : '' }} style="width: 18px; height: 18px; accent-color: #2B6FFF;">
+                            <span style="color: #e5e7eb; font-size: 14px;">Solo Bolívares (Bs.)</span>
+                        </label>
+                        
+                        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                            <input type="radio" name="display_mode" value="both_toggle" {{ $savedMode === 'both_toggle' ? 'checked' : '' }} style="width: 18px; height: 18px; accent-color: #2B6FFF;">
+                            <span style="color: #e5e7eb; font-size: 14px;">Ambos con toggle público</span>
+                        </label>
+                        
+                        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                            <input type="radio" name="display_mode" value="hidden" {{ $savedMode === 'hidden' ? 'checked' : '' }} style="width: 18px; height: 18px; accent-color: #2B6FFF;">
+                            <span style="color: #e5e7eb; font-size: 14px;">Ocultar precio → activa "Más Info"</span>
+                        </label>
+                    </div>
+
+                    <div style="background: #1e3a5f; border-left: 3px solid #2B6FFF; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
+                        <p style="color: #94a3b8; font-size: 13px; margin: 0;">💡 Si ocultás el precio, el botón cambia a "Más Info"</p>
+                    </div>
+
+                    <button type="button" onclick="saveCurrencyConfig()"
+                        style="background: #2B6FFF; color: #fff; border: none; border-radius: 8px; padding: 12px 24px; font-size: 15px; font-weight: 500; cursor: pointer; transition: all 0.2s; width: 100%;"
+                        onmouseover="this.style.background='#1e5ce6'"
+                        onmouseout="this.style.background='#2B6FFF'">
+                        Guardar Configuración de Moneda
+                    </button>
+                </div>
             </div>
+
+            <!-- Section 2: Change PIN -->
+            <div class="config-section" style="background: #0f1c32; border-radius: 12px; padding: 24px; margin-bottom: 24px;">
+                <h3 style="color: #fff; font-size: 18px; font-weight: 600; margin-bottom: 24px;">Cambiar PIN de Acceso</h3>
+                
+                <form id="pin-form" style="display: flex; flex-direction: column; gap: 16px;">
+                    <div>
+                        <label style="color: #e5e7eb; font-size: 13px; display: block; margin-bottom: 6px;">PIN Actual</label>
+                        <input type="password" id="current-pin" maxlength="4" pattern="[0-9]{4}" required
+                            style="width: 100%; background: #07101F; border: 1px solid #1e2a42; border-radius: 8px; padding: 12px 16px; color: #fff; font-size: 15px;"
+                            placeholder="••••">
+                    </div>
+                    
+                    <div>
+                        <label style="color: #e5e7eb; font-size: 13px; display: block; margin-bottom: 6px;">PIN Nuevo</label>
+                        <input type="password" id="new-pin" maxlength="4" pattern="[0-9]{4}" required
+                            style="width: 100%; background: #07101F; border: 1px solid #1e2a42; border-radius: 8px; padding: 12px 16px; color: #fff; font-size: 15px;"
+                            placeholder="••••">
+                    </div>
+                    
+                    <div>
+                        <label style="color: #e5e7eb; font-size: 13px; display: block; margin-bottom: 6px;">Confirmar PIN Nuevo</label>
+                        <input type="password" id="confirm-pin" maxlength="4" pattern="[0-9]{4}" required
+                            style="width: 100%; background: #07101F; border: 1px solid #1e2a42; border-radius: 8px; padding: 12px 16px; color: #fff; font-size: 15px;"
+                            placeholder="••••">
+                    </div>
+                    
+                    <button type="button" onclick="updatePin()"
+                        style="background: #2B6FFF; color: #fff; border: none; border-radius: 8px; padding: 12px 24px; font-size: 15px; font-weight: 500; cursor: pointer; transition: all 0.2s;"
+                        onmouseover="this.style.background='#1e5ce6'"
+                        onmouseout="this.style.background='#2B6FFF'">
+                        Guardar PIN
+                    </button>
+                </form>
+            </div>
+
+            <!-- Section 3: Plan Information -->
+            <div class="config-section" style="background: #0f1c32; border-radius: 12px; padding: 24px;">
+                <h3 style="color: #fff; font-size: 18px; font-weight: 600; margin-bottom: 24px;">Información del Plan</h3>
+                
+                <div style="display: flex; flex-direction: column; gap: 16px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #1e2a42;">
+                        <span style="color: #94a3b8; font-size: 14px;">Plan actual</span>
+                        <span style="color: #fff; font-size: 15px; font-weight: 600;">{{ $plan->name }}</span>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #1e2a42;">
+                        <span style="color: #94a3b8; font-size: 14px;">Productos</span>
+                        <span style="color: #fff; font-size: 15px; font-weight: 600;">
+                            {{ $products->count() }} de {{ $tenant->plan_id == 1 ? 6 : ($tenant->plan_id == 2 ? 18 : 40) }}
+                        </span>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #1e2a42;">
+                        <span style="color: #94a3b8; font-size: 14px;">Servicios</span>
+                        <span style="color: #fff; font-size: 15px; font-weight: 600;">
+                            {{ $services->count() }} de {{ $tenant->plan_id == 1 ? 3 : ($tenant->plan_id == 2 ? 6 : 15) }}
+                        </span>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #1e2a42;">
+                        <span style="color: #94a3b8; font-size: 14px;">Miembro desde</span>
+                        <span style="color: #fff; font-size: 15px; font-weight: 600;">{{ $tenant->created_at->format('d/m/Y') }}</span>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #1e2a42;">
+                        <span style="color: #94a3b8; font-size: 14px;">Renovación</span>
+                        <span style="color: #fff; font-size: 15px; font-weight: 600;">Por definir</span>
+                    </div>
+                    
+                    <a href="#" style="color: #2B6FFF; font-size: 14px; font-weight: 500; text-decoration: none; margin-top: 8px; display: inline-block;"
+                        onmouseover="this.style.textDecoration='underline'"
+                        onmouseout="this.style.textDecoration='none'">
+                        Ver planes disponibles →
+                    </a>
+                </div>
+            </div>
+
         </div>
 
     </main>
@@ -1642,6 +1777,124 @@
                 console.error('Error:', error);
                 toggle.checked = !toggle.checked;
                 alert('✗ Error al cambiar el estado');
+            }
+        }
+
+        // Config Tab: Currency Symbol Toggle UI Only
+        function updateCurrencySymbolUI() {
+            const toggle = document.getElementById('currency-symbol-switch');
+            const slider = document.getElementById('currency-slider');
+            const refLabel = document.getElementById('symbol-ref-label');
+            const dollarLabel = document.getElementById('symbol-dollar-label');
+            
+            // Update UI only
+            if (toggle.checked) {
+                slider.style.transform = 'translateX(26px)';
+                slider.style.backgroundColor = '#2B6FFF';
+                slider.parentElement.children[1].style.backgroundColor = '#2B6FFF';
+                refLabel.style.color = '#6b7280';
+                dollarLabel.style.color = '#2B6FFF';
+            } else {
+                slider.style.transform = 'translateX(0)';
+                slider.style.backgroundColor = '#6b7280';
+                slider.parentElement.children[1].style.backgroundColor = '#1e2a42';
+                refLabel.style.color = '#2B6FFF';
+                dollarLabel.style.color = '#6b7280';
+            }
+        }
+
+        // Config Tab: Save Complete Currency Configuration
+        async function saveCurrencyConfig() {
+            const symbol = document.getElementById('currency-symbol-switch').checked ? '$' : 'REF';
+            const display_mode = document.querySelector('input[name="display_mode"]:checked')?.value;
+            const tenantId = {{ $tenant->id }};
+            
+            console.log('Payload moneda:', {symbol, display_mode});
+            
+            if (!display_mode) {
+                alert('✗ Seleccioná un modo de visualización');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`/tenant/${tenantId}/update-currency-config`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    },
+                    body: JSON.stringify({ 
+                        symbol: symbol,
+                        display_mode: display_mode
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    alert('✓ Configuración de moneda guardada correctamente');
+                } else {
+                    alert('✗ ' + (data.message || 'Error al guardar configuración'));
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('✗ Error al guardar configuración');
+            }
+        }
+
+        // Config Tab: Update PIN
+        async function updatePin() {
+            const currentPin = document.getElementById('current-pin').value;
+            const newPin = document.getElementById('new-pin').value;
+            const confirmPin = document.getElementById('confirm-pin').value;
+            const tenantId = {{ $tenant->id }};
+            
+            // Validation
+            if (!currentPin || !newPin || !confirmPin) {
+                alert('✗ Todos los campos son obligatorios');
+                return;
+            }
+            
+            if (!/^\d{4}$/.test(currentPin) || !/^\d{4}$/.test(newPin)) {
+                alert('✗ El PIN debe tener exactamente 4 dígitos');
+                return;
+            }
+            
+            if (newPin !== confirmPin) {
+                alert('✗ El PIN nuevo y la confirmación no coinciden');
+                return;
+            }
+            
+            if (currentPin === newPin) {
+                alert('✗ El PIN nuevo debe ser diferente al actual');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`/tenant/${tenantId}/update-pin`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    },
+                    body: JSON.stringify({
+                        current_pin: currentPin,
+                        new_pin: newPin,
+                        new_pin_confirmation: confirmPin
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    alert('✓ PIN actualizado correctamente');
+                    document.getElementById('pin-form').reset();
+                } else {
+                    alert('✗ ' + (data.message || 'Error al actualizar PIN'));
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('✗ Error al actualizar PIN');
             }
         }
 

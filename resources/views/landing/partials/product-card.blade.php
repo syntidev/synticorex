@@ -1,4 +1,5 @@
 {{-- Product Card Partial --}}
+
 <article class="bg-white rounded-xl shadow-lg overflow-hidden transition-transform hover:scale-[1.02] {{ $featured ? 'ring-2 ring-yellow-400' : '' }}">
     {{-- Product Image --}}
     <div class="relative aspect-square bg-gray-100">
@@ -46,21 +47,43 @@
         
         {{-- Price --}}
         <div class="flex items-center justify-between">
-            @if($product->price_usd && (float)$product->price_usd > 0)
-                <span 
-                    class="text-xl font-bold"
-                    style="color: var(--color-primary);"
-                    data-price-usd="{{ $product->price_usd }}"
-                >
-                    {{-- Initial price (will be updated by JS) --}}
-                    {{ $currencySettings['symbols']['reference'] }} {{ number_format((float)$product->price_usd, 2) }}
-                </span>
+            @if(!$hidePrice && $product->price_usd && (float)$product->price_usd > 0)
+                @if($showBolivares && !$showReference)
+                    {{-- Show only Bolívares --}}
+                    <span 
+                        class="text-xl font-bold"
+                        style="color: var(--color-primary);"
+                        data-price-usd="{{ $product->price_usd }}"
+                    >
+                        Bs. {{ number_format((float)$product->price_usd * $dollarRate, 2) }}
+                    </span>
+                @elseif($showReference && !$showBolivares)
+                    {{-- Show only Reference --}}
+                    <span 
+                        class="text-xl font-bold"
+                        style="color: var(--color-primary);"
+                        data-price-usd="{{ $product->price_usd }}"
+                    >
+                        REF {{ number_format((float)$product->price_usd, 2) }}
+                    </span>
+                @else
+                    {{-- Show both with toggle (default) --}}
+                    <span 
+                        class="text-xl font-bold cursor-pointer"
+                        style="color: var(--color-primary);"
+                        data-price-usd="{{ $product->price_usd }}"
+                        onclick="toggleCurrency(this)"
+                        title="Click para cambiar divisa"
+                    >
+                        REF {{ number_format((float)$product->price_usd, 2) }}
+                    </span>
+                @endif
             @endif
             
             {{-- WhatsApp Order Button --}}
             @if($tenant->whatsapp_sales)
                 @php
-                    $hasPrice = $product->price_usd && (float)$product->price_usd > 0;
+                    $hasPrice = !$hidePrice && $product->price_usd && (float)$product->price_usd > 0;
                     $buttonLabel = $hasPrice ? 'Pedir' : 'Más Info';
                     $whatsappMessage = $hasPrice 
                         ? 'Hola! Quiero pedir: ' . $product->name . ' - $' . number_format((float)$product->price_usd, 2)

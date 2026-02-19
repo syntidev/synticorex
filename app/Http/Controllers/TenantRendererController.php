@@ -128,6 +128,16 @@ class TenantRendererController extends Controller
 
             $customization = $tenant->customization;
 
+            // Extract currency display settings
+            $displayMode = data_get($tenant->settings, 'engine_settings.currency.display.mode', 'reference_only');
+
+            // Leer display_mode guardado por updateCurrencyConfig
+            $savedDisplayMode = data_get($tenant->settings, 'engine_settings.currency.display.saved_display_mode', 'reference_only');
+
+            $showReference = in_array($savedDisplayMode, ['reference_only', 'both_toggle']);
+            $showBolivares = in_array($savedDisplayMode, ['bolivares_only', 'both_toggle']);
+            $hidePrice     = $savedDisplayMode === 'hidden';
+
             $currencySettings = [
                 'show_conversion_button' => data_get($tenant->settings, 'engine_settings.currency.display.show_conversion_button', true),
                 'mode' => data_get($tenant->settings, 'engine_settings.currency.display.mode', 'toggle'),
@@ -135,7 +145,7 @@ class TenantRendererController extends Controller
                 'symbols' => data_get($tenant->settings, 'engine_settings.currency.display.symbols', ['reference' => 'REF', 'bolivares' => 'Bs.']),
             ];
 
-            return view('landing.base', compact('tenant', 'plan', 'products', 'services', 'dollarRate', 'colors', 'fonts', 'meta', 'customization', 'currencySettings'));
+            return view('landing.base', compact('tenant', 'plan', 'products', 'services', 'dollarRate', 'colors', 'fonts', 'meta', 'customization', 'currencySettings', 'displayMode', 'showReference', 'showBolivares', 'hidePrice'));
         } catch (Throwable $e) {
             Log::error('TenantRendererController: Error rendering landing page', [
                 'subdomain' => $subdomain,
