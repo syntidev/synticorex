@@ -1,15 +1,20 @@
-{{-- Services Section Partial --}}
-<section id="servicios" class="py-16 px-4" style="background-color: var(--color-section-bg-alt);">
-    <div class="container mx-auto">
-        <h2 class="text-3xl font-bold text-center mb-12" style="color: var(--color-primary);">
-            Nuestros Servicios
-        </h2>
+{{-- Services Section - FlyonUI + Synti Design System --}}
+<section id="servicios" class="synti-section-white">
+    <div class="synti-container">
         
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {{-- Section Header --}}
+        <div class="synti-section-header">
+            <h2 class="synti-section-title">Nuestros Servicios</h2>
+            <p class="synti-section-subtitle">Lo que podemos hacer por ti</p>
+        </div>
+        
+        {{-- Services Grid --}}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             @foreach($services as $service)
-                <article class="bg-white rounded-xl shadow-lg overflow-hidden transition-transform hover:scale-[1.02]">
-                    {{-- Service Image or Icon --}}
-                    <div class="relative aspect-video bg-gray-100">
+                <article class="card bg-base-100 shadow-synti hover:shadow-synti-lg transition-all duration-300 hover:-translate-y-1 overflow-hidden">
+                    
+                    {{-- Service Image / Icon --}}
+                    <figure class="relative aspect-video bg-neutral-100">
                         @if($service->image_filename)
                             <img 
                                 src="{{ asset('storage/tenants/' . $tenant->id . '/services/' . $service->image_filename) }}" 
@@ -19,42 +24,25 @@
                             >
                             @if($service->overlay_text)
                                 <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
-                                    <span class="text-white text-xl font-bold text-center px-4">
+                                    <span class="text-white text-lg md:text-xl font-bold text-center px-4">
                                         {{ $service->overlay_text }}
                                     </span>
                                 </div>
                             @endif
                         @else
-                            <div class="w-full h-full flex items-center justify-center" style="background-color: var(--color-primary);">
+                            <div class="w-full h-full flex items-center justify-center" style="background-color: var(--synti-primary-500);">
                                 @if($service->icon_name)
-                                    <span class="text-6xl text-white">
+                                    <span class="text-6xl">
                                         @switch($service->icon_name)
-                                            @case('scissors')
-                                                ✂️
-                                                @break
-                                            @case('wrench')
-                                                🔧
-                                                @break
-                                            @case('burger')
-                                                🍔
-                                                @break
-                                            @case('pizza')
-                                                🍕
-                                                @break
-                                            @case('car')
-                                                🚗
-                                                @break
-                                            @case('home')
-                                                🏠
-                                                @break
-                                            @case('heart')
-                                                ❤️
-                                                @break
-                                            @case('star')
-                                                ⭐
-                                                @break
-                                            @default
-                                                🔹
+                                            @case('scissors') ✂️ @break
+                                            @case('wrench')   🔧 @break
+                                            @case('burger')   🍔 @break
+                                            @case('pizza')    🍕 @break
+                                            @case('car')      🚗 @break
+                                            @case('home')     🏠 @break
+                                            @case('heart')    ❤️ @break
+                                            @case('star')     ⭐ @break
+                                            @default          🔹
                                         @endswitch
                                     </span>
                                 @else
@@ -64,14 +52,14 @@
                                 @endif
                             </div>
                         @endif
-                    </div>
+                    </figure>
                     
                     {{-- Service Info --}}
-                    <div class="p-6">
-                        <h3 class="text-xl font-semibold text-gray-900 mb-2">{{ $service->name }}</h3>
+                    <div class="card-body p-6">
+                        <h3 class="card-title text-lg md:text-xl text-neutral-900">{{ $service->name }}</h3>
                         
                         @if($service->description)
-                            <p class="text-gray-600 mb-4">{{ $service->description }}</p>
+                            <p class="text-sm md:text-base text-neutral-600 flex-grow">{{ $service->description }}</p>
                         @endif
                         
                         {{-- CTA Button --}}
@@ -79,22 +67,26 @@
                             $ctaLink = $service->cta_link ?? ($tenant->whatsapp_sales 
                                 ? 'https://wa.me/' . preg_replace('/[^0-9]/', '', $tenant->whatsapp_sales) . '?text=' . urlencode('Hola! Me interesa el servicio: ' . $service->name)
                                 : '#');
+                            $ctaTarget = $service->cta_link ? '_blank' : '_self';
                         @endphp
-                        
-                        <a 
-                            href="{{ $ctaLink }}"
-                            target="{{ $service->cta_link ? '_blank' : '_self' }}"
-                            class="inline-flex items-center px-6 py-3 rounded-lg font-medium transition-colors w-full justify-center"
-                            style="background-color: var(--color-button-bg); color: var(--color-button-text);"
-                        >
-                            {{ $service->cta_text ?? 'Más información' }}
-                            <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                            </svg>
-                        </a>
+                        <div class="card-actions mt-4">
+                            <a 
+                                href="{{ $ctaLink }}"
+                                target="{{ $ctaTarget }}"
+                                rel="{{ $service->cta_link ? 'noopener noreferrer' : '' }}"
+                                class="btn btn-primary btn-soft w-full gap-2"
+                            >
+                                {{ $service->cta_text ?? 'Más información' }}
+                                <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                </svg>
+                            </a>
+                        </div>
                     </div>
+                    
                 </article>
             @endforeach
         </div>
+        
     </div>
 </section>

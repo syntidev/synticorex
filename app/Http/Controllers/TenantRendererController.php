@@ -145,7 +145,7 @@ class TenantRendererController extends Controller
                 'symbols' => data_get($tenant->settings, 'engine_settings.currency.display.symbols', ['reference' => 'REF', 'bolivares' => 'Bs.']),
             ];
 
-            return view('landing.base', compact('tenant', 'plan', 'products', 'services', 'dollarRate', 'colors', 'fonts', 'meta', 'customization', 'currencySettings', 'displayMode', 'showReference', 'showBolivares', 'hidePrice'));
+            return view('landing-v2.base', compact('tenant', 'plan', 'products', 'services', 'dollarRate', 'colors', 'fonts', 'meta', 'customization', 'currencySettings', 'displayMode', 'showReference', 'showBolivares', 'hidePrice'));
         } catch (Throwable $e) {
             Log::error('TenantRendererController: Error rendering landing page', [
                 'subdomain' => $subdomain,
