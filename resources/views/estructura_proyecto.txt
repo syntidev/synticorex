@@ -1,0 +1,180 @@
+ESTRUCTURA DEL PROYECTO 
+================================================ 
+Fecha: sÃ¡b 21/02/2026 14:32:20,72 
+Ruta: C:\laragon\www\synticorex\resources\views 
+================================================ 
+ 
+[ARBOL DE DIRECTORIOS] 
+ 
+Listado de rutas de carpetas para el volumen OS
+El número de serie del volumen es 92E8-531C
+C:.
+|   dashboard.blade.php
+|   estructura_proyecto.txt
+|   generar_txt_simple.bat
+|   welcome.blade.php
+|   
++---auth
+|       confirm-password.blade.php
+|       forgot-password.blade.php
+|       login.blade.php
+|       register.blade.php
+|       reset-password.blade.php
+|       verify-email.blade.php
+|       
++---components
+|   |   application-logo.blade.php
+|   |   auth-session-status.blade.php
+|   |   danger-button.blade.php
+|   |   dropdown-link.blade.php
+|   |   dropdown.blade.php
+|   |   input-error.blade.php
+|   |   input-label.blade.php
+|   |   modal.blade.php
+|   |   nav-link.blade.php
+|   |   primary-button.blade.php
+|   |   responsive-nav-link.blade.php
+|   |   secondary-button.blade.php
+|   |   text-input.blade.php
+|   |   
+|   \---ui
+|           decorative-background.blade.php
+|           
++---dashboard
+|       index.blade.php
+|       
++---errors
+|       tenant-not-found.blade.php
+|       
++---landing
+|   |   base.blade.php
+|   |   
+|   \---partials
+|           about.blade.php
+|           cta.blade.php
+|           faq.blade.php
+|           floating-panel.blade.php
+|           footer.blade.php
+|           header.blade.php
+|           hero.blade.php
+|           old_hero.blade.php
+|           payment-methods.blade.php
+|           product-card.blade.php
+|           products.blade.php
+|           services.blade.php
+|           whatsapp-button.blade.php
+|           
++---landing-v2
+|   |   test-hero.blade.php
+|   |   test-index.blade.php
+|   |   test-navbar.blade.php
+|   |   
+|   \---partials
+|           hero-fullscreen.blade.php
+|           hero-gradient.blade.php
+|           hero-split.blade.php
+|           navbar.blade.php
+|           old_hero-cards.blade.php
+|           
++---landings
+|   \---templates
+|       \---classic
+|               index.blade.php
+|               
++---layouts
+|       admin.blade.php
+|       app.blade.php
+|       guest.blade.php
+|       navigation.blade.php
+|       
++---profile
+|   |   edit.blade.php
+|   |   
+|   \---partials
+|           delete-user-form.blade.php
+|           update-password-form.blade.php
+|           update-profile-information-form.blade.php
+|           
+\---tenants
+        dashboard.blade.php
+        settings.blade.php
+        
+ 
+================================================ 
+[LISTA COMPLETA DE RUTAS] 
+================================================ 
+C:\laragon\www\synticorex\resources\views\auth
+C:\laragon\www\synticorex\resources\views\components
+C:\laragon\www\synticorex\resources\views\dashboard
+C:\laragon\www\synticorex\resources\views\dashboard.blade.php
+C:\laragon\www\synticorex\resources\views\errors
+C:\laragon\www\synticorex\resources\views\estructura_proyecto.txt
+C:\laragon\www\synticorex\resources\views\generar_txt_simple.bat
+C:\laragon\www\synticorex\resources\views\landing
+C:\laragon\www\synticorex\resources\views\landing-v2
+C:\laragon\www\synticorex\resources\views\landings
+C:\laragon\www\synticorex\resources\views\layouts
+C:\laragon\www\synticorex\resources\views\profile
+C:\laragon\www\synticorex\resources\views\tenants
+C:\laragon\www\synticorex\resources\views\welcome.blade.php
+C:\laragon\www\synticorex\resources\views\auth\confirm-password.blade.php
+C:\laragon\www\synticorex\resources\views\auth\forgot-password.blade.php
+C:\laragon\www\synticorex\resources\views\auth\login.blade.php
+C:\laragon\www\synticorex\resources\views\auth\register.blade.php
+C:\laragon\www\synticorex\resources\views\auth\reset-password.blade.php
+C:\laragon\www\synticorex\resources\views\auth\verify-email.blade.php
+C:\laragon\www\synticorex\resources\views\components\application-logo.blade.php
+C:\laragon\www\synticorex\resources\views\components\auth-session-status.blade.php
+C:\laragon\www\synticorex\resources\views\components\danger-button.blade.php
+C:\laragon\www\synticorex\resources\views\components\dropdown-link.blade.php
+C:\laragon\www\synticorex\resources\views\components\dropdown.blade.php
+C:\laragon\www\synticorex\resources\views\components\input-error.blade.php
+C:\laragon\www\synticorex\resources\views\components\input-label.blade.php
+C:\laragon\www\synticorex\resources\views\components\modal.blade.php
+C:\laragon\www\synticorex\resources\views\components\nav-link.blade.php
+C:\laragon\www\synticorex\resources\views\components\primary-button.blade.php
+C:\laragon\www\synticorex\resources\views\components\responsive-nav-link.blade.php
+C:\laragon\www\synticorex\resources\views\components\secondary-button.blade.php
+C:\laragon\www\synticorex\resources\views\components\text-input.blade.php
+C:\laragon\www\synticorex\resources\views\components\ui
+C:\laragon\www\synticorex\resources\views\components\ui\decorative-background.blade.php
+C:\laragon\www\synticorex\resources\views\dashboard\index.blade.php
+C:\laragon\www\synticorex\resources\views\errors\tenant-not-found.blade.php
+C:\laragon\www\synticorex\resources\views\landing\base.blade.php
+C:\laragon\www\synticorex\resources\views\landing\partials
+C:\laragon\www\synticorex\resources\views\landing\partials\about.blade.php
+C:\laragon\www\synticorex\resources\views\landing\partials\cta.blade.php
+C:\laragon\www\synticorex\resources\views\landing\partials\faq.blade.php
+C:\laragon\www\synticorex\resources\views\landing\partials\floating-panel.blade.php
+C:\laragon\www\synticorex\resources\views\landing\partials\footer.blade.php
+C:\laragon\www\synticorex\resources\views\landing\partials\header.blade.php
+C:\laragon\www\synticorex\resources\views\landing\partials\hero.blade.php
+C:\laragon\www\synticorex\resources\views\landing\partials\old_hero.blade.php
+C:\laragon\www\synticorex\resources\views\landing\partials\payment-methods.blade.php
+C:\laragon\www\synticorex\resources\views\landing\partials\product-card.blade.php
+C:\laragon\www\synticorex\resources\views\landing\partials\products.blade.php
+C:\laragon\www\synticorex\resources\views\landing\partials\services.blade.php
+C:\laragon\www\synticorex\resources\views\landing\partials\whatsapp-button.blade.php
+C:\laragon\www\synticorex\resources\views\landing-v2\partials
+C:\laragon\www\synticorex\resources\views\landing-v2\test-hero.blade.php
+C:\laragon\www\synticorex\resources\views\landing-v2\test-index.blade.php
+C:\laragon\www\synticorex\resources\views\landing-v2\test-navbar.blade.php
+C:\laragon\www\synticorex\resources\views\landing-v2\partials\hero-fullscreen.blade.php
+C:\laragon\www\synticorex\resources\views\landing-v2\partials\hero-gradient.blade.php
+C:\laragon\www\synticorex\resources\views\landing-v2\partials\hero-split.blade.php
+C:\laragon\www\synticorex\resources\views\landing-v2\partials\navbar.blade.php
+C:\laragon\www\synticorex\resources\views\landing-v2\partials\old_hero-cards.blade.php
+C:\laragon\www\synticorex\resources\views\landings\templates
+C:\laragon\www\synticorex\resources\views\landings\templates\classic
+C:\laragon\www\synticorex\resources\views\landings\templates\classic\index.blade.php
+C:\laragon\www\synticorex\resources\views\layouts\admin.blade.php
+C:\laragon\www\synticorex\resources\views\layouts\app.blade.php
+C:\laragon\www\synticorex\resources\views\layouts\guest.blade.php
+C:\laragon\www\synticorex\resources\views\layouts\navigation.blade.php
+C:\laragon\www\synticorex\resources\views\profile\edit.blade.php
+C:\laragon\www\synticorex\resources\views\profile\partials
+C:\laragon\www\synticorex\resources\views\profile\partials\delete-user-form.blade.php
+C:\laragon\www\synticorex\resources\views\profile\partials\update-password-form.blade.php
+C:\laragon\www\synticorex\resources\views\profile\partials\update-profile-information-form.blade.php
+C:\laragon\www\synticorex\resources\views\tenants\dashboard.blade.php
+C:\laragon\www\synticorex\resources\views\tenants\settings.blade.php
