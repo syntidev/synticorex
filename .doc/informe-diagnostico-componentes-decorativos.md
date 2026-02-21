@@ -272,14 +272,212 @@ resources/views/components/ui/
 
 ## 🚀 PRÓXIMOS PASOS
 
-Esperando confirmación del usuario para:
-- [ ] Aplicar correcciones de z-index
-- [ ] Crear/renombrar hero-cards.blade.php
-- [ ] Compilar CSS con cambios
+~~Esperando confirmación del usuario para:~~
+- [x] Aplicar correcciones de z-index
+- [x] Crear/renombrar hero-cards.blade.php
+- [x] Compilar CSS con cambios
 - [ ] Probar en navegador
+
+---
+
+## ✅ CIRUGÍA DE UNIFICACIÓN COMPLETADA (21 Feb 2026)
+
+### Misión: Consolidar diseño en carpeta `landing/` (V1)
+
+**Branch:** `feature/limpieza-frankenstein`
+
+### 🔧 Cambios Ejecutados:
+
+#### 1. **Trasplante de Navbar** ✅
+- **Origen:** `resources/views/landing-v2/partials/navbar.blade.php`
+- **Destino:** `resources/views/landing/partials/header.blade.php`
+- **Acción:** Contenido completamente reemplazado con el navbar moderno de V2
+- **Mejoras incluidas:**
+  - Logo condicional con placeholder inteligente (primera letra)
+  - WhatsApp mobile + desktop
+  - Estado abierto/cerrado con animación ping
+  - Menú hamburguesa responsive
+  - Toggle de moneda (modo `both_toggle`)
+  - Condicionales por plan (Nosotros, FAQ, Delivery)
+
+#### 2. **Corrección de Capas (Z-Index)** ✅
+- **Archivo:** `resources/views/landing/partials/header.blade.php`
+- **Cambio:** `z-10` → `z-50`
+- **Línea modificada:** 
+  ```diff
+  - <header class="... z-10 ...">
+  + <header class="... z-50 ...">
+  ```
+- **Razón:** Evitar colisiones con contenido del hero que usa `z-10` o `z-20`
+
+#### 3. **Activación del Hero** ✅
+- **Archivo:** `resources/views/landing/partials/hero.blade.php`
+- **Estado:** YA TENÍA `<x-ui.decorative-background />` insertado (línea 5)
+- **Verificación:** Contenedor principal tiene `relative z-20` (correcto)
+- **Sin cambios necesarios**
+
+#### 4. **Corrección de Sintaxis Z-Index** ✅
+- **Búsqueda ejecutada en:**
+  - `resources/views/landing/**/*.blade.php`
+  - `resources/views/components/**/*.blade.php`
+- **Resultado:** ❌ Ninguna clase `z-1` o `-z-1` inválida encontrada
+- **Componente decorative-background:** Usa `-z-10` (válido en Tailwind)
+- **Sin correcciones necesarias**
+
+#### 5. **Limpieza del Maestro** ✅
+- **Archivo:** `resources/views/landing/base.blade.php`
+- **Verificación:** Solo incluye `landing.partials.*`
+- **Referencias a landing-v2:** ❌ NINGUNA encontrada
+- **Estado:** Limpio y unificado
+
+---
+
+### 📊 Resultados del Build:
+
+```bash
+vite v7.3.1 building client environment for production...
+/*! 🚀 flyonui 2.4.1 */
+✓ 54 modules transformed.
+public/build/assets/app-B1MaWWVa.css  214.59 kB │ gzip: 32.91 kB
+✓ built in 2.39s
+```
+
+**Evolución del CSS:**
+- Build anterior: 211.99 KB
+- Build actual: **214.59 KB** (+2.6 KB)
+- **Incremento:** Nuevo navbar con JS de toggle de moneda
+
+---
+
+### 🎯 Estado Final del Sistema:
+
+| Componente | Archivo | Z-Index | Estado |
+|------------|---------|---------|--------|
+| **Navbar** | landing/partials/header.blade.php | `z-50` | ✅ Consolidado de V2 |
+| **Hero** | landing/partials/hero.blade.php | `z-20` | ✅ Con decorative-background |
+| **Decorativo** | components/ui/decorative-background.blade.php | `-z-10` | ✅ Activo en hero |
+| **Layout Base** | landing/base.blade.php | N/A | ✅ Sin referencias V2 |
+
+---
+
+### 📁 Estructura Unificada:
+
+```
+resources/views/landing/
+├── base.blade.php (✅ Solo includes de landing.partials.*)
+└── partials/
+    ├── header.blade.php (🆕 Navbar moderno con z-50)
+    ├── hero.blade.php (✅ Con decorative-background + z-20)
+    ├── products.blade.php
+    ├── services.blade.php
+    ├── about.blade.php
+    ├── faq.blade.php
+    ├── cta.blade.php
+    ├── payment-methods.blade.php
+    ├── footer.blade.php
+    └── whatsapp-button.blade.php
+
+resources/views/components/ui/
+└── decorative-background.blade.php (✅ Usado en hero)
+
+resources/views/landing-v2/ (⚠️ Ahora obsoleta, solo para referencia)
+```
+
+---
+
+### 🔍 Validaciones Técnicas:
+
+#### ✅ Jerarquía Z-Index Correcta:
+- Fondo decorativo: `-z-10` (atrás de todo)
+- Contenido hero: `z-20` (sobre el fondo)
+- Navbar fixed: `z-50` (sobre todo el contenido)
+
+#### ✅ Sintaxis Tailwind Válida:
+- No hay clases `z-1` inválidas
+- No hay clases `-z-1` inválidas (que no sean `-z-10`)
+- Todos los z-index usan notación estándar de Tailwind
+
+#### ✅ Sistema de Variables:
+- `$tenant->colorPalette->slug` aplicado en navbar
+- `$customization->logo_filename` con fallback de placeholder
+- `$tenant->saved_display_mode` para toggle de moneda
+- Condicionales por `$tenant->plan->slug`
+
+---
+
+### 🎨 Características del Nuevo Navbar (Heredadas de V2):
+
+1. **Responsive Total:**
+   - Desktop: Navbar horizontal con links visibles
+   - Mobile: Hamburger con collapse animado
+
+2. **Logo Inteligente:**
+   - Si existe: Muestra imagen del tenant
+   - Si no existe: Badge con primera letra del negocio
+
+3. **Estado en Tiempo Real:**
+   - Badge "ABIERTO" / "CERRADO" con animación ping
+   - Indicador visual de disponibilidad
+
+4. **WhatsApp Integrado:**
+   - Mobile: Botón circular en header
+   - Desktop: Botón con texto en navbar-end
+   - Mobile collapse: Link adicional con texto
+
+5. **Toggle de Moneda (Modo Privado):**
+   - Visible solo si `saved_display_mode === 'both_toggle'`
+   - LocalStorage persistente por tenant
+   - Sincronización entre botones mobile/desktop
+
+6. **Condicionales por Plan:**
+   - **Nosotros:** Oculto en plan "Oportunidad"
+   - **FAQ:** Solo en plan "Visión"
+   - **Delivery:** No Oportunidad + `has_delivery === true`
+
+---
+
+### 🚦 Próximos Pasos Recomendados:
+
+1. **Probar en Navegador:**
+   ```bash
+   # Iniciar servidor Laravel
+   php artisan serve
+   
+   # Visitar landing de tenant de prueba
+   http://localhost:8000/tenant-slug
+   ```
+
+2. **Validar Responsive:**
+   - DevTools → Toggle device toolbar
+   - Probar hamburger menu
+   - Verificar WhatsApp button mobile
+   - Comprobar estado "ABIERTO/CERRADO"
+
+3. **Verificar Toggle de Moneda:**
+   - Configurar un tenant con `saved_display_mode = 'both_toggle'`
+   - Probar cambio REF ↔ $ en productos/servicios
+   - Verificar persistencia en localStorage
+
+4. **Limpiar Carpeta V2 (Opcional):**
+   ```bash
+   # Si todo funciona correctamente, considerar:
+   mv resources/views/landing-v2 resources/views/_archived/landing-v2
+   ```
+
+---
+
+## 🚀 PRÓXIMOS PASOS
+
+~~Esperando confirmación del usuario para:~~
+- [x] Aplicar correcciones de z-index
+- [x] Consolidar diseño en landing/ (V1)
+- [x] Compilar CSS con cambios
+- [ ] Probar en navegador (pendiente validación del usuario)
 
 ---
 
 **Generado por:** GitHub Copilot  
 **Fecha de generación:** 21 de febrero de 2026  
-**Versión del sistema:** Laravel 12 + Tailwind v4/v3 + FlyonUI 2.4.1
+**Última actualización:** 21 de febrero de 2026 - Cirugía de Unificación Completada  
+**Versión del sistema:** Laravel 12 + Tailwind v4/v3 + FlyonUI 2.4.1  
+**Branch:** feature/limpieza-frankenstein
