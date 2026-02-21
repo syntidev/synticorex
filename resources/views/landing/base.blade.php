@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html data-theme="{{ $themeSlug }}" lang="es" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,67 +22,36 @@
     <meta property="og:image" content="{{ asset('storage/tenants/' . $tenant->id . '/' . $meta['og_image']) }}">
     @endif
     
-    {{-- Theme Colors CSS Variables --}}
-    <style>
-:root {
-    --color-primary: {{ $colors['primary'] }};
-    --color-secondary: {{ $colors['secondary'] }};
-    --color-accent: {{ $colors['accent'] }};
-    --color-text: {{ $colors['text'] }};
-    --color-text-muted: {{ $colors['textMuted'] }};
-    --color-bg: {{ $colors['background'] }};
-    --color-bg-alt: {{ $colors['backgroundAlt'] }};
-    --color-button-bg: {{ $colors['buttonBg'] }};
-    --color-button-text: {{ $colors['buttonText'] }};
-    --color-button-hover: {{ $colors['buttonHoverBg'] }};
-    --color-link: {{ $colors['linkColor'] }};
-    --color-link-hover: {{ $colors['linkHover'] }};
-    --color-header-text: {{ $colors['header_text'] }};
-    --color-header-bg: {{ $colors['primary'] }};
-    --color-section-bg: {{ $colors['section_bg'] }};
-    --color-section-bg-alt: {{ $colors['section_bg_alt'] }};
-    --color-footer-bg: {{ $colors['footer_bg'] }};
-    --color-footer-text: {{ $colors['footer_text'] }};
-    --color-footer-text-muted: {{ $colors['footer_text_muted'] }};
-    --font-heading: '{{ $fonts['heading'] }}', sans-serif;
-    --font-body: '{{ $fonts['body'] }}', sans-serif;
-}
-
-body {
-    font-family: var(--font-body);
-    color: var(--color-text);
-    background-color: var(--color-bg);
-}
-
-h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-heading);
-}
-
-.btn-primary {
-    background-color: var(--color-button-bg);
-    color: var(--color-button-text);
-}
-
-.btn-primary:hover {
-    background-color: var(--color-button-hover);
-}
-
-a {
-    color: var(--color-link);
-}
-
-a:hover {
-    color: var(--color-link-hover);
-}
-    </style>
+    {{-- Google Fonts for FlyonUI Themes --}}
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amaranth:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Archivo:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Fira+Code:wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
     
-    {{-- Tailwind CSS (CDN for demo, replace with compiled in production) --}}
-    <script src="https://cdn.tailwindcss.com"></script>
+    {{-- FlyonUI Theme System + Compiled CSS --}}
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    
+    {{-- 
+        FlyonUI provides 32 official themes via data-theme attribute
+        Themes: light, dark, cupcake, bumblebee, emerald, corporate, synthwave, retro, cyberpunk, 
+                valentine, halloween, garden, forest, aqua, lofi, pastel, fantasy, wireframe, black, 
+                luxury, dracula, cmyk, autumn, business, acid, lemonade, night, coffee, winter, dim, 
+                nord, sunset
+        
+        Theme colors are automatically handled by FlyonUI CSS
+    --}}
     
     {{-- Custom Styles --}}
     @stack('styles')
+
 </head>
-<body class="min-h-screen" style="background-color: var(--color-bg); color: var(--color-text);">
+<body class="min-h-screen bg-base-200 text-base-content">
     
     {{-- Preview Banner --}}
     @isset($isPreview)

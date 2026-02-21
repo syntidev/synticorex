@@ -1,7 +1,7 @@
 {{-- FAQ Section Partial --}}
-<section id="faq" class="py-16 px-4" style="background-color: var(--color-section-bg-alt);">
+<section id="faq" class="py-16 px-4 bg-base-200">
     <div class="container mx-auto max-w-3xl">
-        <h2 class="text-3xl font-bold text-center mb-12" style="color: var(--color-primary);">
+        <h2 class="text-3xl font-bold text-center mb-12 text-primary">
             Preguntas Frecuentes
         </h2>
         

@@ -932,38 +932,80 @@
 
         <!-- Tab: Diseño -->
         <div id="tab-diseno" class="tab-content">
-            <!-- Sección: Paleta de Colores -->
+            <!-- Sección: Temas FlyonUI -->
             <div class="form-section">
-                <h2 class="table-title">🎨 Paleta de Colores</h2>
-                <p class="table-subtitle" style="margin-bottom: 16px;">Selecciona el estilo visual de tu landing page</p>
+                <h2 class="table-title">🎨 Tema Visual (FlyonUI)</h2>
+                <p class="table-subtitle" style="margin-bottom: 16px;">Selecciona uno de los 17 temas oficiales de FlyonUI</p>
                 
-                <div id="palette-success-message" style="display: none; padding: 12px; background: rgba(0,204,102,0.2); border-radius: 8px; margin-bottom: 16px; color: #00cc66; font-size: 14px;">
-                    ✓ Paleta actualizada correctamente
+                <div id="theme-success-message" style="display: none; padding: 12px; background: rgba(0,204,102,0.2); border-radius: 8px; margin-bottom: 16px; color: #00cc66; font-size: 14px;">
+                    ✓ Tema actualizado correctamente
                 </div>
 
-                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px;">
-                    @foreach($colorPalettes as $palette)
-                    <div 
-                        class="palette-card" 
-                        data-id="{{ $palette->id }}"
-                        onclick="updatePalette({{ $palette->id }})"
-                        style="cursor: pointer; padding: 12px; background: #0f1c32; border-radius: 8px; border: 2px solid {{ $tenant->color_palette_id == $palette->id ? '#2B6FFF' : 'transparent' }}; transition: all 0.2s; position: relative;">
-                        <!-- Color Preview -->
-                        <div style="display: flex; height: 80px; border-radius: 6px; overflow: hidden; margin-bottom: 8px;">
-                            <div style="flex: 1; background: {{ $palette->primary_color }};"></div>
-                            <div style="flex: 1; background: {{ $palette->secondary_color }};"></div>
-                            <div style="flex: 1; background: {{ $palette->background_color }};"></div>
-                        </div>
-                        
-                        <div style="display: flex; align-items: center; justify-content: space-between;">
-                            <span style="font-size: 14px; font-weight: 500;">{{ $palette->name }}</span>
-                            @if($tenant->color_palette_id == $palette->id)
-                                <span class="palette-check" style="color: #2B6FFF; font-size: 18px;">✓</span>
-                            @endif
+                @php
+                $currentTheme = $customization->theme_slug ?? 'light';
+                
+                // 17 temas oficiales FlyonUI
+                $flyonuiThemes = [
+                    ['slug' => 'light', 'name' => 'Light', 'category' => 'Default'],
+                    ['slug' => 'dark', 'name' => 'Dark', 'category' => 'Default'],
+                    ['slug' => 'black', 'name' => 'Black', 'category' => 'Dark Modes'],
+                    ['slug' => 'claude', 'name' => 'Claude', 'category' => 'Professional', 'font' => 'Geist'],
+                    ['slug' => 'corporate', 'name' => 'Corporate', 'category' => 'Professional', 'font' => 'Public Sans'],
+                    ['slug' => 'ghibli', 'name' => 'Ghibli', 'category' => 'Creative', 'font' => 'Amaranth'],
+                    ['slug' => 'gourmet', 'name' => 'Gourmet', 'category' => 'Professional', 'font' => 'Rubik'],
+                    ['slug' => 'luxury', 'name' => 'Luxury', 'category' => 'Professional', 'font' => 'Archivo'],
+                    ['slug' => 'mintlify', 'name' => 'Mintlify', 'category' => 'Tech'],
+                    ['slug' => 'pastel', 'name' => 'Pastel', 'category' => 'Creative', 'font' => 'Open Sans'],
+                    ['slug' => 'perplexity', 'name' => 'Perplexity', 'category' => 'Tech'],
+                    ['slug' => 'shadcn', 'name' => 'Shadcn', 'category' => 'Tech'],
+                    ['slug' => 'slack', 'name' => 'Slack', 'category' => 'Tech', 'font' => 'Lato'],
+                    ['slug' => 'soft', 'name' => 'Soft', 'category' => 'Creative', 'font' => 'Montserrat'],
+                    ['slug' => 'spotify', 'name' => 'Spotify', 'category' => 'Dark Modes', 'font' => 'Lato'],
+                    ['slug' => 'valorant', 'name' => 'Valorant', 'category' => 'Dark Modes', 'font' => 'Work Sans'],
+                    ['slug' => 'vscode', 'name' => 'VS Code', 'category' => 'Tech', 'font' => 'Fira Code'],
+                ];
+                
+                // Agrupar por categoría
+                $themesByCategory = collect($flyonuiThemes)->groupBy('category');
+                @endphp
+
+                @foreach($themesByCategory as $category => $themes)
+                    <div style="margin-bottom: 24px;">
+                        <h3 style="font-size: 14px; font-weight: 600; color: rgba(255,255,255,0.6); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;">
+                            {{ $category }}
+                        </h3>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px;">
+                            @foreach($themes as $theme)
+                            <div 
+                                class="theme-card" 
+                                data-slug="{{ $theme['slug'] }}"
+                                onclick="updateTheme('{{ $theme['slug'] }}')"
+                                style="cursor: pointer; background: #0f1c32; border-radius: 10px; border: 2px solid {{ $currentTheme == $theme['slug'] ? '#2B6FFF' : 'transparent' }}; transition: all 0.2s; position: relative; overflow: hidden;">
+                                
+                                <!-- Preview Real con data-theme de FlyonUI -->
+                                <div data-theme="{{ $theme['slug'] }}" class="p-3">
+                                    <div class="bg-primary w-full h-2 rounded mb-1"></div>
+                                    <div class="bg-secondary w-full h-2 rounded mb-1"></div>
+                                    <div class="bg-accent w-full h-2 rounded mb-2"></div>
+                                    
+                                    <div class="flex items-center justify-between mt-2">
+                                        <p class="text-base-content text-xs font-semibold">{{ $theme['name'] }}</p>
+                                        @if($currentTheme == $theme['slug'])
+                                            <span class="theme-check" style="color: #2B6FFF; font-size: 16px; position: absolute; top: 8px; right: 8px; background: white; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center;">✓</span>
+                                        @endif
+                                    </div>
+                                    
+                                    @if(isset($theme['font']))
+                                        <div class="text-base-content opacity-60 text-[10px] mt-1 italic">
+                                            {{ $theme['font'] }}
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                            @endforeach
                         </div>
                     </div>
-                    @endforeach
-                </div>
+                @endforeach
             </div>
 
             <!-- Sección: Imágenes -->
@@ -1605,41 +1647,42 @@
             }
         }
 
-        // Design Tab: Palette Update
-        function updatePalette(paletteId) {
+        // Design Tab: Theme Update (FlyonUI)
+        function updateTheme(themeSlug) {
             const tenantId = {{ $tenant->id }};
             
-            fetch(`/tenant/${tenantId}/update-palette`, {
+            fetch(`/tenant/${tenantId}/update-theme`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
                 },
-                body: JSON.stringify({palette_id: paletteId})
+                body: JSON.stringify({theme_slug: themeSlug})
             })
             .then(r => r.json())
             .then(data => {
                 if (data.success) {
+                    window.location.reload();
                     // Limpiar TODOS los checks y bordes
-                    document.querySelectorAll('.palette-card').forEach(card => {
+                    document.querySelectorAll('.theme-card').forEach(card => {
                         card.style.border = '2px solid transparent';
-                        const chk = card.querySelector('.palette-check');
+                        const chk = card.querySelector('.theme-check');
                         if (chk) chk.remove();
                     });
                     // Activar la seleccionada
                     const selected = document.querySelector(
-                        `.palette-card[data-id="${paletteId}"]`
+                        `.theme-card[data-slug="${themeSlug}"]`
                     );
                     if (selected) {
                         selected.style.border = '2px solid #2B6FFF';
                         const chk = document.createElement('span');
-                        chk.className = 'palette-check';
+                        chk.className = 'theme-check';
                         chk.textContent = '✓';
-                        chk.style.cssText = 'position:absolute;top:6px;right:8px;color:#2B6FFF;font-weight:700;font-size:14px;';
+                        chk.style.cssText = 'position:absolute;top:8px;right:8px;color:#2B6FFF;font-weight:700;font-size:16px;';
                         selected.appendChild(chk);
                     }
                     // Mensaje éxito
-                    const msg = document.getElementById('palette-success-message');
+                    const msg = document.getElementById('theme-success-message');
                     if (msg) { msg.style.display='block'; setTimeout(()=>msg.style.display='none', 3000); }
                 }
             })

@@ -1,7 +1,7 @@
 {{-- About Section Partial --}}
-<section id="nosotros" class="py-16 px-4" style="background-color: var(--color-section-bg);">
+<section id="about" class="py-16 px-4 bg-base-100">
     <div class="container mx-auto max-w-4xl">
-        <h2 class="text-3xl font-bold text-center mb-8" style="color: var(--color-primary);">
+        <h2 class="text-3xl font-bold text-center mb-8 text-primary">
             Sobre Nosotros
         </h2>
         

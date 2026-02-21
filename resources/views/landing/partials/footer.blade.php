@@ -1,7 +1,7 @@
 {{-- Footer Partial --}}
-<footer class="py-12 px-4" style="background-color: var(--color-footer-bg);">
+<footer id="contact" class="py-12 px-4 bg-neutral text-neutral-content">
     <div class="container mx-auto">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8" style="color: var(--color-footer-text)">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             {{-- Business Info --}}
             <div>
                 <h3 class="text-xl font-bold mb-4">{{ $tenant->business_name }}</h3>

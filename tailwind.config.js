@@ -7,6 +7,7 @@ export default {
         './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
         './storage/framework/views/*.php',
         './resources/views/**/*.blade.php',
+        './node_modules/flyonui/dist/js/*.js',
     ],
 
     theme: {
@@ -17,5 +18,15 @@ export default {
         },
     },
 
-    plugins: [forms],
+    plugins: [
+        forms,
+        require('flyonui')
+    ],
+
+    // FlyonUI Configuration
+    flyonui: {
+        themes: ["light", "dark", "black", "claude", "corporate", "ghibli", "gourmet", 
+                 "luxury", "mintlify", "pastel", "perplexity", "shadcn", "slack", 
+                 "soft", "spotify", "valorant", "vscode"]
+    }
 };

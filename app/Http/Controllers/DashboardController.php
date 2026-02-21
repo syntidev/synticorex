@@ -53,10 +53,8 @@ class DashboardController extends Controller
             // Get current dollar rate
             $dollarRate = $this->dollarRateService->getCurrentRate();
 
-            // Get available color palettes
-            $colorPalettes = \App\Models\ColorPalette::where('is_active', true)
-                ->orderBy('name')
-                ->get();
+            // REMOVED: Color palettes - Now using FlyonUI themes defined in view
+            // $colorPalettes = \App\Models\ColorPalette::where('is_active', true)->orderBy('name')->get();
 
             return view('dashboard.index', compact(
                 'tenant',
@@ -64,8 +62,7 @@ class DashboardController extends Controller
                 'customization',
                 'products',
                 'services',
-                'dollarRate',
-                'colorPalettes'
+                'dollarRate'
             ));
         } catch (\Exception $e) {
             return response()->view('errors.404', [], 404);
@@ -400,7 +397,57 @@ class DashboardController extends Controller
     }
 
     /**
-     * Update tenant color palette.
+     * Update tenant FlyonUI theme.
+     *
+     * @param Request $request
+     * @param int $tenantId
+     * @return JsonResponse
+     */
+    public function updateTheme(Request $request, int $tenantId): JsonResponse
+    {
+        try {
+            // Find tenant and verify status
+            $tenant = Tenant::where('id', $tenantId)
+                ->where('status', 'active')
+                ->firstOrFail();
+
+            // 17 temas oficiales FlyonUI (única fuente de verdad)
+            $validThemes = [
+                'light', 'dark', 'black', 'claude', 'corporate', 'ghibli', 'gourmet',
+                'luxury', 'mintlify', 'pastel', 'perplexity', 'shadcn', 'slack',
+                'soft', 'spotify', 'valorant', 'vscode'
+            ];
+
+            // Validate input
+            $validated = $request->validate([
+                'theme_slug' => 'required|string|in:' . implode(',', $validThemes)
+            ]);
+
+            // Get or create customization record
+            $customization = $tenant->customization;
+            if (!$customization) {
+                $customization = new \App\Models\TenantCustomization();
+                $customization->tenant_id = $tenant->id;
+            }
+
+            // Update theme
+            $customization->theme_slug = $validated['theme_slug'];
+            $customization->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Tema actualizado correctamente'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al actualizar tema: ' . $e->getMessage()
+            ], 422);
+        }
+    }
+
+    /**
+     * Update tenant color palette (LEGACY - use updateTheme instead).
      *
      * @param Request $request
      * @param int $tenantId

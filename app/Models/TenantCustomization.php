@@ -25,6 +25,7 @@ class TenantCustomization extends Model
         'tenant_id',
         'logo_filename',
         'hero_filename',
+        'theme_slug',          // FlyonUI official theme (light, dark, cupcake, etc.)
         'social_networks',
         'payment_methods',
         'faq_items',

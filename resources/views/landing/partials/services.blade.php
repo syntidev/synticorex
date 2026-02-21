@@ -1,7 +1,7 @@
 {{-- Services Section Partial --}}
-<section id="servicios" class="py-16 px-4" style="background-color: var(--color-section-bg-alt);">
+<section id="services" class="py-16 px-4 bg-base-200">
     <div class="container mx-auto">
-        <h2 class="text-3xl font-bold text-center mb-12" style="color: var(--color-primary);">
+        <h2 class="text-3xl font-bold text-center mb-12 text-primary">
             Nuestros Servicios
         </h2>
         
@@ -25,7 +25,7 @@
                                 </div>
                             @endif
                         @else
-                            <div class="w-full h-full flex items-center justify-center" style="background-color: var(--color-primary);">
+                            <div class="w-full h-full flex items-center justify-center bg-primary">
                                 @if($service->icon_name)
                                     <span class="text-6xl text-white">
                                         @switch($service->icon_name)
@@ -84,8 +84,7 @@
                         <a 
                             href="{{ $ctaLink }}"
                             target="{{ $service->cta_link ? '_blank' : '_self' }}"
-                            class="inline-flex items-center px-6 py-3 rounded-lg font-medium transition-colors w-full justify-center"
-                            style="background-color: var(--color-button-bg); color: var(--color-button-text);"
+                            class="btn btn-primary btn-block gap-2"
                         >
                             {{ $service->cta_text ?? 'Más información' }}
                             <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -1,7 +1,7 @@
 {{-- Products Section Partial --}}
-<section id="productos" class="py-16 px-4" style="background-color: var(--color-section-bg);">
+<section id="products" class="py-16 px-4 bg-base-100">
     <div class="container mx-auto">
-        <h2 class="text-3xl font-bold text-center mb-12" style="color: var(--color-primary);">
+        <h2 class="text-3xl font-bold text-center mb-12 text-primary">
             Nuestros Productos
         </h2>
         

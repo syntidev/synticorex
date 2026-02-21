@@ -38,7 +38,6 @@ class TenantRendererController extends Controller
             // Find tenant by subdomain
             $tenant = Tenant::with([
                 'plan',
-                'colorPalette',
                 'customization',
                 'products' => fn($q) => $q
                     ->where('is_active', true)
@@ -64,40 +63,15 @@ class TenantRendererController extends Controller
 
             $plan = $tenant->plan;
 
-            // Obtener paleta de colores
-            $paletteCode = data_get($tenant->settings, 'engine_settings.visual.theme.palette_code', 'energia-roja');
-            $palette = \App\Models\ColorPalette::where('code', $paletteCode)->first();
-
-            if (!$palette) {
-                $palette = \App\Models\ColorPalette::where('code', 'energia-roja')->first();
-            }
-
-            $colors = [
-                'primary' => $palette->primary_color,
-                'secondary' => $palette->secondary_color,
-                'accent' => $palette->accent_color,
-                'text' => $palette->text_color,
-                'textMuted' => $palette->text_muted,
-                'background' => $palette->background_color,
-                'backgroundAlt' => $palette->background_alt,
-                'buttonBg' => $palette->button_bg,
-                'buttonText' => $palette->button_text,
-                'buttonHoverBg' => $palette->button_hover_bg,
-                'linkColor' => $palette->link_color,
-                'linkHover' => $palette->link_hover,
-                'header_bg' => $palette->primary_color,
-                'header_text' => $this->getContrastColor($palette->primary_color),
-                'section_bg' => $palette->background_color ?? '#FFFFFF',
-                'section_bg_alt' => $palette->background_alt ?? '#F5F5F5',
-                'footer_bg' => $palette->background_alt ?? '#1a1a1a',
-                'footer_text' => $this->getContrastColor($palette->background_alt ?? '#1a1a1a'),
-                'footer_text_muted' => $this->getContrastColor($palette->background_alt ?? '#1a1a1a'),
-            ];
-
-            $fonts = [
-                'heading' => $palette->font_primary ?? 'Inter',
-                'body' => $palette->font_secondary ?? 'Inter',
-            ];
+            // ═══════════════════════════════════════════════════════════════════════
+            // FLYONUI THEME SYSTEM (Reemplaza ColorPalette custom)
+            // ═══════════════════════════════════════════════════════════════════════
+            // Obtener theme_slug de tenant_customization
+            // Los temas oficiales FlyonUI se aplican con data-theme attribute
+            // No necesitamos variables CSS custom, FlyonUI lo maneja todo
+            // ═══════════════════════════════════════════════════════════════════════
+            $customization = $tenant->customization;
+            $themeSlug = $customization->theme_slug ?? 'light';
 
             // Get current dollar rate
             $dollarRate = $this->dollarRateService->getCurrentRate();
@@ -145,7 +119,7 @@ class TenantRendererController extends Controller
                 'symbols' => data_get($tenant->settings, 'engine_settings.currency.display.symbols', ['reference' => 'REF', 'bolivares' => 'Bs.']),
             ];
 
-            return view('landing.base', compact('tenant', 'plan', 'products', 'services', 'dollarRate', 'colors', 'fonts', 'meta', 'customization', 'currencySettings', 'displayMode', 'showReference', 'showBolivares', 'hidePrice'));
+            return view('landing.base', compact('tenant', 'plan', 'products', 'services', 'dollarRate', 'themeSlug', 'meta', 'customization', 'currencySettings', 'displayMode', 'showReference', 'showBolivares', 'hidePrice'));
         } catch (Throwable $e) {
             Log::error('TenantRendererController: Error rendering landing page', [
                 'subdomain' => $subdomain,
@@ -170,7 +144,6 @@ class TenantRendererController extends Controller
 
             $tenant = Tenant::with([
                 'plan',
-                'colorPalette',
                 'customization',
                 'products' => fn($q) => $q
                     ->where('is_active', true)
@@ -192,23 +165,27 @@ class TenantRendererController extends Controller
                 return $this->render404($domain);
             }
 
-            // Reuse show logic
+            // FlyonUI Theme System
+            $customization = $tenant->customization;
+            $themeSlug = $customization->theme_slug ?? 'light';
             $dollarRate = $this->dollarRateService->getCurrentRate();
             $products = $this->calculateProductPrices($tenant->products, $dollarRate);
-            $themeColors = $this->extractThemeColors($tenant);
             $currencySettings = $this->extractCurrencySettings($tenant);
 
             $viewData = [
                 'tenant' => $tenant,
+                'plan' => $tenant->plan,
                 'products' => $products,
                 'services' => $tenant->services,
                 'dollarRate' => $dollarRate,
-                'themeColors' => $themeColors,
-                'currencySettings' => $currencySettings,
-                'plan' => $tenant->plan,
-                'customization' => $tenant->customization,
-                'colorPalette' => $tenant->colorPalette,
+                'themeSlug' => $themeSlug,
                 'meta' => $this->buildMetaTags($tenant),
+                'customization' => $customization,
+                'currencySettings' => $currencySettings,
+                'displayMode' => data_get($tenant->settings, 'engine_settings.currency.display.mode', 'reference_only'),
+                'showReference' => in_array(data_get($tenant->settings, 'engine_settings.currency.display.saved_display_mode', 'reference_only'), ['reference_only', 'both_toggle']),
+                'showBolivares' => in_array(data_get($tenant->settings, 'engine_settings.currency.display.saved_display_mode', 'reference_only'), ['bolivares_only', 'both_toggle']),
+                'hidePrice' => data_get($tenant->settings, 'engine_settings.currency.display.saved_display_mode', 'reference_only') === 'hidden',
             ];
 
             Log::info('TenantRendererController: Rendering by custom domain', [
@@ -238,7 +215,6 @@ class TenantRendererController extends Controller
         try {
             $tenant = Tenant::with([
                 'plan',
-                'colorPalette',
                 'customization',
                 'products' => fn($q) => $q->orderBy('position'),
                 'services' => fn($q) => $q->orderBy('position'),
@@ -248,22 +224,27 @@ class TenantRendererController extends Controller
                 return $this->render404("Tenant #{$tenantId}");
             }
 
+            // FlyonUI Theme System
+            $customization = $tenant->customization;
+            $themeSlug = $customization->theme_slug ?? 'light';
             $dollarRate = $this->dollarRateService->getCurrentRate();
             $products = $this->calculateProductPrices($tenant->products, $dollarRate);
-            $themeColors = $this->extractThemeColors($tenant);
             $currencySettings = $this->extractCurrencySettings($tenant);
 
             $viewData = [
                 'tenant' => $tenant,
+                'plan' => $tenant->plan,
                 'products' => $products,
                 'services' => $tenant->services,
                 'dollarRate' => $dollarRate,
-                'themeColors' => $themeColors,
-                'currencySettings' => $currencySettings,
-                'plan' => $tenant->plan,
-                'customization' => $tenant->customization,
-                'colorPalette' => $tenant->colorPalette,
+                'themeSlug' => $themeSlug,
                 'meta' => $this->buildMetaTags($tenant),
+                'customization' => $customization,
+                'currencySettings' => $currencySettings,
+                'displayMode' => data_get($tenant->settings, 'engine_settings.currency.display.mode', 'reference_only'),
+                'showReference' => in_array(data_get($tenant->settings, 'engine_settings.currency.display.saved_display_mode', 'reference_only'), ['reference_only', 'both_toggle']),
+                'showBolivares' => in_array(data_get($tenant->settings, 'engine_settings.currency.display.saved_display_mode', 'reference_only'), ['bolivares_only', 'both_toggle']),
+                'hidePrice' => data_get($tenant->settings, 'engine_settings.currency.display.saved_display_mode', 'reference_only') === 'hidden',
                 'isPreview' => true,
             ];
 
@@ -298,75 +279,6 @@ class TenantRendererController extends Controller
             $product->exchange_rate = $dollarRate;
             return $product;
         });
-    }
-
-    /**
-     * Calculate contrast color (black or white) based on background luminosity.
-     * Uses WCAG relative luminance formula.
-     *
-     * @param string $hexColor
-     * @return string
-     */
-    private function getContrastColor(string $hexColor): string
-    {
-        // Remove # if present
-        $hex = ltrim($hexColor, '#');
-        
-        // Convert to RGB
-        $r = hexdec(substr($hex, 0, 2)) / 255;
-        $g = hexdec(substr($hex, 2, 2)) / 255;
-        $b = hexdec(substr($hex, 4, 2)) / 255;
-        
-        // Apply gamma correction
-        $r = ($r <= 0.03928) ? $r / 12.92 : pow(($r + 0.055) / 1.055, 2.4);
-        $g = ($g <= 0.03928) ? $g / 12.92 : pow(($g + 0.055) / 1.055, 2.4);
-        $b = ($b <= 0.03928) ? $b / 12.92 : pow(($b + 0.055) / 1.055, 2.4);
-        
-        // Calculate relative luminance (WCAG formula)
-        $luminance = 0.2126 * $r + 0.7152 * $g + 0.0722 * $b;
-        
-        // Return dark or light color based on luminance
-        return $luminance > 0.5 ? '#1a1a1a' : '#FFFFFF';
-    }
-
-    /**
-     * Extract theme colors from tenant settings or color palette.
-     *
-     * @param Tenant $tenant
-     * @return array
-     */
-    private function extractThemeColors(Tenant $tenant): array
-    {
-        $settings = $tenant->settings ?? [];
-        $palette = $tenant->colorPalette;
-
-        // Try to get from settings first
-        $visualSettings = data_get($settings, 'engine_settings.visual', []);
-
-        // Calculate footer background
-        $footerBg = $visualSettings['footer_bg'] ?? $palette?->background_alt ?? '#1a1a1a';
-        $footerText = $this->getContrastColor($footerBg);
-
-        // Fallback to color palette
-        $headerBg = $visualSettings['header_bg'] ?? $palette?->primary_color ?? '#0066CC';
-        $headerText = $this->getContrastColor($headerBg);
-        
-        return [
-            'primary' => $visualSettings['primary_color'] ?? $palette?->primary_color ?? '#0066CC',
-            'secondary' => $visualSettings['secondary_color'] ?? $palette?->secondary_color ?? '#FFFFFF',
-            'accent' => $visualSettings['accent_color'] ?? $palette?->accent_color ?? '#FF6600',
-            'background' => $visualSettings['background_color'] ?? $palette?->background_color ?? '#FFFFFF',
-            'text' => $visualSettings['text_color'] ?? $palette?->text_color ?? '#000000',
-            'header_bg' => $headerBg,
-            'header_text' => $headerText,
-            'section_bg' => $visualSettings['background_color'] ?? $palette?->background_color ?? '#FFFFFF',
-            'section_bg_alt' => $visualSettings['background_alt'] ?? $palette?->background_alt ?? '#F5F5F5',
-            'footer_bg' => $footerBg,
-            'footer_text' => $footerText,
-            'footer_text_muted' => $footerText,
-            'button_bg' => $visualSettings['button_bg'] ?? $palette?->primary_color ?? '#0066CC',
-            'button_text' => $visualSettings['button_text'] ?? '#FFFFFF',
-        ];
     }
 
     /**
