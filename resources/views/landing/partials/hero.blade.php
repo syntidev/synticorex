@@ -1,45 +1,38 @@
-<section class="relative overflow-hidden bg-white pt-28 pb-12 lg:pt-40 lg:pb-24">
-    
-    {{-- El componente decorativo ahora vive en z-[1] --}}
+<section class="relative bg-white pt-24 pb-32 lg:pt-40 lg:pb-52 overflow-hidden">
     <x-ui.decorative-background />
 
-    {{-- Subimos el contenido a z-10 para que los marcos pasen por DETRÁS --}}
-    <div class="container relative z-10 mx-auto px-6"> 
-        <div class="flex flex-col items-center gap-12 lg:flex-row">
+    <div class="container mx-auto px-8 lg:px-12 relative z-10">
+        <div class="flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-16">
             
-            <div class="w-full lg:w-1/2">
-                <div class="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary mb-6">
-                    <span class="relative flex h-2 w-2">
-                        <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"></span>
-                        <span class="relative inline-flex h-2 w-2 rounded-full bg-primary"></span>
-                    </span>
+            {{-- COLUMNA TEXTO --}}
+            <div class="w-full lg:w-[42%] space-y-8">
+                <div class="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-xs font-bold text-primary">
                     {{ $tenant->business_name }} • {{ $tenant->years_experience ?: '5+' }} años
                 </div>
-                
-                <h1 class="text-5xl font-black tracking-tight text-gray-900 lg:text-7xl">
+                <h1 class="text-5xl lg:text-7xl font-black text-gray-900 leading-[1.05] tracking-tight">
                     Explore <span class="text-primary italic">Course</span> Categories
                 </h1>
-                
-                <p class="mt-8 text-lg leading-relaxed text-gray-600 max-w-xl">
-                    Create and sell online courses, build vibrant communities, and monetize your expertise on a single, scalable platform.
+                <p class="text-lg text-gray-600 max-w-md leading-relaxed">
+                    Create and sell online courses, build vibrant communities, and monetize your expertise.
                 </p>
-
-                <div class="mt-10 flex flex-wrap gap-4">
-                    <button class="btn btn-primary btn-lg shadow-xl shadow-primary/30 group px-8">
-                        Buy Now
-                        <span class="icon-[tabler--arrow-right] transition-transform group-hover:translate-x-1"></span>
-                    </button>
-                    <button class="btn btn-outline btn-lg border-gray-200 hover:bg-gray-50 text-gray-700 px-8">Learn More</button>
+                <div class="flex gap-4 pt-4">
+                    <button class="btn btn-primary btn-lg px-10 rounded-2xl shadow-xl shadow-primary/20 transition-transform hover:-translate-y-1">Buy Now</button>
+                    <button class="btn btn-outline btn-lg px-10 rounded-2xl border-gray-200">Learn More</button>
                 </div>
             </div>
 
-            <div class="relative w-full lg:w-1/2 flex justify-center items-center">
-                {{-- La imagen principal con su sombra para dar profundidad --}}
-                <div class="relative group">
+            {{-- COLUMNA IMAGEN: Relación Alargada Personalizada --}}
+            <div class="w-full lg:w-[58%] flex justify-end">
+                {{-- 
+                   - lg:w-[58%]: Expandimos la imagen para que domine.
+                   - aspect-[16/11]: Relación alargada pero con cuerpo.
+                   - rounded-[3rem]: Curvatura Bento equilibrada.
+                --}}
+                <div class="relative w-full max-w-[750px] aspect-[16/11] overflow-hidden rounded-[3rem] shadow-2xl border-[8px] border-white transition-all duration-500 hover:scale-[1.01]">
                     <img 
                         src="{{ $customization->hero_filename ? asset('storage/' . $customization->hero_filename) : 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=800' }}" 
                         alt="Hero Image" 
-                        class="h-[450px] lg:h-[550px] w-auto object-contain drop-shadow-2xl transition-transform duration-500 group-hover:scale-105"
+                        class="w-full h-full object-cover"
                     >
                 </div>
             </div>
