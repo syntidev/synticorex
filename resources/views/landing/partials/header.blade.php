@@ -33,7 +33,7 @@
                     onclick="toggleGlobalCurrency('usd')" 
                     id="btn-usd"
                     class="px-3 py-1 text-[10px] font-black rounded-lg transition-all bg-white shadow-sm text-primary"
-                >USD</button>
+                >REF</button>
                 <button 
                     onclick="toggleGlobalCurrency('bs')" 
                     id="btn-bs"

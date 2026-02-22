@@ -1,96 +1,64 @@
-{{-- Services Section Partial --}}
-<section id="services" class="py-16 px-4 bg-base-200">
-    <div class="container mx-auto">
-        <h2 class="text-3xl font-bold text-center mb-12 text-primary">
-            Nuestros Servicios
-        </h2>
+{{-- Services Section: Arquitectura de Lujo --}}
+<section id="servicios" class="relative py-32 overflow-hidden bg-surface-950">
+    
+    {{-- CAPA ATMOSFÉRICA: Luz radial de marca --}}
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[700px] bg-primary/10 blur-[130px] rounded-full pointer-events-none"></div>
+
+    <div class="container mx-auto px-8 relative z-10">
         
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {{-- Encabezado con clase --}}
+        <div class="text-center mb-24">
+            <h2 class="text-white text-4xl md:text-6xl font-black tracking-tighter mb-6">
+                Nuestros <span class="text-primary italic">Servicios</span>
+            </h2>
+            <div class="w-24 h-1.5 bg-primary mx-auto rounded-full"></div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
             @foreach($services as $service)
-                <article class="bg-white rounded-xl shadow-lg overflow-hidden transition-transform hover:scale-[1.02]">
-                    {{-- Service Image or Icon --}}
-                    <div class="relative aspect-video bg-gray-100">
+                <article class="group relative bg-white/5 border border-white/10 rounded-[2.5rem] p-8 transition-all duration-500 hover:bg-white/10 hover:border-primary/30 hover:-translate-y-2 hover:shadow-glow-primary">
+                    
+                    {{-- Contenedor de Imagen o Icono Profesional --}}
+                    <div class="relative w-20 h-20 mb-8 rounded-2xl bg-primary/10 flex items-center justify-center overflow-hidden group-hover:bg-primary/20 transition-colors">
                         @if($service->image_filename)
                             <img 
                                 src="{{ asset('storage/tenants/' . $tenant->id . '/services/' . $service->image_filename) }}" 
                                 alt="{{ $service->name }}"
                                 class="w-full h-full object-cover"
-                                loading="lazy"
                             >
-                            @if($service->overlay_text)
-                                <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
-                                    <span class="text-white text-xl font-bold text-center px-4">
-                                        {{ $service->overlay_text }}
-                                    </span>
-                                </div>
-                            @endif
                         @else
-                            <div class="w-full h-full flex items-center justify-center bg-primary">
-                                @if($service->icon_name)
-                                    <span class="text-6xl text-white">
-                                        @switch($service->icon_name)
-                                            @case('scissors')
-                                                ✂️
-                                                @break
-                                            @case('wrench')
-                                                🔧
-                                                @break
-                                            @case('burger')
-                                                🍔
-                                                @break
-                                            @case('pizza')
-                                                🍕
-                                                @break
-                                            @case('car')
-                                                🚗
-                                                @break
-                                            @case('home')
-                                                🏠
-                                                @break
-                                            @case('heart')
-                                                ❤️
-                                                @break
-                                            @case('star')
-                                                ⭐
-                                                @break
-                                            @default
-                                                🔹
-                                        @endswitch
-                                    </span>
-                                @else
-                                    <svg class="w-16 h-16 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-                                    </svg>
-                                @endif
-                            </div>
+                            {{-- 
+                                USANDO ICONIFY + FLYONUI (Lucide Icons)
+                                Si no hay icono definido, usamos un default elegante.
+                            --}}
+                            <span class="icon-[lucide--{{ $service->icon_name ?? 'component' }}] text-4xl text-primary"></span>
                         @endif
                     </div>
                     
-                    {{-- Service Info --}}
-                    <div class="p-6">
-                        <h3 class="text-xl font-semibold text-gray-900 mb-2">{{ $service->name }}</h3>
+                    {{-- Información del Servicio --}}
+                    <div class="space-y-4">
+                        <h3 class="text-2xl font-bold text-white tracking-tight group-hover:text-primary transition-colors">
+                            {{ $service->name }}
+                        </h3>
                         
-                        @if($service->description)
-                            <p class="text-gray-600 mb-4">{{ $service->description }}</p>
-                        @endif
+                        <p class="text-gray-400 text-sm leading-relaxed line-clamp-3">
+                            {{ $service->description ?? 'Soluciones personalizadas diseñadas para elevar el estándar de tu negocio.' }}
+                        </p>
                         
-                        {{-- CTA Button --}}
-                        @php
-                            $ctaLink = $service->cta_link ?? ($tenant->whatsapp_sales 
-                                ? 'https://wa.me/' . preg_replace('/[^0-9]/', '', $tenant->whatsapp_sales) . '?text=' . urlencode('Hola! Me interesa el servicio: ' . $service->name)
-                                : '#');
-                        @endphp
-                        
-                        <a 
-                            href="{{ $ctaLink }}"
-                            target="{{ $service->cta_link ? '_blank' : '_self' }}"
-                            class="btn btn-primary btn-block gap-2"
-                        >
-                            {{ $service->cta_text ?? 'Más información' }}
-                            <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                            </svg>
-                        </a>
+                        {{-- Botón de Acción Refinado --}}
+                        <div class="pt-6">
+                            @php
+                                $ctaLink = $service->cta_link ?? ($tenant->whatsapp_sales 
+                                    ? 'https://wa.me/' . preg_replace('/[^0-9]/', '', $tenant->whatsapp_sales) . '?text=' . urlencode('Hola! Me interesa el servicio: ' . $service->name)
+                                    : '#');
+                            @endphp
+                            
+                            <a href="{{ $ctaLink }}" 
+                               class="inline-flex items-center gap-2 text-primary font-black uppercase text-xs tracking-widest group/btn">
+                                <span>{{ $service->cta_text ?? 'Saber más' }}</span>
+                                <span class="icon-[lucide--arrow-right] transition-transform group-hover/btn:translate-x-2"></span>
+                            </a>
+                        </div>
                     </div>
                 </article>
             @endforeach

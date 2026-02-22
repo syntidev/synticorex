@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     
-    {{-- SEO Meta Tags --}}
     <title>{{ $meta['title'] }}</title>
     <meta name="description" content="{{ $meta['description'] }}">
     @if($meta['keywords'])
@@ -22,140 +21,78 @@
     <meta property="og:image" content="{{ asset('storage/tenants/' . $tenant->id . '/' . $meta['og_image']) }}">
     @endif
     
-    {{-- Google Fonts for FlyonUI Themes --}}
+    {{-- Fonts --}}
     <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Amaranth:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Archivo:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Fira+Code:wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
-    
-    {{-- FlyonUI Theme System + Compiled CSS --}}
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
-    {{-- 
-        FlyonUI provides 32 official themes via data-theme attribute
-        Themes: light, dark, cupcake, bumblebee, emerald, corporate, synthwave, retro, cyberpunk, 
-                valentine, halloween, garden, forest, aqua, lofi, pastel, fantasy, wireframe, black, 
-                luxury, dracula, cmyk, autumn, business, acid, lemonade, night, coffee, winter, dim, 
-                nord, sunset
-        
-        Theme colors are automatically handled by FlyonUI CSS
-    --}}
-    
-    {{-- Custom Styles --}}
     @stack('styles')
-
 </head>
-<body class="min-h-screen bg-base-200 text-base-content">
-    
-    {{-- Preview Banner --}}
-    @isset($isPreview)
-    <div class="bg-yellow-500 text-black text-center py-2 text-sm font-semibold">
-        ⚠️ MODO VISTA PREVIA - Los cambios no están publicados
-    </div>
-    @endisset
 
-    {{-- Header --}}
+<body class="min-h-screen bg-surface-50 dark:bg-surface-950 text-base-content antialiased transition-colors duration-500">
+
+    {{-- Overlay de textura premium (opcional) --}}
+    <div class="fixed inset-0 z-[9999] opacity-[0.02] pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"></div>
+
     @include('landing.partials.header')
+
+    <main>
+        {{-- Hero: Fondo Blanco/Luz --}}
+        @include('landing.partials.hero')
+
+        {{-- Sección Productos: Transición hacia la onda --}}
+        {{-- Solo el bloque de la Wave en base.blade.php --}}
+<div class="relative bg-base-100 pb-20">
+    @include('landing.partials.products')
     
-    {{-- Hero Section --}}
-    @include('landing.partials.hero')
-    
-    {{-- Products Section --}}
-    @if($products->count() > 0)
-        @include('landing.partials.products')
-    @endif
-    
-    {{-- Services Section --}}
-    @if($services->count() > 0)
-        @include('landing.partials.services')
-    @endif
-    
-    {{-- About Section (if plan allows) --}}
-    @if($plan?->show_about_section && $tenant->description)
-        @include('landing.partials.about')
-    @endif
-    
-    {{-- FAQ Section (if plan allows) --}}
-    @if($plan?->show_faq && $customization?->faq_items)
-        @include('landing.partials.faq')
-    @endif
-    
-    {{-- CTA Section (if plan allows) --}}
-    @if($plan?->show_cta_special && $customization?->cta_title)
-        @include('landing.partials.cta')
-    @endif
-    
-    {{-- Payment Methods Section --}}
-    @if($plan?->show_payment_methods)
-        @include('landing.partials.payment-methods')
-    @endif
-    
-    {{-- Contact/Footer --}}
+    {{-- WAVE DINÁMICA: Hereda el color base-200 de Servicios --}}
+    <div class="absolute bottom-0 left-0 w-full overflow-hidden leading-[0] transform translate-y-[99%] z-20 text-base-200">
+        <svg class="relative block w-full h-[60px] md:h-[100px] fill-current" viewBox="0 0 1200 120" preserveAspectRatio="none">
+            <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"></path>
+        </svg>
+    </div>
+</div>
+
+        {{-- Sección Servicios: El alma del diseño oscuro con Glow --}}
+        <div class="relative bg-surface-900 dark:bg-black pt-32 pb-24 overflow-hidden">
+            {{-- Resplandor radial de marca --}}
+            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[700px] bg-primary/10 blur-[130px] rounded-full pointer-events-none"></div>
+            
+            @include('landing.partials.services')
+        </div>
+
+        {{-- Sección FAQ: Fondo claro para descanso visual --}}
+        <div class="bg-surface-50 dark:bg-surface-950">
+            @include('landing.partials.faq')
+        </div>
+
+        {{-- Sección Testimonios (Crea el archivo parcial si no existe) --}}
+        @if(view()->exists('landing.partials.testimonials'))
+            @include('landing.partials.testimonials')
+        @endif
+    </main>
+
+    {{-- Footer con ADN dinámico --}}
     @include('landing.partials.footer')
-    
-    {{-- WhatsApp Floating Button --}}
-    @include('landing.partials.whatsapp-button')
-    
-    {{-- Currency Configuration --}}
+
+    {{-- Lógica de Precios y Moneda --}}
     <script>
-        const CURRENCY_MODE = '{{ data_get($tenant->settings, "engine_settings.currency.display.saved_display_mode", "reference_only") }}';
-        const CURRENCY_SYMBOL = '{{ data_get($tenant->settings, "engine_settings.currency.display.symbols.reference", "REF") }}';
-        const DOLLAR_RATE = {{ $dollarRate ?? 36.50 }};
-    </script>
-    
-    {{-- Currency Toggle Script --}}
-    <script>
-        const CLIENT_DATA = {
-            tenant_id: {{ $tenant->id }},
-            business_name: "{{ $tenant->business_name }}",
-            currency: {
-                exchange_rate: {{ $dollarRate }},
-                settings: @json($currencySettings)
-            }
-        };
+        const CURRENCY_MODE = @json($tenant->currency_mode);
+        const CURRENCY_SYMBOL = @json($tenant->currency_symbol);
+        const EXCHANGE_RATE = @json($tenant->exchange_rate);
         
-        let currentCurrency = CLIENT_DATA.currency.settings.default_currency;
-        
-        function formatPrice(priceUSD) {
-            const rate = DOLLAR_RATE;
-            const settings = CLIENT_DATA.currency.settings;
-            
-            // Handle 'hidden' mode
-            if (CURRENCY_MODE === 'hidden') {
-                return 'Más Info';
+        let currentCurrency = 'USD';
+
+        function formatPrice(usdPrice) {
+            if (currentCurrency === 'Bs.') {
+                return 'Bs. ' + (usdPrice * EXCHANGE_RATE).toLocaleString('es-VE', {minimumFractionDigits: 2});
             }
-            
-            // Determine currency to display based on mode
-            let displayCurrency = currentCurrency;
-            if (CURRENCY_MODE === 'reference_only') {
-                displayCurrency = CURRENCY_SYMBOL;
-            } else if (CURRENCY_MODE === 'bolivares_only') {
-                displayCurrency = 'Bs.';
-            }
-            
-            if (displayCurrency === CURRENCY_SYMBOL || displayCurrency === 'REF' || displayCurrency === 'USD') {
-                return `${CURRENCY_SYMBOL} ${parseFloat(priceUSD).toFixed(settings.decimals)}`;
-            } else {
-                const priceBS = parseFloat(priceUSD) * rate;
-                return `${settings.symbols.bolivares} ${formatNumber(priceBS, settings.decimals)}`;
-            }
+            return (currentCurrency === 'REF' ? 'REF ' : CURRENCY_SYMBOL + ' ') + parseFloat(usdPrice).toLocaleString('en-US', {minimumFractionDigits: 2});
         }
-        
-        function formatNumber(num, decimals = 2) {
-            return num.toFixed(decimals).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        }
-        
+
         function toggleCurrency() {
-            // Only allow toggling in 'both_toggle' mode
-            if (CURRENCY_MODE !== 'both_toggle') return;
-            
-            currentCurrency = (currentCurrency === CURRENCY_SYMBOL || currentCurrency === 'REF' || currentCurrency === 'USD') ? 'Bs.' : CURRENCY_SYMBOL;
+            currentCurrency = (currentCurrency === CURRENCY_SYMBOL || currentCurrency === 'REF') ? 'Bs.' : CURRENCY_SYMBOL;
             renderAllPrices();
             updateToggleButton();
         }
@@ -170,7 +107,6 @@
         function updateToggleButton() {
             const btn = document.getElementById('currency-toggle-btn');
             if (btn) {
-                // Hide button if mode is not 'both_toggle'
                 if (CURRENCY_MODE !== 'both_toggle') {
                     btn.style.display = 'none';
                 } else {
@@ -180,23 +116,14 @@
             }
         }
         
-        // Initialize on load
         document.addEventListener('DOMContentLoaded', function() {
-            // Set initial currency based on mode
-            if (CURRENCY_MODE === 'bolivares_only') {
-                currentCurrency = 'Bs.';
-            } else {
-                currentCurrency = CURRENCY_SYMBOL;
-            }
-            
+            currentCurrency = (CURRENCY_MODE === 'bolivares_only') ? 'Bs.' : CURRENCY_SYMBOL;
             renderAllPrices();
             updateToggleButton();
         });
     </script>
     
-    {{-- Floating Panel --}}
     @include('landing.partials.floating-panel')
-    
     @stack('scripts')
 </body>
 </html>
