@@ -461,19 +461,18 @@ class DashboardController extends Controller
                 ->where('status', 'active')
                 ->firstOrFail();
 
+            // Lista de 17 temas válidos de FlyonUI
+            $validThemes = [
+                'light', 'dark', 'black', 'claude', 'corporate', 'ghibli',
+                'gourmet', 'luxury', 'mintlify', 'pastel', 'perplexity',
+                'shadcn', 'slack', 'soft', 'spotify', 'valorant', 'vscode'
+            ];
+
             // Validate input
             $validated = $request->validate([
-                'palette_id' => 'required|integer|exists:color_palettes,id'
+                'theme' => 'required|string|in:' . implode(',', $validThemes)
             ]);
 
-            // Verify palette is active
-            $palette = \App\Models\ColorPalette::where('id', $validated['palette_id'])
-                ->where('is_active', true)
-                ->firstOrFail();
-
-            // Update tenant palette and settings
-            $tenant->color_palette_id = $validated['palette_id'];
-            
             // Update settings JSON
             $settings = $tenant->settings ?? [];
             if (!isset($settings['engine_settings'])) {
@@ -486,13 +485,13 @@ class DashboardController extends Controller
                 $settings['engine_settings']['visual']['theme'] = [];
             }
             
-            $settings['engine_settings']['visual']['theme']['palette_code'] = $palette->slug ?? $palette->id;
+            $settings['engine_settings']['visual']['theme']['flyonui_theme'] = $validated['theme'];
             $tenant->settings = $settings;
             $tenant->save();
 
             return response()->json([
                 'success' => true,
-                'message' => 'Paleta actualizada correctamente'
+                'message' => 'Tema actualizado correctamente'
             ]);
         } catch (\Exception $e) {
             return response()->json([

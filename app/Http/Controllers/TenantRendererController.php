@@ -66,12 +66,11 @@ class TenantRendererController extends Controller
             // ═══════════════════════════════════════════════════════════════════════
             // FLYONUI THEME SYSTEM (Reemplaza ColorPalette custom)
             // ═══════════════════════════════════════════════════════════════════════
-            // Obtener theme_slug de tenant_customization
+            // Obtener theme_slug de tenant settings
             // Los temas oficiales FlyonUI se aplican con data-theme attribute
             // No necesitamos variables CSS custom, FlyonUI lo maneja todo
             // ═══════════════════════════════════════════════════════════════════════
-            $customization = $tenant->customization;
-            $themeSlug = $customization->theme_slug ?? 'light';
+            $themeSlug = $tenant->settings['engine_settings']['visual']['theme']['flyonui_theme'] ?? 'light';
 
             // Get current dollar rate
             $dollarRate = $this->dollarRateService->getCurrentRate();
@@ -166,8 +165,7 @@ class TenantRendererController extends Controller
             }
 
             // FlyonUI Theme System
-            $customization = $tenant->customization;
-            $themeSlug = $customization->theme_slug ?? 'light';
+            $themeSlug = $tenant->settings['engine_settings']['visual']['theme']['flyonui_theme'] ?? 'light';
             $dollarRate = $this->dollarRateService->getCurrentRate();
             $products = $this->calculateProductPrices($tenant->products, $dollarRate);
             $currencySettings = $this->extractCurrencySettings($tenant);
@@ -225,8 +223,7 @@ class TenantRendererController extends Controller
             }
 
             // FlyonUI Theme System
-            $customization = $tenant->customization;
-            $themeSlug = $customization->theme_slug ?? 'light';
+            $themeSlug = $tenant->settings['engine_settings']['visual']['theme']['flyonui_theme'] ?? 'light';
             $dollarRate = $this->dollarRateService->getCurrentRate();
             $products = $this->calculateProductPrices($tenant->products, $dollarRate);
             $currencySettings = $this->extractCurrencySettings($tenant);
@@ -239,7 +236,7 @@ class TenantRendererController extends Controller
                 'dollarRate' => $dollarRate,
                 'themeSlug' => $themeSlug,
                 'meta' => $this->buildMetaTags($tenant),
-                'customization' => $customization,
+                'customization' => $tenant->customization,
                 'currencySettings' => $currencySettings,
                 'displayMode' => data_get($tenant->settings, 'engine_settings.currency.display.mode', 'reference_only'),
                 'showReference' => in_array(data_get($tenant->settings, 'engine_settings.currency.display.saved_display_mode', 'reference_only'), ['reference_only', 'both_toggle']),

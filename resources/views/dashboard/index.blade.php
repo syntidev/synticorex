@@ -10,6 +10,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    
     <style>
         * {
             margin: 0;
@@ -932,81 +934,115 @@
 
         <!-- Tab: Diseño -->
         <div id="tab-diseno" class="tab-content">
-            <!-- Sección: Temas FlyonUI -->
-            <div class="form-section">
-                <h2 class="table-title">🎨 Tema Visual (FlyonUI)</h2>
-                <p class="table-subtitle" style="margin-bottom: 16px;">Selecciona uno de los 17 temas oficiales de FlyonUI</p>
-                
-                <div id="theme-success-message" style="display: none; padding: 12px; background: rgba(0,204,102,0.2); border-radius: 8px; margin-bottom: 16px; color: #00cc66; font-size: 14px;">
-                    ✓ Tema actualizado correctamente
+@php
+$currentTheme = $tenant->settings['engine_settings']['visual']['theme']['flyonui_theme'] ?? 'light';
+
+// Colores hardcodeados de cada tema FlyonUI (primary, secondary, accent, neutral, base)
+$flyonuiThemes = [
+    // DEFAULT
+    ['slug'=>'light', 'name'=>'Light', 'category'=>'Default', 'colors'=>['#570df8','#f000b8','#37cdbe','#ffffff']],
+    ['slug'=>'dark', 'name'=>'Dark', 'category'=>'Default', 'colors'=>['#661ae6','#d926a9','#1fb2a6','#2a303c']],
+    // DARK MODES
+    ['slug'=>'black', 'name'=>'Black', 'category'=>'Dark Modes', 'font'=>'Geist', 'colors'=>['#ffffff','#ffffff','#ffffff','#000000']],
+    ['slug'=>'spotify', 'name'=>'Spotify', 'category'=>'Dark Modes', 'font'=>'Montserrat', 'colors'=>['#1db954','#1ed760','#1db954','#121212']],
+    ['slug'=>'valorant', 'name'=>'Valorant', 'category'=>'Dark Modes', 'font'=>'Syne', 'colors'=>['#ff4655','#bd3944','#ff4655','#0f1923']],
+    // PROFESSIONAL
+    ['slug'=>'claude', 'name'=>'Claude', 'category'=>'Professional', 'font'=>'Lato', 'colors'=>['#da7756','#a0785a','#e8c9a0','#f5f0e8']],
+    ['slug'=>'corporate', 'name'=>'Corporate', 'category'=>'Professional', 'font'=>'Inter', 'colors'=>['#4b6bfb','#7b92b2','#67cba0','#ffffff']],
+    ['slug'=>'gourmet', 'name'=>'Gourmet', 'category'=>'Professional', 'font'=>'Montserrat', 'colors'=>['#9b2335','#d4a76a','#c8a97e','#fdfaf5']],
+    ['slug'=>'luxury', 'name'=>'Luxury', 'category'=>'Professional', 'font'=>'Rubik', 'colors'=>['#ffffff','#a08740','#c5a028','#09090b']],
+    // CREATIVE
+    ['slug'=>'ghibli', 'name'=>'Ghibli', 'category'=>'Creative', 'font'=>'Amaranth', 'colors'=>['#6b7c5c','#c49a6c','#e8a87c','#faf6f0']],
+    ['slug'=>'pastel', 'name'=>'Pastel', 'category'=>'Creative', 'font'=>'Open Sans', 'colors'=>['#d1c1f7','#f7d6c1','#c1f7d6','#ffffff']],
+    ['slug'=>'soft', 'name'=>'Soft', 'category'=>'Creative', 'font'=>'Rubik', 'colors'=>['#6b21a8','#db2777','#0891b2','#ffffff']],
+    // TECH
+    ['slug'=>'mintlify', 'name'=>'Mintlify', 'category'=>'Tech', 'font'=>'Work Sans', 'colors'=>['#0ea474','#7c3aed','#0ea5e9','#ffffff']],
+    ['slug'=>'perplexity', 'name'=>'Perplexity', 'category'=>'Tech', 'font'=>'Inter', 'colors'=>['#20b8cd','#1a9ab0','#15808f','#16191d']],
+    ['slug'=>'shadcn', 'name'=>'Shadcn', 'category'=>'Tech', 'font'=>'Geist', 'colors'=>['#18181b','#f4f4f5','#18181b','#ffffff']],
+    ['slug'=>'slack', 'name'=>'Slack', 'category'=>'Tech', 'font'=>'Lato', 'colors'=>['#4a154b','#1264a3','#ecb22e','#3f0e40']],
+    ['slug'=>'vscode', 'name'=>'VS Code', 'category'=>'Tech', 'font'=>'DM Mono', 'colors'=>['#007acc','#6a9955','#569cd6','#1e1e1e']],
+    ['slug'=>'perplexity', 'name'=>'Perplexity', 'category'=>'Tech',         'colors'=>['#20b2aa','#5f9ea0','#48d1cc','#708090','#f0f8ff']],
+    ['slug'=>'shadcn',     'name'=>'Shadcn',     'category'=>'Tech',         'colors'=>['#18181b','#52525b','#3b82f6','#27272a','#fafafa']],
+    ['slug'=>'slack',      'name'=>'Slack',      'category'=>'Tech',         'font'=>'Lato',       'colors'=>['#611f69','#36c5f0','#2eb67d','#1d1c1d','#1a1d21']],
+    ['slug'=>'vscode',     'name'=>'VS Code',    'category'=>'Tech',         'font'=>'Fira Code',  'colors'=>['#007acc','#6c9ef8','#4ec9b0','#3c3c3c','#1e1e1e']],
+];
+
+$themesByCategory = collect($flyonuiThemes)->groupBy('category');
+@endphp
+
+<!-- Sección: Temas FlyonUI -->
+<div class="form-section">
+    <h2 class="table-title">🎨 Tema Visual (FlyonUI)</h2>
+    <p class="table-subtitle" style="margin-bottom: 16px;">Selecciona uno de los 17 temas oficiales de FlyonUI</p>
+    
+    <div id="theme-success-message" style="display: none; padding: 12px; background: rgba(0,204,102,0.2); border-radius: 8px; margin-bottom: 16px; color: #00cc66; font-size: 14px;">
+        ✓ Tema actualizado correctamente
+    </div>
+
+    @foreach($themesByCategory as $category => $themes)
+    <div style="margin-bottom: 28px;">
+        <h3 style="font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.4); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1.5px;">
+            {{ $category }}
+        </h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px;">
+            @foreach($themes as $theme)
+            @php
+                $isActive = $currentTheme === $theme['slug'];
+                $bg      = $theme['colors'][3]; // base background
+                $isDark  = in_array($theme['slug'], ['dark','black','spotify','valorant','luxury','perplexity','slack','vscode']);
+                $textColor = $isDark ? 'rgba(255,255,255,0.9)' : 'rgba(0,0,0,0.85)';
+                $subColor  = $isDark ? 'rgba(255,255,255,0.45)' : 'rgba(0,0,0,0.4)';
+            @endphp
+            <div
+                class="theme-card"
+                data-slug="{{ $theme['slug'] }}"
+                onclick="updateTheme('{{ $theme['slug'] }}')"
+                style="
+                    cursor: pointer;
+                    border-radius: 12px;
+                    border: {{ $isActive ? '2px solid #2B6FFF' : '1px solid rgba(255,255,255,0.08)' }};
+                    box-shadow: {{ $isActive ? '0 0 0 3px rgba(43,111,255,0.25)' : '0 2px 8px rgba(0,0,0,0.3)' }};
+                    transition: all 0.2s ease;
+                    position: relative;
+                    overflow: hidden;
+                    background: {{ $bg }};
+                ">
+
+                <!-- Barra de colores primarios -->
+                <div style="display: flex; height: 48px; border-radius: 10px 10px 0 0; overflow: hidden;">
+                    @foreach(array_slice($theme['colors'], 0, 4) as $color)
+                    <div style="flex: 1; background: {{ $color }};"></div>
+                    @endforeach
                 </div>
 
-                @php
-                $currentTheme = $customization->theme_slug ?? 'light';
-                
-                // 17 temas oficiales FlyonUI
-                $flyonuiThemes = [
-                    ['slug' => 'light', 'name' => 'Light', 'category' => 'Default'],
-                    ['slug' => 'dark', 'name' => 'Dark', 'category' => 'Default'],
-                    ['slug' => 'black', 'name' => 'Black', 'category' => 'Dark Modes'],
-                    ['slug' => 'claude', 'name' => 'Claude', 'category' => 'Professional', 'font' => 'Geist'],
-                    ['slug' => 'corporate', 'name' => 'Corporate', 'category' => 'Professional', 'font' => 'Public Sans'],
-                    ['slug' => 'ghibli', 'name' => 'Ghibli', 'category' => 'Creative', 'font' => 'Amaranth'],
-                    ['slug' => 'gourmet', 'name' => 'Gourmet', 'category' => 'Professional', 'font' => 'Rubik'],
-                    ['slug' => 'luxury', 'name' => 'Luxury', 'category' => 'Professional', 'font' => 'Archivo'],
-                    ['slug' => 'mintlify', 'name' => 'Mintlify', 'category' => 'Tech'],
-                    ['slug' => 'pastel', 'name' => 'Pastel', 'category' => 'Creative', 'font' => 'Open Sans'],
-                    ['slug' => 'perplexity', 'name' => 'Perplexity', 'category' => 'Tech'],
-                    ['slug' => 'shadcn', 'name' => 'Shadcn', 'category' => 'Tech'],
-                    ['slug' => 'slack', 'name' => 'Slack', 'category' => 'Tech', 'font' => 'Lato'],
-                    ['slug' => 'soft', 'name' => 'Soft', 'category' => 'Creative', 'font' => 'Montserrat'],
-                    ['slug' => 'spotify', 'name' => 'Spotify', 'category' => 'Dark Modes', 'font' => 'Lato'],
-                    ['slug' => 'valorant', 'name' => 'Valorant', 'category' => 'Dark Modes', 'font' => 'Work Sans'],
-                    ['slug' => 'vscode', 'name' => 'VS Code', 'category' => 'Tech', 'font' => 'Fira Code'],
-                ];
-                
-                // Agrupar por categoría
-                $themesByCategory = collect($flyonuiThemes)->groupBy('category');
-                @endphp
-
-                @foreach($themesByCategory as $category => $themes)
-                    <div style="margin-bottom: 24px;">
-                        <h3 style="font-size: 14px; font-weight: 600; color: rgba(255,255,255,0.6); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;">
-                            {{ $category }}
-                        </h3>
-                        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px;">
-                            @foreach($themes as $theme)
-                            <div 
-                                class="theme-card" 
-                                data-slug="{{ $theme['slug'] }}"
-                                onclick="updateTheme('{{ $theme['slug'] }}')"
-                                style="cursor: pointer; background: #0f1c32; border-radius: 10px; border: 2px solid {{ $currentTheme == $theme['slug'] ? '#2B6FFF' : 'transparent' }}; transition: all 0.2s; position: relative; overflow: hidden;">
-                                
-                                <!-- Preview Real con data-theme de FlyonUI -->
-                                <div data-theme="{{ $theme['slug'] }}" class="p-3">
-                                    <div class="bg-primary w-full h-2 rounded mb-1"></div>
-                                    <div class="bg-secondary w-full h-2 rounded mb-1"></div>
-                                    <div class="bg-accent w-full h-2 rounded mb-2"></div>
-                                    
-                                    <div class="flex items-center justify-between mt-2">
-                                        <p class="text-base-content text-xs font-semibold">{{ $theme['name'] }}</p>
-                                        @if($currentTheme == $theme['slug'])
-                                            <span class="theme-check" style="color: #2B6FFF; font-size: 16px; position: absolute; top: 8px; right: 8px; background: white; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center;">✓</span>
-                                        @endif
-                                    </div>
-                                    
-                                    @if(isset($theme['font']))
-                                        <div class="text-base-content opacity-60 text-[10px] mt-1 italic">
-                                            {{ $theme['font'] }}
-                                        </div>
-                                    @endif
-                                </div>
-                            </div>
-                            @endforeach
-                        </div>
+                <!-- Info del tema -->
+                <div style="padding: 8px 10px 10px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <span style="font-size: 12px; font-weight: 600; color: {{ $textColor }}; line-height: 1.2;">
+                            {{ $theme['name'] }}
+                        </span>
+                        @if($isActive)
+                        <span class="theme-check" style="
+                            width: 18px; height: 18px;
+                            background: #2B6FFF;
+                            border-radius: 50%;
+                            display: flex; align-items: center; justify-content: center;
+                            font-size: 11px; color: white; font-weight: 700; line-height: 1;
+                            flex-shrink: 0;">✓</span>
+                        @endif
                     </div>
-                @endforeach
+                    @if(isset($theme['font']))
+                    <div style="font-size: 10px; color: {{ $subColor }}; margin-top: 2px; font-style: italic;">
+                        {{ $theme['font'] }}
+                    </div>
+                    @endif
+                </div>
             </div>
+            @endforeach
+        </div>
+    </div>
+    @endforeach
+</div>
 
             <!-- Sección: Imágenes -->
             <div class="form-section" style="margin-top: 32px;">
@@ -1651,13 +1687,13 @@
         function updateTheme(themeSlug) {
             const tenantId = {{ $tenant->id }};
             
-            fetch(`/tenant/${tenantId}/update-theme`, {
+            fetch(`/tenant/${tenantId}/update-palette`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
                 },
-                body: JSON.stringify({theme_slug: themeSlug})
+                body: JSON.stringify({theme: themeSlug})
             })
             .then(r => r.json())
             .then(data => {
