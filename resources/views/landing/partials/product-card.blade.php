@@ -1,10 +1,61 @@
 {{-- Path: resources/views/landing/partials/product-card.blade.php --}}
 <article class="group bg-white rounded-[3.5rem] p-10 shadow-sm border border-gray-100 flex flex-col h-full transition-all duration-500 hover:shadow-2xl">
     
-    {{-- Imagen con margen inferior generoso --}}
+    {{-- Imagen / Slider --}}
     <div class="relative aspect-square overflow-hidden rounded-[2.5rem] bg-gray-50 mb-12">
-        @if($product->image_filename)
-            <img src="{{ asset('storage/products/' . $product->image_filename) }}" class="w-full h-full object-cover">
+        @php
+            $isPlan3 = isset($plan) && (int) $plan->id === 3;
+            $galleryImages = $product->relationLoaded('galleryImages') ? $product->galleryImages : collect();
+            $hasGallery = $isPlan3 && $galleryImages->isNotEmpty();
+            $allImages = collect();
+            
+            if ($hasGallery && isset($tenant)) {
+                // Main image first
+                if ($product->image_filename) {
+                    $allImages->push(asset('storage/tenants/' . $tenant->id . '/' . $product->image_filename));
+                }
+                // Gallery images
+                foreach ($galleryImages as $gi) {
+                    $allImages->push(asset('storage/tenants/' . $tenant->id . '/' . $gi->image_filename));
+                }
+            }
+            $sliderId = 'slider-' . ($product->id ?? uniqid());
+        @endphp
+
+        @if($hasGallery && $allImages->count() > 1)
+            {{-- CSS-only Slider for Plan 3 with multiple images --}}
+            <div class="product-slider relative w-full h-full" id="{{ $sliderId }}">
+                @foreach($allImages as $idx => $imageUrl)
+                    <div class="product-slide absolute inset-0 transition-opacity duration-500 {{ $idx === 0 ? 'opacity-100 z-10' : 'opacity-0 z-0' }}" data-slide="{{ $idx }}">
+                        <img src="{{ $imageUrl }}" class="w-full h-full object-cover" alt="{{ $product->name }}">
+                    </div>
+                @endforeach
+
+                {{-- Navigation Arrows --}}
+                <button type="button" onclick="changeSlide('{{ $sliderId }}', -1)" 
+                    class="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 bg-white/80 hover:bg-white rounded-full flex items-center justify-center shadow-lg transition-all opacity-0 group-hover:opacity-100">
+                    <svg class="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                </button>
+                <button type="button" onclick="changeSlide('{{ $sliderId }}', 1)" 
+                    class="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 bg-white/80 hover:bg-white rounded-full flex items-center justify-center shadow-lg transition-all opacity-0 group-hover:opacity-100">
+                    <svg class="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                </button>
+
+                {{-- Dots --}}
+                <div class="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+                    @foreach($allImages as $idx => $imageUrl)
+                        <button type="button" onclick="goToSlide('{{ $sliderId }}', {{ $idx }})" 
+                            class="slider-dot w-2.5 h-2.5 rounded-full transition-all {{ $idx === 0 ? 'bg-primary scale-110' : 'bg-white/70' }}" data-dot="{{ $idx }}"></button>
+                    @endforeach
+                </div>
+            </div>
+        @else
+            {{-- Single image (Plans 1, 2, or Plan 3 without gallery) --}}
+            @if($product->image_filename)
+                <img src="{{ asset('storage/tenants/' . ($tenant->id ?? '') . '/' . $product->image_filename) }}" 
+                     class="w-full h-full object-cover"
+                     alt="{{ $product->name }}">
+            @endif
         @endif
     </div>
 

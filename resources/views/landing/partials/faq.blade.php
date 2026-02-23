@@ -18,8 +18,8 @@
                                 aria-controls="faq-collapse-{{ $index }}" 
                                 aria-expanded="false">
                             {{ $faq['question'] }}
-                            <span class="icon-[lucide--plus] accordion-item-active:hidden text-primary text-2xl transition-all"></span>
-                            <span class="icon-[lucide--minus] hidden accordion-item-active:inline-flex text-primary text-2xl transition-all"></span>
+                            <iconify-icon icon="tabler:plus" class="accordion-item-active:hidden text-primary transition-all" width="24" height="24"></iconify-icon>
+                            <iconify-icon icon="tabler:minus" class="hidden accordion-item-active:inline-flex text-primary transition-all" width="24" height="24"></iconify-icon>
                         </button>
                         <div id="faq-collapse-{{ $index }}" class="accordion-content w-full overflow-hidden transition-[height] duration-300" aria-labelledby="faq-item-{{ $index }}" role="region">
                             <div class="px-8 pb-6 text-slate-500 leading-relaxed border-t border-slate-50 pt-4">

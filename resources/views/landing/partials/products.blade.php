@@ -1,6 +1,11 @@
 {{-- Path: resources/views/landing/partials/products.blade.php --}}
 @php
-    $limit = 6; // Límite estricto del Plan Oportunidad
+    $defaultVisible = 6;                                   // Always show 6 by default
+    $planLimit      = (int) ($plan->products_limit ?? 6);  // Absolute cap per plan
+    $displayProducts = $products->take($planLimit);         // Cap at plan limit
+    $visible         = $displayProducts->take($defaultVisible);
+    $hidden          = $displayProducts->slice($defaultVisible);
+    $hasMore         = $planLimit > $defaultVisible && $hidden->count() > 0;
 @endphp
 
 <section id="productos" class="py-40 bg-gray-50/30"> {{-- Aumentamos padding de sección --}}
@@ -15,21 +20,105 @@
 
         {{-- GRID CON GAP DE SEGURIDAD (gap-y-32 para evitar el efecto siamés) --}}
         <div id="product-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16 md:gap-y-32 items-stretch mb-32">
-            @foreach($products->take($limit) as $product)
+            {{-- Primeros 6 — siempre visibles --}}
+            @foreach($visible as $product)
                 @include('landing.partials.product-card', ['product' => $product])
             @endforeach
+
+            {{-- Productos adicionales (Plan 2: hasta 12, Plan 3: hasta 18) — ocultos por defecto --}}
+            @if($hasMore)
+                @foreach($hidden as $product)
+                    <div class="product-extra hidden">
+                        @include('landing.partials.product-card', ['product' => $product])
+                    </div>
+                @endforeach
+            @endif
         </div>
 
-        {{-- EL BOTÓN SOLO EXISTE SI HAY MÁS DE 6 PRODUCTOS --}}
-        @if($products->count() > 6)
-            <div id="load-more-container" class="mt-20 text-center"> 
-                <button class="group inline-flex items-center gap-4 px-12 py-5 bg-primary text-white font-black rounded-2xl shadow-2xl shadow-primary/40 active:scale-95 transition-all">
-                    <span class="uppercase tracking-[0.3em] text-[10px]">Ver Catálogo Completo</span>
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        {{-- Botón "Ver más" — solo si hay productos extra (Plan 2/3) --}}
+        @if($hasMore)
+            <div id="load-more-container" class="mt-20 text-center">
+                <button
+                    id="btn-load-more"
+                    onclick="loadMoreProducts(this)"
+                    data-remaining="{{ $hidden->count() }}"
+                    class="group inline-flex items-center gap-4 px-12 py-5 bg-primary text-white font-black rounded-2xl shadow-2xl shadow-primary/40 active:scale-95 transition-all">
+                    <span class="btn-label uppercase tracking-[0.3em] text-[10px]">Ver {{ $hidden->count() }} producto{{ $hidden->count() > 1 ? 's' : '' }} más</span>
+                    <svg class="w-4 h-4 btn-arrow transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"></path>
                     </svg>
                 </button>
             </div>
+
+            @push('scripts')
+            <script>
+                function loadMoreProducts(btn) {
+                    const extras = document.querySelectorAll('#product-grid .product-extra');
+                    const arrow   = btn.querySelector('.btn-arrow');
+                    const label   = btn.querySelector('.btn-label');
+                    const isHidden = extras[0] && extras[0].classList.contains('hidden');
+
+                    extras.forEach(el => el.classList.toggle('hidden', !isHidden));
+
+                    if (isHidden) {
+                        label.textContent = 'Ver menos';
+                        arrow.style.transform = 'rotate(180deg)';
+                    } else {
+                        const count = parseInt(btn.dataset.remaining);
+                        label.textContent = 'Ver ' + count + ' producto' + (count > 1 ? 's' : '') + ' más';
+                        arrow.style.transform = 'rotate(0deg)';
+                    }
+                }
+            </script>
+            @endpush
         @endif
     </div>
 </section>
+
+{{-- Product Slider JS (Plan 3 / VISIÓN) --}}
+@if(isset($plan) && (int) $plan->id === 3)
+@push('scripts')
+<script>
+    // Track current slide per slider
+    const sliderState = {};
+
+    function getSlides(sliderId) {
+        return document.querySelectorAll(`#${sliderId} .product-slide`);
+    }
+
+    function getDots(sliderId) {
+        return document.querySelectorAll(`#${sliderId} .slider-dot`);
+    }
+
+    function goToSlide(sliderId, index) {
+        const slides = getSlides(sliderId);
+        const dots = getDots(sliderId);
+        if (slides.length === 0) return;
+
+        // Wrap around
+        if (index < 0) index = slides.length - 1;
+        if (index >= slides.length) index = 0;
+
+        slides.forEach((slide, i) => {
+            slide.classList.toggle('opacity-100', i === index);
+            slide.classList.toggle('opacity-0', i !== index);
+            slide.classList.toggle('z-10', i === index);
+            slide.classList.toggle('z-0', i !== index);
+        });
+
+        dots.forEach((dot, i) => {
+            dot.classList.toggle('bg-primary', i === index);
+            dot.classList.toggle('scale-110', i === index);
+            dot.classList.toggle('bg-white/70', i !== index);
+        });
+
+        sliderState[sliderId] = index;
+    }
+
+    function changeSlide(sliderId, direction) {
+        const current = sliderState[sliderId] || 0;
+        goToSlide(sliderId, current + direction);
+    }
+</script>
+@endpush
+@endif

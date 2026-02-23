@@ -109,4 +109,60 @@ class ImageUploadService
             default => throw new Exception("Tipo de imagen no válido: {$type}"),
         };
     }
+
+    /**
+     * Process and save uploaded image with a custom filename.
+     * Used for gallery images where filename pattern differs from standard.
+     *
+     * @param \Illuminate\Http\UploadedFile $file
+     * @param int $tenantId
+     * @param string $customFilename
+     * @return string
+     * @throws Exception
+     */
+    public function processWithCustomFilename(
+        \Illuminate\Http\UploadedFile $file,
+        int $tenantId,
+        string $customFilename
+    ): string {
+        // Validate file size
+        if ($file->getSize() > self::MAX_FILE_SIZE) {
+            throw new Exception('El archivo excede el tamaño máximo permitido de 2MB');
+        }
+
+        // Validate mime type
+        if (!in_array($file->getMimeType(), self::ALLOWED_MIME_TYPES)) {
+            throw new Exception('Tipo de archivo no permitido. Solo se aceptan imágenes JPEG, PNG o WebP');
+        }
+
+        // Create ImageManager with GD driver
+        $manager = new ImageManager(new Driver());
+
+        // Load image
+        $image = $manager->read($file->getRealPath());
+
+        // Resize if width exceeds maximum
+        if ($image->width() > self::MAX_WIDTH) {
+            $image->scale(width: self::MAX_WIDTH);
+        }
+
+        // Destination path
+        $directory = storage_path("app/public/tenants/{$tenantId}");
+        $filePath = "{$directory}/{$customFilename}";
+
+        // Create directory if it doesn't exist
+        if (!is_dir($directory)) {
+            mkdir($directory, 0755, true);
+        }
+
+        // Delete old file if exists
+        if (file_exists($filePath)) {
+            unlink($filePath);
+        }
+
+        // Encode to WebP and save
+        $image->toWebp(self::WEBP_QUALITY)->save($filePath);
+
+        return $customFilename;
+    }
 }

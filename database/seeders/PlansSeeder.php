@@ -15,14 +15,14 @@ class PlansSeeder extends Seeder
     public function run(): void
     {
         $plans = [
-            // PLAN OPORTUNIDAD ($49)
+            // PLAN OPORTUNIDAD ($99)
             [
                 'slug' => 'oportunidad',
                 'name' => 'OPORTUNIDAD',
-                'price_usd' => 49.00,
+                'price_usd' => 99.00,
                 'products_limit' => 6,
                 'services_limit' => 3,
-                'images_limit' => 8,
+                'images_limit' => 6,
                 'color_palettes' => 5,
                 'social_networks_limit' => 1,
                 'show_dollar_rate' => false,
@@ -39,14 +39,14 @@ class PlansSeeder extends Seeder
                 'updated_at' => now(),
             ],
             
-            // PLAN CRECIMIENTO ($89)
+            // PLAN CRECIMIENTO ($149)
             [
                 'slug' => 'crecimiento',
                 'name' => 'CRECIMIENTO',
-                'price_usd' => 89.00,
-                'products_limit' => 18,
+                'price_usd' => 149.00,
+                'products_limit' => 12,
                 'services_limit' => 6,
-                'images_limit' => 26,
+                'images_limit' => 12,
                 'color_palettes' => 10,
                 'social_networks_limit' => null,
                 'show_dollar_rate' => true,
@@ -63,14 +63,14 @@ class PlansSeeder extends Seeder
                 'updated_at' => now(),
             ],
             
-            // PLAN VISIÓN ($159)
+            // PLAN VISIÓN ($199)
             [
                 'slug' => 'vision',
                 'name' => 'VISIÓN',
-                'price_usd' => 159.00,
-                'products_limit' => 40,
-                'services_limit' => 15,
-                'images_limit' => 57,
+                'price_usd' => 199.00,
+                'products_limit' => 18,
+                'services_limit' => 9,
+                'images_limit' => 54,
                 'color_palettes' => 20,
                 'social_networks_limit' => null,
                 'show_dollar_rate' => true,

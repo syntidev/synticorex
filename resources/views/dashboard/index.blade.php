@@ -11,6 +11,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    {{-- Iconify runtime for icon picker and service icons --}}
+    <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
     
     <style>
         * {
@@ -390,34 +392,38 @@
             cursor: not-allowed;
         }
 
-        /* Modal */
-        .modal-overlay {
+        /* CRUD Modals — prefixed to avoid FlyonUI .modal class conflict */
+        .crud-overlay {
             display: none;
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 1000;
+            background: rgba(0, 0, 0, 0.75);
+            z-index: 9999;
             align-items: center;
             justify-content: center;
+            padding: 16px;
         }
 
-        .modal-overlay.show {
+        .crud-overlay.show {
             display: flex;
         }
 
-        .modal {
+        .crud-dialog {
             background: #0f1c32;
             border-radius: 12px;
-            width: 90%;
+            width: 100%;
             max-width: 600px;
             max-height: 90vh;
             overflow-y: auto;
+            position: relative;
+            z-index: 10000;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.6);
         }
 
-        .modal-header {
+        .crud-dialog-header {
             padding: 20px 24px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             display: flex;
@@ -425,12 +431,13 @@
             align-items: center;
         }
 
-        .modal-title {
+        .crud-dialog-title {
             font-size: 18px;
             font-weight: 600;
+            color: #fff;
         }
 
-        .modal-close {
+        .crud-dialog-close {
             background: none;
             border: none;
             color: rgba(255, 255, 255, 0.6);
@@ -446,12 +453,12 @@
             transition: all 0.2s;
         }
 
-        .modal-close:hover {
+        .crud-dialog-close:hover {
             background: rgba(255, 255, 255, 0.1);
             color: #ffffff;
         }
 
-        .modal-body {
+        .crud-dialog-body {
             padding: 24px;
         }
 
@@ -465,6 +472,83 @@
             max-height: 200px;
             border-radius: 8px;
             object-fit: cover;
+        }
+
+        /* Gallery thumbnail styles (Plan 3) */
+        .gallery-thumb {
+            position: relative;
+            display: inline-block;
+        }
+
+        .gallery-thumb img {
+            width: 100px;
+            height: 100px;
+            border-radius: 6px;
+            object-fit: cover;
+            border: 2px solid rgba(255,255,255,0.15);
+        }
+
+        .gallery-thumb-delete {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #ef4444;
+            color: #fff;
+            border: none;
+            font-size: 13px;
+            line-height: 22px;
+            text-align: center;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .gallery-thumb-delete:hover {
+            background: #dc2626;
+        }
+
+        .gallery-preview-thumb img {
+            width: 80px;
+            height: 80px;
+            border-radius: 6px;
+            object-fit: cover;
+            border: 2px dashed rgba(255,255,255,0.3);
+        }
+
+        /* Icon Picker */
+        #icon-picker-grid {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,0.15) transparent;
+        }
+        #icon-picker-grid::-webkit-scrollbar { width: 5px; }
+        #icon-picker-grid::-webkit-scrollbar-track { background: transparent; }
+        #icon-picker-grid::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 3px; }
+
+        .icon-pick-item:hover {
+            background: rgba(43,111,255,0.15) !important;
+            border-color: rgba(43,111,255,0.4) !important;
+            transform: translateY(-1px);
+        }
+
+        /* Service mode tabs */
+        .svc-mode-bar {
+            display: flex;
+            gap: 0;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+            flex-shrink: 0;
+        }
+        .svc-mode-bar button {
+            flex: 1;
+            padding: 8px 18px;
+            font-size: 12px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: all .2s;
         }
 
         .toggle-switch {
@@ -556,6 +640,48 @@
         <a href="/{{ $tenant->subdomain }}" class="btn-close">Cerrar ✕</a>
     </header>
 
+    {{-- ── Plan Expiry Notices ──────────────────────────────────────────── --}}
+    @if($isFrozen)
+    {{-- FROZEN: subscription expired, in 30-day grace period --}}
+    <div style="background: #3b0a0a; border-bottom: 2px solid #ef4444; padding: 14px 24px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
+        <span style="font-size: 22px; flex-shrink: 0;">🔴</span>
+        <div style="flex: 1; min-width: 0;">
+            <p style="color: #fca5a5; font-size: 14px; font-weight: 700; margin-bottom: 3px;">
+                Tu plan venció — tu landing pública está pausada
+            </p>
+            <p style="color: #f87171; font-size: 13px;">
+                @if($graceRemainingDays !== null && $graceRemainingDays > 0)
+                    Tienes <strong>{{ $graceRemainingDays }} día{{ $graceRemainingDays === 1 ? '' : 's' }}</strong> de gracia antes de que tu cuenta se archive. Ningún dato se borra.
+                @else
+                    El período de gracia ha vencido. Contacta a soporte para renovar y restaurar tu sitio.
+                @endif
+            </p>
+        </div>
+        <a href="mailto:soporte@synticorex.com"
+           style="flex-shrink: 0; background: #ef4444; color: #fff; border: none; border-radius: 8px; padding: 10px 20px; font-size: 14px; font-weight: 600; text-decoration: none; white-space: nowrap;">
+            Renovar plan
+        </a>
+    </div>
+    @elseif($isExpiringSoon && $daysUntilExpiry !== null)
+    {{-- EXPIRING SOON: 30 days or fewer remaining --}}
+    <div style="background: #431407; border-bottom: 2px solid #f97316; padding: 14px 24px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
+        <span style="font-size: 22px; flex-shrink: 0;">⚠️</span>
+        <div style="flex: 1; min-width: 0;">
+            <p style="color: #fed7aa; font-size: 14px; font-weight: 700; margin-bottom: 3px;">
+                Tu plan vence en {{ $daysUntilExpiry }} día{{ $daysUntilExpiry === 1 ? '' : 's' }}
+            </p>
+            <p style="color: #fdba74; font-size: 13px;">
+                Renueva antes del <strong>{{ $tenant->subscription_ends_at->format('d/m/Y') }}</strong> para mantener tu landing pública activa sin interrupciones.
+            </p>
+        </div>
+        <a href="mailto:soporte@synticorex.com"
+           style="flex-shrink: 0; background: #f97316; color: #fff; border: none; border-radius: 8px; padding: 10px 20px; font-size: 14px; font-weight: 600; text-decoration: none; white-space: nowrap;">
+            Renovar ahora
+        </a>
+    </div>
+    @endif
+    {{-- ── End Plan Expiry Notices ─────────────────────────────────────── --}}
+
     <!-- Navigation Tabs -->
     <nav class="dashboard-nav">
         <ul class="nav-tabs">
@@ -564,6 +690,9 @@
             <li class="nav-tab" data-tab="servicios">🛠️ Servicios</li>
             <li class="nav-tab" data-tab="diseno">🎨 Diseño</li>
             <li class="nav-tab" data-tab="analytics">📊 Analytics</li>
+            @if($plan->id === 3)
+            <li class="nav-tab" data-tab="sucursales">📍 Sucursales</li>
+            @endif
             <li class="nav-tab" data-tab="config">⚙️ Config</li>
         </ul>
     </nav>
@@ -635,10 +764,8 @@
         <!-- Tab: Productos -->
         <div id="tab-productos" class="tab-content">
             @php
-                $productLimits = [1 => 6, 2 => 18, 3 => 40];
-                $maxProducts = $productLimits[$plan->id] ?? 6;
+                $maxProducts = (int) ($plan->products_limit ?? 6);
                 $currentCount = $products->count();
-                $canAddMore = $currentCount < $maxProducts;
             @endphp
 
             <div class="table-header">
@@ -648,9 +775,8 @@
                 </div>
                 <button 
                     class="btn-add" 
-                    onclick="openProductModal()" 
-                    {{ !$canAddMore ? 'disabled' : '' }}
-                    title="{{ !$canAddMore ? 'Has alcanzado el límite de productos de tu plan' : 'Agregar nuevo producto' }}">
+                    onclick="checkAndOpenProductModal()"
+                    title="Agregar nuevo producto">
                     + Agregar Producto
                 </button>
             </div>
@@ -727,13 +853,13 @@
         </div>
 
         <!-- Modal: Producto -->
-        <div id="product-modal" class="modal-overlay">
-            <div class="modal">
-                <div class="modal-header">
-                    <h3 class="modal-title" id="product-modal-title">Agregar Producto</h3>
-                    <button class="modal-close" onclick="closeProductModal()">&times;</button>
+        <div id="product-modal" class="crud-overlay">
+            <div class="crud-dialog">
+                <div class="crud-dialog-header">
+                    <h3 class="crud-dialog-title" id="product-modal-title">Agregar Producto</h3>
+                    <button class="crud-dialog-close" onclick="closeProductModal()">&times;</button>
                 </div>
-                <div class="modal-body">
+                <div class="crud-dialog-body">
                     <form id="product-form" onsubmit="saveProduct(event)">
                         <input type="hidden" id="product-id">
 
@@ -742,12 +868,41 @@
                         </div>
 
                         <div class="form-section">
-                            <label for="product-image" class="form-label">Imagen del Producto</label>
+                            <label for="product-image" class="form-label">Imagen Principal del Producto</label>
                             <input type="file" id="product-image" accept="image/*" class="form-input" onchange="previewProductImage(event)">
                             <p style="font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 4px;">
                                 Máx. 2MB, se redimensionará a 800px
                             </p>
                         </div>
+
+                        {{-- Gallery Section — Plan 3 (VISIÓN) only --}}
+                        @if($plan->id === 3)
+                        <div class="form-section" id="product-gallery-section">
+                            <label class="form-label">📸 Galería Adicional <span style="font-size: 12px; color: rgba(255,255,255,0.5);">(máx. 2 fotos extra — Plan Visión)</span></label>
+
+                            {{-- Existing gallery images container --}}
+                            <div id="product-gallery-existing" style="display: none; margin-bottom: 12px;">
+                                <div id="product-gallery-thumbs" style="display: flex; gap: 10px; flex-wrap: wrap;"></div>
+                            </div>
+
+                            {{-- Upload new gallery images --}}
+                            <div id="product-gallery-upload-area" style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px;">
+                                <div id="gallery-slot-1" class="gallery-upload-slot" style="display: none;">
+                                    <input type="file" id="product-gallery-1" accept="image/*" class="form-input" onchange="previewGalleryImage(event, 1)" style="font-size: 13px;">
+                                </div>
+                                <div id="gallery-slot-2" class="gallery-upload-slot" style="display: none;">
+                                    <input type="file" id="product-gallery-2" accept="image/*" class="form-input" onchange="previewGalleryImage(event, 2)" style="font-size: 13px;">
+                                </div>
+                            </div>
+
+                            {{-- Gallery previews --}}
+                            <div id="product-gallery-previews" style="display: flex; gap: 10px; margin-top: 8px; flex-wrap: wrap;"></div>
+
+                            <p style="font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 6px;">
+                                Las imágenes de galería se suben al guardar el producto. Total: 1 principal + 2 galería = 3 fotos.
+                            </p>
+                        </div>
+                        @endif
 
                         <div class="form-section">
                             <label for="product-name" class="form-label">Nombre *</label>
@@ -802,11 +957,23 @@
         <!-- Tab: Servicios -->
         <div id="tab-servicios" class="tab-content">
             @php
-                $serviceLimits = [1 => 3, 2 => 6, 3 => 15];
-                $maxServices = $serviceLimits[$plan->id] ?? 3;
+                $maxServices = (int) ($plan->services_limit ?? 3);
                 $currentServiceCount = $services->count();
-                $canAddMoreServices = $currentServiceCount < $maxServices;
             @endphp
+
+            {{-- Global display mode selector (Plan 2/3 only) --}}
+            @if($plan->id !== 1)
+            <div style="background: rgba(43,111,255,0.05); border: 1px solid rgba(43,111,255,0.15); border-radius: 12px; padding: 16px 20px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+                <div>
+                    <p style="color: #fff; font-weight: 600; font-size: 14px; margin-bottom: 4px;">🎨 Modo visual de servicios</p>
+                    <p style="color: rgba(255,255,255,0.4); font-size: 12px;">Elige entre íconos o imágenes — mantén la coherencia estética</p>
+                </div>
+                <div class="svc-mode-bar">
+                    <button type="button" id="global-mode-icon-btn" onclick="setGlobalServiceMode('icon')">🎨 Ícono</button>
+                    <button type="button" id="global-mode-image-btn" onclick="setGlobalServiceMode('image')">🖼️ Imagen</button>
+                </div>
+            </div>
+            @endif
 
             <div class="table-header">
                 <div>
@@ -815,9 +982,8 @@
                 </div>
                 <button 
                     class="btn-add" 
-                    onclick="openServiceModal()" 
-                    {{ !$canAddMoreServices ? 'disabled' : '' }}
-                    title="{{ !$canAddMoreServices ? 'Has alcanzado el límite de servicios de tu plan' : 'Agregar nuevo servicio' }}">
+                    onclick="checkAndOpenServiceModal()"
+                    title="Agregar nuevo servicio">
                     + Agregar Servicio
                 </button>
             </div>
@@ -883,27 +1049,68 @@
         </div>
 
         <!-- Modal: Servicio -->
-        <div id="service-modal" class="modal-overlay">
-            <div class="modal">
-                <div class="modal-header">
-                    <h3 class="modal-title" id="service-modal-title">Agregar Servicio</h3>
-                    <button class="modal-close" onclick="closeServiceModal()">&times;</button>
+        <div id="service-modal" class="crud-overlay">
+            <div class="crud-dialog" style="max-width: 640px;">
+                <div class="crud-dialog-header">
+                    <h3 class="crud-dialog-title" id="service-modal-title">Agregar Servicio</h3>
+                    <button class="crud-dialog-close" onclick="closeServiceModal()">&times;</button>
                 </div>
-                <div class="modal-body">
+                <div class="crud-dialog-body">
                     <form id="service-form" onsubmit="saveService(event)">
                         <input type="hidden" id="service-id">
+                        <input type="hidden" id="service-icon-name">
 
-                        <div class="image-preview" id="service-image-preview" style="display: none;">
-                            <img id="service-image-preview-img" src="" alt="Preview">
+                        {{-- Mode tabs: Plan 2/3 only --}}
+                        @if($plan->id !== 1)
+                        <div style="display: flex; gap: 0; margin-bottom: 20px; border-radius: 8px; overflow: hidden; border: 1px solid rgba(255,255,255,0.12);">
+                            <button type="button" id="svc-tab-icon" onclick="setServiceModalMode('icon')"
+                                style="flex: 1; padding: 10px; border: none; cursor: pointer; font-weight: 700; font-size: 13px; transition: all .2s; background: rgba(43,111,255,0.55); color: #fff;">
+                                🎨 Ícono
+                            </button>
+                            <button type="button" id="svc-tab-image" onclick="setServiceModalMode('image')"
+                                style="flex: 1; padding: 10px; border: none; cursor: pointer; font-weight: 700; font-size: 13px; transition: all .2s; background: transparent; color: rgba(255,255,255,0.4);">
+                                🖼️ Imagen
+                            </button>
+                        </div>
+                        @endif
+
+                        {{-- ICON PICKER (Plan 1: always; Plan 2/3: when icon mode) --}}
+                        <div id="svc-section-icon" class="form-section">
+                            <label class="form-label">Ícono del Servicio</label>
+
+                            {{-- Current selection preview --}}
+                            <div style="display: flex; align-items: center; gap: 12px; padding: 12px; background: rgba(255,255,255,0.04); border-radius: 10px; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.07);">
+                                <div style="width: 52px; height: 52px; background: rgba(43,111,255,0.15); border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                    <iconify-icon id="icon-preview-el" icon="tabler:cog" class="text-primary" width="28" height="28"></iconify-icon>
+                                </div>
+                                <div>
+                                    <p id="icon-preview-label" style="color: #fff; font-weight: 600; font-size: 13px; font-style: italic; margin-bottom: 2px;">Sin ícono seleccionado</p>
+                                    <p style="color: rgba(255,255,255,0.35); font-size: 11px;">Busca y haz click en un ícono de abajo</p>
+                                </div>
+                            </div>
+
+                            {{-- Search --}}
+                            <input type="text" id="icon-search" class="form-input"
+                                placeholder="🔍 scissors, camera, truck, heart..."
+                                oninput="filterIcons(this.value)" autocomplete="off"
+                                style="margin-bottom: 10px;">
+
+                            {{-- Icon Grid --}}
+                            <div id="icon-picker-grid" style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; max-height: 264px; overflow-y: auto; padding: 2px; border-radius: 8px;"></div>
+                            <p style="color: rgba(255,255,255,0.2); font-size: 11px; margin-top: 6px; text-align: center;">Haz click en cualquier ícono para seleccionarlo</p>
                         </div>
 
-                        <div class="form-section">
-                            <label for="service-image" class="form-label">Imagen del Servicio</label>
+                        {{-- IMAGE UPLOAD (Plan 2/3 only; hidden by default) --}}
+                        @if($plan->id !== 1)
+                        <div id="svc-section-image" class="form-section" style="display: none;">
+                            <label class="form-label">Imagen del Servicio</label>
+                            <div class="image-preview" id="service-image-preview" style="display: none;">
+                                <img id="service-image-preview-img" src="" alt="Preview">
+                            </div>
                             <input type="file" id="service-image" accept="image/*" class="form-input" onchange="previewServiceImage(event)">
-                            <p style="font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 4px;">
-                                Máx. 2MB, se redimensionará a 800px
-                            </p>
+                            <p style="font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 4px;">Máx. 2MB, se redimensionará a 800px</p>
                         </div>
+                        @endif
 
                         <div class="form-section">
                             <label for="service-name" class="form-label">Nombre *</label>
@@ -928,6 +1135,23 @@
                             <button type="submit" class="btn-primary">Guardar Servicio</button>
                         </div>
                     </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal: Límite de Plan -->
+        <div id="limit-modal" class="crud-overlay">
+            <div class="crud-dialog" style="max-width: 480px;">
+                <div class="crud-dialog-header">
+                    <h3 class="crud-dialog-title" id="limit-modal-title">⚠️ Límite Alcanzado</h3>
+                    <button class="crud-dialog-close" onclick="closeLimitModal()">&times;</button>
+                </div>
+                <div class="crud-dialog-body">
+                    <p id="limit-modal-message" style="color: #cbd5e1; line-height: 1.6; margin-bottom: 20px;"></p>
+                    <div id="limit-modal-actions" style="display: flex; gap: 12px; flex-wrap: wrap;">
+                        <button onclick="closeLimitModal()" class="btn-secondary" style="flex: 1;">Cerrar</button>
+                        <div id="limit-modal-cta"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1189,9 +1413,301 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
             </div>
         </div>
 
+        {{-- Tab: Sucursales (Plan 3 / VISIÓN only) --}}
+        @if($plan->id === 3)
+        <div id="tab-sucursales" class="tab-content">
+            @php
+                $branchesEnabled = data_get($tenant->settings, 'engine_settings.branches.enabled', false);
+                $maxBranches = 3;
+                $currentBranchCount = $branches->count();
+            @endphp
+
+            <div class="config-section" style="background: #0f1c32; border-radius: 12px; padding: 24px; margin-bottom: 24px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+                    <div>
+                        <h2 style="color: #fff; font-size: 20px; font-weight: 700; margin: 0;">📍 Sucursales</h2>
+                        <p style="color: #94a3b8; font-size: 13px; margin-top: 4px;">Muestra hasta 3 sucursales en tu landing pública</p>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="branches-toggle" {{ $branchesEnabled ? 'checked' : '' }} onchange="toggleBranchesSection()">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+
+                <div id="branches-status" style="background: {{ $branchesEnabled ? '#0d3320' : '#1e2a42' }}; border-left: 3px solid {{ $branchesEnabled ? '#22c55e' : '#6b7280' }}; padding: 10px 16px; border-radius: 6px; margin-bottom: 20px;">
+                    <p id="branches-status-text" style="color: {{ $branchesEnabled ? '#86efac' : '#94a3b8' }}; font-size: 13px; margin: 0;">
+                        {{ $branchesEnabled ? '✅ Sección visible en tu landing pública' : '⏸️ Sección oculta en tu landing pública' }}
+                    </p>
+                </div>
+            </div>
+
+            {{-- Branch list + Forms (shown only when enabled) --}}
+            <div id="branches-content" style="{{ $branchesEnabled ? '' : 'display: none;' }}">
+                
+                {{-- Existing branches --}}
+                <div id="branches-list">
+                    @foreach($branches as $branch)
+                    <div class="config-section branch-card" id="branch-card-{{ $branch->id }}" style="background: #0f1c32; border-radius: 12px; padding: 20px; margin-bottom: 16px;">
+                        <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;">
+                            <div style="flex: 1;">
+                                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                                    <span style="font-size: 18px;">📍</span>
+                                    <h3 class="branch-name" style="color: #fff; font-size: 16px; font-weight: 600; margin: 0;">{{ $branch->name }}</h3>
+                                </div>
+                                <p class="branch-address" style="color: #94a3b8; font-size: 14px; margin: 0; line-height: 1.5;">{{ $branch->address }}</p>
+                            </div>
+                            <div style="display: flex; gap: 8px; flex-shrink: 0;">
+                                <button type="button" class="btn-icon" onclick="editBranch({{ $branch->id }}, '{{ addslashes($branch->name) }}', '{{ addslashes($branch->address) }}')" title="Editar">✏️</button>
+                                <button type="button" class="btn-icon btn-danger" onclick="deleteBranch({{ $branch->id }})" title="Eliminar">🗑️</button>
+                            </div>
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+
+                {{-- Add/Edit Branch Form --}}
+                <div id="branch-form-container" class="config-section" style="background: #0f1c32; border-radius: 12px; padding: 24px; margin-top: 16px; {{ $currentBranchCount >= $maxBranches ? 'display: none;' : '' }}">
+                    <h3 id="branch-form-title" style="color: #fff; font-size: 16px; font-weight: 600; margin-bottom: 16px;">+ Agregar Sucursal</h3>
+                    <input type="hidden" id="branch-edit-id" value="">
+
+                    <div style="display: flex; flex-direction: column; gap: 14px;">
+                        <div>
+                            <label style="color: #e5e7eb; font-size: 13px; display: block; margin-bottom: 6px;">Nombre de la Sucursal *</label>
+                            <input type="text" id="branch-name" maxlength="150" required
+                                style="width: 100%; background: #07101F; border: 1px solid #1e2a42; border-radius: 8px; padding: 12px 16px; color: #fff; font-size: 15px;"
+                                placeholder="Ej: Sede Centro, Sucursal Altamira...">
+                        </div>
+
+                        <div>
+                            <label style="color: #e5e7eb; font-size: 13px; display: block; margin-bottom: 6px;">Dirección *</label>
+                            <textarea id="branch-address" maxlength="500" rows="2" required
+                                style="width: 100%; background: #07101F; border: 1px solid #1e2a42; border-radius: 8px; padding: 12px 16px; color: #fff; font-size: 15px; resize: vertical;"
+                                placeholder="Ej: Av. Libertador, Torre X, Piso 3, Caracas"></textarea>
+                        </div>
+
+                        <div style="display: flex; gap: 12px;">
+                            <button type="button" onclick="saveBranch()"
+                                style="background: #2B6FFF; color: #fff; border: none; border-radius: 8px; padding: 12px 24px; font-size: 15px; font-weight: 500; cursor: pointer; flex: 1;"
+                                onmouseover="this.style.background='#1e5ce6'"
+                                onmouseout="this.style.background='#2B6FFF'">
+                                Guardar Sucursal
+                            </button>
+                            <button type="button" id="branch-cancel-btn" onclick="cancelBranchEdit()" style="display: none; background: #374151; color: #fff; border: none; border-radius: 8px; padding: 12px 20px; font-size: 15px; cursor: pointer;">
+                                Cancelar
+                            </button>
+                        </div>
+                    </div>
+
+                    <p style="font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 12px;">
+                        {{ $currentBranchCount }} de {{ $maxBranches }} sucursales usadas
+                    </p>
+                </div>
+            </div>
+        </div>
+        @endif
+
         <!-- Tab: Config -->
         <div id="tab-config" class="tab-content">
-            
+
+            {{-- ═══════════════════════════════════════════════════════════
+                 Section 0: Social Networks
+            ═══════════════════════════════════════════════════════════ --}}
+            <div class="config-section" style="background: #0f1c32; border-radius: 12px; padding: 24px; margin-bottom: 24px;">
+                @php
+                    $rawSocial      = $customization->social_networks ?? [];
+                    $socialNetworks = is_array($rawSocial) ? $rawSocial : [];
+                    $allNetworksMeta = [
+                        'instagram' => ['label' => 'Instagram',  'placeholder' => '@tuusuario',          'icon' => '📸'],
+                        'facebook'  => ['label' => 'Facebook',   'placeholder' => '@pagina o URL',       'icon' => '👤'],
+                        'tiktok'    => ['label' => 'TikTok',     'placeholder' => '@tuusuario',          'icon' => '🎵'],
+                        'linkedin'  => ['label' => 'LinkedIn',   'placeholder' => 'URL o usuario',       'icon' => '💼'],
+                        'youtube'   => ['label' => 'YouTube',    'placeholder' => '@canal o URL',        'icon' => '▶️'],
+                        'x'         => ['label' => 'Twitter / X','placeholder' => '@tuusuario',          'icon' => '🐦'],
+                    ];
+                    $plan1Networks  = ['instagram', 'facebook', 'tiktok', 'linkedin'];
+                    $availableKeys  = $plan->id === 1 ? $plan1Networks : array_keys($allNetworksMeta);
+                    // For Plan 1: determine currently selected network
+                    $plan1Selected  = array_key_first(array_intersect_key($socialNetworks, array_flip($plan1Networks))) ?? '';
+                    $plan1Handle    = $plan1Selected ? ($socialNetworks[$plan1Selected] ?? '') : '';
+                @endphp
+
+                <h3 style="color: #fff; font-size: 18px; font-weight: 600; margin-bottom: 6px;">🌐 Redes Sociales</h3>
+                <p style="color: #94a3b8; font-size: 13px; margin-bottom: 20px;">
+                    @if($plan->id === 1)
+                        <span style="color: #f59e0b;">★ Plan OPORTUNIDAD</span> — Puedes configurar <strong style="color:#fff;">1 red social</strong>
+                    @else
+                        <span style="color: #22c55e;">★ Plan {{ $plan->name }}</span> — Todas las redes disponibles
+                    @endif
+                </p>
+
+                @if($plan->id === 1)
+                {{-- ── Plan 1: radio select + single handle ── --}}
+                <div style="margin-bottom: 20px;">
+                    <label style="color: #e5e7eb; font-size: 13px; display: block; margin-bottom: 10px;">Elige tu red social</label>
+                    <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 18px;" id="social-radio-group">
+                        @foreach($plan1Networks as $key)
+                        @php $meta = $allNetworksMeta[$key]; @endphp
+                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 8px 14px; border-radius: 8px; border: 1px solid {{ $plan1Selected === $key ? '#2B6FFF' : '#1e2a42' }}; background: {{ $plan1Selected === $key ? '#1a2f5e' : 'transparent' }}; transition: all .2s;"
+                               id="social-radio-label-{{ $key }}" onclick="selectSocialNetwork('{{ $key }}')">
+                            <input type="radio" name="social_plan1_choice" value="{{ $key }}" {{ $plan1Selected === $key ? 'checked' : '' }} style="display: none;">
+                            <span>{{ $meta['icon'] }}</span>
+                            <span style="color: #e5e7eb; font-size: 14px; font-weight: 500;">{{ $meta['label'] }}</span>
+                        </label>
+                        @endforeach
+                    </div>
+
+                    <div>
+                        <label style="color: #e5e7eb; font-size: 13px; display: block; margin-bottom: 6px;">
+                            Tu usuario o enlace <span id="social-plan1-network-label" style="color:#2B6FFF;">{{ $plan1Selected ? '(' . $allNetworksMeta[$plan1Selected]['label'] . ')' : '' }}</span>
+                        </label>
+                        <input type="text" id="social-plan1-handle"
+                            value="{{ $plan1Handle }}"
+                            placeholder="{{ $plan1Selected ? $allNetworksMeta[$plan1Selected]['placeholder'] : 'Selecciona una red primero' }}"
+                            style="width: 100%; background: #07101F; border: 1px solid #1e2a42; border-radius: 8px; padding: 12px 16px; color: #fff; font-size: 15px;"
+                            {{ !$plan1Selected ? 'disabled' : '' }}>
+                    </div>
+                </div>
+
+                @else
+                {{-- ── Plan 2 + 3: all 6 networks ── --}}
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;" id="social-all-fields">
+                    @foreach($availableKeys as $key)
+                    @php $meta = $allNetworksMeta[$key]; $current = $socialNetworks[$key] ?? ''; @endphp
+                    <div>
+                        <label style="color: #e5e7eb; font-size: 13px; display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
+                            <span>{{ $meta['icon'] }}</span> {{ $meta['label'] }}
+                        </label>
+                        <input type="text" id="social-{{ $key }}" name="social_{{ $key }}"
+                            value="{{ $current }}"
+                            placeholder="{{ $meta['placeholder'] }}"
+                            maxlength="255"
+                            style="width: 100%; background: #07101F; border: 1px solid #1e2a42; border-radius: 8px; padding: 10px 14px; color: #fff; font-size: 14px;">
+                    </div>
+                    @endforeach
+                </div>
+                @endif
+
+                <button type="button" onclick="saveSocialNetworks()"
+                    style="background: #2B6FFF; color: #fff; border: none; border-radius: 8px; padding: 12px 24px; font-size: 15px; font-weight: 500; cursor: pointer; width: 100%; transition: all .2s;"
+                    onmouseover="this.style.background='#1e5ce6'"
+                    onmouseout="this.style.background='#2B6FFF'">
+                    Guardar Redes Sociales
+                </button>
+            </div>
+
+            {{-- ════════════════════════════════════════════════════════════
+                 Section: Payment Methods
+            ═══════════════════════════════════════════════════════════ --}}
+            <div class="config-section" style="background: #0f1c32; border-radius: 12px; padding: 24px; margin-bottom: 24px;">
+                @php
+                    $payMethods      = $customization->payment_methods ?? [];
+                    $globalEnabled   = $payMethods['global'] ?? [];
+                    $branchPayMeta   = $payMethods['branches'] ?? [];
+                    $allPayMeta      = [
+                        'pagoMovil'  => ['label' => 'Pago Móvil',    'icon' => '📱', 'desc' => 'Transferencia bancaria móvil'],
+                        'biopago'    => ['label' => 'Biopago',        'icon' => '👁️', 'desc' => 'Pago biométrico'],
+                        'puntoventa' => ['label' => 'Punto de Venta', 'icon' => '💳', 'desc' => 'Terminal POS físico'],
+                        'zinli'      => ['label' => 'Zinli',          'icon' => '🟣', 'desc' => 'Billetera digital'],
+                        'zelle'      => ['label' => 'Zelle',          'icon' => '⚡', 'desc' => 'Transferencia USD'],
+                        'paypal'     => ['label' => 'PayPal',         'icon' => '🅿️', 'desc' => 'Pagos internacionales'],
+                    ];
+                    $activeBranchList = $branches->where('is_active', true);
+                @endphp
+
+                <h3 style="color: #fff; font-size: 18px; font-weight: 600; margin-bottom: 6px;">💳 Medios de Pago</h3>
+                <p style="color: #94a3b8; font-size: 13px; margin-bottom: 20px;">
+                    @if($plan->id === 1)
+                        <span style="color: #f59e0b;">★ Plan OPORTUNIDAD</span> — Muestra <strong style="color:#fff;">Pago Móvil y Biopago</strong> fijos en tu landing. No se puede modificar.
+                    @elseif($plan->id === 2)
+                        <span style="color: #22c55e;">★ Plan CRECIMIENTO</span> — Elige cuáles medios mostrar en tu landing
+                    @else
+                        <span style="color: #a78bfa;">★ Plan VISIÓN</span> — Elige tus medios globales y también por sucursal
+                    @endif
+                </p>
+
+                @if($plan->id === 1)
+                {{-- Plan 1: Fixed — read-only --}}
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
+                    @foreach(['pagoMovil', 'biopago'] as $mkey)
+                    @php $m = $allPayMeta[$mkey]; @endphp
+                    <div style="background: #0d3320; border: 1px solid #22c55e40; border-radius: 10px; padding: 14px 16px; display: flex; align-items: center; gap: 10px;">
+                        <span style="font-size: 20px;">{{ $m['icon'] }}</span>
+                        <div>
+                            <div style="color: #86efac; font-size: 13px; font-weight: 600;">{{ $m['label'] }}</div>
+                            <div style="color: #4ade8060; font-size: 11px;">{{ $m['desc'] }}</div>
+                        </div>
+                        <span style="margin-left: auto; color: #22c55e; font-size: 16px;">✓</span>
+                    </div>
+                    @endforeach
+                </div>
+                <div style="background: #1e2a42; border-left: 3px solid #f59e0b; padding: 10px 14px; border-radius: 6px;">
+                    <p style="color: #94a3b8; font-size: 12px; margin: 0;">🔒 Para elegir los medios de pago, mejora al Plan CRECIMIENTO o superior.</p>
+                </div>
+
+                @else
+                {{-- Plan 2 + 3: Selectable checkboxes (global) --}}
+                <div style="margin-bottom: 18px;">
+                    <label style="color: #e5e7eb; font-size: 13px; font-weight: 500; display: block; margin-bottom: 10px;">
+                        @if($plan->id === 3) Métodos globales (todos los clientes) @else Métodos visibles en tu landing @endif
+                    </label>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        @foreach($allPayMeta as $mkey => $m)
+                        @php $checked = in_array($mkey, $globalEnabled); @endphp
+                        <label id="pay-label-{{ $mkey }}" onclick="togglePayMethod('{{ $mkey }}')"
+                            style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 10px 14px; border-radius: 10px; border: 1px solid {{ $checked ? '#2B6FFF' : '#1e2a42' }}; background: {{ $checked ? '#1a2f5e' : 'transparent' }}; transition: all .2s; user-select: none;">
+                            <input type="checkbox" id="pay-check-{{ $mkey }}" value="{{ $mkey }}" {{ $checked ? 'checked' : '' }} style="display: none;">
+                            <span style="font-size: 18px;">{{ $m['icon'] }}</span>
+                            <div>
+                                <div style="color: #e5e7eb; font-size: 13px; font-weight: 500;">{{ $m['label'] }}</div>
+                                <div style="color: #6b7280; font-size: 11px;">{{ $m['desc'] }}</div>
+                            </div>
+                            <span id="pay-check-icon-{{ $mkey }}" style="margin-left: auto; color: {{ $checked ? '#2B6FFF' : '#1e2a42' }}; font-size: 16px; transition: color .2s;">✓</span>
+                        </label>
+                        @endforeach
+                    </div>
+                </div>
+
+                @if($plan->id === 3 && $activeBranchList->isNotEmpty())
+                {{-- Plan 3: per-branch assignment --}}
+                <div style="margin-bottom: 18px;">
+                    <label style="color: #e5e7eb; font-size: 13px; font-weight: 500; display: block; margin-bottom: 4px;">Métodos por Sucursal</label>
+                    <p style="color: #6b7280; font-size: 12px; margin-bottom: 12px;">Personaliza los métodos aceptados en cada sucursal</p>
+                    <div style="display: flex; flex-direction: column; gap: 14px;">
+                        @foreach($activeBranchList as $branch)
+                        @php $bEnabled = $branchPayMeta[(string)$branch->id] ?? []; @endphp
+                        <div style="background: #07101F; border: 1px solid #1e2a42; border-radius: 10px; padding: 14px 16px;">
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
+                                <span style="font-size: 15px;">📍</span>
+                                <span style="color: #fff; font-size: 14px; font-weight: 600;">{{ $branch->name }}</span>
+                            </div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                                @foreach($allPayMeta as $mkey => $m)
+                                @php $bchecked = in_array($mkey, $bEnabled); @endphp
+                                <label id="pay-branch-label-{{ $branch->id }}-{{ $mkey }}"
+                                    onclick="toggleBranchPayMethod({{ $branch->id }}, '{{ $mkey }}')"
+                                    style="display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 8px 10px; border-radius: 8px; border: 1px solid {{ $bchecked ? '#a78bfa60' : '#1e2a42' }}; background: {{ $bchecked ? '#2d1f5e' : 'transparent' }}; transition: all .2s; user-select: none;">
+                                    <input type="checkbox" id="pay-branch-check-{{ $branch->id }}-{{ $mkey }}" value="{{ $mkey }}" {{ $bchecked ? 'checked' : '' }} style="display: none;">
+                                    <span style="font-size: 14px;">{{ $m['icon'] }}</span>
+                                    <span style="color: #e5e7eb; font-size: 12px;">{{ $m['label'] }}</span>
+                                    <span id="pay-branch-check-icon-{{ $branch->id }}-{{ $mkey }}" style="margin-left: auto; color: {{ $bchecked ? '#a78bfa' : '#1e2a42' }}; font-size: 14px;">✓</span>
+                                </label>
+                                @endforeach
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+                @endif
+
+                <button type="button" onclick="savePaymentMethods()"
+                    style="background: #2B6FFF; color: #fff; border: none; border-radius: 8px; padding: 12px 24px; font-size: 15px; font-weight: 500; cursor: pointer; width: 100%; transition: all .2s;"
+                    onmouseover="this.style.background='#1e5ce6'"
+                    onmouseout="this.style.background='#2B6FFF'">
+                    Guardar Medios de Pago
+                </button>
+                @endif
+            </div>
+
             <!-- Section 1: Currency Configuration -->
             <div class="config-section" style="background: #0f1c32; border-radius: 12px; padding: 24px; margin-bottom: 24px;">
                 <h3 style="color: #fff; font-size: 18px; font-weight: 600; margin-bottom: 24px;">Configuración de Moneda</h3>
@@ -1301,14 +1817,14 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
                     <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #1e2a42;">
                         <span style="color: #94a3b8; font-size: 14px;">Productos</span>
                         <span style="color: #fff; font-size: 15px; font-weight: 600;">
-                            {{ $products->count() }} de {{ $tenant->plan_id == 1 ? 6 : ($tenant->plan_id == 2 ? 18 : 40) }}
+                            {{ $products->count() }} de {{ $plan->products_limit }}
                         </span>
                     </div>
                     
                     <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #1e2a42;">
                         <span style="color: #94a3b8; font-size: 14px;">Servicios</span>
                         <span style="color: #fff; font-size: 15px; font-weight: 600;">
-                            {{ $services->count() }} de {{ $tenant->plan_id == 1 ? 3 : ($tenant->plan_id == 2 ? 6 : 15) }}
+                            {{ $services->count() }} de {{ $plan->services_limit }}
                         </span>
                     </div>
                     
@@ -1389,6 +1905,74 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
         let currentProductId = null;
         const productsData = @json($products);
 
+        // ── Plan limits exposed from PHP ─────────────────────────────
+        const planId      = {{ (int) $plan->id }};
+        const planName    = '{{ addslashes($plan->name) }}';
+        const productsMax = {{ (int) ($plan->products_limit ?? 6) }};
+        const servicesMax = {{ (int) ($plan->services_limit ?? 3) }};
+        const NEXT_PLAN   = { 1: { name:'CRECIMIENTO', prods:12, svcs:6 }, 2: { name:'VISIÓN', prods:18, svcs:9 } };
+        const SUPPORT_WA  = 'https://wa.me/584120000000'; // ← actualizar con número de soporte real
+
+        // ── Limit-check wrappers (called by "Agregar" buttons) ───────
+        function checkAndOpenProductModal() {
+            if (productsData.length >= productsMax) {
+                openLimitModal('producto');
+                return;
+            }
+            openProductModal();
+        }
+
+        function checkAndOpenServiceModal() {
+            if (servicesData.length >= servicesMax) {
+                openLimitModal('servicio');
+                return;
+            }
+            openServiceModal();
+        }
+
+        // ── Limit-reached modal ──────────────────────────────────────
+        function openLimitModal(type) {
+            const next  = NEXT_PLAN[planId];
+            const modal = document.getElementById('limit-modal');
+            const title = document.getElementById('limit-modal-title');
+            const msg   = document.getElementById('limit-modal-message');
+            const cta   = document.getElementById('limit-modal-cta');
+            const max   = type === 'producto' ? productsMax : servicesMax;
+            const noun  = type === 'producto' ? 'productos' : 'servicios';
+
+            title.textContent = `⚠️ Límite de ${noun} alcanzado`;
+
+            if (next) {
+                const nextQty = type === 'producto' ? next.prods : next.svcs;
+                msg.innerHTML =
+                    `<strong style="color:#fff;">Has alcanzado el máximo de ${max} ${noun}</strong> del Plan <em>${planName}</em>.<br><br>` +
+                    `Actualiza al Plan <strong style="color:#22c55e;">${next.name}</strong> y gestiona hasta ` +
+                    `<strong style="color:#fff;">${nextQty} ${noun}</strong> en tu landing.`;
+                cta.innerHTML =
+                    `<button onclick="closeLimitModal()" style="background:#22c55e;color:#000;font-weight:700;border:none;` +
+                    `padding:10px 22px;border-radius:8px;cursor:pointer;font-size:13px;">` +
+                    `🚀 Quiero el Plan ${next.name}</button>`;
+            } else {
+                // Plan 3 — last plan → contact support
+                msg.innerHTML =
+                    `<strong style="color:#fff;">Has alcanzado el máximo de ${max} ${noun}</strong> del Plan <em>${planName}</em>.<br><br>` +
+                    `Para necesidades especiales, nuestro equipo puede diseñar una solución ` +
+                    `personalizada para tu negocio. Contáctanos directamente.`;
+                cta.innerHTML =
+                    `<a href="${SUPPORT_WA}?text=${encodeURIComponent('Hola, soy cliente del Plan VISIÓN y necesito soporte personalizado.')}" ` +
+                    `target="_blank" style="background:#25d366;color:#000;font-weight:700;text-decoration:none;` +
+                    `padding:10px 22px;border-radius:8px;display:inline-block;font-size:13px;">` +
+                    `💬 Contactar Soporte</a>`;
+            }
+
+            modal.classList.add('show');
+        }
+
+        function closeLimitModal() {
+            document.getElementById('limit-modal').classList.remove('show');
+        }
+        // ────────────────────────────────────────────────────────────
+
         function openProductModal(productId = null) {
             const modal = document.getElementById('product-modal');
             const title = document.getElementById('product-modal-title');
@@ -1396,6 +1980,9 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
             
             form.reset();
             currentProductId = productId;
+
+            // Reset gallery UI (Plan 3)
+            resetGalleryUI();
             
             if (productId) {
                 // Edit mode
@@ -1417,11 +2004,15 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
                         img.src = `/storage/tenants/{{ $tenant->id }}/${product.image_filename}`;
                         preview.style.display = 'block';
                     }
+
+                    // Populate gallery (Plan 3)
+                    populateGalleryUI(product);
                 }
             } else {
                 // Add mode
                 title.textContent = 'Agregar Producto';
                 document.getElementById('product-image-preview').style.display = 'none';
+                showGallerySlots(0);
             }
             
             modal.classList.add('show');
@@ -1445,6 +2036,175 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
                 reader.readAsDataURL(file);
             }
         }
+
+        // ── Gallery Functions (Plan 3 / VISIÓN) ──────────────────────
+        @if($plan->id === 3)
+        /**
+         * Reset gallery UI to clean state.
+         */
+        function resetGalleryUI() {
+            const thumbsContainer = document.getElementById('product-gallery-thumbs');
+            const previewsContainer = document.getElementById('product-gallery-previews');
+            const existingContainer = document.getElementById('product-gallery-existing');
+            
+            if (thumbsContainer) thumbsContainer.innerHTML = '';
+            if (previewsContainer) previewsContainer.innerHTML = '';
+            if (existingContainer) existingContainer.style.display = 'none';
+            
+            // Reset file inputs
+            const g1 = document.getElementById('product-gallery-1');
+            const g2 = document.getElementById('product-gallery-2');
+            if (g1) g1.value = '';
+            if (g2) g2.value = '';
+        }
+
+        /**
+         * Populate gallery thumbnails from existing product data (edit mode).
+         */
+        function populateGalleryUI(product) {
+            const galleryImages = product.gallery_images || [];
+            const thumbsContainer = document.getElementById('product-gallery-thumbs');
+            const existingContainer = document.getElementById('product-gallery-existing');
+
+            if (!thumbsContainer || !existingContainer) return;
+
+            thumbsContainer.innerHTML = '';
+
+            if (galleryImages.length > 0) {
+                existingContainer.style.display = 'block';
+                
+                galleryImages.forEach(img => {
+                    const thumb = document.createElement('div');
+                    thumb.className = 'gallery-thumb';
+                    thumb.id = `gallery-thumb-${img.id}`;
+                    thumb.innerHTML = `
+                        <img src="/storage/tenants/{{ $tenant->id }}/${img.image_filename}" alt="Gallery">
+                        <button type="button" class="gallery-thumb-delete" onclick="deleteGalleryImage(${product.id}, ${img.id})" title="Eliminar">&times;</button>
+                    `;
+                    thumbsContainer.appendChild(thumb);
+                });
+            }
+
+            // Show available upload slots (max 2 total gallery)
+            showGallerySlots(galleryImages.length);
+        }
+
+        /**
+         * Show/hide gallery file upload slots based on how many gallery images exist.
+         */
+        function showGallerySlots(existingCount) {
+            const slot1 = document.getElementById('gallery-slot-1');
+            const slot2 = document.getElementById('gallery-slot-2');
+            if (!slot1 || !slot2) return;
+
+            const availableSlots = 2 - existingCount;
+            slot1.style.display = availableSlots >= 1 ? 'block' : 'none';
+            slot2.style.display = availableSlots >= 2 ? 'block' : 'none';
+        }
+
+        /**
+         * Preview a gallery image file before upload.
+         */
+        function previewGalleryImage(event, slotNumber) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const previewsContainer = document.getElementById('product-gallery-previews');
+            
+            // Remove existing preview for this slot
+            const existingPreview = document.getElementById(`gallery-preview-${slotNumber}`);
+            if (existingPreview) existingPreview.remove();
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const div = document.createElement('div');
+                div.className = 'gallery-preview-thumb';
+                div.id = `gallery-preview-${slotNumber}`;
+                div.innerHTML = `<img src="${e.target.result}" alt="Preview galería ${slotNumber}">`;
+                previewsContainer.appendChild(div);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        /**
+         * Delete an existing gallery image via API.
+         */
+        async function deleteGalleryImage(productId, imageId) {
+            if (!confirm('¿Eliminar esta imagen de la galería?')) return;
+
+            try {
+                const response = await fetch(`/tenant/{{ $tenant->id }}/upload/product/${productId}/gallery/${imageId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content
+                    }
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    // Remove thumbnail from DOM
+                    const thumb = document.getElementById(`gallery-thumb-${imageId}`);
+                    if (thumb) thumb.remove();
+
+                    // Update productsData locally
+                    const product = productsData.find(p => p.id === productId);
+                    if (product && product.gallery_images) {
+                        product.gallery_images = product.gallery_images.filter(gi => gi.id !== imageId);
+                        showGallerySlots(product.gallery_images.length);
+                        
+                        if (product.gallery_images.length === 0) {
+                            document.getElementById('product-gallery-existing').style.display = 'none';
+                        }
+                    }
+                } else {
+                    alert('✗ Error: ' + (result.error || 'No se pudo eliminar'));
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('✗ Error al eliminar imagen de galería');
+            }
+        }
+
+        /**
+         * Upload pending gallery files after product save.
+         */
+        async function uploadPendingGalleryImages(productId) {
+            const csrf = document.querySelector('meta[name="csrf-token"]')?.content;
+            const slots = [
+                document.getElementById('product-gallery-1'),
+                document.getElementById('product-gallery-2')
+            ];
+
+            for (const input of slots) {
+                if (input && input.files && input.files[0]) {
+                    const formData = new FormData();
+                    formData.append('image', input.files[0]);
+
+                    try {
+                        const res = await fetch(`/tenant/{{ $tenant->id }}/upload/product/${productId}/gallery`, {
+                            method: 'POST',
+                            headers: { 'X-CSRF-TOKEN': csrf },
+                            body: formData
+                        });
+
+                        const result = await res.json();
+                        if (!result.success) {
+                            console.warn('Gallery upload failed:', result.error);
+                        }
+                    } catch (err) {
+                        console.error('Gallery upload error:', err);
+                    }
+                }
+            }
+        }
+        @else
+        // Plans 1 & 2: no-op gallery functions
+        function resetGalleryUI() {}
+        function populateGalleryUI() {}
+        function showGallerySlots() {}
+        @endif
+        // ── End Gallery Functions ────────────────────────────────────
 
         async function saveProduct(event) {
             event.preventDefault();
@@ -1478,13 +2238,15 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
                 const result = await response.json();
 
                 if (result.success) {
-                    // Handle image upload if file selected
+                    const savedProductId = result.product.id;
+
+                    // Handle main image upload if file selected
                     const imageFile = document.getElementById('product-image').files[0];
                     if (imageFile) {
                         const formData = new FormData();
                         formData.append('image', imageFile);
                         
-                        await fetch(`/tenant/{{ $tenant->id }}/upload/product/${result.product.id}`, {
+                        await fetch(`/tenant/{{ $tenant->id }}/upload/product/${savedProductId}`, {
                             method: 'POST',
                             headers: {
                                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content
@@ -1492,6 +2254,11 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
                             body: formData
                         });
                     }
+
+                    // Handle gallery image uploads (Plan 3 only)
+                    @if($plan->id === 3)
+                    await uploadPendingGalleryImages(savedProductId);
+                    @endif
                     
                     alert(`✓ Producto ${isEdit ? 'actualizado' : 'creado'} correctamente`);
                     closeProductModal();
@@ -1541,38 +2308,230 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
         let currentServiceId = null;
         const servicesData = @json($services);
 
+        // ── Service Visual Mode ───────────────────────────────────────
+        const SVC_MODE_KEY  = 'svc_mode_{{ $tenant->id }}';
+        const PLAN_ID       = {{ $plan->id }};
+        // Plan 1: icon-only — never read localStorage for mode
+        let serviceModalMode = (PLAN_ID === 1) ? 'icon' : (localStorage.getItem(SVC_MODE_KEY) || 'icon');
+
+        function setGlobalServiceMode(mode) {
+            if (PLAN_ID === 1) return;   // Plan 1 is always icon-only
+            serviceModalMode = mode;
+            localStorage.setItem(SVC_MODE_KEY, mode);
+            updateGlobalModeBtns();
+        }
+
+        function updateGlobalModeBtns() {
+            const iBtn   = document.getElementById('global-mode-icon-btn');
+            const imgBtn = document.getElementById('global-mode-image-btn');
+            if (!iBtn) return;
+            iBtn.style.background   = serviceModalMode === 'icon'  ? '#2B6FFF' : 'transparent';
+            iBtn.style.color        = serviceModalMode === 'icon'  ? '#fff' : 'rgba(255,255,255,0.45)';
+            imgBtn.style.background = serviceModalMode === 'image' ? '#2B6FFF' : 'transparent';
+            imgBtn.style.color      = serviceModalMode === 'image' ? '#fff' : 'rgba(255,255,255,0.45)';
+        }
+
+        function setServiceModalMode(mode) {
+            serviceModalMode = mode;
+            localStorage.setItem(SVC_MODE_KEY, mode);
+            updateGlobalModeBtns();
+
+            const iconSect = document.getElementById('svc-section-icon');
+            const imgSect  = document.getElementById('svc-section-image');
+            const tabIcon  = document.getElementById('svc-tab-icon');
+            const tabImg   = document.getElementById('svc-tab-image');
+
+            if (iconSect) iconSect.style.display = (mode === 'icon')  ? '' : 'none';
+            if (imgSect)  imgSect.style.display  = (mode === 'image') ? '' : 'none';
+
+            if (tabIcon) {
+                tabIcon.style.background = (mode === 'icon')  ? 'rgba(43,111,255,0.55)' : 'transparent';
+                tabIcon.style.color      = (mode === 'icon')  ? '#fff' : 'rgba(255,255,255,0.4)';
+            }
+            if (tabImg) {
+                tabImg.style.background = (mode === 'image') ? 'rgba(43,111,255,0.55)' : 'transparent';
+                tabImg.style.color      = (mode === 'image') ? '#fff' : 'rgba(255,255,255,0.4)';
+            }
+
+            // Clear icon name input when switching to image mode
+            if (mode === 'image') {
+                const hiddenInput = document.getElementById('service-icon-name');
+                if (hiddenInput) hiddenInput.value = '';
+                iconPickerSelected = '';
+                const prevEl    = document.getElementById('icon-preview-el');
+                const prevLabel = document.getElementById('icon-preview-label');
+                if (prevEl)    prevEl.setAttribute('icon', 'tabler:cog');
+                if (prevLabel) prevLabel.textContent = 'Sin ícono seleccionado';
+            }
+        }
+
+        // ── Icon Picker ───────────────────────────────────────────────
+        const ICON_CATALOG = [
+            // Negocios
+            {n:'briefcase', l:'Portafolio'},      {n:'building-store', l:'Tienda'},
+            {n:'award', l:'Premio'},               {n:'certificate', l:'Certificado'},
+            {n:'crown', l:'Premium'},              {n:'diamond', l:'Diamante'},
+            {n:'rocket', l:'Lanzamiento'},         {n:'target', l:'Objetivo'},
+            {n:'trophy', l:'Trofeo'},              {n:'star', l:'Estrella'},
+            {n:'heart', l:'Favorito'},             {n:'thumb-up', l:'Recomendado'},
+            {n:'shield-check', l:'Seguridad'},     {n:'badge-check', l:'Verificado'},
+            // Servicios físicos
+            {n:'tool', l:'Herramienta'},           {n:'hammer', l:'Construcción'},
+            {n:'paint', l:'Pintura'},              {n:'scissors', l:'Estética'},
+            {n:'needle', l:'Costura'},             {n:'screwdriver', l:'Reparación'},
+            {n:'bolt', l:'Electricidad'},          {n:'car', l:'Automotriz'},
+            {n:'home', l:'Hogar'},                 {n:'building', l:'Inmobiliaria'},
+            {n:'bucket', l:'Limpieza'},            {n:'wash', l:'Lavandería'},
+            // Tecnología
+            {n:'device-desktop', l:'Computadora'},{n:'device-mobile', l:'Móvil'},
+            {n:'wifi', l:'Internet'},              {n:'cpu', l:'Hardware'},
+            {n:'code', l:'Desarrollo'},            {n:'cloud', l:'Nube'},
+            {n:'headset', l:'Soporte'},            {n:'printer', l:'Impresión'},
+            // Foto / Medios
+            {n:'camera', l:'Fotografía'},          {n:'video', l:'Video'},
+            {n:'microphone', l:'Audio/Podcast'},   {n:'palette', l:'Diseño Gráfico'},
+            {n:'pen', l:'Escritura'},              {n:'photo', l:'Galería'},
+            // Salud y Bienestar
+            {n:'stethoscope', l:'Medicina'},       {n:'first-aid-kit', l:'Primeros Auxilios'},
+            {n:'activity', l:'Salud'},             {n:'spa', l:'Spa'},
+            {n:'dumbbell', l:'Gimnasio'},          {n:'leaf', l:'Natural/Orgánico'},
+            {n:'eye', l:'Óptica/Visión'},          {n:'brain', l:'Psicología'},
+            // Educación
+            {n:'book', l:'Libro/Educación'},       {n:'school', l:'Escuela'},
+            {n:'pencil', l:'Enseñanza'},           {n:'flask', l:'Laboratorio'},
+            // Comida y Bebida
+            {n:'soup', l:'Cocina'},                {n:'pizza', l:'Pizza'},
+            {n:'coffee', l:'Café'},                {n:'apple', l:'Nutrición'},
+            // Logística
+            {n:'shopping-cart', l:'Compras'},      {n:'package', l:'Paquete'},
+            {n:'truck', l:'Entrega/Delivery'},     {n:'map-pin', l:'Ubicación'},
+            // Comunicación / Agenda
+            {n:'phone', l:'Teléfono'},             {n:'mail', l:'Email'},
+            {n:'message-circle', l:'Chat'},        {n:'calendar', l:'Agenda'},
+            {n:'clock', l:'Horario'},              {n:'users', l:'Clientes/Equipo'},
+            {n:'user-check', l:'Verificado'},
+        ];
+
+        let iconPickerSelected = '';
+
+        function renderIconGrid(filter = '') {
+            const grid = document.getElementById('icon-picker-grid');
+            if (!grid) return;
+
+            const term     = filter.toLowerCase().trim();
+            const filtered = term
+                ? ICON_CATALOG.filter(ic => ic.n.includes(term) || ic.l.toLowerCase().includes(term))
+                : ICON_CATALOG;
+
+            grid.innerHTML = '';
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div style="grid-column:span 6; text-align:center; color:rgba(255,255,255,0.3); padding:24px; font-size:13px;">Sin resultados para "<em>${filter}</em>"</div>`;
+                return;
+            }
+
+            filtered.forEach(ic => {
+                const selected = iconPickerSelected === ic.n;
+                const el = document.createElement('div');
+                el.className   = 'icon-pick-item';
+                el.title       = ic.l;
+                el.dataset.name = ic.n;
+                el.style.cssText = `
+                    display:flex; flex-direction:column; align-items:center; gap:4px;
+                    padding:8px 4px; border-radius:8px; cursor:pointer; transition:all .15s;
+                    background:${selected ? 'rgba(43,111,255,0.25)' : 'rgba(255,255,255,0.03)'};
+                    border:1px solid ${selected ? 'rgba(43,111,255,0.6)' : 'rgba(255,255,255,0.06)'};
+                `;
+                el.innerHTML = `
+                    <iconify-icon icon="tabler:${ic.n}" class="text-primary" width="22" height="22"></iconify-icon>
+                    <span style="font-size:9px;color:rgba(255,255,255,0.3);text-align:center;line-height:1.2;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${ic.l}</span>
+                `;
+                el.addEventListener('click', () => selectIcon(ic.n, ic.l));
+                grid.appendChild(el);
+            });
+        }
+
+        function filterIcons(val) { renderIconGrid(val); }
+
+        function selectIcon(iconName, iconLabel) {
+            iconPickerSelected = iconName;
+            const hidden = document.getElementById('service-icon-name');
+            if (hidden) hidden.value = iconName;
+            const prevEl    = document.getElementById('icon-preview-el');
+            const prevLabel = document.getElementById('icon-preview-label');
+            if (prevEl)    prevEl.setAttribute('icon', 'tabler:' + iconName);
+            if (prevLabel) prevLabel.textContent = iconLabel + '  (' + iconName + ')';
+            const searchVal = document.getElementById('icon-search')?.value || '';
+            renderIconGrid(searchVal);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => { updateGlobalModeBtns(); });
+
         function openServiceModal(serviceId = null) {
             const modal = document.getElementById('service-modal');
             const title = document.getElementById('service-modal-title');
-            const form = document.getElementById('service-form');
-            
+            const form  = document.getElementById('service-form');
+
             form.reset();
             currentServiceId = serviceId;
-            
+
             if (serviceId) {
                 // Edit mode
                 title.textContent = 'Editar Servicio';
                 const service = servicesData.find(s => s.id === serviceId);
-                
+
                 if (service) {
                     document.getElementById('service-id').value = service.id;
                     document.getElementById('service-name').value = service.name;
                     document.getElementById('service-description').value = service.description || '';
                     document.getElementById('service-is-active').checked = service.is_active == 1;
-                    
-                    if (service.image_filename) {
-                        const preview = document.getElementById('service-image-preview');
-                        const img = document.getElementById('service-image-preview-img');
-                        img.src = `/storage/tenants/{{ $tenant->id }}/${service.image_filename}`;
-                        preview.style.display = 'block';
+
+                    // Restore icon or image mode based on what the service has
+                    const hasIcon  = !!service.icon_name;
+                    const hasImage = !!service.image_filename;
+                    const modeToSet = hasImage && !hasIcon ? 'image' : serviceModalMode;
+
+                    if (hasIcon) {
+                        iconPickerSelected = service.icon_name;
+                        const hidden = document.getElementById('service-icon-name');
+                        if (hidden) hidden.value = service.icon_name;
+                        const prevEl    = document.getElementById('icon-preview-el');
+                        const prevLabel = document.getElementById('icon-preview-label');
+                        if (prevEl)    prevEl.setAttribute('icon', 'tabler:' + service.icon_name);
+                        if (prevLabel) prevLabel.textContent = service.icon_name;
                     }
+
+                    if (hasImage && modeToSet === 'image') {
+                        const preview = document.getElementById('service-image-preview');
+                        const img     = document.getElementById('service-image-preview-img');
+                        if (preview && img) {
+                            img.src = `/storage/tenants/{{ $tenant->id }}/${service.image_filename}`;
+                            preview.style.display = 'block';
+                        }
+                    }
+
+                    setServiceModalMode(modeToSet);
                 }
             } else {
-                // Add mode
+                // Add mode — reset picker
                 title.textContent = 'Agregar Servicio';
-                document.getElementById('service-image-preview').style.display = 'none';
+                iconPickerSelected = '';
+                const hidden = document.getElementById('service-icon-name');
+                if (hidden) hidden.value = '';
+                const prevEl    = document.getElementById('icon-preview-el');
+                const prevLabel = document.getElementById('icon-preview-label');
+                if (prevEl)    prevEl.setAttribute('icon', 'tabler:cog');
+                if (prevLabel) prevLabel.textContent = 'Sin ícono seleccionado';
+                const imgPrev = document.getElementById('service-image-preview');
+                if (imgPrev) imgPrev.style.display = 'none';
+                setServiceModalMode(serviceModalMode);
             }
-            
+
+            // Render icon grid (always)
+            const searchInput = document.getElementById('icon-search');
+            if (searchInput) searchInput.value = '';
+            renderIconGrid('');
+
             modal.classList.add('show');
         }
 
@@ -1601,10 +2560,15 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
             const serviceId = document.getElementById('service-id').value;
             const isEdit = serviceId !== '';
             
+            // Plan 1 is always icon mode regardless of localStorage
+            const currentMode = (PLAN_ID === 1) ? 'icon' : serviceModalMode;
+            const iconNameVal = document.getElementById('service-icon-name')?.value?.trim() || null;
+
             const data = {
                 name: document.getElementById('service-name').value,
                 description: document.getElementById('service-description').value,
-                is_active: document.getElementById('service-is-active').checked ? 1 : 0
+                is_active: document.getElementById('service-is-active').checked ? 1 : 0,
+                icon_name: currentMode === 'icon' ? (iconNameVal || null) : null,
             };
 
             try {
@@ -1624,13 +2588,14 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
                 const result = await response.json();
 
                 if (result.success) {
-                    // Handle image upload if file selected
-                    const imageFile = document.getElementById('service-image').files[0];
+                    // Handle image upload if in image mode and a file was selected
+                    const imageInput = document.getElementById('service-image');
+                    const imageFile  = currentMode === 'image' ? imageInput?.files?.[0] : null;
                     if (imageFile) {
                         const formData = new FormData();
                         formData.append('image', imageFile);
                         
-                        await fetch(`/tenant/{{ $tenant->id }}/upload/service/${result.service.id}`, {
+                        await fetch(`/tenant/{{ $tenant->id }}/upload/service/${result.data.id}`, {
                             method: 'POST',
                             headers: {
                                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content
@@ -1981,6 +2946,288 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
         function resetForm(formId) {
             document.getElementById(formId).reset();
         }
+
+        // ── Social Networks ──────────────────────────────────────────
+        @php
+            $plan1NetworksList = ['instagram', 'facebook', 'tiktok', 'linkedin'];
+            $allNetworksList   = ['instagram', 'facebook', 'tiktok', 'linkedin', 'youtube', 'x'];
+        @endphp
+        let selectedSocialNetwork = '{{ $plan1Selected ?? '' }}';
+
+        function selectSocialNetwork(key) {
+            // Update selected state
+            selectedSocialNetwork = key;
+
+            // Update radio labels visually
+            @foreach($plan1Networks as $k)
+            document.getElementById('social-radio-label-{{ $k }}').style.border    = key === '{{ $k }}' ? '1px solid #2B6FFF' : '1px solid #1e2a42';
+            document.getElementById('social-radio-label-{{ $k }}').style.background = key === '{{ $k }}' ? '#1a2f5e' : 'transparent';
+            @endforeach
+
+            // Update label and placeholder
+            const meta = {
+                instagram: { label: 'Instagram',   placeholder: '@tuusuario' },
+                facebook:  { label: 'Facebook',    placeholder: '@pagina o URL' },
+                tiktok:    { label: 'TikTok',      placeholder: '@tuusuario' },
+                linkedin:  { label: 'LinkedIn',    placeholder: 'URL o usuario' },
+            };
+            const networkLabel = document.getElementById('social-plan1-network-label');
+            const handleInput  = document.getElementById('social-plan1-handle');
+            if (networkLabel) networkLabel.textContent = '(' + (meta[key]?.label || '') + ')';
+            if (handleInput) {
+                handleInput.placeholder = meta[key]?.placeholder || '';
+                handleInput.disabled = false;
+            }
+        }
+
+        async function saveSocialNetworks() {
+            const tenantId = {{ $tenant->id }};
+            const plan = {{ $plan->id }};
+            let payload = {};
+
+            if (plan === 1) {
+                if (!selectedSocialNetwork) {
+                    alert('✗ Selecciona una red social primero');
+                    return;
+                }
+                const handle = document.getElementById('social-plan1-handle')?.value?.trim();
+                if (!handle) {
+                    alert('✗ Ingresa el usuario o enlace de tu red social');
+                    return;
+                }
+                payload[selectedSocialNetwork] = handle;
+            } else {
+                @foreach($allNetworksList as $k)
+                const val_{{ $k }} = document.getElementById('social-{{ $k }}')?.value?.trim();
+                if (val_{{ $k }}) payload['{{ $k }}'] = val_{{ $k }};
+                @endforeach
+            }
+
+            try {
+                const response = await fetch(`/tenant/${tenantId}/update-social-networks`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    alert('✓ Redes sociales guardadas correctamente');
+                } else {
+                    alert('✗ ' + (result.message || 'Error al guardar'));
+                }
+            } catch (err) {
+                console.error('Error:', err);
+                alert('✗ Error al guardar redes sociales');
+            }
+        }
+        // ── End Social Networks ─────────────────────────────────────
+
+        // ── Payment Methods ──────────────────────────────────────────
+        @if($plan->id !== 1)
+        const payAllKeys = @json(array_keys($allPayMeta));
+
+        function togglePayMethod(key) {
+            const check = document.getElementById('pay-check-' + key);
+            const label = document.getElementById('pay-label-' + key);
+            const icon  = document.getElementById('pay-check-icon-' + key);
+            if (!check) return;
+            check.checked = !check.checked;
+            label.style.borderColor = check.checked ? '#2B6FFF' : '#1e2a42';
+            label.style.background  = check.checked ? '#1a2f5e' : 'transparent';
+            icon.style.color        = check.checked ? '#2B6FFF' : '#1e2a42';
+        }
+
+        @if($plan->id === 3)
+        function toggleBranchPayMethod(branchId, key) {
+            const check = document.getElementById('pay-branch-check-' + branchId + '-' + key);
+            const label = document.getElementById('pay-branch-label-' + branchId + '-' + key);
+            const icon  = document.getElementById('pay-branch-check-icon-' + branchId + '-' + key);
+            if (!check) return;
+            check.checked = !check.checked;
+            label.style.borderColor = check.checked ? '#a78bfa60' : '#1e2a42';
+            label.style.background  = check.checked ? '#2d1f5e' : 'transparent';
+            icon.style.color        = check.checked ? '#a78bfa' : '#1e2a42';
+        }
+        @endif
+
+        async function savePaymentMethods() {
+            const tenantId = {{ $tenant->id }};
+            const globalSelected = payAllKeys.filter(k => {
+                const el = document.getElementById('pay-check-' + k);
+                return el && el.checked;
+            });
+            const payload = { global: globalSelected };
+
+            @if($plan->id === 3)
+            const branchData = {};
+            @foreach($activeBranchList as $branch)
+            const bMethods_{{ $branch->id }} = payAllKeys.filter(k => {
+                const el = document.getElementById('pay-branch-check-{{ $branch->id }}-' + k);
+                return el && el.checked;
+            });
+            if (bMethods_{{ $branch->id }}.length > 0) {
+                branchData['{{ $branch->id }}'] = bMethods_{{ $branch->id }};
+            }
+            @endforeach
+            payload.branches = branchData;
+            @endif
+
+            try {
+                const response = await fetch('/tenant/' + tenantId + '/update-payment-methods', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content
+                    },
+                    body: JSON.stringify(payload)
+                });
+                const result = await response.json();
+                if (result.success) {
+                    alert('✓ Medios de pago guardados correctamente');
+                } else {
+                    alert('✗ ' + (result.message || 'Error al guardar'));
+                }
+            } catch (err) {
+                console.error('Error:', err);
+                alert('✗ Error al guardar medios de pago');
+            }
+        }
+        @endif
+        // ── End Payment Methods ──────────────────────────────────────
+
+        // ── Branches (Plan 3 / VISIÓN) ──────────────────────────────
+        @if($plan->id === 3)
+        let branchCount = {{ $branches->count() }};
+
+        async function toggleBranchesSection() {
+            const enabled = document.getElementById('branches-toggle').checked;
+
+            try {
+                const response = await fetch('/tenant/{{ $tenant->id }}/branches/toggle', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content
+                    },
+                    body: JSON.stringify({ enabled })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    const content = document.getElementById('branches-content');
+                    const status = document.getElementById('branches-status');
+                    const statusText = document.getElementById('branches-status-text');
+
+                    content.style.display = enabled ? '' : 'none';
+                    status.style.background = enabled ? '#0d3320' : '#1e2a42';
+                    status.style.borderLeftColor = enabled ? '#22c55e' : '#6b7280';
+                    statusText.style.color = enabled ? '#86efac' : '#94a3b8';
+                    statusText.textContent = enabled
+                        ? '✅ Sección visible en tu landing pública'
+                        : '⏸️ Sección oculta en tu landing pública';
+                } else {
+                    // Revert toggle
+                    document.getElementById('branches-toggle').checked = !enabled;
+                    alert('✗ ' + (result.message || 'Error'));
+                }
+            } catch (err) {
+                document.getElementById('branches-toggle').checked = !enabled;
+                console.error('Error:', err);
+                alert('✗ Error al cambiar estado de sucursales');
+            }
+        }
+
+        function editBranch(id, name, address) {
+            document.getElementById('branch-edit-id').value = id;
+            document.getElementById('branch-name').value = name;
+            document.getElementById('branch-address').value = address;
+            document.getElementById('branch-form-title').textContent = '✏️ Editar Sucursal';
+            document.getElementById('branch-cancel-btn').style.display = '';
+            document.getElementById('branch-form-container').style.display = '';
+        }
+
+        function cancelBranchEdit() {
+            document.getElementById('branch-edit-id').value = '';
+            document.getElementById('branch-name').value = '';
+            document.getElementById('branch-address').value = '';
+            document.getElementById('branch-form-title').textContent = '+ Agregar Sucursal';
+            document.getElementById('branch-cancel-btn').style.display = 'none';
+
+            // Hide form if at max
+            if (branchCount >= 3) {
+                document.getElementById('branch-form-container').style.display = 'none';
+            }
+        }
+
+        async function saveBranch() {
+            const name = document.getElementById('branch-name').value.trim();
+            const address = document.getElementById('branch-address').value.trim();
+            const editId = document.getElementById('branch-edit-id').value;
+
+            if (!name || !address) {
+                alert('✗ Nombre y dirección son obligatorios');
+                return;
+            }
+
+            const payload = { name, address, is_active: true };
+            if (editId) payload.id = parseInt(editId);
+
+            try {
+                const response = await fetch('/tenant/{{ $tenant->id }}/branches', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    alert('✓ ' + result.message);
+                    location.reload();
+                } else {
+                    alert('✗ ' + (result.message || 'Error desconocido'));
+                }
+            } catch (err) {
+                console.error('Error:', err);
+                alert('✗ Error al guardar sucursal');
+            }
+        }
+
+        async function deleteBranch(branchId) {
+            if (!confirm('¿Eliminar esta sucursal?')) return;
+
+            try {
+                const response = await fetch(`/tenant/{{ $tenant->id }}/branches/${branchId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content
+                    }
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    alert('✓ Sucursal eliminada');
+                    location.reload();
+                } else {
+                    alert('✗ ' + (result.message || 'Error'));
+                }
+            } catch (err) {
+                console.error('Error:', err);
+                alert('✗ Error al eliminar sucursal');
+            }
+        }
+        @endif
+        // ── End Branches ────────────────────────────────────────────
     </script>
 </body>
 </html>

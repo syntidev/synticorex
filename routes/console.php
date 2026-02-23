@@ -12,3 +12,8 @@ Schedule::command('dollar:update')
     ->hourly()
     ->withoutOverlapping()
     ->runInBackground();
+
+Schedule::command('tenants:check-expiry')
+    ->dailyAt('02:00')
+    ->withoutOverlapping()
+    ->runInBackground();

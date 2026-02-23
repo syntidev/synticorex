@@ -18,7 +18,7 @@
             @foreach($services as $service)
                 <article class="group relative bg-white/5 border border-white/10 rounded-[2.5rem] p-8 transition-all duration-500 hover:bg-white/10 hover:border-primary/30 hover:-translate-y-2 hover:shadow-glow-primary">
                     
-                    {{-- Contenedor de Imagen o Icono Profesional --}}
+                    {{-- Icon or Image --}}
                     <div class="relative w-20 h-20 mb-8 rounded-2xl bg-primary/10 flex items-center justify-center overflow-hidden group-hover:bg-primary/20 transition-colors">
                         @if($service->image_filename)
                             <img 
@@ -27,11 +27,7 @@
                                 class="w-full h-full object-cover"
                             >
                         @else
-                            {{-- 
-                                USANDO ICONIFY + FLYONUI (Lucide Icons)
-                                Si no hay icono definido, usamos un default elegante.
-                            --}}
-                            <span class="icon-[lucide--{{ $service->icon_name ?? 'component' }}] text-4xl text-primary"></span>
+                            <iconify-icon icon="tabler:{{ $service->icon_name ?? 'cog' }}" class="text-primary" width="40" height="40"></iconify-icon>
                         @endif
                     </div>
                     
@@ -56,7 +52,7 @@
                             <a href="{{ $ctaLink }}" 
                                class="inline-flex items-center gap-2 text-primary font-black uppercase text-xs tracking-widest group/btn">
                                 <span>{{ $service->cta_text ?? 'Saber más' }}</span>
-                                <span class="icon-[lucide--arrow-right] transition-transform group-hover/btn:translate-x-2"></span>
+                                <iconify-icon icon="tabler:arrow-right" class="transition-transform group-hover/btn:translate-x-2" width="16" height="16"></iconify-icon>
                             </a>
                         </div>
                     </div>

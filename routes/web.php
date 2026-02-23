@@ -29,6 +29,9 @@ Route::prefix('tenant/{tenantId}/upload')->group(function () {
     Route::post('/hero',                    [ImageUploadController::class, 'uploadHero']);
     Route::post('/product/{productId}',     [ImageUploadController::class, 'uploadProduct']);
     Route::post('/service/{serviceId}',     [ImageUploadController::class, 'uploadService']);
+    // Gallery images (Plan 3 / VISIÓN only)
+    Route::post('/product/{productId}/gallery',              [ImageUploadController::class, 'uploadProductGallery']);
+    Route::delete('/product/{productId}/gallery/{imageId}',  [ImageUploadController::class, 'deleteProductGalleryImage']);
 });
 
 // Tenant panel actions
@@ -50,6 +53,17 @@ Route::delete('/tenant/{tenantId}/products/{productId}', [DashboardController::c
 Route::post('/tenant/{tenantId}/services',          [DashboardController::class, 'createService']);
 Route::put('/tenant/{tenantId}/services/{serviceId}', [DashboardController::class, 'updateService']);
 Route::delete('/tenant/{tenantId}/services/{serviceId}', [DashboardController::class, 'deleteService']);
+
+// Branches (Plan 3 / VISIÓN)
+Route::post('/tenant/{tenantId}/branches/toggle',          [DashboardController::class, 'toggleBranches']);
+Route::post('/tenant/{tenantId}/branches',                 [DashboardController::class, 'saveBranch']);
+Route::delete('/tenant/{tenantId}/branches/{branchId}',    [DashboardController::class, 'deleteBranch']);
+
+// Payment Methods
+Route::post('/tenant/{tenantId}/update-payment-methods',   [DashboardController::class, 'updatePaymentMethods']);
+
+// Social Networks
+Route::post('/tenant/{tenantId}/update-social-networks',   [DashboardController::class, 'updateSocialNetworks']);
 
 // Config actions
 Route::post('/tenant/{tenantId}/update-currency-config', [DashboardController::class, 'updateCurrencyConfig']);

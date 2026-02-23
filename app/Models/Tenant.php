@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -45,6 +46,7 @@ class Tenant extends Model
         'status',
         'trial_ends_at',
         'subscription_ends_at',
+        'plan_activated_at',
         'settings',
     ];
 
@@ -62,6 +64,7 @@ class Tenant extends Model
             'is_open' => 'boolean',
             'trial_ends_at' => 'datetime',
             'subscription_ends_at' => 'datetime',
+            'plan_activated_at' => 'datetime',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
         ];
@@ -145,5 +148,74 @@ class Tenant extends Model
     public function customization(): HasOne
     {
         return $this->hasOne(TenantCustomization::class);
+    }
+
+    /**
+     * Get the branches for the tenant (Plan 3 / VISIÓN only).
+     *
+     * @return HasMany<TenantBranch, $this>
+     */
+    public function branches(): HasMany
+    {
+        return $this->hasMany(TenantBranch::class);
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════
+    // LIFECYCLE HELPERS
+    // ═══════════════════════════════════════════════════════════════════════
+
+    /**
+     * Days remaining until subscription expires.
+     * Negative means already expired. Returns null when no expiry is set.
+     */
+    public function daysUntilExpiry(): ?int
+    {
+        if ($this->subscription_ends_at === null) {
+            return null;
+        }
+
+        return (int) Carbon::now()->diffInDays($this->subscription_ends_at, false);
+    }
+
+    /**
+     * True when subscription expires in 30 days or fewer (but has NOT yet expired).
+     */
+    public function isExpiringSoon(): bool
+    {
+        $days = $this->daysUntilExpiry();
+
+        return $days !== null && $days >= 0 && $days <= 30;
+    }
+
+    /**
+     * True when the plan is frozen (expired, within 30-day grace period).
+     */
+    public function isFrozen(): bool
+    {
+        return $this->status === 'frozen';
+    }
+
+    /**
+     * True when the plan is archived (grace period has also expired).
+     */
+    public function isArchived(): bool
+    {
+        return $this->status === 'archived';
+    }
+
+    /**
+     * Days of grace-period remaining for a frozen tenant.
+     * Grace ends 30 days after subscription_ends_at.
+     * Returns null if tenant is not frozen or has no expiry date.
+     */
+    public function graceRemainingDays(): ?int
+    {
+        if (! $this->isFrozen() || $this->subscription_ends_at === null) {
+            return null;
+        }
+
+        $graceEndsAt = $this->subscription_ends_at->copy()->addDays(30);
+
+        return max(0, (int) Carbon::now()->diffInDays($graceEndsAt, false));
     }
 }

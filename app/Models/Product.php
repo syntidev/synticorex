@@ -6,6 +6,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Product extends Model
 {
@@ -53,5 +54,43 @@ class Product extends Model
     public function tenant(): BelongsTo
     {
         return $this->belongsTo(Tenant::class);
+    }
+
+    /**
+     * Get the gallery images for this product (Plan 3 only).
+     * These are ADDITIONAL images beyond the main image_filename.
+     * Max 2 gallery images per product.
+     *
+     * @return HasMany<ProductImage, $this>
+     */
+    public function galleryImages(): HasMany
+    {
+        return $this->hasMany(ProductImage::class)->orderBy('position');
+    }
+
+    /**
+     * Get all image URLs for this product (main + gallery).
+     * Returns array of URLs. First element is always the main image.
+     *
+     * @param int $tenantId
+     * @return array<int, string>
+     */
+    public function getAllImageUrls(int $tenantId): array
+    {
+        $urls = [];
+
+        // Main image first
+        if ($this->image_filename) {
+            $urls[] = asset('storage/tenants/' . $tenantId . '/' . $this->image_filename);
+        }
+
+        // Gallery images (Plan 3 only, already loaded via eager load)
+        if ($this->relationLoaded('galleryImages')) {
+            foreach ($this->galleryImages as $galleryImage) {
+                $urls[] = asset('storage/tenants/' . $tenantId . '/' . $galleryImage->image_filename);
+            }
+        }
+
+        return $urls;
     }
 }

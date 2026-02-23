@@ -6,7 +6,7 @@
             {{-- Identidad de Marca (Tenant) --}}
             <div class="flex items-center gap-4">
                 <div class="w-12 h-12 bg-primary rounded-2xl flex items-center justify-center shadow-lg shadow-primary/20">
-                    <span class="icon-[lucide--layers] text-white text-2xl"></span>
+                    <iconify-icon icon="tabler:layers" width="26" height="26" style="color:#fff;"></iconify-icon>
                 </div>
                 <span class="text-2xl font-black text-base-content italic tracking-tighter uppercase leading-none">
                     {{ $tenant->business_name }}
@@ -20,18 +20,46 @@
                 <a href="#faq" class="text-sm font-bold text-base-content/70 hover:text-primary transition-all uppercase tracking-[0.2em]">Ayuda </a>
             </nav>
 
-            {{-- Social: Símbolos Digitales --}}
+            {{-- Social: Redes Sociales --}}
+            @php
+                $rawSn = $customization->social_networks ?? [];
+                $sn = is_array($rawSn) ? $rawSn : [];
+
+                // Build full URLs from handles/usernames
+                $socialLinks = [];
+                foreach ($sn as $network => $handle) {
+                    $handle = trim($handle);
+                    if (!$handle) continue;
+                    $isUrl = str_starts_with($handle, 'http://') || str_starts_with($handle, 'https://');
+                    $h = ltrim($handle, '@');
+                    $socialLinks[$network] = match($network) {
+                        'instagram' => $isUrl ? $handle : 'https://instagram.com/' . $h,
+                        'facebook'  => $isUrl ? $handle : 'https://facebook.com/' . $h,
+                        'tiktok'    => $isUrl ? $handle : 'https://tiktok.com/@' . $h,
+                        'linkedin'  => $isUrl ? $handle : 'https://linkedin.com/in/' . $h,
+                        'youtube'   => $isUrl ? $handle : 'https://youtube.com/@' . $h,
+                        'x'         => $isUrl ? $handle : 'https://x.com/' . $h,
+                        default     => $isUrl ? $handle : '#',
+                    };
+                }
+
+                $socialIconNames = [
+                    'instagram' => 'brand-instagram',
+                    'facebook'  => 'brand-facebook',
+                    'tiktok'    => 'brand-tiktok',
+                    'linkedin'  => 'brand-linkedin',
+                    'youtube'   => 'brand-youtube',
+                    'x'         => 'brand-x',
+                ];
+            @endphp
             <div class="flex items-center gap-6">
-                @if($tenant->social_facebook)
-                    <a href="{{ $tenant->social_facebook }}" class="text-base-content/30 hover:text-primary transition-transform hover:scale-110">
-                        <span class="icon-[lucide--facebook] text-2xl"></span>
+                @foreach($socialLinks as $network => $url)
+                    <a href="{{ $url }}" target="_blank" rel="noopener noreferrer"
+                       class="text-base-content/30 hover:text-primary transition-transform hover:scale-110"
+                       title="{{ ucfirst($network === 'x' ? 'Twitter/X' : $network) }}">
+                        <iconify-icon icon="tabler:{{ $socialIconNames[$network] ?? 'link' }}" width="24" height="24"></iconify-icon>
                     </a>
-                @endif
-                @if($tenant->social_instagram)
-                    <a href="{{ $tenant->social_instagram }}" class="text-base-content/30 hover:text-primary transition-transform hover:scale-110">
-                        <span class="icon-[lucide--instagram] text-2xl"></span>
-                    </a>
-                @endif
+                @endforeach
             </div>
         </div>
 

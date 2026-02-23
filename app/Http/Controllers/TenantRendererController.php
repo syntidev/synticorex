@@ -43,13 +43,15 @@ class TenantRendererController extends Controller
                     ->where('is_active', true)
                     ->orderBy('position')
                     ->orderByDesc('created_at'),
+                'products.galleryImages',
                 'services' => fn($q) => $q
                     ->where('is_active', true)
                     ->orderBy('position')
                     ->orderByDesc('created_at'),
+                'branches',
             ])
             ->where('subdomain', $subdomain)
-            ->where('status', 'active')
+            ->whereIn('status', ['active', 'frozen'])
             ->first();
 
             // Tenant not found or inactive
@@ -59,6 +61,11 @@ class TenantRendererController extends Controller
                 ]);
 
                 return $this->render404($subdomain);
+            }
+
+            // Frozen: subscription expired — show static freeze page
+            if ($tenant->isFrozen()) {
+                return response()->view('landing.frozen', [], 200);
             }
 
             $plan = $tenant->plan;
@@ -147,13 +154,15 @@ class TenantRendererController extends Controller
                 'products' => fn($q) => $q
                     ->where('is_active', true)
                     ->orderBy('position'),
+                'products.galleryImages',
                 'services' => fn($q) => $q
                     ->where('is_active', true)
                     ->orderBy('position'),
+                'branches',
             ])
             ->where('custom_domain', $domain)
             ->where('domain_verified', true)
-            ->where('status', 'active')
+            ->whereIn('status', ['active', 'frozen'])
             ->first();
 
             if ($tenant === null) {
@@ -162,6 +171,11 @@ class TenantRendererController extends Controller
                 ]);
 
                 return $this->render404($domain);
+            }
+
+            // Frozen: subscription expired — show static freeze page
+            if ($tenant->isFrozen()) {
+                return response()->view('landing.frozen', [], 200);
             }
 
             // FlyonUI Theme System
@@ -215,7 +229,9 @@ class TenantRendererController extends Controller
                 'plan',
                 'customization',
                 'products' => fn($q) => $q->orderBy('position'),
+                'products.galleryImages',
                 'services' => fn($q) => $q->orderBy('position'),
+                'branches',
             ])->find($tenantId);
 
             if ($tenant === null) {

@@ -64,6 +64,12 @@
 
         {{-- Sección FAQ: Fondo claro para descanso visual --}}
         <div class="bg-surface-50 dark:bg-surface-950">
+            {{-- Branches Section (Plan 3 / VISIÓN only) --}}
+            @include('landing.partials.branches')
+
+            {{-- Payment Methods Section --}}
+            @include('landing.partials.payment_methods')
+
             @include('landing.partials.faq')
         </div>
 
@@ -124,6 +130,8 @@
     </script>
     
     @include('landing.partials.floating-panel')
+    {{-- Iconify icon runtime — loads icons from CDN, inherits CSS color (theme-aware) --}}
+    <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js" defer></script>
     @stack('scripts')
 </body>
 </html>

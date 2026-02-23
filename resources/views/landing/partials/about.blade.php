@@ -15,7 +15,9 @@
         <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
             @if($tenant->address || $tenant->city)
                 <div class="p-6 bg-white rounded-xl shadow-md">
-                    <div class="text-3xl mb-3">📍</div>
+                    <div class="flex justify-center mb-3">
+                        <iconify-icon icon="tabler:map-pin" class="text-primary" width="36" height="36"></iconify-icon>
+                    </div>
                     <h3 class="font-semibold text-gray-900 mb-1">Ubicación</h3>
                     <p class="text-gray-600 text-sm">
                         {{ $tenant->address }}
@@ -26,7 +28,9 @@
             
             @if($tenant->phone)
                 <div class="p-6 bg-white rounded-xl shadow-md">
-                    <div class="text-3xl mb-3">📞</div>
+                    <div class="flex justify-center mb-3">
+                        <iconify-icon icon="tabler:phone" class="text-primary" width="36" height="36"></iconify-icon>
+                    </div>
                     <h3 class="font-semibold text-gray-900 mb-1">Teléfono</h3>
                     <a href="tel:{{ $tenant->phone }}" class="text-gray-600 text-sm hover:underline">
                         {{ $tenant->phone }}
@@ -36,7 +40,9 @@
             
             @if($tenant->business_hours)
                 <div class="p-6 bg-white rounded-xl shadow-md">
-                    <div class="text-3xl mb-3">🕐</div>
+                    <div class="flex justify-center mb-3">
+                        <iconify-icon icon="tabler:clock" class="text-primary" width="36" height="36"></iconify-icon>
+                    </div>
                     <h3 class="font-semibold text-gray-900 mb-1">Horario</h3>
                     <div class="text-gray-600 text-sm">
                         @php

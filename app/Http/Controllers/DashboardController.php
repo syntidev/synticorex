@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\Tenant;
+use App\Models\TenantBranch;
 use App\Services\DollarRateService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
@@ -37,21 +38,30 @@ class DashboardController extends Controller
                 'products' => fn($q) => $q
                     ->orderBy('position')
                     ->orderByDesc('created_at'),
+                'products.galleryImages',
                 'services' => fn($q) => $q
                     ->orderBy('position')
                     ->orderByDesc('created_at'),
+                'branches',
             ])
             ->where('id', $tenantId)
-            ->where('status', 'active')
+            ->whereIn('status', ['active', 'frozen'])
             ->firstOrFail();
 
-            $plan = $tenant->plan;
+            $plan          = $tenant->plan;
             $customization = $tenant->customization;
-            $products = $tenant->products;
-            $services = $tenant->services;
+            $products      = $tenant->products;
+            $services      = $tenant->services;
+            $branches      = $tenant->branches;
 
             // Get current dollar rate
             $dollarRate = $this->dollarRateService->getCurrentRate();
+
+            // ── Plan expiry data ─────────────────────────────────────────
+            $daysUntilExpiry   = $tenant->daysUntilExpiry();
+            $isExpiringSoon    = $tenant->isExpiringSoon();
+            $isFrozen          = $tenant->isFrozen();
+            $graceRemainingDays = $tenant->graceRemainingDays();
 
             // REMOVED: Color palettes - Now using FlyonUI themes defined in view
             // $colorPalettes = \App\Models\ColorPalette::where('is_active', true)->orderBy('name')->get();
@@ -62,7 +72,12 @@ class DashboardController extends Controller
                 'customization',
                 'products',
                 'services',
-                'dollarRate'
+                'branches',
+                'dollarRate',
+                'daysUntilExpiry',
+                'isExpiringSoon',
+                'isFrozen',
+                'graceRemainingDays'
             ));
         } catch (\Exception $e) {
             return response()->view('errors.404', [], 404);
@@ -127,9 +142,8 @@ class DashboardController extends Controller
                 ->where('status', 'active')
                 ->firstOrFail();
 
-            // Check plan limits
-            $productLimits = [1 => 6, 2 => 18, 3 => 40];
-            $maxProducts = $productLimits[$tenant->plan->id] ?? 6;
+            // Check plan limits (reads from DB)
+            $maxProducts = $tenant->plan->products_limit;
             
             if ($tenant->products->count() >= $maxProducts) {
                 return response()->json([
@@ -242,6 +256,16 @@ class DashboardController extends Controller
                 }
             }
 
+            // Delete gallery images (Plan 3)
+            $galleryImages = \App\Models\ProductImage::where('product_id', $productId)->get();
+            foreach ($galleryImages as $galleryImage) {
+                $galleryPath = storage_path('app/public/tenants/' . $tenantId . '/' . $galleryImage->image_filename);
+                if (file_exists($galleryPath)) {
+                    unlink($galleryPath);
+                }
+            }
+            // DB records cascade-deleted via FK
+
             // Delete product
             $product->delete();
 
@@ -273,8 +297,7 @@ class DashboardController extends Controller
                 ->firstOrFail();
 
             // Check plan limits
-            $serviceLimits = [1 => 3, 2 => 6, 3 => 15];
-            $maxServices = $serviceLimits[$tenant->plan->id] ?? 3;
+            $maxServices = $tenant->plan->services_limit;
             
             if ($tenant->services->count() >= $maxServices) {
                 return response()->json([
@@ -592,6 +615,286 @@ class DashboardController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Error al actualizar PIN: ' . $e->getMessage()
+            ], 422);
+        }
+    }
+
+    // ══════════════════════════════════════════════════════════════════════
+    // BRANCHES (Plan 3 / VISIÓN)
+    // ══════════════════════════════════════════════════════════════════════
+
+    /**
+     * Toggle branches section visibility (stored in tenant settings).
+     */
+    public function toggleBranches(Request $request, int $tenantId): JsonResponse
+    {
+        try {
+            $tenant = Tenant::with('plan')
+                ->where('id', $tenantId)
+                ->where('status', 'active')
+                ->firstOrFail();
+
+            if ((int) $tenant->plan_id !== 3) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'La sección de sucursales solo está disponible en el Plan Visión'
+                ], 403);
+            }
+
+            $validated = $request->validate([
+                'enabled' => 'required|boolean',
+            ]);
+
+            $settings = $tenant->settings ?? [];
+            data_set($settings, 'engine_settings.branches.enabled', (bool) $validated['enabled']);
+            $tenant->settings = $settings;
+            $tenant->save();
+
+            return response()->json([
+                'success' => true,
+                'enabled' => (bool) $validated['enabled'],
+                'message' => $validated['enabled'] ? 'Sección de sucursales activada' : 'Sección de sucursales desactivada',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error: ' . $e->getMessage()
+            ], 422);
+        }
+    }
+
+    /**
+     * Create or update a branch (max 3 per tenant, Plan 3 only).
+     */
+    public function saveBranch(Request $request, int $tenantId): JsonResponse
+    {
+        try {
+            $tenant = Tenant::with('plan')
+                ->where('id', $tenantId)
+                ->where('status', 'active')
+                ->firstOrFail();
+
+            if ((int) $tenant->plan_id !== 3) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Solo disponible en Plan Visión'
+                ], 403);
+            }
+
+            $validated = $request->validate([
+                'id' => 'nullable|integer',
+                'name' => 'required|string|max:150',
+                'address' => 'required|string|max:500',
+                'is_active' => 'boolean',
+            ]);
+
+            if (!empty($validated['id'])) {
+                // Update existing
+                $branch = TenantBranch::where('id', $validated['id'])
+                    ->where('tenant_id', $tenantId)
+                    ->firstOrFail();
+
+                $branch->update([
+                    'name' => $validated['name'],
+                    'address' => $validated['address'],
+                    'is_active' => $validated['is_active'] ?? true,
+                ]);
+            } else {
+                // Create new — enforce max 3
+                $currentCount = TenantBranch::where('tenant_id', $tenantId)->count();
+                if ($currentCount >= 3) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Máximo 3 sucursales permitidas'
+                    ], 422);
+                }
+
+                $branch = TenantBranch::create([
+                    'tenant_id' => $tenantId,
+                    'name' => $validated['name'],
+                    'address' => $validated['address'],
+                    'is_active' => $validated['is_active'] ?? true,
+                ]);
+            }
+
+            return response()->json([
+                'success' => true,
+                'branch' => $branch->fresh(),
+                'message' => !empty($validated['id']) ? 'Sucursal actualizada' : 'Sucursal creada',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error: ' . $e->getMessage()
+            ], 422);
+        }
+    }
+
+    /**
+     * Delete a branch.
+     */
+    public function deleteBranch(int $tenantId, int $branchId): JsonResponse
+    {
+        try {
+            $branch = TenantBranch::where('id', $branchId)
+                ->where('tenant_id', $tenantId)
+                ->firstOrFail();
+
+            $branch->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Sucursal eliminada correctamente'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error: ' . $e->getMessage()
+            ], 422);
+        }
+    }
+
+    // ══════════════════════════════════════════════════════════════════════
+    // PAYMENT METHODS
+    // ══════════════════════════════════════════════════════════════════════
+
+    /**
+     * Update tenant payment methods.
+     * Plan 1: fixed (Pago Móvil + Biopago), not editable.
+     * Plan 2: global selection only.
+     * Plan 3: global + per-branch assignment.
+     */
+    public function updatePaymentMethods(Request $request, int $tenantId): JsonResponse
+    {
+        try {
+            $tenant = Tenant::with(['plan', 'customization', 'branches'])
+                ->where('id', $tenantId)
+                ->where('status', 'active')
+                ->firstOrFail();
+
+            $plan = $tenant->plan;
+
+            if ((int) $plan->id === 1) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'El Plan OPORTUNIDAD tiene medios de pago fijos',
+                ], 422);
+            }
+
+            $allowedMethods = ['pagoMovil', 'biopago', 'puntoventa', 'zinli', 'zelle', 'paypal'];
+
+            $validated = $request->validate([
+                'global'   => 'nullable|array',
+                'global.*' => 'string|in:' . implode(',', $allowedMethods),
+                'branches' => 'nullable|array',
+            ]);
+
+            $data = [
+                'global' => array_values(
+                    array_intersect($validated['global'] ?? [], $allowedMethods)
+                ),
+            ];
+
+            // Plan 3: accept per-branch assignment
+            if ((int) $plan->id === 3) {
+                $branchIds  = $tenant->branches->pluck('id')->toArray();
+                $branchData = [];
+
+                foreach ($validated['branches'] ?? [] as $branchId => $methods) {
+                    if (in_array((int) $branchId, $branchIds, true)) {
+                        $branchData[(string) $branchId] = array_values(
+                            array_intersect((array) $methods, $allowedMethods)
+                        );
+                    }
+                }
+
+                $data['branches'] = $branchData;
+            }
+
+            $customization = $tenant->customization
+                ?? \App\Models\TenantCustomization::firstOrCreate(['tenant_id' => $tenantId]);
+
+            $customization->payment_methods = $data;
+            $customization->save();
+
+            return response()->json([
+                'success'         => true,
+                'message'         => 'Medios de pago actualizados correctamente',
+                'payment_methods' => $data,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error: ' . $e->getMessage()
+            ], 422);
+        }
+    }
+
+    // ══════════════════════════════════════════════════════════════════════
+    // SOCIAL NETWORKS
+    // ══════════════════════════════════════════════════════════════════════
+
+    /**
+     * Update tenant social networks.
+     * Plan 1: max 1 network. Plan 2+3: all 6.
+     */
+    public function updateSocialNetworks(Request $request, int $tenantId): JsonResponse
+    {
+        try {
+            $tenant = Tenant::with(['plan', 'customization'])
+                ->where('id', $tenantId)
+                ->where('status', 'active')
+                ->firstOrFail();
+
+            $plan = $tenant->plan;
+
+            // Allowed networks by plan
+            $allNetworks = ['instagram', 'facebook', 'tiktok', 'linkedin', 'youtube', 'x'];
+            $plan1Networks = ['instagram', 'facebook', 'tiktok', 'linkedin'];
+
+            $allowed = (int) $plan->id === 1 ? $plan1Networks : $allNetworks;
+
+            // Build validation rules
+            $rules = [];
+            foreach ($allowed as $network) {
+                $rules[$network] = 'nullable|string|max:255';
+            }
+
+            $validated = $request->validate($rules);
+
+            // Filter only non-empty values and allowed networks
+            $networks = [];
+            foreach ($allowed as $network) {
+                $value = trim($validated[$network] ?? '');
+                if ($value !== '') {
+                    $networks[$network] = $value;
+                }
+            }
+
+            // Plan 1: enforce max 1 network
+            if ((int) $plan->id === 1 && count($networks) > 1) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'El Plan OPORTUNIDAD solo permite configurar 1 red social',
+                ], 422);
+            }
+
+            // Save to customization
+            $customization = $tenant->customization
+                ?? \App\Models\TenantCustomization::firstOrCreate(['tenant_id' => $tenantId]);
+
+            $customization->social_networks = $networks;
+            $customization->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Redes sociales actualizadas correctamente',
+                'networks' => $networks,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error: ' . $e->getMessage()
             ], 422);
         }
     }
