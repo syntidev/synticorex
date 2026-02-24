@@ -32,7 +32,7 @@
         <div class="card bg-base-100 shadow-xl mb-8">
             <div class="card-body">
                 <h2 class="card-title text-3xl text-primary">
-                    <span class="icon-[tabler--layout-dashboard] size-8"></span>
+                    <span class="iconify tabler--layout-dashboard size-8"></span>
                     Hero {{ ucfirst($heroLayout) }}
                 </h2>
                 
@@ -100,7 +100,7 @@
                             </div>
                             <div class="flex justify-between">
                                 <span class="font-semibold">Color Palette:</span>
-                                <span>{{ $tenant->colorPalette->name }}</span>
+                                <span>{{ $tenant->colorPalette?->name ?? 'Sin paleta' }}</span>
                             </div>
                             <div class="flex justify-between">
                                 <span class="font-semibold">Año fundación:</span>
@@ -142,7 +142,7 @@
 
         {{-- Instructions --}}
         <div class="alert alert-info mb-8">
-            <span class="icon-[tabler--bulb] size-6"></span>
+            <span class="iconify tabler--bulb size-6"></span>
             <div>
                 <h3 class="font-bold">Pruebas Recomendadas</h3>
                 <ul class="text-sm mt-2 space-y-1 list-disc list-inside">
@@ -158,7 +158,7 @@
         {{-- Back button --}}
         <div class="text-center">
             <a href="/test" class="btn btn-outline btn-lg gap-2">
-                <span class="icon-[tabler--arrow-left] size-5"></span>
+                <span class="iconify tabler--arrow-left size-5"></span>
                 Volver al Index
             </a>
         </div>

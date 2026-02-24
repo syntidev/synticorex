@@ -6,7 +6,7 @@
   Toggle moneda (privado): Solo si saved_display_mode === 'both_toggle'
 --}}
 
-<header class="border-base-content/20 bg-base-100 py-0.25 fixed top-0 z-10 w-full border-b" data-theme="{{ $tenant->colorPalette->slug }}">
+<header class="border-base-content/20 bg-base-100 py-0.25 fixed top-0 z-10 w-full border-b" data-theme="{{ $themeSlug ?? 'light' }}">
   <nav class="navbar mx-auto max-w-[1280px] rounded-b-xl px-4 sm:px-6 lg:px-8">
     <div class="w-full lg:flex lg:items-center lg:gap-2">
       
@@ -37,7 +37,7 @@
                target="_blank"
                class="btn btn-circle btn-sm btn-ghost text-success"
                title="WhatsApp: {{ $tenant->whatsapp }}">
-              <span class="icon-[tabler--brand-whatsapp] size-5"></span>
+              <span class="iconify tabler--brand-whatsapp size-5"></span>
             </a>
           @endif
 
@@ -55,8 +55,8 @@
                   data-collapse="#navbar-collapse" 
                   aria-controls="navbar-collapse" 
                   aria-label="Toggle navigation">
-            <span class="icon-[tabler--menu-2] collapse-open:hidden size-5"></span>
-            <span class="icon-[tabler--x] collapse-open:block size-5 hidden"></span>
+            <span class="iconify tabler--menu-2 collapse-open:hidden size-5"></span>
+            <span class="iconify tabler--x collapse-open:block size-5 hidden"></span>
           </button>
         </div>
       </div>
@@ -87,7 +87,7 @@
               <a href="https://wa.me/{{ $tenant->whatsapp }}" 
                  target="_blank"
                  class="btn btn-success btn-sm gap-2">
-                <span class="icon-[tabler--brand-whatsapp] size-5"></span>
+                <span class="iconify tabler--brand-whatsapp size-5"></span>
                 WhatsApp
               </a>
             @endif
@@ -96,7 +96,7 @@
             @if($tenant->saved_display_mode === 'both_toggle')
               <button id="currency-toggle-mobile" 
                       class="btn btn-outline btn-sm gap-2 currency-toggle">
-                <span class="icon-[tabler--currency-dollar] size-5"></span>
+                <span class="iconify tabler--currency-dollar size-5"></span>
                 <span class="currency-symbol">REF</span>
               </button>
             @endif
@@ -110,7 +110,7 @@
         @if($tenant->plan->slug !== 'oportunidad' && $tenant->has_delivery)
           <div class="tooltip tooltip-bottom" data-tooltip="Servicio de Delivery">
             <button class="btn btn-circle btn-ghost btn-sm text-primary">
-              <span class="icon-[tabler--truck-delivery] size-5"></span>
+              <span class="iconify tabler--truck-delivery size-5"></span>
             </button>
           </div>
         @endif
@@ -129,7 +129,7 @@
           <button id="currency-toggle" 
                   class="btn btn-sm gap-2 currency-toggle"
                   title="Cambiar moneda">
-            <span class="icon-[tabler--currency-dollar] size-5"></span>
+            <span class="iconify tabler--currency-dollar size-5"></span>
             <span class="currency-symbol font-mono font-bold">REF</span>
           </button>
         @endif
@@ -139,7 +139,7 @@
           <a href="https://wa.me/{{ $tenant->whatsapp }}?text=Hola%20{{ urlencode($tenant->business_name) }}%2C%20quisiera%20más%20información" 
              target="_blank"
              class="btn btn-success gap-2">
-            <span class="icon-[tabler--brand-whatsapp] size-5"></span>
+            <span class="iconify tabler--brand-whatsapp size-5"></span>
             WhatsApp
           </a>
         @endif

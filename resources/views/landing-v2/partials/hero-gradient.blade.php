@@ -51,35 +51,35 @@
                         <a href="https://wa.me/{{ $tenant->whatsapp }}?text={{ urlencode('Hola ' . $tenant->business_name . ', me gustaría obtener más información') }}" 
                            target="_blank"
                            class="btn btn-lg bg-base-100 text-primary hover:bg-base-100/90 border-0 shadow-2xl transform hover:scale-105 transition-all">
-                            <span class="icon-[tabler--brand-whatsapp] size-6"></span>
+                            <span class="iconify tabler--brand-whatsapp size-6"></span>
                             Contactar Ahora
                         </a>
                     @elseif($tenant->phone)
                         <a href="tel:{{ $tenant->phone }}" 
                            class="btn btn-lg bg-base-100 text-primary hover:bg-base-100/90 border-0 shadow-2xl transform hover:scale-105 transition-all">
-                            <span class="icon-[tabler--phone] size-6"></span>
+                            <span class="iconify tabler--phone size-6"></span>
                             Llamar Ahora
                         </a>
                     @endif
                     
                     <a href="#about" class="btn btn-lg bg-base-100/10 backdrop-blur-sm text-base-100 border-base-100/30 hover:bg-base-100/20">
                         Descubrir Más
-                        <span class="icon-[tabler--arrow-right] size-5"></span>
+                        <span class="iconify tabler--arrow-right size-5"></span>
                     </a>
                 </div>
                 
                 {{-- Features destacados --}}
                 <div class="flex flex-wrap gap-6 pt-4 max-lg:justify-center">
                     <div class="flex items-center gap-2 text-base-100">
-                        <span class="icon-[tabler--check] size-6 text-success"></span>
+                        <span class="iconify tabler--check size-6 text-success"></span>
                         <span>Calidad Premium</span>
                     </div>
                     <div class="flex items-center gap-2 text-base-100">
-                        <span class="icon-[tabler--check] size-6 text-success"></span>
+                        <span class="iconify tabler--check size-6 text-success"></span>
                         <span>Servicio Rápido</span>
                     </div>
                     <div class="flex items-center gap-2 text-base-100">
-                        <span class="icon-[tabler--check] size-6 text-success"></span>
+                        <span class="iconify tabler--check size-6 text-success"></span>
                         <span>Atención 24/7</span>
                     </div>
                 </div>

@@ -46,20 +46,20 @@
                         <a href="https://wa.me/{{ $tenant->whatsapp }}?text={{ urlencode('Hola ' . $tenant->business_name . ', me gustaría obtener más información') }}" 
                            target="_blank"
                            class="btn btn-lg bg-base-100 text-primary hover:bg-base-100/90 border-0 shadow-xl">
-                            <span class="icon-[tabler--brand-whatsapp] size-6"></span>
+                            <span class="iconify tabler--brand-whatsapp size-6"></span>
                             Contactar Ahora
                         </a>
                     @elseif($tenant->phone)
                         <a href="tel:{{ $tenant->phone }}" 
                            class="btn btn-lg bg-base-100 text-primary hover:bg-base-100/90 border-0 shadow-xl">
-                            <span class="icon-[tabler--phone] size-6"></span>
+                            <span class="iconify tabler--phone size-6"></span>
                             Llamar Ahora
                         </a>
                     @endif
                     
                     <a href="#about" class="btn btn-lg bg-base-100/10 backdrop-blur-sm text-base-100 border-base-100/30 hover:bg-base-100/20">
                         Ver Más
-                        <span class="icon-[tabler--chevron-down] size-5"></span>
+                        <span class="iconify tabler--chevron-down size-5"></span>
                     </a>
                 </div>
             </div>
@@ -92,7 +92,7 @@
                     <div class="card-actions justify-end pt-2">
                         <a href="#about" class="btn btn-sm btn-primary">
                             Conocer más
-                            <span class="icon-[tabler--arrow-right] size-4"></span>
+                            <span class="iconify tabler--arrow-right size-4"></span>
                         </a>
                     </div>
                 </div>
@@ -119,12 +119,12 @@
                                target="_blank"
                                class="btn btn-sm btn-primary">
                                 Contactar
-                                <span class="icon-[tabler--brand-whatsapp] size-4"></span>
+                                <span class="iconify tabler--brand-whatsapp size-4"></span>
                             </a>
                         @else
                             <a href="#contact-us" class="btn btn-sm btn-primary">
                                 Contactar
-                                <span class="icon-[tabler--message] size-4"></span>
+                                <span class="iconify tabler--message size-4"></span>
                             </a>
                         @endif
                     </div>
@@ -148,7 +148,7 @@
                     <div class="card-actions justify-end pt-2">
                         <a href="#products" class="btn btn-sm btn-primary">
                             Ver productos
-                            <span class="icon-[tabler--arrow-right] size-4"></span>
+                            <span class="iconify tabler--arrow-right size-4"></span>
                         </a>
                     </div>
                 </div>

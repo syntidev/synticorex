@@ -8,11 +8,11 @@
     $hasMore         = $planLimit > $defaultVisible && $hidden->count() > 0;
 @endphp
 
-<section id="productos" class="py-40 bg-gray-50/30"> {{-- Aumentamos padding de sección --}}
+<section id="productos" class="py-40 bg-base-100"> {{-- Aumentamos padding de sección --}}
     <div class="container mx-auto px-8 md:px-16">
         
         <div class="text-center mb-32"> {{-- Más espacio bajo el título principal --}}
-            <h2 class="text-4xl md:text-6xl font-black text-gray-900 mb-8 tracking-tighter">
+            <h2 class="text-4xl md:text-6xl font-black text-base-content mb-8 tracking-tighter">
                 Nuestros <span class="text-primary italic">Productos</span>
             </h2>
             <div class="w-24 h-2 bg-primary mx-auto rounded-full"></div>

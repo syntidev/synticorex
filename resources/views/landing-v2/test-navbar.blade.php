@@ -18,7 +18,7 @@
         <div class="card bg-base-100 shadow-xl mb-8">
             <div class="card-body">
                 <h2 class="card-title text-3xl">
-                    <span class="icon-[tabler--layout-navbar] size-8 text-primary"></span>
+                    <span class="iconify tabler--layout-navbar size-8 text-primary"></span>
                     Navbar Testing
                 </h2>
                 <p class="text-lg text-base-content/70">
@@ -32,7 +32,7 @@
             <div class="card bg-base-100 shadow-lg">
                 <div class="card-body">
                     <h3 class="card-title text-primary">
-                        <span class="icon-[tabler--building-store] size-6"></span>
+                        <span class="iconify tabler--building-store size-6"></span>
                         Información del Negocio
                     </h3>
                     <div class="space-y-2 text-sm">
@@ -65,7 +65,7 @@
             <div class="card bg-base-100 shadow-lg">
                 <div class="card-body">
                     <h3 class="card-title text-secondary">
-                        <span class="icon-[tabler--palette] size-6"></span>
+                        <span class="iconify tabler--palette size-6"></span>
                         Elementos Visibles (Condicionales)
                     </h3>
                     <div class="space-y-2 text-sm">
@@ -106,7 +106,7 @@
 
         {{-- Instructions --}}
         <div class="alert alert-info">
-            <span class="icon-[tabler--info-circle] size-6"></span>
+            <span class="iconify tabler--info-circle size-6"></span>
             <div>
                 <h3 class="font-bold">Instrucciones de Testing</h3>
                 <ul class="text-sm mt-2 space-y-1 list-disc list-inside">
@@ -164,7 +164,7 @@
         {{-- Back button --}}
         <div class="text-center mt-12">
             <a href="/test" class="btn btn-outline btn-lg gap-2">
-                <span class="icon-[tabler--arrow-left] size-5"></span>
+                <span class="iconify tabler--arrow-left size-5"></span>
                 Volver al Index
             </a>
         </div>

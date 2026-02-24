@@ -1,14 +1,11 @@
 {{-- Services Section: Arquitectura de Lujo --}}
-<section id="servicios" class="relative py-32 overflow-hidden bg-surface-950">
-    
-    {{-- CAPA ATMOSFÉRICA: Luz radial de marca --}}
-    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[700px] bg-primary/10 blur-[130px] rounded-full pointer-events-none"></div>
+<section id="servicios" class="relative py-32 overflow-hidden bg-base-200">
 
     <div class="container mx-auto px-8 relative z-10">
         
         {{-- Encabezado con clase --}}
         <div class="text-center mb-24">
-            <h2 class="text-white text-4xl md:text-6xl font-black tracking-tighter mb-6">
+            <h2 class="text-base-content text-4xl md:text-6xl font-black tracking-tighter mb-6">
                 Nuestros <span class="text-primary italic">Servicios</span>
             </h2>
             <div class="w-24 h-1.5 bg-primary mx-auto rounded-full"></div>
@@ -16,7 +13,7 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
             @foreach($services as $service)
-                <article class="group relative bg-white/5 border border-white/10 rounded-[2.5rem] p-8 transition-all duration-500 hover:bg-white/10 hover:border-primary/30 hover:-translate-y-2 hover:shadow-glow-primary">
+                <article class="group relative bg-base-content/5 border border-base-content/10 rounded-[2.5rem] p-8 transition-all duration-500 hover:bg-base-content/10 hover:border-primary/30 hover:-translate-y-2 hover:shadow-glow-primary">
                     
                     {{-- Icon or Image --}}
                     <div class="relative w-20 h-20 mb-8 rounded-2xl bg-primary/10 flex items-center justify-center overflow-hidden group-hover:bg-primary/20 transition-colors">
@@ -33,11 +30,11 @@
                     
                     {{-- Información del Servicio --}}
                     <div class="space-y-4">
-                        <h3 class="text-2xl font-bold text-white tracking-tight group-hover:text-primary transition-colors">
+                        <h3 class="text-2xl font-bold text-base-content tracking-tight group-hover:text-primary transition-colors">
                             {{ $service->name }}
                         </h3>
                         
-                        <p class="text-gray-400 text-sm leading-relaxed line-clamp-3">
+                        <p class="text-base-content/60 text-sm leading-relaxed line-clamp-3">
                             {{ $service->description ?? 'Soluciones personalizadas diseñadas para elevar el estándar de tu negocio.' }}
                         </p>
                         

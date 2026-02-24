@@ -23,12 +23,12 @@
         <div class="card bg-base-100 shadow-xl mb-8">
             <div class="card-body">
                 <h2 class="card-title text-2xl mb-4">
-                    <span class="icon-[tabler--layout-navbar] size-8 text-primary"></span>
+                    <span class="iconify tabler--layout-navbar size-8 text-primary"></span>
                     Navbar
                 </h2>
                 <div class="grid gap-3">
                     <a href="/test/navbar" class="btn btn-outline btn-lg justify-start gap-3">
-                        <span class="icon-[tabler--eye] size-5"></span>
+                        <span class="iconify tabler--eye size-5"></span>
                         Ver Navbar Standalone
                     </a>
                 </div>
@@ -39,12 +39,12 @@
         <div class="card bg-base-100 shadow-xl mb-8">
             <div class="card-body">
                 <h2 class="card-title text-2xl mb-4">
-                    <span class="icon-[tabler--layout-dashboard] size-8 text-secondary"></span>
+                    <span class="iconify tabler--layout-dashboard size-8 text-secondary"></span>
                     Hero Sections (4 Layouts)
                 </h2>
                 <div class="grid gap-3">
                     <a href="/test/hero-fullscreen" class="btn btn-outline btn-lg justify-start gap-3">
-                        <span class="icon-[tabler--maximize] size-5"></span>
+                        <span class="iconify tabler--maximize size-5"></span>
                         <div class="text-left">
                             <div class="font-bold">Hero Fullscreen</div>
                             <div class="text-xs opacity-70">Background completo + contenido centrado</div>
@@ -52,7 +52,7 @@
                     </a>
                     
                     <a href="/test/hero-split" class="btn btn-outline btn-lg justify-start gap-3">
-                        <span class="icon-[tabler--layout-columns] size-5"></span>
+                        <span class="iconify tabler--layout-columns size-5"></span>
                         <div class="text-left">
                             <div class="font-bold">Hero Split (50/50)</div>
                             <div class="text-xs opacity-70">Contenido izquierda + imagen derecha</div>
@@ -60,7 +60,7 @@
                     </a>
 
                     <a href="/test/hero-gradient" class="btn btn-outline btn-lg justify-start gap-3">
-                        <span class="icon-[tabler--color-swatch] size-5"></span>
+                        <span class="iconify tabler--color-swatch size-5"></span>
                         <div class="text-left">
                             <div class="font-bold">Hero Gradient</div>
                             <div class="text-xs opacity-70">Gradiente animado + floating image</div>
@@ -68,7 +68,7 @@
                     </a>
 
                     <a href="/test/hero-cards" class="btn btn-outline btn-lg justify-start gap-3">
-                        <span class="icon-[tabler--cards] size-5"></span>
+                        <span class="iconify tabler--cards size-5"></span>
                         <div class="text-left">
                             <div class="font-bold">Hero Cards</div>
                             <div class="text-xs opacity-70">Background + 3 cards overlaid</div>
@@ -80,7 +80,7 @@
 
         {{-- Info Card --}}
         <div class="alert alert-info">
-            <span class="icon-[tabler--info-circle] size-6"></span>
+            <span class="iconify tabler--info-circle size-6"></span>
             <div>
                 <h3 class="font-bold">Información</h3>
                 <div class="text-sm mt-1">

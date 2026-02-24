@@ -33,7 +33,6 @@ class DashboardController extends Controller
             // Find tenant and verify status
             $tenant = Tenant::with([
                 'plan',
-                'colorPalette',
                 'customization',
                 'products' => fn($q) => $q
                     ->orderBy('position')
@@ -310,6 +309,7 @@ class DashboardController extends Controller
             $validated = $request->validate([
                 'name' => 'required|string|max:100',
                 'description' => 'nullable|string|max:500',
+                'icon_name' => 'nullable|string|max:50',
                 'is_active' => 'nullable|boolean',
             ]);
 
@@ -358,6 +358,7 @@ class DashboardController extends Controller
             $validated = $request->validate([
                 'name' => 'required|string|max:100',
                 'description' => 'nullable|string|max:500',
+                'icon_name' => 'nullable|string|max:50',
                 'is_active' => 'nullable|boolean',
             ]);
 
@@ -512,9 +513,22 @@ class DashboardController extends Controller
             $tenant->settings = $settings;
             $tenant->save();
 
+            // Also sync to customization->theme_slug for consistency
+            $customization = $tenant->customization;
+            if (!$customization) {
+                $customization = new \App\Models\TenantCustomization();
+                $customization->tenant_id = $tenant->id;
+            }
+            $customization->theme_slug = $validated['theme'];
+            $customization->save();
+
+            // Clear compiled views so landing reflects the new theme immediately
+            \Illuminate\Support\Facades\Artisan::call('view:clear');
+
             return response()->json([
                 'success' => true,
-                'message' => 'Tema actualizado correctamente'
+                'message' => 'Tema actualizado correctamente',
+                'theme'   => $validated['theme'],
             ]);
         } catch (\Exception $e) {
             return response()->json([

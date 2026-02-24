@@ -43,7 +43,7 @@
                    rel="noopener noreferrer" 
                    aria-label="WhatsApp"
                    class="hover:text-success transition-colors">
-                    <span class="icon-[tabler--brand-whatsapp] size-5"></span>
+                    <span class="iconify tabler--brand-whatsapp size-5"></span>
                 </a>
                 @endif
                 
@@ -53,7 +53,7 @@
                    rel="noopener noreferrer" 
                    aria-label="Instagram"
                    class="hover:text-pink-500 transition-colors">
-                    <span class="icon-[tabler--brand-instagram] size-5"></span>
+                    <span class="iconify tabler--brand-instagram size-5"></span>
                 </a>
                 @endif
                 
@@ -63,7 +63,7 @@
                    rel="noopener noreferrer" 
                    aria-label="Facebook"
                    class="hover:text-blue-600 transition-colors">
-                    <span class="icon-[tabler--brand-facebook] size-5"></span>
+                    <span class="iconify tabler--brand-facebook size-5"></span>
                 </a>
                 @endif
                 
@@ -73,7 +73,7 @@
                    rel="noopener noreferrer" 
                    aria-label="TikTok"
                    class="hover:text-base-content transition-colors">
-                    <span class="icon-[tabler--brand-tiktok] size-5"></span>
+                    <span class="iconify tabler--brand-tiktok size-5"></span>
                 </a>
                 @endif
                 
@@ -83,7 +83,7 @@
                    rel="noopener noreferrer" 
                    aria-label="Twitter/X"
                    class="hover:text-base-content transition-colors">
-                    <span class="icon-[tabler--brand-x] size-5"></span>
+                    <span class="iconify tabler--brand-x size-5"></span>
                 </a>
                 @endif
                 
@@ -91,7 +91,7 @@
                 <a href="mailto:{{ $tenant->email }}" 
                    aria-label="Email"
                    class="hover:text-primary transition-colors">
-                    <span class="icon-[tabler--mail] size-5"></span>
+                    <span class="iconify tabler--mail size-5"></span>
                 </a>
                 @endif
             </div>

@@ -40,20 +40,20 @@
                         <a href="https://wa.me/{{ $tenant->whatsapp }}?text={{ urlencode('Hola ' . $tenant->business_name . ', me gustaría obtener más información') }}" 
                            target="_blank"
                            class="btn btn-primary btn-gradient btn-lg">
-                            <span class="icon-[tabler--brand-whatsapp] size-5"></span>
+                            <span class="iconify tabler--brand-whatsapp size-5"></span>
                             Contactar por WhatsApp
                         </a>
                     @elseif($tenant->phone)
                         <a href="tel:{{ $tenant->phone }}" 
                            class="btn btn-primary btn-gradient btn-lg">
-                            <span class="icon-[tabler--phone] size-5"></span>
+                            <span class="iconify tabler--phone size-5"></span>
                             Llamar Ahora
                         </a>
                     @endif
                     
                     <a href="#about" class="btn btn-outline btn-lg">
                         Conocer Más
-                        <span class="icon-[tabler--arrow-down] size-5"></span>
+                        <span class="iconify tabler--arrow-down size-5"></span>
                     </a>
                 </div>
                 

@@ -73,11 +73,12 @@ class TenantRendererController extends Controller
             // ═══════════════════════════════════════════════════════════════════════
             // FLYONUI THEME SYSTEM (Reemplaza ColorPalette custom)
             // ═══════════════════════════════════════════════════════════════════════
-            // Obtener theme_slug de tenant settings
-            // Los temas oficiales FlyonUI se aplican con data-theme attribute
-            // No necesitamos variables CSS custom, FlyonUI lo maneja todo
+            // Prioridad: customization->theme_slug > settings JSON > 'light'
             // ═══════════════════════════════════════════════════════════════════════
-            $themeSlug = $tenant->settings['engine_settings']['visual']['theme']['flyonui_theme'] ?? 'light';
+            $customization = $tenant->customization;
+            $themeSlug = $customization?->theme_slug
+                ?? $tenant->settings['engine_settings']['visual']['theme']['flyonui_theme']
+                ?? 'light';
 
             // Get current dollar rate
             $dollarRate = $this->dollarRateService->getCurrentRate();
@@ -105,8 +106,6 @@ class TenantRendererController extends Controller
                 'og_image' => $tenant->logo_url ?? asset('images/default-og.jpg'),
                 'og_url' => url('/' . $tenant->subdomain),
             ];
-
-            $customization = $tenant->customization;
 
             // Extract currency display settings
             $displayMode = data_get($tenant->settings, 'engine_settings.currency.display.mode', 'reference_only');
@@ -179,7 +178,10 @@ class TenantRendererController extends Controller
             }
 
             // FlyonUI Theme System
-            $themeSlug = $tenant->settings['engine_settings']['visual']['theme']['flyonui_theme'] ?? 'light';
+            $customization = $tenant->customization;
+            $themeSlug = $customization?->theme_slug
+                ?? $tenant->settings['engine_settings']['visual']['theme']['flyonui_theme']
+                ?? 'light';
             $dollarRate = $this->dollarRateService->getCurrentRate();
             $products = $this->calculateProductPrices($tenant->products, $dollarRate);
             $currencySettings = $this->extractCurrencySettings($tenant);
@@ -239,7 +241,10 @@ class TenantRendererController extends Controller
             }
 
             // FlyonUI Theme System
-            $themeSlug = $tenant->settings['engine_settings']['visual']['theme']['flyonui_theme'] ?? 'light';
+            $customization = $tenant->customization;
+            $themeSlug = $customization?->theme_slug
+                ?? $tenant->settings['engine_settings']['visual']['theme']['flyonui_theme']
+                ?? 'light';
             $dollarRate = $this->dollarRateService->getCurrentRate();
             $products = $this->calculateProductPrices($tenant->products, $dollarRate);
             $currencySettings = $this->extractCurrencySettings($tenant);

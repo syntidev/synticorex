@@ -11,8 +11,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    {{-- Iconify runtime for icon picker and service icons --}}
-    <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
     
     <style>
         * {
@@ -1008,8 +1006,14 @@
                                     <img src="{{ asset('storage/tenants/' . $tenant->id . '/' . $service->image_filename) }}" 
                                          alt="{{ $service->name }}" 
                                          class="product-image">
+                                @elseif($service->icon_name)
+                                    <div class="product-image" style="background: linear-gradient(135deg, rgba(59,130,246,0.15) 0%, rgba(255,107,0,0.08) 100%); display: flex; align-items: center; justify-content: center; border: 1px solid rgba(59,130,246,0.25); border-radius: 12px; transition: all 0.2s;">
+                                        <span class="iconify tabler--{{ str_replace('_', '-', $service->icon_name) }}" style="font-size: 40px; color: #3b82f6;"></span>
+                                    </div>
                                 @else
-                                    <div class="product-image" style="background: #374151;"></div>
+                                    <div class="product-image" style="background: rgba(255,255,255,0.04); display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.08); border-radius: 12px;">
+                                        <span class="iconify tabler--settings" style="font-size: 40px; color: rgba(255,255,255,0.3);"></span>
+                                    </div>
                                 @endif
                             </td>
                             <td><strong>{{ $service->name }}</strong></td>
@@ -1050,54 +1054,79 @@
 
         <!-- Modal: Servicio -->
         <div id="service-modal" class="crud-overlay">
-            <div class="crud-dialog" style="max-width: 640px;">
-                <div class="crud-dialog-header">
-                    <h3 class="crud-dialog-title" id="service-modal-title">Agregar Servicio</h3>
-                    <button class="crud-dialog-close" onclick="closeServiceModal()">&times;</button>
+            <div class="crud-dialog" style="max-width: 700px; border-radius: 16px; background: #1a1f2e; border: 1px solid #2d3748; box-shadow: 0 20px 60px rgba(0,0,0,0.5);">
+                <div class="crud-dialog-header" style="padding: 24px 28px; border-bottom: 1px solid #2d3748; background: linear-gradient(135deg, rgba(59,130,246,0.05) 0%, rgba(255,107,0,0.02) 100%);">
+                    <h3 class="crud-dialog-title" id="service-modal-title" style="font-size: 18px; font-weight: 700; color: #e2e8f0; margin: 0;">Agregar Servicio</h3>
+                    <button class="crud-dialog-close" onclick="closeServiceModal()" style="position: absolute; top: 16px; right: 16px; width: 36px; height: 36px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; cursor: pointer; color: #e2e8f0; font-size: 20px; transition: all 0.2s;" onmouseover="this.style.background='rgba(59,130,246,0.15)'" onmouseout="this.style.background='rgba(255,255,255,0.05)'">×</button>
                 </div>
-                <div class="crud-dialog-body">
+                <div class="crud-dialog-body" style="padding: 28px;">
                     <form id="service-form" onsubmit="saveService(event)">
                         <input type="hidden" id="service-id">
                         <input type="hidden" id="service-icon-name">
 
                         {{-- Mode tabs: Plan 2/3 only --}}
                         @if($plan->id !== 1)
-                        <div style="display: flex; gap: 0; margin-bottom: 20px; border-radius: 8px; overflow: hidden; border: 1px solid rgba(255,255,255,0.12);">
+                        <div style="display: flex; gap: 0; margin-bottom: 24px; border-radius: 12px; overflow: hidden; border: 1px solid #2d3748; background: #0f1419;">
                             <button type="button" id="svc-tab-icon" onclick="setServiceModalMode('icon')"
-                                style="flex: 1; padding: 10px; border: none; cursor: pointer; font-weight: 700; font-size: 13px; transition: all .2s; background: rgba(43,111,255,0.55); color: #fff;">
+                                style="flex: 1; padding: 12px; border: none; cursor: pointer; font-weight: 700; font-size: 13px; transition: all .2s; background: #2d3748; color: #e2e8f0;">
                                 🎨 Ícono
                             </button>
                             <button type="button" id="svc-tab-image" onclick="setServiceModalMode('image')"
-                                style="flex: 1; padding: 10px; border: none; cursor: pointer; font-weight: 700; font-size: 13px; transition: all .2s; background: transparent; color: rgba(255,255,255,0.4);">
+                                style="flex: 1; padding: 12px; border: none; cursor: pointer; font-weight: 700; font-size: 13px; transition: all .2s; background: transparent; color: rgba(255,255,255,0.4);">
                                 🖼️ Imagen
                             </button>
                         </div>
                         @endif
 
                         {{-- ICON PICKER (Plan 1: always; Plan 2/3: when icon mode) --}}
-                        <div id="svc-section-icon" class="form-section">
-                            <label class="form-label">Ícono del Servicio</label>
+                        <div id="svc-section-icon" class="form-section" style="margin-bottom: 28px;">
+                            <label class="form-label" style="font-weight: 600; color: #e2e8f0; margin-bottom: 16px; display: block; font-size: 14px;">Ícono del Servicio</label>
 
                             {{-- Current selection preview --}}
-                            <div style="display: flex; align-items: center; gap: 12px; padding: 12px; background: rgba(255,255,255,0.04); border-radius: 10px; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.07);">
-                                <div style="width: 52px; height: 52px; background: rgba(43,111,255,0.15); border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                                    <iconify-icon id="icon-preview-el" icon="tabler:cog" class="text-primary" width="28" height="28"></iconify-icon>
+                            <div style="display: flex; flex-direction: column; align-items: center; padding: 28px; background: linear-gradient(135deg, rgba(59,130,246,0.08) 0%, rgba(255,107,0,0.04) 100%); border-radius: 16px; margin-bottom: 24px; border: 1px solid rgba(59,130,246,0.2);">
+                                <div style="width: 88px; height: 88px; background: rgba(59,130,246,0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-bottom: 16px; border: 2px solid rgba(59,130,246,0.3);">
+                                    <span id="icon-preview-el" class="iconify tabler--settings text-blue-400" style="font-size: 48px; color: #60a5fa;"></span>
                                 </div>
-                                <div>
-                                    <p id="icon-preview-label" style="color: #fff; font-weight: 600; font-size: 13px; font-style: italic; margin-bottom: 2px;">Sin ícono seleccionado</p>
-                                    <p style="color: rgba(255,255,255,0.35); font-size: 11px;">Busca y haz click en un ícono de abajo</p>
-                                </div>
+                                <p id="icon-preview-label" style="color: #e2e8f0; font-weight: 600; font-size: 14px; margin: 0; text-align: center;">Sin ícono seleccionado</p>
+                                <p style="color: rgba(255,255,255,0.4); font-size: 12px; margin-top: 4px; text-align: center;">Busca y selecciona un ícono</p>
                             </div>
 
                             {{-- Search --}}
                             <input type="text" id="icon-search" class="form-input"
-                                placeholder="🔍 scissors, camera, truck, heart..."
+                                placeholder="🔍 Busca: scissors, camera, truck, heart..."
                                 oninput="filterIcons(this.value)" autocomplete="off"
-                                style="margin-bottom: 10px;">
+                                style="margin-bottom: 16px; padding: 12px 16px; background: #0f1419; border: 1px solid #2d3748; border-radius: 10px; color: #e2e8f0; font-size: 14px;" onmouseover="this.style.borderColor='rgba(59,130,246,0.4)'" onmouseout="this.style.borderColor='#2d3748'">
 
                             {{-- Icon Grid --}}
-                            <div id="icon-picker-grid" style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; max-height: 264px; overflow-y: auto; padding: 2px; border-radius: 8px;"></div>
-                            <p style="color: rgba(255,255,255,0.2); font-size: 11px; margin-top: 6px; text-align: center;">Haz click en cualquier ícono para seleccionarlo</p>
+                            <div id="icon-picker-grid" style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; max-height: 320px; overflow-y: auto; padding: 4px; border-radius: 12px; background: #0f1419; padding: 12px; border: 1px solid #2d3748;"></div>
+                            <p style="color: rgba(255,255,255,0.25); font-size: 12px; margin-top: 12px; text-align: center;">60+ iconos disponibles</p>
+                            
+                            {{-- Hidden div to force Tailwind to generate icon classes --}}
+                            <div class="hidden">
+                                <span class="iconify tabler--briefcase"></span><span class="iconify tabler--building-store"></span><span class="iconify tabler--award"></span>
+                                <span class="iconify tabler--certificate"></span><span class="iconify tabler--crown"></span><span class="iconify tabler--diamond"></span>
+                                <span class="iconify tabler--rocket"></span><span class="iconify tabler--target"></span><span class="iconify tabler--trophy"></span>
+                                <span class="iconify tabler--star"></span><span class="iconify tabler--heart"></span><span class="iconify tabler--thumb-up"></span>
+                                <span class="iconify tabler--shield-check"></span><span class="iconify tabler--rosette-discount-check"></span>
+                                <span class="iconify tabler--tool"></span><span class="iconify tabler--hammer"></span><span class="iconify tabler--paint"></span>
+                                <span class="iconify tabler--scissors"></span><span class="iconify tabler--needle-thread"></span><span class="iconify tabler--pencil-bolt"></span>
+                                <span class="iconify tabler--bolt"></span><span class="iconify tabler--car"></span><span class="iconify tabler--home"></span>
+                                <span class="iconify tabler--building"></span><span class="iconify tabler--bucket"></span><span class="iconify tabler--wash"></span>
+                                <span class="iconify tabler--device-desktop"></span><span class="iconify tabler--device-mobile"></span><span class="iconify tabler--wifi"></span>
+                                <span class="iconify tabler--cpu"></span><span class="iconify tabler--code"></span><span class="iconify tabler--cloud"></span>
+                                <span class="iconify tabler--headset"></span><span class="iconify tabler--printer"></span>
+                                <span class="iconify tabler--camera"></span><span class="iconify tabler--video"></span><span class="iconify tabler--microphone"></span>
+                                <span class="iconify tabler--palette"></span><span class="iconify tabler--ballpen"></span><span class="iconify tabler--photo"></span>
+                                <span class="iconify tabler--stethoscope"></span><span class="iconify tabler--first-aid-kit"></span><span class="iconify tabler--activity"></span>
+                                <span class="iconify tabler--bath"></span><span class="iconify tabler--barbell"></span><span class="iconify tabler--leaf"></span>
+                                <span class="iconify tabler--eye"></span><span class="iconify tabler--brain"></span>
+                                <span class="iconify tabler--book"></span><span class="iconify tabler--school"></span><span class="iconify tabler--pencil"></span><span class="iconify tabler--flask"></span>
+                                <span class="iconify tabler--soup"></span><span class="iconify tabler--pizza"></span><span class="iconify tabler--coffee"></span><span class="iconify tabler--apple"></span>
+                                <span class="iconify tabler--shopping-cart"></span><span class="iconify tabler--package"></span><span class="iconify tabler--truck"></span><span class="iconify tabler--map-pin"></span>
+                                <span class="iconify tabler--phone"></span><span class="iconify tabler--mail"></span><span class="iconify tabler--message-circle"></span>
+                                <span class="iconify tabler--calendar"></span><span class="iconify tabler--clock"></span><span class="iconify tabler--users"></span><span class="iconify tabler--user-check"></span>
+                                <span class="iconify tabler--settings"></span><span class="iconify tabler--tool"></span>
+                            </div>
                         </div>
 
                         {{-- IMAGE UPLOAD (Plan 2/3 only; hidden by default) --}}
@@ -1112,27 +1141,28 @@
                         </div>
                         @endif
 
-                        <div class="form-section">
-                            <label for="service-name" class="form-label">Nombre *</label>
-                            <input type="text" id="service-name" class="form-input" required maxlength="100">
+                        <div class="form-section" style="margin-bottom: 24px;">
+                            <label for="service-name" class="form-label" style="font-weight: 600; color: #e2e8f0; margin-bottom: 8px; display: block; font-size: 14px;">Nombre *</label>
+                            <input type="text" id="service-name" class="form-input" required maxlength="100" style="padding: 12px 16px; background: #0f1419; border: 1px solid #2d3748; border-radius: 10px; color: #e2e8f0; font-size: 14px;" onmouseover="this.style.borderColor='rgba(59,130,246,0.4)'" onmouseout="this.style.borderColor='#2d3748'">
                         </div>
 
-                        <div class="form-section">
-                            <label for="service-description" class="form-label">Descripción</label>
-                            <textarea id="service-description" class="form-input" rows="3" maxlength="500"></textarea>
+                        <div class="form-section" style="margin-bottom: 24px;">
+                            <label for="service-description" class="form-label" style="font-weight: 600; color: #e2e8f0; margin-bottom: 8px; display: block; font-size: 14px;">Descripción</label>
+                            <textarea id="service-description" class="form-input" rows="3" maxlength="500" style="padding: 12px 16px; background: #0f1419; border: 1px solid #2d3748; border-radius: 10px; color: #e2e8f0; font-size: 14px; font-family: inherit;" onmouseover="this.style.borderColor='rgba(59,130,246,0.4)'" onmouseout="this.style.borderColor='#2d3748'"></textarea>
                         </div>
 
-                        <div class="form-section">
-                            <label class="form-label">Servicio Activo</label>
-                            <label class="toggle-switch">
+                        <div class="form-section" style="margin-bottom: 28px;">
+                            <label class="form-label" style="font-weight: 600; color: #e2e8f0; margin-bottom: 8px; display: block; font-size: 14px;">Servicio Activo</label>
+                            <label class="toggle-switch" style="display: flex; align-items: center; gap: 12px; cursor: pointer;">
                                 <input type="checkbox" id="service-is-active" checked>
                                 <span class="toggle-slider"></span>
+                                <span style="color: rgba(255,255,255,0.6); font-size: 13px;">Mostrar en landing page</span>
                             </label>
                         </div>
 
-                        <div class="form-actions">
-                            <button type="button" class="btn-secondary" onclick="closeServiceModal()">Cancelar</button>
-                            <button type="submit" class="btn-primary">Guardar Servicio</button>
+                        <div class="form-actions" style="display: flex; gap: 12px; padding-top: 24px; border-top: 1px solid #2d3748; justify-content: flex-end;">
+                            <button type="button" class="btn-secondary" onclick="closeServiceModal()" style="padding: 11px 24px; background: rgba(255,255,255,0.05); border: 1px solid #2d3748; border-radius: 10px; color: #e2e8f0; font-weight: 600; font-size: 14px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.08)'; this.style.borderColor='rgba(255,255,255,0.15)'" onmouseout="this.style.background='rgba(255,255,255,0.05)'; this.style.borderColor='#2d3748'">Cancelar</button>
+                            <button type="submit" class="btn-primary" style="padding: 11px 28px; background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); border: none; border-radius: 10px; color: #fff; font-weight: 600; font-size: 14px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 12px rgba(59,130,246,0.3);" onmouseover="this.style.boxShadow='0 6px 16px rgba(59,130,246,0.4)'; this.style.transform='translateY(-1px)'" onmouseout="this.style.boxShadow='0 4px 12px rgba(59,130,246,0.3)'; this.style.transform='translateY(0)'">Guardar Servicio</button>
                         </div>
                     </form>
                 </div>
@@ -2360,7 +2390,9 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
                 iconPickerSelected = '';
                 const prevEl    = document.getElementById('icon-preview-el');
                 const prevLabel = document.getElementById('icon-preview-label');
-                if (prevEl)    prevEl.setAttribute('icon', 'tabler:cog');
+                if (prevEl) {
+                    prevEl.className = 'iconify tabler--settings text-primary';
+                }
                 if (prevLabel) prevLabel.textContent = 'Sin ícono seleccionado';
             }
         }
@@ -2374,11 +2406,11 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
             {n:'rocket', l:'Lanzamiento'},         {n:'target', l:'Objetivo'},
             {n:'trophy', l:'Trofeo'},              {n:'star', l:'Estrella'},
             {n:'heart', l:'Favorito'},             {n:'thumb-up', l:'Recomendado'},
-            {n:'shield-check', l:'Seguridad'},     {n:'badge-check', l:'Verificado'},
+            {n:'shield-check', l:'Seguridad'},     {n:'rosette-discount-check', l:'Verificado'},
             // Servicios físicos
             {n:'tool', l:'Herramienta'},           {n:'hammer', l:'Construcción'},
             {n:'paint', l:'Pintura'},              {n:'scissors', l:'Estética'},
-            {n:'needle', l:'Costura'},             {n:'screwdriver', l:'Reparación'},
+            {n:'needle-thread', l:'Costura'},      {n:'pencil-bolt', l:'Reparación'},
             {n:'bolt', l:'Electricidad'},          {n:'car', l:'Automotriz'},
             {n:'home', l:'Hogar'},                 {n:'building', l:'Inmobiliaria'},
             {n:'bucket', l:'Limpieza'},            {n:'wash', l:'Lavandería'},
@@ -2390,11 +2422,11 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
             // Foto / Medios
             {n:'camera', l:'Fotografía'},          {n:'video', l:'Video'},
             {n:'microphone', l:'Audio/Podcast'},   {n:'palette', l:'Diseño Gráfico'},
-            {n:'pen', l:'Escritura'},              {n:'photo', l:'Galería'},
+            {n:'ballpen', l:'Escritura'},          {n:'photo', l:'Galería'},
             // Salud y Bienestar
             {n:'stethoscope', l:'Medicina'},       {n:'first-aid-kit', l:'Primeros Auxilios'},
-            {n:'activity', l:'Salud'},             {n:'spa', l:'Spa'},
-            {n:'dumbbell', l:'Gimnasio'},          {n:'leaf', l:'Natural/Orgánico'},
+            {n:'activity', l:'Salud'},             {n:'bath', l:'Spa/Bienestar'},
+            {n:'barbell', l:'Gimnasio'},           {n:'leaf', l:'Natural/Orgánico'},
             {n:'eye', l:'Óptica/Visión'},          {n:'brain', l:'Psicología'},
             // Educación
             {n:'book', l:'Libro/Educación'},       {n:'school', l:'Escuela'},
@@ -2437,14 +2469,29 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
                 el.title       = ic.l;
                 el.dataset.name = ic.n;
                 el.style.cssText = `
-                    display:flex; flex-direction:column; align-items:center; gap:4px;
-                    padding:8px 4px; border-radius:8px; cursor:pointer; transition:all .15s;
-                    background:${selected ? 'rgba(43,111,255,0.25)' : 'rgba(255,255,255,0.03)'};
-                    border:1px solid ${selected ? 'rgba(43,111,255,0.6)' : 'rgba(255,255,255,0.06)'};
+                    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px;
+                    padding:14px 10px; border-radius:12px; cursor:pointer; transition:all .2s;
+                    background:${selected ? 'rgba(59,130,246,0.2)' : 'rgba(255,255,255,0.03)'};
+                    border:2px solid ${selected ? '#3b82f6' : 'transparent'};
+                    position:relative;
                 `;
+                el.addEventListener('mouseenter', function() {
+                    if (!selected) {
+                        this.style.background = 'rgba(59,130,246,0.1)';
+                        this.style.transform = 'scale(1.08)';
+                        this.style.borderColor = 'rgba(59,130,246,0.3)';
+                    }
+                });
+                el.addEventListener('mouseleave', function() {
+                    if (!selected) {
+                        this.style.background = 'rgba(255,255,255,0.03)';
+                        this.style.transform = 'scale(1)';
+                        this.style.borderColor = 'transparent';
+                    }
+                });
                 el.innerHTML = `
-                    <iconify-icon icon="tabler:${ic.n}" class="text-primary" width="22" height="22"></iconify-icon>
-                    <span style="font-size:9px;color:rgba(255,255,255,0.3);text-align:center;line-height:1.2;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${ic.l}</span>
+                    <span class="iconify tabler--${ic.n}" style="font-size: 40px; color: #3b82f6;"></span>
+                    <span style="font-size:10px;color:rgba(255,255,255,0.4);text-align:center;line-height:1.3;max-width:100%;overflow:hidden;text-overflow:ellipsis; font-weight: 500;">${ic.l}</span>
                 `;
                 el.addEventListener('click', () => selectIcon(ic.n, ic.l));
                 grid.appendChild(el);
@@ -2459,7 +2506,9 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
             if (hidden) hidden.value = iconName;
             const prevEl    = document.getElementById('icon-preview-el');
             const prevLabel = document.getElementById('icon-preview-label');
-            if (prevEl)    prevEl.setAttribute('icon', 'tabler:' + iconName);
+            if (prevEl) {
+                prevEl.className = 'iconify tabler--' + iconName + ' text-primary';
+            }
             if (prevLabel) prevLabel.textContent = iconLabel + '  (' + iconName + ')';
             const searchVal = document.getElementById('icon-search')?.value || '';
             renderIconGrid(searchVal);
@@ -2497,7 +2546,9 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
                         if (hidden) hidden.value = service.icon_name;
                         const prevEl    = document.getElementById('icon-preview-el');
                         const prevLabel = document.getElementById('icon-preview-label');
-                        if (prevEl)    prevEl.setAttribute('icon', 'tabler:' + service.icon_name);
+                        if (prevEl) {
+                            prevEl.className = 'iconify tabler--' + service.icon_name + ' text-primary';
+                        }
                         if (prevLabel) prevLabel.textContent = service.icon_name;
                     }
 
@@ -2520,7 +2571,9 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
                 if (hidden) hidden.value = '';
                 const prevEl    = document.getElementById('icon-preview-el');
                 const prevLabel = document.getElementById('icon-preview-label');
-                if (prevEl)    prevEl.setAttribute('icon', 'tabler:cog');
+                if (prevEl) {
+                    prevEl.className = 'iconify tabler--settings text-primary';
+                }
                 if (prevLabel) prevLabel.textContent = 'Sin ícono seleccionado';
                 const imgPrev = document.getElementById('service-image-preview');
                 if (imgPrev) imgPrev.style.display = 'none';
@@ -2651,6 +2704,7 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
         // Design Tab: Theme Update (FlyonUI)
         function updateTheme(themeSlug) {
             const tenantId = {{ $tenant->id }};
+            const subdomain = '{{ $tenant->subdomain }}';
             
             fetch(`/tenant/${tenantId}/update-palette`, {
                 method: 'POST',
@@ -2663,14 +2717,12 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
             .then(r => r.json())
             .then(data => {
                 if (data.success) {
-                    window.location.reload();
-                    // Limpiar TODOS los checks y bordes
+                    // Update UI first
                     document.querySelectorAll('.theme-card').forEach(card => {
                         card.style.border = '2px solid transparent';
                         const chk = card.querySelector('.theme-check');
                         if (chk) chk.remove();
                     });
-                    // Activar la seleccionada
                     const selected = document.querySelector(
                         `.theme-card[data-slug="${themeSlug}"]`
                     );
@@ -2682,9 +2734,13 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
                         chk.style.cssText = 'position:absolute;top:8px;right:8px;color:#2B6FFF;font-weight:700;font-size:16px;';
                         selected.appendChild(chk);
                     }
-                    // Mensaje éxito
+                    // Show success with landing link
                     const msg = document.getElementById('theme-success-message');
-                    if (msg) { msg.style.display='block'; setTimeout(()=>msg.style.display='none', 3000); }
+                    if (msg) {
+                        msg.innerHTML = `Tema <strong>${themeSlug}</strong> aplicado. <a href="/${subdomain}" target="_blank" style="color:#3b82f6;text-decoration:underline;">Ver landing page &rarr;</a>`;
+                        msg.style.display = 'block';
+                        setTimeout(() => msg.style.display = 'none', 6000);
+                    }
                 }
             })
             .catch(e => console.error('Error:', e));

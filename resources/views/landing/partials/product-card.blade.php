@@ -1,8 +1,8 @@
 {{-- Path: resources/views/landing/partials/product-card.blade.php --}}
-<article class="group bg-white rounded-[3.5rem] p-10 shadow-sm border border-gray-100 flex flex-col h-full transition-all duration-500 hover:shadow-2xl">
+<article class="group bg-base-100 rounded-[3.5rem] p-10 shadow-sm border border-base-200 flex flex-col h-full transition-all duration-500 hover:shadow-2xl">
     
     {{-- Imagen / Slider --}}
-    <div class="relative aspect-square overflow-hidden rounded-[2.5rem] bg-gray-50 mb-12">
+    <div class="relative aspect-square overflow-hidden rounded-[2.5rem] bg-base-200 mb-12">
         @php
             $isPlan3 = isset($plan) && (int) $plan->id === 3;
             $galleryImages = $product->relationLoaded('galleryImages') ? $product->galleryImages : collect();

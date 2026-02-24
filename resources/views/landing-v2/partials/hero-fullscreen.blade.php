@@ -53,19 +53,19 @@
                    target="_blank"
                    class="btn btn-primary btn-gradient btn-lg">
                     Contactar por WhatsApp
-                    <span class="icon-[tabler--arrow-right] size-5 rtl:rotate-180"></span>
+                    <span class="iconify tabler--arrow-right size-5 rtl:rotate-180"></span>
                 </a>
             @elseif($tenant->phone)
                 <a href="tel:{{ $tenant->phone }}" 
                    class="btn btn-primary btn-gradient btn-lg">
                     Llamar Ahora
-                    <span class="icon-[tabler--arrow-right] size-5 rtl:rotate-180"></span>
+                    <span class="iconify tabler--arrow-right size-5 rtl:rotate-180"></span>
                 </a>
             @else
                 <a href="#contact-us" 
                    class="btn btn-primary btn-gradient btn-lg">
                     Conocer Más
-                    <span class="icon-[tabler--arrow-right] size-5 rtl:rotate-180"></span>
+                    <span class="iconify tabler--arrow-right size-5 rtl:rotate-180"></span>
                 </a>
             @endif
         </div>
