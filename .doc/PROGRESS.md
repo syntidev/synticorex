@@ -1,24 +1,24 @@
 # 📊 SYNTIWEB MVP - PROGRESO
 
 **Inicio:** 16 Feb 2026  
-**Última actualización:** 22 Feb 2026  
+**Última actualización:** 25 Feb 2026  
 **Meta MVP:** 16 Mar 2026
 
 ---
 
 ## 💰 PRESUPUESTO API
 - **Total:** $50.00
-- **Gastado:** $10.50
-- **Restante:** $39.50
+- **Gastado:** $14.00
+- **Restante:** $36.00
 - **Copilot Pro:** $10/mes ✅ Activo
 
 ---
 
-## 🎯 Próxima tarea: Tenants demo (pizzería, barbería, boutique) + Flujo landing FlyonUI
+## 🎯 Próxima tarea: Mejorar contenido demos + flujo landing FlyonUI + limpieza LEGACY
 
 ---
 
-## 📈 PROGRESO GENERAL: 98%
+## 📈 PROGRESO GENERAL: 99%
 
 ---
 
@@ -56,28 +56,31 @@
 
 ---
 
-## SEMANA 3 ✅ (98% - 13/14 tareas)
+## SEMANA 3 ✅ (100% - 14/14 tareas)
 - [x] DashboardController 6 tabs completos ✨
 - [x] Tab Info: edición + AJAX save ✨
 - [x] Tab Productos: CRUD + límites por plan ✨
 - [x] Tab Servicios: CRUD + límites por plan ✨
-- [x] Tab Diseño: 17 temas FlyonUI colores reales ✨ ← HOY
+- [x] Tab Diseño: 17 temas FlyonUI colores reales ✨
 - [x] Tab Analytics: KPIs + tasa dólar ✨
 - [x] Tab Config: moneda 4 modos + PIN + info plan ✨
 - [x] ImageUploadController 4 endpoints ✨
 - [x] Lógica precio nulo → "Más Info" ✨
 - [x] FlyonUI v2.4.1 NPM integrado ✨
-- [x] @vite en dashboard (fix CSS scope) ✨ ← HOY
-- [x] Auditoría técnica realizada ✨ ← HOY
-- [x] Documentación sincronizada ✨ ← HOY
-- [ ] Mensaje upgrade al límite del plan
+- [x] @vite en dashboard (fix CSS scope) ✨
+- [x] Auditoría técnica realizada ✨
+- [x] Documentación sincronizada ✨
+- [x] Mensajes upgrade al límite del plan ✨ ← HOY
 
 ---
 
-## SEMANA 4 🔥 (0% - 0/14 tareas)
-- [ ] Tenant demo: Pizzería (tema gourmet)
-- [ ] Tenant demo: Barbería (tema luxury/valorant)
-- [ ] Tenant demo: Boutique (tema soft/pastel)
+## SEMANA 4 🔥 (29% - 4/14 tareas)
+- [x] Secciones adicionales Plan 2+3 (Header Top, Acerca de, FAQ) ✨ ← HOY
+- [x] CTAs upgrade → syntiweb.com/planes ✨ ← HOY
+- [x] Validación y corrección 3 tenants demo ✨ ← HOY
+- [x] Comando Artisan tenants:fix-demos ✨ ← HOY
+- [ ] Mejorar contenido textual demos
+- [ ] Agregar imágenes profesionales demos
 - [ ] Flujo landing completo con FlyonUI
 - [ ] Limpieza LEGACY updatePalette
 - [ ] Centralizar lista 17 temas
@@ -86,9 +89,6 @@
 - [ ] SEO: meta tags dinámicos por segmento
 - [ ] Schema.org básico
 - [ ] Sistema onboarding nuevos tenants
-- [ ] Panel admin básico
-- [ ] Producción: servidor + DNS + SSL + cron
-- [ ] Testing E2E completo
 
 ---
 
@@ -102,19 +102,23 @@
 - ✅ CRUD Productos y Servicios con límites
 - ✅ Upload WebP optimizado
 - ✅ Sistema moneda 4 modos
-- ✅ **17 temas FlyonUI con preview colores reales** 🎉 ← HOY
-- ✅ Auditoría técnica completada ← HOY
+- ✅ 17 temas FlyonUI con preview colores reales
+- ✅ Auditoría técnica completada
+- ✅ **Secciones Plan 2+3 (Header Top, Acerca de, FAQ)** ← HOY
+- ✅ **CTAs upgrade integrados en todo el sistema** ← HOY
+- ✅ **3 tenants demo validados y corregidos** ← HOY
+- ✅ **Comando Artisan tenants:fix-demos** ← HOY
 
 ---
 
 ## 📊 MÉTRICAS
 
 ### Tiempo Invertido:
-- Semana 1: ~15h | Semana 2: ~12h | Semana 3: ~22h
-- **Total: ~49h de 160h estimadas**
+- Semana 1: ~15h | Semana 2: ~12h | Semana 3: ~22h | Semana 4: ~2.5h
+- **Total: ~51.5h de 160h estimadas**
 
 ### Código:
-- **Commits:** 15+ | **Archivos:** ~60 | **Líneas:** ~13,500
+- **Commits:** 18+ | **Archivos:** ~65 | **Líneas:** ~14,500
 - **Calidad:** Producción 💎
 
 ---
@@ -124,13 +128,13 @@
 ```
 SEMANA 1: ████████████████████ 100% ✅
 SEMANA 2: ████████████████████ 100% ✅
-SEMANA 3: ███████████████████░  98% ✅
-SEMANA 4: ░░░░░░░░░░░░░░░░░░░░   0% 🔥
+SEMANA 3: ████████████████████ 100% ✅
+SEMANA 4: █████░░░░░░░░░░░░░░░  29% 🔥
          ═══════════════════════
-TOTAL:    ████████████████████  98%
+TOTAL:    ███████████████████░  99%
 ```
 
 ---
 
-**Última actualización:** 22 Feb 2026  
-**Estado:** 🔥 17 TEMAS FLYONUI FUNCIONALES - LISTO PARA DEMOS
+**Última actualización:** 25 Feb 2026  
+**Estado:** 🔥 SECCIONES PLAN 2+3 + DEMOS VALIDADOS + SISTEMA UPGRADE COMPLETO

@@ -109,10 +109,34 @@ class DashboardController extends Controller
                 'city' => 'nullable|string|max:100',
                 'description' => 'nullable|string|max:500',
                 'is_open' => 'nullable|boolean',
+                'contact_maps_url' => 'nullable|string|max:1000',
+                'contact_title' => 'nullable|string|max:120',
+                'contact_subtitle' => 'nullable|string|max:255',
+                'phone_secondary' => 'nullable|string|max:20',
             ]);
 
-            // Update tenant
-            $tenant->update($validated);
+            // Update tenant fields (excluding settings-only fields)
+            $settingsOnlyKeys = ['contact_maps_url', 'contact_title', 'contact_subtitle', 'phone_secondary'];
+            $tenant->update(collect($validated)->except($settingsOnlyKeys)->toArray());
+
+            // Save contact settings in settings JSON (Plan 2+)
+            if ($tenant->plan_id >= 2) {
+                $settings = $tenant->settings ?? [];
+                if ($request->has('contact_maps_url')) {
+                    data_set($settings, 'business_info.contact.maps_url', $validated['contact_maps_url'] ?? '');
+                }
+                if ($request->has('contact_title')) {
+                    data_set($settings, 'business_info.contact.title', $validated['contact_title'] ?? '');
+                }
+                if ($request->has('contact_subtitle')) {
+                    data_set($settings, 'business_info.contact.subtitle', $validated['contact_subtitle'] ?? '');
+                }
+                if ($request->has('phone_secondary')) {
+                    data_set($settings, 'contact_info.phone_secondary', $validated['phone_secondary'] ?? '');
+                }
+                $tenant->settings = $settings;
+                $tenant->save();
+            }
 
             return response()->json([
                 'success' => true,
@@ -795,17 +819,23 @@ class DashboardController extends Controller
                 ], 422);
             }
 
-            $allowedMethods = ['pagoMovil', 'biopago', 'puntoventa', 'zinli', 'zelle', 'paypal'];
+            $allowedMethods    = ['pagoMovil', 'cash', 'puntoventa', 'biopago', 'cashea', 'krece', 'wepa', 'lysto', 'chollo', 'zelle', 'zinli', 'paypal'];
+            $allowedCurrencies = ['usd', 'eur'];
 
             $validated = $request->validate([
-                'global'   => 'nullable|array',
-                'global.*' => 'string|in:' . implode(',', $allowedMethods),
-                'branches' => 'nullable|array',
+                'global'     => 'nullable|array',
+                'global.*'   => 'string|in:' . implode(',', $allowedMethods),
+                'currency'   => 'nullable|array',
+                'currency.*' => 'string|in:' . implode(',', $allowedCurrencies),
+                'branches'   => 'nullable|array',
             ]);
 
             $data = [
-                'global' => array_values(
+                'global'   => array_values(
                     array_intersect($validated['global'] ?? [], $allowedMethods)
+                ),
+                'currency' => array_values(
+                    array_intersect($validated['currency'] ?? [], $allowedCurrencies)
                 ),
             ];
 
@@ -909,6 +939,44 @@ class DashboardController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Error: ' . $e->getMessage()
+            ], 422);
+        }
+    }
+
+    public function saveSectionOrder(Request $request, int $tenantId): JsonResponse
+    {
+        try {
+            $tenant = Tenant::with('customization')
+                ->where('id', $tenantId)
+                ->where('status', 'active')
+                ->firstOrFail();
+
+            $validated = $request->validate([
+                'sections_order'           => 'required|array',
+                'sections_order.*.name'    => 'required|string|max:64',
+                'sections_order.*.visible' => 'required|boolean',
+                'sections_order.*.order'   => 'required|integer|min:0',
+            ]);
+
+            $customization = $tenant->customization
+                ?? \App\Models\TenantCustomization::firstOrCreate(['tenant_id' => $tenantId]);
+
+            $visualEffects = $customization->visual_effects ?? [];
+            $visualEffects['sections_order'] = $validated['sections_order'];
+            $customization->visual_effects = $visualEffects;
+            $customization->save();
+
+            // Sincronizar sections_config con el nuevo sections_order
+            $customization->syncSectionsConfig();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Orden de secciones guardado correctamente',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error: ' . $e->getMessage(),
             ], 422);
         }
     }

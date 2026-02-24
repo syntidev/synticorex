@@ -23,10 +23,17 @@
     $phoneDisplay = $phone ?: null;
 @endphp
 
-<div id="header-top" class="fixed top-0 left-0 right-0 z-[110] h-10 bg-base-200 border-b border-base-content/10 flex items-center">
-    <div class="container mx-auto px-4 md:px-6 flex items-center justify-between gap-4 text-xs">
+<div id="header-top" class="fixed top-0 left-0 right-0 z-[110] h-10 bg-base-200 border-b border-base-content/10 flex items-center transition-transform duration-300" style="opacity: 0; visibility: hidden;">
+    <div class="container mx-auto px-4 md:px-6 flex items-center justify-between gap-4 text-xs font-medium">
 
         {{-- ── Izquierda: Horario ──────────────────────────── --}}
+        @php
+            $schedule = data_get($tenant->settings, 'business_info.schedule_display', 'Lun-Sab 9:00-18:00');
+            $phone = $tenant->whatsapp_number ?? data_get($tenant->settings, 'contact_info.phone', '');
+            $phoneClean = preg_replace('/[^0-9]/', '', $phone);
+            $deliveryAvailable = data_get($tenant->settings, 'business_info.delivery_available', false);
+        @endphp
+
         @if($schedule)
         <div class="flex items-center gap-1.5 text-base-content/60 min-w-0">
             <iconify-icon icon="tabler:clock" width="14" height="14" class="shrink-0 text-primary/70"></iconify-icon>
@@ -37,7 +44,7 @@
         @endif
 
         {{-- ── Centro: Delivery badge ──────────────────────── --}}
-        @if($delivery)
+        @if($deliveryAvailable)
         <div class="hidden md:flex items-center gap-1.5 text-base-content/60">
             <iconify-icon icon="tabler:motorbike" width="14" height="14" class="text-primary/70 shrink-0"></iconify-icon>
             <span>Delivery disponible</span>
@@ -45,7 +52,7 @@
         @endif
 
         {{-- ── Derecha: Teléfono ───────────────────────────── --}}
-        @if($phoneDisplay)
+        @if($phone)
         <div class="flex items-center gap-1.5 ml-auto">
             <iconify-icon icon="tabler:phone" width="14" height="14" class="shrink-0 text-primary/70"></iconify-icon>
             {{-- Desktop: número visible con enlace --}}
@@ -62,3 +69,38 @@
 
     </div>
 </div>
+
+<script>
+(function() {
+    // header-top ya existe en DOM aquí, pero main-nav NO (se incluye después).
+    // Por eso buscamos main-nav de forma lazy dentro de cada handler.
+
+    var headerTop = document.getElementById('header-top');
+    var _nav = null;
+    function getNav() {
+        if (!_nav) _nav = document.getElementById('main-nav');
+        return _nav;
+    }
+
+    // Fade-in header-top
+    if (headerTop) {
+        setTimeout(function() {
+            headerTop.style.opacity    = '1';
+            headerTop.style.visibility = 'visible';
+        }, 100);
+    }
+
+    // Scroll: ocultar header-top + subir nav a top:0
+    window.addEventListener('scroll', function() {
+        var scrolled = window.pageYOffset > 50;
+        var nav = getNav();
+
+        if (headerTop) {
+            headerTop.style.transform = scrolled ? 'translateY(-100%)' : 'translateY(0)';
+        }
+        if (nav) {
+            nav.style.top = scrolled ? '0px' : '40px';
+        }
+    });
+})();
+</script>

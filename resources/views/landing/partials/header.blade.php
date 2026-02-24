@@ -1,4 +1,6 @@
-<header class="fixed top-0 z-[100] w-full border-b border-base-200 !bg-base-100/95 backdrop-blur-md">
+<header id="main-nav" 
+        class="fixed top-0 z-[100] w-full border-b border-base-200 !bg-base-100/95 backdrop-blur-md"
+        style="{{ $tenant->plan_id >= 2 ? 'top: 40px;' : '' }} transition: top 0.3s ease;">
     <div class="container mx-auto flex items-center justify-between px-6 py-4">
         {{-- Logo Dinámico --}}
         <div class="flex items-center gap-3">

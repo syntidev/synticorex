@@ -65,18 +65,44 @@ class TenantCustomization extends Model
 
     /**
      * Get the sections order from visual_effects.
+     * Normalizes format to ensure consistency across all plans.
      *
-     * @return array<int, string>
+     * @return array
      */
     public function getSectionsOrder(): array
     {
-        $defaultOrder = ['hero', 'products', 'services', 'faq', 'cta', 'footer'];
-        
-        if (empty($this->visual_effects) || !isset($this->visual_effects['sections_order'])) {
-            return $defaultOrder;
-        }
+        $order = $this->visual_effects['sections_order'] ?? [];
 
-        return $this->visual_effects['sections_order'];
+        // Si no hay orden guardado, devolver secciones por defecto
+        if (empty($order)) {
+            $order = [
+                ['name' => 'products',        'visible' => true, 'order' => 0],
+                ['name' => 'services',        'visible' => true, 'order' => 1],
+                ['name' => 'contact',         'visible' => true, 'order' => 2],
+                ['name' => 'payment_methods', 'visible' => true, 'order' => 3],
+                ['name' => 'faq',             'visible' => true, 'order' => 4],
+                ['name' => 'branches',        'visible' => true, 'order' => 5],
+                ['name' => 'cta',             'visible' => true, 'order' => 6],
+            ];
+        }
+        
+        // Normalizar formato: convertir strings a arrays si es necesario
+        return collect($order)->map(function($section) {
+            // Si es string, convertir a formato array
+            if (is_string($section)) {
+                return [
+                    'name' => $section,
+                    'visible' => true,
+                    'order' => 0
+                ];
+            }
+            // Si ya es array, asegurar que tiene todas las keys
+            return [
+                'name' => $section['name'] ?? '',
+                'visible' => $section['visible'] ?? true,
+                'order' => $section['order'] ?? 0
+            ];
+        })->toArray();
     }
 
     /**
@@ -106,15 +132,42 @@ class TenantCustomization extends Model
     }
 
     /**
-     * Check if a section is visible.
+     * Check if a section is visible (from sections_order).
+     * Single source of truth for visibility.
      *
      * @param string $section
      * @return bool
      */
     public function isSectionVisible(string $section): bool
     {
-        $config = $this->getSectionConfig($section);
-        return $config['visible'] ?? true;
+        $order = $this->getSectionsOrder();
+        $sectionData = collect($order)->firstWhere('name', $section);
+        return $sectionData['visible'] ?? true;
+    }
+
+    /**
+     * Check if tenant can access a section based on plan.
+     *
+     * @param string $section
+     * @param int $planId
+     * @return bool
+     */
+    public function canAccessSection(string $section, int $planId): bool
+    {
+        $planRequirements = [
+            'products' => 1,
+            'services' => 1,
+            'contact' => 1,
+            'payment_methods' => 1,
+            'faq' => 3,
+            'branches' => 3,
+            'cta' => 1,
+            'hero' => 1,
+            'footer' => 1,
+        ];
+
+        $requiredPlan = $planRequirements[$section] ?? 1;
+        return $planId >= $requiredPlan;
     }
 
     /**
@@ -127,7 +180,7 @@ class TenantCustomization extends Model
     public function updateSectionConfig(string $section, array $newConfig): void
     {
         $visualEffects = $this->visual_effects ?? [
-            'sections_order' => ['hero', 'products', 'services', 'faq', 'cta', 'footer'],
+            'sections_order' => [],
             'sections_config' => [],
         ];
 
@@ -137,6 +190,31 @@ class TenantCustomization extends Model
 
         $currentConfig = $visualEffects['sections_config'][$section] ?? [];
         $visualEffects['sections_config'][$section] = array_merge($currentConfig, $newConfig);
+
+        $this->update(['visual_effects' => $visualEffects]);
+    }
+
+    /**
+     * Sync sections_config with sections_order visibility.
+     *
+     * @return void
+     */
+    public function syncSectionsConfig(): void
+    {
+        $visualEffects = $this->visual_effects ?? [];
+        $order = $this->getSectionsOrder();
+
+        if (!isset($visualEffects['sections_config'])) {
+            $visualEffects['sections_config'] = [];
+        }
+
+        foreach ($order as $section) {
+            $name = $section['name'];
+            if (!isset($visualEffects['sections_config'][$name])) {
+                $visualEffects['sections_config'][$name] = [];
+            }
+            $visualEffects['sections_config'][$name]['visible'] = $section['visible'];
+        }
 
         $this->update(['visual_effects' => $visualEffects]);
     }

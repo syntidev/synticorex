@@ -740,6 +740,53 @@
                             <input type="text" class="form-input" name="address" value="{{ $tenant->address }}">
                         </div>
                         
+                        @if($tenant->plan_id >= 2)
+                        <div class="form-group">
+                            <label class="form-label flex items-center gap-2">
+                                <span>Título sección Contacto</span>
+                                <span style="font-size:11px; color:#22c55e; font-weight:600; background:rgba(34,197,94,.12); padding:2px 8px; border-radius:20px;">Plan {{ $plan->name }}</span>
+                            </label>
+                            <input type="text"
+                                   name="contact_title"
+                                   class="form-input"
+                                   value="{{ data_get($tenant->settings, 'business_info.contact.title', '') }}"
+                                   placeholder="Contáctanos">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label flex items-center gap-2">
+                                <span>Subtítulo sección Contacto</span>
+                                <span style="font-size:11px; color:#22c55e; font-weight:600; background:rgba(34,197,94,.12); padding:2px 8px; border-radius:20px;">Plan {{ $plan->name }}</span>
+                            </label>
+                            <input type="text"
+                                   name="contact_subtitle"
+                                   class="form-input"
+                                   value="{{ data_get($tenant->settings, 'business_info.contact.subtitle', '') }}"
+                                   placeholder="Estamos aquí para atenderte">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label flex items-center gap-2">
+                                <span>URL Google Maps</span>
+                                <span style="font-size:11px; color:#22c55e; font-weight:600; background:rgba(34,197,94,.12); padding:2px 8px; border-radius:20px;">Plan {{ $plan->name }}</span>
+                            </label>
+                            <input type="url"
+                                   name="contact_maps_url"
+                                   class="form-input"
+                                   value="{{ data_get($tenant->settings, 'business_info.contact.maps_url', '') }}"
+                                   placeholder="https://www.google.com/maps/embed?pb=...">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label flex items-center gap-2">
+                                <span>Teléfono Secundario</span>
+                                <span style="font-size:11px; color:#22c55e; font-weight:600; background:rgba(34,197,94,.12); padding:2px 8px; border-radius:20px;">Plan {{ $plan->name }}</span>
+                            </label>
+                            <input type="tel"
+                                   name="phone_secondary"
+                                   class="form-input"
+                                   value="{{ data_get($tenant->settings, 'contact_info.phone_secondary', '') }}"
+                                   placeholder="+58 XXX XXXXXXX">
+                        </div>
+                        @endif
+
                         <div class="form-group">
                             <label class="form-label">Ciudad</label>
                             <input type="text" class="form-input" name="city" value="{{ $tenant->city }}">
@@ -1340,6 +1387,113 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
     @endforeach
 </div>
 
+            {{-- ══════════════════════════════════════════════════════════════
+                 SECCIÓN: Orden de Secciones (Drag & Drop)
+            ══════════════════════════════════════════════════════════════ --}}
+            <div class="form-section" style="margin-top: 32px;">
+                <h2 class="table-title">📋 Orden de Secciones</h2>
+                <p class="table-subtitle" style="margin-bottom: 16px;">
+                    Arrastra para reordenar. Las secciones apagadas no aparecen en tu landing.
+                </p>
+
+                <div id="sortable-sections" class="space-y-2">
+                    @php
+                        $availableSections = [
+                            'products'        => ['label' => 'Productos',       'icon' => 'tabler:shopping-cart', 'plan' => 1],
+                            'services'        => ['label' => 'Servicios',       'icon' => 'tabler:tool',          'plan' => 1],
+                            'contact'         => ['label' => 'Contacto',        'icon' => 'tabler:map-pin',       'plan' => 1],
+                            'payment_methods' => ['label' => 'Medios de Pago', 'icon' => 'tabler:credit-card',   'plan' => 2],
+                            'faq'             => ['label' => 'FAQ',             'icon' => 'tabler:help-circle',   'plan' => 3],
+                            'branches'        => ['label' => 'Sucursales',      'icon' => 'tabler:building-bank', 'plan' => 3],
+                        ];
+
+                        $currentOrder = $customization->visual_effects['sections_order'] ?? [];
+
+                        // Ordenar $availableSections según $currentOrder
+                        if (!empty($currentOrder)) {
+                            $orderedKeys = collect($currentOrder)->pluck('name')->toArray();
+                            $sortedSections = [];
+                            foreach ($orderedKeys as $k) {
+                                if (isset($availableSections[$k])) {
+                                    $sortedSections[$k] = $availableSections[$k];
+                                }
+                            }
+                            // Agregar las que no están en el orden guardado al final
+                            foreach ($availableSections as $k => $v) {
+                                if (!isset($sortedSections[$k])) {
+                                    $sortedSections[$k] = $v;
+                                }
+                            }
+                            $availableSections = $sortedSections;
+                        }
+                    @endphp
+
+                    @foreach($availableSections as $key => $section)
+                        @php
+                            $sectionData   = collect($currentOrder)->firstWhere('name', $key);
+                            $isVisible     = $sectionData['visible'] ?? true;
+                            $planRequired  = $section['plan'];
+                            $hasAccess     = $tenant->plan_id >= $planRequired;
+                        @endphp
+
+                        <div class="section-item {{ $hasAccess ? '' : 'opacity-50' }}"
+                             data-section="{{ $key }}"
+                             data-plan="{{ $planRequired }}"
+                             style="margin-bottom: 8px;">
+                            <div style="display: flex; align-items: center; gap: 12px; padding: 12px 14px;
+                                        background: #0f1c32; border-radius: 10px;
+                                        border: 1px solid {{ $hasAccess ? 'rgba(255,255,255,0.08)' : 'rgba(255,255,255,0.04)' }};
+                                        {{ $hasAccess ? 'cursor: move;' : 'cursor: not-allowed;' }}
+                                        transition: border-color 0.2s;">
+
+                                {{-- Drag handle / Lock --}}
+                                @if($hasAccess)
+                                    <span class="drag-handle" style="display: inline-flex; align-items: center; justify-content: center; cursor: grab; flex-shrink: 0; width: 24px; height: 24px; color: #4ade80; font-weight: bold; font-size: 16px; user-select: none;">≡</span>
+                                @else
+                                    <span style="display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; width: 24px; height: 24px; color: #f59e0b; font-weight: bold; font-size: 16px;">🔒</span>
+                                @endif
+
+                                {{-- Section icon --}}
+                                <iconify-icon icon="{{ $section['icon'] }}"
+                                              style="color: #4d8dff; flex-shrink: 0;"
+                                              width="20"></iconify-icon>
+
+                                {{-- Label --}}
+                                <span style="flex: 1; font-weight: 500; font-size: 14px; color: {{ $hasAccess ? '#fff' : 'rgba(255,255,255,0.4)' }};">
+                                    {{ $section['label'] }}
+                                    @if(!$hasAccess)
+                                        <span style="font-size: 11px; color: #f59e0b; margin-left: 8px;">
+                                            (Plan {{ $planRequired == 2 ? 'CRECIMIENTO' : 'VISIÓN' }})
+                                        </span>
+                                    @endif
+                                </span>
+
+                                {{-- Toggle visible --}}
+                                @if($hasAccess)
+                                    <label style="position: relative; display: inline-flex; align-items: center; cursor: pointer; flex-shrink: 0;">
+                                        <input type="checkbox"
+                                               class="sr-only peer section-toggle"
+                                               data-section="{{ $key }}"
+                                               {{ $isVisible ? 'checked' : '' }}>
+                                        <div style="width: 44px; height: 24px; background: rgba(255,255,255,0.1); border-radius: 12px;
+                                                    position: relative; transition: background 0.2s;"
+                                             class="toggle-track">
+                                            <div style="position: absolute; top: 2px; left: 2px; width: 20px; height: 20px;
+                                                        background: {{ $isVisible ? '#2B6FFF' : 'rgba(255,255,255,0.4)' }};
+                                                        border-radius: 50%; transition: all 0.2s;
+                                                        transform: {{ $isVisible ? 'translateX(20px)' : 'translateX(0)' }};"
+                                                 class="toggle-thumb"></div>
+                                        </div>
+                                    </label>
+                                @endif
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
+            {{-- SortableJS se inicializa al abrir la pestaña Diseño (ver script global al pie del body) --}}
+
             @if($plan->id === 1)
             <div style="background: linear-gradient(135deg, #1a2040 0%, #0f1c32 100%); border: 1px solid rgba(43,111,255,0.3); border-radius: 12px; padding: 16px 20px; margin-top: 24px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
                 <div style="display: flex; align-items: center; gap: 12px;">
@@ -1692,14 +1846,27 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
                 @php
                     $payMethods      = $customization->payment_methods ?? [];
                     $globalEnabled   = $payMethods['global'] ?? [];
+                    $currencyEnabled = $payMethods['currency'] ?? [];
                     $branchPayMeta   = $payMethods['branches'] ?? [];
                     $allPayMeta      = [
-                        'pagoMovil'  => ['label' => 'Pago Móvil',    'icon' => '📱', 'desc' => 'Transferencia bancaria móvil'],
-                        'biopago'    => ['label' => 'Biopago',        'icon' => '👁️', 'desc' => 'Pago biométrico'],
-                        'puntoventa' => ['label' => 'Punto de Venta', 'icon' => '💳', 'desc' => 'Terminal POS físico'],
-                        'zinli'      => ['label' => 'Zinli',          'icon' => '🟣', 'desc' => 'Billetera digital'],
-                        'zelle'      => ['label' => 'Zelle',          'icon' => '⚡', 'desc' => 'Transferencia USD'],
-                        'paypal'     => ['label' => 'PayPal',         'icon' => '🅿️', 'desc' => 'Pagos internacionales'],
+                        // 🇻🇪 Nacionales / Flujo
+                        'pagoMovil'  => ['label' => 'Pago Móvil',    'icon' => '📱', 'desc' => 'Transferencia bancaria móvil',  'group' => 'Nacional'],
+                        'cash'       => ['label' => 'Efectivo',       'icon' => '💵', 'desc' => 'Pago en efectivo',                 'group' => 'Nacional'],
+                        'puntoventa' => ['label' => 'Punto de Venta', 'icon' => '💳', 'desc' => 'Terminal POS físico',            'group' => 'Nacional'],
+                        'biopago'    => ['label' => 'Biopago',        'icon' => '👁️', 'desc' => 'Pago biométrico',           'group' => 'Nacional'],
+                        'cashea'     => ['label' => 'Cashea',         'icon' => '🛒', 'desc' => 'Compra ahora, paga después',     'group' => 'Nacional'],
+                        'krece'      => ['label' => 'Krece',          'icon' => '📈', 'desc' => 'Financiamiento tech/electro',        'group' => 'Nacional'],
+                        'wepa'       => ['label' => 'Wepa',           'icon' => '📲', 'desc' => 'Cuotas desde el móvil',           'group' => 'Nacional'],
+                        'lysto'      => ['label' => 'Lysto',          'icon' => '🗓️', 'desc' => 'Pago en cuotas en comercios',  'group' => 'Nacional'],
+                        'chollo'     => ['label' => 'Chollo',         'icon' => '🏷️', 'desc' => 'Compras a cuotas en retail',    'group' => 'Nacional'],
+                        // 💱 Divisas
+                        'zelle'      => ['label' => 'Zelle',          'icon' => '⚡', 'desc' => 'Transferencia USD',                 'group' => 'Divisa'],
+                        'zinli'      => ['label' => 'Zinli',          'icon' => '🟣', 'desc' => 'Billetera digital USD',             'group' => 'Divisa'],
+                        'paypal'     => ['label' => 'PayPal',         'icon' => '🅿️', 'desc' => 'Pagos internacionales',         'group' => 'Divisa'],
+                    ];
+                    $allCurrencyMeta = [
+                        'usd' => ['label' => 'Dólares (USD)', 'icon' => '💵', 'desc' => 'Acepta billetes USD'],
+                        'eur' => ['label' => 'Euros (€)',     'icon' => '💶', 'desc' => 'Acepta billetes EUR'],
                     ];
                     $activeBranchList = $branches->where('is_active', true);
                 @endphp
@@ -1707,7 +1874,7 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
                 <h3 style="color: #fff; font-size: 18px; font-weight: 600; margin-bottom: 6px;">💳 Medios de Pago</h3>
                 <p style="color: #94a3b8; font-size: 13px; margin-bottom: 20px;">
                     @if($plan->id === 1)
-                        <span style="color: #f59e0b;">★ Plan OPORTUNIDAD</span> — Muestra <strong style="color:#fff;">Pago Móvil y Biopago</strong> fijos en tu landing. No se puede modificar.
+                        <span style="color: #f59e0b;">★ Plan OPORTUNIDAD</span> — Muestra <strong style="color:#fff;">Pago Móvil y Efectivo</strong> fijos en tu landing. No se puede modificar.
                     @elseif($plan->id === 2)
                         <span style="color: #22c55e;">★ Plan CRECIMIENTO</span> — Elige cuáles medios mostrar en tu landing
                     @else
@@ -1718,7 +1885,7 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
                 @if($plan->id === 1)
                 {{-- Plan 1: Fixed — read-only --}}
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
-                    @foreach(['pagoMovil', 'biopago'] as $mkey)
+                    @foreach(['pagoMovil', 'cash'] as $mkey)
                     @php $m = $allPayMeta[$mkey]; @endphp
                     <div style="background: #0d3320; border: 1px solid #22c55e40; border-radius: 10px; padding: 14px 16px; display: flex; align-items: center; gap: 10px;">
                         <span style="font-size: 20px;">{{ $m['icon'] }}</span>
@@ -1740,8 +1907,12 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
                     <label style="color: #e5e7eb; font-size: 13px; font-weight: 500; display: block; margin-bottom: 10px;">
                         @if($plan->id === 3) Métodos globales (todos los clientes) @else Métodos visibles en tu landing @endif
                     </label>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+
+                    {{-- Grupo: Tradicionales --}}
+                    <p style="color: #6b7280; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 8px;">Tradicionales</p>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px;">
                         @foreach($allPayMeta as $mkey => $m)
+                        @if(($m['group'] ?? '') !== 'BNPL')
                         @php $checked = in_array($mkey, $globalEnabled); @endphp
                         <label id="pay-label-{{ $mkey }}" onclick="togglePayMethod('{{ $mkey }}')"
                             style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 10px 14px; border-radius: 10px; border: 1px solid {{ $checked ? '#2B6FFF' : '#1e2a42' }}; background: {{ $checked ? '#1a2f5e' : 'transparent' }}; transition: all .2s; user-select: none;">
@@ -1753,7 +1924,60 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
                             </div>
                             <span id="pay-check-icon-{{ $mkey }}" style="margin-left: auto; color: {{ $checked ? '#2B6FFF' : '#1e2a42' }}; font-size: 16px; transition: color .2s;">✓</span>
                         </label>
+                        @endif
                         @endforeach
+                    </div>
+
+                    {{-- Grupo: BNPL --}}
+                    <div style="border-top: 1px solid #1e2a42; padding-top: 14px;">
+                        <p style="color: #a78bfa; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 8px;">📆 Compra ahora, paga después (BNPL)</p>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                            @foreach($allPayMeta as $mkey => $m)
+                            @if(($m['group'] ?? '') === 'BNPL')
+                            @php $checked = in_array($mkey, $globalEnabled); @endphp
+                            <label id="pay-label-{{ $mkey }}" onclick="togglePayMethod('{{ $mkey }}')"
+                                style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 10px 14px; border-radius: 10px; border: 1px solid {{ $checked ? '#a78bfa' : '#1e2a42' }}; background: {{ $checked ? '#2d1f5e' : 'transparent' }}; transition: all .2s; user-select: none;">
+                                <input type="checkbox" id="pay-check-{{ $mkey }}" value="{{ $mkey }}" {{ $checked ? 'checked' : '' }} style="display: none;">
+                                <span style="font-size: 18px;">{{ $m['icon'] }}</span>
+                                <div>
+                                    <div style="color: #e5e7eb; font-size: 13px; font-weight: 500;">{{ $m['label'] }}</div>
+                                    <div style="color: #6b7280; font-size: 11px;">{{ $m['desc'] }}</div>
+                                </div>
+                                <span id="pay-check-icon-{{ $mkey }}" style="margin-left: auto; color: {{ $checked ? '#a78bfa' : '#1e2a42' }}; font-size: 16px; transition: color .2s;">✓</span>
+                            </label>
+                            @endif
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Denominaciones / Monedas --}}
+                <div style="margin-bottom: 18px; padding-top: 18px; border-top: 1px solid #1e2a42;">
+                    <label style="color: #e5e7eb; font-size: 13px; font-weight: 500; display: block; margin-bottom: 10px;">
+                        💰 Denominaciones Aceptadas
+                    </label>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        @foreach($allCurrencyMeta as $ckey => $c)
+                        @php $checked = in_array($ckey, $currencyEnabled); @endphp
+                        <label id="curr-label-{{ $ckey }}" onclick="toggleCurrency('{{ $ckey }}')"
+                            style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 10px 14px; border-radius: 10px; border: 1px solid {{ $checked ? '#2B6FFF' : '#1e2a42' }}; background: {{ $checked ? '#1a2f5e' : 'transparent' }}; transition: all .2s; user-select: none;">
+                            <input type="checkbox" id="curr-check-{{ $ckey }}" value="{{ $ckey }}" {{ $checked ? 'checked' : '' }} style="display: none;">
+                            <span style="font-size: 18px;">{{ $c['icon'] }}</span>
+                            <div>
+                                <div style="color: #e5e7eb; font-size: 13px; font-weight: 500;">{{ $c['label'] }}</div>
+                                <div style="color: #6b7280; font-size: 11px;">{{ $c['desc'] }}</div>
+                            </div>
+                            <span id="curr-check-icon-{{ $ckey }}" style="margin-left: auto; color: {{ $checked ? '#2B6FFF' : '#1e2a42' }}; font-size: 16px; transition: color .2s;">✓</span>
+                        </label>
+                        @endforeach
+                    </div>
+                </div>
+
+                {{-- VISTA PREVIA: Cómo se verá en la landing --}}
+                <div style="margin-top: 24px; padding: 16px; background: #07101F; border-radius: 10px; border: 1px solid #22c55e40;">
+                    <p style="color: #86efac; font-size: 12px; font-weight: 600; margin-bottom: 12px;">👁️ VISTA PREVIA EN LA LANDING:</p>
+                    <div id="payment-preview" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; padding: 12px; background: #0f1c32; border-radius: 8px; min-height: 40px; align-items: center;">
+                        {{-- Se actualiza dinámicamente con JS --}}
                     </div>
                 </div>
 
@@ -1793,7 +2017,7 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
                     style="background: #2B6FFF; color: #fff; border: none; border-radius: 8px; padding: 12px 24px; font-size: 15px; font-weight: 500; cursor: pointer; width: 100%; transition: all .2s;"
                     onmouseover="this.style.background='#1e5ce6'"
                     onmouseout="this.style.background='#2B6FFF'">
-                    Guardar Medios de Pago
+                    Guardar Medios de Pago y Denominaciones
                 </button>
                 @endif
             </div>
@@ -1958,6 +2182,12 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
                     // Add active class to clicked tab and corresponding content
                     this.classList.add('active');
                     document.getElementById('tab-' + tabId).classList.add('active');
+
+                    // Init drag & drop the FIRST time the Diseño tab becomes visible
+                    if (tabId === 'diseno' && !window._sortableReady) {
+                        window._sortableReady = true;
+                        window.initSortable();
+                    }
                 });
             });
         });
@@ -3145,7 +3375,11 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
 
         // ── Payment Methods ──────────────────────────────────────────
         @if($plan->id !== 1)
-        const payAllKeys = @json(array_keys($allPayMeta));
+        const payAllKeys  = @json(array_keys($allPayMeta));
+        const currAllKeys = @json(array_keys($allCurrencyMeta));
+        const allPayMetaData  = @json($allPayMeta);
+        const allCurrMetaData = @json($allCurrencyMeta);
+        const divisaKeys  = ['zelle', 'zinli', 'paypal'];
 
         function togglePayMethod(key) {
             const check = document.getElementById('pay-check-' + key);
@@ -3153,10 +3387,57 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
             const icon  = document.getElementById('pay-check-icon-' + key);
             if (!check) return;
             check.checked = !check.checked;
+            const isDivisa   = divisaKeys.includes(key);
+            const activeColor = isDivisa ? '#fbbf24' : '#2B6FFF';
+            const activeBg    = isDivisa ? '#2a1f05' : '#1a2f5e';
+            label.style.borderColor = check.checked ? activeColor : '#1e2a42';
+            label.style.background  = check.checked ? activeBg    : 'transparent';
+            icon.style.color        = check.checked ? activeColor : '#1e2a42';
+            updatePaymentPreview();
+        }
+
+        function toggleCurrency(key) {
+            const check = document.getElementById('curr-check-' + key);
+            const label = document.getElementById('curr-label-' + key);
+            const icon  = document.getElementById('curr-check-icon-' + key);
+            if (!check) return;
+            check.checked = !check.checked;
             label.style.borderColor = check.checked ? '#2B6FFF' : '#1e2a42';
             label.style.background  = check.checked ? '#1a2f5e' : 'transparent';
             icon.style.color        = check.checked ? '#2B6FFF' : '#1e2a42';
+            updatePaymentPreview();
         }
+
+        function updatePaymentPreview() {
+            const preview = document.getElementById('payment-preview');
+            if (!preview) return;
+            const selected = [];
+            payAllKeys.forEach(k => {
+                const el = document.getElementById('pay-check-' + k);
+                if (el && el.checked) {
+                    selected.push({ key: k, ...allPayMetaData[k], type: 'method' });
+                }
+            });
+            currAllKeys.forEach(k => {
+                const el = document.getElementById('curr-check-' + k);
+                if (el && el.checked) {
+                    selected.push({ key: k, ...allCurrMetaData[k], type: 'currency' });
+                }
+            });
+            if (selected.length === 0) {
+                preview.innerHTML = '<span style="color:#6b7280; font-size:12px;">Selecciona métodos para ver la previa</span>';
+                return;
+            }
+            preview.innerHTML = selected.map(item => 
+                `<span style="display:inline-flex; align-items:center; gap:6px; padding:6px 12px; border-radius:20px;
+                         background:#0d2f18; border:1px solid #22c55e60; color:#86efac; font-size:12px; font-weight:500; white-space:nowrap;">
+                    <iconify-icon icon="${item.icon}" width="14"></iconify-icon> ${item.label}
+                </span>`
+            ).join('');
+        }
+
+        // Inicializar previa al cargar
+        document.addEventListener('DOMContentLoaded', updatePaymentPreview);
 
         @if($plan->id === 3)
         function toggleBranchPayMethod(branchId, key) {
@@ -3177,7 +3458,11 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
                 const el = document.getElementById('pay-check-' + k);
                 return el && el.checked;
             });
-            const payload = { global: globalSelected };
+            const currencySelected = currAllKeys.filter(k => {
+                const el = document.getElementById('curr-check-' + k);
+                return el && el.checked;
+            });
+            const payload = { global: globalSelected, currency: currencySelected };
 
             @if($plan->id === 3)
             const branchData = {};
@@ -3204,7 +3489,7 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
                 });
                 const result = await response.json();
                 if (result.success) {
-                    alert('✓ Medios de pago guardados correctamente');
+                    alert('✓ Medios de pago y denominaciones guardados correctamente');
                 } else {
                     alert('✗ ' + (result.message || 'Error al guardar'));
                 }
@@ -3345,6 +3630,88 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
         }
         @endif
         // ── End Branches ────────────────────────────────────────────
+    </script>
+
+    {{-- ═══ SortableJS CDN + global drag-and-drop init ═══ --}}
+    <style>
+        .sortable-ghost { opacity: 0.3 !important; }
+        .sortable-drag  { box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5) !important; }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+    <script>
+        // ── Toast global ──────────────────────────────────────────────
+        window.showToast = function(message, type) {
+            const toast = document.createElement('div');
+            const bg    = type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#3b82f6';
+            toast.textContent = message;
+            Object.assign(toast.style, {
+                position: 'fixed', bottom: '24px', right: '24px', zIndex: '99999',
+                background: bg, color: '#fff', padding: '12px 20px',
+                borderRadius: '10px', fontSize: '14px', fontWeight: '600',
+                boxShadow: '0 4px 20px rgba(0,0,0,0.3)', opacity: '0',
+                transition: 'opacity 0.3s ease', maxWidth: '320px'
+            });
+            document.body.appendChild(toast);
+            requestAnimationFrame(() => { toast.style.opacity = '1'; });
+            setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 2500);
+        };
+
+        // ── Sortable init (called when the Diseño tab opens) ─────────
+        window._sortableReady = false;
+        window.initSortable = function() {
+            const sortableEl = document.getElementById('sortable-sections');
+            if (!sortableEl) { console.error('\u274c sortable-sections no encontrado'); return; }
+
+            new Sortable(sortableEl, {
+                handle: '.drag-handle',
+                animation: 200,
+                ghostClass: 'sortable-ghost',
+                dragClass: 'sortable-drag',
+                filter: '.opacity-50',
+                preventOnFilter: false,
+                onEnd: function() { saveSectionsOrder(); }
+            });
+
+            sortableEl.addEventListener('change', function(e) {
+                if (!e.target.classList.contains('section-toggle')) return;
+                const checked = e.target.checked;
+                const item    = e.target.closest('.section-item');
+                const thumb   = item && item.querySelector('.toggle-thumb');
+                if (thumb) {
+                    thumb.style.background = checked ? '#2B6FFF' : 'rgba(255,255,255,0.4)';
+                    thumb.style.transform  = checked ? 'translateX(20px)' : 'translateX(0)';
+                }
+                saveSectionsOrder();
+            });
+
+            console.log('\u2705 SortableJS inicializado correctamente');
+        };
+
+        function saveSectionsOrder() {
+            const sortableEl = document.getElementById('sortable-sections');
+            if (!sortableEl) return;
+            const sections = [];
+            sortableEl.querySelectorAll('.section-item').forEach((item, index) => {
+                const name    = item.dataset.section;
+                const toggle  = item.querySelector('.section-toggle');
+                const visible = toggle ? toggle.checked : true;
+                sections.push({ name, visible, order: index });
+            });
+            fetch(`/tenant/{{ $tenant->id }}/dashboard/save-section-order`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                },
+                body: JSON.stringify({ sections_order: sections })
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) { window.showToast('\u2705 Orden guardado', 'success'); }
+                else              { window.showToast('\u274c Error al guardar', 'error'); }
+            })
+            .catch(() => window.showToast('\u274c Error de red', 'error'));
+        }
     </script>
 </body>
 </html>

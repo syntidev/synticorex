@@ -22,6 +22,7 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="preload" href="https://api.iconify.design/tabler.css" as="style">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('styles')
@@ -31,30 +32,43 @@
 
     <div class="fixed inset-0 z-[9999] opacity-[0.02] pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"></div>
 
+    {{-- ══════════════════════════════════════════════
+         SECCIONES FIJAS - SIEMPRE VISIBLES
+    ══════════════════════════════════════════════ --}}
+
     @if($tenant->plan_id >= 2)
         {{-- Barra informativa: horario, teléfono, delivery --}}
         @include('landing.partials.header-top')
-        {{-- Empuja el nav principal 40px hacia abajo para no solapar header-top --}}
-        <style>header.fixed { top: 40px !important; }</style>
     @endif
 
     @include('landing.partials.header')
 
+    {{-- Wrapper que compensa las barras fixed: header-top (40px plan2+) + nav (60px) --}}
+    <div class="{{ $tenant->plan_id >= 2 ? 'pt-[100px]' : 'pt-[60px]' }}">
+
+    @php $sConfig = $customization->getSectionConfig('hero'); @endphp
+    @include('landing.partials.hero', ['sConfig' => $sConfig])
+
+    {{-- ══════════════════════════════════════════════
+         SECCIONES DINÁMICAS - ORDENABLES
+    ══════════════════════════════════════════════ --}}
+
     <main>
         @foreach($customization->getSectionsOrder() as $section)
-            @if($customization->isSectionVisible($section))
-                @php $sConfig = $customization->getSectionConfig($section); @endphp
+            @php
+                $sectionName = $section['name'];
+                $isVisible = $section['visible'] ?? true;
+                $canAccess = $customization->canAccessSection($sectionName, $tenant->plan_id);
+                $shouldRender = $isVisible && $canAccess && $sectionName !== 'hero';
+            @endphp
 
-                @switch($section)
+            @if($shouldRender)
+                @php $sConfig = $customization->getSectionConfig($sectionName); @endphp
 
-                    @case('hero')
-                        @include('landing.partials.hero', ['sConfig' => $sConfig])
-                        @break
+                @switch($sectionName)
 
-                    @case('about')
-                        @if($tenant->plan_id >= 2)
-                            @include('landing.partials.about', ['sConfig' => $sConfig])
-                        @endif
+                    @case('contact')
+                        @include('landing.partials.contact', ['sConfig' => $sConfig])
                         @break
 
                     @case('products')
@@ -84,15 +98,11 @@
                         @break
 
                     @case('faq')
-                        @if($tenant->plan_id >= 3)
-                            @include('landing.partials.faq', ['sConfig' => $sConfig])
-                        @endif
+                        @include('landing.partials.faq', ['sConfig' => $sConfig])
                         @break
 
                     @case('branches')
-                        @if($tenant->plan_id >= 3)
-                            @include('landing.partials.branches', ['sConfig' => $sConfig])
-                        @endif
+                        @include('landing.partials.branches', ['sConfig' => $sConfig])
                         @break
 
                     @case('payment_methods')
@@ -114,6 +124,12 @@
             @include('landing.partials.testimonials')
         @endif
     </main>
+
+    </div>{{-- /pt wrapper --}}
+
+    {{-- ══════════════════════════════════════════════
+         FOOTER FIJO
+    ══════════════════════════════════════════════ --}}
 
     @include('landing.partials.footer', ['sConfig' => $customization->getSectionConfig('footer')])
 

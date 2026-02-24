@@ -65,6 +65,10 @@ Route::post('/tenant/{tenantId}/update-payment-methods',   [DashboardController:
 // Social Networks
 Route::post('/tenant/{tenantId}/update-social-networks',   [DashboardController::class, 'updateSocialNetworks']);
 
+// Section Order (drag & drop)
+Route::post('/tenant/{tenantId}/dashboard/save-section-order', [DashboardController::class, 'saveSectionOrder'])
+    ->name('tenant.dashboard.save-section-order');
+
 // Config actions
 Route::post('/tenant/{tenantId}/update-currency-config', [DashboardController::class, 'updateCurrencyConfig']);
 Route::post('/tenant/{tenantId}/update-pin',             [DashboardController::class, 'updatePin']);
