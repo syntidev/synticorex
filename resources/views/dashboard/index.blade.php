@@ -779,6 +779,27 @@
                 </button>
             </div>
 
+            @if($currentCount >= $maxProducts)
+            <div style="background: linear-gradient(135deg, #1a2040 0%, #0f1c32 100%); border: 1px solid rgba(43,111,255,0.3); border-radius: 12px; padding: 16px 20px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <span style="font-size: 22px;">📦</span>
+                    <div>
+                        <p style="color: #fff; font-weight: 600; font-size: 14px; margin: 0 0 2px;">Límite de productos alcanzado ({{ $maxProducts }}/{{ $maxProducts }})</p>
+                        <p style="color: rgba(255,255,255,0.5); font-size: 12px; margin: 0;">
+                            @if($plan->id === 1)Plan CRECIMIENTO: hasta 12 productos · Plan VISIÓN: hasta 18 productos
+                            @else Plan VISIÓN: hasta 18 productos @endif
+                        </p>
+                    </div>
+                </div>
+                <a href="https://syntiweb.com/planes" target="_blank" rel="noopener noreferrer"
+                   style="background: #2B6FFF; color: #fff; text-decoration: none; padding: 8px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; white-space: nowrap;"
+                   onmouseover="this.style.background='#1e5beb'"
+                   onmouseout="this.style.background='#2B6FFF'">
+                    Ver Planes ↗
+                </a>
+            </div>
+            @endif
+
             @if($products->count() > 0)
             <div class="table-container">
                 <table class="data-table">
@@ -985,6 +1006,27 @@
                     + Agregar Servicio
                 </button>
             </div>
+
+            @if($currentServiceCount >= $maxServices)
+            <div style="background: linear-gradient(135deg, #1a2040 0%, #0f1c32 100%); border: 1px solid rgba(43,111,255,0.3); border-radius: 12px; padding: 16px 20px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <span style="font-size: 22px;">🛠️</span>
+                    <div>
+                        <p style="color: #fff; font-weight: 600; font-size: 14px; margin: 0 0 2px;">Límite de servicios alcanzado ({{ $currentServiceCount }}/{{ $maxServices }})</p>
+                        <p style="color: rgba(255,255,255,0.5); font-size: 12px; margin: 0;">
+                            @if($plan->id === 1)Plan CRECIMIENTO: hasta 6 servicios · Plan VISIÓN: hasta 9 servicios
+                            @else Plan VISIÓN: hasta 9 servicios @endif
+                        </p>
+                    </div>
+                </div>
+                <a href="https://syntiweb.com/planes" target="_blank" rel="noopener noreferrer"
+                   style="background: #2B6FFF; color: #fff; text-decoration: none; padding: 8px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; white-space: nowrap;"
+                   onmouseover="this.style.background='#1e5beb'"
+                   onmouseout="this.style.background='#2B6FFF'">
+                    Ver Planes ↗
+                </a>
+            </div>
+            @endif
 
             @if($services->count() > 0)
             <div class="table-container">
@@ -1297,6 +1339,24 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
     </div>
     @endforeach
 </div>
+
+            @if($plan->id === 1)
+            <div style="background: linear-gradient(135deg, #1a2040 0%, #0f1c32 100%); border: 1px solid rgba(43,111,255,0.3); border-radius: 12px; padding: 16px 20px; margin-top: 24px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <span style="font-size: 22px;">🎨</span>
+                    <div>
+                        <p style="color: #fff; font-weight: 600; font-size: 14px; margin: 0 0 2px;">Desbloquea más personalización</p>
+                        <p style="color: rgba(255,255,255,0.5); font-size: 12px; margin: 0;">Header Top + Sección Acerca de disponibles desde el Plan CRECIMIENTO</p>
+                    </div>
+                </div>
+                <a href="https://syntiweb.com/planes" target="_blank" rel="noopener noreferrer"
+                   style="background: #2B6FFF; color: #fff; text-decoration: none; padding: 8px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; white-space: nowrap;"
+                   onmouseover="this.style.background='#1e5beb'"
+                   onmouseout="this.style.background='#2B6FFF'">
+                    Ver Planes ↗
+                </a>
+            </div>
+            @endif
 
             <!-- Sección: Imágenes -->
             <div class="form-section" style="margin-top: 32px;">
@@ -1868,10 +1928,11 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
                         <span style="color: #fff; font-size: 15px; font-weight: 600;">Por definir</span>
                     </div>
                     
-                    <a href="#" style="color: #2B6FFF; font-size: 14px; font-weight: 500; text-decoration: none; margin-top: 8px; display: inline-block;"
+                    <a href="https://syntiweb.com/planes" target="_blank" rel="noopener noreferrer"
+                       style="color: #2B6FFF; font-size: 14px; font-weight: 500; text-decoration: none; margin-top: 8px; display: inline-block;"
                         onmouseover="this.style.textDecoration='underline'"
                         onmouseout="this.style.textDecoration='none'">
-                        Ver planes disponibles →
+                        Ver planes disponibles ↗
                     </a>
                 </div>
             </div>
@@ -1979,9 +2040,9 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
                     `Actualiza al Plan <strong style="color:#22c55e;">${next.name}</strong> y gestiona hasta ` +
                     `<strong style="color:#fff;">${nextQty} ${noun}</strong> en tu landing.`;
                 cta.innerHTML =
-                    `<button onclick="closeLimitModal()" style="background:#22c55e;color:#000;font-weight:700;border:none;` +
-                    `padding:10px 22px;border-radius:8px;cursor:pointer;font-size:13px;">` +
-                    `🚀 Quiero el Plan ${next.name}</button>`;
+                    `<a href="https://syntiweb.com/planes" target="_blank" rel="noopener noreferrer" style="background:#22c55e;color:#000;font-weight:700;text-decoration:none;` +
+                    `padding:10px 22px;border-radius:8px;display:inline-block;cursor:pointer;font-size:13px;">` +
+                    `\uD83D\DE80 Quiero el Plan ${next.name}</a>`;
             } else {
                 // Plan 3 — last plan → contact support
                 msg.innerHTML =

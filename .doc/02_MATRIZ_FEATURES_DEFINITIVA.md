@@ -15,7 +15,7 @@
 | **DISEÑO** | 5 Paletas predefinidas | 10 Paletas | 20 Paletas + Efectos visuales |
 | **TASA DÓLAR** | No visible | Visible (Auto-refresh cada hora) | Visible (Full control + histórico) |
 | **WHATSAPP** | 1 Botón (Productos) | Hasta 2 (Ventas/Soporte) | 2 con Filtro Horario |
-| **ANALYTICS** | Clicks por mes (básico) | Visitas diarias/mensuales | Avanzado (Top 3 productos) |
+| **ANALYTICS** | Clicks por mes (básico) | Visitas diarias/mensuales (medium) | Avanzado (Top 3 productos) |
 | **SECCIONES EXTRAS** | No | Header Top + Acerca de + Medios Pago | FAQ (5 items) + CTA especial |
 | **SEO** | Auto-generado básico | Mejorado (Meta tags por segmento) | Profundo (Schema + Análisis) |
 | **REDES SOCIALES** | 1 red social | Todas (símbolo + usuario) | Todas + personalización |
@@ -316,7 +316,9 @@ features_json: {
   "products_limit": 6,
   "services_limit": 3,
   "show_dollar_rate": false,
-  "analytics_level": "basic",
+  "analytics_level": "basic" (OPORTUNIDAD)
+  "analytics_level": "medium" (CRECIMIENTO)
+  "analytics_level": "advanced" (VISIÓN),
   "seo_level": "auto",
   ...
 }

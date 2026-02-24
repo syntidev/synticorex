@@ -31,6 +31,13 @@
 
     <div class="fixed inset-0 z-[9999] opacity-[0.02] pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"></div>
 
+    @if($tenant->plan_id >= 2)
+        {{-- Barra informativa: horario, teléfono, delivery --}}
+        @include('landing.partials.header-top')
+        {{-- Empuja el nav principal 40px hacia abajo para no solapar header-top --}}
+        <style>header.fixed { top: 40px !important; }</style>
+    @endif
+
     @include('landing.partials.header')
 
     <main>
@@ -42,6 +49,12 @@
 
                     @case('hero')
                         @include('landing.partials.hero', ['sConfig' => $sConfig])
+                        @break
+
+                    @case('about')
+                        @if($tenant->plan_id >= 2)
+                            @include('landing.partials.about', ['sConfig' => $sConfig])
+                        @endif
                         @break
 
                     @case('products')
@@ -71,7 +84,9 @@
                         @break
 
                     @case('faq')
-                        @include('landing.partials.faq', ['sConfig' => $sConfig])
+                        @if($tenant->plan_id >= 3)
+                            @include('landing.partials.faq', ['sConfig' => $sConfig])
+                        @endif
                         @break
 
                     @case('branches')
