@@ -8,6 +8,7 @@ use App\Models\ColorPalette;
 use App\Models\Tenant;
 use App\Models\TenantBranch;
 use App\Services\DollarRateService;
+use App\Services\FlyonUIThemeService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -479,16 +480,9 @@ class DashboardController extends Controller
                 $tenant->save();
             }
 
-            // 17 temas oficiales FlyonUI (única fuente de verdad)
-            $validThemes = [
-                'light', 'dark', 'black', 'claude', 'corporate', 'ghibli', 'gourmet',
-                'luxury', 'mintlify', 'pastel', 'perplexity', 'shadcn', 'slack',
-                'soft', 'spotify', 'valorant', 'vscode'
-            ];
-
-            // Validate input
+            // Validate input using FlyonUIThemeService (single source of truth)
             $validated = $request->validate([
-                'theme_slug' => 'required|string|in:' . implode(',', $validThemes)
+                'theme_slug' => 'required|string|' . FlyonUIThemeService::getValidationRule($tenant->plan_id)
             ]);
 
             // Get or create customization record
@@ -529,16 +523,9 @@ class DashboardController extends Controller
                 ->where('status', 'active')
                 ->firstOrFail();
 
-            // Lista de 17 temas válidos de FlyonUI
-            $validThemes = [
-                'light', 'dark', 'black', 'claude', 'corporate', 'ghibli',
-                'gourmet', 'luxury', 'mintlify', 'pastel', 'perplexity',
-                'shadcn', 'slack', 'soft', 'spotify', 'valorant', 'vscode'
-            ];
-
-            // Validate input
+            // Validate input using FlyonUIThemeService (single source of truth)
             $validated = $request->validate([
-                'theme' => 'required|string|in:' . implode(',', $validThemes)
+                'theme' => 'required|string|' . FlyonUIThemeService::getValidationRule($tenant->plan_id)
             ]);
 
             // Update settings JSON
