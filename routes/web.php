@@ -69,6 +69,10 @@ Route::post('/tenant/{tenantId}/update-social-networks',   [DashboardController:
 Route::post('/tenant/{tenantId}/dashboard/save-section-order', [DashboardController::class, 'saveSectionOrder'])
     ->name('tenant.dashboard.save-section-order');
 
+// Custom palette (Plan 3)
+Route::post('/tenant/{tenantId}/dashboard/save-custom-palette', [DashboardController::class, 'saveCustomPalette'])
+    ->name('tenant.dashboard.save-custom-palette');
+
 // Config actions
 Route::post('/tenant/{tenantId}/update-currency-config', [DashboardController::class, 'updateCurrencyConfig']);
 Route::post('/tenant/{tenantId}/update-pin',             [DashboardController::class, 'updatePin']);

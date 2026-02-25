@@ -1278,7 +1278,7 @@
         <!-- Tab: Diseño -->
         <div id="tab-diseno" class="tab-content">
 @php
-$currentTheme = $tenant->settings['engine_settings']['visual']['theme']['flyonui_theme'] ?? 'light';
+// activeTheme ya viene desde el controller
 
 // Colores hardcodeados de cada tema FlyonUI (primary, secondary, accent, neutral, base)
 $flyonuiThemes = [
@@ -1310,18 +1310,22 @@ $flyonuiThemes = [
     ['slug'=>'vscode',     'name'=>'VS Code',    'category'=>'Tech',         'font'=>'Fira Code',  'colors'=>['#007acc','#6c9ef8','#4ec9b0','#3c3c3c','#1e1e1e']],
 ];
 
+// Filter to only the themes available for this tenant's plan (from DB)
+$allowedSlugs = $palettes->pluck('slug')->toArray();
+$flyonuiThemes = array_values(array_filter($flyonuiThemes, fn($t) => in_array($t['slug'], $allowedSlugs)));
 $themesByCategory = collect($flyonuiThemes)->groupBy('category');
 @endphp
 
 <!-- Sección: Temas FlyonUI -->
 <div class="form-section">
     <h2 class="table-title">🎨 Tema Visual (FlyonUI)</h2>
-    <p class="table-subtitle" style="margin-bottom: 16px;">Selecciona uno de los 17 temas oficiales de FlyonUI</p>
+    <p class="table-subtitle" style="margin-bottom: 16px;">Elige el tema que mejor represente tu marca</p>
     
     <div id="theme-success-message" style="display: none; padding: 12px; background: rgba(0,204,102,0.2); border-radius: 8px; margin-bottom: 16px; color: #00cc66; font-size: 14px;">
         ✓ Tema actualizado correctamente
     </div>
 
+    {{-- activeTheme viene del controller --}}
     @foreach($themesByCategory as $category => $themes)
     <div style="margin-bottom: 28px;">
         <h3 style="font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.4); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1.5px;">
@@ -1349,8 +1353,10 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
                     position: relative;
                     overflow: hidden;
                     background: {{ $bg }};
-                ">
+                "
+            >
 
+                <!-- Barra de colores primarios -->
                 <!-- Barra de colores primarios -->
                 <div style="display: flex; height: 48px; border-radius: 10px 10px 0 0; overflow: hidden;">
                     @foreach(array_slice($theme['colors'], 0, 4) as $color)
@@ -1364,14 +1370,8 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
                         <span style="font-size: 12px; font-weight: 600; color: {{ $textColor }}; line-height: 1.2;">
                             {{ $theme['name'] }}
                         </span>
-                        @if($isActive)
-                        <span class="theme-check" style="
-                            width: 18px; height: 18px;
-                            background: #2B6FFF;
-                            border-radius: 50%;
-                            display: flex; align-items: center; justify-content: center;
-                            font-size: 11px; color: white; font-weight: 700; line-height: 1;
-                            flex-shrink: 0;">✓</span>
+                        @if($activeTheme === $theme['slug'])
+                        <div class="badge badge-primary" style="margin-left:8px;">✓</div>
                         @endif
                     </div>
                     @if(isset($theme['font']))
@@ -1386,6 +1386,46 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
     </div>
     @endforeach
 </div>
+
+@if($tenant->plan_id === 3)
+<div class="form-section" style="margin-top: 24px;">
+    <div class="divider" style="margin: 0 0 20px;">O personaliza tus colores</div>
+    <div class="card bg-base-200">
+        <div class="card-body">
+            <h3 class="card-title">🎨 Paleta Personalizada</h3>
+            @php
+            $customPalette = $tenant->settings['engine_settings']['visual']['custom_palette'] ?? [
+                'primary' => '#570DF8',
+                'secondary' => '#F000B9',
+                'accent' => '#1DCDBC',
+                'base' => '#FFFFFF'
+            ];
+            @endphp
+            <div class="grid grid-cols-2 gap-4">
+                <div class="form-control">
+                    <label class="label"><span class="label-text">Primary</span></label>
+                    <input type="color" id="custom-primary" class="input w-full h-10" value="{{ $customPalette['primary'] }}">
+                </div>
+                <div class="form-control">
+                    <label class="label"><span class="label-text">Secondary</span></label>
+                    <input type="color" id="custom-secondary" class="input w-full h-10" value="{{ $customPalette['secondary'] }}">
+                </div>
+                <div class="form-control">
+                    <label class="label"><span class="label-text">Accent</span></label>
+                    <input type="color" id="custom-accent" class="input w-full h-10" value="{{ $customPalette['accent'] }}">
+                </div>
+                <div class="form-control">
+                    <label class="label"><span class="label-text">Base</span></label>
+                    <input type="color" id="custom-base" class="input w-full h-10" value="{{ $customPalette['base'] }}">
+                </div>
+            </div>
+            <button onclick="applyCustomPalette()" class="btn btn-primary mt-4">
+                Aplicar Paleta Custom
+            </button>
+        </div>
+    </div>
+</div>
+@endif
 
             {{-- ══════════════════════════════════════════════════════════════
                  SECCIÓN: Orden de Secciones (Drag & Drop)
@@ -2992,49 +3032,60 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
             }
         }
 
-        // Design Tab: Theme Update (FlyonUI)
-        function updateTheme(themeSlug) {
-            const tenantId = {{ $tenant->id }};
-            const subdomain = '{{ $tenant->subdomain }}';
+        // Design Tab: Custom Palette (Plan 3)
+        function applyCustomPalette() {
+            const colors = {
+                primary: document.getElementById('custom-primary').value,
+                secondary: document.getElementById('custom-secondary').value,
+                accent: document.getElementById('custom-accent').value,
+                base: document.getElementById('custom-base').value
+            };
             
-            fetch(`/tenant/${tenantId}/update-palette`, {
+            fetch(`/tenant/{{ $tenant->id }}/dashboard/save-custom-palette`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
                 },
-                body: JSON.stringify({theme: themeSlug})
+                body: JSON.stringify(colors)
             })
             .then(r => r.json())
             .then(data => {
-                if (data.success) {
-                    // Update UI first
-                    document.querySelectorAll('.theme-card').forEach(card => {
-                        card.style.border = '2px solid transparent';
-                        const chk = card.querySelector('.theme-check');
-                        if (chk) chk.remove();
-                    });
-                    const selected = document.querySelector(
-                        `.theme-card[data-slug="${themeSlug}"]`
-                    );
-                    if (selected) {
-                        selected.style.border = '2px solid #2B6FFF';
-                        const chk = document.createElement('span');
-                        chk.className = 'theme-check';
-                        chk.textContent = '✓';
-                        chk.style.cssText = 'position:absolute;top:8px;right:8px;color:#2B6FFF;font-weight:700;font-size:16px;';
-                        selected.appendChild(chk);
-                    }
-                    // Show success with landing link
-                    const msg = document.getElementById('theme-success-message');
-                    if (msg) {
-                        msg.innerHTML = `Tema <strong>${themeSlug}</strong> aplicado. <a href="/${subdomain}" target="_blank" style="color:#3b82f6;text-decoration:underline;">Ver landing page &rarr;</a>`;
-                        msg.style.display = 'block';
-                        setTimeout(() => msg.style.display = 'none', 6000);
-                    }
+                if(data.success) {
+                    showToast('✅ Paleta personalizada guardada');
+                    
+                    // Aplicar HEX directo (FlyonUI acepta hex en vars CSS)
+                    document.documentElement.style.setProperty('--color-primary', colors.primary);
+                    document.documentElement.style.setProperty('--color-secondary', colors.secondary);
+                    document.documentElement.style.setProperty('--color-accent', colors.accent);
+                    document.documentElement.style.setProperty('--color-base-100', colors.base);
+                    
+                    setTimeout(() => location.reload(), 1500);
                 }
             })
-            .catch(e => console.error('Error:', e));
+            .catch(err => showToast('❌ Error al aplicar paleta'));
+        }
+
+        // Design Tab: Theme Update (FlyonUI)
+        function updateTheme(theme) {
+            fetch(`/tenant/{{ $tenant->id }}/update-theme`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({
+                    theme_slug: theme,
+                    clear_custom: true
+                })
+            })
+            .then(r => r.json())
+            .then(data => {
+                if(data.success) {
+                    showToast('✅ Tema ' + theme + ' aplicado');
+                    setTimeout(() => location.reload(), 1000);
+                }
+            });
         }
 
         // Design Tab: Upload Logo

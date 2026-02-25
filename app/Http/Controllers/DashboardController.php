@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Models\ColorPalette;
 use App\Models\Tenant;
 use App\Models\TenantBranch;
 use App\Services\DollarRateService;
@@ -62,8 +63,15 @@ class DashboardController extends Controller
             $isFrozen          = $tenant->isFrozen();
             $graceRemainingDays = $tenant->graceRemainingDays();
 
-            // REMOVED: Color palettes - Now using FlyonUI themes defined in view
-            // $colorPalettes = \App\Models\ColorPalette::where('is_active', true)->orderBy('name')->get();
+                        $palettes = ColorPalette::where('min_plan_id', '<=', $tenant->plan_id)
+                ->orderBy('min_plan_id')
+                ->get();
+
+            // THEME SYSTEM - Single Source of Truth: theme_slug
+            $currentTheme = $tenant->customization->theme_slug ?? 'light';
+            $customPalette = $tenant->settings['engine_settings']['visual']['custom_palette'] ?? null;
+            $hasCustomPalette = !empty($customPalette);
+            $activeTheme = $hasCustomPalette ? 'custom' : $currentTheme;
 
             return view('dashboard.index', compact(
                 'tenant',
@@ -76,7 +84,11 @@ class DashboardController extends Controller
                 'daysUntilExpiry',
                 'isExpiringSoon',
                 'isFrozen',
-                'graceRemainingDays'
+                'graceRemainingDays',
+                'palettes',
+                'currentTheme',
+                'activeTheme',
+                'hasCustomPalette'
             ));
         } catch (\Exception $e) {
             return response()->view('errors.404', [], 404);
@@ -458,6 +470,14 @@ class DashboardController extends Controller
             $tenant = Tenant::where('id', $tenantId)
                 ->where('status', 'active')
                 ->firstOrFail();
+
+                        // SIEMPRE limpiar custom palette cuando se selecciona tema FlyonUI
+            $settings = $tenant->settings ?? [];
+            if (isset($settings['engine_settings']['visual']['custom_palette'])) {
+                unset($settings['engine_settings']['visual']['custom_palette']);
+                $tenant->settings = $settings;
+                $tenant->save();
+            }
 
             // 17 temas oficiales FlyonUI (única fuente de verdad)
             $validThemes = [
@@ -977,6 +997,56 @@ class DashboardController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Error: ' . $e->getMessage(),
+            ], 422);
+        }
+    }
+
+        /**
+     * Save custom color palette for Plan 3 tenants.
+     */
+    public function saveCustomPalette(Request $request, int $tenantId): JsonResponse
+    {
+        try {
+            $tenant = Tenant::with('customization')
+                ->where('id', $tenantId)
+                ->where('status', 'active')
+                ->firstOrFail();
+
+            if ((int) $tenant->plan_id !== 3) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'La paleta personalizada solo está disponible en el Plan Visión'
+                ], 403);
+            }
+
+            // Guardar custom palette en settings
+            $settings = $tenant->settings ?? [];
+            $settings['engine_settings']['visual']['custom_palette'] = [
+                'primary'   => $request->primary,
+                'secondary' => $request->secondary,
+                'accent'    => $request->accent,
+                'base'      => $request->base,
+            ];
+            $tenant->settings = $settings;
+            $tenant->save();
+
+            // Marcar theme_slug como NULL (custom mode)
+            $customization = $tenant->customization;
+            if (!$customization) {
+                $customization = new \App\Models\TenantCustomization();
+                $customization->tenant_id = $tenant->id;
+            }
+            $customization->theme_slug = null;
+            $customization->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Paleta personalizada guardada'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error: ' . $e->getMessage()
             ], 422);
         }
     }
