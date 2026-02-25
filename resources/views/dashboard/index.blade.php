@@ -116,6 +116,54 @@
             border-bottom-color: #2B6FFF;
         }
 
+        /* Mobile Bottom Navigation */
+        .mobile-bottom-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 56px;
+            background: #0a1628;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-around;
+            z-index: 40;
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+
+        .mobile-bottom-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            height: 100%;
+            cursor: pointer;
+            color: rgba(255, 255, 255, 0.6);
+            border: none;
+            background: none;
+            padding: 0;
+            font-size: 24px;
+            transition: color 0.2s;
+            gap: 4px;
+            text-decoration: none;
+        }
+
+        .mobile-bottom-nav-item:hover,
+        .mobile-bottom-nav-item.active {
+            color: #2B6FFF;
+        }
+
+        .mobile-bottom-nav-label {
+            font-size: 11px;
+            font-weight: 500;
+            color: inherit;
+        }
+
         /* Content Area */
         .dashboard-content {
             padding: 24px;
@@ -652,7 +700,12 @@
 
             /* Navigation Tabs - Hide (use bottom nav instead) */
             .dashboard-nav {
-                display: none;
+                display: none !important;
+            }
+
+            /* Show Mobile Bottom Nav */
+            .mobile-bottom-nav {
+                display: flex;
             }
 
             /* Responsive Content Area */
@@ -769,6 +822,11 @@
             .dashboard-nav {
                 display: flex !important;
                 padding: 0 24px;
+            }
+
+            /* Hide Mobile Bottom Nav on Desktop */
+            .mobile-bottom-nav {
+                display: none !important;
             }
 
             .dashboard-content {
@@ -2362,29 +2420,69 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
 
     </main>
 
+    <!-- Mobile Bottom Navigation (visible only on mobile <640px) -->
+    <nav class="mobile-bottom-nav" role="navigation" aria-label="Navegación principal">
+        <button class="mobile-bottom-nav-item active" data-tab="info" aria-label="Información del negocio">
+            <span>📋</span>
+            <span class="mobile-bottom-nav-label">Info</span>
+        </button>
+        <button class="mobile-bottom-nav-item" data-tab="productos" aria-label="Gestión de productos">
+            <span>📦</span>
+            <span class="mobile-bottom-nav-label">Productos</span>
+        </button>
+        <button class="mobile-bottom-nav-item" data-tab="servicios" aria-label="Gestión de servicios">
+            <span>🛠️</span>
+            <span class="mobile-bottom-nav-label">Servicios</span>
+        </button>
+        <button class="mobile-bottom-nav-item" data-tab="diseno" aria-label="Personalización y diseño">
+            <span>🎨</span>
+            <span class="mobile-bottom-nav-label">Diseño</span>
+        </button>
+        <button class="mobile-bottom-nav-item" data-tab="config" aria-label="Más opciones">
+            <span>⋯</span>
+            <span class="mobile-bottom-nav-label">Más</span>
+        </button>
+    </nav>
+
     <script>
         // Tab Navigation
         document.addEventListener('DOMContentLoaded', function() {
             const tabs = document.querySelectorAll('.nav-tab');
+            const mobileNavItems = document.querySelectorAll('.mobile-bottom-nav-item');
             const contents = document.querySelectorAll('.tab-content');
 
+            // Helper function to switch tab
+            function switchTab(tabId) {
+                // Remove active class from all tabs/nav items and contents
+                tabs.forEach(t => t.classList.remove('active'));
+                mobileNavItems.forEach(m => m.classList.remove('active'));
+                contents.forEach(c => c.classList.remove('active'));
+
+                // Add active class to clicked tab and corresponding content
+                document.querySelector(`[data-tab="${tabId}"]`)?.classList.add('active');
+                document.querySelector(`.mobile-bottom-nav-item[data-tab="${tabId}"]`)?.classList.add('active');
+                document.getElementById('tab-' + tabId).classList.add('active');
+
+                // Init drag & drop the FIRST time the Diseño tab becomes visible
+                if (tabId === 'diseno' && !window._sortableReady) {
+                    window._sortableReady = true;
+                    window.initSortable();
+                }
+            }
+
+            // Desktop navigation tabs
             tabs.forEach(tab => {
                 tab.addEventListener('click', function() {
                     const tabId = this.getAttribute('data-tab');
+                    switchTab(tabId);
+                });
+            });
 
-                    // Remove active class from all tabs and contents
-                    tabs.forEach(t => t.classList.remove('active'));
-                    contents.forEach(c => c.classList.remove('active'));
-
-                    // Add active class to clicked tab and corresponding content
-                    this.classList.add('active');
-                    document.getElementById('tab-' + tabId).classList.add('active');
-
-                    // Init drag & drop the FIRST time the Diseño tab becomes visible
-                    if (tabId === 'diseno' && !window._sortableReady) {
-                        window._sortableReady = true;
-                        window.initSortable();
-                    }
+            // Mobile bottom navigation
+            mobileNavItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+                    switchTab(tabId);
                 });
             });
         });
