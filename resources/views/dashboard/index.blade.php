@@ -1572,13 +1572,13 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
                                     @endif
                                 </span>
 
-                                {{-- FlyonUI Switch --}}
+                                {{-- Toggle de visibilidad --}}
                                 @if($hasAccess)
                                     <input type="checkbox"
-                                           class="switch switch-primary switch-sm section-toggle"
+                                           class="toggle toggle-primary toggle-sm"
                                            id="section-{{ $key }}"
-                                           data-section="{{ $key }}"
-                                           {{ $isVisible ? 'checked' : '' }}>
+                                           @checked($isVisible)
+                                           onchange="toggleSection('{{ $key }}', this.checked)">
                                 @endif
                             </div>
                         </div>
@@ -3930,12 +3930,7 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
                 onEnd: function() { saveSectionsOrder(); }
             });
 
-            // Attach change listeners to each section toggle switch
-            document.querySelectorAll('.section-toggle').forEach(toggle => {
-                toggle.addEventListener('change', function() {
-                    saveSectionsOrder();
-                }, false);
-            });
+            // Section toggles now use onchange="toggleSection()" directly on each input
 
             console.log('\u2705 SortableJS inicializado correctamente');
         };
@@ -3964,6 +3959,27 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
                 else              { window.showToast('\u274c Error al guardar', 'error'); }
             })
             .catch(() => window.showToast('\u274c Error de red', 'error'));
+        }
+
+        // ── Toggle individual de sección ──────────────────────────────
+        function toggleSection(section, visible) {
+            fetch(`/tenant/{{ $tenant->id }}/dashboard/toggle-section`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ section, visible })
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    window.showToast('✅ ' + (visible ? 'Sección activada' : 'Sección desactivada'), 'success');
+                } else {
+                    window.showToast('❌ Error al guardar', 'error');
+                }
+            })
+            .catch(() => window.showToast('❌ Error de red', 'error'));
         }
     </script>
     </div>{{-- /lg:ps-64 content wrapper --}}
