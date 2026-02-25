@@ -1538,7 +1538,7 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
                             $hasAccess    = $tenant->plan_id >= $planRequired;
                         @endphp
 
-                        <div class="section-item {{ $hasAccess ? '' : 'opacity-40 pointer-events-none' }}"
+                        <div class="section-item {{ $hasAccess ? '' : 'no-drag opacity-40 pointer-events-none' }}"
                              data-section="{{ $key }}"
                              data-plan="{{ $planRequired }}">
                             <div class="flex items-center gap-3 px-3 py-2.5 rounded-box
@@ -3628,27 +3628,32 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
         function togglePayMethod(key) {
             const check = document.getElementById('pay-check-' + key);
             const label = document.getElementById('pay-label-' + key);
-            const icon  = document.getElementById('pay-check-icon-' + key);
-            if (!check) return;
+            if (!check || !label) return;
             check.checked = !check.checked;
-            const isDivisa   = divisaKeys.includes(key);
-            const activeColor = isDivisa ? '#fbbf24' : '#2B6FFF';
-            const activeBg    = isDivisa ? '#2a1f05' : '#1a2f5e';
-            label.style.borderColor = check.checked ? activeColor : '#1e2a42';
-            label.style.background  = check.checked ? activeBg    : 'transparent';
-            icon.style.color        = check.checked ? activeColor : '#1e2a42';
+            // Use classList instead of inline styles (Tailwind classes take precedence)
+            label.classList.toggle('bg-primary/20', check.checked);
+            label.classList.toggle('border-primary/50', check.checked);
+            label.classList.toggle('text-primary', check.checked);
+            label.classList.toggle('font-semibold', check.checked);
+            label.classList.toggle('bg-base-200/50', !check.checked);
+            label.classList.toggle('border-base-content/10', !check.checked);
+            label.classList.toggle('text-base-content', !check.checked);
             updatePaymentPreview();
         }
 
         function toggleCurrency(key) {
             const check = document.getElementById('curr-check-' + key);
             const label = document.getElementById('curr-label-' + key);
-            const icon  = document.getElementById('curr-check-icon-' + key);
-            if (!check) return;
+            if (!check || !label) return;
             check.checked = !check.checked;
-            label.style.borderColor = check.checked ? '#2B6FFF' : '#1e2a42';
-            label.style.background  = check.checked ? '#1a2f5e' : 'transparent';
-            icon.style.color        = check.checked ? '#2B6FFF' : '#1e2a42';
+            // Use classList instead of inline styles
+            label.classList.toggle('bg-primary/20', check.checked);
+            label.classList.toggle('border-primary/50', check.checked);
+            label.classList.toggle('text-primary', check.checked);
+            label.classList.toggle('font-semibold', check.checked);
+            label.classList.toggle('bg-base-200/50', !check.checked);
+            label.classList.toggle('border-base-content/10', !check.checked);
+            label.classList.toggle('text-base-content', !check.checked);
             updatePaymentPreview();
         }
 
@@ -3687,12 +3692,16 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
         function toggleBranchPayMethod(branchId, key) {
             const check = document.getElementById('pay-branch-check-' + branchId + '-' + key);
             const label = document.getElementById('pay-branch-label-' + branchId + '-' + key);
-            const icon  = document.getElementById('pay-branch-check-icon-' + branchId + '-' + key);
-            if (!check) return;
+            if (!check || !label) return;
             check.checked = !check.checked;
-            label.style.borderColor = check.checked ? '#a78bfa60' : '#1e2a42';
-            label.style.background  = check.checked ? '#2d1f5e' : 'transparent';
-            icon.style.color        = check.checked ? '#a78bfa' : '#1e2a42';
+            // Use classList instead of inline styles
+            label.classList.toggle('bg-primary/20', check.checked);
+            label.classList.toggle('border-primary/50', check.checked);
+            label.classList.toggle('text-primary', check.checked);
+            label.classList.toggle('font-semibold', check.checked);
+            label.classList.toggle('bg-base-100', !check.checked);
+            label.classList.toggle('border-base-content/10', !check.checked);
+            label.classList.toggle('text-base-content', !check.checked);
         }
         @endif
 
@@ -3916,15 +3925,16 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
                 animation: 200,
                 ghostClass: 'sortable-ghost',
                 dragClass: 'sortable-drag',
-                filter: '.opacity-50',
+                filter: '.no-drag',      // Ignore items without access
                 preventOnFilter: false,
                 onEnd: function() { saveSectionsOrder(); }
             });
 
-            sortableEl.addEventListener('change', function(e) {
-                if (!e.target.classList.contains('section-toggle')) return;
-                // FlyonUI's switch handles styling automatically
-                saveSectionsOrder();
+            // Attach change listeners to each section toggle switch
+            document.querySelectorAll('.section-toggle').forEach(toggle => {
+                toggle.addEventListener('change', function() {
+                    saveSectionsOrder();
+                }, false);
             });
 
             console.log('\u2705 SortableJS inicializado correctamente');
