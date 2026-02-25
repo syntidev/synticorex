@@ -916,15 +916,15 @@
                                 </td>
                                 <td>
                                     <div class="flex items-center gap-1">
-                                        <button class="btn btn-circle btn-text btn-sm text-base-content/60 hover:text-primary"
-                                                onclick="editProduct({{ $product->id }})"
-                                                title="Editar" aria-label="Editar producto">
-                                            <span class="icon-[tabler--pencil] size-4" aria-hidden="true"></span>
+                                        <button onclick="editProduct({{ $product->id }})" class="btn btn-sm btn-ghost" title="Editar" aria-label="Editar producto">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                            </svg>
                                         </button>
-                                        <button class="btn btn-circle btn-text btn-sm text-base-content/60 hover:text-error"
-                                                onclick="deleteProduct({{ $product->id }})"
-                                                title="Eliminar" aria-label="Eliminar producto">
-                                            <span class="icon-[tabler--trash] size-4" aria-hidden="true"></span>
+                                        <button onclick="deleteProduct({{ $product->id }})" class="btn btn-sm btn-ghost text-error" title="Eliminar" aria-label="Eliminar producto">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                            </svg>
                                         </button>
                                     </div>
                                 </td>
@@ -1168,15 +1168,15 @@
                                 </td>
                                 <td>
                                     <div class="flex items-center gap-1">
-                                        <button class="btn btn-circle btn-text btn-sm text-base-content/60 hover:text-secondary"
-                                                onclick="editService({{ $service->id }})"
-                                                title="Editar" aria-label="Editar servicio">
-                                            <span class="icon-[tabler--pencil] size-4" aria-hidden="true"></span>
+                                        <button onclick="editService({{ $service->id }})" class="btn btn-sm btn-ghost" title="Editar" aria-label="Editar servicio">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                            </svg>
                                         </button>
-                                        <button class="btn btn-circle btn-text btn-sm text-base-content/60 hover:text-error"
-                                                onclick="deleteService({{ $service->id }})"
-                                                title="Eliminar" aria-label="Eliminar servicio">
-                                            <span class="icon-[tabler--trash] size-4" aria-hidden="true"></span>
+                                        <button onclick="deleteService({{ $service->id }})" class="btn btn-sm btn-ghost text-error" title="Eliminar" aria-label="Eliminar servicio">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                            </svg>
                                         </button>
                                     </div>
                                 </td>
