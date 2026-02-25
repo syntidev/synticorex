@@ -1107,7 +1107,6 @@
                 </div>
                 @endif
             </div>
-            @endif
         </div>
 
         <!-- Modal: Servicio -->
