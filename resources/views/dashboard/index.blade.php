@@ -10,14 +10,85 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
     <style>
+        /* ══════════════════════════════════════════════════════════
+           SYNTIWEB DESIGN SYSTEM — Dashboard
+           Primario: #4D8FFF  |  Font display: Plus Jakarta Sans
+        ══════════════════════════════════════════════════════════ */
+        :root {
+            --synti: #4D8FFF;
+            --synti-glow: rgba(77,143,255,0.14);
+            --synti-bdr:  rgba(77,143,255,0.22);
+            --synti-soft: rgba(77,143,255,0.10);
+        }
+
         /* ── Tab visibility ─────────────────────────────────────────── */
         .tab-content { display: none; }
         .tab-content.active { display: block; }
+
+        /* ── Display font override ──────────────────────────────────── */
+        .card-title, .modal-title-display {
+            font-family: 'Plus Jakarta Sans', sans-serif !important;
+            color: var(--synti) !important;
+            letter-spacing: -0.3px;
+        }
+        h2.card-title, h3.card-title { color: var(--synti) !important; }
+
+        /* ── Sidebar branding & active state ────────────────────────── */
+        .sidebar-logo-text {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            line-height: 1;
+        }
+        .sidebar-logo-synti { color: #4D8FFF; }
+        .sidebar-logo-web   { color: var(--color-base-content); }
+
+        /* Active nav item — gradient derivado del azul SYNTIweb */
+        .menu li button.menu-active,
+        .menu li button[aria-selected="true"] {
+            background: linear-gradient(90deg, rgba(77,143,255,0.18) 0%, rgba(77,143,255,0.04) 100%) !important;
+            color: #4D8FFF !important;
+            border-left: 3px solid #4D8FFF;
+            padding-left: calc(0.75rem - 3px);
+            font-weight: 600;
+        }
+        .menu li button:not(.menu-active):not([aria-selected="true"]):hover {
+            background: rgba(77,143,255,0.07) !important;
+            color: #4D8FFF !important;
+        }
+
+        /* ── Breathing dot (is_open indicator) ─────────────────────── */
+        @keyframes synti-breathe {
+            0%,100% { opacity:1; box-shadow: 0 0 0 0 rgba(34,197,94,0.5); }
+            50%      { opacity:.7; box-shadow: 0 0 0 4px rgba(34,197,94,0); }
+        }
+        @keyframes synti-breathe-off {
+            0%,100% { opacity:1; }
+            50%      { opacity:.5; }
+        }
+        .dot-online {
+            display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+            background: #22c55e; flex-shrink: 0;
+            animation: synti-breathe 2.5s ease-in-out infinite;
+        }
+        .dot-offline {
+            display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+            background: #ef4444; flex-shrink: 0;
+            animation: synti-breathe-off 2s ease-in-out infinite;
+        }
+
+        /* ── Clock display ──────────────────────────────────────────── */
+        #live-clock {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.8rem; font-weight: 700;
+            color: var(--synti); letter-spacing: 0.5px;
+        }
 
         /* ── Section cards (FlyonUI variables) ──────────────────────── */
         .form-section {
@@ -28,10 +99,9 @@
             margin-bottom: 1.5rem;
         }
         .form-section-title {
-            font-size: 1.125rem;
-            font-weight: 600;
-            margin-bottom: 1.25rem;
-            color: var(--color-base-content);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 1.125rem; font-weight: 700;
+            margin-bottom: 1.25rem; color: var(--synti);
         }
         .form-grid {
             display: grid;
@@ -40,78 +110,62 @@
         }
         .form-group { margin-bottom: 1rem; }
         .form-label {
-            display: block;
-            font-size: 0.875rem;
-            font-weight: 500;
-            color: var(--color-base-content);
-            margin-bottom: 0.375rem;
+            display: block; font-size: 0.875rem; font-weight: 500;
+            color: var(--color-base-content); margin-bottom: 0.375rem;
         }
-        .form-input,
-        .form-textarea,
-        .form-select {
-            width: 100%;
-            padding: 0.625rem 0.75rem;
+        .form-input, .form-textarea, .form-select {
+            width: 100%; padding: 0.625rem 0.75rem;
             background: var(--color-base-200);
             border: 1px solid color-mix(in oklch, var(--color-base-content) 20%, transparent);
             border-radius: var(--radius-field, 0.375rem);
             color: var(--color-base-content);
-            font-size: 0.875rem;
-            font-family: inherit;
+            font-size: 0.875rem; font-family: inherit;
             transition: border-color 0.2s, box-shadow 0.2s;
         }
         .form-input:focus, .form-textarea:focus, .form-select:focus {
             outline: none;
-            border-color: var(--color-primary);
-            box-shadow: 0 0 0 3px color-mix(in oklch, var(--color-primary) 25%, transparent);
+            border-color: var(--synti);
+            box-shadow: 0 0 0 3px var(--synti-glow);
         }
         .form-textarea { min-height: 100px; resize: vertical; }
         .form-actions { display: flex; gap: 0.75rem; margin-top: 1.25rem; flex-wrap: wrap; }
 
         /* Focus visible (WCAG 2.4.7) */
-        :focus-visible {
-            outline: 2px solid var(--color-primary) !important;
-            outline-offset: 2px !important;
-        }
-        .form-input:focus-visible, .form-textarea:focus-visible, .form-select:focus-visible {
-            outline: none !important;
-        }
+        :focus-visible { outline: 2px solid var(--synti) !important; outline-offset: 2px !important; }
+        .form-input:focus-visible, .form-textarea:focus-visible, .form-select:focus-visible { outline: none !important; }
 
-        /* ── Legacy button classes (gradual migration) ──────────────── */
+        /* ── Buttons ─────────────────────────────────────────────────── */
         .btn-primary {
-            background: var(--color-primary);
-            color: var(--color-primary-content, #fff);
-            border: none; padding: 0.625rem 1.25rem;
-            border-radius: var(--radius-field); font-size: 0.875rem;
-            font-weight: 600; cursor: pointer; transition: opacity 0.2s;
+            background: var(--synti); color: #fff; border: none;
+            padding: 0.625rem 1.25rem; border-radius: var(--radius-field);
+            font-size: 0.875rem; font-weight: 600; cursor: pointer; transition: opacity 0.2s;
         }
         .btn-primary:hover { opacity: 0.88; }
         .btn-secondary {
-            background: transparent;
-            color: var(--color-primary);
-            border: 1px solid var(--color-primary);
-            padding: 0.625rem 1.25rem;
-            border-radius: var(--radius-field); font-size: 0.875rem;
-            font-weight: 600; cursor: pointer; transition: all 0.2s;
+            background: transparent; color: var(--synti);
+            border: 1px solid var(--synti);
+            padding: 0.625rem 1.25rem; border-radius: var(--radius-field);
+            font-size: 0.875rem; font-weight: 600; cursor: pointer; transition: all 0.2s;
         }
-        .btn-secondary:hover { background: var(--color-primary); color: var(--color-primary-content, #fff); }
+        .btn-secondary:hover { background: var(--synti); color: #fff; }
         .btn-add {
-            background: var(--color-primary); color: var(--color-primary-content, #fff);
-            border: none; padding: 0.625rem 1.25rem; border-radius: var(--radius-field);
+            background: var(--synti); color: #fff; border: none;
+            padding: 0.625rem 1.25rem; border-radius: var(--radius-field);
             font-size: 0.875rem; font-weight: 600; cursor: pointer; transition: opacity 0.2s;
         }
         .btn-add:hover:not(:disabled) { opacity: 0.88; }
         .btn-add:disabled { opacity: 0.45; cursor: not-allowed; }
         .btn-icon {
             background: none; border: none;
-            color: color-mix(in oklch, var(--color-base-content) 60%, transparent);
+            color: color-mix(in oklch, var(--color-base-content) 55%, transparent);
             cursor: pointer; padding: 0.375rem; border-radius: var(--radius-field);
-            transition: all 0.2s; font-size: 0.875rem; display: inline-flex; align-items: center;
+            transition: all 0.2s; font-size: 0.875rem;
+            display: inline-flex; align-items: center; justify-content: center;
         }
         .btn-icon:hover {
-            background: color-mix(in oklch, var(--color-base-content) 10%, transparent);
-            color: var(--color-primary);
+            background: var(--synti-soft); color: var(--synti);
         }
-        .btn-danger:hover { color: var(--color-error); }
+        .btn-danger:hover { color: var(--color-error) !important; }
 
         /* ── Placeholder / Empty state ───────────────────────────────── */
         .placeholder-content, .empty-state {
@@ -129,7 +183,10 @@
             display: flex; justify-content: space-between;
             align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.75rem;
         }
-        .table-title { font-size: 1.125rem; font-weight: 600; color: var(--color-base-content); }
+        .table-title {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 1.125rem; font-weight: 700; color: var(--synti);
+        }
         .table-subtitle {
             font-size: 0.8125rem; margin-top: 0.25rem;
             color: color-mix(in oklch, var(--color-base-content) 55%, transparent);
@@ -148,17 +205,13 @@
             border-bottom: 1px solid color-mix(in oklch, var(--color-base-content) 12%, transparent);
         }
         .data-table td {
-            padding: 0.75rem 1rem; font-size: 0.875rem;
-            color: var(--color-base-content);
+            padding: 0.75rem 1rem; font-size: 0.875rem; color: var(--color-base-content);
             border-bottom: 1px solid color-mix(in oklch, var(--color-base-content) 7%, transparent);
         }
-        .data-table tbody tr:hover {
-            background: color-mix(in oklch, var(--color-primary) 5%, transparent);
-        }
+        .data-table tbody tr:hover { background: var(--synti-soft); }
         .product-image {
             width: 48px; height: 48px; border-radius: var(--radius-field);
-            object-fit: cover;
-            background: var(--color-base-200);
+            object-fit: cover; background: var(--color-base-200);
         }
 
         /* ── Badges ──────────────────────────────────────────────────── */
@@ -173,8 +226,9 @@
         /* ── CRUD Modals ─────────────────────────────────────────────── */
         .crud-overlay {
             display: none; position: fixed; inset: 0;
-            background: rgba(0,0,0,0.65); z-index: 9999;
-            align-items: center; justify-content: center; padding: 1rem;
+            background: rgba(0,0,0,0.55);
+            backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+            z-index: 9999; align-items: center; justify-content: center; padding: 1rem;
         }
         .crud-overlay.show { display: flex; }
         .crud-dialog {
@@ -182,114 +236,111 @@
             border-radius: var(--radius-box); width: 100%;
             max-width: 600px; max-height: 90vh; overflow-y: auto;
             position: relative; z-index: 10000;
-            box-shadow: 0 25px 60px rgba(0,0,0,0.35);
-            border: 1px solid color-mix(in oklch, var(--color-base-content) 12%, transparent);
+            box-shadow: 0 25px 80px rgba(0,0,0,0.25), 0 0 0 1px var(--synti-bdr);
+            border: 1px solid color-mix(in oklch, var(--color-base-content) 10%, transparent);
         }
         .crud-dialog-header {
             padding: 1.25rem 1.5rem;
             border-bottom: 1px solid color-mix(in oklch, var(--color-base-content) 10%, transparent);
             display: flex; justify-content: space-between; align-items: center;
+            background: linear-gradient(135deg, var(--synti-soft) 0%, transparent 60%);
         }
         .crud-dialog-title {
-            font-size: 1.125rem; font-weight: 600; color: var(--color-base-content);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 1.1rem; font-weight: 700; color: var(--synti);
         }
-
         .crud-dialog-close {
-            background: none;
-            border: none;
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 24px;
-            cursor: pointer;
-            padding: 0;
-            width: 32px;
-            height: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 4px;
-            transition: all 0.2s;
+            background: color-mix(in oklch, var(--color-base-content) 8%, transparent);
+            border: 1px solid color-mix(in oklch, var(--color-base-content) 12%, transparent);
+            color: var(--color-base-content);
+            font-size: 1.125rem; cursor: pointer;
+            width: 32px; height: 32px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: var(--radius-field); transition: all 0.2s;
         }
-
         .crud-dialog-close:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: #ffffff;
+            background: var(--synti-soft);
+            border-color: var(--synti-bdr);
+            color: var(--synti);
         }
+        .crud-dialog-body { padding: 1.5rem; }
 
-        .crud-dialog-body {
-            padding: 24px;
-        }
-
-        .image-preview {
-            margin-bottom: 16px;
-            text-align: center;
-        }
-
+        /* ── Image preview ───────────────────────────────────────────── */
+        .image-preview { margin-bottom: 1rem; text-align: center; }
         .image-preview img {
-            max-width: 200px;
-            max-height: 200px;
-            border-radius: 8px;
-            object-fit: cover;
+            max-width: 200px; max-height: 200px;
+            border-radius: var(--radius-box); object-fit: cover;
+            border: 2px solid var(--synti-bdr);
         }
 
-        /* Gallery thumbnail styles (Plan 3) */
-        .gallery-thumb {
-            position: relative;
-            display: inline-block;
-        }
-
+        /* ── Gallery thumbs (Plan 3) ─────────────────────────────────── */
+        .gallery-thumb { position: relative; display: inline-block; }
         .gallery-thumb img {
-            width: 100px;
-            height: 100px;
-            border-radius: 6px;
-            object-fit: cover;
-            border: 2px solid rgba(255,255,255,0.15);
+            width: 100px; height: 100px; border-radius: 6px; object-fit: cover;
+            border: 2px solid color-mix(in oklch, var(--color-base-content) 15%, transparent);
         }
-
         .gallery-thumb-delete {
-            position: absolute;
-            top: -6px;
-            right: -6px;
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            background: #ef4444;
-            color: #fff;
-            border: none;
-            font-size: 13px;
-            line-height: 22px;
-            text-align: center;
-            cursor: pointer;
-            padding: 0;
+            position: absolute; top: -6px; right: -6px;
+            width: 22px; height: 22px; border-radius: 50%;
+            background: var(--color-error); color: #fff; border: none;
+            font-size: 13px; line-height: 22px; text-align: center;
+            cursor: pointer; padding: 0; display: flex; align-items: center; justify-content: center;
         }
-
-        .gallery-thumb-delete:hover {
-            background: #dc2626;
-        }
-
+        .gallery-thumb-delete:hover { opacity: 0.85; }
         .gallery-preview-thumb img {
-            width: 80px;
-            height: 80px;
-            border-radius: 6px;
-            object-fit: cover;
-            border: 2px dashed rgba(255,255,255,0.3);
+            width: 80px; height: 80px; border-radius: 6px; object-fit: cover;
+            border: 2px dashed var(--synti-bdr);
         }
 
-        /* Icon Picker */
+        /* ── Icon Picker ─────────────────────────────────────────────── */
         #icon-picker-grid {
             scrollbar-width: thin;
-            scrollbar-color: rgba(255,255,255,0.15) transparent;
+            scrollbar-color: var(--synti-bdr) transparent;
         }
         #icon-picker-grid::-webkit-scrollbar { width: 5px; }
         #icon-picker-grid::-webkit-scrollbar-track { background: transparent; }
-        #icon-picker-grid::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 3px; }
-
+        #icon-picker-grid::-webkit-scrollbar-thumb { background: var(--synti-bdr); border-radius: 3px; }
+        .icon-pick-item {
+            transition: all 0.18s ease;
+            border: 1px solid color-mix(in oklch, var(--color-base-content) 10%, transparent) !important;
+            background: var(--color-base-200) !important;
+            color: var(--color-base-content) !important;
+        }
         .icon-pick-item:hover {
-            background: rgba(43,111,255,0.15) !important;
-            border-color: rgba(43,111,255,0.4) !important;
-            transform: translateY(-1px);
+            background: var(--synti-soft) !important;
+            border-color: var(--synti-bdr) !important;
+            color: var(--synti) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px var(--synti-glow) !important;
+        }
+        .icon-pick-item.selected {
+            background: var(--synti) !important;
+            border-color: var(--synti) !important;
+            color: #fff !important;
+            box-shadow: 0 4px 14px var(--synti-glow) !important;
         }
 
-        /* ── Service mode bar ────────────────────────────────────────── */
+        /* ── Segmented control (Ícono / Imagen) ─────────────────────── */
+        .svc-segment {
+            display: inline-flex; align-items: center;
+            background: var(--color-base-200);
+            border-radius: var(--radius-box); padding: 3px; gap: 2px;
+        }
+        .svc-segment button {
+            display: flex; align-items: center; gap: 6px;
+            padding: 0.45rem 1rem; border-radius: calc(var(--radius-box) - 3px);
+            font-size: 0.8125rem; font-weight: 600; border: none; cursor: pointer;
+            transition: all 0.2s; color: color-mix(in oklch, var(--color-base-content) 55%, transparent);
+            background: transparent;
+        }
+        .svc-segment button.seg-active {
+            background: var(--color-base-100);
+            color: var(--synti);
+            box-shadow: 0 1px 6px rgba(0,0,0,0.10);
+        }
+        .svc-segment button .seg-icon { font-size: 1rem; }
+
+        /* ── Service mode bar (legacy global selector on tab-servicios) ── */
         .svc-mode-bar {
             display: flex; gap: 0; border-radius: var(--radius-box); overflow: hidden;
             border: 1px solid color-mix(in oklch, var(--color-base-content) 12%, transparent);
@@ -301,10 +352,10 @@
             background: var(--color-base-200); color: var(--color-base-content);
         }
         .svc-mode-bar button.active {
-            background: var(--color-primary); color: var(--color-primary-content, #fff);
+            background: var(--synti); color: #fff;
         }
 
-        /* ── Legacy toggle (keep for status toggle) ──────────────────── */
+        /* ── Legacy toggle ───────────────────────────────────────────── */
         .toggle-switch { position: relative; display: inline-block; width: 48px; height: 24px; }
         .toggle-switch input { opacity: 0; width: 0; height: 0; }
         .toggle-slider {
@@ -320,28 +371,20 @@
         .toggle-switch input:checked + .toggle-slider { background-color: var(--color-success); }
         .toggle-switch input:checked + .toggle-slider:before { transform: translateX(24px); }
 
-        /* ═══════════════════════════════════════════════════════════════════════ */
-        /* RESPONSIVE BREAKPOINTS (components — layout handled by FlyonUI)      */
-        /* ═══════════════════════════════════════════════════════════════════════ */
-
-        /* Mobile S: ≤374px */
+        /* ═══════════════════════════════════════════════════════════════
+           RESPONSIVE
+        ═══════════════════════════════════════════════════════════════ */
         @media (max-width: 374px) {
             .form-section { padding: 16px; margin-bottom: 16px; }
-            .form-section-title { font-size: 16px; margin-bottom: 16px; }
             .form-grid { grid-template-columns: 1fr; }
             .btn-primary, .btn-secondary { min-height: 44px; padding: 10px 12px; }
         }
-
-        /* Mobile M/L: ≤639px */
         @media (max-width: 639px) {
             .form-section { padding: 16px; margin-bottom: 16px; }
-            .form-section-title { font-size: 16px; margin-bottom: 12px; }
             .form-grid { grid-template-columns: 1fr; gap: 12px; }
             .form-group { margin-bottom: 12px; }
             .form-input, .form-textarea, .form-select { padding: 10px 12px; }
             .form-actions { flex-wrap: wrap; }
-
-            /* Tables → Card layout */
             .data-table thead { display: none; }
             .data-table tbody tr {
                 display: block; margin-bottom: 0.75rem;
@@ -350,40 +393,32 @@
                 border: 1px solid color-mix(in oklch, var(--color-base-content) 10%, transparent);
             }
             .data-table td {
-                display: flex; justify-content: space-between;
-                align-items: center; padding: 0.5rem 0;
+                display: flex; justify-content: space-between; align-items: center;
+                padding: 0.5rem 0;
                 border-bottom: 1px solid color-mix(in oklch, var(--color-base-content) 7%, transparent);
                 font-size: 0.8125rem;
             }
             .data-table td:last-child { border-bottom: none; }
             .data-table td::before {
-                content: attr(data-label);
-                font-weight: 600;
-                color: rgba(255,255,255,0.6);
-                flex-basis: 90px;
-                flex-shrink: 0;
-                font-size: 12px;
+                content: attr(data-label); font-weight: 600;
+                color: color-mix(in oklch, var(--color-base-content) 55%, transparent);
+                flex-basis: 90px; flex-shrink: 0; font-size: 12px;
             }
             .product-image { width: 48px; height: 48px; object-fit: cover; border-radius: 4px; aspect-ratio: 1; }
             .btn-primary, .btn-secondary { min-height: 44px; min-width: 44px; padding: 10px 12px; font-size: 13px; }
-            .action-button { min-height: 44px; min-width: 44px; display: inline-flex; align-items: center; justify-content: center; font-size: 18px; }
+            .action-button { min-height: 44px; min-width: 44px; display: inline-flex; align-items: center; justify-content: center; }
             .theme-grid { grid-template-columns: repeat(2, 1fr) !important; }
+            #header-extras { display: none !important; }
         }
-
-        /* Tablet portrait: 640-767px */
         @media (max-width: 767px) {
             .form-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
             .form-section { padding: 18px; margin-bottom: 18px; }
             .theme-grid { grid-template-columns: repeat(3, 1fr) !important; }
         }
-
-        /* Tablet landscape / Laptop: 768-1023px */
         @media (max-width: 1023px) {
             .form-grid { grid-template-columns: repeat(2, 1fr); }
             .theme-grid { grid-template-columns: repeat(4, 1fr) !important; }
         }
-
-        /* Desktop: 1024px+ */
         @media (min-width: 1024px) {
             .form-grid { grid-template-columns: repeat(3, 1fr); }
             .data-table tbody tr { display: table-row !important; }
@@ -406,29 +441,66 @@
 <div class="flex min-h-screen flex-col">
 
     <!-- ══ HEADER NAVBAR ══════════════════════════════════════════════════ -->
-    <div class="navbar bg-base-100 border-base-content/20 lg:ps-64 sticky top-0 z-50 border-b min-h-14 px-4">
-        <div class="navbar-start gap-2">
-            {{-- Hamburger: solo mobile/tablet --}}
+    <div class="navbar bg-base-100 border-base-content/10 lg:ps-64 sticky top-0 z-50 border-b min-h-14 px-3 gap-2"
+         style="box-shadow: 0 1px 12px rgba(77,143,255,0.06);">
+
+        {{-- ── Start: hamburger + nombre negocio con dot de estado ── --}}
+        <div class="navbar-start gap-2 min-w-0">
             <button type="button"
-                    class="btn btn-text btn-square btn-sm lg:hidden"
+                    class="btn btn-text btn-square btn-sm lg:hidden shrink-0"
                     aria-haspopup="dialog" aria-expanded="false"
                     aria-controls="layout-sidebar"
                     data-overlay="#layout-sidebar">
                 <span class="icon-[tabler--menu-2] size-5" aria-hidden="true"></span>
                 <span class="sr-only">Abrir menú</span>
             </button>
-            {{-- Logo visible solo en mobile (en desktop está en sidebar) --}}
-            <span class="text-primary font-bold text-lg lg:hidden">SYNTI<em class="text-base-content not-italic">web</em></span>
-        </div>
-        <div class="navbar-end gap-2">
-            <span class="text-base-content/70 hidden sm:block text-sm font-medium truncate max-w-48">
-                {{ $tenant->business_name }}
+            {{-- Logo mobile --}}
+            <span class="sidebar-logo-text text-base lg:hidden shrink-0">
+                <span class="sidebar-logo-synti">SYNTI</span><span class="sidebar-logo-web">web</span>
             </span>
+            {{-- Negocio + dot de estado (desktop) --}}
+            <div class="hidden lg:flex items-center gap-2 min-w-0">
+                <span class="{{ $tenant->is_open ? 'dot-online' : 'dot-offline' }}" aria-hidden="true"></span>
+                <span class="text-sm font-semibold text-base-content truncate max-w-52">{{ $tenant->business_name }}</span>
+                <span class="badge badge-soft badge-xs shrink-0
+                    {{ $plan->id === 1 ? 'badge-warning' : ($plan->id === 2 ? 'badge-success' : 'badge-info') }}">
+                    {{ $plan->name }}
+                </span>
+            </div>
+        </div>
+
+        {{-- ── Center: reloj + tasa BCV (hidden mobile) ── --}}
+        <div id="header-extras" class="navbar-center hidden md:flex items-center gap-3">
+            {{-- Reloj en tiempo real --}}
+            <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-box bg-base-200/70 border border-base-content/8">
+                <span class="icon-[tabler--clock] size-3.5 text-base-content/50" aria-hidden="true"></span>
+                <span id="live-clock" aria-label="Hora actual">--:--</span>
+            </div>
+            {{-- Tasa del dólar BCV --}}
+            <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-box bg-base-200/70 border border-base-content/8">
+                <span class="icon-[tabler--currency-dollar] size-3.5 text-green-500" aria-hidden="true"></span>
+                <span class="text-xs font-semibold text-base-content/70">
+                    Bs. <span id="header-dollar-rate">{{ number_format($dollarRate, 2) }}</span>
+                </span>
+            </div>
+        </div>
+
+        {{-- ── End: link al sitio + cerrar ── --}}
+        <div class="navbar-end gap-1.5 shrink-0">
+            {{-- Ver mi sitio público --}}
+            <a href="/{{ $tenant->subdomain }}" target="_blank" rel="noopener noreferrer"
+               class="btn btn-text btn-sm btn-circle hidden sm:flex"
+               title="Ver mi sitio público">
+                <span class="icon-[tabler--external-link] size-4 text-base-content/60" aria-hidden="true"></span>
+            </a>
+            {{-- Estado del negocio (mobile) --}}
+            <span class="sm:hidden {{ $tenant->is_open ? 'dot-online' : 'dot-offline' }}" aria-hidden="true"></span>
+            {{-- Cerrar / salir del dashboard --}}
             <a href="/{{ $tenant->subdomain }}"
                class="btn btn-soft btn-sm gap-1.5"
                title="Cerrar dashboard">
-                <span class="icon-[tabler--x] size-4" aria-hidden="true"></span>
-                <span class="max-sm:hidden">Cerrar</span>
+                <span class="icon-[tabler--layout-sidebar-right-collapse] size-4" aria-hidden="true"></span>
+                <span class="hidden sm:inline">Cerrar</span>
             </a>
         </div>
     </div>
@@ -452,8 +524,20 @@
                 </button>
 
                 {{-- Logo --}}
-                <div class="border-base-content/20 flex items-center gap-2 border-b px-5 py-4">
-                    <span class="text-primary text-xl font-bold">SYNTI<em class="text-base-content not-italic">web</em></span>
+                <div class="border-base-content/20 flex items-center gap-2.5 border-b px-5 py-4">
+                    {{-- Símbolo geométrico SYNTIweb --}}
+                    <svg viewBox="0 0 900 900" class="size-7 shrink-0" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <rect x="0"   y="0"   width="560" height="80"  fill="currentColor" class="text-base-content"/>
+                        <rect x="0"   y="80"  width="80"  height="480" fill="currentColor" class="text-base-content"/>
+                        <rect x="820" y="300" width="80"  height="520" fill="currentColor" class="text-base-content"/>
+                        <rect x="340" y="820" width="560" height="80"  fill="currentColor" class="text-base-content"/>
+                        <rect x="0"   y="700" width="80"  height="120" fill="currentColor" class="text-base-content"/>
+                        <rect x="0"   y="820" width="200" height="80"  fill="currentColor" class="text-base-content"/>
+                        <circle cx="780" cy="120" r="120" fill="#4D8FFF"/>
+                    </svg>
+                    <span class="sidebar-logo-text">
+                        <span class="sidebar-logo-synti">SYNTI</span><span class="sidebar-logo-web">web</span>
+                    </span>
                 </div>
 
                 {{-- Tenant info --}}
@@ -878,15 +962,17 @@
                         <div class="form-section">
                             <label for="product-image" class="form-label">Imagen Principal del Producto</label>
                             <input type="file" id="product-image" accept="image/*" class="form-input" onchange="previewProductImage(event)">
-                            <p style="font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 4px;">
-                                Máx. 2MB, se redimensionará a 800px
-                            </p>
+                            <p class="text-xs text-base-content/50 mt-1">Máx. 2MB, se redimensionará a 800px</p>
                         </div>
 
                         {{-- Gallery Section — Plan 3 (VISIÓN) only --}}
                         @if($plan->id === 3)
                         <div class="form-section" id="product-gallery-section">
-                            <label class="form-label">📸 Galería Adicional <span style="font-size: 12px; color: rgba(255,255,255,0.5);">(máx. 2 fotos extra — Plan Visión)</span></label>
+                            <label class="form-label flex items-center gap-2">
+                                <span class="icon-[tabler--photo-scan] size-4 text-primary" aria-hidden="true"></span>
+                                Galería Adicional
+                                <span class="text-xs text-base-content/50 font-normal">(máx. 2 fotos extra — Plan Visión)</span>
+                            </label>
 
                             {{-- Existing gallery images container --}}
                             <div id="product-gallery-existing" style="display: none; margin-bottom: 12px;">
@@ -906,7 +992,7 @@
                             {{-- Gallery previews --}}
                             <div id="product-gallery-previews" style="display: flex; gap: 10px; margin-top: 8px; flex-wrap: wrap;"></div>
 
-                            <p style="font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 6px;">
+                            <p class="text-xs text-base-content/50 mt-1.5">
                                 Las imágenes de galería se suben al guardar el producto. Total: 1 principal + 2 galería = 3 fotos.
                             </p>
                         </div>
@@ -1112,52 +1198,55 @@
         <!-- Modal: Servicio -->
         <div id="service-modal" class="crud-overlay"
              role="dialog" aria-modal="true" aria-labelledby="service-modal-title" aria-hidden="true">
-            <div class="crud-dialog" style="max-width: 700px; border-radius: 16px; background: #1a1f2e; border: 1px solid #2d3748; box-shadow: 0 20px 60px rgba(0,0,0,0.5);">
-                <div class="crud-dialog-header" style="padding: 24px 28px; border-bottom: 1px solid #2d3748; background: linear-gradient(135deg, rgba(59,130,246,0.05) 0%, rgba(255,107,0,0.02) 100%);">
-                    <h3 class="crud-dialog-title" id="service-modal-title" style="font-size: 18px; font-weight: 700; color: #e2e8f0; margin: 0;">Agregar Servicio</h3>
-                    <button class="crud-dialog-close" onclick="closeServiceModal()" aria-label="Cerrar modal" style="position: absolute; top: 16px; right: 16px; width: 36px; height: 36px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; cursor: pointer; color: #e2e8f0; font-size: 20px; transition: all 0.2s;" onmouseover="this.style.background='rgba(59,130,246,0.15)'" onmouseout="this.style.background='rgba(255,255,255,0.05)'">×</button>
+            <div class="crud-dialog" style="max-width: 700px;">
+                <div class="crud-dialog-header">
+                    <h3 class="crud-dialog-title" id="service-modal-title">Agregar Servicio</h3>
+                    <button class="crud-dialog-close" onclick="closeServiceModal()" aria-label="Cerrar modal">
+                        <span class="icon-[tabler--x] size-5" aria-hidden="true"></span>
+                    </button>
                 </div>
-                <div class="crud-dialog-body" style="padding: 28px;">
+                <div class="crud-dialog-body p-7">
                     <form id="service-form" onsubmit="saveService(event)">
                         <input type="hidden" id="service-id">
                         <input type="hidden" id="service-icon-name">
 
                         {{-- Mode tabs: Plan 2/3 only --}}
                         @if($plan->id !== 1)
-                        <div style="display: flex; gap: 0; margin-bottom: 24px; border-radius: 12px; overflow: hidden; border: 1px solid #2d3748; background: #0f1419;">
-                            <button type="button" id="svc-tab-icon" onclick="setServiceModalMode('icon')"
-                                style="flex: 1; padding: 12px; border: none; cursor: pointer; font-weight: 700; font-size: 13px; transition: all .2s; background: #2d3748; color: #e2e8f0;">
-                                🎨 Ícono
+                        <div class="svc-segment w-full mb-6" role="tablist" aria-label="Modo de representación del servicio">
+                            <button type="button" id="svc-tab-icon" role="tab"
+                                class="seg-active flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-btn text-sm font-bold transition-all"
+                                onclick="setServiceModalMode('icon')">
+                                <span class="icon-[tabler--color-picker] size-4" aria-hidden="true"></span> Ícono
                             </button>
-                            <button type="button" id="svc-tab-image" onclick="setServiceModalMode('image')"
-                                style="flex: 1; padding: 12px; border: none; cursor: pointer; font-weight: 700; font-size: 13px; transition: all .2s; background: transparent; color: rgba(255,255,255,0.4);">
-                                🖼️ Imagen
+                            <button type="button" id="svc-tab-image" role="tab"
+                                class="flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-btn text-sm font-bold transition-all"
+                                onclick="setServiceModalMode('image')">
+                                <span class="icon-[tabler--photo-up] size-4" aria-hidden="true"></span> Imagen
                             </button>
                         </div>
                         @endif
 
                         {{-- ICON PICKER (Plan 1: always; Plan 2/3: when icon mode) --}}
                         <div id="svc-section-icon" class="form-section" style="margin-bottom: 28px;">
-                            <label class="form-label" style="font-weight: 600; color: #e2e8f0; margin-bottom: 16px; display: block; font-size: 14px;">Ícono del Servicio</label>
+                            <label class="form-label font-semibold mb-4 block">Ícono del Servicio</label>
 
                             {{-- Current selection preview --}}
-                            <div style="display: flex; flex-direction: column; align-items: center; padding: 28px; background: linear-gradient(135deg, rgba(59,130,246,0.08) 0%, rgba(255,107,0,0.04) 100%); border-radius: 16px; margin-bottom: 24px; border: 1px solid rgba(59,130,246,0.2);">
-                                <div style="width: 88px; height: 88px; background: rgba(59,130,246,0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-bottom: 16px; border: 2px solid rgba(59,130,246,0.3);">
-                                    <span id="icon-preview-el" class="iconify tabler--settings text-blue-400" style="font-size: 48px; color: #60a5fa;"></span>
+                            <div class="flex flex-col items-center p-7 rounded-2xl mb-6 border" style="background:linear-gradient(135deg,var(--synti-soft) 0%,transparent 60%);border-color:var(--synti-bdr);">
+                                <div class="size-20 rounded-full flex items-center justify-center shrink-0 mb-4 border-2" style="background:var(--synti-soft);border-color:var(--synti-bdr);">
+                                    <span id="icon-preview-el" class="iconify tabler--settings size-12 text-primary"></span>
                                 </div>
-                                <p id="icon-preview-label" style="color: #e2e8f0; font-weight: 600; font-size: 14px; margin: 0; text-align: center;">Sin ícono seleccionado</p>
-                                <p style="color: rgba(255,255,255,0.4); font-size: 12px; margin-top: 4px; text-align: center;">Busca y selecciona un ícono</p>
+                                <p id="icon-preview-label" class="text-sm font-semibold text-base-content text-center mb-0">Sin ícono seleccionado</p>
+                                <p class="text-xs text-base-content/40 text-center mt-1">Busca y selecciona un ícono</p>
                             </div>
 
                             {{-- Search --}}
-                            <input type="text" id="icon-search" class="form-input"
-                                placeholder="🔍 Busca: scissors, camera, truck, heart..."
-                                oninput="filterIcons(this.value)" autocomplete="off"
-                                style="margin-bottom: 16px; padding: 12px 16px; background: #0f1419; border: 1px solid #2d3748; border-radius: 10px; color: #e2e8f0; font-size: 14px;" onmouseover="this.style.borderColor='rgba(59,130,246,0.4)'" onmouseout="this.style.borderColor='#2d3748'">
+                            <input type="text" id="icon-search" class="input input-sm w-full mb-4"
+                                placeholder="Busca: scissors, camera, truck, heart..."
+                                oninput="filterIcons(this.value)" autocomplete="off">
 
                             {{-- Icon Grid --}}
-                            <div id="icon-picker-grid" style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; max-height: 320px; overflow-y: auto; padding: 4px; border-radius: 12px; background: #0f1419; padding: 12px; border: 1px solid #2d3748;"></div>
-                            <p style="color: rgba(255,255,255,0.25); font-size: 12px; margin-top: 12px; text-align: center;">60+ iconos disponibles</p>
+                            <div id="icon-picker-grid" class="grid grid-cols-6 gap-3 max-h-80 overflow-y-auto p-3 rounded-xl bg-base-200/60 border border-base-content/8"></div>
+                            <p class="text-xs text-base-content/30 mt-3 text-center">60+ iconos disponibles</p>
                             
                             {{-- Hidden div to force Tailwind to generate icon classes --}}
                             <div class="hidden">
@@ -1195,32 +1284,35 @@
                                 <img id="service-image-preview-img" src="" alt="Preview">
                             </div>
                             <input type="file" id="service-image" accept="image/*" class="form-input" onchange="previewServiceImage(event)">
-                            <p style="font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 4px;">Máx. 2MB, se redimensionará a 800px</p>
+                            <p class="text-xs text-base-content/50 mt-1">Máx. 2MB, se redimensionará a 800px</p>
                         </div>
                         @endif
 
-                        <div class="form-section" style="margin-bottom: 24px;">
-                            <label for="service-name" class="form-label" style="font-weight: 600; color: #e2e8f0; margin-bottom: 8px; display: block; font-size: 14px;">Nombre *</label>
-                            <input type="text" id="service-name" class="form-input" required maxlength="100" style="padding: 12px 16px; background: #0f1419; border: 1px solid #2d3748; border-radius: 10px; color: #e2e8f0; font-size: 14px;" onmouseover="this.style.borderColor='rgba(59,130,246,0.4)'" onmouseout="this.style.borderColor='#2d3748'">
+                        <div class="form-section mb-6">
+                            <label for="service-name" class="form-label font-semibold mb-2 block">Nombre *</label>
+                            <input type="text" id="service-name" class="input w-full" required maxlength="100">
                         </div>
 
-                        <div class="form-section" style="margin-bottom: 24px;">
-                            <label for="service-description" class="form-label" style="font-weight: 600; color: #e2e8f0; margin-bottom: 8px; display: block; font-size: 14px;">Descripción</label>
-                            <textarea id="service-description" class="form-input" rows="3" maxlength="500" style="padding: 12px 16px; background: #0f1419; border: 1px solid #2d3748; border-radius: 10px; color: #e2e8f0; font-size: 14px; font-family: inherit;" onmouseover="this.style.borderColor='rgba(59,130,246,0.4)'" onmouseout="this.style.borderColor='#2d3748'"></textarea>
+                        <div class="form-section mb-6">
+                            <label for="service-description" class="form-label font-semibold mb-2 block">Descripción</label>
+                            <textarea id="service-description" class="textarea w-full" rows="3" maxlength="500"></textarea>
                         </div>
 
-                        <div class="form-section" style="margin-bottom: 28px;">
-                            <label class="form-label" style="font-weight: 600; color: #e2e8f0; margin-bottom: 8px; display: block; font-size: 14px;">Servicio Activo</label>
-                            <label class="toggle-switch" style="display: flex; align-items: center; gap: 12px; cursor: pointer;">
+                        <div class="form-section mb-7">
+                            <label class="form-label font-semibold mb-2 block">Servicio Activo</label>
+                            <label class="toggle-switch flex items-center gap-3 cursor-pointer">
                                 <input type="checkbox" id="service-is-active" checked>
                                 <span class="toggle-slider"></span>
-                                <span style="color: rgba(255,255,255,0.6); font-size: 13px;">Mostrar en landing page</span>
+                                <span class="text-sm text-base-content/60">Mostrar en landing page</span>
                             </label>
                         </div>
 
-                        <div class="form-actions" style="display: flex; gap: 12px; padding-top: 24px; border-top: 1px solid #2d3748; justify-content: flex-end;">
-                            <button type="button" class="btn-secondary" onclick="closeServiceModal()" style="padding: 11px 24px; background: rgba(255,255,255,0.05); border: 1px solid #2d3748; border-radius: 10px; color: #e2e8f0; font-weight: 600; font-size: 14px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.08)'; this.style.borderColor='rgba(255,255,255,0.15)'" onmouseout="this.style.background='rgba(255,255,255,0.05)'; this.style.borderColor='#2d3748'">Cancelar</button>
-                            <button type="submit" class="btn-primary" style="padding: 11px 28px; background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); border: none; border-radius: 10px; color: #fff; font-weight: 600; font-size: 14px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 12px rgba(59,130,246,0.3);" onmouseover="this.style.boxShadow='0 6px 16px rgba(59,130,246,0.4)'; this.style.transform='translateY(-1px)'" onmouseout="this.style.boxShadow='0 4px 12px rgba(59,130,246,0.3)'; this.style.transform='translateY(0)'">Guardar Servicio</button>
+                        <div class="flex gap-3 pt-6 border-t border-base-content/10 justify-end">
+                            <button type="button" class="btn btn-soft" onclick="closeServiceModal()">Cancelar</button>
+                            <button type="submit" class="btn btn-primary gap-2">
+                                <span class="icon-[tabler--device-floppy] size-4" aria-hidden="true"></span>
+                                Guardar Servicio
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -1298,7 +1390,7 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
     {{-- activeTheme viene del controller --}}
     @foreach($themesByCategory as $category => $themes)
     <div style="margin-bottom: 28px;">
-        <h3 style="font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.4); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1.5px;">
+        <h3 class="text-[11px] font-bold text-base-content/40 mb-3 uppercase tracking-widest">
             {{ $category }}
         </h3>
         <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px;">
@@ -2799,10 +2891,8 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
             const iBtn   = document.getElementById('global-mode-icon-btn');
             const imgBtn = document.getElementById('global-mode-image-btn');
             if (!iBtn) return;
-            iBtn.style.background   = serviceModalMode === 'icon'  ? '#2B6FFF' : 'transparent';
-            iBtn.style.color        = serviceModalMode === 'icon'  ? '#fff' : 'rgba(255,255,255,0.45)';
-            imgBtn.style.background = serviceModalMode === 'image' ? '#2B6FFF' : 'transparent';
-            imgBtn.style.color      = serviceModalMode === 'image' ? '#fff' : 'rgba(255,255,255,0.45)';
+            iBtn.classList.toggle('seg-active', serviceModalMode === 'icon');
+            imgBtn.classList.toggle('seg-active', serviceModalMode === 'image');
         }
 
         function setServiceModalMode(mode) {
@@ -2818,14 +2908,8 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
             if (iconSect) iconSect.style.display = (mode === 'icon')  ? '' : 'none';
             if (imgSect)  imgSect.style.display  = (mode === 'image') ? '' : 'none';
 
-            if (tabIcon) {
-                tabIcon.style.background = (mode === 'icon')  ? 'rgba(43,111,255,0.55)' : 'transparent';
-                tabIcon.style.color      = (mode === 'icon')  ? '#fff' : 'rgba(255,255,255,0.4)';
-            }
-            if (tabImg) {
-                tabImg.style.background = (mode === 'image') ? 'rgba(43,111,255,0.55)' : 'transparent';
-                tabImg.style.color      = (mode === 'image') ? '#fff' : 'rgba(255,255,255,0.4)';
-            }
+            if (tabIcon) tabIcon.classList.toggle('seg-active', mode === 'icon');
+            if (tabImg)  tabImg.classList.toggle('seg-active',  mode === 'image');
 
             // Clear icon name input when switching to image mode
             if (mode === 'image') {
@@ -2902,40 +2986,19 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
             grid.innerHTML = '';
 
             if (filtered.length === 0) {
-                grid.innerHTML = `<div style="grid-column:span 6; text-align:center; color:rgba(255,255,255,0.3); padding:24px; font-size:13px;">Sin resultados para "<em>${filter}</em>"</div>`;
+                grid.innerHTML = `<div class="col-span-6 text-center text-base-content/30 py-6 text-sm">Sin resultados para "<em>${filter}</em>"</div>`;
                 return;
             }
 
             filtered.forEach(ic => {
                 const selected = iconPickerSelected === ic.n;
                 const el = document.createElement('div');
-                el.className   = 'icon-pick-item';
+                el.className   = 'icon-pick-item' + (selected ? ' selected' : '');
                 el.title       = ic.l;
                 el.dataset.name = ic.n;
-                el.style.cssText = `
-                    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px;
-                    padding:14px 10px; border-radius:12px; cursor:pointer; transition:all .2s;
-                    background:${selected ? 'rgba(59,130,246,0.2)' : 'rgba(255,255,255,0.03)'};
-                    border:2px solid ${selected ? '#3b82f6' : 'transparent'};
-                    position:relative;
-                `;
-                el.addEventListener('mouseenter', function() {
-                    if (!selected) {
-                        this.style.background = 'rgba(59,130,246,0.1)';
-                        this.style.transform = 'scale(1.08)';
-                        this.style.borderColor = 'rgba(59,130,246,0.3)';
-                    }
-                });
-                el.addEventListener('mouseleave', function() {
-                    if (!selected) {
-                        this.style.background = 'rgba(255,255,255,0.03)';
-                        this.style.transform = 'scale(1)';
-                        this.style.borderColor = 'transparent';
-                    }
-                });
                 el.innerHTML = `
-                    <span class="iconify tabler--${ic.n}" style="font-size: 40px; color: #3b82f6;"></span>
-                    <span style="font-size:10px;color:rgba(255,255,255,0.4);text-align:center;line-height:1.3;max-width:100%;overflow:hidden;text-overflow:ellipsis; font-weight: 500;">${ic.l}</span>
+                    <span class="iconify tabler--${ic.n} size-10 ${selected ? 'text-white' : 'text-primary'}"></span>
+                    <span class="text-[10px] text-center leading-tight font-medium truncate w-full">${ic.l}</span>
                 `;
                 el.addEventListener('click', () => selectIcon(ic.n, ic.l));
                 grid.appendChild(el);
@@ -2951,14 +3014,27 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
             const prevEl    = document.getElementById('icon-preview-el');
             const prevLabel = document.getElementById('icon-preview-label');
             if (prevEl) {
-                prevEl.className = 'iconify tabler--' + iconName + ' text-primary';
+                prevEl.className = 'iconify tabler--' + iconName + ' size-12 text-primary';
             }
-            if (prevLabel) prevLabel.textContent = iconLabel + '  (' + iconName + ')';
+            if (prevLabel) prevLabel.textContent = iconLabel;
             const searchVal = document.getElementById('icon-search')?.value || '';
             renderIconGrid(searchVal);
         }
 
-        document.addEventListener('DOMContentLoaded', () => { updateGlobalModeBtns(); });
+        document.addEventListener('DOMContentLoaded', () => {
+            updateGlobalModeBtns();
+
+            // ── Live Clock ────────────────────────────────────────────
+            function updateClock() {
+                const el = document.getElementById('live-clock');
+                if (!el) return;
+                el.textContent = new Date().toLocaleTimeString('es-VE', {
+                    hour: '2-digit', minute: '2-digit', second: '2-digit'
+                });
+            }
+            updateClock();
+            setInterval(updateClock, 1000);
+        });
 
         function openServiceModal(serviceId = null) {
             const modal = document.getElementById('service-modal');
