@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Dashboard - {{ $tenant->business_name }}</title>
+    <meta name="description" content="Panel de administración de {{ $tenant->business_name }} — gestiona tu información, productos, servicios y diseño de tu sitio web.">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Dashboard — {{ $tenant->business_name }} | SYNTIweb</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,116 +15,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: #07101F;
-            color: #ffffff;
-            min-height: 100vh;
-        }
-
-        /* Header */
-        .dashboard-header {
-            position: sticky;
-            top: 0;
-            background: #0a1628;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 16px 24px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 100;
-        }
-
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .logo {
-            font-size: 20px;
-            font-weight: 700;
-            color: #2B6FFF;
-        }
-
-        .logo em {
-            color: #ffffff;
-            font-style: normal;
-        }
-
-        .business-name {
-            font-size: 16px;
-            font-weight: 600;
-            color: rgba(255, 255, 255, 0.9);
-            padding-left: 16px;
-            border-left: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .btn-close {
-            background: rgba(255, 255, 255, 0.1);
-            border: none;
-            color: #ffffff;
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            transition: background 0.2s;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .btn-close:hover {
-            background: rgba(255, 255, 255, 0.15);
-        }
-
-        /* Navigation Tabs */
-        .dashboard-nav {
-            background: #0a1628;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 0 24px;
-            overflow-x: auto;
-        }
-
-        .nav-tabs {
-            display: flex;
-            gap: 8px;
-            list-style: none;
-        }
-
-        .nav-tab {
-            padding: 16px 20px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            color: rgba(255, 255, 255, 0.6);
-            border-bottom: 2px solid transparent;
-            transition: all 0.2s;
-            white-space: nowrap;
-        }
-
-        .nav-tab:hover {
-            color: rgba(255, 255, 255, 0.9);
-        }
-
-        .nav-tab.active {
-            color: #2B6FFF;
-            border-bottom-color: #2B6FFF;
-        }
-
-        /* Content Area */
-        .dashboard-content {
-            padding: 24px;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
+        /* Tab content visibility */
         .tab-content {
             display: none;
         }
@@ -183,6 +76,19 @@
         .form-select:focus {
             outline: none;
             border-color: #2B6FFF;
+        }
+
+        /* Focus visible — keyboard navigation (WCAG 2.4.7) */
+        :focus-visible {
+            outline: 2px solid #2B6FFF !important;
+            outline-offset: 2px !important;
+        }
+        /* Excluir inputs que ya tienen estilo de foco propio */
+        .form-input:focus-visible,
+        .form-textarea:focus-visible,
+        .form-select:focus-visible {
+            outline: none !important;
+            box-shadow: 0 0 0 3px rgba(43, 111, 255, 0.35);
         }
 
         .form-textarea {
@@ -605,38 +511,221 @@
             margin-bottom: 16px;
         }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            .dashboard-header {
-                flex-wrap: wrap;
-                gap: 12px;
-            }
+        /* ═══════════════════════════════════════════════════════════════════════ */
+        /* RESPONSIVE BREAKPOINTS (components — layout handled by FlyonUI)      */
+        /* ═══════════════════════════════════════════════════════════════════════ */
 
-            .header-left {
-                flex-wrap: wrap;
-            }
+        /* Mobile S: ≤374px */
+        @media (max-width: 374px) {
+            .form-section { padding: 16px; margin-bottom: 16px; }
+            .form-section-title { font-size: 16px; margin-bottom: 16px; }
+            .form-grid { grid-template-columns: 1fr; }
+            .btn-primary, .btn-secondary { min-height: 44px; padding: 10px 12px; }
+        }
 
-            .business-name {
-                padding-left: 0;
-                border-left: none;
-                width: 100%;
-            }
+        /* Mobile M/L: ≤639px */
+        @media (max-width: 639px) {
+            .form-section { padding: 16px; margin-bottom: 16px; }
+            .form-section-title { font-size: 16px; margin-bottom: 12px; }
+            .form-grid { grid-template-columns: 1fr; gap: 12px; }
+            .form-group { margin-bottom: 12px; }
+            .form-input, .form-textarea, .form-select { padding: 10px 12px; }
+            .form-actions { flex-wrap: wrap; }
 
-            .form-grid {
-                grid-template-columns: 1fr;
+            /* Tables → Card layout */
+            .data-table thead { display: none; }
+            .data-table tbody tr {
+                display: block;
+                margin-bottom: 12px;
+                background: #0f1c32;
+                border-radius: 8px;
+                padding: 12px;
+                border: 1px solid rgba(255,255,255,0.1);
             }
+            .data-table td {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 8px 0;
+                border-bottom: 1px solid rgba(255,255,255,0.05);
+                font-size: 13px;
+            }
+            .data-table td:last-child { border-bottom: none; }
+            .data-table td::before {
+                content: attr(data-label);
+                font-weight: 600;
+                color: rgba(255,255,255,0.6);
+                flex-basis: 90px;
+                flex-shrink: 0;
+                font-size: 12px;
+            }
+            .product-image { width: 48px; height: 48px; object-fit: cover; border-radius: 4px; aspect-ratio: 1; }
+            .btn-primary, .btn-secondary { min-height: 44px; min-width: 44px; padding: 10px 12px; font-size: 13px; }
+            .action-button { min-height: 44px; min-width: 44px; display: inline-flex; align-items: center; justify-content: center; font-size: 18px; }
+            .theme-grid { grid-template-columns: repeat(2, 1fr) !important; }
+        }
+
+        /* Tablet portrait: 640-767px */
+        @media (max-width: 767px) {
+            .form-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+            .form-section { padding: 18px; margin-bottom: 18px; }
+            .theme-grid { grid-template-columns: repeat(3, 1fr) !important; }
+        }
+
+        /* Tablet landscape / Laptop: 768-1023px */
+        @media (max-width: 1023px) {
+            .form-grid { grid-template-columns: repeat(2, 1fr); }
+            .theme-grid { grid-template-columns: repeat(4, 1fr) !important; }
+        }
+
+        /* Desktop: 1024px+ */
+        @media (min-width: 1024px) {
+            .form-grid { grid-template-columns: repeat(3, 1fr); }
+            .data-table tbody tr { display: table-row !important; }
+            .data-table td::before { display: none !important; }
+            .data-table thead { display: table-header-group !important; }
         }
     </style>
 </head>
-<body>
-    <!-- Header -->
-    <header class="dashboard-header">
-        <div class="header-left">
-            <span class="logo">SYNTI<em>web</em></span>
-            <span class="business-name">{{ $tenant->business_name }}</span>
+<body class="bg-base-200">
+<div class="flex min-h-screen flex-col">
+
+    <!-- ══ HEADER NAVBAR ══════════════════════════════════════════════════ -->
+    <div class="navbar bg-base-100 border-base-content/20 lg:ps-64 sticky top-0 z-50 border-b min-h-14 px-4">
+        <div class="navbar-start gap-2">
+            {{-- Hamburger: solo mobile/tablet --}}
+            <button type="button"
+                    class="btn btn-text btn-square btn-sm lg:hidden"
+                    aria-haspopup="dialog" aria-expanded="false"
+                    aria-controls="layout-sidebar"
+                    data-overlay="#layout-sidebar">
+                <span class="icon-[tabler--menu-2] size-5" aria-hidden="true"></span>
+                <span class="sr-only">Abrir menú</span>
+            </button>
+            {{-- Logo visible solo en mobile (en desktop está en sidebar) --}}
+            <span class="text-primary font-bold text-lg lg:hidden">SYNTI<em class="text-base-content not-italic">web</em></span>
         </div>
-        <a href="/{{ $tenant->subdomain }}" class="btn-close">Cerrar ✕</a>
-    </header>
+        <div class="navbar-end gap-2">
+            <span class="text-base-content/70 hidden sm:block text-sm font-medium truncate max-w-48">
+                {{ $tenant->business_name }}
+            </span>
+            <a href="/{{ $tenant->subdomain }}"
+               class="btn btn-soft btn-sm gap-1.5"
+               title="Cerrar dashboard">
+                <span class="icon-[tabler--x] size-4" aria-hidden="true"></span>
+                <span class="max-sm:hidden">Cerrar</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- ══ SIDEBAR ════════════════════════════════════════════════════════ -->
+    <aside id="layout-sidebar"
+           class="overlay overlay-open:translate-x-0 drawer drawer-start w-64
+                  inset-y-0 start-0 hidden h-full [--auto-close:lg]
+                  lg:z-50 lg:block lg:translate-x-0 lg:shadow-none"
+           aria-label="Navegación principal"
+           tabindex="-1">
+        <div class="drawer-body border-base-content/20 h-full border-e p-0">
+            <div class="flex h-full flex-col">
+
+                {{-- Cerrar (solo mobile) --}}
+                <button type="button"
+                        class="btn btn-text btn-circle btn-sm absolute end-3 top-3 lg:hidden"
+                        aria-label="Cerrar menú"
+                        data-overlay="#layout-sidebar">
+                    <span class="icon-[tabler--x] size-4.5" aria-hidden="true"></span>
+                </button>
+
+                {{-- Logo --}}
+                <div class="border-base-content/20 flex items-center gap-2 border-b px-5 py-4">
+                    <span class="text-primary text-xl font-bold">SYNTI<em class="text-base-content not-italic">web</em></span>
+                </div>
+
+                {{-- Tenant info --}}
+                <div class="border-base-content/20 border-b px-5 py-3">
+                    <p class="text-base-content text-sm font-semibold truncate">{{ $tenant->business_name }}</p>
+                    <p class="text-base-content/60 text-xs">Plan {{ $plan->name }}</p>
+                </div>
+
+                {{-- Menú de navegación --}}
+                <nav class="h-full overflow-y-auto" aria-label="Secciones del dashboard">
+                    <ul class="menu menu-sm gap-0.5 p-3" role="tablist">
+                        <li role="presentation">
+                            <button class="w-full text-start menu-active" role="tab"
+                                    aria-selected="true" aria-controls="tab-info"
+                                    id="tab-info-btn" data-tab="info" tabindex="0">
+                                <span class="icon-[tabler--info-circle] size-4.5" aria-hidden="true"></span>
+                                Información
+                            </button>
+                        </li>
+                        <li role="presentation">
+                            <button class="w-full text-start" role="tab"
+                                    aria-selected="false" aria-controls="tab-productos"
+                                    id="tab-productos-btn" data-tab="productos" tabindex="-1">
+                                <span class="icon-[tabler--package] size-4.5" aria-hidden="true"></span>
+                                Productos
+                            </button>
+                        </li>
+                        <li role="presentation">
+                            <button class="w-full text-start" role="tab"
+                                    aria-selected="false" aria-controls="tab-servicios"
+                                    id="tab-servicios-btn" data-tab="servicios" tabindex="-1">
+                                <span class="icon-[tabler--tool] size-4.5" aria-hidden="true"></span>
+                                Servicios
+                            </button>
+                        </li>
+                        <li role="presentation">
+                            <button class="w-full text-start" role="tab"
+                                    aria-selected="false" aria-controls="tab-diseno"
+                                    id="tab-diseno-btn" data-tab="diseno" tabindex="-1">
+                                <span class="icon-[tabler--palette] size-4.5" aria-hidden="true"></span>
+                                Diseño
+                            </button>
+                        </li>
+                        <li role="presentation">
+                            <button class="w-full text-start" role="tab"
+                                    aria-selected="false" aria-controls="tab-analytics"
+                                    id="tab-analytics-btn" data-tab="analytics" tabindex="-1">
+                                <span class="icon-[tabler--chart-bar] size-4.5" aria-hidden="true"></span>
+                                Analytics
+                            </button>
+                        </li>
+                        @if($plan->id === 3)
+                        <li role="presentation">
+                            <button class="w-full text-start" role="tab"
+                                    aria-selected="false" aria-controls="tab-sucursales"
+                                    id="tab-sucursales-btn" data-tab="sucursales" tabindex="-1">
+                                <span class="icon-[tabler--map-pin] size-4.5" aria-hidden="true"></span>
+                                Sucursales
+                            </button>
+                        </li>
+                        @endif
+                        <li role="presentation">
+                            <button class="w-full text-start" role="tab"
+                                    aria-selected="false" aria-controls="tab-config"
+                                    id="tab-config-btn" data-tab="config" tabindex="-1">
+                                <span class="icon-[tabler--settings] size-4.5" aria-hidden="true"></span>
+                                Configuración
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
+
+                {{-- Footer sidebar --}}
+                <div class="border-base-content/20 border-t p-3 mt-auto">
+                    <a href="/{{ $tenant->subdomain }}" target="_blank" rel="noopener noreferrer"
+                       class="btn btn-soft btn-block btn-sm">
+                        <span class="icon-[tabler--external-link] size-4" aria-hidden="true"></span>
+                        Ver mi sitio
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </aside>
+
+    <!-- ══ LAYOUT CONTENT con offset sidebar en desktop ══════════════════ -->
+    <div class="lg:ps-64 flex grow flex-col">
 
     {{-- ── Plan Expiry Notices ──────────────────────────────────────────── --}}
     @if($isFrozen)
@@ -680,23 +769,8 @@
     @endif
     {{-- ── End Plan Expiry Notices ─────────────────────────────────────── --}}
 
-    <!-- Navigation Tabs -->
-    <nav class="dashboard-nav">
-        <ul class="nav-tabs">
-            <li class="nav-tab active" data-tab="info">📋 Info</li>
-            <li class="nav-tab" data-tab="productos">📦 Productos</li>
-            <li class="nav-tab" data-tab="servicios">🛠️ Servicios</li>
-            <li class="nav-tab" data-tab="diseno">🎨 Diseño</li>
-            <li class="nav-tab" data-tab="analytics">📊 Analytics</li>
-            @if($plan->id === 3)
-            <li class="nav-tab" data-tab="sucursales">📍 Sucursales</li>
-            @endif
-            <li class="nav-tab" data-tab="config">⚙️ Config</li>
-        </ul>
-    </nav>
-
     <!-- Content -->
-    <main class="dashboard-content">
+    <main class="mx-auto w-full max-w-7xl flex-1 grow p-4 lg:p-6">
         
         <!-- Tab: Info -->
         <div id="tab-info" class="tab-content active">
@@ -706,38 +780,38 @@
                     
                     <div class="form-grid">
                         <div class="form-group">
-                            <label class="form-label">Nombre del Negocio</label>
-                            <input type="text" class="form-input" name="business_name" value="{{ $tenant->business_name }}" required>
+                            <label class="form-label" for="info-business-name">Nombre del Negocio</label>
+                            <input id="info-business-name" type="text" class="form-input" name="business_name" value="{{ $tenant->business_name }}" required>
                         </div>
-                        
+
                         <div class="form-group">
-                            <label class="form-label">Subdominio</label>
-                            <input type="text" class="form-input" value="{{ $tenant->subdomain }}" disabled>
+                            <label class="form-label" for="info-subdomain">Subdominio</label>
+                            <input id="info-subdomain" type="text" class="form-input" value="{{ $tenant->subdomain }}" disabled aria-readonly="true">
                         </div>
-                        
+
                         <div class="form-group">
-                            <label class="form-label">Eslogan</label>
-                            <input type="text" class="form-input" name="slogan" value="{{ $tenant->slogan }}">
+                            <label class="form-label" for="info-slogan">Eslogan</label>
+                            <input id="info-slogan" type="text" class="form-input" name="slogan" value="{{ $tenant->slogan }}">
                         </div>
-                        
+
                         <div class="form-group">
-                            <label class="form-label">Teléfono</label>
-                            <input type="text" class="form-input" name="phone" value="{{ $tenant->phone }}">
+                            <label class="form-label" for="info-phone">Teléfono</label>
+                            <input id="info-phone" type="text" class="form-input" name="phone" value="{{ $tenant->phone }}">
                         </div>
-                        
+
                         <div class="form-group">
-                            <label class="form-label">WhatsApp Ventas</label>
-                            <input type="text" class="form-input" name="whatsapp_sales" value="{{ $tenant->whatsapp_sales }}">
+                            <label class="form-label" for="info-whatsapp">WhatsApp Ventas</label>
+                            <input id="info-whatsapp" type="text" class="form-input" name="whatsapp_sales" value="{{ $tenant->whatsapp_sales }}">
                         </div>
-                        
+
                         <div class="form-group">
-                            <label class="form-label">Email</label>
-                            <input type="email" class="form-input" name="email" value="{{ $tenant->email }}">
+                            <label class="form-label" for="info-email">Email</label>
+                            <input id="info-email" type="email" class="form-input" name="email" value="{{ $tenant->email }}">
                         </div>
-                        
+
                         <div class="form-group">
-                            <label class="form-label">Dirección</label>
-                            <input type="text" class="form-input" name="address" value="{{ $tenant->address }}">
+                            <label class="form-label" for="info-address">Dirección</label>
+                            <input id="info-address" type="text" class="form-input" name="address" value="{{ $tenant->address }}">
                         </div>
                         
                         @if($tenant->plan_id >= 2)
@@ -788,14 +862,14 @@
                         @endif
 
                         <div class="form-group">
-                            <label class="form-label">Ciudad</label>
-                            <input type="text" class="form-input" name="city" value="{{ $tenant->city }}">
+                            <label class="form-label" for="info-city">Ciudad</label>
+                            <input id="info-city" type="text" class="form-input" name="city" value="{{ $tenant->city }}">
                         </div>
                     </div>
-                    
+
                     <div class="form-group">
-                        <label class="form-label">Descripción</label>
-                        <textarea class="form-textarea" name="description">{{ $tenant->description }}</textarea>
+                        <label class="form-label" for="info-description">Descripción</label>
+                        <textarea id="info-description" class="form-textarea" name="description">{{ $tenant->description }}</textarea>
                     </div>
                     
                     <div class="form-actions">
@@ -863,23 +937,23 @@
                     <tbody>
                         @foreach($products as $product)
                         <tr>
-                            <td>
+                            <td data-label="Imagen">
                                 @if($product->image_filename)
-                                    <img src="{{ asset('storage/tenants/' . $tenant->id . '/' . $product->image_filename) }}" 
-                                         alt="{{ $product->name }}" 
+                                    <img src="{{ asset('storage/tenants/' . $tenant->id . '/' . $product->image_filename) }}"
+                                         alt="{{ $product->name }}"
                                          class="product-image">
                                 @else
                                     <div class="product-image" style="background: #374151;"></div>
                                 @endif
                             </td>
-                            <td>
+                            <td data-label="Nombre">
                                 <strong>{{ $product->name }}</strong>
                                 @if($product->is_featured)
                                     <span style="color: #ffd700; margin-left: 4px;">⭐</span>
                                 @endif
                             </td>
-                            <td>${{ number_format($product->price_usd, 2) }}</td>
-                            <td>
+                            <td data-label="Precio USD">${{ number_format($product->price_usd, 2) }}</td>
+                            <td data-label="Badge">
                                 @if($product->badge === 'hot')
                                     <span class="badge badge-hot">🔥 Hot</span>
                                 @elseif($product->badge === 'new')
@@ -890,17 +964,17 @@
                                     <span style="color: rgba(255,255,255,0.3);">-</span>
                                 @endif
                             </td>
-                            <td>
+                            <td data-label="Activo">
                                 <span class="status-indicator">
                                     <span class="status-dot {{ $product->is_active ? 'active' : 'inactive' }}"></span>
                                     {{ $product->is_active ? 'Activo' : 'Inactivo' }}
                                 </span>
                             </td>
-                            <td>
-                                <button class="btn-icon" onclick="editProduct({{ $product->id }})" title="Editar">
+                            <td data-label="Acciones" style="gap: 8px;">
+                                <button class="action-button btn-icon" onclick="editProduct({{ $product->id }})" title="Editar" aria-label="Editar producto">
                                     ✏️
                                 </button>
-                                <button class="btn-icon btn-danger" onclick="deleteProduct({{ $product->id }})" title="Eliminar">
+                                <button class="action-button btn-icon btn-danger" onclick="deleteProduct({{ $product->id }})" title="Eliminar" aria-label="Eliminar producto">
                                     🗑️
                                 </button>
                             </td>
@@ -919,11 +993,12 @@
         </div>
 
         <!-- Modal: Producto -->
-        <div id="product-modal" class="crud-overlay">
+        <div id="product-modal" class="crud-overlay"
+             role="dialog" aria-modal="true" aria-labelledby="product-modal-title" aria-hidden="true">
             <div class="crud-dialog">
                 <div class="crud-dialog-header">
                     <h3 class="crud-dialog-title" id="product-modal-title">Agregar Producto</h3>
-                    <button class="crud-dialog-close" onclick="closeProductModal()">&times;</button>
+                    <button class="crud-dialog-close" onclick="closeProductModal()" aria-label="Cerrar modal">&times;</button>
                 </div>
                 <div class="crud-dialog-body">
                     <form id="product-form" onsubmit="saveProduct(event)">
@@ -1090,10 +1165,10 @@
                     <tbody>
                         @foreach($services as $service)
                         <tr>
-                            <td>
+                            <td data-label="Imagen">
                                 @if($service->image_filename)
-                                    <img src="{{ asset('storage/tenants/' . $tenant->id . '/' . $service->image_filename) }}" 
-                                         alt="{{ $service->name }}" 
+                                    <img src="{{ asset('storage/tenants/' . $tenant->id . '/' . $service->image_filename) }}"
+                                         alt="{{ $service->name }}"
                                          class="product-image">
                                 @elseif($service->icon_name)
                                     <div class="product-image" style="background: linear-gradient(135deg, rgba(59,130,246,0.15) 0%, rgba(255,107,0,0.08) 100%); display: flex; align-items: center; justify-content: center; border: 1px solid rgba(59,130,246,0.25); border-radius: 12px; transition: all 0.2s;">
@@ -1105,25 +1180,25 @@
                                     </div>
                                 @endif
                             </td>
-                            <td><strong>{{ $service->name }}</strong></td>
-                            <td>
+                            <td data-label="Nombre"><strong>{{ $service->name }}</strong></td>
+                            <td data-label="Descripción">
                                 @if($service->description)
                                     {{ Str::limit($service->description, 60) }}
                                 @else
                                     <span style="color: rgba(255,255,255,0.3);">-</span>
                                 @endif
                             </td>
-                            <td>
+                            <td data-label="Activo">
                                 <span class="status-indicator">
                                     <span class="status-dot {{ $service->is_active ? 'active' : 'inactive' }}"></span>
                                     {{ $service->is_active ? 'Activo' : 'Inactivo' }}
                                 </span>
                             </td>
-                            <td>
-                                <button class="btn-icon" onclick="editService({{ $service->id }})" title="Editar">
+                            <td data-label="Acciones" style="gap: 8px;">
+                                <button class="action-button btn-icon" onclick="editService({{ $service->id }})" title="Editar" aria-label="Editar servicio">
                                     ✏️
                                 </button>
-                                <button class="btn-icon btn-danger" onclick="deleteService({{ $service->id }})" title="Eliminar">
+                                <button class="action-button btn-icon btn-danger" onclick="deleteService({{ $service->id }})" title="Eliminar" aria-label="Eliminar servicio">
                                     🗑️
                                 </button>
                             </td>
@@ -1142,11 +1217,12 @@
         </div>
 
         <!-- Modal: Servicio -->
-        <div id="service-modal" class="crud-overlay">
+        <div id="service-modal" class="crud-overlay"
+             role="dialog" aria-modal="true" aria-labelledby="service-modal-title" aria-hidden="true">
             <div class="crud-dialog" style="max-width: 700px; border-radius: 16px; background: #1a1f2e; border: 1px solid #2d3748; box-shadow: 0 20px 60px rgba(0,0,0,0.5);">
                 <div class="crud-dialog-header" style="padding: 24px 28px; border-bottom: 1px solid #2d3748; background: linear-gradient(135deg, rgba(59,130,246,0.05) 0%, rgba(255,107,0,0.02) 100%);">
                     <h3 class="crud-dialog-title" id="service-modal-title" style="font-size: 18px; font-weight: 700; color: #e2e8f0; margin: 0;">Agregar Servicio</h3>
-                    <button class="crud-dialog-close" onclick="closeServiceModal()" style="position: absolute; top: 16px; right: 16px; width: 36px; height: 36px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; cursor: pointer; color: #e2e8f0; font-size: 20px; transition: all 0.2s;" onmouseover="this.style.background='rgba(59,130,246,0.15)'" onmouseout="this.style.background='rgba(255,255,255,0.05)'">×</button>
+                    <button class="crud-dialog-close" onclick="closeServiceModal()" aria-label="Cerrar modal" style="position: absolute; top: 16px; right: 16px; width: 36px; height: 36px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; cursor: pointer; color: #e2e8f0; font-size: 20px; transition: all 0.2s;" onmouseover="this.style.background='rgba(59,130,246,0.15)'" onmouseout="this.style.background='rgba(255,255,255,0.05)'">×</button>
                 </div>
                 <div class="crud-dialog-body" style="padding: 28px;">
                     <form id="service-form" onsubmit="saveService(event)">
@@ -1259,11 +1335,12 @@
         </div>
 
         <!-- Modal: Límite de Plan -->
-        <div id="limit-modal" class="crud-overlay">
+        <div id="limit-modal" class="crud-overlay"
+             role="dialog" aria-modal="true" aria-labelledby="limit-modal-title" aria-hidden="true">
             <div class="crud-dialog" style="max-width: 480px;">
                 <div class="crud-dialog-header">
                     <h3 class="crud-dialog-title" id="limit-modal-title">⚠️ Límite Alcanzado</h3>
-                    <button class="crud-dialog-close" onclick="closeLimitModal()">&times;</button>
+                    <button class="crud-dialog-close" onclick="closeLimitModal()" aria-label="Cerrar modal">&times;</button>
                 </div>
                 <div class="crud-dialog-body">
                     <p id="limit-modal-message" style="color: #cbd5e1; line-height: 1.6; margin-bottom: 20px;"></p>
@@ -2206,27 +2283,68 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
     </main>
 
     <script>
-        // Tab Navigation
+        // Tab Navigation — FlyonUI Sidebar
         document.addEventListener('DOMContentLoaded', function() {
-            const tabs = document.querySelectorAll('.nav-tab');
+            const tabs     = document.querySelectorAll('#layout-sidebar [role="tab"]');
             const contents = document.querySelectorAll('.tab-content');
 
-            tabs.forEach(tab => {
+            function switchTab(tabId) {
+                // Reset all sidebar tabs
+                tabs.forEach(t => {
+                    t.classList.remove('menu-active');
+                    t.setAttribute('aria-selected', 'false');
+                    t.setAttribute('tabindex', '-1');
+                });
+                // Reset all content panels
+                contents.forEach(c => c.classList.remove('active'));
+
+                // Activate selected button + panel
+                const activeBtn     = document.querySelector(`#layout-sidebar [data-tab="${tabId}"]`);
+                const activeContent = document.getElementById('tab-' + tabId);
+
+                activeBtn?.classList.add('menu-active');
+                activeBtn?.setAttribute('aria-selected', 'true');
+                activeBtn?.setAttribute('tabindex', '0');
+
+                activeContent?.classList.add('active');
+
+                // Auto-close mobile sidebar drawer after navigation
+                if (window.innerWidth < 1024) {
+                    document.getElementById('layout-sidebar')?.classList.remove('overlay-open');
+                }
+
+                // Init SortableJS the first time the Diseño tab opens
+                if (tabId === 'diseno' && !window._sortableReady) {
+                    window._sortableReady = true;
+                    window.initSortable();
+                }
+            }
+
+            // Bind click events to all sidebar nav buttons
+            tabs.forEach((tab, index) => {
                 tab.addEventListener('click', function() {
-                    const tabId = this.getAttribute('data-tab');
+                    switchTab(this.getAttribute('data-tab'));
+                });
 
-                    // Remove active class from all tabs and contents
-                    tabs.forEach(t => t.classList.remove('active'));
-                    contents.forEach(c => c.classList.remove('active'));
-
-                    // Add active class to clicked tab and corresponding content
-                    this.classList.add('active');
-                    document.getElementById('tab-' + tabId).classList.add('active');
-
-                    // Init drag & drop the FIRST time the Diseño tab becomes visible
-                    if (tabId === 'diseno' && !window._sortableReady) {
-                        window._sortableReady = true;
-                        window.initSortable();
+                // Keyboard: ArrowUp/Down for vertical sidebar navigation
+                tab.addEventListener('keydown', function(e) {
+                    let nextTab = null;
+                    if (e.key === 'ArrowDown') {
+                        nextTab = tabs[index + 1] || tabs[0];
+                        e.preventDefault();
+                    } else if (e.key === 'ArrowUp') {
+                        nextTab = tabs[index - 1] || tabs[tabs.length - 1];
+                        e.preventDefault();
+                    } else if (e.key === 'Home') {
+                        nextTab = tabs[0];
+                        e.preventDefault();
+                    } else if (e.key === 'End') {
+                        nextTab = tabs[tabs.length - 1];
+                        e.preventDefault();
+                    }
+                    if (nextTab) {
+                        nextTab.focus();
+                        switchTab(nextTab.getAttribute('data-tab'));
                     }
                 });
             });
@@ -2327,10 +2445,14 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
             }
 
             modal.classList.add('show');
+            modal.removeAttribute('aria-hidden');
+            modal.querySelector('.crud-dialog-close')?.focus();
         }
 
         function closeLimitModal() {
-            document.getElementById('limit-modal').classList.remove('show');
+            const modal = document.getElementById('limit-modal');
+            modal.classList.remove('show');
+            modal.setAttribute('aria-hidden', 'true');
         }
         // ────────────────────────────────────────────────────────────
 
@@ -2377,10 +2499,14 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
             }
             
             modal.classList.add('show');
+            modal.removeAttribute('aria-hidden');
+            modal.querySelector('.crud-dialog-close')?.focus();
         }
 
         function closeProductModal() {
-            document.getElementById('product-modal').classList.remove('show');
+            const modal = document.getElementById('product-modal');
+            modal.classList.remove('show');
+            modal.setAttribute('aria-hidden', 'true');
             currentProductId = null;
         }
 
@@ -2917,10 +3043,14 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
             renderIconGrid('');
 
             modal.classList.add('show');
+            modal.removeAttribute('aria-hidden');
+            modal.querySelector('.crud-dialog-close')?.focus();
         }
 
         function closeServiceModal() {
-            document.getElementById('service-modal').classList.remove('show');
+            const modal = document.getElementById('service-modal');
+            modal.classList.remove('show');
+            modal.setAttribute('aria-hidden', 'true');
             currentServiceId = null;
         }
 
@@ -3688,7 +3818,9 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
         .sortable-ghost { opacity: 0.3 !important; }
         .sortable-drag  { box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5) !important; }
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"
+            integrity="sha256-ipiJrDxYBg3KPcKWCKoGLFUMjjFvFugmzOY9qbHAVQ="
+            crossorigin="anonymous"></script>
     <script>
         // ── Toast global ──────────────────────────────────────────────
         window.showToast = function(message, type) {
@@ -3764,5 +3896,7 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
             .catch(() => window.showToast('\u274c Error de red', 'error'));
         }
     </script>
+    </div>{{-- /lg:ps-64 content wrapper --}}
+</div>{{-- /flex min-h-screen --}}
 </body>
 </html>
