@@ -1548,8 +1548,8 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
 
                                 {{-- Handle / Lock --}}
                                 @if($hasAccess)
-                                    <span class="drag-handle text-base-content/30 hover:text-base-content/60 cursor-grab select-none flex-shrink-0">
-                                        <span class="icon-[tabler--grid-dots] size-4"></span>
+                                    <span class="drag-handle text-base-content/40 hover:text-base-content/70 cursor-grab select-none flex-shrink-0 active:cursor-grabbing">
+                                        <span class="iconify tabler--grip-vertical" style="font-size: 16px;"></span>
                                     </span>
                                 @else
                                     <span class="text-warning flex-shrink-0">
@@ -2137,13 +2137,13 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
                         @foreach($allPayMeta as $mkey => $m)
                         @php $checked = in_array($mkey, $globalEnabled); @endphp
                         <label id="pay-label-{{ $mkey }}" onclick="togglePayMethod('{{ $mkey }}')"
-                               class="flex items-center gap-2 cursor-pointer p-2.5 rounded-box border transition-colors select-none
-                                      {{ $checked ? 'bg-primary/10 border-primary/30' : 'bg-base-200/50 border-base-content/10 hover:border-base-content/20' }}">
+                               class="flex items-center gap-2 cursor-pointer p-2.5 rounded-box border transition-all select-none
+                                      {{ $checked ? 'bg-primary/20 border-primary/50 text-primary font-semibold' : 'bg-base-200/50 border-base-content/10 text-base-content hover:border-base-content/20' }}">
                             <input type="checkbox" id="pay-check-{{ $mkey }}" value="{{ $mkey }}" {{ $checked ? 'checked' : '' }} class="hidden">
                             <span class="text-base">{{ $m['icon'] }}</span>
                             <div class="flex-1 min-w-0">
-                                <div class="text-xs font-medium text-base-content">{{ $m['label'] }}</div>
-                                <div class="text-xs text-base-content/40">{{ $m['desc'] }}</div>
+                                <div class="text-xs font-medium {{ $checked ? 'text-primary' : 'text-base-content' }}">{{ $m['label'] }}</div>
+                                <div class="text-xs {{ $checked ? 'text-primary/70' : 'text-base-content/40' }}">{{ $m['desc'] }}</div>
                             </div>
                             <span id="pay-check-icon-{{ $mkey }}"
                                   class="icon-[tabler--check] size-4 shrink-0 transition-opacity {{ $checked ? 'text-primary opacity-100' : 'opacity-0' }}"
@@ -2162,13 +2162,13 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
                             @foreach($allCurrencyMeta as $ckey => $c)
                             @php $checked = in_array($ckey, $currencyEnabled); @endphp
                             <label id="curr-label-{{ $ckey }}" onclick="toggleCurrency('{{ $ckey }}')"
-                                   class="flex items-center gap-2 cursor-pointer p-2.5 rounded-box border transition-colors select-none
-                                          {{ $checked ? 'bg-primary/10 border-primary/30' : 'bg-base-200/50 border-base-content/10 hover:border-base-content/20' }}">
+                                   class="flex items-center gap-2 cursor-pointer p-2.5 rounded-box border transition-all select-none
+                                          {{ $checked ? 'bg-primary/20 border-primary/50 text-primary font-semibold' : 'bg-base-200/50 border-base-content/10 text-base-content hover:border-base-content/20' }}">
                                 <input type="checkbox" id="curr-check-{{ $ckey }}" value="{{ $ckey }}" {{ $checked ? 'checked' : '' }} class="hidden">
                                 <span class="text-base">{{ $c['icon'] }}</span>
                                 <div class="flex-1 min-w-0">
-                                    <div class="text-xs font-medium text-base-content">{{ $c['label'] }}</div>
-                                    <div class="text-xs text-base-content/40">{{ $c['desc'] }}</div>
+                                    <div class="text-xs font-medium {{ $checked ? 'text-primary' : 'text-base-content' }}">{{ $c['label'] }}</div>
+                                    <div class="text-xs {{ $checked ? 'text-primary/70' : 'text-base-content/40' }}">{{ $c['desc'] }}</div>
                                 </div>
                                 <span id="curr-check-icon-{{ $ckey }}"
                                       class="icon-[tabler--check] size-4 shrink-0 transition-opacity {{ $checked ? 'text-primary opacity-100' : 'opacity-0' }}"
@@ -2202,11 +2202,11 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
                                     @php $bchecked = in_array($mkey, $bEnabled); @endphp
                                     <label id="pay-branch-label-{{ $branch->id }}-{{ $mkey }}"
                                            onclick="toggleBranchPayMethod({{ $branch->id }}, '{{ $mkey }}')"
-                                           class="flex items-center gap-1.5 cursor-pointer p-2 rounded-lg border transition-colors select-none
-                                                  {{ $bchecked ? 'bg-primary/10 border-primary/30' : 'bg-base-100 border-base-content/10 hover:border-base-content/20' }}">
+                                           class="flex items-center gap-1.5 cursor-pointer p-2 rounded-lg border transition-all select-none
+                                                  {{ $bchecked ? 'bg-primary/20 border-primary/50 text-primary font-semibold' : 'bg-base-100 border-base-content/10 text-base-content hover:border-base-content/20' }}">
                                         <input type="checkbox" id="pay-branch-check-{{ $branch->id }}-{{ $mkey }}" value="{{ $mkey }}" {{ $bchecked ? 'checked' : '' }} class="hidden">
                                         <span class="text-sm">{{ $m['icon'] }}</span>
-                                        <span class="text-xs text-base-content flex-1">{{ $m['label'] }}</span>
+                                        <span class="text-xs {{ $bchecked ? 'text-primary' : 'text-base-content' }} flex-1">{{ $m['label'] }}</span>
                                         <span id="pay-branch-check-icon-{{ $branch->id }}-{{ $mkey }}"
                                               class="icon-[tabler--check] size-3.5 shrink-0 transition-opacity {{ $bchecked ? 'text-primary opacity-100' : 'opacity-0' }}"
                                               aria-hidden="true"></span>
@@ -3923,13 +3923,7 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
 
             sortableEl.addEventListener('change', function(e) {
                 if (!e.target.classList.contains('section-toggle')) return;
-                const checked = e.target.checked;
-                const item    = e.target.closest('.section-item');
-                const thumb   = item && item.querySelector('.toggle-thumb');
-                if (thumb) {
-                    thumb.style.background = checked ? '#2B6FFF' : 'rgba(255,255,255,0.4)';
-                    thumb.style.transform  = checked ? 'translateX(20px)' : 'translateX(0)';
-                }
+                // FlyonUI's switch handles styling automatically
                 saveSectionsOrder();
             });
 
