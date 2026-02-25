@@ -31,7 +31,6 @@ class ColorPalettesSeeder extends Seeder
             [
                 'name'             => 'Light',
                 'slug'             => 'light',
-                'code'             => 'light',
                 'primary_color'    => null,
                 'secondary_color'  => null,
                 'accent_color'     => null,
@@ -43,7 +42,6 @@ class ColorPalettesSeeder extends Seeder
             [
                 'name'             => 'Ghibli',
                 'slug'             => 'ghibli',
-                'code'             => 'ghibli',
                 'primary_color'    => null,
                 'secondary_color'  => null,
                 'accent_color'     => null,
@@ -55,7 +53,6 @@ class ColorPalettesSeeder extends Seeder
             [
                 'name'             => 'Gourmet',
                 'slug'             => 'gourmet',
-                'code'             => 'gourmet',
                 'primary_color'    => null,
                 'secondary_color'  => null,
                 'accent_color'     => null,
@@ -67,7 +64,6 @@ class ColorPalettesSeeder extends Seeder
             [
                 'name'             => 'Perplexity',
                 'slug'             => 'perplexity',
-                'code'             => 'perplexity',
                 'primary_color'    => null,
                 'secondary_color'  => null,
                 'accent_color'     => null,
@@ -79,7 +75,6 @@ class ColorPalettesSeeder extends Seeder
             [
                 'name'             => 'Soft',
                 'slug'             => 'soft',
-                'code'             => 'soft',
                 'primary_color'    => null,
                 'secondary_color'  => null,
                 'accent_color'     => null,
@@ -91,7 +86,6 @@ class ColorPalettesSeeder extends Seeder
             [
                 'name'             => 'Dark',
                 'slug'             => 'dark',
-                'code'             => 'dark',
                 'primary_color'    => null,
                 'secondary_color'  => null,
                 'accent_color'     => null,
@@ -103,7 +97,6 @@ class ColorPalettesSeeder extends Seeder
             [
                 'name'             => 'Shadcn',
                 'slug'             => 'shadcn',
-                'code'             => 'shadcn',
                 'primary_color'    => null,
                 'secondary_color'  => null,
                 'accent_color'     => null,
@@ -115,7 +108,6 @@ class ColorPalettesSeeder extends Seeder
             [
                 'name'             => 'VSCode',
                 'slug'             => 'vscode',
-                'code'             => 'vscode',
                 'primary_color'    => null,
                 'secondary_color'  => null,
                 'accent_color'     => null,
@@ -127,7 +119,6 @@ class ColorPalettesSeeder extends Seeder
             [
                 'name'             => 'Pastel',
                 'slug'             => 'pastel',
-                'code'             => 'pastel',
                 'primary_color'    => null,
                 'secondary_color'  => null,
                 'accent_color'     => null,
@@ -139,7 +130,6 @@ class ColorPalettesSeeder extends Seeder
             [
                 'name'             => 'Corporate',
                 'slug'             => 'corporate',
-                'code'             => 'corporate',
                 'primary_color'    => null,
                 'secondary_color'  => null,
                 'accent_color'     => null,
@@ -156,7 +146,6 @@ class ColorPalettesSeeder extends Seeder
             [
                 'name'             => 'Black',
                 'slug'             => 'black',
-                'code'             => 'black',
                 'primary_color'    => null,
                 'secondary_color'  => null,
                 'accent_color'     => null,
@@ -168,7 +157,6 @@ class ColorPalettesSeeder extends Seeder
             [
                 'name'             => 'Luxury',
                 'slug'             => 'luxury',
-                'code'             => 'luxury',
                 'primary_color'    => null,
                 'secondary_color'  => null,
                 'accent_color'     => null,
@@ -180,7 +168,6 @@ class ColorPalettesSeeder extends Seeder
             [
                 'name'             => 'Slack',
                 'slug'             => 'slack',
-                'code'             => 'slack',
                 'primary_color'    => null,
                 'secondary_color'  => null,
                 'accent_color'     => null,
@@ -192,7 +179,6 @@ class ColorPalettesSeeder extends Seeder
             [
                 'name'             => 'Spotify',
                 'slug'             => 'spotify',
-                'code'             => 'spotify',
                 'primary_color'    => null,
                 'secondary_color'  => null,
                 'accent_color'     => null,
@@ -204,7 +190,6 @@ class ColorPalettesSeeder extends Seeder
             [
                 'name'             => 'Mintlify',
                 'slug'             => 'mintlify',
-                'code'             => 'mintlify',
                 'primary_color'    => null,
                 'secondary_color'  => null,
                 'accent_color'     => null,
@@ -216,7 +201,6 @@ class ColorPalettesSeeder extends Seeder
             [
                 'name'             => 'Claude',
                 'slug'             => 'claude',
-                'code'             => 'claude',
                 'primary_color'    => null,
                 'secondary_color'  => null,
                 'accent_color'     => null,
@@ -228,7 +212,6 @@ class ColorPalettesSeeder extends Seeder
             [
                 'name'             => 'Valorant',
                 'slug'             => 'valorant',
-                'code'             => 'valorant',
                 'primary_color'    => null,
                 'secondary_color'  => null,
                 'accent_color'     => null,

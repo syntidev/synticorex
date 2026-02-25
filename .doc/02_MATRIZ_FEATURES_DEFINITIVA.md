@@ -8,20 +8,20 @@
 
 ## 🎯 TABLA MAESTRA DE CARACTERÍSTICAS
 
-| Feature / Sección | Plan OPORTUNIDAD ($49) | Plan CRECIMIENTO ($89) | Plan VISIÓN ($159) |
-|-------------------|------------------------|------------------------|-------------------|
-| **PRODUCTOS** | 6 productos | 18 productos | 40 productos (Layout dinámico) |
-| **SERVICIOS** | 3 (Solo iconos) | 6 (Icono o Imagen) | 15 (Overlay + Botón Info) |
-| **DISEÑO** | 5 Paletas predefinidas | 10 Paletas | 20 Paletas + Efectos visuales |
-| **TASA DÓLAR** | No visible | Visible (Auto-refresh cada hora) | Visible (Full control + histórico) |
-| **WHATSAPP** | 1 Botón (Productos) | Hasta 2 (Ventas/Soporte) | 2 con Filtro Horario |
-| **ANALYTICS** | Clicks por mes (básico) | Visitas diarias/mensuales (medium) | Avanzado (Top 3 productos) |
-| **SECCIONES EXTRAS** | No | Header Top + Acerca de + Medios Pago | FAQ (5 items) + CTA especial |
-| **SEO** | Auto-generado básico | Mejorado (Meta tags por segmento) | Profundo (Schema + Análisis) |
-| **REDES SOCIALES** | 1 red social | Todas (símbolo + usuario) | Todas + personalización |
-| **MEDIOS DE PAGO** | No | Todos (iconos informativos) | Todos + personalización |
-| **IMÁGENES MAX** | 8 (1 logo + 1 hero + 6 prod) | 26 (1 logo + 1 hero + 6 serv + 18 prod) | 57 (1 logo + 1 hero + 15 serv + 40 prod) |
-| **WHITE LABEL** | No (incluye marca SYNTIweb) | No (incluye marca SYNTIweb) | Opcional (add-on) |
+| Feature / Sección | OPORTUNIDAD ($99) | CRECIMIENTO ($149) | VISIÓN ($199) |
+|-------------------|------------------|-------------------|----------------|
+| **PRODUCTOS**     | 6                | 12                | 18             |
+| **SERVICIOS**     | 3                | 6                 | 9              |
+| **IMÁGENES**      | 6 (1 por producto) | 12 (1 por producto) | 54 (3 por producto) |
+| **PALETAS/TEMAS** | 5 básicas        | 10 (básicas+marca) | 20 (todas)     |
+| **TASA DÓLAR**    | No               | Sí (widget)        | Sí (widget+histórico) |
+| **WHATSAPP**      | 1 número         | 2 números          | 2 + filtro horario |
+| **ANALYTICS**     | Básico           | Media              | Avanzado       |
+| **SECCIONES EXTRA** | No             | Header Top, Acerca, Medios Pago | FAQ, CTA especial, Sucursales |
+| **SEO**           | Básico           | Media              | Avanzado       |
+| **REDES SOCIALES**| 1                | Todas              | Todas          |
+| **MEDIOS DE PAGO**| Pago Móvil, Biopago | Todos configurables | Todos + por sucursal |
+| **WHITE LABEL**   | No               | No                 | Opcional (add-on) |
 
 ---
 
