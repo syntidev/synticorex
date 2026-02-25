@@ -15,330 +15,183 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
     <style>
-        /* Tab content visibility */
-        .tab-content {
-            display: none;
-        }
+        /* ── Tab visibility ─────────────────────────────────────────── */
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
 
-        .tab-content.active {
-            display: block;
-        }
-
-        /* Forms */
+        /* ── Section cards (FlyonUI variables) ──────────────────────── */
         .form-section {
-            background: #0f1c32;
-            border-radius: 12px;
-            padding: 24px;
-            margin-bottom: 24px;
+            background: var(--color-base-100);
+            border-radius: var(--radius-box, 0.5rem);
+            border: 1px solid color-mix(in oklch, var(--color-base-content) 10%, transparent);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
         }
-
         .form-section-title {
-            font-size: 18px;
+            font-size: 1.125rem;
             font-weight: 600;
-            margin-bottom: 20px;
-            color: #ffffff;
+            margin-bottom: 1.25rem;
+            color: var(--color-base-content);
         }
-
         .form-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 16px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
         }
-
-        .form-group {
-            margin-bottom: 16px;
-        }
-
+        .form-group { margin-bottom: 1rem; }
         .form-label {
             display: block;
-            font-size: 14px;
+            font-size: 0.875rem;
             font-weight: 500;
-            color: rgba(255, 255, 255, 0.9);
-            margin-bottom: 8px;
+            color: var(--color-base-content);
+            margin-bottom: 0.375rem;
         }
-
         .form-input,
         .form-textarea,
         .form-select {
             width: 100%;
-            padding: 10px 12px;
-            background: #07101F;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 6px;
-            color: #ffffff;
-            font-size: 14px;
-            font-family: 'Inter', sans-serif;
-            transition: border-color 0.2s;
+            padding: 0.625rem 0.75rem;
+            background: var(--color-base-200);
+            border: 1px solid color-mix(in oklch, var(--color-base-content) 20%, transparent);
+            border-radius: var(--radius-field, 0.375rem);
+            color: var(--color-base-content);
+            font-size: 0.875rem;
+            font-family: inherit;
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
-
-        .form-input:focus,
-        .form-textarea:focus,
-        .form-select:focus {
+        .form-input:focus, .form-textarea:focus, .form-select:focus {
             outline: none;
-            border-color: #2B6FFF;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px color-mix(in oklch, var(--color-primary) 25%, transparent);
         }
+        .form-textarea { min-height: 100px; resize: vertical; }
+        .form-actions { display: flex; gap: 0.75rem; margin-top: 1.25rem; flex-wrap: wrap; }
 
-        /* Focus visible — keyboard navigation (WCAG 2.4.7) */
+        /* Focus visible (WCAG 2.4.7) */
         :focus-visible {
-            outline: 2px solid #2B6FFF !important;
+            outline: 2px solid var(--color-primary) !important;
             outline-offset: 2px !important;
         }
-        /* Excluir inputs que ya tienen estilo de foco propio */
-        .form-input:focus-visible,
-        .form-textarea:focus-visible,
-        .form-select:focus-visible {
+        .form-input:focus-visible, .form-textarea:focus-visible, .form-select:focus-visible {
             outline: none !important;
-            box-shadow: 0 0 0 3px rgba(43, 111, 255, 0.35);
         }
 
-        .form-textarea {
-            min-height: 100px;
-            resize: vertical;
-        }
-
-        /* Buttons */
+        /* ── Legacy button classes (gradual migration) ──────────────── */
         .btn-primary {
-            background: #2B6FFF;
-            color: #ffffff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s;
+            background: var(--color-primary);
+            color: var(--color-primary-content, #fff);
+            border: none; padding: 0.625rem 1.25rem;
+            border-radius: var(--radius-field); font-size: 0.875rem;
+            font-weight: 600; cursor: pointer; transition: opacity 0.2s;
         }
-
-        .btn-primary:hover {
-            background: #1e5beb;
-        }
-
+        .btn-primary:hover { opacity: 0.88; }
         .btn-secondary {
-            background: #0f1c32;
-            color: #2B6FFF;
-            border: 1px solid #2B6FFF;
-            padding: 10px 20px;
-            border-radius: 6px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
+            background: transparent;
+            color: var(--color-primary);
+            border: 1px solid var(--color-primary);
+            padding: 0.625rem 1.25rem;
+            border-radius: var(--radius-field); font-size: 0.875rem;
+            font-weight: 600; cursor: pointer; transition: all 0.2s;
         }
-
-        .btn-secondary:hover {
-            background: #2B6FFF;
-            color: #ffffff;
+        .btn-secondary:hover { background: var(--color-primary); color: var(--color-primary-content, #fff); }
+        .btn-add {
+            background: var(--color-primary); color: var(--color-primary-content, #fff);
+            border: none; padding: 0.625rem 1.25rem; border-radius: var(--radius-field);
+            font-size: 0.875rem; font-weight: 600; cursor: pointer; transition: opacity 0.2s;
         }
-
-        .form-actions {
-            display: flex;
-            gap: 12px;
-            margin-top: 20px;
+        .btn-add:hover:not(:disabled) { opacity: 0.88; }
+        .btn-add:disabled { opacity: 0.45; cursor: not-allowed; }
+        .btn-icon {
+            background: none; border: none;
+            color: color-mix(in oklch, var(--color-base-content) 60%, transparent);
+            cursor: pointer; padding: 0.375rem; border-radius: var(--radius-field);
+            transition: all 0.2s; font-size: 0.875rem; display: inline-flex; align-items: center;
         }
-
-        /* Placeholder content */
-        .placeholder-content {
-            text-align: center;
-            padding: 60px 20px;
-            color: rgba(255, 255, 255, 0.5);
+        .btn-icon:hover {
+            background: color-mix(in oklch, var(--color-base-content) 10%, transparent);
+            color: var(--color-primary);
         }
+        .btn-danger:hover { color: var(--color-error); }
 
-        .placeholder-content h3 {
-            font-size: 20px;
-            margin-bottom: 8px;
-            color: rgba(255, 255, 255, 0.7);
+        /* ── Placeholder / Empty state ───────────────────────────────── */
+        .placeholder-content, .empty-state {
+            text-align: center; padding: 3.5rem 1.25rem;
+            color: color-mix(in oklch, var(--color-base-content) 45%, transparent);
         }
+        .placeholder-content h3, .empty-state h3 {
+            font-size: 1.125rem; margin-bottom: 0.5rem;
+            color: color-mix(in oklch, var(--color-base-content) 65%, transparent);
+        }
+        .empty-state-icon { font-size: 3rem; margin-bottom: 1rem; }
 
-        /* Table */
+        /* ── Table ───────────────────────────────────────────────────── */
         .table-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
+            display: flex; justify-content: space-between;
+            align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.75rem;
         }
-
-        .table-title {
-            font-size: 18px;
-            font-weight: 600;
-        }
-
+        .table-title { font-size: 1.125rem; font-weight: 600; color: var(--color-base-content); }
         .table-subtitle {
-            font-size: 13px;
-            color: rgba(255, 255, 255, 0.6);
-            margin-top: 4px;
+            font-size: 0.8125rem; margin-top: 0.25rem;
+            color: color-mix(in oklch, var(--color-base-content) 55%, transparent);
         }
-
         .table-container {
-            background: #0f1c32;
-            border-radius: 12px;
+            background: var(--color-base-100);
+            border-radius: var(--radius-box);
+            border: 1px solid color-mix(in oklch, var(--color-base-content) 10%, transparent);
             overflow: hidden;
         }
-
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .data-table thead {
-            background: #0a1628;
-        }
-
+        .data-table { width: 100%; border-collapse: collapse; }
+        .data-table thead { background: var(--color-base-200); }
         .data-table th {
-            padding: 12px 16px;
-            text-align: left;
-            font-size: 13px;
-            font-weight: 600;
-            color: rgba(255, 255, 255, 0.7);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0.75rem 1rem; text-align: left; font-size: 0.8125rem;
+            font-weight: 600; color: color-mix(in oklch, var(--color-base-content) 70%, transparent);
+            border-bottom: 1px solid color-mix(in oklch, var(--color-base-content) 12%, transparent);
         }
-
         .data-table td {
-            padding: 12px 16px;
-            font-size: 14px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 0.75rem 1rem; font-size: 0.875rem;
+            color: var(--color-base-content);
+            border-bottom: 1px solid color-mix(in oklch, var(--color-base-content) 7%, transparent);
         }
-
         .data-table tbody tr:hover {
-            background: rgba(43, 111, 255, 0.05);
+            background: color-mix(in oklch, var(--color-primary) 5%, transparent);
         }
-
         .product-image {
-            width: 48px;
-            height: 48px;
-            border-radius: 6px;
+            width: 48px; height: 48px; border-radius: var(--radius-field);
             object-fit: cover;
-            background: #07101F;
+            background: var(--color-base-200);
         }
 
-        .badge {
-            display: inline-block;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 11px;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
+        /* ── Badges ──────────────────────────────────────────────────── */
+        .badge-hot  { background: var(--color-error);   color: var(--color-error-content, #fff); }
+        .badge-new  { background: var(--color-success); color: var(--color-success-content, #fff); }
+        .badge-promo{ background: var(--color-warning); color: var(--color-warning-content, #000); }
+        .status-indicator { display: inline-flex; align-items: center; gap: 0.375rem; font-size: 0.8125rem; }
+        .status-dot { width: 8px; height: 8px; border-radius: 50%; }
+        .status-dot.active  { background: var(--color-success); }
+        .status-dot.inactive{ background: color-mix(in oklch, var(--color-base-content) 35%, transparent); }
 
-        .badge-hot {
-            background: #ff4444;
-            color: #ffffff;
-        }
-
-        .badge-new {
-            background: #00cc66;
-            color: #ffffff;
-        }
-
-        .badge-promo {
-            background: #ff9900;
-            color: #ffffff;
-        }
-
-        .status-indicator {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 13px;
-        }
-
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-        }
-
-        .status-dot.active {
-            background: #00cc66;
-        }
-
-        .status-dot.inactive {
-            background: #666;
-        }
-
-        .btn-icon {
-            background: none;
-            border: none;
-            color: rgba(255, 255, 255, 0.6);
-            cursor: pointer;
-            padding: 6px;
-            border-radius: 4px;
-            transition: all 0.2s;
-            font-size: 14px;
-        }
-
-        .btn-icon:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: #2B6FFF;
-        }
-
-        .btn-danger:hover {
-            color: #ff4444;
-        }
-
-        .btn-add {
-            background: #2B6FFF;
-            color: #ffffff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .btn-add:hover:not(:disabled) {
-            background: #1e5beb;
-        }
-
-        .btn-add:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        /* CRUD Modals — prefixed to avoid FlyonUI .modal class conflict */
+        /* ── CRUD Modals ─────────────────────────────────────────────── */
         .crud-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.75);
-            z-index: 9999;
-            align-items: center;
-            justify-content: center;
-            padding: 16px;
+            display: none; position: fixed; inset: 0;
+            background: rgba(0,0,0,0.65); z-index: 9999;
+            align-items: center; justify-content: center; padding: 1rem;
         }
-
-        .crud-overlay.show {
-            display: flex;
-        }
-
+        .crud-overlay.show { display: flex; }
         .crud-dialog {
-            background: #0f1c32;
-            border-radius: 12px;
-            width: 100%;
-            max-width: 600px;
-            max-height: 90vh;
-            overflow-y: auto;
-            position: relative;
-            z-index: 10000;
-            box-shadow: 0 25px 60px rgba(0,0,0,0.6);
+            background: var(--color-base-100);
+            border-radius: var(--radius-box); width: 100%;
+            max-width: 600px; max-height: 90vh; overflow-y: auto;
+            position: relative; z-index: 10000;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.35);
+            border: 1px solid color-mix(in oklch, var(--color-base-content) 12%, transparent);
         }
-
         .crud-dialog-header {
-            padding: 20px 24px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid color-mix(in oklch, var(--color-base-content) 10%, transparent);
+            display: flex; justify-content: space-between; align-items: center;
         }
-
         .crud-dialog-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: #fff;
+            font-size: 1.125rem; font-weight: 600; color: var(--color-base-content);
         }
 
         .crud-dialog-close {
@@ -436,80 +289,36 @@
             transform: translateY(-1px);
         }
 
-        /* Service mode tabs */
+        /* ── Service mode bar ────────────────────────────────────────── */
         .svc-mode-bar {
-            display: flex;
-            gap: 0;
-            border-radius: 10px;
-            overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.1);
+            display: flex; gap: 0; border-radius: var(--radius-box); overflow: hidden;
+            border: 1px solid color-mix(in oklch, var(--color-base-content) 12%, transparent);
             flex-shrink: 0;
         }
         .svc-mode-bar button {
-            flex: 1;
-            padding: 8px 18px;
-            font-size: 12px;
-            font-weight: 700;
-            border: none;
-            cursor: pointer;
-            transition: all .2s;
+            flex: 1; padding: 0.5rem 1.125rem; font-size: 0.75rem; font-weight: 700;
+            border: none; cursor: pointer; transition: all .2s;
+            background: var(--color-base-200); color: var(--color-base-content);
+        }
+        .svc-mode-bar button.active {
+            background: var(--color-primary); color: var(--color-primary-content, #fff);
         }
 
-        .toggle-switch {
-            position: relative;
-            display: inline-block;
-            width: 48px;
-            height: 24px;
-        }
-
-        .toggle-switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
+        /* ── Legacy toggle (keep for status toggle) ──────────────────── */
+        .toggle-switch { position: relative; display: inline-block; width: 48px; height: 24px; }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
         .toggle-slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #374151;
-            transition: 0.3s;
-            border-radius: 24px;
+            position: absolute; cursor: pointer; inset: 0;
+            background-color: color-mix(in oklch, var(--color-base-content) 20%, transparent);
+            transition: 0.3s; border-radius: 24px;
         }
-
         .toggle-slider:before {
-            position: absolute;
-            content: "";
-            height: 18px;
-            width: 18px;
-            left: 3px;
-            bottom: 3px;
-            background-color: white;
-            transition: 0.3s;
-            border-radius: 50%;
+            position: absolute; content: "";
+            height: 18px; width: 18px; left: 3px; bottom: 3px;
+            background-color: var(--color-base-100); transition: 0.3s; border-radius: 50%;
         }
-
-        .toggle-switch input:checked + .toggle-slider {
-            background-color: #2B6FFF;
-        }
-
-        .toggle-switch input:checked + .toggle-slider:before {
-            transform: translateX(24px);
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: rgba(255, 255, 255, 0.5);
-        }
-
-        .empty-state-icon {
-            font-size: 48px;
-            margin-bottom: 16px;
-        }
+        .toggle-switch input:checked + .toggle-slider { background-color: var(--color-success); }
+        .toggle-switch input:checked + .toggle-slider:before { transform: translateX(24px); }
 
         /* ═══════════════════════════════════════════════════════════════════════ */
         /* RESPONSIVE BREAKPOINTS (components — layout handled by FlyonUI)      */
@@ -535,20 +344,16 @@
             /* Tables → Card layout */
             .data-table thead { display: none; }
             .data-table tbody tr {
-                display: block;
-                margin-bottom: 12px;
-                background: #0f1c32;
-                border-radius: 8px;
-                padding: 12px;
-                border: 1px solid rgba(255,255,255,0.1);
+                display: block; margin-bottom: 0.75rem;
+                background: var(--color-base-100);
+                border-radius: var(--radius-box); padding: 0.75rem;
+                border: 1px solid color-mix(in oklch, var(--color-base-content) 10%, transparent);
             }
             .data-table td {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                padding: 8px 0;
-                border-bottom: 1px solid rgba(255,255,255,0.05);
-                font-size: 13px;
+                display: flex; justify-content: space-between;
+                align-items: center; padding: 0.5rem 0;
+                border-bottom: 1px solid color-mix(in oklch, var(--color-base-content) 7%, transparent);
+                font-size: 0.8125rem;
             }
             .data-table td:last-child { border-bottom: none; }
             .data-table td::before {
@@ -739,14 +544,12 @@
 
     {{-- ── Plan Expiry Notices ──────────────────────────────────────────── --}}
     @if($isFrozen)
-    {{-- FROZEN: subscription expired, in 30-day grace period --}}
-    <div style="background: #3b0a0a; border-bottom: 2px solid #ef4444; padding: 14px 24px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
-        <span style="font-size: 22px; flex-shrink: 0;">🔴</span>
-        <div style="flex: 1; min-width: 0;">
-            <p style="color: #fca5a5; font-size: 14px; font-weight: 700; margin-bottom: 3px;">
-                Tu plan venció — tu landing pública está pausada
-            </p>
-            <p style="color: #f87171; font-size: 13px;">
+    {{-- FROZEN: subscription expired --}}
+    <div class="alert alert-error rounded-none border-x-0 border-t-0 flex items-center gap-3 flex-wrap px-6">
+        <span class="icon-[tabler--circle-x] size-6 shrink-0" aria-hidden="true"></span>
+        <div class="flex-1 min-w-0">
+            <p class="font-bold text-sm">Tu plan venció — tu landing pública está pausada</p>
+            <p class="text-sm opacity-80">
                 @if($graceRemainingDays !== null && $graceRemainingDays > 0)
                     Tienes <strong>{{ $graceRemainingDays }} día{{ $graceRemainingDays === 1 ? '' : 's' }}</strong> de gracia antes de que tu cuenta se archive. Ningún dato se borra.
                 @else
@@ -754,25 +557,21 @@
                 @endif
             </p>
         </div>
-        <a href="mailto:soporte@synticorex.com"
-           style="flex-shrink: 0; background: #ef4444; color: #fff; border: none; border-radius: 8px; padding: 10px 20px; font-size: 14px; font-weight: 600; text-decoration: none; white-space: nowrap;">
+        <a href="mailto:soporte@synticorex.com" class="btn btn-sm btn-error border-error-content/30 text-error-content shrink-0">
             Renovar plan
         </a>
     </div>
     @elseif($isExpiringSoon && $daysUntilExpiry !== null)
     {{-- EXPIRING SOON: 30 days or fewer remaining --}}
-    <div style="background: #431407; border-bottom: 2px solid #f97316; padding: 14px 24px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
-        <span style="font-size: 22px; flex-shrink: 0;">⚠️</span>
-        <div style="flex: 1; min-width: 0;">
-            <p style="color: #fed7aa; font-size: 14px; font-weight: 700; margin-bottom: 3px;">
-                Tu plan vence en {{ $daysUntilExpiry }} día{{ $daysUntilExpiry === 1 ? '' : 's' }}
-            </p>
-            <p style="color: #fdba74; font-size: 13px;">
+    <div class="alert alert-warning rounded-none border-x-0 border-t-0 flex items-center gap-3 flex-wrap px-6">
+        <span class="icon-[tabler--alert-triangle] size-6 shrink-0" aria-hidden="true"></span>
+        <div class="flex-1 min-w-0">
+            <p class="font-bold text-sm">Tu plan vence en {{ $daysUntilExpiry }} día{{ $daysUntilExpiry === 1 ? '' : 's' }}</p>
+            <p class="text-sm opacity-80">
                 Renueva antes del <strong>{{ $tenant->subscription_ends_at->format('d/m/Y') }}</strong> para mantener tu landing pública activa sin interrupciones.
             </p>
         </div>
-        <a href="mailto:soporte@synticorex.com"
-           style="flex-shrink: 0; background: #f97316; color: #fff; border: none; border-radius: 8px; padding: 10px 20px; font-size: 14px; font-weight: 600; text-decoration: none; white-space: nowrap;">
+        <a href="mailto:soporte@synticorex.com" class="btn btn-sm btn-warning border-warning-content/30 text-warning-content shrink-0">
             Renovar ahora
         </a>
     </div>
@@ -785,106 +584,144 @@
         <!-- Tab: Info -->
         <div id="tab-info" class="tab-content active">
             <form id="form-info" onsubmit="saveInfo(event)">
-                <div class="form-section">
-                    <h2 class="form-section-title">Información del Negocio</h2>
-                    
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label class="form-label" for="info-business-name">Nombre del Negocio</label>
-                            <input id="info-business-name" type="text" class="form-input" name="business_name" value="{{ $tenant->business_name }}" required autocomplete="organization">
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label" for="info-subdomain">Subdominio</label>
-                            <input id="info-subdomain" type="text" class="form-input" value="{{ $tenant->subdomain }}" disabled aria-readonly="true">
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label" for="info-slogan">Eslogan</label>
-                            <input id="info-slogan" type="text" class="form-input" name="slogan" value="{{ $tenant->slogan }}">
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label" for="info-phone">Teléfono</label>
-                            <input id="info-phone" type="text" class="form-input" name="phone" value="{{ $tenant->phone }}" autocomplete="tel">
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label" for="info-whatsapp">WhatsApp Ventas</label>
-                            <input id="info-whatsapp" type="text" class="form-input" name="whatsapp_sales" value="{{ $tenant->whatsapp_sales }}" autocomplete="off">
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label" for="info-email">Email</label>
-                            <input id="info-email" type="email" class="form-input" name="email" value="{{ $tenant->email }}" autocomplete="email">
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label" for="info-address">Dirección</label>
-                            <input id="info-address" type="text" class="form-input" name="address" value="{{ $tenant->address }}" autocomplete="street-address">
-                        </div>
-                        
-                        @if($tenant->plan_id >= 2)
-                        <div class="form-group">
-                            <label class="form-label flex items-center gap-2">
-                                <span>Título sección Contacto</span>
-                                <span style="font-size:11px; color:#22c55e; font-weight:600; background:rgba(34,197,94,.12); padding:2px 8px; border-radius:20px;">Plan {{ $plan->name }}</span>
-                            </label>
-                            <input type="text"
-                                   name="contact_title"
-                                   class="form-input"
-                                   value="{{ data_get($tenant->settings, 'business_info.contact.title', '') }}"
-                                   placeholder="Contáctanos">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label flex items-center gap-2">
-                                <span>Subtítulo sección Contacto</span>
-                                <span style="font-size:11px; color:#22c55e; font-weight:600; background:rgba(34,197,94,.12); padding:2px 8px; border-radius:20px;">Plan {{ $plan->name }}</span>
-                            </label>
-                            <input type="text"
-                                   name="contact_subtitle"
-                                   class="form-input"
-                                   value="{{ data_get($tenant->settings, 'business_info.contact.subtitle', '') }}"
-                                   placeholder="Estamos aquí para atenderte">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label flex items-center gap-2">
-                                <span>URL Google Maps</span>
-                                <span style="font-size:11px; color:#22c55e; font-weight:600; background:rgba(34,197,94,.12); padding:2px 8px; border-radius:20px;">Plan {{ $plan->name }}</span>
-                            </label>
-                            <input type="url"
-                                   name="contact_maps_url"
-                                   class="form-input"
-                                   value="{{ data_get($tenant->settings, 'business_info.contact.maps_url', '') }}"
-                                   placeholder="https://www.google.com/maps/embed?pb=...">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label flex items-center gap-2">
-                                <span>Teléfono Secundario</span>
-                                <span style="font-size:11px; color:#22c55e; font-weight:600; background:rgba(34,197,94,.12); padding:2px 8px; border-radius:20px;">Plan {{ $plan->name }}</span>
-                            </label>
-                            <input type="tel"
-                                   name="phone_secondary"
-                                   class="form-input"
-                                   value="{{ data_get($tenant->settings, 'contact_info.phone_secondary', '') }}"
-                                   placeholder="+58 XXX XXXXXXX">
-                        </div>
-                        @endif
-
-                        <div class="form-group">
-                            <label class="form-label" for="info-city">Ciudad</label>
-                            <input id="info-city" type="text" class="form-input" name="city" value="{{ $tenant->city }}" autocomplete="address-level2">
-                        </div>
+                <div class="card bg-base-100 shadow-sm border border-base-content/10">
+                    <div class="card-header">
+                        <h2 class="card-title flex items-center gap-2">
+                            <span class="icon-[tabler--building-store] size-5 text-primary" aria-hidden="true"></span>
+                            Información del Negocio
+                        </h2>
                     </div>
+                    <div class="card-body">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
-                    <div class="form-group">
-                        <label class="form-label" for="info-description">Descripción</label>
-                        <textarea id="info-description" class="form-textarea" name="description">{{ $tenant->description }}</textarea>
-                    </div>
-                    
-                    <div class="form-actions">
-                        <button type="submit" class="btn-primary">Guardar Cambios</button>
-                        <button type="button" class="btn-secondary" onclick="resetForm('form-info')">Cancelar</button>
+                            <div class="form-control">
+                                <label class="label" for="info-business-name">
+                                    <span class="label-text font-medium">Nombre del Negocio</span>
+                                </label>
+                                <input id="info-business-name" type="text" class="input input-bordered w-full"
+                                       name="business_name" value="{{ $tenant->business_name }}"
+                                       required autocomplete="organization">
+                            </div>
+
+                            <div class="form-control">
+                                <label class="label" for="info-subdomain">
+                                    <span class="label-text font-medium">Subdominio</span>
+                                </label>
+                                <input id="info-subdomain" type="text" class="input input-bordered w-full opacity-60"
+                                       value="{{ $tenant->subdomain }}" disabled aria-readonly="true">
+                            </div>
+
+                            <div class="form-control">
+                                <label class="label" for="info-slogan">
+                                    <span class="label-text font-medium">Eslogan</span>
+                                </label>
+                                <input id="info-slogan" type="text" class="input input-bordered w-full"
+                                       name="slogan" value="{{ $tenant->slogan }}">
+                            </div>
+
+                            <div class="form-control">
+                                <label class="label" for="info-phone">
+                                    <span class="label-text font-medium">Teléfono</span>
+                                </label>
+                                <input id="info-phone" type="text" class="input input-bordered w-full"
+                                       name="phone" value="{{ $tenant->phone }}" autocomplete="tel">
+                            </div>
+
+                            <div class="form-control">
+                                <label class="label" for="info-whatsapp">
+                                    <span class="label-text font-medium">WhatsApp Ventas</span>
+                                </label>
+                                <input id="info-whatsapp" type="text" class="input input-bordered w-full"
+                                       name="whatsapp_sales" value="{{ $tenant->whatsapp_sales }}" autocomplete="off">
+                            </div>
+
+                            <div class="form-control">
+                                <label class="label" for="info-email">
+                                    <span class="label-text font-medium">Email</span>
+                                </label>
+                                <input id="info-email" type="email" class="input input-bordered w-full"
+                                       name="email" value="{{ $tenant->email }}" autocomplete="email">
+                            </div>
+
+                            <div class="form-control">
+                                <label class="label" for="info-address">
+                                    <span class="label-text font-medium">Dirección</span>
+                                </label>
+                                <input id="info-address" type="text" class="input input-bordered w-full"
+                                       name="address" value="{{ $tenant->address }}" autocomplete="street-address">
+                            </div>
+
+                            <div class="form-control">
+                                <label class="label" for="info-city">
+                                    <span class="label-text font-medium">Ciudad</span>
+                                </label>
+                                <input id="info-city" type="text" class="input input-bordered w-full"
+                                       name="city" value="{{ $tenant->city }}" autocomplete="address-level2">
+                            </div>
+
+                            @if($tenant->plan_id >= 2)
+                            <div class="form-control">
+                                <label class="label">
+                                    <span class="label-text font-medium flex items-center gap-2">
+                                        Título sección Contacto
+                                        <span class="badge badge-soft badge-success badge-xs">Plan {{ $plan->name }}</span>
+                                    </span>
+                                </label>
+                                <input type="text" name="contact_title" class="input input-bordered w-full"
+                                       value="{{ data_get($tenant->settings, 'business_info.contact.title', '') }}"
+                                       placeholder="Contáctanos">
+                            </div>
+                            <div class="form-control">
+                                <label class="label">
+                                    <span class="label-text font-medium flex items-center gap-2">
+                                        Subtítulo sección Contacto
+                                        <span class="badge badge-soft badge-success badge-xs">Plan {{ $plan->name }}</span>
+                                    </span>
+                                </label>
+                                <input type="text" name="contact_subtitle" class="input input-bordered w-full"
+                                       value="{{ data_get($tenant->settings, 'business_info.contact.subtitle', '') }}"
+                                       placeholder="Estamos aquí para atenderte">
+                            </div>
+                            <div class="form-control">
+                                <label class="label">
+                                    <span class="label-text font-medium flex items-center gap-2">
+                                        URL Google Maps
+                                        <span class="badge badge-soft badge-success badge-xs">Plan {{ $plan->name }}</span>
+                                    </span>
+                                </label>
+                                <input type="url" name="contact_maps_url" class="input input-bordered w-full"
+                                       value="{{ data_get($tenant->settings, 'business_info.contact.maps_url', '') }}"
+                                       placeholder="https://www.google.com/maps/embed?pb=...">
+                            </div>
+                            <div class="form-control">
+                                <label class="label">
+                                    <span class="label-text font-medium flex items-center gap-2">
+                                        Teléfono Secundario
+                                        <span class="badge badge-soft badge-success badge-xs">Plan {{ $plan->name }}</span>
+                                    </span>
+                                </label>
+                                <input type="tel" name="phone_secondary" class="input input-bordered w-full"
+                                       value="{{ data_get($tenant->settings, 'contact_info.phone_secondary', '') }}"
+                                       placeholder="+58 XXX XXXXXXX">
+                            </div>
+                            @endif
+                        </div>
+
+                        <div class="form-control mt-4">
+                            <label class="label" for="info-description">
+                                <span class="label-text font-medium">Descripción</span>
+                            </label>
+                            <textarea id="info-description" class="textarea textarea-bordered w-full min-h-24"
+                                      name="description">{{ $tenant->description }}</textarea>
+                        </div>
+
+                        <div class="flex items-center gap-3 justify-end pt-4 border-t border-base-content/10 mt-4">
+                            <button type="button" class="btn btn-ghost" onclick="resetForm('form-info')">Cancelar</button>
+                            <button type="submit" class="btn btn-primary gap-2">
+                                <span class="icon-[tabler--device-floppy] size-4" aria-hidden="true"></span>
+                                Guardar Cambios
+                            </button>
+                        </div>
                     </div>
                 </div>
             </form>
@@ -897,112 +734,129 @@
                 $currentCount = $products->count();
             @endphp
 
-            <div class="table-header">
-                <div>
-                    <h2 class="table-title">📦 Productos</h2>
-                    <p class="table-subtitle">{{ $currentCount }} de {{ $maxProducts }} productos</p>
-                </div>
-                <button 
-                    class="btn-add" 
-                    onclick="checkAndOpenProductModal()"
-                    title="Agregar nuevo producto">
-                    + Agregar Producto
-                </button>
-            </div>
-
-            @if($currentCount >= $maxProducts)
-            <div style="background: linear-gradient(135deg, #1a2040 0%, #0f1c32 100%); border: 1px solid rgba(43,111,255,0.3); border-radius: 12px; padding: 16px 20px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
-                <div style="display: flex; align-items: center; gap: 12px;">
-                    <span style="font-size: 22px;">📦</span>
+            {{-- ── Productos card ─────────────────────────────────── --}}
+            <div class="card bg-base-100 shadow-sm border border-base-content/10 mb-4">
+                <div class="card-header flex items-center justify-between gap-3 flex-wrap">
                     <div>
-                        <p style="color: #fff; font-weight: 600; font-size: 14px; margin: 0 0 2px;">Límite de productos alcanzado ({{ $maxProducts }}/{{ $maxProducts }})</p>
-                        <p style="color: rgba(255,255,255,0.5); font-size: 12px; margin: 0;">
-                            @if($plan->id === 1)Plan CRECIMIENTO: hasta 12 productos · Plan VISIÓN: hasta 18 productos
-                            @else Plan VISIÓN: hasta 18 productos @endif
-                        </p>
+                        <h2 class="card-title flex items-center gap-2">
+                            <span class="icon-[tabler--package] size-5 text-primary" aria-hidden="true"></span>
+                            Productos
+                        </h2>
+                        <p class="text-xs text-base-content/50 mt-0.5">{{ $currentCount }} de {{ $maxProducts }} productos</p>
                     </div>
+                    <button class="btn btn-primary btn-sm gap-1.5"
+                            onclick="checkAndOpenProductModal()"
+                            title="Agregar nuevo producto">
+                        <span class="icon-[tabler--plus] size-4" aria-hidden="true"></span>
+                        Agregar Producto
+                    </button>
                 </div>
-                <a href="https://syntiweb.com/planes" target="_blank" rel="noopener noreferrer"
-                   style="background: #2B6FFF; color: #fff; text-decoration: none; padding: 8px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; white-space: nowrap;"
-                   onmouseover="this.style.background='#1e5beb'"
-                   onmouseout="this.style.background='#2B6FFF'">
-                    Ver Planes ↗
-                </a>
-            </div>
-            @endif
 
-            @if($products->count() > 0)
-            <div class="table-container">
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>Imagen</th>
-                            <th>Nombre</th>
-                            <th>Precio USD</th>
-                            <th>Badge</th>
-                            <th>Activo</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($products as $product)
-                        <tr>
-                            <td data-label="Imagen">
-                                @if($product->image_filename)
-                                    <img src="{{ asset('storage/tenants/' . $tenant->id . '/' . $product->image_filename) }}"
-                                         alt="{{ $product->name }}"
-                                         class="product-image"
-                                         width="48" height="48"
-                                         loading="lazy"
-                                         decoding="async">
-                                @else
-                                    <div class="product-image" style="background: #374151;"></div>
-                                @endif
-                            </td>
-                            <td data-label="Nombre">
-                                <strong>{{ $product->name }}</strong>
-                                @if($product->is_featured)
-                                    <span style="color: #ffd700; margin-left: 4px;">⭐</span>
-                                @endif
-                            </td>
-                            <td data-label="Precio USD">${{ number_format($product->price_usd, 2) }}</td>
-                            <td data-label="Badge">
-                                @if($product->badge === 'hot')
-                                    <span class="badge badge-hot">🔥 Hot</span>
-                                @elseif($product->badge === 'new')
-                                    <span class="badge badge-new">✨ New</span>
-                                @elseif($product->badge === 'promo')
-                                    <span class="badge badge-promo">🎉 Promo</span>
-                                @else
-                                    <span style="color: rgba(255,255,255,0.3);">-</span>
-                                @endif
-                            </td>
-                            <td data-label="Activo">
-                                <span class="status-indicator">
-                                    <span class="status-dot {{ $product->is_active ? 'active' : 'inactive' }}"></span>
-                                    {{ $product->is_active ? 'Activo' : 'Inactivo' }}
-                                </span>
-                            </td>
-                            <td data-label="Acciones" style="gap: 8px;">
-                                <button class="action-button btn-icon" onclick="editProduct({{ $product->id }})" title="Editar" aria-label="Editar producto">
-                                    ✏️
-                                </button>
-                                <button class="action-button btn-icon btn-danger" onclick="deleteProduct({{ $product->id }})" title="Eliminar" aria-label="Eliminar producto">
-                                    🗑️
-                                </button>
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                @if($currentCount >= $maxProducts)
+                <div class="alert alert-info mx-4 mb-2 flex items-center justify-between gap-4 flex-wrap">
+                    <div class="flex items-center gap-3">
+                        <span class="icon-[tabler--info-circle] size-5 shrink-0" aria-hidden="true"></span>
+                        <div>
+                            <p class="font-semibold text-sm">Límite alcanzado ({{ $maxProducts }}/{{ $maxProducts }} productos)</p>
+                            <p class="text-xs opacity-70">
+                                @if($plan->id === 1)Plan CRECIMIENTO: hasta 12 · Plan VISIÓN: hasta 18
+                                @else Plan VISIÓN: hasta 18 productos @endif
+                            </p>
+                        </div>
+                    </div>
+                    <a href="https://syntiweb.com/planes" target="_blank" rel="noopener noreferrer"
+                       class="btn btn-primary btn-sm shrink-0">Ver Planes ↗</a>
+                </div>
+                @endif
+
+                @if($products->count() > 0)
+                <div class="card-body pt-0 pb-0 overflow-x-auto">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Imagen</th>
+                                <th>Nombre</th>
+                                <th>Precio USD</th>
+                                <th>Badge</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($products as $product)
+                            <tr class="hover:bg-base-200/50 transition-colors">
+                                <td>
+                                    @if($product->image_filename)
+                                        <img src="{{ asset('storage/tenants/' . $tenant->id . '/' . $product->image_filename) }}"
+                                             alt="{{ $product->name }}"
+                                             class="size-12 rounded-box object-cover border border-base-content/10"
+                                             width="48" height="48"
+                                             loading="lazy"
+                                             decoding="async">
+                                    @else
+                                        <div class="size-12 rounded-box bg-base-200 flex items-center justify-center border border-base-content/10">
+                                            <span class="icon-[tabler--package] size-6 text-base-content/30" aria-hidden="true"></span>
+                                        </div>
+                                    @endif
+                                </td>
+                                <td>
+                                    <span class="font-semibold text-base-content">{{ $product->name }}</span>
+                                    @if($product->is_featured)
+                                        <span class="badge badge-soft badge-warning badge-xs ml-1">Destacado</span>
+                                    @endif
+                                </td>
+                                <td class="font-medium text-base-content/80">${{ number_format($product->price_usd, 2) }}</td>
+                                <td>
+                                    @if($product->badge === 'hot')
+                                        <span class="badge badge-soft badge-error badge-sm">Hot</span>
+                                    @elseif($product->badge === 'new')
+                                        <span class="badge badge-soft badge-success badge-sm">New</span>
+                                    @elseif($product->badge === 'promo')
+                                        <span class="badge badge-soft badge-warning badge-sm">Promo</span>
+                                    @else
+                                        <span class="text-base-content/30 text-xs">—</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    @if($product->is_active)
+                                        <span class="badge badge-soft badge-success badge-sm gap-1">
+                                            <span class="size-1.5 rounded-full bg-success inline-block"></span>
+                                            Activo
+                                        </span>
+                                    @else
+                                        <span class="badge badge-soft badge-error badge-sm gap-1">
+                                            <span class="size-1.5 rounded-full bg-error inline-block"></span>
+                                            Inactivo
+                                        </span>
+                                    @endif
+                                </td>
+                                <td>
+                                    <div class="flex items-center gap-1">
+                                        <button class="btn btn-circle btn-text btn-sm text-base-content/60 hover:text-primary"
+                                                onclick="editProduct({{ $product->id }})"
+                                                title="Editar" aria-label="Editar producto">
+                                            <span class="icon-[tabler--pencil] size-4" aria-hidden="true"></span>
+                                        </button>
+                                        <button class="btn btn-circle btn-text btn-sm text-base-content/60 hover:text-error"
+                                                onclick="deleteProduct({{ $product->id }})"
+                                                title="Eliminar" aria-label="Eliminar producto">
+                                            <span class="icon-[tabler--trash] size-4" aria-hidden="true"></span>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+                @else
+                <div class="card-body flex flex-col items-center justify-center py-12 text-center">
+                    <span class="icon-[tabler--package] size-12 text-base-content/20 mb-3" aria-hidden="true"></span>
+                    <h3 class="font-semibold text-base-content/60 mb-1">No hay productos aún</h3>
+                    <p class="text-sm text-base-content/40">Comienza agregando tu primer producto</p>
+                </div>
+                @endif
             </div>
-            @else
-            <div class="empty-state">
-                <div class="empty-state-icon">📦</div>
-                <h3>No hay productos aún</h3>
-                <p>Comienza agregando tu primer producto</p>
-            </div>
-            @endif
         </div>
 
         <!-- Modal: Producto -->
@@ -1117,117 +971,141 @@
 
             {{-- Global display mode selector (Plan 2/3 only) --}}
             @if($plan->id !== 1)
-            <div style="background: rgba(43,111,255,0.05); border: 1px solid rgba(43,111,255,0.15); border-radius: 12px; padding: 16px 20px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+            <div class="alert alert-info mb-4 flex items-center justify-between gap-4 flex-wrap">
                 <div>
-                    <p style="color: #fff; font-weight: 600; font-size: 14px; margin-bottom: 4px;">🎨 Modo visual de servicios</p>
-                    <p style="color: rgba(255,255,255,0.4); font-size: 12px;">Elige entre íconos o imágenes — mantén la coherencia estética</p>
+                    <p class="font-semibold text-sm">Modo visual de servicios</p>
+                    <p class="text-xs opacity-70">Elige entre íconos o imágenes — mantén la coherencia estética</p>
                 </div>
-                <div class="svc-mode-bar">
-                    <button type="button" id="global-mode-icon-btn" onclick="setGlobalServiceMode('icon')">🎨 Ícono</button>
-                    <button type="button" id="global-mode-image-btn" onclick="setGlobalServiceMode('image')">🖼️ Imagen</button>
+                <div class="join">
+                    <button type="button" id="global-mode-icon-btn"
+                            onclick="setGlobalServiceMode('icon')"
+                            class="btn btn-sm join-item btn-primary">
+                        <span class="icon-[tabler--palette] size-4" aria-hidden="true"></span> Ícono
+                    </button>
+                    <button type="button" id="global-mode-image-btn"
+                            onclick="setGlobalServiceMode('image')"
+                            class="btn btn-sm join-item btn-ghost">
+                        <span class="icon-[tabler--photo] size-4" aria-hidden="true"></span> Imagen
+                    </button>
                 </div>
             </div>
             @endif
 
-            <div class="table-header">
-                <div>
-                    <h2 class="table-title">🛠️ Servicios</h2>
-                    <p class="table-subtitle">{{ $currentServiceCount }} de {{ $maxServices }} servicios</p>
-                </div>
-                <button 
-                    class="btn-add" 
-                    onclick="checkAndOpenServiceModal()"
-                    title="Agregar nuevo servicio">
-                    + Agregar Servicio
-                </button>
-            </div>
-
-            @if($currentServiceCount >= $maxServices)
-            <div style="background: linear-gradient(135deg, #1a2040 0%, #0f1c32 100%); border: 1px solid rgba(43,111,255,0.3); border-radius: 12px; padding: 16px 20px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
-                <div style="display: flex; align-items: center; gap: 12px;">
-                    <span style="font-size: 22px;">🛠️</span>
+            {{-- ── Servicios card ──────────────────────────────────── --}}
+            <div class="card bg-base-100 shadow-sm border border-base-content/10 mb-4">
+                <div class="card-header flex items-center justify-between gap-3 flex-wrap">
                     <div>
-                        <p style="color: #fff; font-weight: 600; font-size: 14px; margin: 0 0 2px;">Límite de servicios alcanzado ({{ $currentServiceCount }}/{{ $maxServices }})</p>
-                        <p style="color: rgba(255,255,255,0.5); font-size: 12px; margin: 0;">
-                            @if($plan->id === 1)Plan CRECIMIENTO: hasta 6 servicios · Plan VISIÓN: hasta 9 servicios
-                            @else Plan VISIÓN: hasta 9 servicios @endif
-                        </p>
+                        <h2 class="card-title flex items-center gap-2">
+                            <span class="icon-[tabler--tool] size-5 text-secondary" aria-hidden="true"></span>
+                            Servicios
+                        </h2>
+                        <p class="text-xs text-base-content/50 mt-0.5">{{ $currentServiceCount }} de {{ $maxServices }} servicios</p>
                     </div>
+                    <button class="btn btn-secondary btn-sm gap-1.5"
+                            onclick="checkAndOpenServiceModal()"
+                            title="Agregar nuevo servicio">
+                        <span class="icon-[tabler--plus] size-4" aria-hidden="true"></span>
+                        Agregar Servicio
+                    </button>
                 </div>
-                <a href="https://syntiweb.com/planes" target="_blank" rel="noopener noreferrer"
-                   style="background: #2B6FFF; color: #fff; text-decoration: none; padding: 8px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; white-space: nowrap;"
-                   onmouseover="this.style.background='#1e5beb'"
-                   onmouseout="this.style.background='#2B6FFF'">
-                    Ver Planes ↗
-                </a>
-            </div>
-            @endif
 
-            @if($services->count() > 0)
-            <div class="table-container">
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>Imagen</th>
-                            <th>Nombre</th>
-                            <th>Descripción</th>
-                            <th>Activo</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($services as $service)
-                        <tr>
-                            <td data-label="Imagen">
-                                @if($service->image_filename)
-                                    <img src="{{ asset('storage/tenants/' . $tenant->id . '/' . $service->image_filename) }}"
-                                         alt="{{ $service->name }}"
-                                         class="product-image"
-                                         width="48" height="48"
-                                         loading="lazy"
-                                         decoding="async">
-                                @elseif($service->icon_name)
-                                    <div class="product-image" style="background: linear-gradient(135deg, rgba(59,130,246,0.15) 0%, rgba(255,107,0,0.08) 100%); display: flex; align-items: center; justify-content: center; border: 1px solid rgba(59,130,246,0.25); border-radius: 12px; transition: all 0.2s;">
-                                        <span class="iconify tabler--{{ str_replace('_', '-', $service->icon_name) }}" style="font-size: 40px; color: #3b82f6;"></span>
+                @if($currentServiceCount >= $maxServices)
+                <div class="alert alert-info mx-4 mb-2 flex items-center justify-between gap-4 flex-wrap">
+                    <div class="flex items-center gap-3">
+                        <span class="icon-[tabler--info-circle] size-5 shrink-0" aria-hidden="true"></span>
+                        <div>
+                            <p class="font-semibold text-sm">Límite alcanzado ({{ $currentServiceCount }}/{{ $maxServices }} servicios)</p>
+                            <p class="text-xs opacity-70">
+                                @if($plan->id === 1)Plan CRECIMIENTO: hasta 6 · Plan VISIÓN: hasta 9
+                                @else Plan VISIÓN: hasta 9 servicios @endif
+                            </p>
+                        </div>
+                    </div>
+                    <a href="https://syntiweb.com/planes" target="_blank" rel="noopener noreferrer"
+                       class="btn btn-primary btn-sm shrink-0">Ver Planes ↗</a>
+                </div>
+                @endif
+
+                @if($services->count() > 0)
+                <div class="card-body pt-0 pb-0 overflow-x-auto">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Imagen</th>
+                                <th>Nombre</th>
+                                <th>Descripción</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($services as $service)
+                            <tr class="hover:bg-base-200/50 transition-colors">
+                                <td>
+                                    @if($service->image_filename)
+                                        <img src="{{ asset('storage/tenants/' . $tenant->id . '/' . $service->image_filename) }}"
+                                             alt="{{ $service->name }}"
+                                             class="size-12 rounded-box object-cover border border-base-content/10"
+                                             width="48" height="48"
+                                             loading="lazy"
+                                             decoding="async">
+                                    @elseif($service->icon_name)
+                                        <div class="size-12 rounded-box bg-primary/10 flex items-center justify-center border border-primary/20">
+                                            <span class="iconify tabler--{{ str_replace('_', '-', $service->icon_name) }} text-primary text-2xl"></span>
+                                        </div>
+                                    @else
+                                        <div class="size-12 rounded-box bg-base-200 flex items-center justify-center border border-base-content/10">
+                                            <span class="icon-[tabler--tool] size-6 text-base-content/30" aria-hidden="true"></span>
+                                        </div>
+                                    @endif
+                                </td>
+                                <td class="font-semibold text-base-content">{{ $service->name }}</td>
+                                <td class="text-sm text-base-content/60">
+                                    @if($service->description)
+                                        {{ Str::limit($service->description, 60) }}
+                                    @else
+                                        <span class="text-base-content/30">—</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    @if($service->is_active)
+                                        <span class="badge badge-soft badge-success badge-sm gap-1">
+                                            <span class="size-1.5 rounded-full bg-success inline-block"></span>
+                                            Activo
+                                        </span>
+                                    @else
+                                        <span class="badge badge-soft badge-error badge-sm gap-1">
+                                            <span class="size-1.5 rounded-full bg-error inline-block"></span>
+                                            Inactivo
+                                        </span>
+                                    @endif
+                                </td>
+                                <td>
+                                    <div class="flex items-center gap-1">
+                                        <button class="btn btn-circle btn-text btn-sm text-base-content/60 hover:text-secondary"
+                                                onclick="editService({{ $service->id }})"
+                                                title="Editar" aria-label="Editar servicio">
+                                            <span class="icon-[tabler--pencil] size-4" aria-hidden="true"></span>
+                                        </button>
+                                        <button class="btn btn-circle btn-text btn-sm text-base-content/60 hover:text-error"
+                                                onclick="deleteService({{ $service->id }})"
+                                                title="Eliminar" aria-label="Eliminar servicio">
+                                            <span class="icon-[tabler--trash] size-4" aria-hidden="true"></span>
+                                        </button>
                                     </div>
-                                @else
-                                    <div class="product-image" style="background: rgba(255,255,255,0.04); display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.08); border-radius: 12px;">
-                                        <span class="iconify tabler--settings" style="font-size: 40px; color: rgba(255,255,255,0.3);"></span>
-                                    </div>
-                                @endif
-                            </td>
-                            <td data-label="Nombre"><strong>{{ $service->name }}</strong></td>
-                            <td data-label="Descripción">
-                                @if($service->description)
-                                    {{ Str::limit($service->description, 60) }}
-                                @else
-                                    <span style="color: rgba(255,255,255,0.3);">-</span>
-                                @endif
-                            </td>
-                            <td data-label="Activo">
-                                <span class="status-indicator">
-                                    <span class="status-dot {{ $service->is_active ? 'active' : 'inactive' }}"></span>
-                                    {{ $service->is_active ? 'Activo' : 'Inactivo' }}
-                                </span>
-                            </td>
-                            <td data-label="Acciones" style="gap: 8px;">
-                                <button class="action-button btn-icon" onclick="editService({{ $service->id }})" title="Editar" aria-label="Editar servicio">
-                                    ✏️
-                                </button>
-                                <button class="action-button btn-icon btn-danger" onclick="deleteService({{ $service->id }})" title="Eliminar" aria-label="Eliminar servicio">
-                                    🗑️
-                                </button>
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-            @else
-            <div class="empty-state">
-                <div class="empty-state-icon">🛠️</div>
-                <h3>No hay servicios aún</h3>
-                <p>Comienza agregando tu primer servicio</p>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+                @else
+                <div class="card-body flex flex-col items-center justify-center py-12 text-center">
+                    <span class="icon-[tabler--tool] size-12 text-base-content/20 mb-3" aria-hidden="true"></span>
+                    <h3 class="font-semibold text-base-content/60 mb-1">No hay servicios aún</h3>
+                    <p class="text-sm text-base-content/40">Comienza agregando tu primer servicio</p>
+                </div>
+                @endif
             </div>
             @endif
         </div>
@@ -1563,61 +1441,53 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
 
                     @foreach($availableSections as $key => $section)
                         @php
-                            $sectionData   = collect($currentOrder)->firstWhere('name', $key);
-                            $isVisible     = $sectionData['visible'] ?? true;
-                            $planRequired  = $section['plan'];
-                            $hasAccess     = $tenant->plan_id >= $planRequired;
+                            $sectionData  = collect($currentOrder)->firstWhere('name', $key);
+                            $isVisible    = $sectionData['visible'] ?? true;
+                            $planRequired = $section['plan'];
+                            $hasAccess    = $tenant->plan_id >= $planRequired;
                         @endphp
 
-                        <div class="section-item {{ $hasAccess ? '' : 'opacity-50' }}"
+                        <div class="section-item {{ $hasAccess ? '' : 'opacity-40 pointer-events-none' }}"
                              data-section="{{ $key }}"
-                             data-plan="{{ $planRequired }}"
-                             style="margin-bottom: 8px;">
-                            <div style="display: flex; align-items: center; gap: 12px; padding: 12px 14px;
-                                        background: #0f1c32; border-radius: 10px;
-                                        border: 1px solid {{ $hasAccess ? 'rgba(255,255,255,0.08)' : 'rgba(255,255,255,0.04)' }};
-                                        {{ $hasAccess ? 'cursor: move;' : 'cursor: not-allowed;' }}
-                                        transition: border-color 0.2s;">
+                             data-plan="{{ $planRequired }}">
+                            <div class="flex items-center gap-3 px-3 py-2.5 rounded-box
+                                        bg-base-200 border border-base-content/10
+                                        {{ $hasAccess ? 'cursor-move' : 'cursor-not-allowed' }}
+                                        transition-colors hover:border-base-content/20">
 
-                                {{-- Drag handle / Lock --}}
+                                {{-- Handle / Lock --}}
                                 @if($hasAccess)
-                                    <span class="drag-handle" style="display: inline-flex; align-items: center; justify-content: center; cursor: grab; flex-shrink: 0; width: 24px; height: 24px; color: #4ade80; font-weight: bold; font-size: 16px; user-select: none;">≡</span>
+                                    <span class="drag-handle text-base-content/30 hover:text-base-content/60 cursor-grab select-none flex-shrink-0">
+                                        <span class="icon-[tabler--grid-dots] size-4"></span>
+                                    </span>
                                 @else
-                                    <span style="display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; width: 24px; height: 24px; color: #f59e0b; font-weight: bold; font-size: 16px;">🔒</span>
+                                    <span class="text-warning flex-shrink-0">
+                                        <span class="icon-[tabler--lock] size-4"></span>
+                                    </span>
                                 @endif
 
-                                {{-- Section icon --}}
-                                <iconify-icon icon="{{ $section['icon'] }}"
-                                              style="color: #4d8dff; flex-shrink: 0;"
-                                              width="20"></iconify-icon>
+                                {{-- Icon --}}
+                                <span class="text-primary flex-shrink-0">
+                                    <iconify-icon icon="{{ $section['icon'] }}" width="18"></iconify-icon>
+                                </span>
 
                                 {{-- Label --}}
-                                <span style="flex: 1; font-weight: 500; font-size: 14px; color: {{ $hasAccess ? '#fff' : 'rgba(255,255,255,0.4)' }};">
+                                <span class="flex-1 text-sm font-medium text-base-content">
                                     {{ $section['label'] }}
                                     @if(!$hasAccess)
-                                        <span style="font-size: 11px; color: #f59e0b; margin-left: 8px;">
-                                            (Plan {{ $planRequired == 2 ? 'CRECIMIENTO' : 'VISIÓN' }})
+                                        <span class="badge badge-warning badge-soft badge-xs ms-1">
+                                            Plan {{ $planRequired == 2 ? 'CRECIMIENTO' : 'VISIÓN' }}
                                         </span>
                                     @endif
                                 </span>
 
-                                {{-- Toggle visible --}}
+                                {{-- FlyonUI Switch --}}
                                 @if($hasAccess)
-                                    <label style="position: relative; display: inline-flex; align-items: center; cursor: pointer; flex-shrink: 0;">
-                                        <input type="checkbox"
-                                               class="sr-only peer section-toggle"
-                                               data-section="{{ $key }}"
-                                               {{ $isVisible ? 'checked' : '' }}>
-                                        <div style="width: 44px; height: 24px; background: rgba(255,255,255,0.1); border-radius: 12px;
-                                                    position: relative; transition: background 0.2s;"
-                                             class="toggle-track">
-                                            <div style="position: absolute; top: 2px; left: 2px; width: 20px; height: 20px;
-                                                        background: {{ $isVisible ? '#2B6FFF' : 'rgba(255,255,255,0.4)' }};
-                                                        border-radius: 50%; transition: all 0.2s;
-                                                        transform: {{ $isVisible ? 'translateX(20px)' : 'translateX(0)' }};"
-                                                 class="toggle-thumb"></div>
-                                        </div>
-                                    </label>
+                                    <input type="checkbox"
+                                           class="switch switch-primary switch-sm section-toggle"
+                                           id="section-{{ $key }}"
+                                           data-section="{{ $key }}"
+                                           {{ $isVisible ? 'checked' : '' }}>
                                 @endif
                             </div>
                         </div>
@@ -1645,60 +1515,64 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
             </div>
             @endif
 
-            <!-- Sección: Imágenes -->
-            <div class="form-section" style="margin-top: 32px;">
-                <h2 class="table-title">📸 Imágenes</h2>
-                <p class="table-subtitle" style="margin-bottom: 16px;">Personaliza el logo y la imagen principal</p>
-
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px;">
-                    <!-- Card: Logo -->
-                    <div style="background: #0f1c32; border-radius: 12px; padding: 20px;">
-                        <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 16px;">Logo del Negocio</h3>
-                        
-                        <div style="background: #07101F; border-radius: 8px; height: 200px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px;">
-                            @if($customization && $customization->logo_filename)
-                                <img 
-                                    id="logo-preview" 
-                                    src="{{ asset('storage/tenants/' . $tenant->id . '/' . $customization->logo_filename) }}" 
-                                    alt="Logo"
-                                    style="max-width: 100%; max-height: 100%; object-fit: contain;">
-                            @else
-                                <div id="logo-placeholder" style="text-align: center; color: rgba(255,255,255,0.3);">
-                                    <div style="font-size: 48px; margin-bottom: 8px;">🖼️</div>
-                                    <p style="font-size: 14px;">Sin logo</p>
-                                </div>
-                            @endif
-                        </div>
-                        
-                        <input type="file" id="logo-file" accept="image/*" style="display: none;" onchange="uploadLogo(event)">
-                        <button onclick="document.getElementById('logo-file').click()" class="btn-primary" style="width: 100%;">
-                            📤 Cambiar Logo
-                        </button>
+            {{-- ── Imágenes ──────────────────────────────────────────────── --}}
+            <div class="card bg-base-100 shadow-sm border border-base-content/10 mt-4">
+                <div class="card-header">
+                    <div class="flex items-center gap-2">
+                        <span class="icon-[tabler--photo] size-5 text-primary"></span>
+                        <h3 class="card-title">Imágenes del Negocio</h3>
                     </div>
+                    <p class="text-xs text-base-content/50 mt-0.5">Logo e imagen principal de tu landing</p>
+                </div>
+                <div class="card-body">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
-                    <!-- Card: Hero -->
-                    <div style="background: #0f1c32; border-radius: 12px; padding: 20px;">
-                        <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 16px;">Imagen Principal (Hero)</h3>
-                        
-                        <div style="background: #07101F; border-radius: 8px; height: 200px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px;">
-                            @if($customization && $customization->hero_filename)
-                                <img 
-                                    id="hero-preview" 
-                                    src="{{ asset('storage/tenants/' . $tenant->id . '/' . $customization->hero_filename) }}" 
-                                    alt="Hero"
-                                    style="max-width: 100%; max-height: 100%; object-fit: cover; border-radius: 8px;">
-                            @else
-                                <div id="hero-placeholder" style="text-align: center; color: rgba(255,255,255,0.3);">
-                                    <div style="font-size: 48px; margin-bottom: 8px;">🌄</div>
-                                    <p style="font-size: 14px;">Sin imagen hero</p>
-                                </div>
-                            @endif
+                        {{-- Logo --}}
+                        <div>
+                            <p class="text-sm font-medium text-base-content mb-2">Logo del Negocio</p>
+                            <div class="bg-base-200 rounded-box h-44 flex items-center justify-center mb-3 overflow-hidden">
+                                @if($customization && $customization->logo_filename)
+                                    <img id="logo-preview"
+                                         src="{{ asset('storage/tenants/' . $tenant->id . '/' . $customization->logo_filename) }}"
+                                         alt="Logo" class="max-w-full max-h-full object-contain" loading="lazy">
+                                @else
+                                    <div id="logo-placeholder" class="text-center text-base-content/30">
+                                        <span class="icon-[tabler--photo-off] size-12 mb-2 block mx-auto"></span>
+                                        <p class="text-xs">Sin logo</p>
+                                    </div>
+                                @endif
+                            </div>
+                            <input type="file" id="logo-file" accept="image/*" class="hidden" onchange="uploadLogo(event)">
+                            <button onclick="document.getElementById('logo-file').click()"
+                                    class="btn btn-primary btn-block btn-sm gap-2">
+                                <span class="icon-[tabler--upload] size-4"></span>
+                                Cambiar Logo
+                            </button>
                         </div>
-                        
-                        <input type="file" id="hero-file" accept="image/*" style="display: none;" onchange="uploadHero(event)">
-                        <button onclick="document.getElementById('hero-file').click()" class="btn-primary" style="width: 100%;">
-                            📤 Cambiar Hero
-                        </button>
+
+                        {{-- Hero --}}
+                        <div>
+                            <p class="text-sm font-medium text-base-content mb-2">Imagen Principal (Hero)</p>
+                            <div class="bg-base-200 rounded-box h-44 flex items-center justify-center mb-3 overflow-hidden">
+                                @if($customization && $customization->hero_filename)
+                                    <img id="hero-preview"
+                                         src="{{ asset('storage/tenants/' . $tenant->id . '/' . $customization->hero_filename) }}"
+                                         alt="Hero" class="w-full h-full object-cover" loading="lazy">
+                                @else
+                                    <div id="hero-placeholder" class="text-center text-base-content/30">
+                                        <span class="icon-[tabler--panorama] size-12 mb-2 block mx-auto"></span>
+                                        <p class="text-xs">Sin imagen hero</p>
+                                    </div>
+                                @endif
+                            </div>
+                            <input type="file" id="hero-file" accept="image/*" class="hidden" onchange="uploadHero(event)">
+                            <button onclick="document.getElementById('hero-file').click()"
+                                    class="btn btn-primary btn-block btn-sm gap-2">
+                                <span class="icon-[tabler--upload] size-4"></span>
+                                Cambiar Hero
+                            </button>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -1706,87 +1580,183 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
 
         <!-- Tab: Analytics -->
         <div id="tab-analytics" class="tab-content">
-            <!-- Sección: El Radar -->
-            <div class="form-section">
-                <h2 class="table-title">📊 El Radar</h2>
-                <p class="table-subtitle" style="margin-bottom: 24px;">Métricas básicas de tu negocio</p>
 
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 32px;">
-                    <!-- KPI: Visitas hoy -->
-                    <div style="background: #0f1c32; border-radius: 12px; padding: 20px; text-align: center;">
-                        <div style="font-size: 36px; font-weight: 700; color: #2B6FFF; margin-bottom: 8px;">0</div>
-                        <div style="font-size: 13px; color: rgba(255,255,255,0.6);">Visitas hoy</div>
-                    </div>
+            {{-- ── KPI Stat Cards ────────────────────────────────────────── --}}
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
 
-                    <!-- KPI: Clicks WhatsApp -->
-                    <div style="background: #0f1c32; border-radius: 12px; padding: 20px; text-align: center;">
-                        <div style="font-size: 36px; font-weight: 700; color: #2B6FFF; margin-bottom: 8px;">0</div>
-                        <div style="font-size: 13px; color: rgba(255,255,255,0.6);">Clicks WhatsApp</div>
-                    </div>
-
-                    <!-- KPI: Escaneos QR -->
-                    <div style="background: #0f1c32; border-radius: 12px; padding: 20px; text-align: center;">
-                        <div style="font-size: 36px; font-weight: 700; color: #2B6FFF; margin-bottom: 8px;">0</div>
-                        <div style="font-size: 13px; color: rgba(255,255,255,0.6);">Escaneos QR</div>
-                    </div>
-
-                    <!-- KPI: Productos vistos -->
-                    <div style="background: #0f1c32; border-radius: 12px; padding: 20px; text-align: center;">
-                        <div style="font-size: 36px; font-weight: 700; color: #2B6FFF; margin-bottom: 8px;">0</div>
-                        <div style="font-size: 13px; color: rgba(255,255,255,0.6);">Productos vistos</div>
+                {{-- Visitas --}}
+                <div class="card bg-base-100 shadow-sm border border-base-content/10">
+                    <div class="card-body p-4">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="avatar avatar-placeholder">
+                                <div class="bg-primary/10 text-primary rounded-field size-10">
+                                    <span class="icon-[tabler--eye] size-5"></span>
+                                </div>
+                            </div>
+                            <span class="badge badge-soft badge-sm badge-primary">Hoy</span>
+                        </div>
+                        <div class="text-2xl font-bold text-base-content">0</div>
+                        <div class="text-xs text-base-content/55 mt-0.5">Visitas al sitio</div>
                     </div>
                 </div>
 
-                <!-- Nota informativa -->
-                <div style="background: rgba(43, 111, 255, 0.1); border-left: 3px solid #2B6FFF; padding: 16px; border-radius: 8px; margin-bottom: 32px;">
-                    <p style="font-size: 14px; color: rgba(255,255,255,0.8); margin: 0;">
-                        ℹ️ El sistema de analítica detallada estará disponible próximamente. Por ahora puedes ver el pulso básico en tu panel flotante.
-                    </p>
+                {{-- WhatsApp --}}
+                <div class="card bg-base-100 shadow-sm border border-base-content/10">
+                    <div class="card-body p-4">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="avatar avatar-placeholder">
+                                <div class="bg-success/10 text-success rounded-field size-10">
+                                    <span class="icon-[tabler--brand-whatsapp] size-5"></span>
+                                </div>
+                            </div>
+                            <span class="badge badge-soft badge-sm badge-success">Hoy</span>
+                        </div>
+                        <div class="text-2xl font-bold text-base-content">0</div>
+                        <div class="text-xs text-base-content/55 mt-0.5">Clicks WhatsApp</div>
+                    </div>
+                </div>
+
+                {{-- QR --}}
+                <div class="card bg-base-100 shadow-sm border border-base-content/10">
+                    <div class="card-body p-4">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="avatar avatar-placeholder">
+                                <div class="bg-warning/10 text-warning rounded-field size-10">
+                                    <span class="icon-[tabler--qrcode] size-5"></span>
+                                </div>
+                            </div>
+                            <span class="badge badge-soft badge-sm badge-warning">Hoy</span>
+                        </div>
+                        <div class="text-2xl font-bold text-base-content">0</div>
+                        <div class="text-xs text-base-content/55 mt-0.5">Escaneos QR</div>
+                    </div>
+                </div>
+
+                {{-- Productos vistos --}}
+                <div class="card bg-base-100 shadow-sm border border-base-content/10">
+                    <div class="card-body p-4">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="avatar avatar-placeholder">
+                                <div class="bg-info/10 text-info rounded-field size-10">
+                                    <span class="icon-[tabler--package] size-5"></span>
+                                </div>
+                            </div>
+                            <span class="badge badge-soft badge-sm badge-info">Hoy</span>
+                        </div>
+                        <div class="text-2xl font-bold text-base-content">0</div>
+                        <div class="text-xs text-base-content/55 mt-0.5">Productos vistos</div>
+                    </div>
                 </div>
             </div>
 
-            <!-- Sección: Herramientas -->
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px;">
-                <!-- Card: Tasa del Dólar -->
-                <div style="background: #0f1c32; border-radius: 12px; padding: 24px;">
-                    <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 16px;">💵 Tasa del Dólar</h3>
-                    
-                    <div style="background: #07101F; border-radius: 8px; padding: 20px; text-align: center; margin-bottom: 16px;">
-                        <div style="font-size: 28px; font-weight: 700; color: #2B6FFF; margin-bottom: 4px;">
-                            Bs. <span id="dollar-rate-value">{{ $dollarRate }}</span>
-                        </div>
-                        <div style="font-size: 12px; color: rgba(255,255,255,0.5);">por 1 USD</div>
+            {{-- ── Charts Row ────────────────────────────────────────────── --}}
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
+
+                {{-- Actividad 7 días (área) --}}
+                <div class="card bg-base-100 shadow-sm border border-base-content/10 lg:col-span-2">
+                    <div class="card-header flex items-center justify-between">
+                        <h4 class="card-title text-base">Actividad — últimos 7 días</h4>
+                        <span class="badge badge-soft badge-primary badge-sm">Próximamente</span>
                     </div>
-
-                    <button onclick="updateDollarRate()" class="btn-primary" style="width: 100%;">
-                        🔄 Actualizar
-                    </button>
-                </div>
-
-                <!-- Card: Estado actual -->
-                <div style="background: #0f1c32; border-radius: 12px; padding: 24px;">
-                    <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 16px;">🔴 Estado actual</h3>
-                    
-                    <div style="background: #07101F; border-radius: 8px; padding: 20px; text-align: center;">
-                        <div style="margin-bottom: 16px;">
-                            <label class="toggle-switch" style="display: inline-block;">
-                                <input 
-                                    type="checkbox" 
-                                    id="status-toggle-large"
-                                    {{ $tenant->is_open ? 'checked' : '' }}
-                                    onchange="toggleBusinessStatusLarge()">
-                                <span class="toggle-slider"></span>
-                            </label>
-                        </div>
-                        
-                        <div style="font-size: 14px; color: rgba(255,255,255,0.7);">
-                            Actualmente: 
-                            <span style="color: #00cc66; font-weight: 600;">
-                                {{ $tenant->is_open ? '🟢 Abierto' : '🔴 Cerrado' }}
-                            </span>
-                        </div>
+                    <div class="card-body pt-0">
+                        <div id="analytics-area-chart"></div>
+                        <p class="text-xs text-base-content/40 text-center mt-2">
+                            La analítica detallada estará disponible en la próxima versión
+                        </p>
                     </div>
                 </div>
+
+                {{-- Distribución (donut) --}}
+                <div class="card bg-base-100 shadow-sm border border-base-content/10">
+                    <div class="card-header">
+                        <h4 class="card-title text-base">Distribución</h4>
+                    </div>
+                    <div class="card-body pt-0 flex flex-col items-center">
+                        <div id="analytics-donut-chart"></div>
+                        <div class="flex flex-col gap-2 w-full mt-2">
+                            <div class="flex items-center justify-between text-xs">
+                                <span class="flex items-center gap-1.5">
+                                    <span class="inline-block size-2.5 rounded-full bg-primary"></span>
+                                    Visitas
+                                </span>
+                                <span class="font-semibold text-base-content">—</span>
+                            </div>
+                            <div class="flex items-center justify-between text-xs">
+                                <span class="flex items-center gap-1.5">
+                                    <span class="inline-block size-2.5 rounded-full bg-success"></span>
+                                    WhatsApp
+                                </span>
+                                <span class="font-semibold text-base-content">—</span>
+                            </div>
+                            <div class="flex items-center justify-between text-xs">
+                                <span class="flex items-center gap-1.5">
+                                    <span class="inline-block size-2.5 rounded-full bg-warning"></span>
+                                    QR
+                                </span>
+                                <span class="font-semibold text-base-content">—</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- ── Herramientas de negocio ───────────────────────────────── --}}
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+                {{-- Tasa del Dólar --}}
+                <div class="card bg-base-100 shadow-sm border border-base-content/10">
+                    <div class="card-header">
+                        <div class="flex items-center gap-2">
+                            <span class="icon-[tabler--currency-dollar] size-5 text-success"></span>
+                            <h4 class="card-title text-base">Tasa del Dólar</h4>
+                        </div>
+                    </div>
+                    <div class="card-body pt-2">
+                        <div class="bg-base-200 rounded-box p-4 text-center mb-4">
+                            <div class="text-3xl font-bold text-primary leading-none">
+                                Bs. <span id="dollar-rate-value">{{ $dollarRate }}</span>
+                            </div>
+                            <div class="text-xs text-base-content/50 mt-1">por 1 USD — Tasa BCV</div>
+                        </div>
+                        <button onclick="updateDollarRate()" class="btn btn-primary btn-block btn-sm gap-2">
+                            <span class="icon-[tabler--refresh] size-4"></span>
+                            Actualizar tasa
+                        </button>
+                    </div>
+                </div>
+
+                {{-- Estado del negocio --}}
+                <div class="card bg-base-100 shadow-sm border border-base-content/10">
+                    <div class="card-header">
+                        <div class="flex items-center gap-2">
+                            <span class="icon-[tabler--building-store] size-5 text-primary"></span>
+                            <h4 class="card-title text-base">Estado del Negocio</h4>
+                        </div>
+                    </div>
+                    <div class="card-body pt-2">
+                        <div class="bg-base-200 rounded-box p-4 flex flex-col items-center gap-3">
+                            <div class="flex items-center gap-3">
+                                <input type="checkbox" class="switch switch-success"
+                                       id="status-toggle-large"
+                                       {{ $tenant->is_open ? 'checked' : '' }}
+                                       onchange="toggleBusinessStatusLarge()">
+                                <label for="status-toggle-large" class="label-text text-base font-medium cursor-pointer">
+                                    <span id="business-status-label">
+                                        {{ $tenant->is_open ? 'Abierto' : 'Cerrado' }}
+                                    </span>
+                                </label>
+                            </div>
+                            <div id="business-status-badge">
+                                @if($tenant->is_open)
+                                    <span class="badge badge-success badge-soft">🟢 Tu sitio está recibiendo clientes</span>
+                                @else
+                                    <span class="badge badge-error badge-soft">🔴 Tu sitio está pausado</span>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
 
@@ -1799,43 +1769,59 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
                 $currentBranchCount = $branches->count();
             @endphp
 
-            <div class="config-section" style="background: #0f1c32; border-radius: 12px; padding: 24px; margin-bottom: 24px;">
-                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+            {{-- ── Sucursales header card ──────────────────────────────── --}}
+            <div class="card bg-base-100 shadow-sm border border-base-content/10 mb-4">
+                <div class="card-header flex items-center justify-between gap-3">
                     <div>
-                        <h2 style="color: #fff; font-size: 20px; font-weight: 700; margin: 0;">📍 Sucursales</h2>
-                        <p style="color: #94a3b8; font-size: 13px; margin-top: 4px;">Muestra hasta 3 sucursales en tu landing pública</p>
+                        <h2 class="card-title flex items-center gap-2">
+                            <span class="icon-[tabler--map-pin] size-5 text-primary" aria-hidden="true"></span>
+                            Sucursales
+                        </h2>
+                        <p class="text-xs text-base-content/50 mt-0.5">Muestra hasta 3 sucursales en tu landing pública</p>
                     </div>
-                    <label class="toggle-switch">
-                        <input type="checkbox" id="branches-toggle" {{ $branchesEnabled ? 'checked' : '' }} onchange="toggleBranchesSection()">
-                        <span class="toggle-slider"></span>
-                    </label>
+                    <input type="checkbox" id="branches-toggle"
+                           class="switch switch-success"
+                           {{ $branchesEnabled ? 'checked' : '' }}
+                           onchange="toggleBranchesSection()">
                 </div>
-
-                <div id="branches-status" style="background: {{ $branchesEnabled ? '#0d3320' : '#1e2a42' }}; border-left: 3px solid {{ $branchesEnabled ? '#22c55e' : '#6b7280' }}; padding: 10px 16px; border-radius: 6px; margin-bottom: 20px;">
-                    <p id="branches-status-text" style="color: {{ $branchesEnabled ? '#86efac' : '#94a3b8' }}; font-size: 13px; margin: 0;">
-                        {{ $branchesEnabled ? '✅ Sección visible en tu landing pública' : '⏸️ Sección oculta en tu landing pública' }}
-                    </p>
+                <div class="card-body pt-0">
+                    <div id="branches-status" class="alert {{ $branchesEnabled ? 'alert-success' : 'alert-info' }}">
+                        <span class="icon-[tabler--{{ $branchesEnabled ? 'check' : 'pause' }}] size-4" aria-hidden="true"></span>
+                        <p id="branches-status-text" class="text-sm">
+                            {{ $branchesEnabled ? 'Sección visible en tu landing pública' : 'Sección oculta en tu landing pública' }}
+                        </p>
+                    </div>
                 </div>
             </div>
 
             {{-- Branch list + Forms (shown only when enabled) --}}
-            <div id="branches-content" style="{{ $branchesEnabled ? '' : 'display: none;' }}">
-                
+            <div id="branches-content" {{ $branchesEnabled ? '' : 'style="display:none"' }}>
+
                 {{-- Existing branches --}}
-                <div id="branches-list">
+                <div id="branches-list" class="space-y-3 mb-4">
                     @foreach($branches as $branch)
-                    <div class="config-section branch-card" id="branch-card-{{ $branch->id }}" style="background: #0f1c32; border-radius: 12px; padding: 20px; margin-bottom: 16px;">
-                        <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;">
-                            <div style="flex: 1;">
-                                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
-                                    <span style="font-size: 18px;">📍</span>
-                                    <h3 class="branch-name" style="color: #fff; font-size: 16px; font-weight: 600; margin: 0;">{{ $branch->name }}</h3>
+                    <div class="card bg-base-100 shadow-sm border border-base-content/10 branch-card" id="branch-card-{{ $branch->id }}">
+                        <div class="card-body flex-row items-start justify-between gap-3">
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-center gap-2 mb-1">
+                                    <span class="icon-[tabler--map-pin] size-4 text-primary shrink-0" aria-hidden="true"></span>
+                                    <h3 class="branch-name font-semibold text-base-content">{{ $branch->name }}</h3>
                                 </div>
-                                <p class="branch-address" style="color: #94a3b8; font-size: 14px; margin: 0; line-height: 1.5;">{{ $branch->address }}</p>
+                                <p class="branch-address text-sm text-base-content/60 leading-relaxed">{{ $branch->address }}</p>
                             </div>
-                            <div style="display: flex; gap: 8px; flex-shrink: 0;">
-                                <button type="button" class="btn-icon" onclick="editBranch({{ $branch->id }}, '{{ addslashes($branch->name) }}', '{{ addslashes($branch->address) }}')" title="Editar">✏️</button>
-                                <button type="button" class="btn-icon btn-danger" onclick="deleteBranch({{ $branch->id }})" title="Eliminar">🗑️</button>
+                            <div class="flex gap-1 shrink-0">
+                                <button type="button"
+                                        class="btn btn-circle btn-text btn-sm text-base-content/60 hover:text-primary"
+                                        onclick="editBranch({{ $branch->id }}, '{{ addslashes($branch->name) }}', '{{ addslashes($branch->address) }}')"
+                                        title="Editar" aria-label="Editar sucursal">
+                                    <span class="icon-[tabler--pencil] size-4" aria-hidden="true"></span>
+                                </button>
+                                <button type="button"
+                                        class="btn btn-circle btn-text btn-sm text-base-content/60 hover:text-error"
+                                        onclick="deleteBranch({{ $branch->id }})"
+                                        title="Eliminar" aria-label="Eliminar sucursal">
+                                    <span class="icon-[tabler--trash] size-4" aria-hidden="true"></span>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -1843,41 +1829,46 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
                 </div>
 
                 {{-- Add/Edit Branch Form --}}
-                <div id="branch-form-container" class="config-section" style="background: #0f1c32; border-radius: 12px; padding: 24px; margin-top: 16px; {{ $currentBranchCount >= $maxBranches ? 'display: none;' : '' }}">
-                    <h3 id="branch-form-title" style="color: #fff; font-size: 16px; font-weight: 600; margin-bottom: 16px;">+ Agregar Sucursal</h3>
-                    <input type="hidden" id="branch-edit-id" value="">
-
-                    <div style="display: flex; flex-direction: column; gap: 14px;">
-                        <div>
-                            <label style="color: #e5e7eb; font-size: 13px; display: block; margin-bottom: 6px;">Nombre de la Sucursal *</label>
-                            <input type="text" id="branch-name" maxlength="150" required
-                                style="width: 100%; background: #07101F; border: 1px solid #1e2a42; border-radius: 8px; padding: 12px 16px; color: #fff; font-size: 15px;"
-                                placeholder="Ej: Sede Centro, Sucursal Altamira...">
-                        </div>
-
-                        <div>
-                            <label style="color: #e5e7eb; font-size: 13px; display: block; margin-bottom: 6px;">Dirección *</label>
-                            <textarea id="branch-address" maxlength="500" rows="2" required
-                                style="width: 100%; background: #07101F; border: 1px solid #1e2a42; border-radius: 8px; padding: 12px 16px; color: #fff; font-size: 15px; resize: vertical;"
-                                placeholder="Ej: Av. Libertador, Torre X, Piso 3, Caracas"></textarea>
-                        </div>
-
-                        <div style="display: flex; gap: 12px;">
-                            <button type="button" onclick="saveBranch()"
-                                style="background: #2B6FFF; color: #fff; border: none; border-radius: 8px; padding: 12px 24px; font-size: 15px; font-weight: 500; cursor: pointer; flex: 1;"
-                                onmouseover="this.style.background='#1e5ce6'"
-                                onmouseout="this.style.background='#2B6FFF'">
-                                Guardar Sucursal
-                            </button>
-                            <button type="button" id="branch-cancel-btn" onclick="cancelBranchEdit()" style="display: none; background: #374151; color: #fff; border: none; border-radius: 8px; padding: 12px 20px; font-size: 15px; cursor: pointer;">
-                                Cancelar
-                            </button>
-                        </div>
+                <div id="branch-form-container" class="card bg-base-100 shadow-sm border border-base-content/10"
+                     {{ $currentBranchCount >= $maxBranches ? 'style="display:none"' : '' }}>
+                    <div class="card-header">
+                        <h3 id="branch-form-title" class="card-title text-base flex items-center gap-2">
+                            <span class="icon-[tabler--plus] size-4 text-primary" aria-hidden="true"></span>
+                            Agregar Sucursal
+                        </h3>
                     </div>
-
-                    <p style="font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 12px;">
-                        {{ $currentBranchCount }} de {{ $maxBranches }} sucursales usadas
-                    </p>
+                    <div class="card-body">
+                        <input type="hidden" id="branch-edit-id" value="">
+                        <div class="flex flex-col gap-4">
+                            <div class="form-control">
+                                <label class="label" for="branch-name">
+                                    <span class="label-text font-medium">Nombre de la Sucursal *</span>
+                                </label>
+                                <input type="text" id="branch-name" maxlength="150" required
+                                       class="input input-bordered w-full"
+                                       placeholder="Ej: Sede Centro, Sucursal Altamira...">
+                            </div>
+                            <div class="form-control">
+                                <label class="label" for="branch-address">
+                                    <span class="label-text font-medium">Dirección *</span>
+                                </label>
+                                <textarea id="branch-address" maxlength="500" rows="2" required
+                                          class="textarea textarea-bordered w-full"
+                                          placeholder="Ej: Av. Libertador, Torre X, Piso 3, Caracas"></textarea>
+                            </div>
+                            <div class="flex items-center gap-3 pt-2 border-t border-base-content/10">
+                                <button type="button" onclick="saveBranch()" class="btn btn-primary flex-1 gap-2">
+                                    <span class="icon-[tabler--device-floppy] size-4" aria-hidden="true"></span>
+                                    Guardar Sucursal
+                                </button>
+                                <button type="button" id="branch-cancel-btn" onclick="cancelBranchEdit()"
+                                        class="btn btn-ghost hidden">
+                                    Cancelar
+                                </button>
+                            </div>
+                        </div>
+                        <p class="text-xs text-base-content/40 mt-3">{{ $currentBranchCount }} de {{ $maxBranches }} sucursales usadas</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1889,112 +1880,118 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
             {{-- ═══════════════════════════════════════════════════════════
                  Section 0: Social Networks
             ═══════════════════════════════════════════════════════════ --}}
-            <div class="config-section" style="background: #0f1c32; border-radius: 12px; padding: 24px; margin-bottom: 24px;">
+            <div class="card bg-base-100 shadow-sm border border-base-content/10 mb-4">
                 @php
                     $rawSocial      = $customization->social_networks ?? [];
                     $socialNetworks = is_array($rawSocial) ? $rawSocial : [];
                     $allNetworksMeta = [
-                        'instagram' => ['label' => 'Instagram',  'placeholder' => '@tuusuario',          'icon' => '📸'],
-                        'facebook'  => ['label' => 'Facebook',   'placeholder' => '@pagina o URL',       'icon' => '👤'],
-                        'tiktok'    => ['label' => 'TikTok',     'placeholder' => '@tuusuario',          'icon' => '🎵'],
-                        'linkedin'  => ['label' => 'LinkedIn',   'placeholder' => 'URL o usuario',       'icon' => '💼'],
-                        'youtube'   => ['label' => 'YouTube',    'placeholder' => '@canal o URL',        'icon' => '▶️'],
-                        'x'         => ['label' => 'Twitter / X','placeholder' => '@tuusuario',          'icon' => '🐦'],
+                        'instagram' => ['label' => 'Instagram',  'placeholder' => '@tuusuario',    'icon' => 'tabler--brand-instagram'],
+                        'facebook'  => ['label' => 'Facebook',   'placeholder' => '@pagina o URL', 'icon' => 'tabler--brand-facebook'],
+                        'tiktok'    => ['label' => 'TikTok',     'placeholder' => '@tuusuario',    'icon' => 'tabler--brand-tiktok'],
+                        'linkedin'  => ['label' => 'LinkedIn',   'placeholder' => 'URL o usuario', 'icon' => 'tabler--brand-linkedin'],
+                        'youtube'   => ['label' => 'YouTube',    'placeholder' => '@canal o URL',  'icon' => 'tabler--brand-youtube'],
+                        'x'         => ['label' => 'Twitter / X','placeholder' => '@tuusuario',    'icon' => 'tabler--brand-x'],
                     ];
                     $plan1Networks  = ['instagram', 'facebook', 'tiktok', 'linkedin'];
                     $availableKeys  = $plan->id === 1 ? $plan1Networks : array_keys($allNetworksMeta);
-                    // For Plan 1: determine currently selected network
                     $plan1Selected  = array_key_first(array_intersect_key($socialNetworks, array_flip($plan1Networks))) ?? '';
                     $plan1Handle    = $plan1Selected ? ($socialNetworks[$plan1Selected] ?? '') : '';
                 @endphp
 
-                <h3 style="color: #fff; font-size: 18px; font-weight: 600; margin-bottom: 6px;">🌐 Redes Sociales</h3>
-                <p style="color: #94a3b8; font-size: 13px; margin-bottom: 20px;">
+                <div class="card-header flex items-center justify-between gap-2 flex-wrap">
+                    <h3 class="card-title flex items-center gap-2">
+                        <span class="icon-[tabler--social] size-5 text-primary" aria-hidden="true"></span>
+                        Redes Sociales
+                    </h3>
                     @if($plan->id === 1)
-                        <span style="color: #f59e0b;">★ Plan OPORTUNIDAD</span> — Puedes configurar <strong style="color:#fff;">1 red social</strong>
+                        <span class="badge badge-soft badge-warning badge-sm">Plan OPORTUNIDAD — 1 red social</span>
                     @else
-                        <span style="color: #22c55e;">★ Plan {{ $plan->name }}</span> — Todas las redes disponibles
+                        <span class="badge badge-soft badge-success badge-sm">Plan {{ $plan->name }} — Todas las redes</span>
                     @endif
-                </p>
+                </div>
+                <div class="card-body">
+                    @if($plan->id === 1)
+                    {{-- ── Plan 1: radio select + single handle ── --}}
+                    <div class="mb-4">
+                        <label class="label"><span class="label-text font-medium">Elige tu red social</span></label>
+                        <div class="flex flex-wrap gap-2 mb-4" id="social-radio-group">
+                            @foreach($plan1Networks as $key)
+                            @php $meta = $allNetworksMeta[$key]; @endphp
+                            <label id="social-radio-label-{{ $key }}"
+                                   onclick="selectSocialNetwork('{{ $key }}')"
+                                   class="btn btn-sm gap-1.5 {{ $plan1Selected === $key ? 'btn-primary' : 'btn-ghost border border-base-content/20' }} cursor-pointer">
+                                <input type="radio" name="social_plan1_choice" value="{{ $key }}"
+                                       {{ $plan1Selected === $key ? 'checked' : '' }} class="hidden">
+                                <span class="icon-[{{ $meta['icon'] }}] size-4" aria-hidden="true"></span>
+                                {{ $meta['label'] }}
+                            </label>
+                            @endforeach
+                        </div>
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text font-medium">
+                                    Tu usuario o enlace
+                                    <span id="social-plan1-network-label" class="text-primary ml-1">
+                                        {{ $plan1Selected ? '(' . $allNetworksMeta[$plan1Selected]['label'] . ')' : '' }}
+                                    </span>
+                                </span>
+                            </label>
+                            <input type="text" id="social-plan1-handle"
+                                   value="{{ $plan1Handle }}"
+                                   placeholder="{{ $plan1Selected ? $allNetworksMeta[$plan1Selected]['placeholder'] : 'Selecciona una red primero' }}"
+                                   class="input input-bordered w-full"
+                                   {{ !$plan1Selected ? 'disabled' : '' }}>
+                        </div>
+                    </div>
 
-                @if($plan->id === 1)
-                {{-- ── Plan 1: radio select + single handle ── --}}
-                <div style="margin-bottom: 20px;">
-                    <label style="color: #e5e7eb; font-size: 13px; display: block; margin-bottom: 10px;">Elige tu red social</label>
-                    <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 18px;" id="social-radio-group">
-                        @foreach($plan1Networks as $key)
-                        @php $meta = $allNetworksMeta[$key]; @endphp
-                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 8px 14px; border-radius: 8px; border: 1px solid {{ $plan1Selected === $key ? '#2B6FFF' : '#1e2a42' }}; background: {{ $plan1Selected === $key ? '#1a2f5e' : 'transparent' }}; transition: all .2s;"
-                               id="social-radio-label-{{ $key }}" onclick="selectSocialNetwork('{{ $key }}')">
-                            <input type="radio" name="social_plan1_choice" value="{{ $key }}" {{ $plan1Selected === $key ? 'checked' : '' }} style="display: none;">
-                            <span>{{ $meta['icon'] }}</span>
-                            <span style="color: #e5e7eb; font-size: 14px; font-weight: 500;">{{ $meta['label'] }}</span>
-                        </label>
+                    @else
+                    {{-- ── Plan 2 + 3: all 6 networks ── --}}
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4" id="social-all-fields">
+                        @foreach($availableKeys as $key)
+                        @php $meta = $allNetworksMeta[$key]; $current = $socialNetworks[$key] ?? ''; @endphp
+                        <div class="form-control">
+                            <label class="label" for="social-{{ $key }}">
+                                <span class="label-text flex items-center gap-1.5 font-medium">
+                                    <span class="icon-[{{ $meta['icon'] }}] size-4 text-base-content/60" aria-hidden="true"></span>
+                                    {{ $meta['label'] }}
+                                </span>
+                            </label>
+                            <input type="text" id="social-{{ $key }}" name="social_{{ $key }}"
+                                   value="{{ $current }}"
+                                   placeholder="{{ $meta['placeholder'] }}"
+                                   maxlength="255"
+                                   class="input input-bordered w-full">
+                        </div>
                         @endforeach
                     </div>
+                    @endif
 
-                    <div>
-                        <label style="color: #e5e7eb; font-size: 13px; display: block; margin-bottom: 6px;">
-                            Tu usuario o enlace <span id="social-plan1-network-label" style="color:#2B6FFF;">{{ $plan1Selected ? '(' . $allNetworksMeta[$plan1Selected]['label'] . ')' : '' }}</span>
-                        </label>
-                        <input type="text" id="social-plan1-handle"
-                            value="{{ $plan1Handle }}"
-                            placeholder="{{ $plan1Selected ? $allNetworksMeta[$plan1Selected]['placeholder'] : 'Selecciona una red primero' }}"
-                            style="width: 100%; background: #07101F; border: 1px solid #1e2a42; border-radius: 8px; padding: 12px 16px; color: #fff; font-size: 15px;"
-                            {{ !$plan1Selected ? 'disabled' : '' }}>
-                    </div>
+                    <button type="button" onclick="saveSocialNetworks()" class="btn btn-primary w-full gap-2">
+                        <span class="icon-[tabler--device-floppy] size-4" aria-hidden="true"></span>
+                        Guardar Redes Sociales
+                    </button>
                 </div>
-
-                @else
-                {{-- ── Plan 2 + 3: all 6 networks ── --}}
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;" id="social-all-fields">
-                    @foreach($availableKeys as $key)
-                    @php $meta = $allNetworksMeta[$key]; $current = $socialNetworks[$key] ?? ''; @endphp
-                    <div>
-                        <label style="color: #e5e7eb; font-size: 13px; display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
-                            <span>{{ $meta['icon'] }}</span> {{ $meta['label'] }}
-                        </label>
-                        <input type="text" id="social-{{ $key }}" name="social_{{ $key }}"
-                            value="{{ $current }}"
-                            placeholder="{{ $meta['placeholder'] }}"
-                            maxlength="255"
-                            style="width: 100%; background: #07101F; border: 1px solid #1e2a42; border-radius: 8px; padding: 10px 14px; color: #fff; font-size: 14px;">
-                    </div>
-                    @endforeach
-                </div>
-                @endif
-
-                <button type="button" onclick="saveSocialNetworks()"
-                    style="background: #2B6FFF; color: #fff; border: none; border-radius: 8px; padding: 12px 24px; font-size: 15px; font-weight: 500; cursor: pointer; width: 100%; transition: all .2s;"
-                    onmouseover="this.style.background='#1e5ce6'"
-                    onmouseout="this.style.background='#2B6FFF'">
-                    Guardar Redes Sociales
-                </button>
             </div>
 
-            {{-- ════════════════════════════════════════════════════════════
-                 Section: Payment Methods
-            ═══════════════════════════════════════════════════════════ --}}
-            <div class="config-section" style="background: #0f1c32; border-radius: 12px; padding: 24px; margin-bottom: 24px;">
+            {{-- ── Medios de Pago card ─────────────────────────────────── --}}
+            <div class="card bg-base-100 shadow-sm border border-base-content/10 mb-4">
                 @php
                     $payMethods      = $customization->payment_methods ?? [];
                     $globalEnabled   = $payMethods['global'] ?? [];
                     $currencyEnabled = $payMethods['currency'] ?? [];
                     $branchPayMeta   = $payMethods['branches'] ?? [];
                     $allPayMeta      = [
-                        // 🇻🇪 Nacionales / Flujo
                         'pagoMovil'  => ['label' => 'Pago Móvil',    'icon' => '📱', 'desc' => 'Transferencia bancaria móvil',  'group' => 'Nacional'],
-                        'cash'       => ['label' => 'Efectivo',       'icon' => '💵', 'desc' => 'Pago en efectivo',                 'group' => 'Nacional'],
-                        'puntoventa' => ['label' => 'Punto de Venta', 'icon' => '💳', 'desc' => 'Terminal POS físico',            'group' => 'Nacional'],
-                        'biopago'    => ['label' => 'Biopago',        'icon' => '👁️', 'desc' => 'Pago biométrico',           'group' => 'Nacional'],
-                        'cashea'     => ['label' => 'Cashea',         'icon' => '🛒', 'desc' => 'Compra ahora, paga después',     'group' => 'Nacional'],
-                        'krece'      => ['label' => 'Krece',          'icon' => '📈', 'desc' => 'Financiamiento tech/electro',        'group' => 'Nacional'],
-                        'wepa'       => ['label' => 'Wepa',           'icon' => '📲', 'desc' => 'Cuotas desde el móvil',           'group' => 'Nacional'],
+                        'cash'       => ['label' => 'Efectivo',       'icon' => '💵', 'desc' => 'Pago en efectivo',              'group' => 'Nacional'],
+                        'puntoventa' => ['label' => 'Punto de Venta', 'icon' => '💳', 'desc' => 'Terminal POS físico',           'group' => 'Nacional'],
+                        'biopago'    => ['label' => 'Biopago',        'icon' => '👁️', 'desc' => 'Pago biométrico',              'group' => 'Nacional'],
+                        'cashea'     => ['label' => 'Cashea',         'icon' => '🛒', 'desc' => 'Compra ahora, paga después',    'group' => 'Nacional'],
+                        'krece'      => ['label' => 'Krece',          'icon' => '📈', 'desc' => 'Financiamiento tech/electro',   'group' => 'Nacional'],
+                        'wepa'       => ['label' => 'Wepa',           'icon' => '📲', 'desc' => 'Cuotas desde el móvil',         'group' => 'Nacional'],
                         'lysto'      => ['label' => 'Lysto',          'icon' => '🗓️', 'desc' => 'Pago en cuotas en comercios',  'group' => 'Nacional'],
-                        'chollo'     => ['label' => 'Chollo',         'icon' => '🏷️', 'desc' => 'Compras a cuotas en retail',    'group' => 'Nacional'],
-                        // 💱 Divisas
-                        'zelle'      => ['label' => 'Zelle',          'icon' => '⚡', 'desc' => 'Transferencia USD',                 'group' => 'Divisa'],
-                        'zinli'      => ['label' => 'Zinli',          'icon' => '🟣', 'desc' => 'Billetera digital USD',             'group' => 'Divisa'],
+                        'chollo'     => ['label' => 'Chollo',         'icon' => '🏷️', 'desc' => 'Compras a cuotas en retail',   'group' => 'Nacional'],
+                        'zelle'      => ['label' => 'Zelle',          'icon' => '⚡',  'desc' => 'Transferencia USD',             'group' => 'Divisa'],
+                        'zinli'      => ['label' => 'Zinli',          'icon' => '🟣', 'desc' => 'Billetera digital USD',          'group' => 'Divisa'],
                         'paypal'     => ['label' => 'PayPal',         'icon' => '🅿️', 'desc' => 'Pagos internacionales',         'group' => 'Divisa'],
                     ];
                     $allCurrencyMeta = [
@@ -2004,213 +2001,188 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
                     $activeBranchList = $branches->where('is_active', true);
                 @endphp
 
-                <h3 style="color: #fff; font-size: 18px; font-weight: 600; margin-bottom: 6px;">💳 Medios de Pago</h3>
-                <p style="color: #94a3b8; font-size: 13px; margin-bottom: 20px;">
+                <div class="card-header flex items-center justify-between gap-2 flex-wrap">
+                    <h3 class="card-title flex items-center gap-2">
+                        <span class="icon-[tabler--credit-card] size-5 text-primary" aria-hidden="true"></span>
+                        Medios de Pago
+                    </h3>
                     @if($plan->id === 1)
-                        <span style="color: #f59e0b;">★ Plan OPORTUNIDAD</span> — Muestra <strong style="color:#fff;">Pago Móvil y Efectivo</strong> fijos en tu landing. No se puede modificar.
+                        <span class="badge badge-soft badge-warning badge-sm">Plan OPORTUNIDAD — fijos</span>
                     @elseif($plan->id === 2)
-                        <span style="color: #22c55e;">★ Plan CRECIMIENTO</span> — Elige cuáles medios mostrar en tu landing
+                        <span class="badge badge-soft badge-success badge-sm">Plan CRECIMIENTO</span>
                     @else
-                        <span style="color: #a78bfa;">★ Plan VISIÓN</span> — Elige tus medios globales y también por sucursal
+                        <span class="badge badge-soft badge-info badge-sm">Plan VISIÓN — global + sucursales</span>
                     @endif
-                </p>
-
-                @if($plan->id === 1)
-                {{-- Plan 1: Fixed — read-only --}}
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
-                    @foreach(['pagoMovil', 'cash'] as $mkey)
-                    @php $m = $allPayMeta[$mkey]; @endphp
-                    <div style="background: #0d3320; border: 1px solid #22c55e40; border-radius: 10px; padding: 14px 16px; display: flex; align-items: center; gap: 10px;">
-                        <span style="font-size: 20px;">{{ $m['icon'] }}</span>
-                        <div>
-                            <div style="color: #86efac; font-size: 13px; font-weight: 600;">{{ $m['label'] }}</div>
-                            <div style="color: #4ade8060; font-size: 11px;">{{ $m['desc'] }}</div>
+                </div>
+                <div class="card-body">
+                    @if($plan->id === 1)
+                    {{-- Plan 1: Fixed — read-only --}}
+                    <div class="grid grid-cols-2 gap-3 mb-4">
+                        @foreach(['pagoMovil', 'cash'] as $mkey)
+                        @php $m = $allPayMeta[$mkey]; @endphp
+                        <div class="flex items-center gap-2 p-3 rounded-box bg-success/10 border border-success/20">
+                            <span class="text-xl">{{ $m['icon'] }}</span>
+                            <div class="flex-1 min-w-0">
+                                <div class="text-sm font-semibold text-success">{{ $m['label'] }}</div>
+                                <div class="text-xs text-success/60">{{ $m['desc'] }}</div>
+                            </div>
+                            <span class="icon-[tabler--check] size-4 text-success shrink-0" aria-hidden="true"></span>
                         </div>
-                        <span style="margin-left: auto; color: #22c55e; font-size: 16px;">✓</span>
+                        @endforeach
                     </div>
-                    @endforeach
-                </div>
-                <div style="background: #1e2a42; border-left: 3px solid #f59e0b; padding: 10px 14px; border-radius: 6px;">
-                    <p style="color: #94a3b8; font-size: 12px; margin: 0;">🔒 Para elegir los medios de pago, mejora al Plan CRECIMIENTO o superior.</p>
-                </div>
+                    <div class="alert alert-warning">
+                        <span class="icon-[tabler--lock] size-4" aria-hidden="true"></span>
+                        <span class="text-sm">Para elegir los medios de pago, mejora al Plan CRECIMIENTO o superior.</span>
+                    </div>
 
-                @else
-                {{-- Plan 2 + 3: Selectable checkboxes (global) --}}
-                <div style="margin-bottom: 18px;">
-                    <label style="color: #e5e7eb; font-size: 13px; font-weight: 500; display: block; margin-bottom: 10px;">
+                    @else
+                    {{-- Plan 2 + 3: Selectable checkboxes (global) --}}
+                    <p class="text-sm font-medium text-base-content mb-3">
                         @if($plan->id === 3) Métodos globales (todos los clientes) @else Métodos visibles en tu landing @endif
-                    </label>
+                    </p>
 
-                    {{-- Grupo: Tradicionales --}}
-                    <p style="color: #6b7280; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 8px;">Tradicionales</p>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px;">
+                    <p class="text-xs font-semibold uppercase tracking-wide text-base-content/40 mb-2">Nacionales / Divisas</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4">
                         @foreach($allPayMeta as $mkey => $m)
-                        @if(($m['group'] ?? '') !== 'BNPL')
                         @php $checked = in_array($mkey, $globalEnabled); @endphp
                         <label id="pay-label-{{ $mkey }}" onclick="togglePayMethod('{{ $mkey }}')"
-                            style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 10px 14px; border-radius: 10px; border: 1px solid {{ $checked ? '#2B6FFF' : '#1e2a42' }}; background: {{ $checked ? '#1a2f5e' : 'transparent' }}; transition: all .2s; user-select: none;">
-                            <input type="checkbox" id="pay-check-{{ $mkey }}" value="{{ $mkey }}" {{ $checked ? 'checked' : '' }} style="display: none;">
-                            <span style="font-size: 18px;">{{ $m['icon'] }}</span>
-                            <div>
-                                <div style="color: #e5e7eb; font-size: 13px; font-weight: 500;">{{ $m['label'] }}</div>
-                                <div style="color: #6b7280; font-size: 11px;">{{ $m['desc'] }}</div>
+                               class="flex items-center gap-2 cursor-pointer p-2.5 rounded-box border transition-colors select-none
+                                      {{ $checked ? 'bg-primary/10 border-primary/30' : 'bg-base-200/50 border-base-content/10 hover:border-base-content/20' }}">
+                            <input type="checkbox" id="pay-check-{{ $mkey }}" value="{{ $mkey }}" {{ $checked ? 'checked' : '' }} class="hidden">
+                            <span class="text-base">{{ $m['icon'] }}</span>
+                            <div class="flex-1 min-w-0">
+                                <div class="text-xs font-medium text-base-content">{{ $m['label'] }}</div>
+                                <div class="text-xs text-base-content/40">{{ $m['desc'] }}</div>
                             </div>
-                            <span id="pay-check-icon-{{ $mkey }}" style="margin-left: auto; color: {{ $checked ? '#2B6FFF' : '#1e2a42' }}; font-size: 16px; transition: color .2s;">✓</span>
+                            <span id="pay-check-icon-{{ $mkey }}"
+                                  class="icon-[tabler--check] size-4 shrink-0 transition-opacity {{ $checked ? 'text-primary opacity-100' : 'opacity-0' }}"
+                                  aria-hidden="true"></span>
                         </label>
-                        @endif
                         @endforeach
                     </div>
 
-                    {{-- Grupo: BNPL --}}
-                    <div style="border-top: 1px solid #1e2a42; padding-top: 14px;">
-                        <p style="color: #a78bfa; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 8px;">📆 Compra ahora, paga después (BNPL)</p>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                            @foreach($allPayMeta as $mkey => $m)
-                            @if(($m['group'] ?? '') === 'BNPL')
-                            @php $checked = in_array($mkey, $globalEnabled); @endphp
-                            <label id="pay-label-{{ $mkey }}" onclick="togglePayMethod('{{ $mkey }}')"
-                                style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 10px 14px; border-radius: 10px; border: 1px solid {{ $checked ? '#a78bfa' : '#1e2a42' }}; background: {{ $checked ? '#2d1f5e' : 'transparent' }}; transition: all .2s; user-select: none;">
-                                <input type="checkbox" id="pay-check-{{ $mkey }}" value="{{ $mkey }}" {{ $checked ? 'checked' : '' }} style="display: none;">
-                                <span style="font-size: 18px;">{{ $m['icon'] }}</span>
-                                <div>
-                                    <div style="color: #e5e7eb; font-size: 13px; font-weight: 500;">{{ $m['label'] }}</div>
-                                    <div style="color: #6b7280; font-size: 11px;">{{ $m['desc'] }}</div>
+                    {{-- Denominaciones --}}
+                    <div class="pt-4 border-t border-base-content/10">
+                        <p class="text-sm font-medium text-base-content mb-3">
+                            <span class="icon-[tabler--cash] size-4 inline-block mr-1 text-base-content/60" aria-hidden="true"></span>
+                            Denominaciones Aceptadas
+                        </p>
+                        <div class="grid grid-cols-2 gap-2 mb-4">
+                            @foreach($allCurrencyMeta as $ckey => $c)
+                            @php $checked = in_array($ckey, $currencyEnabled); @endphp
+                            <label id="curr-label-{{ $ckey }}" onclick="toggleCurrency('{{ $ckey }}')"
+                                   class="flex items-center gap-2 cursor-pointer p-2.5 rounded-box border transition-colors select-none
+                                          {{ $checked ? 'bg-primary/10 border-primary/30' : 'bg-base-200/50 border-base-content/10 hover:border-base-content/20' }}">
+                                <input type="checkbox" id="curr-check-{{ $ckey }}" value="{{ $ckey }}" {{ $checked ? 'checked' : '' }} class="hidden">
+                                <span class="text-base">{{ $c['icon'] }}</span>
+                                <div class="flex-1 min-w-0">
+                                    <div class="text-xs font-medium text-base-content">{{ $c['label'] }}</div>
+                                    <div class="text-xs text-base-content/40">{{ $c['desc'] }}</div>
                                 </div>
-                                <span id="pay-check-icon-{{ $mkey }}" style="margin-left: auto; color: {{ $checked ? '#a78bfa' : '#1e2a42' }}; font-size: 16px; transition: color .2s;">✓</span>
+                                <span id="curr-check-icon-{{ $ckey }}"
+                                      class="icon-[tabler--check] size-4 shrink-0 transition-opacity {{ $checked ? 'text-primary opacity-100' : 'opacity-0' }}"
+                                      aria-hidden="true"></span>
                             </label>
-                            @endif
                             @endforeach
                         </div>
                     </div>
-                </div>
 
-                {{-- Denominaciones / Monedas --}}
-                <div style="margin-bottom: 18px; padding-top: 18px; border-top: 1px solid #1e2a42;">
-                    <label style="color: #e5e7eb; font-size: 13px; font-weight: 500; display: block; margin-bottom: 10px;">
-                        💰 Denominaciones Aceptadas
-                    </label>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                        @foreach($allCurrencyMeta as $ckey => $c)
-                        @php $checked = in_array($ckey, $currencyEnabled); @endphp
-                        <label id="curr-label-{{ $ckey }}" onclick="toggleCurrency('{{ $ckey }}')"
-                            style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 10px 14px; border-radius: 10px; border: 1px solid {{ $checked ? '#2B6FFF' : '#1e2a42' }}; background: {{ $checked ? '#1a2f5e' : 'transparent' }}; transition: all .2s; user-select: none;">
-                            <input type="checkbox" id="curr-check-{{ $ckey }}" value="{{ $ckey }}" {{ $checked ? 'checked' : '' }} style="display: none;">
-                            <span style="font-size: 18px;">{{ $c['icon'] }}</span>
-                            <div>
-                                <div style="color: #e5e7eb; font-size: 13px; font-weight: 500;">{{ $c['label'] }}</div>
-                                <div style="color: #6b7280; font-size: 11px;">{{ $c['desc'] }}</div>
-                            </div>
-                            <span id="curr-check-icon-{{ $ckey }}" style="margin-left: auto; color: {{ $checked ? '#2B6FFF' : '#1e2a42' }}; font-size: 16px; transition: color .2s;">✓</span>
-                        </label>
-                        @endforeach
+                    {{-- Vista previa --}}
+                    <div class="rounded-box bg-base-200 border border-base-content/10 p-3 mb-4">
+                        <p class="text-xs font-semibold text-base-content/50 uppercase tracking-wide mb-2">Vista previa en la landing:</p>
+                        <div id="payment-preview" class="flex flex-wrap justify-center gap-2 min-h-8 items-center"></div>
                     </div>
-                </div>
 
-                {{-- VISTA PREVIA: Cómo se verá en la landing --}}
-                <div style="margin-top: 24px; padding: 16px; background: #07101F; border-radius: 10px; border: 1px solid #22c55e40;">
-                    <p style="color: #86efac; font-size: 12px; font-weight: 600; margin-bottom: 12px;">👁️ VISTA PREVIA EN LA LANDING:</p>
-                    <div id="payment-preview" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; padding: 12px; background: #0f1c32; border-radius: 8px; min-height: 40px; align-items: center;">
-                        {{-- Se actualiza dinámicamente con JS --}}
-                    </div>
-                </div>
-
-                @if($plan->id === 3 && $activeBranchList->isNotEmpty())
-                {{-- Plan 3: per-branch assignment --}}
-                <div style="margin-bottom: 18px;">
-                    <label style="color: #e5e7eb; font-size: 13px; font-weight: 500; display: block; margin-bottom: 4px;">Métodos por Sucursal</label>
-                    <p style="color: #6b7280; font-size: 12px; margin-bottom: 12px;">Personaliza los métodos aceptados en cada sucursal</p>
-                    <div style="display: flex; flex-direction: column; gap: 14px;">
-                        @foreach($activeBranchList as $branch)
-                        @php $bEnabled = $branchPayMeta[(string)$branch->id] ?? []; @endphp
-                        <div style="background: #07101F; border: 1px solid #1e2a42; border-radius: 10px; padding: 14px 16px;">
-                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
-                                <span style="font-size: 15px;">📍</span>
-                                <span style="color: #fff; font-size: 14px; font-weight: 600;">{{ $branch->name }}</span>
+                    @if($plan->id === 3 && $activeBranchList->isNotEmpty())
+                    {{-- Plan 3: per-branch --}}
+                    <div class="pt-4 border-t border-base-content/10">
+                        <p class="text-sm font-medium text-base-content mb-1">Métodos por Sucursal</p>
+                        <p class="text-xs text-base-content/50 mb-3">Personaliza los métodos aceptados en cada sucursal</p>
+                        <div class="space-y-3">
+                            @foreach($activeBranchList as $branch)
+                            @php $bEnabled = $branchPayMeta[(string)$branch->id] ?? []; @endphp
+                            <div class="rounded-box bg-base-200/50 border border-base-content/10 p-3">
+                                <div class="flex items-center gap-2 mb-3">
+                                    <span class="icon-[tabler--map-pin] size-4 text-base-content/50" aria-hidden="true"></span>
+                                    <span class="font-semibold text-sm text-base-content">{{ $branch->name }}</span>
+                                </div>
+                                <div class="grid grid-cols-2 gap-1.5">
+                                    @foreach($allPayMeta as $mkey => $m)
+                                    @php $bchecked = in_array($mkey, $bEnabled); @endphp
+                                    <label id="pay-branch-label-{{ $branch->id }}-{{ $mkey }}"
+                                           onclick="toggleBranchPayMethod({{ $branch->id }}, '{{ $mkey }}')"
+                                           class="flex items-center gap-1.5 cursor-pointer p-2 rounded-lg border transition-colors select-none
+                                                  {{ $bchecked ? 'bg-primary/10 border-primary/30' : 'bg-base-100 border-base-content/10 hover:border-base-content/20' }}">
+                                        <input type="checkbox" id="pay-branch-check-{{ $branch->id }}-{{ $mkey }}" value="{{ $mkey }}" {{ $bchecked ? 'checked' : '' }} class="hidden">
+                                        <span class="text-sm">{{ $m['icon'] }}</span>
+                                        <span class="text-xs text-base-content flex-1">{{ $m['label'] }}</span>
+                                        <span id="pay-branch-check-icon-{{ $branch->id }}-{{ $mkey }}"
+                                              class="icon-[tabler--check] size-3.5 shrink-0 transition-opacity {{ $bchecked ? 'text-primary opacity-100' : 'opacity-0' }}"
+                                              aria-hidden="true"></span>
+                                    </label>
+                                    @endforeach
+                                </div>
                             </div>
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-                                @foreach($allPayMeta as $mkey => $m)
-                                @php $bchecked = in_array($mkey, $bEnabled); @endphp
-                                <label id="pay-branch-label-{{ $branch->id }}-{{ $mkey }}"
-                                    onclick="toggleBranchPayMethod({{ $branch->id }}, '{{ $mkey }}')"
-                                    style="display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 8px 10px; border-radius: 8px; border: 1px solid {{ $bchecked ? '#a78bfa60' : '#1e2a42' }}; background: {{ $bchecked ? '#2d1f5e' : 'transparent' }}; transition: all .2s; user-select: none;">
-                                    <input type="checkbox" id="pay-branch-check-{{ $branch->id }}-{{ $mkey }}" value="{{ $mkey }}" {{ $bchecked ? 'checked' : '' }} style="display: none;">
-                                    <span style="font-size: 14px;">{{ $m['icon'] }}</span>
-                                    <span style="color: #e5e7eb; font-size: 12px;">{{ $m['label'] }}</span>
-                                    <span id="pay-branch-check-icon-{{ $branch->id }}-{{ $mkey }}" style="margin-left: auto; color: {{ $bchecked ? '#a78bfa' : '#1e2a42' }}; font-size: 14px;">✓</span>
-                                </label>
-                                @endforeach
-                            </div>
+                            @endforeach
                         </div>
-                        @endforeach
                     </div>
-                </div>
-                @endif
+                    @endif
 
-                <button type="button" onclick="savePaymentMethods()"
-                    style="background: #2B6FFF; color: #fff; border: none; border-radius: 8px; padding: 12px 24px; font-size: 15px; font-weight: 500; cursor: pointer; width: 100%; transition: all .2s;"
-                    onmouseover="this.style.background='#1e5ce6'"
-                    onmouseout="this.style.background='#2B6FFF'">
-                    Guardar Medios de Pago y Denominaciones
-                </button>
-                @endif
+                    <button type="button" onclick="savePaymentMethods()" class="btn btn-primary w-full gap-2 mt-4">
+                        <span class="icon-[tabler--device-floppy] size-4" aria-hidden="true"></span>
+                        Guardar Medios de Pago y Denominaciones
+                    </button>
+                    @endif
+                </div>
             </div>
 
-            <!-- Section 1: Currency Configuration -->
-            <div class="config-section" style="background: #0f1c32; border-radius: 12px; padding: 24px; margin-bottom: 24px;">
-                <h3 style="color: #fff; font-size: 18px; font-weight: 600; margin-bottom: 24px;">Configuración de Moneda</h3>
-                
-                <!-- Currency Symbol Switch -->
-                <div style="margin-bottom: 32px;">
-                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
-                        <label style="color: #fff; font-size: 15px; font-weight: 500;">Símbolo de Precio</label>
-                        <div style="display: flex; align-items: center; gap: 12px;">
-                            <span id="symbol-ref-label" style="color: #2B6FFF; font-size: 14px; font-weight: 600;">REF</span>
-                            <label style="position: relative; display: inline-block; width: 50px; height: 24px;">
-                                <input type="checkbox" id="currency-symbol-switch" style="opacity: 0; width: 0; height: 0;">
-                                <span style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #1e2a42; border-radius: 24px; transition: .3s;"></span>
-                                <span id="currency-slider" style="position: absolute; content: ''; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: #6b7280; border-radius: 50%; transition: .3s;"></span>
-                            </label>
-                            <span id="symbol-dollar-label" style="color: #6b7280; font-size: 14px; font-weight: 600;">$</span>
+            {{-- ── Configuración de Moneda card ──────────────────────────── --}}
+            <div class="card bg-base-100 shadow-sm border border-base-content/10 mb-4">
+                <div class="card-header">
+                    <h3 class="card-title flex items-center gap-2">
+                        <span class="icon-[tabler--currency-dollar] size-5 text-primary" aria-hidden="true"></span>
+                        Configuración de Moneda
+                    </h3>
+                </div>
+                <div class="card-body">
+                    {{-- Símbolo toggle --}}
+                    <div class="flex items-center justify-between mb-6 p-3 rounded-box bg-base-200/50 border border-base-content/10">
+                        <span class="font-medium text-sm text-base-content">Símbolo de Precio</span>
+                        <div class="flex items-center gap-3">
+                            <span id="symbol-ref-label" class="text-sm font-semibold text-primary">REF</span>
+                            <input type="checkbox" id="currency-symbol-switch" class="switch switch-primary switch-sm">
+                            <span id="symbol-dollar-label" class="text-sm font-semibold text-base-content/40">$</span>
                         </div>
                     </div>
-                </div>
 
-                <!-- Display Mode Options -->
-                <div>
-                    <label style="color: #fff; font-size: 15px; font-weight: 500; display: block; margin-bottom: 16px;">Mostrar Precios en</label>
-                    
-                    @php $savedMode = $tenant->settings['engine_settings']['currency']['display']['saved_display_mode'] ?? 'reference_only'; @endphp
-                    
-                    <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px;">
-                        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
-                            <input type="radio" name="display_mode" value="reference_only" {{ $savedMode === 'reference_only' ? 'checked' : '' }} style="width: 18px; height: 18px; accent-color: #2B6FFF;">
-                            <span style="color: #e5e7eb; font-size: 14px;">Solo Referencia (REF/$)</span>
-                        </label>
-                        
-                        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
-                            <input type="radio" name="display_mode" value="bolivares_only" {{ $savedMode === 'bolivares_only' ? 'checked' : '' }} style="width: 18px; height: 18px; accent-color: #2B6FFF;">
-                            <span style="color: #e5e7eb; font-size: 14px;">Solo Bolívares (Bs.)</span>
-                        </label>
-                        
-                        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
-                            <input type="radio" name="display_mode" value="both_toggle" {{ $savedMode === 'both_toggle' ? 'checked' : '' }} style="width: 18px; height: 18px; accent-color: #2B6FFF;">
-                            <span style="color: #e5e7eb; font-size: 14px;">Ambos con toggle público</span>
-                        </label>
-                        
-                        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
-                            <input type="radio" name="display_mode" value="hidden" {{ $savedMode === 'hidden' ? 'checked' : '' }} style="width: 18px; height: 18px; accent-color: #2B6FFF;">
-                            <span style="color: #e5e7eb; font-size: 14px;">Ocultar precio → activa "Más Info"</span>
-                        </label>
+                    {{-- Display Mode --}}
+                    <div class="form-control mb-4">
+                        <label class="label"><span class="label-text font-medium">Mostrar Precios en</span></label>
+                        @php $savedMode = $tenant->settings['engine_settings']['currency']['display']['saved_display_mode'] ?? 'reference_only'; @endphp
+                        <div class="flex flex-col gap-2">
+                            @foreach([
+                                'reference_only' => 'Solo Referencia (REF/$)',
+                                'bolivares_only' => 'Solo Bolívares (Bs.)',
+                                'both_toggle'   => 'Ambos con toggle público',
+                                'hidden'        => 'Ocultar precio → activa "Más Info"',
+                            ] as $val => $label)
+                            <label class="flex items-center gap-2.5 cursor-pointer">
+                                <input type="radio" name="display_mode" value="{{ $val }}"
+                                       {{ $savedMode === $val ? 'checked' : '' }}
+                                       class="radio radio-primary radio-sm">
+                                <span class="text-sm text-base-content">{{ $label }}</span>
+                            </label>
+                            @endforeach
+                        </div>
                     </div>
 
-                    <div style="background: #1e3a5f; border-left: 3px solid #2B6FFF; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;">
-                        <p style="color: #94a3b8; font-size: 13px; margin: 0;">💡 Si ocultás el precio, el botón cambia a "Más Info"</p>
+                    <div class="alert alert-info mb-4">
+                        <span class="icon-[tabler--info-circle] size-4" aria-hidden="true"></span>
+                        <span class="text-sm">Si ocultás el precio, el botón cambia a "Más Info"</span>
                     </div>
 
-                    <button type="button" onclick="saveCurrencyConfig()"
-                        style="background: #2B6FFF; color: #fff; border: none; border-radius: 8px; padding: 12px 24px; font-size: 15px; font-weight: 500; cursor: pointer; transition: all 0.2s; width: 100%;"
-                        onmouseover="this.style.background='#1e5ce6'"
-                        onmouseout="this.style.background='#2B6FFF'">
+                    <button type="button" onclick="saveCurrencyConfig()" class="btn btn-primary w-full gap-2">
+                        <span class="icon-[tabler--device-floppy] size-4" aria-hidden="true"></span>
                         Guardar Configuración de Moneda
                     </button>
                 </div>
