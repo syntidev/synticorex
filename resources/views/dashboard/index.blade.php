@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Dashboard - {{ $tenant->business_name }}</title>
+    <meta name="description" content="Panel de administración de {{ $tenant->business_name }} — gestiona tu información, productos, servicios y diseño de tu sitio web.">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Dashboard — {{ $tenant->business_name }} | SYNTIweb</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -74,6 +76,19 @@
         .form-select:focus {
             outline: none;
             border-color: #2B6FFF;
+        }
+
+        /* Focus visible — keyboard navigation (WCAG 2.4.7) */
+        :focus-visible {
+            outline: 2px solid #2B6FFF !important;
+            outline-offset: 2px !important;
+        }
+        /* Excluir inputs que ya tienen estilo de foco propio */
+        .form-input:focus-visible,
+        .form-textarea:focus-visible,
+        .form-select:focus-visible {
+            outline: none !important;
+            box-shadow: 0 0 0 3px rgba(43, 111, 255, 0.35);
         }
 
         .form-textarea {
@@ -765,38 +780,38 @@
                     
                     <div class="form-grid">
                         <div class="form-group">
-                            <label class="form-label">Nombre del Negocio</label>
-                            <input type="text" class="form-input" name="business_name" value="{{ $tenant->business_name }}" required>
+                            <label class="form-label" for="info-business-name">Nombre del Negocio</label>
+                            <input id="info-business-name" type="text" class="form-input" name="business_name" value="{{ $tenant->business_name }}" required>
                         </div>
-                        
+
                         <div class="form-group">
-                            <label class="form-label">Subdominio</label>
-                            <input type="text" class="form-input" value="{{ $tenant->subdomain }}" disabled>
+                            <label class="form-label" for="info-subdomain">Subdominio</label>
+                            <input id="info-subdomain" type="text" class="form-input" value="{{ $tenant->subdomain }}" disabled aria-readonly="true">
                         </div>
-                        
+
                         <div class="form-group">
-                            <label class="form-label">Eslogan</label>
-                            <input type="text" class="form-input" name="slogan" value="{{ $tenant->slogan }}">
+                            <label class="form-label" for="info-slogan">Eslogan</label>
+                            <input id="info-slogan" type="text" class="form-input" name="slogan" value="{{ $tenant->slogan }}">
                         </div>
-                        
+
                         <div class="form-group">
-                            <label class="form-label">Teléfono</label>
-                            <input type="text" class="form-input" name="phone" value="{{ $tenant->phone }}">
+                            <label class="form-label" for="info-phone">Teléfono</label>
+                            <input id="info-phone" type="text" class="form-input" name="phone" value="{{ $tenant->phone }}">
                         </div>
-                        
+
                         <div class="form-group">
-                            <label class="form-label">WhatsApp Ventas</label>
-                            <input type="text" class="form-input" name="whatsapp_sales" value="{{ $tenant->whatsapp_sales }}">
+                            <label class="form-label" for="info-whatsapp">WhatsApp Ventas</label>
+                            <input id="info-whatsapp" type="text" class="form-input" name="whatsapp_sales" value="{{ $tenant->whatsapp_sales }}">
                         </div>
-                        
+
                         <div class="form-group">
-                            <label class="form-label">Email</label>
-                            <input type="email" class="form-input" name="email" value="{{ $tenant->email }}">
+                            <label class="form-label" for="info-email">Email</label>
+                            <input id="info-email" type="email" class="form-input" name="email" value="{{ $tenant->email }}">
                         </div>
-                        
+
                         <div class="form-group">
-                            <label class="form-label">Dirección</label>
-                            <input type="text" class="form-input" name="address" value="{{ $tenant->address }}">
+                            <label class="form-label" for="info-address">Dirección</label>
+                            <input id="info-address" type="text" class="form-input" name="address" value="{{ $tenant->address }}">
                         </div>
                         
                         @if($tenant->plan_id >= 2)
@@ -847,14 +862,14 @@
                         @endif
 
                         <div class="form-group">
-                            <label class="form-label">Ciudad</label>
-                            <input type="text" class="form-input" name="city" value="{{ $tenant->city }}">
+                            <label class="form-label" for="info-city">Ciudad</label>
+                            <input id="info-city" type="text" class="form-input" name="city" value="{{ $tenant->city }}">
                         </div>
                     </div>
-                    
+
                     <div class="form-group">
-                        <label class="form-label">Descripción</label>
-                        <textarea class="form-textarea" name="description">{{ $tenant->description }}</textarea>
+                        <label class="form-label" for="info-description">Descripción</label>
+                        <textarea id="info-description" class="form-textarea" name="description">{{ $tenant->description }}</textarea>
                     </div>
                     
                     <div class="form-actions">
@@ -978,11 +993,12 @@
         </div>
 
         <!-- Modal: Producto -->
-        <div id="product-modal" class="crud-overlay">
+        <div id="product-modal" class="crud-overlay"
+             role="dialog" aria-modal="true" aria-labelledby="product-modal-title" aria-hidden="true">
             <div class="crud-dialog">
                 <div class="crud-dialog-header">
                     <h3 class="crud-dialog-title" id="product-modal-title">Agregar Producto</h3>
-                    <button class="crud-dialog-close" onclick="closeProductModal()">&times;</button>
+                    <button class="crud-dialog-close" onclick="closeProductModal()" aria-label="Cerrar modal">&times;</button>
                 </div>
                 <div class="crud-dialog-body">
                     <form id="product-form" onsubmit="saveProduct(event)">
@@ -1201,11 +1217,12 @@
         </div>
 
         <!-- Modal: Servicio -->
-        <div id="service-modal" class="crud-overlay">
+        <div id="service-modal" class="crud-overlay"
+             role="dialog" aria-modal="true" aria-labelledby="service-modal-title" aria-hidden="true">
             <div class="crud-dialog" style="max-width: 700px; border-radius: 16px; background: #1a1f2e; border: 1px solid #2d3748; box-shadow: 0 20px 60px rgba(0,0,0,0.5);">
                 <div class="crud-dialog-header" style="padding: 24px 28px; border-bottom: 1px solid #2d3748; background: linear-gradient(135deg, rgba(59,130,246,0.05) 0%, rgba(255,107,0,0.02) 100%);">
                     <h3 class="crud-dialog-title" id="service-modal-title" style="font-size: 18px; font-weight: 700; color: #e2e8f0; margin: 0;">Agregar Servicio</h3>
-                    <button class="crud-dialog-close" onclick="closeServiceModal()" style="position: absolute; top: 16px; right: 16px; width: 36px; height: 36px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; cursor: pointer; color: #e2e8f0; font-size: 20px; transition: all 0.2s;" onmouseover="this.style.background='rgba(59,130,246,0.15)'" onmouseout="this.style.background='rgba(255,255,255,0.05)'">×</button>
+                    <button class="crud-dialog-close" onclick="closeServiceModal()" aria-label="Cerrar modal" style="position: absolute; top: 16px; right: 16px; width: 36px; height: 36px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; cursor: pointer; color: #e2e8f0; font-size: 20px; transition: all 0.2s;" onmouseover="this.style.background='rgba(59,130,246,0.15)'" onmouseout="this.style.background='rgba(255,255,255,0.05)'">×</button>
                 </div>
                 <div class="crud-dialog-body" style="padding: 28px;">
                     <form id="service-form" onsubmit="saveService(event)">
@@ -1318,11 +1335,12 @@
         </div>
 
         <!-- Modal: Límite de Plan -->
-        <div id="limit-modal" class="crud-overlay">
+        <div id="limit-modal" class="crud-overlay"
+             role="dialog" aria-modal="true" aria-labelledby="limit-modal-title" aria-hidden="true">
             <div class="crud-dialog" style="max-width: 480px;">
                 <div class="crud-dialog-header">
                     <h3 class="crud-dialog-title" id="limit-modal-title">⚠️ Límite Alcanzado</h3>
-                    <button class="crud-dialog-close" onclick="closeLimitModal()">&times;</button>
+                    <button class="crud-dialog-close" onclick="closeLimitModal()" aria-label="Cerrar modal">&times;</button>
                 </div>
                 <div class="crud-dialog-body">
                     <p id="limit-modal-message" style="color: #cbd5e1; line-height: 1.6; margin-bottom: 20px;"></p>
@@ -2427,10 +2445,14 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
             }
 
             modal.classList.add('show');
+            modal.removeAttribute('aria-hidden');
+            modal.querySelector('.crud-dialog-close')?.focus();
         }
 
         function closeLimitModal() {
-            document.getElementById('limit-modal').classList.remove('show');
+            const modal = document.getElementById('limit-modal');
+            modal.classList.remove('show');
+            modal.setAttribute('aria-hidden', 'true');
         }
         // ────────────────────────────────────────────────────────────
 
@@ -2477,10 +2499,14 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
             }
             
             modal.classList.add('show');
+            modal.removeAttribute('aria-hidden');
+            modal.querySelector('.crud-dialog-close')?.focus();
         }
 
         function closeProductModal() {
-            document.getElementById('product-modal').classList.remove('show');
+            const modal = document.getElementById('product-modal');
+            modal.classList.remove('show');
+            modal.setAttribute('aria-hidden', 'true');
             currentProductId = null;
         }
 
@@ -3017,10 +3043,14 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
             renderIconGrid('');
 
             modal.classList.add('show');
+            modal.removeAttribute('aria-hidden');
+            modal.querySelector('.crud-dialog-close')?.focus();
         }
 
         function closeServiceModal() {
-            document.getElementById('service-modal').classList.remove('show');
+            const modal = document.getElementById('service-modal');
+            modal.classList.remove('show');
+            modal.setAttribute('aria-hidden', 'true');
             currentServiceId = null;
         }
 
@@ -3788,7 +3818,9 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
         .sortable-ghost { opacity: 0.3 !important; }
         .sortable-drag  { box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5) !important; }
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"
+            integrity="sha256-ipiJrDxYBg3KPcKWCKoGLFUMjjFvFugmzOY9qbHAVQ="
+            crossorigin="anonymous"></script>
     <script>
         // ── Toast global ──────────────────────────────────────────────
         window.showToast = function(message, type) {
