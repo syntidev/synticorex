@@ -588,6 +588,16 @@
     </style>
 </head>
 <body class="bg-base-200">
+
+{{-- Skip link accesibilidad: visible solo al recibir foco por teclado --}}
+<a href="#main-content"
+   class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:start-2 focus:z-[9999] focus:btn focus:btn-primary focus:btn-sm">
+    Saltar al contenido principal
+</a>
+
+{{-- Región aria-live para anunciar toasts a lectores de pantalla --}}
+<div id="toast-announcer" aria-live="polite" aria-atomic="true" class="sr-only"></div>
+
 <div class="flex min-h-screen flex-col">
 
     <!-- ══ HEADER NAVBAR ══════════════════════════════════════════════════ -->
@@ -770,7 +780,7 @@
     {{-- ── End Plan Expiry Notices ─────────────────────────────────────── --}}
 
     <!-- Content -->
-    <main class="mx-auto w-full max-w-7xl flex-1 grow p-4 lg:p-6">
+    <main id="main-content" class="mx-auto w-full max-w-7xl flex-1 grow p-4 lg:p-6" tabindex="-1">
         
         <!-- Tab: Info -->
         <div id="tab-info" class="tab-content active">
@@ -781,7 +791,7 @@
                     <div class="form-grid">
                         <div class="form-group">
                             <label class="form-label" for="info-business-name">Nombre del Negocio</label>
-                            <input id="info-business-name" type="text" class="form-input" name="business_name" value="{{ $tenant->business_name }}" required>
+                            <input id="info-business-name" type="text" class="form-input" name="business_name" value="{{ $tenant->business_name }}" required autocomplete="organization">
                         </div>
 
                         <div class="form-group">
@@ -796,22 +806,22 @@
 
                         <div class="form-group">
                             <label class="form-label" for="info-phone">Teléfono</label>
-                            <input id="info-phone" type="text" class="form-input" name="phone" value="{{ $tenant->phone }}">
+                            <input id="info-phone" type="text" class="form-input" name="phone" value="{{ $tenant->phone }}" autocomplete="tel">
                         </div>
 
                         <div class="form-group">
                             <label class="form-label" for="info-whatsapp">WhatsApp Ventas</label>
-                            <input id="info-whatsapp" type="text" class="form-input" name="whatsapp_sales" value="{{ $tenant->whatsapp_sales }}">
+                            <input id="info-whatsapp" type="text" class="form-input" name="whatsapp_sales" value="{{ $tenant->whatsapp_sales }}" autocomplete="off">
                         </div>
 
                         <div class="form-group">
                             <label class="form-label" for="info-email">Email</label>
-                            <input id="info-email" type="email" class="form-input" name="email" value="{{ $tenant->email }}">
+                            <input id="info-email" type="email" class="form-input" name="email" value="{{ $tenant->email }}" autocomplete="email">
                         </div>
 
                         <div class="form-group">
                             <label class="form-label" for="info-address">Dirección</label>
-                            <input id="info-address" type="text" class="form-input" name="address" value="{{ $tenant->address }}">
+                            <input id="info-address" type="text" class="form-input" name="address" value="{{ $tenant->address }}" autocomplete="street-address">
                         </div>
                         
                         @if($tenant->plan_id >= 2)
@@ -863,7 +873,7 @@
 
                         <div class="form-group">
                             <label class="form-label" for="info-city">Ciudad</label>
-                            <input id="info-city" type="text" class="form-input" name="city" value="{{ $tenant->city }}">
+                            <input id="info-city" type="text" class="form-input" name="city" value="{{ $tenant->city }}" autocomplete="address-level2">
                         </div>
                     </div>
 
@@ -941,7 +951,10 @@
                                 @if($product->image_filename)
                                     <img src="{{ asset('storage/tenants/' . $tenant->id . '/' . $product->image_filename) }}"
                                          alt="{{ $product->name }}"
-                                         class="product-image">
+                                         class="product-image"
+                                         width="48" height="48"
+                                         loading="lazy"
+                                         decoding="async">
                                 @else
                                     <div class="product-image" style="background: #374151;"></div>
                                 @endif
@@ -1169,7 +1182,10 @@
                                 @if($service->image_filename)
                                     <img src="{{ asset('storage/tenants/' . $tenant->id . '/' . $service->image_filename) }}"
                                          alt="{{ $service->name }}"
-                                         class="product-image">
+                                         class="product-image"
+                                         width="48" height="48"
+                                         loading="lazy"
+                                         decoding="async">
                                 @elseif($service->icon_name)
                                     <div class="product-image" style="background: linear-gradient(135deg, rgba(59,130,246,0.15) 0%, rgba(255,107,0,0.08) 100%); display: flex; align-items: center; justify-content: center; border: 1px solid rgba(59,130,246,0.25); border-radius: 12px; transition: all 0.2s;">
                                         <span class="iconify tabler--{{ str_replace('_', '-', $service->icon_name) }}" style="font-size: 40px; color: #3b82f6;"></span>
@@ -3837,6 +3853,9 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
             document.body.appendChild(toast);
             requestAnimationFrame(() => { toast.style.opacity = '1'; });
             setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 2500);
+            // Anunciar mensaje a lectores de pantalla via aria-live
+            const announcer = document.getElementById('toast-announcer');
+            if (announcer) { announcer.textContent = ''; requestAnimationFrame(() => { announcer.textContent = message; }); }
         };
 
         // ── Sortable init (called when the Diseño tab opens) ─────────
