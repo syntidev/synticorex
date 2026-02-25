@@ -605,15 +605,36 @@
             margin-bottom: 16px;
         }
 
-        /* Responsive */
-        @media (max-width: 768px) {
+        /* ═══════════════════════════════════════════════════════════════════════ */
+        /* RESPONSIVE BREAKPOINTS (Mobile-First) */
+        /* ═══════════════════════════════════════════════════════════════════════ */
+
+        /* Mobile S: 320-374px */
+        @media (max-width: 374px) {
+            .dashboard-container { padding: 12px; }
+            .dashboard-header { padding: 12px 16px; }
+            .nav-tabs { gap: 4px; }
+            .nav-tab { padding: 8px 10px; font-size: 12px; height: 44px; }
+            .dashboard-content { padding: 12px; }
+            .form-section { padding: 16px; margin-bottom: 16px; }
+            .form-section-title { font-size: 16px; margin-bottom: 16px; }
+            .form-grid { grid-template-columns: 1fr; }
+            .btn-primary, .btn-secondary { min-height: 44px; padding: 10px 12px; }
+        }
+
+        /* Mobile M/L: 375-639px */
+        @media (max-width: 639px) {
+            .dashboard-container { padding: 16px; }
             .dashboard-header {
                 flex-wrap: wrap;
                 gap: 12px;
+                padding: 16px;
+                min-height: 56px;
             }
 
             .header-left {
                 flex-wrap: wrap;
+                flex: 1;
             }
 
             .business-name {
@@ -622,9 +643,145 @@
                 width: 100%;
             }
 
-            .form-grid {
-                grid-template-columns: 1fr;
+            .btn-close {
+                min-height: 44px;
+                min-width: 44px;
+                padding: 10px;
+                align-self: flex-start;
             }
+
+            /* Navigation Tabs - Hide (use bottom nav instead) */
+            .dashboard-nav {
+                display: none;
+            }
+
+            /* Responsive Content Area */
+            .dashboard-content {
+                padding: 16px;
+                padding-bottom: 80px; /* Space for bottom nav */
+            }
+
+            .tab-content { display: none; }
+            .tab-content.active { display: block; }
+
+            /* Forms */
+            .form-section { padding: 16px; margin-bottom: 16px; }
+            .form-section-title { font-size: 16px; margin-bottom: 12px; }
+            .form-grid { grid-template-columns: 1fr; gap: 12px; }
+            .form-group { margin-bottom: 12px; }
+            .form-input, .form-textarea, .form-select { padding: 10px 12px; }
+            .form-actions { flex-wrap: wrap; }
+
+            /* Tables → Card Layout */
+            .data-table {
+                border-collapse: collapse;
+            }
+
+            .data-table thead {
+                display: none;
+            }
+
+            .data-table tbody tr {
+                display: block;
+                margin-bottom: 12px;
+                background: #0f1c32;
+                border-radius: 8px;
+                padding: 12px;
+                border: 1px solid rgba(255,255,255,0.1);
+            }
+
+            .data-table td {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 8px 0;
+                border-bottom: 1px solid rgba(255,255,255,0.05);
+                font-size: 13px;
+            }
+
+            .data-table td:last-child {
+                border-bottom: none;
+            }
+
+            .data-table td::before {
+                content: attr(data-label);
+                font-weight: 600;
+                color: rgba(255,255,255,0.6);
+                flex-basis: 90px;
+                flex-shrink: 0;
+                font-size: 12px;
+            }
+
+            /* Product image in card */
+            .product-image {
+                width: 48px;
+                height: 48px;
+                object-fit: cover;
+                border-radius: 4px;
+                aspect-ratio: 1;
+            }
+
+            /* Buttons */
+            .btn-primary, .btn-secondary {
+                min-height: 44px;
+                min-width: 44px;
+                padding: 10px 12px;
+                font-size: 13px;
+            }
+
+            /* Icons in table actions */
+            .action-button {
+                min-height: 44px;
+                min-width: 44px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 18px;
+            }
+
+            /* Grid layouts */
+            .theme-grid { grid-template-columns: repeat(2, 1fr) !important; }
+        }
+
+        /* Tablet portrait: 640-767px */
+        @media (max-width: 767px) {
+            .dashboard-container { padding: 20px; }
+            .dashboard-nav { padding: 0 16px; }
+            .nav-tabs { gap: 6px; }
+            .nav-tab { padding: 12px 16px; font-size: 13px; height: 44px; }
+            .dashboard-content { padding: 20px; }
+            .form-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+            .form-section { padding: 18px; margin-bottom: 18px; }
+            .theme-grid { grid-template-columns: repeat(3, 1fr) !important; }
+        }
+
+        /* Tablet landscape / Laptop: 768-1023px */
+        @media (max-width: 1023px) {
+            .dashboard-nav { padding: 0 20px; }
+            .dashboard-content { padding: 24px; }
+            .form-grid { grid-template-columns: repeat(2, 1fr); }
+            .sidebar-info { flex-direction: column; }
+            .theme-grid { grid-template-columns: repeat(4, 1fr) !important; }
+        }
+
+        /* Desktop: 1024px+ */
+        @media (min-width: 1024px) {
+            .dashboard-nav {
+                display: flex !important;
+                padding: 0 24px;
+            }
+
+            .dashboard-content {
+                max-width: 1400px;
+                margin: 0 auto;
+                padding: 24px;
+                padding-bottom: 24px;
+            }
+
+            .form-grid { grid-template-columns: repeat(3, 1fr); }
+            .data-table tbody tr { display: table-row !important; }
+            .data-table td::before { display: none !important; }
+            .data-table thead { display: table-header-group !important; }
         }
     </style>
 </head>
@@ -863,23 +1020,23 @@
                     <tbody>
                         @foreach($products as $product)
                         <tr>
-                            <td>
+                            <td data-label="Imagen">
                                 @if($product->image_filename)
-                                    <img src="{{ asset('storage/tenants/' . $tenant->id . '/' . $product->image_filename) }}" 
-                                         alt="{{ $product->name }}" 
+                                    <img src="{{ asset('storage/tenants/' . $tenant->id . '/' . $product->image_filename) }}"
+                                         alt="{{ $product->name }}"
                                          class="product-image">
                                 @else
                                     <div class="product-image" style="background: #374151;"></div>
                                 @endif
                             </td>
-                            <td>
+                            <td data-label="Nombre">
                                 <strong>{{ $product->name }}</strong>
                                 @if($product->is_featured)
                                     <span style="color: #ffd700; margin-left: 4px;">⭐</span>
                                 @endif
                             </td>
-                            <td>${{ number_format($product->price_usd, 2) }}</td>
-                            <td>
+                            <td data-label="Precio USD">${{ number_format($product->price_usd, 2) }}</td>
+                            <td data-label="Badge">
                                 @if($product->badge === 'hot')
                                     <span class="badge badge-hot">🔥 Hot</span>
                                 @elseif($product->badge === 'new')
@@ -890,17 +1047,17 @@
                                     <span style="color: rgba(255,255,255,0.3);">-</span>
                                 @endif
                             </td>
-                            <td>
+                            <td data-label="Activo">
                                 <span class="status-indicator">
                                     <span class="status-dot {{ $product->is_active ? 'active' : 'inactive' }}"></span>
                                     {{ $product->is_active ? 'Activo' : 'Inactivo' }}
                                 </span>
                             </td>
-                            <td>
-                                <button class="btn-icon" onclick="editProduct({{ $product->id }})" title="Editar">
+                            <td data-label="Acciones" style="gap: 8px;">
+                                <button class="action-button btn-icon" onclick="editProduct({{ $product->id }})" title="Editar" aria-label="Editar producto">
                                     ✏️
                                 </button>
-                                <button class="btn-icon btn-danger" onclick="deleteProduct({{ $product->id }})" title="Eliminar">
+                                <button class="action-button btn-icon btn-danger" onclick="deleteProduct({{ $product->id }})" title="Eliminar" aria-label="Eliminar producto">
                                     🗑️
                                 </button>
                             </td>
@@ -1090,10 +1247,10 @@
                     <tbody>
                         @foreach($services as $service)
                         <tr>
-                            <td>
+                            <td data-label="Imagen">
                                 @if($service->image_filename)
-                                    <img src="{{ asset('storage/tenants/' . $tenant->id . '/' . $service->image_filename) }}" 
-                                         alt="{{ $service->name }}" 
+                                    <img src="{{ asset('storage/tenants/' . $tenant->id . '/' . $service->image_filename) }}"
+                                         alt="{{ $service->name }}"
                                          class="product-image">
                                 @elseif($service->icon_name)
                                     <div class="product-image" style="background: linear-gradient(135deg, rgba(59,130,246,0.15) 0%, rgba(255,107,0,0.08) 100%); display: flex; align-items: center; justify-content: center; border: 1px solid rgba(59,130,246,0.25); border-radius: 12px; transition: all 0.2s;">
@@ -1105,25 +1262,25 @@
                                     </div>
                                 @endif
                             </td>
-                            <td><strong>{{ $service->name }}</strong></td>
-                            <td>
+                            <td data-label="Nombre"><strong>{{ $service->name }}</strong></td>
+                            <td data-label="Descripción">
                                 @if($service->description)
                                     {{ Str::limit($service->description, 60) }}
                                 @else
                                     <span style="color: rgba(255,255,255,0.3);">-</span>
                                 @endif
                             </td>
-                            <td>
+                            <td data-label="Activo">
                                 <span class="status-indicator">
                                     <span class="status-dot {{ $service->is_active ? 'active' : 'inactive' }}"></span>
                                     {{ $service->is_active ? 'Activo' : 'Inactivo' }}
                                 </span>
                             </td>
-                            <td>
-                                <button class="btn-icon" onclick="editService({{ $service->id }})" title="Editar">
+                            <td data-label="Acciones" style="gap: 8px;">
+                                <button class="action-button btn-icon" onclick="editService({{ $service->id }})" title="Editar" aria-label="Editar servicio">
                                     ✏️
                                 </button>
-                                <button class="btn-icon btn-danger" onclick="deleteService({{ $service->id }})" title="Eliminar">
+                                <button class="action-button btn-icon btn-danger" onclick="deleteService({{ $service->id }})" title="Eliminar" aria-label="Eliminar servicio">
                                     🗑️
                                 </button>
                             </td>
