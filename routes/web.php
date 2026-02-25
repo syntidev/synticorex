@@ -73,6 +73,9 @@ Route::post('/tenant/{tenantId}/dashboard/save-section-order', [DashboardControl
 Route::post('/tenant/{tenantId}/dashboard/save-custom-palette', [DashboardController::class, 'saveCustomPalette'])
     ->name('tenant.dashboard.save-custom-palette');
 
+Route::post('/tenant/{tenantId}/dashboard/toggle-section', [DashboardController::class, 'toggleSection'])
+    ->name('tenant.dashboard.toggle-section');
+
 // Config actions
 Route::post('/tenant/{tenantId}/update-currency-config', [DashboardController::class, 'updateCurrencyConfig']);
 Route::post('/tenant/{tenantId}/update-pin',             [DashboardController::class, 'updatePin']);

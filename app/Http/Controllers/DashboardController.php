@@ -1037,4 +1037,63 @@ class DashboardController extends Controller
             ], 422);
         }
     }
+
+    /**
+     * Toggle visibility of a single landing section.
+     * Saves into customization.visual_effects.sections_order (same structure as saveSectionOrder).
+     */
+    public function toggleSection(Request $request, int $tenantId): JsonResponse
+    {
+        try {
+            $tenant = Tenant::with('customization')
+                ->where('id', $tenantId)
+                ->where('status', 'active')
+                ->firstOrFail();
+
+            $validated = $request->validate([
+                'section' => 'required|string|max:64',
+                'visible' => 'required|boolean',
+            ]);
+
+            $customization = $tenant->customization
+                ?? \App\Models\TenantCustomization::firstOrCreate(['tenant_id' => $tenantId]);
+
+            $visualEffects  = $customization->visual_effects ?? [];
+            $sectionsOrder  = $visualEffects['sections_order'] ?? [];
+
+            // Update visibility for the given section; add it if missing
+            $found = false;
+            foreach ($sectionsOrder as &$item) {
+                if ($item['name'] === $validated['section']) {
+                    $item['visible'] = $validated['visible'];
+                    $found = true;
+                    break;
+                }
+            }
+            unset($item);
+
+            if (!$found) {
+                $sectionsOrder[] = [
+                    'name'    => $validated['section'],
+                    'visible' => $validated['visible'],
+                    'order'   => count($sectionsOrder),
+                ];
+            }
+
+            $visualEffects['sections_order'] = $sectionsOrder;
+            $customization->visual_effects   = $visualEffects;
+            $customization->save();
+
+            if (method_exists($customization, 'syncSectionsConfig')) {
+                $customization->syncSectionsConfig();
+            }
+
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error: ' . $e->getMessage(),
+            ], 422);
+        }
+    }
 }
