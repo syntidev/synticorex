@@ -94,6 +94,13 @@
             display: flex;
             gap: 8px;
             list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-tab-wrapper {
+            padding: 0;
+            margin: 0;
         }
 
         .nav-tab {
@@ -105,6 +112,12 @@
             border-bottom: 2px solid transparent;
             transition: all 0.2s;
             white-space: nowrap;
+            border: none;
+            background: none;
+            font-family: 'Inter', sans-serif;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
         }
 
         .nav-tab:hover {
@@ -896,17 +909,31 @@
     {{-- ── End Plan Expiry Notices ─────────────────────────────────────── --}}
 
     <!-- Navigation Tabs -->
-    <nav class="dashboard-nav">
-        <ul class="nav-tabs">
-            <li class="nav-tab active" data-tab="info">📋 Info</li>
-            <li class="nav-tab" data-tab="productos">📦 Productos</li>
-            <li class="nav-tab" data-tab="servicios">🛠️ Servicios</li>
-            <li class="nav-tab" data-tab="diseno">🎨 Diseño</li>
-            <li class="nav-tab" data-tab="analytics">📊 Analytics</li>
+    <nav class="dashboard-nav" role="navigation" aria-label="Secciones del dashboard">
+        <ul class="nav-tabs" role="tablist" aria-label="Pestañas principales del dashboard">
+            <li role="presentation" class="nav-tab-wrapper">
+                <button class="nav-tab active" role="tab" aria-selected="true" aria-controls="tab-info" id="tab-info-btn" data-tab="info" tabindex="0">📋 Info</button>
+            </li>
+            <li role="presentation" class="nav-tab-wrapper">
+                <button class="nav-tab" role="tab" aria-selected="false" aria-controls="tab-productos" id="tab-productos-btn" data-tab="productos" tabindex="-1">📦 Productos</button>
+            </li>
+            <li role="presentation" class="nav-tab-wrapper">
+                <button class="nav-tab" role="tab" aria-selected="false" aria-controls="tab-servicios" id="tab-servicios-btn" data-tab="servicios" tabindex="-1">🛠️ Servicios</button>
+            </li>
+            <li role="presentation" class="nav-tab-wrapper">
+                <button class="nav-tab" role="tab" aria-selected="false" aria-controls="tab-diseno" id="tab-diseno-btn" data-tab="diseno" tabindex="-1">🎨 Diseño</button>
+            </li>
+            <li role="presentation" class="nav-tab-wrapper">
+                <button class="nav-tab" role="tab" aria-selected="false" aria-controls="tab-analytics" id="tab-analytics-btn" data-tab="analytics" tabindex="-1">📊 Analytics</button>
+            </li>
             @if($plan->id === 3)
-            <li class="nav-tab" data-tab="sucursales">📍 Sucursales</li>
+            <li role="presentation" class="nav-tab-wrapper">
+                <button class="nav-tab" role="tab" aria-selected="false" aria-controls="tab-sucursales" id="tab-sucursales-btn" data-tab="sucursales" tabindex="-1">📍 Sucursales</button>
+            </li>
             @endif
-            <li class="nav-tab" data-tab="config">⚙️ Config</li>
+            <li role="presentation" class="nav-tab-wrapper">
+                <button class="nav-tab" role="tab" aria-selected="false" aria-controls="tab-config" id="tab-config-btn" data-tab="config" tabindex="-1">⚙️ Config</button>
+            </li>
         </ul>
     </nav>
 
@@ -2454,14 +2481,26 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
             // Helper function to switch tab
             function switchTab(tabId) {
                 // Remove active class from all tabs/nav items and contents
-                tabs.forEach(t => t.classList.remove('active'));
+                tabs.forEach(t => {
+                    t.classList.remove('active');
+                    t.setAttribute('aria-selected', 'false');
+                    t.setAttribute('tabindex', '-1');
+                });
                 mobileNavItems.forEach(m => m.classList.remove('active'));
                 contents.forEach(c => c.classList.remove('active'));
 
                 // Add active class to clicked tab and corresponding content
-                document.querySelector(`[data-tab="${tabId}"]`)?.classList.add('active');
-                document.querySelector(`.mobile-bottom-nav-item[data-tab="${tabId}"]`)?.classList.add('active');
-                document.getElementById('tab-' + tabId).classList.add('active');
+                const activeTab = document.querySelector(`[data-tab="${tabId}"]`);
+                const activeMobileItem = document.querySelector(`.mobile-bottom-nav-item[data-tab="${tabId}"]`);
+                const activeContent = document.getElementById('tab-' + tabId);
+
+                activeTab?.classList.add('active');
+                activeTab?.setAttribute('aria-selected', 'true');
+                activeTab?.setAttribute('tabindex', '0');
+                activeTab?.focus();
+
+                activeMobileItem?.classList.add('active');
+                activeContent?.classList.add('active');
 
                 // Init drag & drop the FIRST time the Diseño tab becomes visible
                 if (tabId === 'diseno' && !window._sortableReady) {
@@ -2483,6 +2522,32 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
                 item.addEventListener('click', function() {
                     const tabId = this.getAttribute('data-tab');
                     switchTab(tabId);
+                });
+            });
+
+            // Keyboard navigation for tabs (ArrowLeft/ArrowRight)
+            tabs.forEach((tab, index) => {
+                tab.addEventListener('keydown', function(e) {
+                    let nextTab = null;
+
+                    if (e.key === 'ArrowRight') {
+                        nextTab = tabs[index + 1] || tabs[0];  // Wrap to first
+                        e.preventDefault();
+                    } else if (e.key === 'ArrowLeft') {
+                        nextTab = tabs[index - 1] || tabs[tabs.length - 1];  // Wrap to last
+                        e.preventDefault();
+                    } else if (e.key === 'Home') {
+                        nextTab = tabs[0];
+                        e.preventDefault();
+                    } else if (e.key === 'End') {
+                        nextTab = tabs[tabs.length - 1];
+                        e.preventDefault();
+                    }
+
+                    if (nextTab) {
+                        const tabId = nextTab.getAttribute('data-tab');
+                        switchTab(tabId);
+                    }
                 });
             });
         });
