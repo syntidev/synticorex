@@ -13,177 +13,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: #07101F;
-            color: #ffffff;
-            min-height: 100vh;
-        }
-
-        /* Header */
-        .dashboard-header {
-            position: sticky;
-            top: 0;
-            background: #0a1628;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 16px 24px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 100;
-        }
-
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .logo {
-            font-size: 20px;
-            font-weight: 700;
-            color: #2B6FFF;
-        }
-
-        .logo em {
-            color: #ffffff;
-            font-style: normal;
-        }
-
-        .business-name {
-            font-size: 16px;
-            font-weight: 600;
-            color: rgba(255, 255, 255, 0.9);
-            padding-left: 16px;
-            border-left: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .btn-close {
-            background: rgba(255, 255, 255, 0.1);
-            border: none;
-            color: #ffffff;
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            transition: background 0.2s;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .btn-close:hover {
-            background: rgba(255, 255, 255, 0.15);
-        }
-
-        /* Navigation Tabs */
-        .dashboard-nav {
-            background: #0a1628;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 0 24px;
-            overflow-x: auto;
-        }
-
-        .nav-tabs {
-            display: flex;
-            gap: 8px;
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .nav-tab-wrapper {
-            padding: 0;
-            margin: 0;
-        }
-
-        .nav-tab {
-            padding: 16px 20px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            color: rgba(255, 255, 255, 0.6);
-            border-bottom: 2px solid transparent;
-            transition: all 0.2s;
-            white-space: nowrap;
-            border: none;
-            background: none;
-            font-family: 'Inter', sans-serif;
-            min-height: 44px;
-            display: flex;
-            align-items: center;
-        }
-
-        .nav-tab:hover {
-            color: rgba(255, 255, 255, 0.9);
-        }
-
-        .nav-tab.active {
-            color: #2B6FFF;
-            border-bottom-color: #2B6FFF;
-        }
-
-        /* Mobile Bottom Navigation */
-        .mobile-bottom-nav {
-            display: none;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 56px;
-            background: #0a1628;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            flex-direction: row;
-            align-items: center;
-            justify-content: space-around;
-            z-index: 40;
-            padding: 0;
-            margin: 0;
-            list-style: none;
-        }
-
-        .mobile-bottom-nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            flex: 1;
-            height: 100%;
-            cursor: pointer;
-            color: rgba(255, 255, 255, 0.6);
-            border: none;
-            background: none;
-            padding: 0;
-            font-size: 24px;
-            transition: color 0.2s;
-            gap: 4px;
-            text-decoration: none;
-        }
-
-        .mobile-bottom-nav-item:hover,
-        .mobile-bottom-nav-item.active {
-            color: #2B6FFF;
-        }
-
-        .mobile-bottom-nav-label {
-            font-size: 11px;
-            font-weight: 500;
-            color: inherit;
-        }
-
-        /* Content Area */
-        .dashboard-content {
-            padding: 24px;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
+        /* Tab content visibility */
         .tab-content {
             display: none;
         }
@@ -667,70 +497,19 @@
         }
 
         /* ═══════════════════════════════════════════════════════════════════════ */
-        /* RESPONSIVE BREAKPOINTS (Mobile-First) */
+        /* RESPONSIVE BREAKPOINTS (components — layout handled by FlyonUI)      */
         /* ═══════════════════════════════════════════════════════════════════════ */
 
-        /* Mobile S: 320-374px */
+        /* Mobile S: ≤374px */
         @media (max-width: 374px) {
-            .dashboard-container { padding: 12px; }
-            .dashboard-header { padding: 12px 16px; }
-            .nav-tabs { gap: 4px; }
-            .nav-tab { padding: 8px 10px; font-size: 12px; height: 44px; }
-            .dashboard-content { padding: 12px; }
             .form-section { padding: 16px; margin-bottom: 16px; }
             .form-section-title { font-size: 16px; margin-bottom: 16px; }
             .form-grid { grid-template-columns: 1fr; }
             .btn-primary, .btn-secondary { min-height: 44px; padding: 10px 12px; }
         }
 
-        /* Mobile M/L: 375-639px */
+        /* Mobile M/L: ≤639px */
         @media (max-width: 639px) {
-            .dashboard-container { padding: 16px; }
-            .dashboard-header {
-                flex-wrap: wrap;
-                gap: 12px;
-                padding: 16px;
-                min-height: 56px;
-            }
-
-            .header-left {
-                flex-wrap: wrap;
-                flex: 1;
-            }
-
-            .business-name {
-                padding-left: 0;
-                border-left: none;
-                width: 100%;
-            }
-
-            .btn-close {
-                min-height: 44px;
-                min-width: 44px;
-                padding: 10px;
-                align-self: flex-start;
-            }
-
-            /* Navigation Tabs - Hide (use bottom nav instead) */
-            .dashboard-nav {
-                display: none !important;
-            }
-
-            /* Show Mobile Bottom Nav */
-            .mobile-bottom-nav {
-                display: flex;
-            }
-
-            /* Responsive Content Area */
-            .dashboard-content {
-                padding: 16px;
-                padding-bottom: 80px; /* Space for bottom nav */
-            }
-
-            .tab-content { display: none; }
-            .tab-content.active { display: block; }
-
-            /* Forms */
             .form-section { padding: 16px; margin-bottom: 16px; }
             .form-section-title { font-size: 16px; margin-bottom: 12px; }
             .form-grid { grid-template-columns: 1fr; gap: 12px; }
@@ -738,15 +517,8 @@
             .form-input, .form-textarea, .form-select { padding: 10px 12px; }
             .form-actions { flex-wrap: wrap; }
 
-            /* Tables → Card Layout */
-            .data-table {
-                border-collapse: collapse;
-            }
-
-            .data-table thead {
-                display: none;
-            }
-
+            /* Tables → Card layout */
+            .data-table thead { display: none; }
             .data-table tbody tr {
                 display: block;
                 margin-bottom: 12px;
@@ -755,7 +527,6 @@
                 padding: 12px;
                 border: 1px solid rgba(255,255,255,0.1);
             }
-
             .data-table td {
                 display: flex;
                 justify-content: space-between;
@@ -764,11 +535,7 @@
                 border-bottom: 1px solid rgba(255,255,255,0.05);
                 font-size: 13px;
             }
-
-            .data-table td:last-child {
-                border-bottom: none;
-            }
-
+            .data-table td:last-child { border-bottom: none; }
             .data-table td::before {
                 content: attr(data-label);
                 font-weight: 600;
@@ -777,45 +544,14 @@
                 flex-shrink: 0;
                 font-size: 12px;
             }
-
-            /* Product image in card */
-            .product-image {
-                width: 48px;
-                height: 48px;
-                object-fit: cover;
-                border-radius: 4px;
-                aspect-ratio: 1;
-            }
-
-            /* Buttons */
-            .btn-primary, .btn-secondary {
-                min-height: 44px;
-                min-width: 44px;
-                padding: 10px 12px;
-                font-size: 13px;
-            }
-
-            /* Icons in table actions */
-            .action-button {
-                min-height: 44px;
-                min-width: 44px;
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 18px;
-            }
-
-            /* Grid layouts */
+            .product-image { width: 48px; height: 48px; object-fit: cover; border-radius: 4px; aspect-ratio: 1; }
+            .btn-primary, .btn-secondary { min-height: 44px; min-width: 44px; padding: 10px 12px; font-size: 13px; }
+            .action-button { min-height: 44px; min-width: 44px; display: inline-flex; align-items: center; justify-content: center; font-size: 18px; }
             .theme-grid { grid-template-columns: repeat(2, 1fr) !important; }
         }
 
         /* Tablet portrait: 640-767px */
         @media (max-width: 767px) {
-            .dashboard-container { padding: 20px; }
-            .dashboard-nav { padding: 0 16px; }
-            .nav-tabs { gap: 6px; }
-            .nav-tab { padding: 12px 16px; font-size: 13px; height: 44px; }
-            .dashboard-content { padding: 20px; }
             .form-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
             .form-section { padding: 18px; margin-bottom: 18px; }
             .theme-grid { grid-template-columns: repeat(3, 1fr) !important; }
@@ -823,32 +559,12 @@
 
         /* Tablet landscape / Laptop: 768-1023px */
         @media (max-width: 1023px) {
-            .dashboard-nav { padding: 0 20px; }
-            .dashboard-content { padding: 24px; }
             .form-grid { grid-template-columns: repeat(2, 1fr); }
-            .sidebar-info { flex-direction: column; }
             .theme-grid { grid-template-columns: repeat(4, 1fr) !important; }
         }
 
         /* Desktop: 1024px+ */
         @media (min-width: 1024px) {
-            .dashboard-nav {
-                display: flex !important;
-                padding: 0 24px;
-            }
-
-            /* Hide Mobile Bottom Nav on Desktop */
-            .mobile-bottom-nav {
-                display: none !important;
-            }
-
-            .dashboard-content {
-                max-width: 1400px;
-                margin: 0 auto;
-                padding: 24px;
-                padding-bottom: 24px;
-            }
-
             .form-grid { grid-template-columns: repeat(3, 1fr); }
             .data-table tbody tr { display: table-row !important; }
             .data-table td::before { display: none !important; }
@@ -856,15 +572,145 @@
         }
     </style>
 </head>
-<body>
-    <!-- Header -->
-    <header class="dashboard-header">
-        <div class="header-left">
-            <span class="logo">SYNTI<em>web</em></span>
-            <span class="business-name">{{ $tenant->business_name }}</span>
+<body class="bg-base-200">
+<div class="flex min-h-screen flex-col">
+
+    <!-- ══ HEADER NAVBAR ══════════════════════════════════════════════════ -->
+    <div class="navbar bg-base-100 border-base-content/20 lg:ps-64 sticky top-0 z-50 border-b min-h-14 px-4">
+        <div class="navbar-start gap-2">
+            {{-- Hamburger: solo mobile/tablet --}}
+            <button type="button"
+                    class="btn btn-text btn-square btn-sm lg:hidden"
+                    aria-haspopup="dialog" aria-expanded="false"
+                    aria-controls="layout-sidebar"
+                    data-overlay="#layout-sidebar">
+                <span class="icon-[tabler--menu-2] size-5" aria-hidden="true"></span>
+                <span class="sr-only">Abrir menú</span>
+            </button>
+            {{-- Logo visible solo en mobile (en desktop está en sidebar) --}}
+            <span class="text-primary font-bold text-lg lg:hidden">SYNTI<em class="text-base-content not-italic">web</em></span>
         </div>
-        <a href="/{{ $tenant->subdomain }}" class="btn-close">Cerrar ✕</a>
-    </header>
+        <div class="navbar-end gap-2">
+            <span class="text-base-content/70 hidden sm:block text-sm font-medium truncate max-w-48">
+                {{ $tenant->business_name }}
+            </span>
+            <a href="/{{ $tenant->subdomain }}"
+               class="btn btn-soft btn-sm gap-1.5"
+               title="Cerrar dashboard">
+                <span class="icon-[tabler--x] size-4" aria-hidden="true"></span>
+                <span class="max-sm:hidden">Cerrar</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- ══ SIDEBAR ════════════════════════════════════════════════════════ -->
+    <aside id="layout-sidebar"
+           class="overlay overlay-open:translate-x-0 drawer drawer-start w-64
+                  inset-y-0 start-0 hidden h-full [--auto-close:lg]
+                  lg:z-50 lg:block lg:translate-x-0 lg:shadow-none"
+           aria-label="Navegación principal"
+           tabindex="-1">
+        <div class="drawer-body border-base-content/20 h-full border-e p-0">
+            <div class="flex h-full flex-col">
+
+                {{-- Cerrar (solo mobile) --}}
+                <button type="button"
+                        class="btn btn-text btn-circle btn-sm absolute end-3 top-3 lg:hidden"
+                        aria-label="Cerrar menú"
+                        data-overlay="#layout-sidebar">
+                    <span class="icon-[tabler--x] size-4.5" aria-hidden="true"></span>
+                </button>
+
+                {{-- Logo --}}
+                <div class="border-base-content/20 flex items-center gap-2 border-b px-5 py-4">
+                    <span class="text-primary text-xl font-bold">SYNTI<em class="text-base-content not-italic">web</em></span>
+                </div>
+
+                {{-- Tenant info --}}
+                <div class="border-base-content/20 border-b px-5 py-3">
+                    <p class="text-base-content text-sm font-semibold truncate">{{ $tenant->business_name }}</p>
+                    <p class="text-base-content/60 text-xs">Plan {{ $plan->name }}</p>
+                </div>
+
+                {{-- Menú de navegación --}}
+                <nav class="h-full overflow-y-auto" aria-label="Secciones del dashboard">
+                    <ul class="menu menu-sm gap-0.5 p-3" role="tablist">
+                        <li role="presentation">
+                            <button class="w-full text-start menu-active" role="tab"
+                                    aria-selected="true" aria-controls="tab-info"
+                                    id="tab-info-btn" data-tab="info" tabindex="0">
+                                <span class="icon-[tabler--info-circle] size-4.5" aria-hidden="true"></span>
+                                Información
+                            </button>
+                        </li>
+                        <li role="presentation">
+                            <button class="w-full text-start" role="tab"
+                                    aria-selected="false" aria-controls="tab-productos"
+                                    id="tab-productos-btn" data-tab="productos" tabindex="-1">
+                                <span class="icon-[tabler--package] size-4.5" aria-hidden="true"></span>
+                                Productos
+                            </button>
+                        </li>
+                        <li role="presentation">
+                            <button class="w-full text-start" role="tab"
+                                    aria-selected="false" aria-controls="tab-servicios"
+                                    id="tab-servicios-btn" data-tab="servicios" tabindex="-1">
+                                <span class="icon-[tabler--tool] size-4.5" aria-hidden="true"></span>
+                                Servicios
+                            </button>
+                        </li>
+                        <li role="presentation">
+                            <button class="w-full text-start" role="tab"
+                                    aria-selected="false" aria-controls="tab-diseno"
+                                    id="tab-diseno-btn" data-tab="diseno" tabindex="-1">
+                                <span class="icon-[tabler--palette] size-4.5" aria-hidden="true"></span>
+                                Diseño
+                            </button>
+                        </li>
+                        <li role="presentation">
+                            <button class="w-full text-start" role="tab"
+                                    aria-selected="false" aria-controls="tab-analytics"
+                                    id="tab-analytics-btn" data-tab="analytics" tabindex="-1">
+                                <span class="icon-[tabler--chart-bar] size-4.5" aria-hidden="true"></span>
+                                Analytics
+                            </button>
+                        </li>
+                        @if($plan->id === 3)
+                        <li role="presentation">
+                            <button class="w-full text-start" role="tab"
+                                    aria-selected="false" aria-controls="tab-sucursales"
+                                    id="tab-sucursales-btn" data-tab="sucursales" tabindex="-1">
+                                <span class="icon-[tabler--map-pin] size-4.5" aria-hidden="true"></span>
+                                Sucursales
+                            </button>
+                        </li>
+                        @endif
+                        <li role="presentation">
+                            <button class="w-full text-start" role="tab"
+                                    aria-selected="false" aria-controls="tab-config"
+                                    id="tab-config-btn" data-tab="config" tabindex="-1">
+                                <span class="icon-[tabler--settings] size-4.5" aria-hidden="true"></span>
+                                Configuración
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
+
+                {{-- Footer sidebar --}}
+                <div class="border-base-content/20 border-t p-3 mt-auto">
+                    <a href="/{{ $tenant->subdomain }}" target="_blank" rel="noopener noreferrer"
+                       class="btn btn-soft btn-block btn-sm">
+                        <span class="icon-[tabler--external-link] size-4" aria-hidden="true"></span>
+                        Ver mi sitio
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </aside>
+
+    <!-- ══ LAYOUT CONTENT con offset sidebar en desktop ══════════════════ -->
+    <div class="lg:ps-64 flex grow flex-col">
 
     {{-- ── Plan Expiry Notices ──────────────────────────────────────────── --}}
     @if($isFrozen)
@@ -908,37 +754,8 @@
     @endif
     {{-- ── End Plan Expiry Notices ─────────────────────────────────────── --}}
 
-    <!-- Navigation Tabs -->
-    <nav class="dashboard-nav" role="navigation" aria-label="Secciones del dashboard">
-        <ul class="nav-tabs" role="tablist" aria-label="Pestañas principales del dashboard">
-            <li role="presentation" class="nav-tab-wrapper">
-                <button class="nav-tab active" role="tab" aria-selected="true" aria-controls="tab-info" id="tab-info-btn" data-tab="info" tabindex="0">📋 Info</button>
-            </li>
-            <li role="presentation" class="nav-tab-wrapper">
-                <button class="nav-tab" role="tab" aria-selected="false" aria-controls="tab-productos" id="tab-productos-btn" data-tab="productos" tabindex="-1">📦 Productos</button>
-            </li>
-            <li role="presentation" class="nav-tab-wrapper">
-                <button class="nav-tab" role="tab" aria-selected="false" aria-controls="tab-servicios" id="tab-servicios-btn" data-tab="servicios" tabindex="-1">🛠️ Servicios</button>
-            </li>
-            <li role="presentation" class="nav-tab-wrapper">
-                <button class="nav-tab" role="tab" aria-selected="false" aria-controls="tab-diseno" id="tab-diseno-btn" data-tab="diseno" tabindex="-1">🎨 Diseño</button>
-            </li>
-            <li role="presentation" class="nav-tab-wrapper">
-                <button class="nav-tab" role="tab" aria-selected="false" aria-controls="tab-analytics" id="tab-analytics-btn" data-tab="analytics" tabindex="-1">📊 Analytics</button>
-            </li>
-            @if($plan->id === 3)
-            <li role="presentation" class="nav-tab-wrapper">
-                <button class="nav-tab" role="tab" aria-selected="false" aria-controls="tab-sucursales" id="tab-sucursales-btn" data-tab="sucursales" tabindex="-1">📍 Sucursales</button>
-            </li>
-            @endif
-            <li role="presentation" class="nav-tab-wrapper">
-                <button class="nav-tab" role="tab" aria-selected="false" aria-controls="tab-config" id="tab-config-btn" data-tab="config" tabindex="-1">⚙️ Config</button>
-            </li>
-        </ul>
-    </nav>
-
     <!-- Content -->
-    <main class="dashboard-content">
+    <main class="mx-auto w-full max-w-7xl flex-1 grow p-4 lg:p-6">
         
         <!-- Tab: Info -->
         <div id="tab-info" class="tab-content active">
@@ -2447,94 +2264,58 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
 
     </main>
 
-    <!-- Mobile Bottom Navigation (visible only on mobile <640px) -->
-    <nav class="mobile-bottom-nav" role="navigation" aria-label="Navegación principal">
-        <button class="mobile-bottom-nav-item active" data-tab="info" aria-label="Información del negocio">
-            <span>📋</span>
-            <span class="mobile-bottom-nav-label">Info</span>
-        </button>
-        <button class="mobile-bottom-nav-item" data-tab="productos" aria-label="Gestión de productos">
-            <span>📦</span>
-            <span class="mobile-bottom-nav-label">Productos</span>
-        </button>
-        <button class="mobile-bottom-nav-item" data-tab="servicios" aria-label="Gestión de servicios">
-            <span>🛠️</span>
-            <span class="mobile-bottom-nav-label">Servicios</span>
-        </button>
-        <button class="mobile-bottom-nav-item" data-tab="diseno" aria-label="Personalización y diseño">
-            <span>🎨</span>
-            <span class="mobile-bottom-nav-label">Diseño</span>
-        </button>
-        <button class="mobile-bottom-nav-item" data-tab="config" aria-label="Más opciones">
-            <span>⋯</span>
-            <span class="mobile-bottom-nav-label">Más</span>
-        </button>
-    </nav>
-
     <script>
-        // Tab Navigation
+        // Tab Navigation — FlyonUI Sidebar
         document.addEventListener('DOMContentLoaded', function() {
-            const tabs = document.querySelectorAll('.nav-tab');
-            const mobileNavItems = document.querySelectorAll('.mobile-bottom-nav-item');
+            const tabs     = document.querySelectorAll('#layout-sidebar [role="tab"]');
             const contents = document.querySelectorAll('.tab-content');
 
-            // Helper function to switch tab
             function switchTab(tabId) {
-                // Remove active class from all tabs/nav items and contents
+                // Reset all sidebar tabs
                 tabs.forEach(t => {
-                    t.classList.remove('active');
+                    t.classList.remove('menu-active');
                     t.setAttribute('aria-selected', 'false');
                     t.setAttribute('tabindex', '-1');
                 });
-                mobileNavItems.forEach(m => m.classList.remove('active'));
+                // Reset all content panels
                 contents.forEach(c => c.classList.remove('active'));
 
-                // Add active class to clicked tab and corresponding content
-                const activeTab = document.querySelector(`[data-tab="${tabId}"]`);
-                const activeMobileItem = document.querySelector(`.mobile-bottom-nav-item[data-tab="${tabId}"]`);
+                // Activate selected button + panel
+                const activeBtn     = document.querySelector(`#layout-sidebar [data-tab="${tabId}"]`);
                 const activeContent = document.getElementById('tab-' + tabId);
 
-                activeTab?.classList.add('active');
-                activeTab?.setAttribute('aria-selected', 'true');
-                activeTab?.setAttribute('tabindex', '0');
-                activeTab?.focus();
+                activeBtn?.classList.add('menu-active');
+                activeBtn?.setAttribute('aria-selected', 'true');
+                activeBtn?.setAttribute('tabindex', '0');
 
-                activeMobileItem?.classList.add('active');
                 activeContent?.classList.add('active');
 
-                // Init drag & drop the FIRST time the Diseño tab becomes visible
+                // Auto-close mobile sidebar drawer after navigation
+                if (window.innerWidth < 1024) {
+                    document.getElementById('layout-sidebar')?.classList.remove('overlay-open');
+                }
+
+                // Init SortableJS the first time the Diseño tab opens
                 if (tabId === 'diseno' && !window._sortableReady) {
                     window._sortableReady = true;
                     window.initSortable();
                 }
             }
 
-            // Desktop navigation tabs
-            tabs.forEach(tab => {
-                tab.addEventListener('click', function() {
-                    const tabId = this.getAttribute('data-tab');
-                    switchTab(tabId);
-                });
-            });
-
-            // Mobile bottom navigation
-            mobileNavItems.forEach(item => {
-                item.addEventListener('click', function() {
-                    const tabId = this.getAttribute('data-tab');
-                    switchTab(tabId);
-                });
-            });
-
-            // Keyboard navigation for tabs (ArrowLeft/ArrowRight)
+            // Bind click events to all sidebar nav buttons
             tabs.forEach((tab, index) => {
+                tab.addEventListener('click', function() {
+                    switchTab(this.getAttribute('data-tab'));
+                });
+
+                // Keyboard: ArrowUp/Down for vertical sidebar navigation
                 tab.addEventListener('keydown', function(e) {
                     let nextTab = null;
-
-                    if (e.key === 'ArrowRight') {
-                        nextTab = tabs[index + 1] || tabs[0];  // Wrap to first
+                    if (e.key === 'ArrowDown') {
+                        nextTab = tabs[index + 1] || tabs[0];
                         e.preventDefault();
-                    } else if (e.key === 'ArrowLeft') {
-                        nextTab = tabs[index - 1] || tabs[tabs.length - 1];  // Wrap to last
+                    } else if (e.key === 'ArrowUp') {
+                        nextTab = tabs[index - 1] || tabs[tabs.length - 1];
                         e.preventDefault();
                     } else if (e.key === 'Home') {
                         nextTab = tabs[0];
@@ -2543,10 +2324,9 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
                         nextTab = tabs[tabs.length - 1];
                         e.preventDefault();
                     }
-
                     if (nextTab) {
-                        const tabId = nextTab.getAttribute('data-tab');
-                        switchTab(tabId);
+                        nextTab.focus();
+                        switchTab(nextTab.getAttribute('data-tab'));
                     }
                 });
             });
@@ -4084,5 +3864,7 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
             .catch(() => window.showToast('\u274c Error de red', 'error'));
         }
     </script>
+    </div>{{-- /lg:ps-64 content wrapper --}}
+</div>{{-- /flex min-h-screen --}}
 </body>
 </html>
