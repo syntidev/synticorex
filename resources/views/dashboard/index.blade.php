@@ -438,10 +438,10 @@
 {{-- Región aria-live para anunciar toasts a lectores de pantalla --}}
 <div id="toast-announcer" aria-live="polite" aria-atomic="true" class="sr-only"></div>
 
-<div class="flex min-h-screen flex-col relative">
+<div class="flex min-h-screen flex-col">
 
     <!-- ══ HEADER NAVBAR ══════════════════════════════════════════════════ -->
-    <div class="navbar bg-base-100 border-base-content/10 sm:overlay-layout-open:ps-64 sticky top-0 z-50 border-b min-h-14 px-3 gap-2 transition-all duration-300"
+    <div class="navbar bg-base-100 border-base-content/10 lg:ps-64 sticky top-0 z-50 border-b min-h-14 px-3 gap-2"
          style="box-shadow: 0 1px 12px rgba(77,143,255,0.06);">
 
         {{-- ── Start: hamburger + nombre negocio con dot de estado ── --}}
@@ -507,15 +507,13 @@
 
     <!-- ══ SIDEBAR ════════════════════════════════════════════════════════ -->
     <aside id="layout-sidebar"
-           class="overlay [--body-scroll:true] overlay-open:translate-x-0 drawer drawer-start
-                  hidden w-64 border-e border-base-content/20
-                  [--auto-close:sm] [--is-layout-affect:true] [--opened:lg]
-                  sm:absolute sm:z-0 sm:flex sm:shadow-none
-                  lg:[--overlay-backdrop:false]"
+           class="overlay overlay-open:translate-x-0 drawer drawer-start w-64
+                  inset-y-0 start-0 hidden h-full [--auto-close:lg]
+                  lg:z-50 lg:flex lg:translate-x-0 lg:shadow-none"
            aria-label="Navegación principal"
            role="dialog"
            tabindex="-1">
-        <div class="drawer-body h-full p-0">
+        <div class="drawer-body border-base-content/20 h-full border-e p-0">
             <div class="flex h-full flex-col">
 
                 {{-- Cerrar (solo mobile) --}}
@@ -627,7 +625,7 @@
     </aside>
 
     <!-- ══ LAYOUT CONTENT con offset sidebar en desktop ══════════════════ -->
-    <div class="sm:overlay-layout-open:ps-64 flex grow flex-col transition-all duration-300">
+    <div class="lg:ps-64 flex grow flex-col">
 
     {{-- ── Plan Expiry Notices ──────────────────────────────────────────── --}}
     @if($isFrozen)
