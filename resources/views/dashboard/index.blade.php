@@ -438,23 +438,23 @@
 {{-- Región aria-live para anunciar toasts a lectores de pantalla --}}
 <div id="toast-announcer" aria-live="polite" aria-atomic="true" class="sr-only"></div>
 
-<div class="flex min-h-screen flex-col">
+<div class="flex min-h-screen flex-col relative">
 
     <!-- ══ HEADER NAVBAR ══════════════════════════════════════════════════ -->
-    <div class="navbar bg-base-100 border-base-content/10 lg:ps-64 sticky top-0 z-50 border-b min-h-14 px-3 gap-2"
+    <div class="navbar bg-base-100 border-base-content/10 sm:overlay-layout-open:ps-64 sticky top-0 z-50 border-b min-h-14 px-3 gap-2 transition-[padding] duration-300"
          style="box-shadow: 0 1px 12px rgba(77,143,255,0.06);">
 
         {{-- ── Start: hamburger + nombre negocio con dot de estado ── --}}
         <div class="navbar-start gap-2 min-w-0">
             <button type="button"
-                    class="btn btn-text btn-square btn-sm lg:hidden shrink-0"
+                    class="btn btn-text btn-square btn-sm shrink-0"
                     aria-haspopup="dialog" aria-expanded="false"
                     aria-controls="layout-sidebar"
                     data-overlay="#layout-sidebar">
                 <span class="icon-[tabler--menu-2] size-5" aria-hidden="true"></span>
-                <span class="sr-only">Abrir menú</span>
+                <span class="sr-only">Abrir/cerrar menú</span>
             </button>
-            {{-- Logo mobile --}}
+            {{-- Logo mobile (se oculta en lg cuando el sidebar está visible) --}}
             <span class="sidebar-logo-text text-base lg:hidden shrink-0">
                 <span class="sidebar-logo-synti">SYNTI</span><span class="sidebar-logo-web">web</span>
             </span>
@@ -507,13 +507,17 @@
 
     <!-- ══ SIDEBAR ════════════════════════════════════════════════════════ -->
     <aside id="layout-sidebar"
-           class="overlay overlay-open:translate-x-0 drawer drawer-start w-64
-                  inset-y-0 start-0 hidden h-full [--auto-close:lg]
-                  lg:z-50 lg:flex lg:translate-x-0 lg:shadow-none"
+           class="overlay [--body-scroll:true] overlay-open:translate-x-0 drawer drawer-start
+                  sm:overlay-layout-open:translate-x-0
+                  hidden w-64 border-e border-base-content/20
+                  inset-y-0 start-0 h-full
+                  [--auto-close:sm] [--is-layout-affect:true] [--opened:lg]
+                  sm:absolute sm:z-0 sm:flex sm:shadow-none
+                  lg:[--overlay-backdrop:false]"
            aria-label="Navegación principal"
            role="dialog"
            tabindex="-1">
-        <div class="drawer-body border-base-content/20 h-full border-e p-0">
+        <div class="drawer-body h-full p-0">
             <div class="flex h-full flex-col">
 
                 {{-- Cerrar (solo mobile) --}}
@@ -625,7 +629,7 @@
     </aside>
 
     <!-- ══ LAYOUT CONTENT con offset sidebar en desktop ══════════════════ -->
-    <div class="lg:ps-64 flex grow flex-col">
+    <div class="sm:overlay-layout-open:ps-64 flex grow flex-col transition-[padding] duration-300">
 
     {{-- ── Plan Expiry Notices ──────────────────────────────────────────── --}}
     @if($isFrozen)
