@@ -16,15 +16,35 @@
             </a>
         </div>
 
-        {{-- Menú Central --}}
-        <nav class="hidden space-x-8 lg:flex">
+        {{-- Menú Central — dinámico según secciones activas --}}
+        @php
+            $navSectionMap = [
+                'products'        => ['label' => 'Productos',   'anchor' => '#products'],
+                'services'        => ['label' => 'Servicios',   'anchor' => '#services'],
+                'about'           => ['label' => 'Nosotros',    'anchor' => '#about'],
+                'contact'         => ['label' => 'Contacto',    'anchor' => '#contact'],
+                'testimonials'    => ['label' => 'Testimonios', 'anchor' => '#testimonials'],
+                'faq'             => ['label' => 'FAQ',         'anchor' => '#faq'],
+                'branches'        => ['label' => 'Sucursales',  'anchor' => '#branches'],
+                'payment_methods' => ['label' => 'Pagos',       'anchor' => '#payment_methods'],
+            ];
+            $visibleNavLinks = [];
+            foreach ($customization->getSectionsOrder() as $sec) {
+                $k = $sec['name'] ?? '';
+                if (($sec['visible'] ?? true) && $customization->canAccessSection($k, $tenant->plan_id) && isset($navSectionMap[$k])) {
+                    if (!collect($visibleNavLinks)->contains('anchor', $navSectionMap[$k]['anchor'])) {
+                        $visibleNavLinks[] = $navSectionMap[$k];
+                    }
+                }
+            }
+        @endphp
+        <nav class="hidden space-x-6 lg:flex items-center">
             <a href="#home" class="text-sm font-semibold text-base-content/70 hover:text-primary transition-colors">Home</a>
-            <a href="#products" class="text-sm font-semibold text-base-content/70 hover:text-primary transition-colors">Productos</a>
-            <a href="#services" class="text-sm font-semibold text-base-content/70 hover:text-primary transition-colors">Servicios</a>
-            
-            @if($tenant->plan->slug !== 'oportunidad')
-                <a href="#about" class="text-sm font-semibold text-base-content/70 hover:text-primary transition-colors">Nosotros</a>
-            @endif
+            @foreach($visibleNavLinks as $link)
+                <a href="{{ $link['anchor'] }}" class="text-sm font-semibold text-base-content/70 hover:text-primary transition-colors">
+                    {{ $link['label'] }}
+                </a>
+            @endforeach
         </nav>
 
         {{-- Acciones y Moneda --}}
@@ -51,8 +71,10 @@
                 {{ $tenant->is_open ? 'ABIERTO' : 'CERRADO' }}
             </span>
             
-            @if($tenant->whatsapp)
-                <a href="https://wa.me/{{ $tenant->whatsapp }}" class="btn btn-sm btn-success hidden sm:flex font-bold rounded-xl shadow-lg shadow-success/20">WhatsApp</a>
+            @php $wa = $tenant->whatsapp_sales ?? $tenant->whatsapp ?? null; @endphp
+            @if($wa)
+                <a href="https://wa.me/{{ $wa }}" target="_blank" rel="noopener noreferrer"
+                   class="btn btn-sm btn-success hidden sm:flex font-bold rounded-xl shadow-lg shadow-success/20">WhatsApp</a>
             @endif
         </div>
     </div>

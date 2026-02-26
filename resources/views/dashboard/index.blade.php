@@ -675,12 +675,12 @@
                             Información del Negocio
                         </h2>
                     </div>
-                    <div class="card-body">
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="card-body pt-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
 
                             <div class="form-control">
-                                <label class="label" for="info-business-name">
-                                    <span class="label-text font-medium">Nombre del Negocio</span>
+                                <label class="label pb-1" for="info-business-name">
+                                    <span class="label-text font-medium text-sm">Nombre del Negocio</span>
                                 </label>
                                 <input id="info-business-name" type="text" class="input input-bordered w-full"
                                        name="business_name" value="{{ $tenant->business_name }}"
@@ -688,56 +688,56 @@
                             </div>
 
                             <div class="form-control">
-                                <label class="label" for="info-subdomain">
-                                    <span class="label-text font-medium">Subdominio</span>
-                                </label>
-                                <input id="info-subdomain" type="text" class="input input-bordered w-full opacity-60"
-                                       value="{{ $tenant->subdomain }}" disabled aria-readonly="true">
-                            </div>
-
-                            <div class="form-control">
-                                <label class="label" for="info-slogan">
-                                    <span class="label-text font-medium">Eslogan</span>
+                                <label class="label pb-1" for="info-slogan">
+                                    <span class="label-text font-medium text-sm">Eslogan</span>
                                 </label>
                                 <input id="info-slogan" type="text" class="input input-bordered w-full"
                                        name="slogan" value="{{ $tenant->slogan }}">
                             </div>
 
                             <div class="form-control">
-                                <label class="label" for="info-phone">
-                                    <span class="label-text font-medium">Teléfono</span>
+                                <label class="label pb-1" for="info-subdomain">
+                                    <span class="label-text font-medium text-sm">Subdominio</span>
+                                </label>
+                                <input id="info-subdomain" type="text" class="input input-bordered w-full opacity-60"
+                                       value="{{ $tenant->subdomain }}" disabled aria-readonly="true">
+                            </div>
+
+                            <div class="form-control">
+                                <label class="label pb-1" for="info-phone">
+                                    <span class="label-text font-medium text-sm">Teléfono</span>
                                 </label>
                                 <input id="info-phone" type="text" class="input input-bordered w-full"
                                        name="phone" value="{{ $tenant->phone }}" autocomplete="tel">
                             </div>
 
                             <div class="form-control">
-                                <label class="label" for="info-whatsapp">
-                                    <span class="label-text font-medium">WhatsApp Ventas</span>
+                                <label class="label pb-1" for="info-whatsapp">
+                                    <span class="label-text font-medium text-sm">WhatsApp Ventas</span>
                                 </label>
                                 <input id="info-whatsapp" type="text" class="input input-bordered w-full"
                                        name="whatsapp_sales" value="{{ $tenant->whatsapp_sales }}" autocomplete="off">
                             </div>
 
                             <div class="form-control">
-                                <label class="label" for="info-email">
-                                    <span class="label-text font-medium">Email</span>
+                                <label class="label pb-1" for="info-email">
+                                    <span class="label-text font-medium text-sm">Email</span>
                                 </label>
                                 <input id="info-email" type="email" class="input input-bordered w-full"
                                        name="email" value="{{ $tenant->email }}" autocomplete="email">
                             </div>
 
                             <div class="form-control">
-                                <label class="label" for="info-address">
-                                    <span class="label-text font-medium">Dirección</span>
+                                <label class="label pb-1" for="info-address">
+                                    <span class="label-text font-medium text-sm">Dirección</span>
                                 </label>
                                 <input id="info-address" type="text" class="input input-bordered w-full"
                                        name="address" value="{{ $tenant->address }}" autocomplete="street-address">
                             </div>
 
                             <div class="form-control">
-                                <label class="label" for="info-city">
-                                    <span class="label-text font-medium">Ciudad</span>
+                                <label class="label pb-1" for="info-city">
+                                    <span class="label-text font-medium text-sm">Ciudad</span>
                                 </label>
                                 <input id="info-city" type="text" class="input input-bordered w-full"
                                        name="city" value="{{ $tenant->city }}" autocomplete="address-level2">
@@ -745,10 +745,10 @@
 
                             @if($tenant->plan_id >= 2)
                             <div class="form-control">
-                                <label class="label">
-                                    <span class="label-text font-medium flex items-center gap-2">
-                                        Título sección Contacto
-                                        <span class="badge badge-soft badge-success badge-xs">Plan {{ $plan->name }}</span>
+                                <label class="label pb-1">
+                                    <span class="label-text font-medium text-sm flex items-center gap-1">
+                                        Título Contacto
+                                        <span class="badge badge-soft badge-success badge-xs">{{ $plan->name }}</span>
                                     </span>
                                 </label>
                                 <input type="text" name="contact_title" class="input input-bordered w-full"
@@ -756,10 +756,10 @@
                                        placeholder="Contáctanos">
                             </div>
                             <div class="form-control">
-                                <label class="label">
-                                    <span class="label-text font-medium flex items-center gap-2">
-                                        Subtítulo sección Contacto
-                                        <span class="badge badge-soft badge-success badge-xs">Plan {{ $plan->name }}</span>
+                                <label class="label pb-1">
+                                    <span class="label-text font-medium text-sm flex items-center gap-1">
+                                        Subtítulo Contacto
+                                        <span class="badge badge-soft badge-success badge-xs">{{ $plan->name }}</span>
                                     </span>
                                 </label>
                                 <input type="text" name="contact_subtitle" class="input input-bordered w-full"
@@ -767,35 +767,35 @@
                                        placeholder="Estamos aquí para atenderte">
                             </div>
                             <div class="form-control">
-                                <label class="label">
-                                    <span class="label-text font-medium flex items-center gap-2">
-                                        URL Google Maps
-                                        <span class="badge badge-soft badge-success badge-xs">Plan {{ $plan->name }}</span>
-                                    </span>
-                                </label>
-                                <input type="url" name="contact_maps_url" class="input input-bordered w-full"
-                                       value="{{ data_get($tenant->settings, 'business_info.contact.maps_url', '') }}"
-                                       placeholder="https://www.google.com/maps/embed?pb=...">
-                            </div>
-                            <div class="form-control">
-                                <label class="label">
-                                    <span class="label-text font-medium flex items-center gap-2">
+                                <label class="label pb-1">
+                                    <span class="label-text font-medium text-sm flex items-center gap-1">
                                         Teléfono Secundario
-                                        <span class="badge badge-soft badge-success badge-xs">Plan {{ $plan->name }}</span>
+                                        <span class="badge badge-soft badge-success badge-xs">{{ $plan->name }}</span>
                                     </span>
                                 </label>
                                 <input type="tel" name="phone_secondary" class="input input-bordered w-full"
                                        value="{{ data_get($tenant->settings, 'contact_info.phone_secondary', '') }}"
                                        placeholder="+58 XXX XXXXXXX">
                             </div>
+                            <div class="form-control sm:col-span-2 lg:col-span-3">
+                                <label class="label pb-1">
+                                    <span class="label-text font-medium text-sm flex items-center gap-1">
+                                        URL Google Maps
+                                        <span class="badge badge-soft badge-success badge-xs">{{ $plan->name }}</span>
+                                    </span>
+                                </label>
+                                <input type="url" name="contact_maps_url" class="input input-bordered w-full"
+                                       value="{{ data_get($tenant->settings, 'business_info.contact.maps_url', '') }}"
+                                       placeholder="https://www.google.com/maps/embed?pb=...">
+                            </div>
                             @endif
                         </div>
 
-                        <div class="form-control mt-4">
-                            <label class="label" for="info-description">
-                                <span class="label-text font-medium">Descripción</span>
+                        <div class="form-control mt-3">
+                            <label class="label pb-1" for="info-description">
+                                <span class="label-text font-medium text-sm">Descripción del Negocio</span>
                             </label>
-                            <textarea id="info-description" class="textarea textarea-bordered w-full min-h-24"
+                            <textarea id="info-description" class="textarea textarea-bordered w-full min-h-20"
                                       name="description">{{ $tenant->description }}</textarea>
                         </div>
 
@@ -809,6 +809,69 @@
                     </div>
                 </div>
             </form>
+
+            {{-- ══ Imágenes del Negocio — Logo + Hero ════════════════════════ --}}
+            <div class="card bg-base-100 shadow-sm border border-base-content/10 mt-4">
+                <div class="card-header">
+                    <div class="flex items-center gap-2">
+                        <span class="icon-[tabler--photo] size-5 text-primary"></span>
+                        <h3 class="card-title">Imágenes del Negocio</h3>
+                    </div>
+                    <p class="text-xs text-base-content/50 mt-0.5">Logo e imagen principal de tu landing</p>
+                </div>
+                <div class="card-body">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+                        {{-- Logo --}}
+                        <div>
+                            <p class="text-sm font-medium text-base-content mb-2">Logo del Negocio</p>
+                            <div class="bg-base-200 rounded-box h-44 flex items-center justify-center mb-3 overflow-hidden">
+                                @if($customization && $customization->logo_filename)
+                                    <img id="logo-preview"
+                                         src="{{ asset('storage/tenants/' . $tenant->id . '/' . $customization->logo_filename) }}"
+                                         alt="Logo" class="max-w-full max-h-full object-contain" loading="lazy">
+                                @else
+                                    <div id="logo-placeholder" class="text-center text-base-content/30">
+                                        <span class="icon-[tabler--photo-off] size-12 mb-2 block mx-auto"></span>
+                                        <p class="text-xs">Sin logo</p>
+                                    </div>
+                                @endif
+                            </div>
+                            <input type="file" id="logo-file" accept="image/*" class="hidden" onchange="uploadLogo(event)">
+                            <button onclick="document.getElementById('logo-file').click()"
+                                    class="btn btn-primary btn-block btn-sm gap-2">
+                                <span class="icon-[tabler--upload] size-4"></span>
+                                Cambiar Logo
+                            </button>
+                        </div>
+
+                        {{-- Hero --}}
+                        <div>
+                            <p class="text-sm font-medium text-base-content mb-2">Imagen Principal (Hero)</p>
+                            <div class="bg-base-200 rounded-box h-44 flex items-center justify-center mb-3 overflow-hidden">
+                                @if($customization && $customization->hero_filename)
+                                    <img id="hero-preview"
+                                         src="{{ asset('storage/tenants/' . $tenant->id . '/' . $customization->hero_filename) }}"
+                                         alt="Hero" class="w-full h-full object-cover" loading="lazy">
+                                @else
+                                    <div id="hero-placeholder" class="text-center text-base-content/30">
+                                        <span class="icon-[tabler--panorama] size-12 mb-2 block mx-auto"></span>
+                                        <p class="text-xs">Sin imagen hero</p>
+                                    </div>
+                                @endif
+                            </div>
+                            <input type="file" id="hero-file" accept="image/*" class="hidden" onchange="uploadHero(event)">
+                            <button onclick="document.getElementById('hero-file').click()"
+                                    class="btn btn-primary btn-block btn-sm gap-2">
+                                <span class="icon-[tabler--upload] size-4"></span>
+                                Cambiar Hero
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
         </div>
 
         <!-- Tab: Productos -->
@@ -1586,18 +1649,18 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
                                            onchange="toggleSection('{{ $key }}', this.checked)">
 
                                     {{-- Flechas orden (alternativa al D&D) --}}
-                                    <div class="flex flex-col gap-0.5 flex-shrink-0">
+                                    <div class="flex flex-col gap-0 flex-shrink-0">
                                         <button type="button"
                                                 onclick="moveSection('{{ $key }}', -1)"
-                                                class="btn btn-xs btn-ghost p-0 h-4 min-h-0 text-base-content/40 hover:text-primary"
+                                                class="flex items-center justify-center w-6 h-5 rounded-t bg-base-300 hover:bg-primary hover:text-white text-base-content border border-base-content/20 transition-all"
                                                 title="Subir">
-                                            <span class="iconify tabler--chevron-up" style="font-size:13px;"></span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
                                         </button>
                                         <button type="button"
                                                 onclick="moveSection('{{ $key }}', 1)"
-                                                class="btn btn-xs btn-ghost p-0 h-4 min-h-0 text-base-content/40 hover:text-primary"
+                                                class="flex items-center justify-center w-6 h-5 rounded-b bg-base-300 hover:bg-primary hover:text-white text-base-content border border-base-content/20 border-t-0 transition-all"
                                                 title="Bajar">
-                                            <span class="iconify tabler--chevron-down" style="font-size:13px;"></span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
                                         </button>
                                     </div>
                                 @endif
@@ -1737,67 +1800,6 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
             </div>
             @endif
 
-            {{-- ── Imágenes ──────────────────────────────────────────────── --}}
-            <div class="card bg-base-100 shadow-sm border border-base-content/10 mt-4">
-                <div class="card-header">
-                    <div class="flex items-center gap-2">
-                        <span class="icon-[tabler--photo] size-5 text-primary"></span>
-                        <h3 class="card-title">Imágenes del Negocio</h3>
-                    </div>
-                    <p class="text-xs text-base-content/50 mt-0.5">Logo e imagen principal de tu landing</p>
-                </div>
-                <div class="card-body">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-
-                        {{-- Logo --}}
-                        <div>
-                            <p class="text-sm font-medium text-base-content mb-2">Logo del Negocio</p>
-                            <div class="bg-base-200 rounded-box h-44 flex items-center justify-center mb-3 overflow-hidden">
-                                @if($customization && $customization->logo_filename)
-                                    <img id="logo-preview"
-                                         src="{{ asset('storage/tenants/' . $tenant->id . '/' . $customization->logo_filename) }}"
-                                         alt="Logo" class="max-w-full max-h-full object-contain" loading="lazy">
-                                @else
-                                    <div id="logo-placeholder" class="text-center text-base-content/30">
-                                        <span class="icon-[tabler--photo-off] size-12 mb-2 block mx-auto"></span>
-                                        <p class="text-xs">Sin logo</p>
-                                    </div>
-                                @endif
-                            </div>
-                            <input type="file" id="logo-file" accept="image/*" class="hidden" onchange="uploadLogo(event)">
-                            <button onclick="document.getElementById('logo-file').click()"
-                                    class="btn btn-primary btn-block btn-sm gap-2">
-                                <span class="icon-[tabler--upload] size-4"></span>
-                                Cambiar Logo
-                            </button>
-                        </div>
-
-                        {{-- Hero --}}
-                        <div>
-                            <p class="text-sm font-medium text-base-content mb-2">Imagen Principal (Hero)</p>
-                            <div class="bg-base-200 rounded-box h-44 flex items-center justify-center mb-3 overflow-hidden">
-                                @if($customization && $customization->hero_filename)
-                                    <img id="hero-preview"
-                                         src="{{ asset('storage/tenants/' . $tenant->id . '/' . $customization->hero_filename) }}"
-                                         alt="Hero" class="w-full h-full object-cover" loading="lazy">
-                                @else
-                                    <div id="hero-placeholder" class="text-center text-base-content/30">
-                                        <span class="icon-[tabler--panorama] size-12 mb-2 block mx-auto"></span>
-                                        <p class="text-xs">Sin imagen hero</p>
-                                    </div>
-                                @endif
-                            </div>
-                            <input type="file" id="hero-file" accept="image/*" class="hidden" onchange="uploadHero(event)">
-                            <button onclick="document.getElementById('hero-file').click()"
-                                    class="btn btn-primary btn-block btn-sm gap-2">
-                                <span class="icon-[tabler--upload] size-4"></span>
-                                Cambiar Hero
-                            </button>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
         </div>
 
         <!-- Tab: Analytics -->
@@ -2523,10 +2525,9 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
                     document.getElementById('layout-sidebar')?.classList.remove('overlay-open');
                 }
 
-                // Init SortableJS the first time the Diseño tab opens
-                if (tabId === 'diseno' && !window._sortableReady) {
-                    window._sortableReady = true;
-                    window.initSortable();
+                // Re-init SortableJS cada vez que se abre el tab Diseño
+                if (tabId === 'diseno') {
+                    requestAnimationFrame(function() { window.initSortable(); });
                 }
             }
 
@@ -4021,9 +4022,7 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
         .sortable-ghost { opacity: 0.3 !important; }
         .sortable-drag  { box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5) !important; }
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"
-            integrity="sha256-ipiJrDxYBg3KPcKWCKoGLFUMjjFvFugmzOY9qbHAVQ="
-            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
     <script>
         // ── Toast global ──────────────────────────────────────────────
         window.showToast = function(message, type) {
@@ -4045,25 +4044,32 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
             if (announcer) { announcer.textContent = ''; requestAnimationFrame(() => { announcer.textContent = message; }); }
         };
 
-        // ── Sortable init (called when the Diseño tab opens) ─────────
-        window._sortableReady = false;
+        // ── Sortable init (se llama cada vez que abre tab Diseño) ────
+        window._sortableInstance = null;
         window.initSortable = function() {
+            if (typeof Sortable === 'undefined') {
+                console.error('❌ SortableJS no cargó — D&D no disponible');
+                return;
+            }
             const sortableEl = document.getElementById('sortable-sections');
-            if (!sortableEl) { console.error('\u274c sortable-sections no encontrado'); return; }
+            if (!sortableEl) { console.error('❌ sortable-sections no encontrado'); return; }
 
-            new Sortable(sortableEl, {
+            // Destruir instancia anterior si existe
+            if (window._sortableInstance) {
+                try { window._sortableInstance.destroy(); } catch(e) {}
+                window._sortableInstance = null;
+            }
+
+            window._sortableInstance = new Sortable(sortableEl, {
                 handle: '.drag-handle',
                 animation: 200,
                 ghostClass: 'sortable-ghost',
-                dragClass: 'sortable-drag',
-                filter: '.no-drag',      // Ignore items without access
-                preventOnFilter: false,
+                dragClass:  'sortable-drag',
+                forceFallback: false,
                 onEnd: function() { saveSectionsOrder(); }
             });
 
-            // Section toggles now use onchange="toggleSection()" directly on each input
-
-            console.log('\u2705 SortableJS inicializado correctamente');
+            console.log('✅ SortableJS listo — ' + sortableEl.children.length + ' secciones');
         };
 
         function saveSectionsOrder() {
