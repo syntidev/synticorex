@@ -1,76 +1,44 @@
-# 🚀 PRÓXIMA SESIÓN
+CRÍTICO MAÑANA:
+- [ ] CTA: conectar contenido al render
+- [ ] Crear about.blade.php Plan 2
+- [ ] Validar branches/testimonials vs MATRIZ
+- [ ] Eliminar legacy (frozen, product-card, whatsapp-button)
+- [ ] Sistema secciones 100% funcional
 
-**Fecha:** 26 Feb 2026
-**Objetivo:** Contenido demos + imágenes + limpieza código
-**Progreso:** S3 ✅ 100% | S4 🔥 40%
+COMPLETADO HOY:
+- Dashboard migrado a FlyonUI (optimización peso)
+- Switches secciones + CRUD botones visibles
 
-## ✅ COMPLETADO HOY (25 Feb):
-- Redistribución 17 temas FlyonUI por plan
-- Custom palette Plan 3 (4 colores: primary, secondary, accent, base)
-- Fix selector tema (theme_slug única fuente de verdad)
-- Migration nullable para color_palette fields
-- Sistema toggle custom ↔ temas predefinidos
+# 🚦 NEXT SESSION: Auditoría y Roadmap Inmediato
 
-## 🎯 TAREAS PENDIENTES S4:
+**Fecha:** 25/02/2026
 
-### PRIORIDAD ALTA:
-- [ ] Mejorar contenido textual 3 demos (techstart, retailco, servicepro)
-- [ ] Agregar imágenes profesionales productos/servicios
-- [ ] Limpieza LEGACY código (updatePalette viejo)
-- [ ] Centralizar lista 17 temas (un solo lugar)
+## ⏳ Prioridad 2h: Completar antes de la próxima sesión
 
-### PRIORIDAD MEDIA:
-- [ ] Middleware autenticación rutas `/tenant/{id}/dashboard`
-- [ ] Analytics: tracking JS → analytics_events
-- [ ] SEO: meta tags dinámicos por segmento
+### 1. Seguridad y Autenticación
+- [ ] Implementar capas de seguridad (middleware, roles, protección rutas admin y dashboard)
+- [ ] Revisar y reforzar autenticación de usuarios y tenants
 
-### PRIORIDAD BAJA:
-- [ ] Sistema onboarding nuevos tenants
-- [ ] Panel admin básico
-- [ ] Producción: servidor + DNS + SSL + cron
+### 2. Panel Administrativo Central
+- [ ] Diseñar y desarrollar el panel de administración central (gestión de tenants, usuarios, upgrades, facturación)
+- [ ] Definir estructura de permisos y roles para el panel admin
 
-## 🔧 DETALLES TÉCNICOS COMPLETADOS:
+### 3. Métricas y Analytics
+- [ ] Implementar sistema de métricas para saber si los clientes acceden a su dashboard (tracking de logins, actividad, uso de funcionalidades)
+- [ ] Dashboard de métricas para admins (visualización de actividad por tenant)
 
-**Sistema Temas:**
-- Plan 1 (OPORTUNIDAD): 10 temas equilibrados
-- Plan 2 (CRECIMIENTO): 17 temas completos
-- Plan 3 (VISIÓN): 17 temas + custom palette
+### 4. QA y Checklist
+- [ ] Validar límites y upgrades de plan en el dashboard de usuario
+- [ ] QA integral de panel de usuario y demo tenants
 
-**Custom Palette Plan 3:**
-- Ruta: `/tenant/{id}/dashboard/save-custom-palette`
-- Guarda en: `settings->engine_settings->visual->custom_palette`
-- Aplica vía: CSS variables en `[data-theme="custom"]`
-- Inputs cargan valores guardados de BD
-
-**Archivos Modificados:**
-```
-database/seeders/ColorPalettesSeeder.php (17 temas)
-routes/web.php (ruta save-custom-palette)
-app/Http/Controllers/DashboardController.php (saveCustomPalette + filtro paletas)
-resources/views/dashboard/index.blade.php (custom palette UI)
-resources/views/landing/base.blade.php (aplica custom CSS)
-```
-
-## 💡 NOTAS PARA PRÓXIMA SESIÓN:
-
-**Tokens API:**
-- Gastado hoy: ~$3.50
-- Restante: $32.50
-- Usar Haiku para contenido textual
-- Sonnet solo para features técnicas
-
-**Decisión Custom Palette:**
-- Mantener 4 colores (suficiente para branding)
-- NO expandir a paleta completa (complejidad innecesaria)
-- Plan 3 diferenciado con esta feature
-
-**Pendientes Críticos:**
-1. Contenido demos profesional (copys atractivos)
-2. Imágenes productos reales (no placeholders)
-3. Testing visual exhaustivo 3 planes
+### 5. Documentar avances y próximos pasos
+- [ ] Actualizar documentación de tareas y fases pendientes
+- [ ] Preparar informe de avance para revisión
 
 ---
 
-**Commit:** faed65e  
-**Rama:** feature/limpieza-frankenstein  
-**Estado:** ✅ Sistema temas completo y funcional
+> ⚡ **Nota:** El desarrollo del sistema QR y onboarding avanzado de tenants queda para la siguiente fase, tras asegurar seguridad y panel central.
+
+---
+
+# ⏩ Siguiente sesión: Revisar avances en seguridad, panel admin y métricas.
