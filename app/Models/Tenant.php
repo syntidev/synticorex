@@ -218,4 +218,38 @@ class Tenant extends Model
 
         return max(0, (int) Carbon::now()->diffInDays($graceEndsAt, false));
     }
+
+    /**
+     * Get available sections for this tenant's plan.
+     * Uses canAccessSection() to filter by plan requirements.
+     *
+     * @return array<string, array>
+     */
+    public function getAvailableSections(): array
+    {
+        // All possible sections with metadata
+        $allSections = [
+            'hero'            => ['label' => 'Hero',             'icon' => 'tabler:layout-hero',        'plan' => 1],
+            'products'        => ['label' => 'Productos',        'icon' => 'tabler:shopping-cart',      'plan' => 1],
+            'services'        => ['label' => 'Servicios',        'icon' => 'tabler:tool',               'plan' => 1],
+            'contact'         => ['label' => 'Contacto',         'icon' => 'tabler:map-pin',            'plan' => 1],
+            'payment_methods' => ['label' => 'Medios de Pago',   'icon' => 'tabler:credit-card',        'plan' => 1],
+            'cta'             => ['label' => 'Llamado a Acción', 'icon' => 'tabler:send',               'plan' => 1],
+            'footer'          => ['label' => 'Pie de Página',    'icon' => 'tabler:layout-footer',      'plan' => 1],
+            'about'           => ['label' => 'Acerca de',        'icon' => 'tabler:info-circle',        'plan' => 2],
+            'testimonials'    => ['label' => 'Testimonios',      'icon' => 'tabler:message-star',       'plan' => 2],
+            'faq'             => ['label' => 'FAQ',              'icon' => 'tabler:help-circle',        'plan' => 3],
+            'branches'        => ['label' => 'Sucursales',       'icon' => 'tabler:building-bank',      'plan' => 3],
+        ];
+
+        // Filter by plan access
+        $available = [];
+        foreach ($allSections as $key => $section) {
+            if ($this->customization && $this->customization->canAccessSection($key, $this->plan_id)) {
+                $available[$key] = $section;
+            }
+        }
+
+        return $available;
+    }
 }
