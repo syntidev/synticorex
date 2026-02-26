@@ -22,14 +22,14 @@
         <div id="product-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16 md:gap-y-32 items-stretch mb-32">
             {{-- Primeros 6 — siempre visibles --}}
             @foreach($visible as $product)
-                @include('landing.partials.product-card', ['product' => $product])
+                @include('landing.partials.product-card', ['product' => $product, 'tenant' => $tenant, 'plan' => $plan])
             @endforeach
 
             {{-- Productos adicionales (Plan 2: hasta 12, Plan 3: hasta 18) — ocultos por defecto --}}
             @if($hasMore)
                 @foreach($hidden as $product)
                     <div class="product-extra hidden">
-                        @include('landing.partials.product-card', ['product' => $product])
+                        @include('landing.partials.product-card', ['product' => $product, 'tenant' => $tenant, 'plan' => $plan])
                     </div>
                 @endforeach
             @endif
