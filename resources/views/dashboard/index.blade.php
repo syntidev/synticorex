@@ -1580,10 +1580,26 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
                                 {{-- Toggle de visibilidad --}}
                                 @if($hasAccess)
                                     <input type="checkbox"
-                                           class="toggle toggle-primary toggle-sm"
+                                           class="toggle toggle-primary toggle-sm section-toggle"
                                            id="section-{{ $key }}"
                                            @checked($isVisible)
                                            onchange="toggleSection('{{ $key }}', this.checked)">
+
+                                    {{-- Flechas orden (alternativa al D&D) --}}
+                                    <div class="flex flex-col gap-0.5 flex-shrink-0">
+                                        <button type="button"
+                                                onclick="moveSection('{{ $key }}', -1)"
+                                                class="btn btn-xs btn-ghost p-0 h-4 min-h-0 text-base-content/40 hover:text-primary"
+                                                title="Subir">
+                                            <span class="iconify tabler--chevron-up" style="font-size:13px;"></span>
+                                        </button>
+                                        <button type="button"
+                                                onclick="moveSection('{{ $key }}', 1)"
+                                                class="btn btn-xs btn-ghost p-0 h-4 min-h-0 text-base-content/40 hover:text-primary"
+                                                title="Bajar">
+                                            <span class="iconify tabler--chevron-down" style="font-size:13px;"></span>
+                                        </button>
+                                    </div>
                                 @endif
                             </div>
                         </div>
@@ -1592,6 +1608,116 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
             </div>
 
             {{-- SortableJS se inicializa al abrir la pestaña Diseño (ver script global al pie del body) --}}
+
+            {{-- ═══════════════════════════════════════════════════════
+                 EDITOR TESTIMONIOS (Plan 2+)
+            ═══════════════════════════════════════════════════════ --}}
+            @if($plan->id >= 2)
+            @php
+                $savedTestimonials = data_get($tenant->settings, 'business_info.testimonials', []);
+                // Pad a 5 slots vacíos para el editor
+                while (count($savedTestimonials) < 5) {
+                    $savedTestimonials[] = ['name' => '', 'title' => '', 'text' => '', 'rating' => 5];
+                }
+            @endphp
+            <div class="card bg-base-100 shadow-sm border border-base-content/10 mt-4">
+                <div class="card-header">
+                    <h3 class="card-title flex items-center gap-2">
+                        <span class="icon-[tabler--message-star] size-5 text-primary"></span>
+                        Testimonios de Clientes
+                        <span class="badge badge-soft badge-primary badge-xs ms-1">Plan CRECIMIENTO+</span>
+                    </h3>
+                    <p class="text-base-content/50 text-xs mt-1">Hasta 5 testimonios. Deja vacíos los que no uses.</p>
+                </div>
+                <div class="card-body space-y-4">
+                    @foreach($savedTestimonials as $ti => $testim)
+                    <div class="border border-base-content/10 rounded-xl p-4 space-y-3 bg-base-200/40">
+                        <p class="text-xs font-bold text-base-content/40 uppercase tracking-wider">Testimonio {{ $ti + 1 }}</p>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="label label-text text-xs">Nombre</label>
+                                <input type="text" id="testim_name_{{ $ti }}"
+                                       class="input input-sm w-full" placeholder="María García"
+                                       value="{{ $testim['name'] ?? '' }}">
+                            </div>
+                            <div>
+                                <label class="label label-text text-xs">Cargo / Empresa</label>
+                                <input type="text" id="testim_title_{{ $ti }}"
+                                       class="input input-sm w-full" placeholder="CEO en Empresa"
+                                       value="{{ $testim['title'] ?? '' }}">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="label label-text text-xs">Testimonio</label>
+                            <textarea id="testim_text_{{ $ti }}" rows="2"
+                                      class="textarea textarea-sm w-full resize-none"
+                                      placeholder="Excelente servicio...">{{ $testim['text'] ?? '' }}</textarea>
+                        </div>
+                        <div>
+                            <label class="label label-text text-xs">Estrellas</label>
+                            <select id="testim_rating_{{ $ti }}" class="select select-sm w-28">
+                                @for($s = 5; $s >= 1; $s--)
+                                    <option value="{{ $s }}" {{ ($testim['rating'] ?? 5) == $s ? 'selected' : '' }}>
+                                        {{ $s }} ★
+                                    </option>
+                                @endfor
+                            </select>
+                        </div>
+                    </div>
+                    @endforeach
+                    <button type="button" onclick="saveTestimonials()" class="btn btn-primary w-full gap-2">
+                        <span class="icon-[tabler--device-floppy] size-4"></span>
+                        Guardar Testimonios
+                    </button>
+                </div>
+            </div>
+            @endif
+
+            {{-- ═══════════════════════════════════════════════════════
+                 EDITOR FAQ (Plan 3)
+            ═══════════════════════════════════════════════════════ --}}
+            @if($plan->id >= 3)
+            @php
+                $savedFaq = data_get($tenant->settings, 'business_info.faq', []);
+                while (count($savedFaq) < 5) {
+                    $savedFaq[] = ['question' => '', 'answer' => ''];
+                }
+            @endphp
+            <div class="card bg-base-100 shadow-sm border border-base-content/10 mt-4">
+                <div class="card-header">
+                    <h3 class="card-title flex items-center gap-2">
+                        <span class="icon-[tabler--help-circle] size-5 text-primary"></span>
+                        Preguntas Frecuentes (FAQ)
+                        <span class="badge badge-soft badge-secondary badge-xs ms-1">Plan VISIÓN</span>
+                    </h3>
+                    <p class="text-base-content/50 text-xs mt-1">Hasta 5 preguntas. Deja vacíos los que no uses. Si todos vacíos se usan respuestas automáticas.</p>
+                </div>
+                <div class="card-body space-y-4">
+                    @foreach($savedFaq as $fi => $fitem)
+                    <div class="border border-base-content/10 rounded-xl p-4 space-y-3 bg-base-200/40">
+                        <p class="text-xs font-bold text-base-content/40 uppercase tracking-wider">Pregunta {{ $fi + 1 }}</p>
+                        <div>
+                            <label class="label label-text text-xs">Pregunta</label>
+                            <input type="text" id="faq_question_{{ $fi }}"
+                                   class="input input-sm w-full"
+                                   placeholder="¿Cuál es el horario de atención?"
+                                   value="{{ $fitem['question'] ?? '' }}">
+                        </div>
+                        <div>
+                            <label class="label label-text text-xs">Respuesta</label>
+                            <textarea id="faq_answer_{{ $fi }}" rows="2"
+                                      class="textarea textarea-sm w-full resize-none"
+                                      placeholder="Atendemos de lunes a viernes...">{{ $fitem['answer'] ?? '' }}</textarea>
+                        </div>
+                    </div>
+                    @endforeach
+                    <button type="button" onclick="saveFaq()" class="btn btn-primary w-full gap-2">
+                        <span class="icon-[tabler--device-floppy] size-4"></span>
+                        Guardar FAQ
+                    </button>
+                </div>
+            </div>
+            @endif
 
             @if($plan->id === 1)
             <div style="background: linear-gradient(135deg, #1a2040 0%, #0f1c32 100%); border: 1px solid rgba(43,111,255,0.3); border-radius: 12px; padding: 16px 20px; margin-top: 24px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
@@ -3964,6 +4090,60 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
                 else              { window.showToast('\u274c Error al guardar', 'error'); }
             })
             .catch(() => window.showToast('\u274c Error de red', 'error'));
+        }
+
+        // ── Mover sección con flechas ▲▼ ─────────────────────────────
+        function moveSection(key, direction) {
+            const container = document.getElementById('sortable-sections');
+            const items     = Array.from(container.querySelectorAll('.section-item'));
+            const idx       = items.findIndex(el => el.dataset.section === key);
+            const target    = idx + direction;
+            if (target < 0 || target >= items.length) return;
+            // Reordenar en DOM
+            if (direction === -1) {
+                container.insertBefore(items[idx], items[target]);
+            } else {
+                container.insertBefore(items[target], items[idx]);
+            }
+            saveSectionsOrder();
+        }
+
+        // ── Guardar Testimonios ───────────────────────────────────────
+        function saveTestimonials() {
+            const testimonials = [];
+            for (let i = 0; i < 5; i++) {
+                const name  = document.getElementById(`testim_name_${i}`)?.value.trim();
+                const title = document.getElementById(`testim_title_${i}`)?.value.trim();
+                const text  = document.getElementById(`testim_text_${i}`)?.value.trim();
+                const rating = parseInt(document.getElementById(`testim_rating_${i}`)?.value || '5');
+                if (name && text) testimonials.push({ name, title, text, rating });
+            }
+            fetch(`/tenant/{{ $tenant->id }}/update-testimonials`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+                body: JSON.stringify({ testimonials })
+            })
+            .then(r => r.json())
+            .then(d => window.showToast(d.success ? '✅ Testimonios guardados' : '✗ Error', d.success ? 'success' : 'error'))
+            .catch(() => window.showToast('✗ Error de red', 'error'));
+        }
+
+        // ── Guardar FAQ ───────────────────────────────────────────────
+        function saveFaq() {
+            const faq = [];
+            for (let i = 0; i < 5; i++) {
+                const question = document.getElementById(`faq_question_${i}`)?.value.trim();
+                const answer   = document.getElementById(`faq_answer_${i}`)?.value.trim();
+                if (question && answer) faq.push({ question, answer });
+            }
+            fetch(`/tenant/{{ $tenant->id }}/update-faq`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+                body: JSON.stringify({ faq })
+            })
+            .then(r => r.json())
+            .then(d => window.showToast(d.success ? '✅ FAQ guardado' : '✗ Error', d.success ? 'success' : 'error'))
+            .catch(() => window.showToast('✗ Error de red', 'error'));
         }
 
         // ── Toggle individual de sección ──────────────────────────────

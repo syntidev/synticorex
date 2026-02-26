@@ -625,6 +625,66 @@ class DashboardController extends Controller
     }
 
     /**
+     * Update testimonials (stored in settings['business_info']['testimonials']).
+     */
+    public function updateTestimonials(Request $request, int $tenantId): JsonResponse
+    {
+        try {
+            $tenant = Tenant::where('id', $tenantId)->where('status', 'active')->firstOrFail();
+
+            $items = collect($request->input('testimonials', []))
+                ->filter(fn($t) => !empty($t['name']) && !empty($t['text']))
+                ->take(5)
+                ->map(fn($t) => [
+                    'name'   => strip_tags(trim($t['name'])),
+                    'title'  => strip_tags(trim($t['title'] ?? '')),
+                    'text'   => strip_tags(trim($t['text'])),
+                    'rating' => min(5, max(1, (int)($t['rating'] ?? 5))),
+                ])
+                ->values()
+                ->toArray();
+
+            $settings = $tenant->settings ?? [];
+            data_set($settings, 'business_info.testimonials', $items);
+            $tenant->settings = $settings;
+            $tenant->save();
+
+            return response()->json(['success' => true, 'message' => 'Testimonios guardados']);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 422);
+        }
+    }
+
+    /**
+     * Update FAQ (stored in settings['business_info']['faq']).
+     */
+    public function updateFaq(Request $request, int $tenantId): JsonResponse
+    {
+        try {
+            $tenant = Tenant::where('id', $tenantId)->where('status', 'active')->firstOrFail();
+
+            $items = collect($request->input('faq', []))
+                ->filter(fn($f) => !empty($f['question']) && !empty($f['answer']))
+                ->take(5)
+                ->map(fn($f) => [
+                    'question' => strip_tags(trim($f['question'])),
+                    'answer'   => strip_tags(trim($f['answer'])),
+                ])
+                ->values()
+                ->toArray();
+
+            $settings = $tenant->settings ?? [];
+            data_set($settings, 'business_info.faq', $items);
+            $tenant->settings = $settings;
+            $tenant->save();
+
+            return response()->json(['success' => true, 'message' => 'FAQ guardado']);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 422);
+        }
+    }
+
+    /**
      * Update tenant PIN.
      */
     public function updatePin(Request $request, int $tenantId): JsonResponse

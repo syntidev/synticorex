@@ -77,5 +77,7 @@ Route::post('/tenant/{tenantId}/dashboard/toggle-section', [DashboardController:
     ->name('tenant.dashboard.toggle-section');
 
 // Config actions
-Route::post('/tenant/{tenantId}/update-currency-config', [DashboardController::class, 'updateCurrencyConfig']);
-Route::post('/tenant/{tenantId}/update-pin',             [DashboardController::class, 'updatePin']);
+Route::post('/tenant/{tenantId}/update-currency-config',  [DashboardController::class, 'updateCurrencyConfig']);
+Route::post('/tenant/{tenantId}/update-pin',              [DashboardController::class, 'updatePin']);
+Route::post('/tenant/{tenantId}/update-testimonials',     [DashboardController::class, 'updateTestimonials']);
+Route::post('/tenant/{tenantId}/update-faq',              [DashboardController::class, 'updateFaq']);

@@ -1,116 +1,64 @@
-{{-- About Section — Plan 2+ --}}
+{{-- About Section — Plan 2+ — slim CTA style --}}
 @php
     $description = $tenant->description ?? null;
     $slogan      = $tenant->slogan ?? null;
-    $hours       = $tenant->business_hours ?? [];
-    $address     = $tenant->address ?? null;
-    $city        = $tenant->city ?? null;
-    $phone       = $tenant->phone ?? null;
-    $email       = $tenant->email ?? null;
-
-    $days = [
-        'monday'    => 'Lunes',
-        'tuesday'   => 'Martes',
-        'wednesday' => 'Miércoles',
-        'thursday'  => 'Jueves',
-        'friday'    => 'Viernes',
-        'saturday'  => 'Sábado',
-        'sunday'    => 'Domingo',
-    ];
 @endphp
 
-<section id="about" class="py-20 px-4 bg-base-100">
-    <div class="container mx-auto max-w-5xl">
+<section id="about" class="py-16 bg-base-200/50">
+    <div class="container mx-auto px-6 max-w-6xl">
+        <div class="flex flex-col lg:flex-row gap-10 lg:gap-16 items-center">
 
-        {{-- Header --}}
-        <div class="text-center mb-14">
-            <span class="text-primary text-sm font-semibold uppercase tracking-widest mb-3 block">Acerca de nosotros</span>
-            <h2 class="text-3xl md:text-4xl font-bold text-base-content mb-4">
-                {{ $tenant->business_name }}
-            </h2>
-            @if($slogan)
-                <p class="text-lg text-base-content/60 max-w-xl mx-auto italic">"{{ $slogan }}"</p>
-            @endif
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
-
-            {{-- Descripción --}}
-            <div>
+            {{-- Col 8/12 — Descripción --}}
+            <div class="flex-1 lg:basis-2/3">
+                <span class="text-primary text-xs font-black uppercase tracking-[0.2em] mb-3 block">
+                    Acerca de nosotros
+                </span>
+                <h2 class="text-3xl md:text-4xl font-black tracking-tight text-base-content mb-4 leading-tight">
+                    {{ $tenant->business_name }}
+                </h2>
+                @if($slogan)
+                    <p class="text-base-content/50 text-sm italic mb-5">"{{ $slogan }}"</p>
+                @endif
                 @if($description)
-                    <p class="text-base-content/80 leading-relaxed text-lg mb-6">
+                    <p class="text-base-content/75 leading-relaxed text-base">
                         {{ $description }}
                     </p>
+                @else
+                    <p class="text-base-content/40 text-sm italic">
+                        Agrega una descripción de tu empresa en el dashboard → Información.
+                    </p>
                 @endif
-
-                {{-- Datos de contacto --}}
-                <ul class="space-y-3">
-                    @if($address || $city)
-                        <li class="flex items-start gap-3 text-sm text-base-content/70">
-                            <svg class="w-5 h-5 text-primary mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-                            </svg>
-                            <span>{{ implode(', ', array_filter([$address, $city])) }}</span>
-                        </li>
-                    @endif
-
-                    @if($phone)
-                        <li class="flex items-center gap-3 text-sm text-base-content/70">
-                            <svg class="w-5 h-5 text-primary shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
-                            </svg>
-                            <span>{{ $phone }}</span>
-                        </li>
-                    @endif
-
-                    @if($email)
-                        <li class="flex items-center gap-3 text-sm text-base-content/70">
-                            <svg class="w-5 h-5 text-primary shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-                            </svg>
-                            <span>{{ $email }}</span>
-                        </li>
-                    @endif
-                </ul>
             </div>
 
-            {{-- Horarios --}}
-            @if(!empty($hours))
-                <div class="bg-base-200 rounded-2xl p-6">
-                    <h3 class="font-bold text-base-content mb-4 flex items-center gap-2">
-                        <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                        Horario de Atención
-                    </h3>
-                    <ul class="space-y-2">
-                        @foreach($days as $key => $label)
-                            @if(isset($hours[$key]))
-                                @php $h = $hours[$key]; @endphp
-                                <li class="flex justify-between text-sm">
-                                    <span class="text-base-content/60 font-medium">{{ $label }}</span>
-                                    @if($h['closed'] ?? false)
-                                        <span class="text-error/70">Cerrado</span>
-                                    @else
-                                        <span class="text-base-content font-semibold">
-                                            {{ $h['open'] ?? '--:--' }} – {{ $h['close'] ?? '--:--' }}
-                                        </span>
-                                    @endif
-                                </li>
-                            @endif
-                        @endforeach
-                    </ul>
+            {{-- Col 4/12 — Adorno geométrico + accent --}}
+            <div class="lg:basis-1/3 flex items-center justify-center w-full">
+                <div class="relative w-full max-w-xs">
+                    {{-- Fondos decorativos blur --}}
+                    <div class="absolute -top-4 -right-4 w-32 h-32 bg-primary/10 rounded-full blur-2xl pointer-events-none"></div>
+                    <div class="absolute -bottom-4 -left-4 w-24 h-24 bg-primary/5 rounded-full blur-xl pointer-events-none"></div>
+
+                    {{-- Tarjeta accent --}}
+                    <div class="relative bg-base-100 border border-base-content/10 rounded-3xl p-7 shadow-sm">
+                        <div class="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                            </svg>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="h-2 bg-primary/20 rounded-full w-3/4"></div>
+                            <div class="h-2 bg-base-content/10 rounded-full w-full"></div>
+                            <div class="h-2 bg-base-content/10 rounded-full w-5/6"></div>
+                            <div class="h-2 bg-primary/10 rounded-full w-2/3 mt-4"></div>
+                            <div class="h-2 bg-base-content/10 rounded-full w-full"></div>
+                        </div>
+                        <div class="mt-5 inline-flex items-center gap-2 bg-primary/10 text-primary text-xs font-bold px-3 py-1.5 rounded-full">
+                            <span class="w-1.5 h-1.5 bg-primary rounded-full animate-pulse"></span>
+                            {{ $tenant->city ?? 'Venezuela' }}
+                        </div>
+                    </div>
                 </div>
-            @elseif(!$description)
-                {{-- Fallback si no hay descripción ni horarios --}}
-                <div class="bg-base-200 rounded-2xl p-8 flex flex-col items-center justify-center text-center gap-3">
-                    <svg class="w-10 h-10 text-primary/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-                    </svg>
-                    <p class="text-base-content/40 text-sm">Completa tu perfil de negocio en el dashboard</p>
-                </div>
-            @endif
+            </div>
 
         </div>
     </div>
