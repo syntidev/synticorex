@@ -1500,33 +1500,38 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
 
                 <div id="sortable-sections" class="space-y-2">
                     @php
-                        $availableSections = [
-                            'products'        => ['label' => 'Productos',       'icon' => 'tabler:shopping-cart', 'plan' => 1],
-                            'services'        => ['label' => 'Servicios',       'icon' => 'tabler:tool',          'plan' => 1],
-                            'contact'         => ['label' => 'Contacto',        'icon' => 'tabler:map-pin',       'plan' => 1],
-                            'payment_methods' => ['label' => 'Medios de Pago', 'icon' => 'tabler:credit-card',   'plan' => 2],
-                            'faq'             => ['label' => 'FAQ',             'icon' => 'tabler:help-circle',   'plan' => 3],
-                            'branches'        => ['label' => 'Sucursales',      'icon' => 'tabler:building-bank', 'plan' => 3],
+                        // Get all 9 available sections from the Tenant model (based on plan access)
+                        $allSections = [
+                            'products'        => ['label' => 'Productos',        'icon' => 'tabler:shopping-cart',      'plan' => 1],
+                            'services'        => ['label' => 'Servicios',        'icon' => 'tabler:tool',               'plan' => 1],
+                            'contact'         => ['label' => 'Contacto',         'icon' => 'tabler:map-pin',            'plan' => 1],
+                            'payment_methods' => ['label' => 'Medios de Pago',   'icon' => 'tabler:credit-card',        'plan' => 1],
+                            'cta'             => ['label' => 'Llamado a Acción', 'icon' => 'tabler:send',               'plan' => 1],
+                            'about'           => ['label' => 'Acerca de',        'icon' => 'tabler:info-circle',        'plan' => 2],
+                            'testimonials'    => ['label' => 'Testimonios',      'icon' => 'tabler:message-star',       'plan' => 2],
+                            'faq'             => ['label' => 'FAQ',              'icon' => 'tabler:help-circle',        'plan' => 3],
+                            'branches'        => ['label' => 'Sucursales',       'icon' => 'tabler:building-bank',      'plan' => 3],
                         ];
 
                         $currentOrder = $customization->visual_effects['sections_order'] ?? [];
 
-                        // Ordenar $availableSections según $currentOrder
+                        // Ordenar $allSections según $currentOrder
+                        $availableSections = [];
                         if (!empty($currentOrder)) {
                             $orderedKeys = collect($currentOrder)->pluck('name')->toArray();
-                            $sortedSections = [];
                             foreach ($orderedKeys as $k) {
-                                if (isset($availableSections[$k])) {
-                                    $sortedSections[$k] = $availableSections[$k];
+                                if (isset($allSections[$k])) {
+                                    $availableSections[$k] = $allSections[$k];
                                 }
                             }
                             // Agregar las que no están en el orden guardado al final
-                            foreach ($availableSections as $k => $v) {
-                                if (!isset($sortedSections[$k])) {
-                                    $sortedSections[$k] = $v;
+                            foreach ($allSections as $k => $v) {
+                                if (!isset($availableSections[$k])) {
+                                    $availableSections[$k] = $v;
                                 }
                             }
-                            $availableSections = $sortedSections;
+                        } else {
+                            $availableSections = $allSections;
                         }
                     @endphp
 

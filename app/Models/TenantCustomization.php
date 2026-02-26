@@ -78,13 +78,13 @@ class TenantCustomization extends Model
             $order = [
                 ['name' => 'products',        'visible' => true, 'order' => 0],
                 ['name' => 'services',        'visible' => true, 'order' => 1],
-                ['name' => 'about',           'visible' => true, 'order' => 2],
-                ['name' => 'contact',         'visible' => true, 'order' => 3],
-                ['name' => 'payment_methods', 'visible' => true, 'order' => 4],
-                ['name' => 'testimonials',    'visible' => true, 'order' => 5],
-                ['name' => 'faq',             'visible' => true, 'order' => 6],
-                ['name' => 'branches',        'visible' => true, 'order' => 7],
-                ['name' => 'cta',             'visible' => true, 'order' => 8],
+                ['name' => 'contact',         'visible' => true, 'order' => 2],
+                ['name' => 'payment_methods', 'visible' => true, 'order' => 3],
+                ['name' => 'cta',             'visible' => true, 'order' => 4],
+                ['name' => 'about',           'visible' => true, 'order' => 5],
+                ['name' => 'testimonials',    'visible' => true, 'order' => 6],
+                ['name' => 'faq',             'visible' => true, 'order' => 7],
+                ['name' => 'branches',        'visible' => true, 'order' => 8],
             ];
         }
         
