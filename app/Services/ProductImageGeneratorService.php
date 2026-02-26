@@ -16,9 +16,17 @@ class ProductImageGeneratorService
     public function generateProductImage(
         int $tenantId,
         string $productName,
-        string $segment
+        string $segment,
+        ?int $index = null
     ): string {
-        $filename = Str::slug($productName) . '_' . Str::random(8) . '.jpg';
+        // Use standard naming: product_01.webp, product_02.webp, etc.
+        // If no index provided, count existing products
+        if ($index === null) {
+            $existingCount = \App\Models\Product::where('tenant_id', $tenantId)->count();
+            $index = $existingCount + 1;
+        }
+
+        $filename = 'product_' . str_pad((string)$index, 2, '0', STR_PAD_LEFT) . '.webp';
         $path = "tenants/{$tenantId}";
 
         // Ensure directory exists
@@ -32,7 +40,7 @@ class ProductImageGeneratorService
         // Create placeholder image using placeholder service
         $imageUrl = $this->generatePlaceholderUrl($productName, $color);
 
-        // Download and save image
+        // Download and save image (convert to WebP)
         $imageContent = @file_get_contents($imageUrl);
 
         if ($imageContent === false) {
@@ -40,7 +48,16 @@ class ProductImageGeneratorService
             return $this->createFallbackImage($tenantId, $filename, $color);
         }
 
-        Storage::disk('public')->put("{$path}/{$filename}", $imageContent);
+        // Convert to WebP using Intervention Image
+        try {
+            $imageManager = new \Intervention\Image\ImageManager(new \Intervention\Image\Drivers\Gd\Driver());
+            $image = $imageManager->read($imageContent);
+            $webpContent = $image->toWebp(80)->toString();
+            Storage::disk('public')->put("{$path}/{$filename}", $webpContent);
+        } catch (\Exception $e) {
+            // Fallback to original format if conversion fails
+            Storage::disk('public')->put("{$path}/{$filename}", $imageContent);
+        }
 
         return $filename;
     }
@@ -94,13 +111,22 @@ class ProductImageGeneratorService
         $text = "Product Image";
         imagestring($image, 5, 200, 190, $text, $textColor);
 
-        // Save image
+        // Convert to WebP
         ob_start();
         imagejpeg($image, null, 85);
-        $imageContent = ob_get_clean();
+        $jpgContent = ob_get_clean();
         imagedestroy($image);
 
-        Storage::disk('public')->put("{$path}/{$filename}", $imageContent);
+        // Convert JPEG to WebP
+        try {
+            $imageManager = new \Intervention\Image\ImageManager(new \Intervention\Image\Drivers\Gd\Driver());
+            $webpImage = $imageManager->read($jpgContent);
+            $webpContent = $webpImage->toWebp(80)->toString();
+            Storage::disk('public')->put("{$path}/{$filename}", $webpContent);
+        } catch (\Exception $e) {
+            // Fallback to JPEG if conversion fails
+            Storage::disk('public')->put("{$path}/{$filename}", $jpgContent);
+        }
 
         return $filename;
     }
