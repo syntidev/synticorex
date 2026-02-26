@@ -438,10 +438,10 @@
 {{-- Región aria-live para anunciar toasts a lectores de pantalla --}}
 <div id="toast-announcer" aria-live="polite" aria-atomic="true" class="sr-only"></div>
 
-<div class="flex min-h-screen flex-col">
+<div class="flex min-h-screen flex-col relative">
 
     <!-- ══ HEADER NAVBAR ══════════════════════════════════════════════════ -->
-    <div class="navbar bg-base-100 border-base-content/10 lg:ps-64 sticky top-0 z-50 border-b min-h-14 px-3 gap-2"
+    <div class="navbar bg-base-100 border-base-content/10 sm:overlay-layout-open:ps-64 sticky top-0 z-50 border-b min-h-14 px-3 gap-2 transition-all duration-300"
          style="box-shadow: 0 1px 12px rgba(77,143,255,0.06);">
 
         {{-- ── Start: hamburger + nombre negocio con dot de estado ── --}}
@@ -507,12 +507,15 @@
 
     <!-- ══ SIDEBAR ════════════════════════════════════════════════════════ -->
     <aside id="layout-sidebar"
-           class="overlay overlay-open:translate-x-0 drawer drawer-start w-64
-                  inset-y-0 start-0 hidden h-full [--auto-close:lg]
-                  lg:z-50 lg:block lg:translate-x-0 lg:shadow-none"
+           class="overlay [--body-scroll:true] overlay-open:translate-x-0 drawer drawer-start
+                  hidden w-64 border-e border-base-content/20
+                  [--auto-close:sm] [--is-layout-affect:true] [--opened:lg]
+                  sm:absolute sm:z-0 sm:flex sm:shadow-none
+                  lg:[--overlay-backdrop:false]"
            aria-label="Navegación principal"
+           role="dialog"
            tabindex="-1">
-        <div class="drawer-body border-base-content/20 h-full border-e p-0">
+        <div class="drawer-body h-full p-0">
             <div class="flex h-full flex-col">
 
                 {{-- Cerrar (solo mobile) --}}
@@ -624,7 +627,7 @@
     </aside>
 
     <!-- ══ LAYOUT CONTENT con offset sidebar en desktop ══════════════════ -->
-    <div class="lg:ps-64 flex grow flex-col">
+    <div class="sm:overlay-layout-open:ps-64 flex grow flex-col transition-all duration-300">
 
     {{-- ── Plan Expiry Notices ──────────────────────────────────────────── --}}
     @if($isFrozen)
@@ -2520,9 +2523,14 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
 
                 activeContent?.classList.add('active');
 
-                // Auto-close mobile sidebar drawer after navigation
+                // Auto-close mobile sidebar drawer after navigation (via FlyonUI API)
                 if (window.innerWidth < 1024) {
-                    document.getElementById('layout-sidebar')?.classList.remove('overlay-open');
+                    if (window.HSOverlay) {
+                        window.HSOverlay.close('#layout-sidebar');
+                    } else {
+                        const sb = document.getElementById('layout-sidebar');
+                        if (sb) { sb.classList.remove('open', 'opened'); }
+                    }
                 }
 
                 // Re-init SortableJS cada vez que se abre el tab Diseño
