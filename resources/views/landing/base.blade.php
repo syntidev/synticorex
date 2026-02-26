@@ -87,6 +87,10 @@ $effectiveTheme = $customPalette ? 'custom' : $themeSlug;
 
                 @switch($sectionName)
 
+                    @case('about')
+                        @include('landing.partials.about', ['sConfig' => $sConfig])
+                        @break
+
                     @case('contact')
                         @include('landing.partials.contact', ['sConfig' => $sConfig])
                         @break
@@ -117,6 +121,10 @@ $effectiveTheme = $customPalette ? 'custom' : $themeSlug;
                         @endif
                         @break
 
+                    @case('testimonials')
+                        @include('landing.partials.testimonials', ['sConfig' => $sConfig])
+                        @break
+
                     @case('faq')
                         @include('landing.partials.faq', ['sConfig' => $sConfig])
                         @break
@@ -140,9 +148,6 @@ $effectiveTheme = $customPalette ? 'custom' : $themeSlug;
             @endif
         @endforeach
 
-        @if(view()->exists('landing.partials.testimonials'))
-            @include('landing.partials.testimonials')
-        @endif
     </main>
 
     </div>{{-- /pt wrapper --}}

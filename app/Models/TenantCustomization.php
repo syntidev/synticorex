@@ -78,11 +78,13 @@ class TenantCustomization extends Model
             $order = [
                 ['name' => 'products',        'visible' => true, 'order' => 0],
                 ['name' => 'services',        'visible' => true, 'order' => 1],
-                ['name' => 'contact',         'visible' => true, 'order' => 2],
-                ['name' => 'payment_methods', 'visible' => true, 'order' => 3],
-                ['name' => 'faq',             'visible' => true, 'order' => 4],
-                ['name' => 'branches',        'visible' => true, 'order' => 5],
-                ['name' => 'cta',             'visible' => true, 'order' => 6],
+                ['name' => 'about',           'visible' => true, 'order' => 2],
+                ['name' => 'contact',         'visible' => true, 'order' => 3],
+                ['name' => 'payment_methods', 'visible' => true, 'order' => 4],
+                ['name' => 'testimonials',    'visible' => true, 'order' => 5],
+                ['name' => 'faq',             'visible' => true, 'order' => 6],
+                ['name' => 'branches',        'visible' => true, 'order' => 7],
+                ['name' => 'cta',             'visible' => true, 'order' => 8],
             ];
         }
         
@@ -114,12 +116,17 @@ class TenantCustomization extends Model
     public function getSectionConfig(string $section): array
     {
         $defaults = [
-            'hero' => ['variant' => 'fullscreen', 'visible' => true],
-            'products' => ['variant' => 'grid3', 'visible' => true, 'border' => 'rounded', 'effect' => 'none', 'spacing' => 'normal'],
-            'services' => ['variant' => 'cards', 'visible' => true, 'border' => 'rounded', 'effect' => 'glow', 'spacing' => 'airy'],
-            'faq' => ['variant' => 'accordion', 'visible' => true, 'border' => 'pill', 'effect' => 'none', 'spacing' => 'normal'],
-            'cta' => ['variant' => 'centered', 'visible' => true, 'border' => 'rounded', 'effect' => 'gradient', 'spacing' => 'airy'],
-            'footer' => ['variant' => 'simple', 'visible' => true],
+            'hero'            => ['variant' => 'fullscreen',  'visible' => true],
+            'products'        => ['variant' => 'grid3',       'visible' => true, 'border' => 'rounded', 'effect' => 'none',     'spacing' => 'normal'],
+            'services'        => ['variant' => 'cards',       'visible' => true, 'border' => 'rounded', 'effect' => 'glow',     'spacing' => 'airy'],
+            'about'           => ['variant' => 'split',       'visible' => true, 'border' => 'rounded', 'effect' => 'none',     'spacing' => 'normal'],
+            'contact'         => ['variant' => 'map',         'visible' => true, 'border' => 'rounded', 'effect' => 'none',     'spacing' => 'normal'],
+            'payment_methods' => ['variant' => 'grid',        'visible' => true, 'border' => 'rounded', 'effect' => 'none',     'spacing' => 'normal'],
+            'testimonials'    => ['variant' => 'carousel',    'visible' => true, 'border' => 'rounded', 'effect' => 'none',     'spacing' => 'normal'],
+            'faq'             => ['variant' => 'accordion',   'visible' => true, 'border' => 'pill',    'effect' => 'none',     'spacing' => 'normal'],
+            'branches'        => ['variant' => 'cards',       'visible' => true, 'border' => 'rounded', 'effect' => 'none',     'spacing' => 'normal'],
+            'cta'             => ['variant' => 'centered',    'visible' => true, 'border' => 'rounded', 'effect' => 'gradient', 'spacing' => 'airy'],
+            'footer'          => ['variant' => 'simple',      'visible' => true],
         ];
 
         $defaultConfig = $defaults[$section] ?? ['visible' => true];
@@ -155,15 +162,17 @@ class TenantCustomization extends Model
     public function canAccessSection(string $section, int $planId): bool
     {
         $planRequirements = [
-            'products' => 1,
-            'services' => 1,
-            'contact' => 1,
+            'hero'            => 1,
+            'products'        => 1,
+            'services'        => 1,
+            'contact'         => 1,
             'payment_methods' => 1,
-            'faq' => 3,
-            'branches' => 3,
-            'cta' => 1,
-            'hero' => 1,
-            'footer' => 1,
+            'cta'             => 1,
+            'footer'          => 1,
+            'about'           => 2,
+            'testimonials'    => 2,
+            'faq'             => 3,
+            'branches'        => 3,
         ];
 
         $requiredPlan = $planRequirements[$section] ?? 1;
