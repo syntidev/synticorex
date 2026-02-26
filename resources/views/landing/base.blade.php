@@ -156,38 +156,57 @@ $effectiveTheme = $customPalette ? 'custom' : $themeSlug;
     @include('landing.partials.footer', ['sConfig' => $customization->getSectionConfig('footer')])
 
     <script>
-        const CURRENCY_MODE = @json($tenant->currency_mode);
-        const CURRENCY_SYMBOL = @json($tenant->currency_symbol);
-        const EXCHANGE_RATE = @json($tenant->exchange_rate);
-        let currentCurrency = 'USD';
+        const CURRENCY_MODE   = @json($savedDisplayMode ?? $displayMode ?? 'reference_only');
+        const CURRENCY_SYMBOL = @json($currencySettings['symbols']['reference'] ?? 'REF');
+        const EXCHANGE_RATE   = @json($dollarRate ?? 36.50);
+        let currentCurrency   = CURRENCY_SYMBOL; // 'REF' o '$'
 
         function formatPrice(usdPrice) {
+            const val = parseFloat(usdPrice);
             if (currentCurrency === 'Bs.') {
-                return 'Bs. ' + (usdPrice * EXCHANGE_RATE).toLocaleString('es-VE', {minimumFractionDigits: 2});
+                return `<span class="text-xs font-medium opacity-50 mr-1">Bs.</span>${(val * EXCHANGE_RATE).toLocaleString('es-VE', {minimumFractionDigits: 2})}`;
             }
-            return (currentCurrency === 'REF' ? 'REF ' : CURRENCY_SYMBOL + ' ') + parseFloat(usdPrice).toLocaleString('en-US', {minimumFractionDigits: 2});
+            return `<span class="text-xs font-medium opacity-50 mr-1">${CURRENCY_SYMBOL}</span>${val.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
+        }
+
+        function setCurrency(mode) {
+            currentCurrency = (mode === 'bs') ? 'Bs.' : CURRENCY_SYMBOL;
+            renderAllPrices();
+            updateToggleButton();
         }
 
         function toggleCurrency() {
-            currentCurrency = (currentCurrency === CURRENCY_SYMBOL || currentCurrency === 'REF') ? 'Bs.' : CURRENCY_SYMBOL;
+            currentCurrency = (currentCurrency === 'Bs.') ? CURRENCY_SYMBOL : 'Bs.';
             renderAllPrices();
             updateToggleButton();
         }
 
         function renderAllPrices() {
             document.querySelectorAll('[data-price-usd]').forEach(el => {
-                el.textContent = formatPrice(el.getAttribute('data-price-usd'));
+                el.innerHTML = formatPrice(el.getAttribute('data-price-usd'));
             });
         }
 
         function updateToggleButton() {
             const btn = document.getElementById('currency-toggle-btn');
-            if (btn) {
-                if (CURRENCY_MODE !== 'both_toggle') {
-                    btn.style.display = 'none';
-                } else {
-                    btn.style.display = '';
-                    btn.textContent = (currentCurrency === CURRENCY_SYMBOL || currentCurrency === 'REF') ? 'Ver en Bs.' : `Ver en ${CURRENCY_SYMBOL}`;
+            if (!btn) return;
+            if (CURRENCY_MODE !== 'both_toggle') {
+                btn.style.display = 'none';
+            } else {
+                btn.style.display = '';
+                // Actualiza estado visual activo
+                const btnRef = btn.querySelector('[data-currency="ref"]');
+                const btnBs  = btn.querySelector('[data-currency="bs"]');
+                if (btnRef && btnBs) {
+                    const active  = 'bg-base-100 shadow-sm text-primary';
+                    const inactive = 'text-base-content/40';
+                    if (currentCurrency === 'Bs.') {
+                        btnBs.className  = `px-3 py-1 text-[10px] font-black rounded-lg transition-all ${active}`;
+                        btnRef.className = `px-3 py-1 text-[10px] font-black rounded-lg transition-all ${inactive}`;
+                    } else {
+                        btnRef.className = `px-3 py-1 text-[10px] font-black rounded-lg transition-all ${active}`;
+                        btnBs.className  = `px-3 py-1 text-[10px] font-black rounded-lg transition-all ${inactive}`;
+                    }
                 }
             }
         }

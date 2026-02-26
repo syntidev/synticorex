@@ -107,11 +107,9 @@ class TenantRendererController extends Controller
                 'og_url' => url('/' . $tenant->subdomain),
             ];
 
-            // Extract currency display settings
-            $displayMode = data_get($tenant->settings, 'engine_settings.currency.display.mode', 'reference_only');
-
-            // Leer display_mode guardado por updateCurrencyConfig
+            // Extract currency display settings — lee siempre desde saved_display_mode
             $savedDisplayMode = data_get($tenant->settings, 'engine_settings.currency.display.saved_display_mode', 'reference_only');
+            $displayMode      = $savedDisplayMode;
 
             $showReference = in_array($savedDisplayMode, ['reference_only', 'both_toggle']);
             $showBolivares = in_array($savedDisplayMode, ['bolivares_only', 'both_toggle']);
@@ -119,12 +117,12 @@ class TenantRendererController extends Controller
 
             $currencySettings = [
                 'show_conversion_button' => data_get($tenant->settings, 'engine_settings.currency.display.show_conversion_button', true),
-                'mode' => data_get($tenant->settings, 'engine_settings.currency.display.mode', 'toggle'),
+                'mode' => $savedDisplayMode,
                 'default_currency' => data_get($tenant->settings, 'engine_settings.currency.display.default_currency', 'REF'),
                 'symbols' => data_get($tenant->settings, 'engine_settings.currency.display.symbols', ['reference' => 'REF', 'bolivares' => 'Bs.']),
             ];
 
-            return view('landing.base', compact('tenant', 'plan', 'products', 'services', 'dollarRate', 'themeSlug', 'meta', 'customization', 'currencySettings', 'displayMode', 'showReference', 'showBolivares', 'hidePrice'));
+            return view('landing.base', compact('tenant', 'plan', 'products', 'services', 'dollarRate', 'themeSlug', 'meta', 'customization', 'currencySettings', 'displayMode', 'savedDisplayMode', 'showReference', 'showBolivares', 'hidePrice'));
         } catch (Throwable $e) {
             Log::error('TenantRendererController: Error rendering landing page', [
                 'subdomain' => $subdomain,
@@ -196,7 +194,8 @@ class TenantRendererController extends Controller
                 'meta' => $this->buildMetaTags($tenant),
                 'customization' => $customization,
                 'currencySettings' => $currencySettings,
-                'displayMode' => data_get($tenant->settings, 'engine_settings.currency.display.mode', 'reference_only'),
+                'savedDisplayMode' => data_get($tenant->settings, 'engine_settings.currency.display.saved_display_mode', 'reference_only'),
+                'displayMode' => data_get($tenant->settings, 'engine_settings.currency.display.saved_display_mode', 'reference_only'),
                 'showReference' => in_array(data_get($tenant->settings, 'engine_settings.currency.display.saved_display_mode', 'reference_only'), ['reference_only', 'both_toggle']),
                 'showBolivares' => in_array(data_get($tenant->settings, 'engine_settings.currency.display.saved_display_mode', 'reference_only'), ['bolivares_only', 'both_toggle']),
                 'hidePrice' => data_get($tenant->settings, 'engine_settings.currency.display.saved_display_mode', 'reference_only') === 'hidden',
@@ -259,7 +258,8 @@ class TenantRendererController extends Controller
                 'meta' => $this->buildMetaTags($tenant),
                 'customization' => $tenant->customization,
                 'currencySettings' => $currencySettings,
-                'displayMode' => data_get($tenant->settings, 'engine_settings.currency.display.mode', 'reference_only'),
+                'savedDisplayMode' => data_get($tenant->settings, 'engine_settings.currency.display.saved_display_mode', 'reference_only'),
+                'displayMode' => data_get($tenant->settings, 'engine_settings.currency.display.saved_display_mode', 'reference_only'),
                 'showReference' => in_array(data_get($tenant->settings, 'engine_settings.currency.display.saved_display_mode', 'reference_only'), ['reference_only', 'both_toggle']),
                 'showBolivares' => in_array(data_get($tenant->settings, 'engine_settings.currency.display.saved_display_mode', 'reference_only'), ['bolivares_only', 'both_toggle']),
                 'hidePrice' => data_get($tenant->settings, 'engine_settings.currency.display.saved_display_mode', 'reference_only') === 'hidden',

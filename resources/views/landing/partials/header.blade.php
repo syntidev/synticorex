@@ -29,19 +29,22 @@
 
         {{-- Acciones y Moneda --}}
         <div class="flex items-center gap-4">
-            {{-- Switch de Moneda (Bento Style) --}}
-            <div class="hidden sm:flex items-center bg-base-200 p-1 rounded-xl border border-base-300">
-                <button 
-                    onclick="toggleGlobalCurrency('usd')" 
-                    id="btn-usd"
+            {{-- Switch de Moneda — solo visible cuando el tenant configura "Ambos con toggle" --}}
+            @php $currencyMode = $savedDisplayMode ?? $displayMode ?? 'reference_only'; @endphp
+            @if($currencyMode === 'both_toggle')
+            <div id="currency-toggle-btn" class="hidden sm:flex items-center bg-base-200 p-1 rounded-xl border border-base-300">
+                <button
+                    onclick="setCurrency('ref')"
+                    data-currency="ref"
                     class="px-3 py-1 text-[10px] font-black rounded-lg transition-all bg-base-100 shadow-sm text-primary"
-                >REF</button>
-                <button 
-                    onclick="toggleGlobalCurrency('bs')" 
-                    id="btn-bs"
+                >{{ $currencySettings['symbols']['reference'] ?? 'REF' }}</button>
+                <button
+                    onclick="setCurrency('bs')"
+                    data-currency="bs"
                     class="px-3 py-1 text-[10px] font-black rounded-lg transition-all text-base-content/40"
-                >BS</button>
+                >Bs.</button>
             </div>
+            @endif
 
             <span class="inline-flex items-center gap-1.5 rounded-full {{ $tenant->is_open ? 'bg-success/10 text-success' : 'bg-error/10 text-error' }} px-3 py-1 text-xs font-bold">
                 <span class="h-1.5 w-1.5 rounded-full {{ $tenant->is_open ? 'bg-success' : 'bg-error' }} animate-pulse"></span>
@@ -55,32 +58,3 @@
     </div>
 </header>
 
-<script>
-function toggleGlobalCurrency(mode) {
-    const isUsd = mode === 'usd';
-    const elements = document.querySelectorAll('[data-price-usd]');
-    
-    elements.forEach(el => {
-        const usd = parseFloat(el.getAttribute('data-price-usd'));
-        const rate = {{ $dollarRate ?? 0 }}; // Inyectado desde el backend de SYNTIWeb
-        
-        if (isUsd) {
-            el.innerHTML = `<span class="text-xs font-medium opacity-50 mr-1">REF</span>${usd.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
-        } else {
-            el.innerHTML = `<span class="text-xs font-medium opacity-50 mr-1">Bs.</span>${(usd * rate).toLocaleString('es-VE', {minimumFractionDigits: 2})}`;
-        }
-    });
-
-    // Actualizar visual del switch
-    const btnUsd = document.getElementById('btn-usd');
-    const btnBs = document.getElementById('btn-bs');
-
-    if (isUsd) {
-        btnUsd.className = "px-3 py-1 text-[10px] font-black rounded-lg transition-all bg-base-100 shadow-sm text-primary";
-        btnBs.className = "px-3 py-1 text-[10px] font-black rounded-lg transition-all text-base-content/40";
-    } else {
-        btnBs.className = "px-3 py-1 text-[10px] font-black rounded-lg transition-all bg-base-100 shadow-sm text-primary";
-        btnUsd.className = "px-3 py-1 text-[10px] font-black rounded-lg transition-all text-base-content/40";
-    }
-}
-</script>
