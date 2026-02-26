@@ -141,9 +141,6 @@ $effectiveTheme = $customPalette ? 'custom' : $themeSlug;
                         @include('landing.partials.cta', ['sConfig' => $sConfig])
                         @break
 
-                    @case('footer')
-                        @break
-
                 @endswitch
             @endif
         @endforeach

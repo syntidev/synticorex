@@ -220,22 +220,21 @@ class Tenant extends Model
     }
 
     /**
-     * Get available sections for this tenant's plan.
-     * Uses canAccessSection() to filter by plan requirements.
+     * Get available REORDERABLE sections for this tenant's plan (9 secciones dinámicas).
+     * Nota: hero y footer NO están incluidas porque se renderizan hardcodeadas
+     * fuera del loop dinámico (hero antes de main, footer después de main).
      *
      * @return array<string, array>
      */
     public function getAvailableSections(): array
     {
-        // All possible sections with metadata
+        // 9 secciones dinámicas reordenables (hero y footer son fijas)
         $allSections = [
-            'hero'            => ['label' => 'Hero',             'icon' => 'tabler:layout-hero',        'plan' => 1],
             'products'        => ['label' => 'Productos',        'icon' => 'tabler:shopping-cart',      'plan' => 1],
             'services'        => ['label' => 'Servicios',        'icon' => 'tabler:tool',               'plan' => 1],
             'contact'         => ['label' => 'Contacto',         'icon' => 'tabler:map-pin',            'plan' => 1],
             'payment_methods' => ['label' => 'Medios de Pago',   'icon' => 'tabler:credit-card',        'plan' => 1],
             'cta'             => ['label' => 'Llamado a Acción', 'icon' => 'tabler:send',               'plan' => 1],
-            'footer'          => ['label' => 'Pie de Página',    'icon' => 'tabler:layout-footer',      'plan' => 1],
             'about'           => ['label' => 'Acerca de',        'icon' => 'tabler:info-circle',        'plan' => 2],
             'testimonials'    => ['label' => 'Testimonios',      'icon' => 'tabler:message-star',       'plan' => 2],
             'faq'             => ['label' => 'FAQ',              'icon' => 'tabler:help-circle',        'plan' => 3],
