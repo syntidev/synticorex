@@ -78,16 +78,21 @@
             </div>
         </div>
 
-        <!-- QR Code -->
+        <!-- QR Code Tracking -->
         <div class="synti-section">
-            <h4 class="synti-section-title">📱 Código QR</h4>
+            <h4 class="synti-section-title">📱 QR de tu Vitrina</h4>
             <div class="synti-qr-container">
-                @php
-                    $tenantUrl = url('/' . $tenant->subdomain);
-                    $qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=' . urlencode($tenantUrl);
-                @endphp
-                <img src="{{ $qrUrl }}" alt="QR Code" class="synti-qr-image" />
-                <p class="synti-qr-url">{{ $tenant->subdomain }}.synticorex.test</p>
+                <div id="qr-floating-display" class="synti-qr-wrapper">
+                    {!! $trackingQRSmall !!}
+                </div>
+                <p class="synti-qr-url">{{ $trackingShortlink }}</p>
+                <p class="synti-qr-description">Escaneos registrados en Analytics</p>
+                <button onclick="downloadQRFloating()" class="synti-btn-download">
+                    <svg class="synti-icon-inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                    </svg>
+                    Descargar
+                </button>
             </div>
         </div>
 
@@ -357,6 +362,20 @@
     border-radius: 8px;
 }
 
+.synti-qr-wrapper {
+    background: white;
+    padding: 8px;
+    border-radius: 8px;
+    display: inline-block;
+    margin: 0 auto 12px;
+}
+
+.synti-qr-wrapper svg {
+    display: block;
+    width: 150px;
+    height: 150px;
+}
+
 .synti-qr-image {
     margin: 0 auto 12px;
     display: block;
@@ -366,6 +385,38 @@
     font-size: 11px;
     color: rgba(255, 255, 255, 0.6);
     word-break: break-all;
+    margin-bottom: 4px;
+}
+
+.synti-qr-description {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.4);
+    margin-bottom: 12px;
+}
+
+.synti-btn-download {
+    background: #2B6FFF;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s;
+    margin-top: 8px;
+}
+
+.synti-btn-download:hover {
+    background: #1e5beb;
+}
+
+.synti-icon-inline {
+    width: 16px;
+    height: 16px;
 }
 
 /* Buttons */
@@ -604,5 +655,40 @@ async function toggleBusinessStatus() {
         console.error('Error toggling status:', error);
         toggle.checked = !isOpen;
     }
+}
+
+// Download QR from Floating Panel
+function downloadQRFloating() {
+    const svgElement = document.querySelector('#qr-floating-display svg');
+    if (!svgElement) {
+        alert('Error: No se encontró el código QR');
+        return;
+    }
+
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    const svgData = new XMLSerializer().serializeToString(svgElement);
+    const img = new Image();
+    
+    img.onload = function() {
+        canvas.width = 150;
+        canvas.height = 150;
+        ctx.fillStyle = 'white';
+        ctx.fillRect(0, 0, 150, 150);
+        ctx.drawImage(img, 0, 0, 150, 150);
+        
+        canvas.toBlob(function(blob) {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = '{{ $tenant->subdomain }}_qr.png';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }, 'image/png');
+    };
+    
+    img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
 }
 </script>

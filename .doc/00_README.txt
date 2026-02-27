@@ -1,7 +1,7 @@
 # 📖 README - SYNTIWEB MVP
 
 **Versión:** 2.0  
-**Stack:** VS Code + Copilot + Claude API + Continue  
+**Stack:** VS Code + Copilot + Claude API + Windsurf  
 **Timeline:** 4 semanas (160 horas)  
 **Inversión:** $60 ($10 Copilot + $50 Claude API)
 
@@ -13,7 +13,7 @@
 1. **Lee primero:** `06_GUIA_HERRAMIENTAS_E_INVERSION_V2.md`
    - Entiende tu stack completo
    - Conoce cuándo usar cada herramienta
-   - Configura Continue correctamente
+   - Configura Windsurf correctamente
 
 2. **Abre siempre:** `01_ROADMAP_MVP.md`
    - Checklist de tareas diarias
@@ -123,8 +123,8 @@ Tareas:
 Prompt crítico Continue:
 "Crea sección productos que:
 - Plan OPORTUNIDAD: 6 productos
-- Plan CRECIMIENTO: 18 productos
-- Plan VISIÓN: 40 productos + lazy loading
+- Plan CRECIMIENTO: 12 productos
+- Plan VISIÓN: 18 productos + lazy loading
 - Grid responsive 3 cols desktop, 1 col mobile
 - Precio USD/Bs según preferencia usuario
 - Botón WhatsApp con mensaje pre-filled
@@ -190,7 +190,7 @@ Frontend (Blade):
 - Submit AJAX
 
 Backend (Controller):
-- Validar según plan_id (6/18/40 límite)
+- Validar según plan_id (6/12/18 límite)
 - Store/Update/Delete
 - JSON response
 - Proteger con auth"

@@ -12,419 +12,84 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
+    {{-- Chart.js para Analytics --}}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
     <style>
-        /* ══════════════════════════════════════════════════════════
-           SYNTIWEB DESIGN SYSTEM — Dashboard
-           Primario: #4D8FFF  |  Font display: Plus Jakarta Sans
-        ══════════════════════════════════════════════════════════ */
-        :root {
-            --synti: #4D8FFF;
-            --synti-glow: rgba(77,143,255,0.14);
-            --synti-bdr:  rgba(77,143,255,0.22);
-            --synti-soft: rgba(77,143,255,0.10);
-        }
+        /* ══ SYNTIWEB Dashboard — Minimal CSS ══ */
+        :root { --synti: #4D8FFF; --synti-glow: rgba(77,143,255,0.14); --synti-bdr: rgba(77,143,255,0.22); --synti-soft: rgba(77,143,255,0.10); }
 
-        /* ── Tab visibility ─────────────────────────────────────────── */
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
+        /* Sidebar */
+        #layout-sidebar { position:fixed; top:0; bottom:0; left:0; width:16rem; z-index:80; background:var(--color-base-100); transform:translateX(-100%); transition:transform .3s ease; display:flex !important; }
+        #layout-sidebar.opened, #layout-sidebar.open { transform:translateX(0); }
+        @media(min-width:1024px){ #layout-sidebar { transform:translateX(0); z-index:50; } }
 
-        /* ── Display font override ──────────────────────────────────── */
-        .card-title, .modal-title-display {
-            font-family: 'Plus Jakarta Sans', sans-serif !important;
-            color: var(--synti) !important;
-            letter-spacing: -0.3px;
-        }
-        h2.card-title, h3.card-title { color: var(--synti) !important; }
+        /* Tabs */
+        .tab-content { display:none; } .tab-content.active { display:block; }
 
-        /* ── Sidebar branding & active state ────────────────────────── */
-        .sidebar-logo-text {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 1.2rem;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-            line-height: 1;
-        }
-        .sidebar-logo-synti { color: #4D8FFF; }
-        .sidebar-logo-web   { color: var(--color-base-content); }
+        /* Brand fonts */
+        .card-title, .table-title, .crud-dialog-title { font-family:'Plus Jakarta Sans',sans-serif !important; color:var(--synti) !important; letter-spacing:-0.3px; }
+        .sidebar-logo-text { font-family:'Plus Jakarta Sans',sans-serif; font-size:1.2rem; font-weight:800; letter-spacing:-0.5px; line-height:1; }
+        .sidebar-logo-synti { color:#4D8FFF; } .sidebar-logo-web { color:var(--color-base-content); }
+        #live-clock { font-family:'Plus Jakarta Sans',sans-serif; font-size:.8rem; font-weight:700; color:var(--synti); letter-spacing:.5px; }
 
-        /* Active nav item — gradient derivado del azul SYNTIweb */
-        .menu li button.menu-active,
-        .menu li button[aria-selected="true"] {
-            background: linear-gradient(90deg, rgba(77,143,255,0.18) 0%, rgba(77,143,255,0.04) 100%) !important;
-            color: #4D8FFF !important;
-            border-left: 3px solid #4D8FFF;
-            padding-left: calc(0.75rem - 3px);
-            font-weight: 600;
-        }
-        .menu li button:not(.menu-active):not([aria-selected="true"]):hover {
-            background: rgba(77,143,255,0.07) !important;
-            color: #4D8FFF !important;
-        }
+        /* Sidebar active */
+        .menu li button.menu-active, .menu li button[aria-selected="true"] { background:linear-gradient(90deg,rgba(77,143,255,.18) 0%,rgba(77,143,255,.04) 100%) !important; color:#4D8FFF !important; border-left:3px solid #4D8FFF; padding-left:calc(.75rem - 3px); font-weight:600; }
+        .menu li button:not(.menu-active):not([aria-selected="true"]):hover { background:rgba(77,143,255,.07) !important; color:#4D8FFF !important; }
 
-        /* ── Breathing dot (is_open indicator) ─────────────────────── */
-        @keyframes synti-breathe {
-            0%,100% { opacity:1; box-shadow: 0 0 0 0 rgba(34,197,94,0.5); }
-            50%      { opacity:.7; box-shadow: 0 0 0 4px rgba(34,197,94,0); }
-        }
-        @keyframes synti-breathe-off {
-            0%,100% { opacity:1; }
-            50%      { opacity:.5; }
-        }
-        .dot-online {
-            display: inline-block; width: 8px; height: 8px; border-radius: 50%;
-            background: #22c55e; flex-shrink: 0;
-            animation: synti-breathe 2.5s ease-in-out infinite;
-        }
-        .dot-offline {
-            display: inline-block; width: 8px; height: 8px; border-radius: 50%;
-            background: #ef4444; flex-shrink: 0;
-            animation: synti-breathe-off 2s ease-in-out infinite;
-        }
+        /* Breathing dots */
+        @keyframes synti-breathe { 0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(34,197,94,.5)} 50%{opacity:.7;box-shadow:0 0 0 4px rgba(34,197,94,0)} }
+        @keyframes synti-breathe-off { 0%,100%{opacity:1} 50%{opacity:.5} }
+        .dot-online { display:inline-block; width:8px; height:8px; border-radius:50%; background:#22c55e; flex-shrink:0; animation:synti-breathe 2.5s ease-in-out infinite; }
+        .dot-offline { display:inline-block; width:8px; height:8px; border-radius:50%; background:#ef4444; flex-shrink:0; animation:synti-breathe-off 2s ease-in-out infinite; }
 
-        /* ── Clock display ──────────────────────────────────────────── */
-        #live-clock {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 0.8rem; font-weight: 700;
-            color: var(--synti); letter-spacing: 0.5px;
-        }
+        /* CRUD Modals */
+        .crud-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.55); backdrop-filter:blur(4px); z-index:9999; align-items:center; justify-content:center; padding:1rem; }
+        .crud-overlay.show { display:flex; }
+        .crud-dialog { background:var(--color-base-100); border-radius:var(--radius-box); width:100%; max-width:600px; max-height:90vh; overflow-y:auto; z-index:10000; box-shadow:0 25px 80px rgba(0,0,0,.25); border:1px solid color-mix(in oklch,var(--color-base-content) 10%,transparent); }
+        .crud-dialog-header { padding:1rem 1.25rem; border-bottom:1px solid color-mix(in oklch,var(--color-base-content) 10%,transparent); display:flex; justify-content:space-between; align-items:center; }
+        .crud-dialog-close { background:color-mix(in oklch,var(--color-base-content) 8%,transparent); border:1px solid color-mix(in oklch,var(--color-base-content) 12%,transparent); color:var(--color-base-content); cursor:pointer; width:32px; height:32px; display:flex; align-items:center; justify-content:center; border-radius:var(--radius-field); transition:all .2s; }
+        .crud-dialog-close:hover { background:var(--synti-soft); color:var(--synti); }
+        .crud-dialog-body { padding:1.25rem; }
+        @media(max-width:639px) { .crud-dialog { max-width:100%; max-height:100vh; border-radius:0; height:100%; } }
 
-        /* ── Section cards (FlyonUI variables) ──────────────────────── */
-        .form-section {
-            background: var(--color-base-100);
-            border-radius: var(--radius-box, 0.5rem);
-            border: 1px solid color-mix(in oklch, var(--color-base-content) 10%, transparent);
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-        .form-section-title {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 1.125rem; font-weight: 700;
-            margin-bottom: 1.25rem; color: var(--synti);
-        }
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1rem;
-        }
-        .form-group { margin-bottom: 1rem; }
-        .form-label {
-            display: block; font-size: 0.875rem; font-weight: 500;
-            color: var(--color-base-content); margin-bottom: 0.375rem;
-        }
-        .form-input, .form-textarea, .form-select {
-            width: 100%; padding: 0.625rem 0.75rem;
-            background: var(--color-base-200);
-            border: 1px solid color-mix(in oklch, var(--color-base-content) 20%, transparent);
-            border-radius: var(--radius-field, 0.375rem);
-            color: var(--color-base-content);
-            font-size: 0.875rem; font-family: inherit;
-            transition: border-color 0.2s, box-shadow 0.2s;
-        }
-        .form-input:focus, .form-textarea:focus, .form-select:focus {
-            outline: none;
-            border-color: var(--synti);
-            box-shadow: 0 0 0 3px var(--synti-glow);
-        }
-        .form-textarea { min-height: 100px; resize: vertical; }
-        .form-actions { display: flex; gap: 0.75rem; margin-top: 1.25rem; flex-wrap: wrap; }
+        /* Form focus ring (FlyonUI native inputs) */
+        .input:focus, .textarea:focus, .select:focus, .file-input:focus { box-shadow:0 0 0 3px var(--synti-glow); }
 
-        /* Focus visible (WCAG 2.4.7) */
-        :focus-visible { outline: 2px solid var(--synti) !important; outline-offset: 2px !important; }
-        .form-input:focus-visible, .form-textarea:focus-visible, .form-select:focus-visible { outline: none !important; }
+        /* Image previews */
+        .image-preview { margin-bottom:1rem; text-align:center; }
+        .image-preview img { max-width:200px; max-height:200px; border-radius:var(--radius-box); object-fit:cover; border:2px solid var(--synti-bdr); }
+        .gallery-thumb { position:relative; display:inline-block; }
+        .gallery-thumb img { width:80px; height:80px; border-radius:6px; object-fit:cover; border:2px solid color-mix(in oklch,var(--color-base-content) 15%,transparent); }
+        .gallery-thumb-delete { position:absolute; top:-6px; right:-6px; width:20px; height:20px; border-radius:50%; background:var(--color-error); color:#fff; border:none; font-size:12px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+        .gallery-preview-thumb img { width:80px; height:80px; border-radius:6px; object-fit:cover; border:2px dashed var(--synti-bdr); }
 
-        /* ── Buttons ─────────────────────────────────────────────────── */
-        .btn-primary {
-            background: var(--synti); color: #fff; border: none;
-            padding: 0.625rem 1.25rem; border-radius: var(--radius-field);
-            font-size: 0.875rem; font-weight: 600; cursor: pointer; transition: opacity 0.2s;
-        }
-        .btn-primary:hover { opacity: 0.88; }
-        .btn-secondary {
-            background: transparent; color: var(--synti);
-            border: 1px solid var(--synti);
-            padding: 0.625rem 1.25rem; border-radius: var(--radius-field);
-            font-size: 0.875rem; font-weight: 600; cursor: pointer; transition: all 0.2s;
-        }
-        .btn-secondary:hover { background: var(--synti); color: #fff; }
-        .btn-add {
-            background: var(--synti); color: #fff; border: none;
-            padding: 0.625rem 1.25rem; border-radius: var(--radius-field);
-            font-size: 0.875rem; font-weight: 600; cursor: pointer; transition: opacity 0.2s;
-        }
-        .btn-add:hover:not(:disabled) { opacity: 0.88; }
-        .btn-add:disabled { opacity: 0.45; cursor: not-allowed; }
-        .btn-icon {
-            background: none; border: none;
-            color: color-mix(in oklch, var(--color-base-content) 55%, transparent);
-            cursor: pointer; padding: 0.375rem; border-radius: var(--radius-field);
-            transition: all 0.2s; font-size: 0.875rem;
-            display: inline-flex; align-items: center; justify-content: center;
-        }
-        .btn-icon:hover {
-            background: var(--synti-soft); color: var(--synti);
-        }
-        .btn-danger:hover { color: var(--color-error) !important; }
+        /* Icon picker */
+        #icon-picker-grid { scrollbar-width:thin; scrollbar-color:var(--synti-bdr) transparent; }
+        .icon-pick-item { transition:all .18s; border:1px solid color-mix(in oklch,var(--color-base-content) 10%,transparent) !important; background:var(--color-base-200) !important; color:var(--color-base-content) !important; }
+        .icon-pick-item:hover { background:var(--synti-soft) !important; border-color:var(--synti-bdr) !important; color:var(--synti) !important; transform:translateY(-2px); }
+        .icon-pick-item.selected { background:var(--synti) !important; border-color:var(--synti) !important; color:#fff !important; }
 
-        /* ── Placeholder / Empty state ───────────────────────────────── */
-        .placeholder-content, .empty-state {
-            text-align: center; padding: 3.5rem 1.25rem;
-            color: color-mix(in oklch, var(--color-base-content) 45%, transparent);
-        }
-        .placeholder-content h3, .empty-state h3 {
-            font-size: 1.125rem; margin-bottom: 0.5rem;
-            color: color-mix(in oklch, var(--color-base-content) 65%, transparent);
-        }
-        .empty-state-icon { font-size: 3rem; margin-bottom: 1rem; }
+        /* Segmented / mode bar */
+        .svc-segment { display:inline-flex; align-items:center; background:var(--color-base-200); border-radius:var(--radius-box); padding:3px; gap:2px; }
+        .svc-segment button { display:flex; align-items:center; gap:6px; padding:.45rem 1rem; border-radius:calc(var(--radius-box) - 3px); font-size:.8125rem; font-weight:600; border:none; cursor:pointer; transition:all .2s; color:color-mix(in oklch,var(--color-base-content) 55%,transparent); background:transparent; }
+        .svc-segment button.seg-active { background:var(--color-base-100); color:var(--synti); box-shadow:0 1px 6px rgba(0,0,0,.1); }
 
-        /* ── Table ───────────────────────────────────────────────────── */
-        .table-header {
-            display: flex; justify-content: space-between;
-            align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.75rem;
-        }
-        .table-title {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 1.125rem; font-weight: 700; color: var(--synti);
-        }
-        .table-subtitle {
-            font-size: 0.8125rem; margin-top: 0.25rem;
-            color: color-mix(in oklch, var(--color-base-content) 55%, transparent);
-        }
-        .table-container {
-            background: var(--color-base-100);
-            border-radius: var(--radius-box);
-            border: 1px solid color-mix(in oklch, var(--color-base-content) 10%, transparent);
-            overflow: hidden;
-        }
-        .data-table { width: 100%; border-collapse: collapse; }
-        .data-table thead { background: var(--color-base-200); }
-        .data-table th {
-            padding: 0.75rem 1rem; text-align: left; font-size: 0.8125rem;
-            font-weight: 600; color: color-mix(in oklch, var(--color-base-content) 70%, transparent);
-            border-bottom: 1px solid color-mix(in oklch, var(--color-base-content) 12%, transparent);
-        }
-        .data-table td {
-            padding: 0.75rem 1rem; font-size: 0.875rem; color: var(--color-base-content);
-            border-bottom: 1px solid color-mix(in oklch, var(--color-base-content) 7%, transparent);
-        }
-        .data-table tbody tr:hover { background: var(--synti-soft); }
-        .product-image {
-            width: 48px; height: 48px; border-radius: var(--radius-field);
-            object-fit: cover; background: var(--color-base-200);
-        }
+        /* (Legacy toggle removed — migrated to FlyonUI .toggle component) */
 
-        /* ── Badges ──────────────────────────────────────────────────── */
-        .badge-hot  { background: var(--color-error);   color: var(--color-error-content, #fff); }
-        .badge-new  { background: var(--color-success); color: var(--color-success-content, #fff); }
-        .badge-promo{ background: var(--color-warning); color: var(--color-warning-content, #000); }
-        .status-indicator { display: inline-flex; align-items: center; gap: 0.375rem; font-size: 0.8125rem; }
-        .status-dot { width: 8px; height: 8px; border-radius: 50%; }
-        .status-dot.active  { background: var(--color-success); }
-        .status-dot.inactive{ background: color-mix(in oklch, var(--color-base-content) 35%, transparent); }
+        /* Focus WCAG */
+        :focus-visible { outline:2px solid var(--synti) !important; outline-offset:2px !important; }
 
-        /* ── CRUD Modals ─────────────────────────────────────────────── */
-        .crud-overlay {
-            display: none; position: fixed; inset: 0;
-            background: rgba(0,0,0,0.55);
-            backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
-            z-index: 9999; align-items: center; justify-content: center; padding: 1rem;
-        }
-        .crud-overlay.show { display: flex; }
-        .crud-dialog {
-            background: var(--color-base-100);
-            border-radius: var(--radius-box); width: 100%;
-            max-width: 600px; max-height: 90vh; overflow-y: auto;
-            position: relative; z-index: 10000;
-            box-shadow: 0 25px 80px rgba(0,0,0,0.25), 0 0 0 1px var(--synti-bdr);
-            border: 1px solid color-mix(in oklch, var(--color-base-content) 10%, transparent);
-        }
-        .crud-dialog-header {
-            padding: 1.25rem 1.5rem;
-            border-bottom: 1px solid color-mix(in oklch, var(--color-base-content) 10%, transparent);
-            display: flex; justify-content: space-between; align-items: center;
-            background: linear-gradient(135deg, var(--synti-soft) 0%, transparent 60%);
-        }
-        .crud-dialog-title {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 1.1rem; font-weight: 700; color: var(--synti);
-        }
-        .crud-dialog-close {
-            background: color-mix(in oklch, var(--color-base-content) 8%, transparent);
-            border: 1px solid color-mix(in oklch, var(--color-base-content) 12%, transparent);
-            color: var(--color-base-content);
-            font-size: 1.125rem; cursor: pointer;
-            width: 32px; height: 32px;
-            display: flex; align-items: center; justify-content: center;
-            border-radius: var(--radius-field); transition: all 0.2s;
-        }
-        .crud-dialog-close:hover {
-            background: var(--synti-soft);
-            border-color: var(--synti-bdr);
-            color: var(--synti);
-        }
-        .crud-dialog-body { padding: 1.5rem; }
+        /* Scrollable sections */
+        .section-scroll { max-height:400px; overflow-y:auto; scrollbar-width:thin; }
 
-        /* ── Image preview ───────────────────────────────────────────── */
-        .image-preview { margin-bottom: 1rem; text-align: center; }
-        .image-preview img {
-            max-width: 200px; max-height: 200px;
-            border-radius: var(--radius-box); object-fit: cover;
-            border: 2px solid var(--synti-bdr);
-        }
+        /* QR display — force SVG to fill container exactly */
+        #qr-display svg { width:100% !important; height:100% !important; display:block; }
 
-        /* ── Gallery thumbs (Plan 3) ─────────────────────────────────── */
-        .gallery-thumb { position: relative; display: inline-block; }
-        .gallery-thumb img {
-            width: 100px; height: 100px; border-radius: 6px; object-fit: cover;
-            border: 2px solid color-mix(in oklch, var(--color-base-content) 15%, transparent);
-        }
-        .gallery-thumb-delete {
-            position: absolute; top: -6px; right: -6px;
-            width: 22px; height: 22px; border-radius: 50%;
-            background: var(--color-error); color: #fff; border: none;
-            font-size: 13px; line-height: 22px; text-align: center;
-            cursor: pointer; padding: 0; display: flex; align-items: center; justify-content: center;
-        }
-        .gallery-thumb-delete:hover { opacity: 0.85; }
-        .gallery-preview-thumb img {
-            width: 80px; height: 80px; border-radius: 6px; object-fit: cover;
-            border: 2px dashed var(--synti-bdr);
-        }
-
-        /* ── Icon Picker ─────────────────────────────────────────────── */
-        #icon-picker-grid {
-            scrollbar-width: thin;
-            scrollbar-color: var(--synti-bdr) transparent;
-        }
-        #icon-picker-grid::-webkit-scrollbar { width: 5px; }
-        #icon-picker-grid::-webkit-scrollbar-track { background: transparent; }
-        #icon-picker-grid::-webkit-scrollbar-thumb { background: var(--synti-bdr); border-radius: 3px; }
-        .icon-pick-item {
-            transition: all 0.18s ease;
-            border: 1px solid color-mix(in oklch, var(--color-base-content) 10%, transparent) !important;
-            background: var(--color-base-200) !important;
-            color: var(--color-base-content) !important;
-        }
-        .icon-pick-item:hover {
-            background: var(--synti-soft) !important;
-            border-color: var(--synti-bdr) !important;
-            color: var(--synti) !important;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px var(--synti-glow) !important;
-        }
-        .icon-pick-item.selected {
-            background: var(--synti) !important;
-            border-color: var(--synti) !important;
-            color: #fff !important;
-            box-shadow: 0 4px 14px var(--synti-glow) !important;
-        }
-
-        /* ── Segmented control (Ícono / Imagen) ─────────────────────── */
-        .svc-segment {
-            display: inline-flex; align-items: center;
-            background: var(--color-base-200);
-            border-radius: var(--radius-box); padding: 3px; gap: 2px;
-        }
-        .svc-segment button {
-            display: flex; align-items: center; gap: 6px;
-            padding: 0.45rem 1rem; border-radius: calc(var(--radius-box) - 3px);
-            font-size: 0.8125rem; font-weight: 600; border: none; cursor: pointer;
-            transition: all 0.2s; color: color-mix(in oklch, var(--color-base-content) 55%, transparent);
-            background: transparent;
-        }
-        .svc-segment button.seg-active {
-            background: var(--color-base-100);
-            color: var(--synti);
-            box-shadow: 0 1px 6px rgba(0,0,0,0.10);
-        }
-        .svc-segment button .seg-icon { font-size: 1rem; }
-
-        /* ── Service mode bar (legacy global selector on tab-servicios) ── */
-        .svc-mode-bar {
-            display: flex; gap: 0; border-radius: var(--radius-box); overflow: hidden;
-            border: 1px solid color-mix(in oklch, var(--color-base-content) 12%, transparent);
-            flex-shrink: 0;
-        }
-        .svc-mode-bar button {
-            flex: 1; padding: 0.5rem 1.125rem; font-size: 0.75rem; font-weight: 700;
-            border: none; cursor: pointer; transition: all .2s;
-            background: var(--color-base-200); color: var(--color-base-content);
-        }
-        .svc-mode-bar button.active {
-            background: var(--synti); color: #fff;
-        }
-
-        /* ── Legacy toggle ───────────────────────────────────────────── */
-        .toggle-switch { position: relative; display: inline-block; width: 48px; height: 24px; }
-        .toggle-switch input { opacity: 0; width: 0; height: 0; }
-        .toggle-slider {
-            position: absolute; cursor: pointer; inset: 0;
-            background-color: color-mix(in oklch, var(--color-base-content) 20%, transparent);
-            transition: 0.3s; border-radius: 24px;
-        }
-        .toggle-slider:before {
-            position: absolute; content: "";
-            height: 18px; width: 18px; left: 3px; bottom: 3px;
-            background-color: var(--color-base-100); transition: 0.3s; border-radius: 50%;
-        }
-        .toggle-switch input:checked + .toggle-slider { background-color: var(--color-success); }
-        .toggle-switch input:checked + .toggle-slider:before { transform: translateX(24px); }
-
-        /* ═══════════════════════════════════════════════════════════════
-           RESPONSIVE
-        ═══════════════════════════════════════════════════════════════ */
-        @media (max-width: 374px) {
-            .form-section { padding: 16px; margin-bottom: 16px; }
-            .form-grid { grid-template-columns: 1fr; }
-            .btn-primary, .btn-secondary { min-height: 44px; padding: 10px 12px; }
-        }
-        @media (max-width: 639px) {
-            .form-section { padding: 16px; margin-bottom: 16px; }
-            .form-grid { grid-template-columns: 1fr; gap: 12px; }
-            .form-group { margin-bottom: 12px; }
-            .form-input, .form-textarea, .form-select { padding: 10px 12px; }
-            .form-actions { flex-wrap: wrap; }
-            .data-table thead { display: none; }
-            .data-table tbody tr {
-                display: block; margin-bottom: 0.75rem;
-                background: var(--color-base-100);
-                border-radius: var(--radius-box); padding: 0.75rem;
-                border: 1px solid color-mix(in oklch, var(--color-base-content) 10%, transparent);
-            }
-            .data-table td {
-                display: flex; justify-content: space-between; align-items: center;
-                padding: 0.5rem 0;
-                border-bottom: 1px solid color-mix(in oklch, var(--color-base-content) 7%, transparent);
-                font-size: 0.8125rem;
-            }
-            .data-table td:last-child { border-bottom: none; }
-            .data-table td::before {
-                content: attr(data-label); font-weight: 600;
-                color: color-mix(in oklch, var(--color-base-content) 55%, transparent);
-                flex-basis: 90px; flex-shrink: 0; font-size: 12px;
-            }
-            .product-image { width: 48px; height: 48px; object-fit: cover; border-radius: 4px; aspect-ratio: 1; }
-            .btn-primary, .btn-secondary { min-height: 44px; min-width: 44px; padding: 10px 12px; font-size: 13px; }
-            .action-button { min-height: 44px; min-width: 44px; display: inline-flex; align-items: center; justify-content: center; }
-            .theme-grid { grid-template-columns: repeat(2, 1fr) !important; }
-            #header-extras { display: none !important; }
-        }
-        @media (max-width: 767px) {
-            .form-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
-            .form-section { padding: 18px; margin-bottom: 18px; }
-            .theme-grid { grid-template-columns: repeat(3, 1fr) !important; }
-        }
-        @media (max-width: 1023px) {
-            .form-grid { grid-template-columns: repeat(2, 1fr); }
-            .theme-grid { grid-template-columns: repeat(4, 1fr) !important; }
-        }
-        @media (min-width: 1024px) {
-            .form-grid { grid-template-columns: repeat(3, 1fr); }
-            .data-table tbody tr { display: table-row !important; }
-            .data-table td::before { display: none !important; }
-            .data-table thead { display: table-header-group !important; }
-        }
+        /* Responsive */
+        @media(max-width:639px) { #header-extras { display:none !important; } }
     </style>
 </head>
 <body class="bg-base-200">
@@ -438,156 +103,139 @@
 {{-- Región aria-live para anunciar toasts a lectores de pantalla --}}
 <div id="toast-announcer" aria-live="polite" aria-atomic="true" class="sr-only"></div>
 
-<div class="flex min-h-screen flex-col">
+<div class="bg-base-200 flex min-h-screen flex-col">
 
-    <!-- ══ HEADER NAVBAR ══════════════════════════════════════════════════ -->
-    <div class="navbar bg-base-100 border-base-content/10 lg:ps-64 sticky top-0 z-50 border-b min-h-14 px-3 gap-2"
-         style="box-shadow: 0 1px 12px rgba(77,143,255,0.06);">
+    <!-- ══ HEADER ════════════════════════════════════════════════════════ -->
+    <div class="bg-base-100 border-base-content/20 lg:ps-64 sticky top-0 z-50 flex border-b">
+        <div class="mx-auto w-full">
+            <nav class="navbar py-2 px-3">
+                <div class="navbar-start items-center gap-2">
+                    {{-- Hamburger: visible solo en móvil --}}
+                    <button type="button"
+                            class="btn btn-soft btn-square btn-sm lg:hidden"
+                            aria-haspopup="dialog"
+                            aria-expanded="false"
+                            aria-controls="layout-sidebar"
+                            data-overlay="#layout-sidebar">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
+                    </button>
+                    {{-- Logo mobile --}}
+                    <span class="sidebar-logo-text text-base lg:hidden">
+                        <span class="sidebar-logo-synti">SYNTI</span><span class="sidebar-logo-web">web</span>
+                    </span>
+                    {{-- Negocio + dot de estado (desktop) --}}
+                    <div class="hidden lg:flex items-center gap-2 min-w-0">
+                        <span class="{{ $tenant->is_open ? 'dot-online' : 'dot-offline' }}"></span>
+                        <span class="text-sm font-semibold text-base-content truncate max-w-52">{{ $tenant->business_name }}</span>
+                        <span class="badge badge-soft badge-xs shrink-0
+                            {{ $plan->id === 1 ? 'badge-warning' : ($plan->id === 2 ? 'badge-success' : 'badge-info') }}">
+                            {{ $plan->name }}
+                        </span>
+                    </div>
+                </div>
 
-        {{-- ── Start: hamburger + nombre negocio con dot de estado ── --}}
-        <div class="navbar-start gap-2 min-w-0">
-            <button type="button"
-                    class="btn btn-text btn-square btn-sm lg:hidden shrink-0"
-                    aria-haspopup="dialog" aria-expanded="false"
-                    aria-controls="layout-sidebar"
-                    data-overlay="#layout-sidebar">
-                <span class="icon-[tabler--menu-2] size-5" aria-hidden="true"></span>
-                <span class="sr-only">Abrir menú</span>
-            </button>
-            {{-- Logo mobile (se oculta en lg cuando el sidebar está visible) --}}
-            <span class="sidebar-logo-text text-base lg:hidden shrink-0">
-                <span class="sidebar-logo-synti">SYNTI</span><span class="sidebar-logo-web">web</span>
-            </span>
-            {{-- Negocio + dot de estado (desktop) --}}
-            <div class="hidden lg:flex items-center gap-2 min-w-0">
-                <span class="{{ $tenant->is_open ? 'dot-online' : 'dot-offline' }}" aria-hidden="true"></span>
-                <span class="text-sm font-semibold text-base-content truncate max-w-52">{{ $tenant->business_name }}</span>
-                <span class="badge badge-soft badge-xs shrink-0
-                    {{ $plan->id === 1 ? 'badge-warning' : ($plan->id === 2 ? 'badge-success' : 'badge-info') }}">
-                    {{ $plan->name }}
-                </span>
-            </div>
-        </div>
+                {{-- Center: reloj + tasa BCV --}}
+                <div id="header-extras" class="navbar-center hidden md:flex items-center gap-3">
+                    <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-box bg-base-200/70 border border-base-content/8">
+                        <span class="icon-[tabler--clock] size-3.5 text-base-content/50"></span>
+                        <span id="live-clock" aria-label="Hora actual">--:--</span>
+                    </div>
+                    <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-box bg-base-200/70 border border-base-content/8">
+                        <span class="icon-[tabler--currency-dollar] size-3.5 text-green-500"></span>
+                        <span class="text-xs font-semibold text-base-content/70">
+                            Bs. <span id="header-dollar-rate">{{ number_format($dollarRate, 2) }}</span>
+                        </span>
+                    </div>
+                </div>
 
-        {{-- ── Center: reloj + tasa BCV (hidden mobile) ── --}}
-        <div id="header-extras" class="navbar-center hidden md:flex items-center gap-3">
-            {{-- Reloj en tiempo real --}}
-            <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-box bg-base-200/70 border border-base-content/8">
-                <span class="icon-[tabler--clock] size-3.5 text-base-content/50" aria-hidden="true"></span>
-                <span id="live-clock" aria-label="Hora actual">--:--</span>
-            </div>
-            {{-- Tasa del dólar BCV --}}
-            <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-box bg-base-200/70 border border-base-content/8">
-                <span class="icon-[tabler--currency-dollar] size-3.5 text-green-500" aria-hidden="true"></span>
-                <span class="text-xs font-semibold text-base-content/70">
-                    Bs. <span id="header-dollar-rate">{{ number_format($dollarRate, 2) }}</span>
-                </span>
-            </div>
-        </div>
-
-        {{-- ── End: link al sitio + cerrar ── --}}
-        <div class="navbar-end gap-1.5 shrink-0">
-            {{-- Ver mi sitio público --}}
-            <a href="/{{ $tenant->subdomain }}" target="_blank" rel="noopener noreferrer"
-               class="btn btn-text btn-sm btn-circle hidden sm:flex"
-               title="Ver mi sitio público">
-                <span class="icon-[tabler--external-link] size-4 text-base-content/60" aria-hidden="true"></span>
-            </a>
-            {{-- Estado del negocio (mobile) --}}
-            <span class="sm:hidden {{ $tenant->is_open ? 'dot-online' : 'dot-offline' }}" aria-hidden="true"></span>
-            {{-- Cerrar / salir del dashboard --}}
-            <a href="/{{ $tenant->subdomain }}"
-               class="btn btn-soft btn-sm gap-1.5"
-               title="Cerrar dashboard">
-                <span class="icon-[tabler--layout-sidebar-right-collapse] size-4" aria-hidden="true"></span>
-                <span class="hidden sm:inline">Cerrar</span>
-            </a>
+                {{-- End: estado + cerrar --}}
+                <div class="navbar-end items-center gap-2">
+                    <span class="{{ $tenant->is_open ? 'dot-online' : 'dot-offline' }} lg:hidden"></span>
+                    <a href="/{{ $tenant->subdomain }}"
+                       class="btn btn-soft btn-sm gap-1.5">
+                        <span class="icon-[tabler--layout-sidebar-right-collapse] size-4"></span>
+                        <span class="hidden sm:inline">Cerrar</span>
+                    </a>
+                </div>
+            </nav>
         </div>
     </div>
 
-    <!-- ══ SIDEBAR ════════════════════════════════════════════════════════ -->
+    <!-- ══ SIDEBAR ═══════════════════════════════════════════════════════ -->
     <aside id="layout-sidebar"
-           class="overlay overlay-open:translate-x-0 drawer drawer-start w-64
-                  inset-y-0 start-0 hidden h-full [--auto-close:lg]
-                  lg:z-50 lg:flex lg:translate-x-0 lg:shadow-none"
-           aria-label="Navegación principal"
-           role="dialog"
+           class="overlay [--auto-close:lg]"
+           aria-label="Sidebar"
            tabindex="-1">
         <div class="drawer-body border-base-content/20 h-full border-e p-0">
-            <div class="flex h-full flex-col">
-
-                {{-- Cerrar (solo mobile) --}}
+            <div class="flex h-full max-h-full flex-col">
+                {{-- Close (mobile) --}}
                 <button type="button"
                         class="btn btn-text btn-circle btn-sm absolute end-3 top-3 lg:hidden"
-                        aria-label="Cerrar menú"
+                        aria-label="Close"
                         data-overlay="#layout-sidebar">
-                    <span class="icon-[tabler--x] size-4.5" aria-hidden="true"></span>
+                    <span class="icon-[tabler--x] size-4.5"></span>
                 </button>
 
                 {{-- Logo --}}
-                <div class="border-base-content/20 flex items-center gap-2.5 border-b px-5 py-4">
-                    {{-- Símbolo geométrico SYNTIweb --}}
-                    <svg viewBox="0 0 900 900" class="size-7 shrink-0" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                        <rect x="0"   y="0"   width="560" height="80"  fill="currentColor" class="text-base-content"/>
-                        <rect x="0"   y="80"  width="80"  height="480" fill="currentColor" class="text-base-content"/>
-                        <rect x="820" y="300" width="80"  height="520" fill="currentColor" class="text-base-content"/>
-                        <rect x="340" y="820" width="560" height="80"  fill="currentColor" class="text-base-content"/>
-                        <rect x="0"   y="700" width="80"  height="120" fill="currentColor" class="text-base-content"/>
-                        <rect x="0"   y="820" width="200" height="80"  fill="currentColor" class="text-base-content"/>
+                <div class="text-base-content border-base-content/20 flex items-center gap-3 border-b px-5 py-5">
+                    <svg viewBox="0 0 900 900" class="size-8 shrink-0" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="0" y="0" width="560" height="80" fill="currentColor"/>
+                        <rect x="0" y="80" width="80" height="480" fill="currentColor"/>
+                        <rect x="820" y="300" width="80" height="520" fill="currentColor"/>
+                        <rect x="340" y="820" width="560" height="80" fill="currentColor"/>
+                        <rect x="0" y="700" width="80" height="120" fill="currentColor"/>
+                        <rect x="0" y="820" width="200" height="80" fill="currentColor"/>
                         <circle cx="780" cy="120" r="120" fill="#4D8FFF"/>
                     </svg>
-                    <span class="sidebar-logo-text">
-                        <span class="sidebar-logo-synti">SYNTI</span><span class="sidebar-logo-web">web</span>
-                    </span>
+                    <div>
+                        <span class="sidebar-logo-text">
+                            <span class="sidebar-logo-synti">SYNTI</span><span class="sidebar-logo-web">web</span>
+                        </span>
+                        <p class="text-base-content/60 text-xs">{{ $tenant->business_name }}</p>
+                    </div>
                 </div>
 
-                {{-- Tenant info --}}
-                <div class="border-base-content/20 border-b px-5 py-3">
-                    <p class="text-base-content text-sm font-semibold truncate">{{ $tenant->business_name }}</p>
-                    <p class="text-base-content/60 text-xs">Plan {{ $plan->name }}</p>
-                </div>
-
-                {{-- Menú de navegación --}}
-                <nav class="h-full overflow-y-auto" aria-label="Secciones del dashboard">
-                    <ul class="menu menu-sm gap-0.5 p-3" role="tablist">
+                {{-- Navigation --}}
+                <div class="h-full overflow-y-auto">
+                    <ul class="menu menu-sm gap-1 p-3" role="tablist">
                         <li role="presentation">
-                            <button class="w-full text-start menu-active" role="tab"
+                            <button class="menu-active w-full text-start" role="tab"
                                     aria-selected="true" aria-controls="tab-info"
                                     id="tab-info-btn" data-tab="info" tabindex="0">
-                                <span class="icon-[tabler--info-circle] size-4.5" aria-hidden="true"></span>
-                                Información
+                                <span class="icon-[tabler--info-circle] size-4.5"></span>
+                                <span class="grow">Información</span>
                             </button>
                         </li>
                         <li role="presentation">
                             <button class="w-full text-start" role="tab"
                                     aria-selected="false" aria-controls="tab-productos"
                                     id="tab-productos-btn" data-tab="productos" tabindex="-1">
-                                <span class="icon-[tabler--package] size-4.5" aria-hidden="true"></span>
-                                Productos
+                                <span class="icon-[tabler--package] size-4.5"></span>
+                                <span class="grow">Productos</span>
                             </button>
                         </li>
                         <li role="presentation">
                             <button class="w-full text-start" role="tab"
                                     aria-selected="false" aria-controls="tab-servicios"
                                     id="tab-servicios-btn" data-tab="servicios" tabindex="-1">
-                                <span class="icon-[tabler--tool] size-4.5" aria-hidden="true"></span>
-                                Servicios
+                                <span class="icon-[tabler--tool] size-4.5"></span>
+                                <span class="grow">Servicios</span>
                             </button>
                         </li>
                         <li role="presentation">
                             <button class="w-full text-start" role="tab"
                                     aria-selected="false" aria-controls="tab-diseno"
                                     id="tab-diseno-btn" data-tab="diseno" tabindex="-1">
-                                <span class="icon-[tabler--palette] size-4.5" aria-hidden="true"></span>
-                                Diseño
+                                <span class="icon-[tabler--palette] size-4.5"></span>
+                                <span class="grow">Diseño</span>
                             </button>
                         </li>
                         <li role="presentation">
                             <button class="w-full text-start" role="tab"
                                     aria-selected="false" aria-controls="tab-analytics"
                                     id="tab-analytics-btn" data-tab="analytics" tabindex="-1">
-                                <span class="icon-[tabler--chart-bar] size-4.5" aria-hidden="true"></span>
-                                Analytics
+                                <span class="icon-[tabler--chart-bar] size-4.5"></span>
+                                <span class="grow">Analytics</span>
                             </button>
                         </li>
                         @if($plan->id === 3)
@@ -595,8 +243,8 @@
                             <button class="w-full text-start" role="tab"
                                     aria-selected="false" aria-controls="tab-sucursales"
                                     id="tab-sucursales-btn" data-tab="sucursales" tabindex="-1">
-                                <span class="icon-[tabler--map-pin] size-4.5" aria-hidden="true"></span>
-                                Sucursales
+                                <span class="icon-[tabler--map-pin] size-4.5"></span>
+                                <span class="grow">Sucursales</span>
                             </button>
                         </li>
                         @endif
@@ -604,27 +252,26 @@
                             <button class="w-full text-start" role="tab"
                                     aria-selected="false" aria-controls="tab-config"
                                     id="tab-config-btn" data-tab="config" tabindex="-1">
-                                <span class="icon-[tabler--settings] size-4.5" aria-hidden="true"></span>
-                                Configuración
+                                <span class="icon-[tabler--settings] size-4.5"></span>
+                                <span class="grow">Configuración</span>
                             </button>
                         </li>
                     </ul>
-                </nav>
+                </div>
 
-                {{-- Footer sidebar --}}
+                {{-- Footer --}}
                 <div class="border-base-content/20 border-t p-3 mt-auto">
                     <a href="/{{ $tenant->subdomain }}" target="_blank" rel="noopener noreferrer"
-                       class="btn btn-soft btn-block btn-sm">
-                        <span class="icon-[tabler--external-link] size-4" aria-hidden="true"></span>
+                       class="btn btn-soft btn-block btn-sm gap-2">
+                        <span class="icon-[tabler--external-link] size-4"></span>
                         Ver mi sitio
                     </a>
                 </div>
-
             </div>
         </div>
     </aside>
 
-    <!-- ══ LAYOUT CONTENT con offset sidebar en desktop ══════════════════ -->
+    <!-- ══ LAYOUT CONTENT ════════════════════════════════════════════════ -->
     <div class="lg:ps-64 flex grow flex-col">
 
     {{-- ── Plan Expiry Notices ──────────────────────────────────────────── --}}
@@ -664,78 +311,160 @@
     {{-- ── End Plan Expiry Notices ─────────────────────────────────────── --}}
 
     <!-- Content -->
-    <main id="main-content" class="mx-auto w-full max-w-7xl flex-1 grow p-4 lg:p-6" tabindex="-1">
+    <main id="main-content" class="mx-auto w-full max-w-[1200px] flex-1 grow p-4 lg:p-6" tabindex="-1">
         
         <!-- Tab: Info -->
         <div id="tab-info" class="tab-content active">
+
+            {{-- ══ Visual Assets: Logo + Hero + QR ═══════════════════════════ --}}
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+                {{-- Logo Card (200x200) --}}
+                <div class="card bg-base-100 shadow-sm border border-base-content/10">
+                    <div class="card-body p-4">
+                        <p class="text-xs font-bold text-base-content/40 uppercase tracking-wider mb-2">Logo</p>
+                        <div id="logo-dropzone"
+                             class="bg-base-200 rounded-box h-40 flex items-center justify-center mb-3 overflow-hidden border-2 border-dashed border-transparent transition-colors cursor-pointer"
+                             onclick="document.getElementById('logo-file').click()"
+                             ondragover="event.preventDefault(); this.classList.add('border-primary','bg-primary/5')"
+                             ondragleave="this.classList.remove('border-primary','bg-primary/5')"
+                             ondrop="event.preventDefault(); this.classList.remove('border-primary','bg-primary/5'); handleDropUpload(event, 'logo')">
+                            @if($customization && $customization->logo_filename)
+                                <img id="logo-preview"
+                                     src="{{ asset('storage/tenants/' . $tenant->id . '/' . $customization->logo_filename) }}"
+                                     alt="Logo" class="max-w-full max-h-full object-contain">
+                            @else
+                                <div id="logo-placeholder" class="text-center text-base-content/30">
+                                    <span class="icon-[tabler--cloud-upload] size-8 mb-1 block mx-auto"></span>
+                                    <p class="text-xs">Arrastra o haz clic</p>
+                                </div>
+                            @endif
+                        </div>
+                        <input type="file" id="logo-file" accept="image/*" class="hidden" onchange="uploadLogo(event)">
+                        <button onclick="document.getElementById('logo-file').click()"
+                                class="btn btn-primary btn-block btn-sm gap-2">
+                            <span class="icon-[tabler--upload] size-4"></span>
+                            Cambiar Logo
+                        </button>
+                    </div>
+                </div>
+
+                {{-- Hero Card (400x300) --}}
+                <div class="card bg-base-100 shadow-sm border border-base-content/10">
+                    <div class="card-body p-4">
+                        <p class="text-xs font-bold text-base-content/40 uppercase tracking-wider mb-2">Hero</p>
+                        <div id="hero-dropzone"
+                             class="bg-base-200 rounded-box h-40 flex items-center justify-center mb-3 overflow-hidden border-2 border-dashed border-transparent transition-colors cursor-pointer"
+                             onclick="document.getElementById('hero-file').click()"
+                             ondragover="event.preventDefault(); this.classList.add('border-primary','bg-primary/5')"
+                             ondragleave="this.classList.remove('border-primary','bg-primary/5')"
+                             ondrop="event.preventDefault(); this.classList.remove('border-primary','bg-primary/5'); handleDropUpload(event, 'hero')">
+                            @if($customization && $customization->hero_main_filename)
+                                <img id="hero-preview"
+                                     src="{{ asset('storage/tenants/' . $tenant->id . '/' . $customization->hero_main_filename) }}"
+                                     alt="Hero" class="w-full h-full object-cover">
+                            @else
+                                <div id="hero-placeholder" class="text-center text-base-content/30">
+                                    <span class="icon-[tabler--cloud-upload] size-8 mb-1 block mx-auto"></span>
+                                    <p class="text-xs">Arrastra o haz clic</p>
+                                </div>
+                            @endif
+                        </div>
+                        <input type="file" id="hero-file" accept="image/*" class="hidden" onchange="uploadHero(event)">
+                        <button onclick="document.getElementById('hero-file').click()"
+                                class="btn btn-primary btn-block btn-sm gap-2">
+                            <span class="icon-[tabler--upload] size-4"></span>
+                            Cambiar Hero
+                        </button>
+                    </div>
+                </div>
+
+                {{-- QR Card (200x200) --}}
+                <div class="card bg-base-100 shadow-sm border border-base-content/10">
+                    <div class="card-body p-4">
+                        <p class="text-xs font-bold text-base-content/40 uppercase tracking-wider mb-2">QR Tracking</p>
+                        <div class="flex justify-center mb-2">
+                            <div class="bg-white p-2 rounded-lg border border-base-content/10" style="width:140px;height:140px;overflow:hidden;">
+                                <div id="qr-display" style="width:136px;height:136px;overflow:hidden;">
+                                    {!! $trackingQR !!}
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-[10px] text-base-content/40 text-center mb-2 break-all leading-tight select-all">{{ $trackingShortlink }}</p>
+                        <div class="flex gap-2">
+                            <a href="/tenant/{{ $tenant->id }}/qr/download" class="btn btn-primary btn-sm gap-1 flex-1" download>
+                                <span class="icon-[tabler--download] size-3.5"></span>
+                                PNG
+                            </a>
+                            <button type="button" onclick="downloadQRSVG()" class="btn btn-soft btn-sm gap-1 flex-1">
+                                <span class="icon-[tabler--file-type-svg] size-3.5"></span>
+                                SVG
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- ══ Info Form ══════════════════════════════════════════════════ --}}
             <form id="form-info" onsubmit="saveInfo(event)">
                 <div class="card bg-base-100 shadow-sm border border-base-content/10">
                     <div class="card-header">
                         <h2 class="card-title flex items-center gap-2">
-                            <span class="icon-[tabler--building-store] size-5 text-primary" aria-hidden="true"></span>
+                            <span class="icon-[tabler--building-store] size-5 text-primary"></span>
                             Información del Negocio
                         </h2>
+                        <p class="text-xs text-base-content/50 mt-0.5">Datos que se muestran en tu landing pública</p>
                     </div>
-                    <div class="card-body pt-4">
-                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-
+                    <div class="card-body pt-2">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                             <div class="form-control">
-                                <label class="label pb-1" for="info-business-name">
-                                    <span class="label-text font-medium text-sm">Nombre del Negocio</span>
+                                <label class="label pb-1" for="info-name">
+                                    <span class="label-text font-medium text-sm">Nombre del Negocio *</span>
                                 </label>
-                                <input id="info-business-name" type="text" class="input input-bordered w-full"
-                                       name="business_name" value="{{ $tenant->business_name }}"
-                                       required autocomplete="organization">
+                                <input id="info-name" type="text" class="input input-bordered w-full"
+                                       name="business_name" value="{{ $tenant->business_name }}" required autocomplete="organization">
                             </div>
-
                             <div class="form-control">
-                                <label class="label pb-1" for="info-slogan">
-                                    <span class="label-text font-medium text-sm">Eslogan</span>
+                                <label class="label pb-1">
+                                    <span class="label-text font-medium text-sm">Eslogan / Tagline</span>
                                 </label>
-                                <input id="info-slogan" type="text" class="input input-bordered w-full"
-                                       name="slogan" value="{{ $tenant->slogan }}">
+                                <input type="text" name="tagline" class="input input-bordered w-full"
+                                       value="{{ $tenant->tagline }}" placeholder="Tu frase corta" autocomplete="off">
                             </div>
-
                             <div class="form-control">
-                                <label class="label pb-1" for="info-subdomain">
+                                <label class="label pb-1">
                                     <span class="label-text font-medium text-sm">Subdominio</span>
                                 </label>
-                                <input id="info-subdomain" type="text" class="input input-bordered w-full opacity-60"
-                                       value="{{ $tenant->subdomain }}" disabled aria-readonly="true">
+                                <input type="text" class="input input-bordered w-full bg-base-200 text-base-content/60"
+                                       value="{{ $tenant->subdomain }}" disabled>
                             </div>
-
                             <div class="form-control">
-                                <label class="label pb-1" for="info-phone">
+                                <label class="label pb-1">
                                     <span class="label-text font-medium text-sm">Teléfono</span>
                                 </label>
-                                <input id="info-phone" type="text" class="input input-bordered w-full"
-                                       name="phone" value="{{ $tenant->phone }}" autocomplete="tel">
+                                <input type="tel" name="phone" class="input input-bordered w-full"
+                                       value="{{ $tenant->phone }}" placeholder="+58 XXX XXXXXXX" autocomplete="tel">
                             </div>
-
                             <div class="form-control">
-                                <label class="label pb-1" for="info-whatsapp">
-                                    <span class="label-text font-medium text-sm">WhatsApp Ventas</span>
+                                <label class="label pb-1">
+                                    <span class="label-text font-medium text-sm">WhatsApp</span>
                                 </label>
-                                <input id="info-whatsapp" type="text" class="input input-bordered w-full"
-                                       name="whatsapp_sales" value="{{ $tenant->whatsapp_sales }}" autocomplete="off">
+                                <input type="tel" name="whatsapp" class="input input-bordered w-full"
+                                       value="{{ $tenant->whatsapp }}" placeholder="+58 XXX XXXXXXX" autocomplete="tel">
                             </div>
-
                             <div class="form-control">
-                                <label class="label pb-1" for="info-email">
+                                <label class="label pb-1">
                                     <span class="label-text font-medium text-sm">Email</span>
                                 </label>
-                                <input id="info-email" type="email" class="input input-bordered w-full"
-                                       name="email" value="{{ $tenant->email }}" autocomplete="email">
+                                <input type="email" name="email" class="input input-bordered w-full"
+                                       value="{{ $tenant->email }}" autocomplete="email">
                             </div>
-
-                            <div class="form-control">
+                            <div class="form-control sm:col-span-2">
                                 <label class="label pb-1" for="info-address">
                                     <span class="label-text font-medium text-sm">Dirección</span>
                                 </label>
                                 <input id="info-address" type="text" class="input input-bordered w-full"
                                        name="address" value="{{ $tenant->address }}" autocomplete="street-address">
                             </div>
-
                             <div class="form-control">
                                 <label class="label pb-1" for="info-city">
                                     <span class="label-text font-medium text-sm">Ciudad</span>
@@ -743,7 +472,6 @@
                                 <input id="info-city" type="text" class="input input-bordered w-full"
                                        name="city" value="{{ $tenant->city }}" autocomplete="address-level2">
                             </div>
-
                             @if($tenant->plan_id >= 2)
                             <div class="form-control">
                                 <label class="label pb-1">
@@ -800,6 +528,69 @@
                                       name="description">{{ $tenant->description }}</textarea>
                         </div>
 
+                        {{-- ══ Indicador de Horario (Opcional) ═══════════════════════ --}}
+                        <div class="divider text-xs text-base-content/40 mt-6 mb-4">Indicador de Horario en Navbar</div>
+
+                        <div class="alert alert-info mb-4">
+                            <span class="icon-[tabler--info-circle] size-5 shrink-0"></span>
+                            <div class="text-sm">
+                                <p class="font-semibold">Indicador de Estado Opcional</p>
+                                <p class="text-xs opacity-80">Muestra un badge "ABIERTO" o "CERRADO" en la navbar según tu horario de atención.</p>
+                            </div>
+                        </div>
+
+                        <div class="form-control">
+                            <label class="label cursor-pointer justify-start gap-3">
+                                <input type="hidden" name="show_hours_indicator" value="0">
+                                <input type="checkbox" name="show_hours_indicator" id="show-hours-toggle"
+                                       class="switch switch-success"
+                                       value="1"
+                                       {{ data_get($tenant->settings, 'engine_settings.features.show_hours_indicator', false) ? 'checked' : '' }}
+                                       onchange="toggleHoursIndicatorFields()">
+                                <div class="flex-1">
+                                    <span class="label-text font-medium">¿Mostrar estado de horario en navbar?</span>
+                                    <p class="text-xs text-base-content/60 mt-0.5">Activa para mostrar badge ABIERTO/CERRADO junto al botón WhatsApp</p>
+                                </div>
+                            </label>
+                        </div>
+
+                        <div id="hours-indicator-fields" class="{{ data_get($tenant->settings, 'engine_settings.features.show_hours_indicator', false) ? '' : 'hidden' }} mt-4 p-4 bg-base-200/50 rounded-box space-y-4">
+                            <div class="form-control">
+                                <label class="label pb-1">
+                                    <span class="label-text font-medium text-sm">Mensaje cuando estamos cerrados</span>
+                                    <span class="label-text-alt text-base-content/50" id="char-count">0 / 150</span>
+                                </label>
+                                <textarea id="closed-message-input" name="closed_message" class="textarea textarea-bordered w-full min-h-16"
+                                          placeholder="Estamos cerrados. Te responderemos durante nuestro horario de atención."
+                                          maxlength="150"
+                                          oninput="updateCharCount(); updatePreview()">{{ data_get($tenant->settings, 'business_info.closed_message', 'Estamos cerrados. Te responderemos durante nuestro horario de atención.') }}</textarea>
+                                <label class="label">
+                                    <span class="label-text-alt text-base-content/60">Este mensaje se usará en el botón de WhatsApp cuando tu negocio esté cerrado</span>
+                                </label>
+                            </div>
+
+                            <div class="alert alert-warning">
+                                <span class="icon-[tabler--eye] size-5 shrink-0"></span>
+                                <div class="text-xs">
+                                    <p class="font-semibold mb-2">Así se verá en tu navbar</p>
+                                    <div class="flex items-center gap-2 flex-wrap">
+                                        <span class="badge badge-sm gap-1 bg-success/20 text-success border-success/30">
+                                            <span class="icon-[tabler--circle-filled] size-3"></span>
+                                            ABIERTO
+                                        </span>
+                                        <span class="text-base-content/30">o</span>
+                                        <span class="badge badge-sm gap-1 bg-error/20 text-error border-error/30">
+                                            <span class="icon-[tabler--circle-filled] size-3"></span>
+                                            CERRADO
+                                        </span>
+                                    </div>
+                                    <p class="mt-3 p-2 bg-base-100/50 rounded text-xs italic border-l-2 border-warning">
+                                        <span class="font-semibold">Mensaje WhatsApp:</span> <span id="preview-message">{{ data_get($tenant->settings, 'business_info.closed_message', 'Estamos cerrados. Te responderemos durante nuestro horario de atención.') }}</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="flex items-center gap-3 justify-end pt-4 border-t border-base-content/10 mt-4">
                             <button type="button" class="btn btn-ghost" onclick="resetForm('form-info')">Cancelar</button>
                             <button type="submit" class="btn btn-primary gap-2">
@@ -811,64 +602,36 @@
                 </div>
             </form>
 
-            {{-- ══ Imágenes del Negocio — Logo + Hero ════════════════════════ --}}
+            {{-- ══ Horario de Atención (solo lectura) ══════════════════════════ --}}
+            @php
+                $bhReadonly = $tenant->business_hours ?? [];
+                $daysReadonly = [
+                    'monday' => 'Lun', 'tuesday' => 'Mar', 'wednesday' => 'Mié',
+                    'thursday' => 'Jue', 'friday' => 'Vie', 'saturday' => 'Sáb', 'sunday' => 'Dom',
+                ];
+            @endphp
             <div class="card bg-base-100 shadow-sm border border-base-content/10 mt-4">
-                <div class="card-header">
-                    <div class="flex items-center gap-2">
-                        <span class="icon-[tabler--photo] size-5 text-primary"></span>
-                        <h3 class="card-title">Imágenes del Negocio</h3>
-                    </div>
-                    <p class="text-xs text-base-content/50 mt-0.5">Logo e imagen principal de tu landing</p>
+                <div class="card-header flex items-center justify-between gap-2">
+                    <h3 class="card-title flex items-center gap-2 text-sm">
+                        <span class="icon-[tabler--clock] size-4 text-primary" aria-hidden="true"></span>
+                        Horario de Atención
+                    </h3>
+                    <span class="text-[10px] text-base-content/40">Editar en Configuración</span>
                 </div>
-                <div class="card-body">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-
-                        {{-- Logo --}}
-                        <div>
-                            <p class="text-sm font-medium text-base-content mb-2">Logo del Negocio</p>
-                            <div class="bg-base-200 rounded-box h-44 flex items-center justify-center mb-3 overflow-hidden">
-                                @if($customization && $customization->logo_filename)
-                                    <img id="logo-preview"
-                                         src="{{ asset('storage/tenants/' . $tenant->id . '/' . $customization->logo_filename) }}"
-                                         alt="Logo" class="max-w-full max-h-full object-contain" loading="lazy">
-                                @else
-                                    <div id="logo-placeholder" class="text-center text-base-content/30">
-                                        <span class="icon-[tabler--photo-off] size-12 mb-2 block mx-auto"></span>
-                                        <p class="text-xs">Sin logo</p>
-                                    </div>
-                                @endif
-                            </div>
-                            <input type="file" id="logo-file" accept="image/*" class="hidden" onchange="uploadLogo(event)">
-                            <button onclick="document.getElementById('logo-file').click()"
-                                    class="btn btn-primary btn-block btn-sm gap-2">
-                                <span class="icon-[tabler--upload] size-4"></span>
-                                Cambiar Logo
-                            </button>
+                <div class="card-body pt-0 pb-3">
+                    <div class="flex flex-wrap gap-2">
+                        @foreach($daysReadonly as $dk => $dl)
+                        @php $dData = $bhReadonly[$dk] ?? null; @endphp
+                        <div class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs
+                            {{ $dData ? 'bg-success/10 text-success border border-success/20' : 'bg-base-200 text-base-content/40 border border-base-content/10' }}">
+                            <span class="font-semibold">{{ $dl }}</span>
+                            @if($dData)
+                                <span>{{ $dData['open'] ?? '?' }}–{{ $dData['close'] ?? '?' }}</span>
+                            @else
+                                <span>Cerrado</span>
+                            @endif
                         </div>
-
-                        {{-- Hero --}}
-                        <div>
-                            <p class="text-sm font-medium text-base-content mb-2">Imagen Principal (Hero)</p>
-                            <div class="bg-base-200 rounded-box h-44 flex items-center justify-center mb-3 overflow-hidden">
-                                @if($customization && $customization->hero_filename)
-                                    <img id="hero-preview"
-                                         src="{{ asset('storage/tenants/' . $tenant->id . '/' . $customization->hero_filename) }}"
-                                         alt="Hero" class="w-full h-full object-cover" loading="lazy">
-                                @else
-                                    <div id="hero-placeholder" class="text-center text-base-content/30">
-                                        <span class="icon-[tabler--panorama] size-12 mb-2 block mx-auto"></span>
-                                        <p class="text-xs">Sin imagen hero</p>
-                                    </div>
-                                @endif
-                            </div>
-                            <input type="file" id="hero-file" accept="image/*" class="hidden" onchange="uploadHero(event)">
-                            <button onclick="document.getElementById('hero-file').click()"
-                                    class="btn btn-primary btn-block btn-sm gap-2">
-                                <span class="icon-[tabler--upload] size-4"></span>
-                                Cambiar Hero
-                            </button>
-                        </div>
-
+                        @endforeach
                     </div>
                 </div>
             </div>
@@ -918,90 +681,64 @@
                 @endif
 
                 @if($products->count() > 0)
-                <div class="card-body pt-0 pb-0 overflow-x-auto">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Imagen</th>
-                                <th>Nombre</th>
-                                <th>Precio USD</th>
-                                <th>Badge</th>
-                                <th>Estado</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($products as $product)
-                            <tr class="hover:bg-base-200/50 transition-colors">
-                                <td>
-                                    @if($product->image_filename)
-                                        <img src="{{ asset('storage/tenants/' . $tenant->id . '/' . $product->image_filename) }}"
-                                             alt="{{ $product->name }}"
-                                             class="size-12 rounded-box object-cover border border-base-content/10"
-                                             width="48" height="48"
-                                             loading="lazy"
-                                             decoding="async">
-                                    @else
-                                        <div class="size-12 rounded-box bg-base-200 flex items-center justify-center border border-base-content/10">
-                                            <span class="icon-[tabler--package] size-6 text-base-content/30" aria-hidden="true"></span>
-                                        </div>
+                <div class="card-body pt-2 section-scroll">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                        @foreach($products as $product)
+                        <div class="group relative rounded-lg border border-base-content/10 bg-base-200/30 overflow-hidden transition-all hover:border-primary/30 hover:shadow-sm">
+                            {{-- Imagen thumbnail --}}
+                            <div class="h-32 bg-base-200 flex items-center justify-center overflow-hidden">
+                                @if($product->image_filename)
+                                    <img src="{{ asset('storage/tenants/' . $tenant->id . '/' . $product->image_filename) }}"
+                                         alt="{{ $product->name }}"
+                                         class="w-full h-full object-cover"
+                                         loading="lazy" decoding="async">
+                                @else
+                                    <span class="icon-[tabler--package] size-10 text-base-content/20" aria-hidden="true"></span>
+                                @endif
+                            </div>
+                            {{-- Info --}}
+                            <div class="p-3">
+                                <div class="flex items-start justify-between gap-2 mb-1">
+                                    <h4 class="text-sm font-semibold text-base-content truncate flex-1">{{ $product->name }}</h4>
+                                    @if(!$product->is_active)
+                                        <span class="badge badge-soft badge-error badge-xs shrink-0">Off</span>
                                     @endif
-                                </td>
-                                <td>
-                                    <span class="font-semibold text-base-content">{{ $product->name }}</span>
-                                    @if($product->is_featured)
-                                        <span class="badge badge-soft badge-warning badge-xs ml-1">Destacado</span>
-                                    @endif
-                                </td>
-                                <td class="font-medium text-base-content/80">${{ number_format($product->price_usd, 2) }}</td>
-                                <td>
+                                </div>
+                                <div class="flex items-center gap-2 mb-2">
+                                    <span class="text-base font-bold text-primary">${{ number_format($product->price_usd, 2) }}</span>
                                     @if($product->badge === 'hot')
-                                        <span class="badge badge-soft badge-error badge-sm">Hot</span>
+                                        <span class="badge badge-soft badge-error badge-xs">🔥 Hot</span>
                                     @elseif($product->badge === 'new')
-                                        <span class="badge badge-soft badge-success badge-sm">New</span>
+                                        <span class="badge badge-soft badge-success badge-xs">✨ New</span>
                                     @elseif($product->badge === 'promo')
-                                        <span class="badge badge-soft badge-warning badge-sm">Promo</span>
-                                    @else
-                                        <span class="text-base-content/30 text-xs">—</span>
+                                        <span class="badge badge-soft badge-warning badge-xs">🎉 Promo</span>
                                     @endif
-                                </td>
-                                <td>
-                                    @if($product->is_active)
-                                        <span class="badge badge-soft badge-success badge-sm gap-1">
-                                            <span class="size-1.5 rounded-full bg-success inline-block"></span>
-                                            Activo
-                                        </span>
-                                    @else
-                                        <span class="badge badge-soft badge-error badge-sm gap-1">
-                                            <span class="size-1.5 rounded-full bg-error inline-block"></span>
-                                            Inactivo
-                                        </span>
+                                    @if($product->is_featured)
+                                        <span class="badge badge-soft badge-warning badge-xs">⭐</span>
                                     @endif
-                                </td>
-                                <td>
-                                    <div class="flex items-center gap-1">
-                                        <button onclick="editProduct({{ $product->id }})" class="btn btn-sm btn-ghost" title="Editar" aria-label="Editar producto">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-                                            </svg>
-                                        </button>
-                                        <button onclick="deleteProduct({{ $product->id }})" class="btn btn-sm btn-ghost text-error" title="Eliminar" aria-label="Eliminar producto">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                                            </svg>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                                </div>
+                                {{-- Actions --}}
+                                <div class="flex gap-1.5">
+                                    <button onclick="editProduct({{ $product->id }})"
+                                            class="btn btn-soft btn-sm flex-1 gap-1" title="Editar">
+                                        <span class="icon-[tabler--pencil] size-3.5" aria-hidden="true"></span>
+                                        Editar
+                                    </button>
+                                    <button onclick="deleteProduct({{ $product->id }})"
+                                            class="btn btn-soft btn-error btn-sm btn-square" title="Eliminar" aria-label="Eliminar producto">
+                                        <span class="icon-[tabler--trash] size-3.5" aria-hidden="true"></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
                 </div>
                 @else
-                <div class="card-body flex flex-col items-center justify-center py-12 text-center">
-                    <span class="icon-[tabler--package] size-12 text-base-content/20 mb-3" aria-hidden="true"></span>
-                    <h3 class="font-semibold text-base-content/60 mb-1">No hay productos aún</h3>
-                    <p class="text-sm text-base-content/40">Comienza agregando tu primer producto</p>
+                <div class="card-body flex flex-col items-center justify-center py-10 text-center">
+                    <span class="icon-[tabler--package] size-10 text-base-content/20 mb-2" aria-hidden="true"></span>
+                    <h3 class="font-semibold text-sm text-base-content/60 mb-1">No hay productos aún</h3>
+                    <p class="text-xs text-base-content/40">Comienza agregando tu primer producto</p>
                 </div>
                 @endif
             </div>
@@ -1023,38 +760,38 @@
                             <img id="product-image-preview-img" src="" alt="Preview">
                         </div>
 
-                        <div class="form-section">
-                            <label for="product-image" class="form-label">Imagen Principal del Producto</label>
-                            <input type="file" id="product-image" accept="image/*" class="form-input" onchange="previewProductImage(event)">
+                        <div class="form-control py-2">
+                            <label for="product-image" class="label"><span class="label-text text-sm font-medium">Imagen Principal del Producto</span></label>
+                            <input type="file" id="product-image" accept="image/*" class="file-input file-input-bordered w-full" onchange="previewProductImage(event)">
                             <p class="text-xs text-base-content/50 mt-1">Máx. 2MB, se redimensionará a 800px</p>
                         </div>
 
                         {{-- Gallery Section — Plan 3 (VISIÓN) only --}}
                         @if($plan->id === 3)
-                        <div class="form-section" id="product-gallery-section">
-                            <label class="form-label flex items-center gap-2">
+                        <div class="form-control py-2" id="product-gallery-section">
+                            <label class="label flex items-center gap-2">
                                 <span class="icon-[tabler--photo-scan] size-4 text-primary" aria-hidden="true"></span>
                                 Galería Adicional
                                 <span class="text-xs text-base-content/50 font-normal">(máx. 2 fotos extra — Plan Visión)</span>
                             </label>
 
                             {{-- Existing gallery images container --}}
-                            <div id="product-gallery-existing" style="display: none; margin-bottom: 12px;">
-                                <div id="product-gallery-thumbs" style="display: flex; gap: 10px; flex-wrap: wrap;"></div>
+                            <div id="product-gallery-existing" class="hidden mb-3">
+                                <div id="product-gallery-thumbs" class="flex gap-2.5 flex-wrap"></div>
                             </div>
 
                             {{-- Upload new gallery images --}}
-                            <div id="product-gallery-upload-area" style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px;">
-                                <div id="gallery-slot-1" class="gallery-upload-slot" style="display: none;">
-                                    <input type="file" id="product-gallery-1" accept="image/*" class="form-input" onchange="previewGalleryImage(event, 1)" style="font-size: 13px;">
+                            <div id="product-gallery-upload-area" class="flex gap-2.5 flex-wrap mt-2">
+                                <div id="gallery-slot-1" class="gallery-upload-slot hidden">
+                                    <input type="file" id="product-gallery-1" accept="image/*" class="file-input file-input-bordered file-input-sm w-full" onchange="previewGalleryImage(event, 1)">
                                 </div>
-                                <div id="gallery-slot-2" class="gallery-upload-slot" style="display: none;">
-                                    <input type="file" id="product-gallery-2" accept="image/*" class="form-input" onchange="previewGalleryImage(event, 2)" style="font-size: 13px;">
+                                <div id="gallery-slot-2" class="gallery-upload-slot hidden">
+                                    <input type="file" id="product-gallery-2" accept="image/*" class="file-input file-input-bordered file-input-sm w-full" onchange="previewGalleryImage(event, 2)">
                                 </div>
                             </div>
 
                             {{-- Gallery previews --}}
-                            <div id="product-gallery-previews" style="display: flex; gap: 10px; margin-top: 8px; flex-wrap: wrap;"></div>
+                            <div id="product-gallery-previews" class="flex gap-2.5 mt-2 flex-wrap"></div>
 
                             <p class="text-xs text-base-content/50 mt-1.5">
                                 Las imágenes de galería se suben al guardar el producto. Total: 1 principal + 2 galería = 3 fotos.
@@ -1062,24 +799,24 @@
                         </div>
                         @endif
 
-                        <div class="form-section">
-                            <label for="product-name" class="form-label">Nombre *</label>
-                            <input type="text" id="product-name" class="form-input" required maxlength="100">
+                        <div class="form-control py-2">
+                            <label for="product-name" class="label"><span class="label-text text-sm font-medium">Nombre *</span></label>
+                            <input type="text" id="product-name" class="input input-bordered w-full" required maxlength="100">
                         </div>
 
-                        <div class="form-section">
-                            <label for="product-description" class="form-label">Descripción</label>
-                            <textarea id="product-description" class="form-input" rows="3" maxlength="500"></textarea>
+                        <div class="form-control py-2">
+                            <label for="product-description" class="label"><span class="label-text text-sm font-medium">Descripción</span></label>
+                            <textarea id="product-description" class="textarea textarea-bordered w-full" rows="3" maxlength="500"></textarea>
                         </div>
 
-                        <div class="form-section">
-                            <label for="product-price" class="form-label">Precio USD *</label>
-                            <input type="number" id="product-price" class="form-input" required step="0.01" min="0">
+                        <div class="form-control py-2">
+                            <label for="product-price" class="label"><span class="label-text text-sm font-medium">Precio USD *</span></label>
+                            <input type="number" id="product-price" class="input input-bordered w-full" required step="0.01" min="0">
                         </div>
 
-                        <div class="form-section">
-                            <label for="product-badge" class="form-label">Badge</label>
-                            <select id="product-badge" class="form-input">
+                        <div class="form-control py-2">
+                            <label for="product-badge" class="label"><span class="label-text text-sm font-medium">Badge</span></label>
+                            <select id="product-badge" class="select select-bordered w-full">
                                 <option value="">Sin badge</option>
                                 <option value="hot">🔥 Hot</option>
                                 <option value="new">✨ New</option>
@@ -1087,25 +824,22 @@
                             </select>
                         </div>
 
-                        <div class="form-section">
-                            <label class="form-label">Producto Activo</label>
-                            <label class="toggle-switch">
-                                <input type="checkbox" id="product-is-active" checked>
-                                <span class="toggle-slider"></span>
-                            </label>
+                        <div class="form-control py-2">
+                            <label class="label"><span class="label-text text-sm font-medium">Producto Activo</span></label>
+                            <input type="checkbox" id="product-is-active" class="toggle toggle-success" checked>
                         </div>
 
-                        <div class="form-section">
-                            <label class="form-label">Producto Destacado ⭐</label>
-                            <label class="toggle-switch">
-                                <input type="checkbox" id="product-is-featured">
-                                <span class="toggle-slider"></span>
-                            </label>
+                        <div class="form-control py-2">
+                            <label class="label"><span class="label-text text-sm font-medium">Producto Destacado ⭐</span></label>
+                            <input type="checkbox" id="product-is-featured" class="toggle toggle-warning">
                         </div>
 
-                        <div class="form-actions">
-                            <button type="button" class="btn-secondary" onclick="closeProductModal()">Cancelar</button>
-                            <button type="submit" class="btn-primary">Guardar Producto</button>
+                        <div class="flex gap-2 pt-3 border-t border-base-content/10 mt-2">
+                            <button type="button" class="btn btn-ghost flex-1" onclick="closeProductModal()">Cancelar</button>
+                            <button type="submit" class="btn btn-primary flex-1 gap-2">
+                                <span class="icon-[tabler--device-floppy] size-4" aria-hidden="true"></span>
+                                Guardar Producto
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -1177,83 +911,57 @@
                 @endif
 
                 @if($services->count() > 0)
-                <div class="card-body pt-0 pb-0 overflow-x-auto">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Imagen</th>
-                                <th>Nombre</th>
-                                <th>Descripción</th>
-                                <th>Estado</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($services as $service)
-                            <tr class="hover:bg-base-200/50 transition-colors">
-                                <td>
+                <div class="card-body pt-2 section-scroll">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                        @foreach($services as $service)
+                        <div class="rounded-lg border border-base-content/10 bg-base-200/30 p-3 transition-all hover:border-secondary/30 hover:shadow-sm">
+                            <div class="flex items-start gap-3 mb-2">
+                                {{-- Icon/Image --}}
+                                <div class="size-12 rounded-lg shrink-0 flex items-center justify-center overflow-hidden
+                                    {{ $service->image_filename ? '' : 'bg-secondary/10 border border-secondary/20' }}">
                                     @if($service->image_filename)
                                         <img src="{{ asset('storage/tenants/' . $tenant->id . '/' . $service->image_filename) }}"
                                              alt="{{ $service->name }}"
-                                             class="size-12 rounded-box object-cover border border-base-content/10"
-                                             width="48" height="48"
-                                             loading="lazy"
-                                             decoding="async">
+                                             class="w-full h-full object-cover rounded-lg"
+                                             loading="lazy" decoding="async">
                                     @elseif($service->icon_name)
-                                        <div class="size-12 rounded-box bg-primary/10 flex items-center justify-center border border-primary/20">
-                                            <span class="iconify tabler--{{ str_replace('_', '-', $service->icon_name) }} text-primary text-2xl"></span>
-                                        </div>
+                                        <span class="iconify tabler--{{ str_replace('_', '-', $service->icon_name) }} text-secondary text-xl"></span>
                                     @else
-                                        <div class="size-12 rounded-box bg-base-200 flex items-center justify-center border border-base-content/10">
-                                            <span class="icon-[tabler--tool] size-6 text-base-content/30" aria-hidden="true"></span>
-                                        </div>
+                                        <span class="icon-[tabler--tool] size-6 text-base-content/30" aria-hidden="true"></span>
                                     @endif
-                                </td>
-                                <td class="font-semibold text-base-content">{{ $service->name }}</td>
-                                <td class="text-sm text-base-content/60">
-                                    @if($service->description)
-                                        {{ Str::limit($service->description, 60) }}
-                                    @else
-                                        <span class="text-base-content/30">—</span>
-                                    @endif
-                                </td>
-                                <td>
-                                    @if($service->is_active)
-                                        <span class="badge badge-soft badge-success badge-sm gap-1">
-                                            <span class="size-1.5 rounded-full bg-success inline-block"></span>
-                                            Activo
-                                        </span>
-                                    @else
-                                        <span class="badge badge-soft badge-error badge-sm gap-1">
-                                            <span class="size-1.5 rounded-full bg-error inline-block"></span>
-                                            Inactivo
-                                        </span>
-                                    @endif
-                                </td>
-                                <td>
-                                    <div class="flex items-center gap-1">
-                                        <button onclick="editService({{ $service->id }})" class="btn btn-sm btn-ghost" title="Editar" aria-label="Editar servicio">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-                                            </svg>
-                                        </button>
-                                        <button onclick="deleteService({{ $service->id }})" class="btn btn-sm btn-ghost text-error" title="Eliminar" aria-label="Eliminar servicio">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                                            </svg>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                                </div>
+                                {{-- Name + Status --}}
+                                <div class="flex-1 min-w-0">
+                                    <h4 class="text-sm font-semibold text-base-content truncate">{{ $service->name }}</h4>
+                                    <p class="text-xs text-base-content/50 line-clamp-2 mt-0.5">
+                                        {{ $service->description ? Str::limit($service->description, 80) : '—' }}
+                                    </p>
+                                </div>
+                                @if(!$service->is_active)
+                                    <span class="badge badge-soft badge-error badge-xs shrink-0">Off</span>
+                                @endif
+                            </div>
+                            {{-- Actions --}}
+                            <div class="flex gap-1.5">
+                                <button onclick="editService({{ $service->id }})"
+                                        class="btn btn-soft btn-sm flex-1 gap-1" title="Editar">
+                                    <span class="icon-[tabler--pencil] size-3.5" aria-hidden="true"></span>
+                                    Editar
+                                </button>
+                                <button onclick="deleteService({{ $service->id }})"
+                                        class="btn btn-soft btn-error btn-sm btn-square" title="Eliminar" aria-label="Eliminar servicio">
+                                    <span class="icon-[tabler--trash] size-3.5" aria-hidden="true"></span>
+                                </button>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
                 </div>
                 @else
-                <div class="card-body flex flex-col items-center justify-center py-12 text-center">
-                    <span class="icon-[tabler--tool] size-12 text-base-content/20 mb-3" aria-hidden="true"></span>
-                    <h3 class="font-semibold text-base-content/60 mb-1">No hay servicios aún</h3>
-                    <p class="text-sm text-base-content/40">Comienza agregando tu primer servicio</p>
+                <div class="card-body flex flex-col items-center justify-center py-10 text-center">
+                    <span class="icon-[tabler--tool] size-10 text-base-content/20 mb-2" aria-hidden="true"></span>
+                    <h3 class="font-semibold text-sm text-base-content/60 mb-1">No hay servicios aún</h3>
+                    <p class="text-xs text-base-content/40">Comienza agregando tu primer servicio</p>
                 </div>
                 @endif
             </div>
@@ -1262,7 +970,7 @@
         <!-- Modal: Servicio -->
         <div id="service-modal" class="crud-overlay"
              role="dialog" aria-modal="true" aria-labelledby="service-modal-title" aria-hidden="true">
-            <div class="crud-dialog" style="max-width: 700px;">
+            <div class="crud-dialog max-w-2xl">
                 <div class="crud-dialog-header">
                     <h3 class="crud-dialog-title" id="service-modal-title">Agregar Servicio</h3>
                     <button class="crud-dialog-close" onclick="closeServiceModal()" aria-label="Cerrar modal">
@@ -1291,8 +999,8 @@
                         @endif
 
                         {{-- ICON PICKER (Plan 1: always; Plan 2/3: when icon mode) --}}
-                        <div id="svc-section-icon" class="form-section" style="margin-bottom: 28px;">
-                            <label class="form-label font-semibold mb-4 block">Ícono del Servicio</label>
+                        <div id="svc-section-icon" class="form-control py-2 mb-4">
+                            <label class="label"><span class="label-text text-sm font-semibold">Ícono del Servicio</span></label>
 
                             {{-- Current selection preview --}}
                             <div class="flex flex-col items-center p-7 rounded-2xl mb-6 border" style="background:linear-gradient(135deg,var(--synti-soft) 0%,transparent 60%);border-color:var(--synti-bdr);">
@@ -1342,31 +1050,30 @@
 
                         {{-- IMAGE UPLOAD (Plan 2/3 only; hidden by default) --}}
                         @if($plan->id !== 1)
-                        <div id="svc-section-image" class="form-section" style="display: none;">
-                            <label class="form-label">Imagen del Servicio</label>
+                        <div id="svc-section-image" class="form-control py-2" style="display: none;">
+                            <label class="label"><span class="label-text text-sm font-medium">Imagen del Servicio</span></label>
                             <div class="image-preview" id="service-image-preview" style="display: none;">
                                 <img id="service-image-preview-img" src="" alt="Preview">
                             </div>
-                            <input type="file" id="service-image" accept="image/*" class="form-input" onchange="previewServiceImage(event)">
+                            <input type="file" id="service-image" accept="image/*" class="file-input file-input-bordered w-full" onchange="previewServiceImage(event)">
                             <p class="text-xs text-base-content/50 mt-1">Máx. 2MB, se redimensionará a 800px</p>
                         </div>
                         @endif
 
-                        <div class="form-section mb-6">
-                            <label for="service-name" class="form-label font-semibold mb-2 block">Nombre *</label>
-                            <input type="text" id="service-name" class="input w-full" required maxlength="100">
+                        <div class="form-control py-2">
+                            <label for="service-name" class="label"><span class="label-text text-sm font-medium">Nombre *</span></label>
+                            <input type="text" id="service-name" class="input input-bordered w-full" required maxlength="100">
                         </div>
 
-                        <div class="form-section mb-6">
-                            <label for="service-description" class="form-label font-semibold mb-2 block">Descripción</label>
-                            <textarea id="service-description" class="textarea w-full" rows="3" maxlength="500"></textarea>
+                        <div class="form-control py-2">
+                            <label for="service-description" class="label"><span class="label-text text-sm font-medium">Descripción</span></label>
+                            <textarea id="service-description" class="textarea textarea-bordered w-full" rows="3" maxlength="500"></textarea>
                         </div>
 
-                        <div class="form-section mb-7">
-                            <label class="form-label font-semibold mb-2 block">Servicio Activo</label>
-                            <label class="toggle-switch flex items-center gap-3 cursor-pointer">
-                                <input type="checkbox" id="service-is-active" checked>
-                                <span class="toggle-slider"></span>
+                        <div class="form-control py-2">
+                            <label class="label"><span class="label-text text-sm font-medium">Servicio Activo</span></label>
+                            <label class="flex items-center gap-3 cursor-pointer">
+                                <input type="checkbox" id="service-is-active" class="toggle toggle-success" checked>
                                 <span class="text-sm text-base-content/60">Mostrar en landing page</span>
                             </label>
                         </div>
@@ -1386,15 +1093,15 @@
         <!-- Modal: Límite de Plan -->
         <div id="limit-modal" class="crud-overlay"
              role="dialog" aria-modal="true" aria-labelledby="limit-modal-title" aria-hidden="true">
-            <div class="crud-dialog" style="max-width: 480px;">
+            <div class="crud-dialog max-w-md">
                 <div class="crud-dialog-header">
                     <h3 class="crud-dialog-title" id="limit-modal-title">⚠️ Límite Alcanzado</h3>
                     <button class="crud-dialog-close" onclick="closeLimitModal()" aria-label="Cerrar modal">&times;</button>
                 </div>
                 <div class="crud-dialog-body">
-                    <p id="limit-modal-message" style="color: #cbd5e1; line-height: 1.6; margin-bottom: 20px;"></p>
-                    <div id="limit-modal-actions" style="display: flex; gap: 12px; flex-wrap: wrap;">
-                        <button onclick="closeLimitModal()" class="btn-secondary" style="flex: 1;">Cerrar</button>
+                    <p id="limit-modal-message" class="text-base-content/80 leading-relaxed mb-5"></p>
+                    <div id="limit-modal-actions" class="flex gap-3 flex-wrap">
+                        <button onclick="closeLimitModal()" class="btn btn-ghost flex-1">Cerrar</button>
                         <div id="limit-modal-cta"></div>
                     </div>
                 </div>
@@ -1442,113 +1149,84 @@ $flyonuiThemes = array_values(array_filter($flyonuiThemes, fn($t) => in_array($t
 $themesByCategory = collect($flyonuiThemes)->groupBy('category');
 @endphp
 
-<!-- Sección: Temas FlyonUI -->
-<div class="form-section">
-    <h2 class="table-title">🎨 Tema Visual (FlyonUI)</h2>
-    <p class="table-subtitle" style="margin-bottom: 16px;">Elige el tema que mejor represente tu marca</p>
-    
-    <div id="theme-success-message" style="display: none; padding: 12px; background: rgba(0,204,102,0.2); border-radius: 8px; margin-bottom: 16px; color: #00cc66; font-size: 14px;">
-        ✓ Tema actualizado correctamente
+{{-- ── Temas FlyonUI ─────────────────────────────────── --}}
+<div class="card bg-base-100 shadow-sm border border-base-content/10 mb-4">
+    <div class="card-header">
+        <h2 class="card-title flex items-center gap-2">
+            <span class="icon-[tabler--palette] size-5 text-primary" aria-hidden="true"></span>
+            Tema Visual
+        </h2>
+        <p class="text-xs text-base-content/50 mt-0.5">Elige el tema que mejor represente tu marca</p>
     </div>
+    <div class="card-body pt-2">
+        <div id="theme-success-message" class="alert alert-success mb-3" style="display:none;">
+            <span class="icon-[tabler--check] size-4"></span>
+            <span class="text-sm">Tema actualizado correctamente</span>
+        </div>
 
-    {{-- activeTheme viene del controller --}}
-    @foreach($themesByCategory as $category => $themes)
-    <div style="margin-bottom: 28px;">
-        <h3 class="text-[11px] font-bold text-base-content/40 mb-3 uppercase tracking-widest">
-            {{ $category }}
-        </h3>
-        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px;">
-            @foreach($themes as $theme)
-            @php
-                $isActive = $currentTheme === $theme['slug'];
-                $bg      = $theme['colors'][3]; // base background
-                $isDark  = in_array($theme['slug'], ['dark','black','spotify','valorant','luxury','perplexity','slack','vscode']);
-                $textColor = $isDark ? 'rgba(255,255,255,0.9)' : 'rgba(0,0,0,0.85)';
-                $subColor  = $isDark ? 'rgba(255,255,255,0.45)' : 'rgba(0,0,0,0.4)';
-            @endphp
-            <div
-                class="theme-card"
-                data-slug="{{ $theme['slug'] }}"
-                onclick="updateTheme('{{ $theme['slug'] }}')"
-                style="
-                    cursor: pointer;
-                    border-radius: 12px;
-                    border: {{ $isActive ? '2px solid #2B6FFF' : '1px solid rgba(255,255,255,0.08)' }};
-                    box-shadow: {{ $isActive ? '0 0 0 3px rgba(43,111,255,0.25)' : '0 2px 8px rgba(0,0,0,0.3)' }};
-                    transition: all 0.2s ease;
-                    position: relative;
-                    overflow: hidden;
-                    background: {{ $bg }};
-                "
-            >
-
-                <!-- Barra de colores primarios -->
-                <!-- Barra de colores primarios -->
-                <div style="display: flex; height: 48px; border-radius: 10px 10px 0 0; overflow: hidden;">
-                    @foreach(array_slice($theme['colors'], 0, 4) as $color)
-                    <div style="flex: 1; background: {{ $color }};"></div>
+        <div class="max-h-[350px] overflow-y-auto pr-1 space-y-3">
+            @foreach($themesByCategory as $category => $themes)
+            <div>
+                <h3 class="text-[10px] font-bold text-base-content/40 mb-2 uppercase tracking-wider sticky top-0 bg-base-100 py-1 z-10">
+                    {{ $category }}
+                </h3>
+                <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2">
+                    @foreach($themes as $theme)
+                    @php
+                        $isActive = $currentTheme === $theme['slug'];
+                        $bg      = $theme['colors'][3];
+                        $isDark  = in_array($theme['slug'], ['dark','black','spotify','valorant','luxury','perplexity','slack','vscode']);
+                    @endphp
+                    <div class="theme-card cursor-pointer rounded-lg overflow-hidden border-2 transition-all hover:scale-105 {{ $isActive ? 'border-primary ring-2 ring-primary/25' : 'border-base-content/10 hover:border-base-content/25' }}"
+                         data-slug="{{ $theme['slug'] }}"
+                         onclick="updateTheme('{{ $theme['slug'] }}')"
+                         style="background:{{ $bg }}">
+                        <div class="flex h-8">
+                            @foreach(array_slice($theme['colors'], 0, 4) as $color)
+                            <div class="flex-1" style="background:{{ $color }}"></div>
+                            @endforeach
+                        </div>
+                        <div class="px-2 py-1.5 flex items-center justify-between gap-1">
+                            <span class="text-[11px] font-semibold truncate" style="color:{{ $isDark ? 'rgba(255,255,255,.9)' : 'rgba(0,0,0,.85)' }}">{{ $theme['name'] }}</span>
+                            @if($isActive)<span class="icon-[tabler--check] size-3.5 text-primary shrink-0"></span>@endif
+                        </div>
+                    </div>
                     @endforeach
-                </div>
-
-                <!-- Info del tema -->
-                <div style="padding: 8px 10px 10px;">
-                    <div style="display: flex; align-items: center; justify-content: space-between;">
-                        <span style="font-size: 12px; font-weight: 600; color: {{ $textColor }}; line-height: 1.2;">
-                            {{ $theme['name'] }}
-                        </span>
-                        @if($activeTheme === $theme['slug'])
-                        <div class="badge badge-primary" style="margin-left:8px;">✓</div>
-                        @endif
-                    </div>
-                    @if(isset($theme['font']))
-                    <div style="font-size: 10px; color: {{ $subColor }}; margin-top: 2px; font-style: italic;">
-                        {{ $theme['font'] }}
-                    </div>
-                    @endif
                 </div>
             </div>
             @endforeach
         </div>
     </div>
-    @endforeach
 </div>
 
 @if($tenant->plan_id === 3)
-<div class="form-section" style="margin-top: 24px;">
-    <div class="divider" style="margin: 0 0 20px;">O personaliza tus colores</div>
-    <div class="card bg-base-200">
-        <div class="card-body">
-            <h3 class="card-title">🎨 Paleta Personalizada</h3>
-            @php
-            $customPalette = $tenant->settings['engine_settings']['visual']['custom_palette'] ?? [
-                'primary' => '#570DF8',
-                'secondary' => '#F000B9',
-                'accent' => '#1DCDBC',
-                'base' => '#FFFFFF'
-            ];
-            @endphp
-            <div class="grid grid-cols-2 gap-4">
-                <div class="form-control">
-                    <label class="label"><span class="label-text">Primary</span></label>
-                    <input type="color" id="custom-primary" class="input w-full h-10" value="{{ $customPalette['primary'] }}">
-                </div>
-                <div class="form-control">
-                    <label class="label"><span class="label-text">Secondary</span></label>
-                    <input type="color" id="custom-secondary" class="input w-full h-10" value="{{ $customPalette['secondary'] }}">
-                </div>
-                <div class="form-control">
-                    <label class="label"><span class="label-text">Accent</span></label>
-                    <input type="color" id="custom-accent" class="input w-full h-10" value="{{ $customPalette['accent'] }}">
-                </div>
-                <div class="form-control">
-                    <label class="label"><span class="label-text">Base</span></label>
-                    <input type="color" id="custom-base" class="input w-full h-10" value="{{ $customPalette['base'] }}">
-                </div>
+{{-- ── Paleta Personalizada (Plan VISIÓN) ──────────── --}}
+<div class="card bg-base-100 shadow-sm border border-base-content/10 mb-4">
+    <div class="card-header">
+        <h3 class="card-title flex items-center gap-2">
+            <span class="icon-[tabler--color-swatch] size-5 text-primary" aria-hidden="true"></span>
+            Paleta Personalizada
+            <span class="badge badge-soft badge-info badge-xs">Plan VISIÓN</span>
+        </h3>
+    </div>
+    <div class="card-body">
+        @php
+        $customPalette = $tenant->settings['engine_settings']['visual']['custom_palette'] ?? [
+            'primary' => '#570DF8', 'secondary' => '#F000B9', 'accent' => '#1DCDBC', 'base' => '#FFFFFF'
+        ];
+        @endphp
+        <div class="grid grid-cols-4 gap-3">
+            @foreach(['primary','secondary','accent','base'] as $colorKey)
+            <div class="form-control">
+                <label class="label pb-1"><span class="label-text text-xs font-medium capitalize">{{ $colorKey }}</span></label>
+                <input type="color" id="custom-{{ $colorKey }}" class="w-full h-10 rounded-lg border border-base-content/10 cursor-pointer" value="{{ $customPalette[$colorKey] }}">
             </div>
-            <button onclick="applyCustomPalette()" class="btn btn-primary mt-4">
-                Aplicar Paleta Custom
-            </button>
+            @endforeach
         </div>
+        <button onclick="applyCustomPalette()" class="btn btn-primary btn-sm w-full gap-2 mt-3">
+            <span class="icon-[tabler--palette] size-4"></span>
+            Aplicar Paleta Custom
+        </button>
     </div>
 </div>
 @endif
@@ -1556,13 +1234,17 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
             {{-- ══════════════════════════════════════════════════════════════
                  SECCIÓN: Orden de Secciones (Drag & Drop)
             ══════════════════════════════════════════════════════════════ --}}
-            <div class="form-section" style="margin-top: 32px;">
-                <h2 class="table-title">📋 Orden de Secciones</h2>
-                <p class="table-subtitle" style="margin-bottom: 16px;">
-                    Arrastra para reordenar. Las secciones apagadas no aparecen en tu landing.
-                </p>
+            <div class="card bg-base-100 shadow-sm border border-base-content/10 mb-4">
+                <div class="card-header">
+                    <h2 class="card-title flex items-center gap-2">
+                        <span class="icon-[tabler--list-check] size-5 text-primary" aria-hidden="true"></span>
+                        Orden de Secciones
+                    </h2>
+                    <p class="text-xs text-base-content/50 mt-0.5">Arrastra para reordenar. Las secciones apagadas no aparecen en tu landing.</p>
+                </div>
+                <div class="card-body pt-2">
 
-                <div id="sortable-sections" class="space-y-2">
+                <div id="sortable-sections" class="grid grid-cols-1 lg:grid-cols-2 gap-2">
                     @php
                         // Get all 9 available sections from the Tenant model (based on plan access)
                         $allSections = [
@@ -1610,7 +1292,7 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
                         <div class="section-item {{ $hasAccess ? '' : 'no-drag opacity-40 pointer-events-none' }}"
                              data-section="{{ $key }}"
                              data-plan="{{ $planRequired }}">
-                            <div class="flex items-center gap-3 px-3 py-2.5 rounded-box
+                            <div class="flex items-center gap-2 px-2.5 py-2 rounded-lg
                                         bg-base-200 border border-base-content/10
                                         {{ $hasAccess ? 'cursor-move' : 'cursor-not-allowed' }}
                                         transition-colors hover:border-base-content/20">
@@ -1618,7 +1300,7 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
                                 {{-- Handle / Lock --}}
                                 @if($hasAccess)
                                     <span class="drag-handle text-base-content/40 hover:text-base-content/70 cursor-grab select-none flex-shrink-0 active:cursor-grabbing">
-                                        <span class="iconify tabler--grip-vertical" style="font-size: 16px;"></span>
+                                        <span class="iconify tabler--grip-vertical text-base"></span>
                                     </span>
                                 @else
                                     <span class="text-warning flex-shrink-0">
@@ -1669,6 +1351,7 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
                         </div>
                     @endforeach
                 </div>
+                </div>
             </div>
 
             {{-- SortableJS se inicializa al abrir la pestaña Diseño (ver script global al pie del body) --}}
@@ -1685,51 +1368,46 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
                 }
             @endphp
             <div class="card bg-base-100 shadow-sm border border-base-content/10 mt-4">
-                <div class="card-header">
-                    <h3 class="card-title flex items-center gap-2">
-                        <span class="icon-[tabler--message-star] size-5 text-primary"></span>
-                        Testimonios de Clientes
-                        <span class="badge badge-soft badge-primary badge-xs ms-1">Plan CRECIMIENTO+</span>
-                    </h3>
-                    <p class="text-base-content/50 text-xs mt-1">Hasta 5 testimonios. Deja vacíos los que no uses.</p>
+                <div class="card-header flex items-center justify-between gap-3 flex-wrap">
+                    <div>
+                        <h3 class="card-title flex items-center gap-2">
+                            <span class="icon-[tabler--message-star] size-5 text-primary"></span>
+                            Testimonios de Clientes
+                            <span class="badge badge-soft badge-primary badge-xs ms-1">Plan CRECIMIENTO+</span>
+                        </h3>
+                        <p class="text-base-content/50 text-xs mt-0.5">Hasta 5 testimonios. Deja vacíos los que no uses.</p>
+                    </div>
                 </div>
-                <div class="card-body space-y-4">
+                <div class="card-body pt-2 section-scroll">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                     @foreach($savedTestimonials as $ti => $testim)
-                    <div class="border border-base-content/10 rounded-xl p-4 space-y-3 bg-base-200/40">
-                        <p class="text-xs font-bold text-base-content/40 uppercase tracking-wider">Testimonio {{ $ti + 1 }}</p>
-                        <div class="grid grid-cols-2 gap-3">
-                            <div>
-                                <label class="label label-text text-xs">Nombre</label>
-                                <input type="text" id="testim_name_{{ $ti }}"
-                                       class="input input-sm w-full" placeholder="María García"
-                                       value="{{ $testim['name'] ?? '' }}">
-                            </div>
-                            <div>
-                                <label class="label label-text text-xs">Cargo / Empresa</label>
-                                <input type="text" id="testim_title_{{ $ti }}"
-                                       class="input input-sm w-full" placeholder="CEO en Empresa"
-                                       value="{{ $testim['title'] ?? '' }}">
-                            </div>
-                        </div>
-                        <div>
-                            <label class="label label-text text-xs">Testimonio</label>
-                            <textarea id="testim_text_{{ $ti }}" rows="2"
-                                      class="textarea textarea-sm w-full resize-none"
-                                      placeholder="Excelente servicio...">{{ $testim['text'] ?? '' }}</textarea>
-                        </div>
-                        <div>
-                            <label class="label label-text text-xs">Estrellas</label>
-                            <select id="testim_rating_{{ $ti }}" class="select select-sm w-28">
+                    @php $hasContent = !empty($testim['name']) || !empty($testim['text']); @endphp
+                    <div class="rounded-lg border p-3 space-y-2 transition-all
+                        {{ $hasContent ? 'border-primary/20 bg-primary/5' : 'border-base-content/10 bg-base-200/30' }}">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="text-[10px] font-bold text-base-content/40 uppercase tracking-wider">#{{ $ti + 1 }}</span>
+                            <select id="testim_rating_{{ $ti }}" class="select select-xs w-16 text-xs">
                                 @for($s = 5; $s >= 1; $s--)
-                                    <option value="{{ $s }}" {{ ($testim['rating'] ?? 5) == $s ? 'selected' : '' }}>
-                                        {{ $s }} ★
-                                    </option>
+                                    <option value="{{ $s }}" {{ ($testim['rating'] ?? 5) == $s ? 'selected' : '' }}>{{ $s }}★</option>
                                 @endfor
                             </select>
                         </div>
+                        <div class="grid grid-cols-2 gap-1.5">
+                            <input type="text" id="testim_name_{{ $ti }}"
+                                   class="input input-xs w-full" placeholder="Nombre"
+                                   value="{{ $testim['name'] ?? '' }}">
+                            <input type="text" id="testim_title_{{ $ti }}"
+                                   class="input input-xs w-full" placeholder="Cargo"
+                                   value="{{ $testim['title'] ?? '' }}">
+                        </div>
+                        <textarea id="testim_text_{{ $ti }}" rows="2"
+                                  class="textarea textarea-xs w-full resize-none text-xs"
+                                  maxlength="200"
+                                  placeholder="Excelente servicio...">{{ $testim['text'] ?? '' }}</textarea>
                     </div>
                     @endforeach
-                    <button type="button" onclick="saveTestimonials()" class="btn btn-primary w-full gap-2">
+                    </div>
+                    <button type="button" onclick="saveTestimonials()" class="btn btn-primary w-full gap-2 mt-3">
                         <span class="icon-[tabler--device-floppy] size-4"></span>
                         Guardar Testimonios
                     </button>
@@ -1748,34 +1426,36 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
                 }
             @endphp
             <div class="card bg-base-100 shadow-sm border border-base-content/10 mt-4">
-                <div class="card-header">
-                    <h3 class="card-title flex items-center gap-2">
-                        <span class="icon-[tabler--help-circle] size-5 text-primary"></span>
-                        Preguntas Frecuentes (FAQ)
-                        <span class="badge badge-soft badge-secondary badge-xs ms-1">Plan VISIÓN</span>
-                    </h3>
-                    <p class="text-base-content/50 text-xs mt-1">Hasta 5 preguntas. Deja vacíos los que no uses. Si todos vacíos se usan respuestas automáticas.</p>
-                </div>
-                <div class="card-body space-y-4">
-                    @foreach($savedFaq as $fi => $fitem)
-                    <div class="border border-base-content/10 rounded-xl p-4 space-y-3 bg-base-200/40">
-                        <p class="text-xs font-bold text-base-content/40 uppercase tracking-wider">Pregunta {{ $fi + 1 }}</p>
-                        <div>
-                            <label class="label label-text text-xs">Pregunta</label>
-                            <input type="text" id="faq_question_{{ $fi }}"
-                                   class="input input-sm w-full"
-                                   placeholder="¿Cuál es el horario de atención?"
-                                   value="{{ $fitem['question'] ?? '' }}">
-                        </div>
-                        <div>
-                            <label class="label label-text text-xs">Respuesta</label>
-                            <textarea id="faq_answer_{{ $fi }}" rows="2"
-                                      class="textarea textarea-sm w-full resize-none"
-                                      placeholder="Atendemos de lunes a viernes...">{{ $fitem['answer'] ?? '' }}</textarea>
-                        </div>
+                <div class="card-header flex items-center justify-between gap-3 flex-wrap">
+                    <div>
+                        <h3 class="card-title flex items-center gap-2">
+                            <span class="icon-[tabler--help-circle] size-5 text-primary"></span>
+                            Preguntas Frecuentes (FAQ)
+                            <span class="badge badge-soft badge-secondary badge-xs ms-1">Plan VISIÓN</span>
+                        </h3>
+                        <p class="text-base-content/50 text-xs mt-0.5">Hasta 5 preguntas. Vacías = respuestas automáticas.</p>
                     </div>
-                    @endforeach
-                    <button type="button" onclick="saveFaq()" class="btn btn-primary w-full gap-2">
+                </div>
+                <div class="card-body pt-2 section-scroll">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                        @foreach($savedFaq as $fi => $fitem)
+                        @php $hasFaqContent = !empty($fitem['question']) || !empty($fitem['answer']); @endphp
+                        <div class="rounded-lg border p-3 space-y-2 transition-all
+                            {{ $hasFaqContent ? 'border-secondary/20 bg-secondary/5' : 'border-base-content/10 bg-base-200/30' }}">
+                            <span class="text-[10px] font-bold text-base-content/40 uppercase tracking-wider">#{{ $fi + 1 }}</span>
+                            <input type="text" id="faq_question_{{ $fi }}"
+                                   class="input input-xs w-full font-medium"
+                                   placeholder="¿Pregunta?"
+                                   maxlength="150"
+                                   value="{{ $fitem['question'] ?? '' }}">
+                            <textarea id="faq_answer_{{ $fi }}" rows="2"
+                                      class="textarea textarea-xs w-full resize-none text-xs"
+                                      maxlength="300"
+                                      placeholder="Respuesta...">{{ $fitem['answer'] ?? '' }}</textarea>
+                        </div>
+                        @endforeach
+                    </div>
+                    <button type="button" onclick="saveFaq()" class="btn btn-primary w-full gap-2 mt-3">
                         <span class="icon-[tabler--device-floppy] size-4"></span>
                         Guardar FAQ
                     </button>
@@ -1784,20 +1464,16 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
             @endif
 
             @if($plan->id === 1)
-            <div style="background: linear-gradient(135deg, #1a2040 0%, #0f1c32 100%); border: 1px solid rgba(43,111,255,0.3); border-radius: 12px; padding: 16px 20px; margin-top: 24px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
-                <div style="display: flex; align-items: center; gap: 12px;">
-                    <span style="font-size: 22px;">🎨</span>
+            <div class="alert alert-info mt-4 flex items-center justify-between gap-4 flex-wrap">
+                <div class="flex items-center gap-3">
+                    <span class="icon-[tabler--sparkles] size-5 shrink-0" aria-hidden="true"></span>
                     <div>
-                        <p style="color: #fff; font-weight: 600; font-size: 14px; margin: 0 0 2px;">Desbloquea más personalización</p>
-                        <p style="color: rgba(255,255,255,0.5); font-size: 12px; margin: 0;">Header Top + Sección Acerca de disponibles desde el Plan CRECIMIENTO</p>
+                        <p class="font-semibold text-sm">Desbloquea más personalización</p>
+                        <p class="text-xs opacity-70">Header Top + Sección Acerca de disponibles desde el Plan CRECIMIENTO</p>
                     </div>
                 </div>
                 <a href="https://syntiweb.com/planes" target="_blank" rel="noopener noreferrer"
-                   style="background: #2B6FFF; color: #fff; text-decoration: none; padding: 8px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; white-space: nowrap;"
-                   onmouseover="this.style.background='#1e5beb'"
-                   onmouseout="this.style.background='#2B6FFF'">
-                    Ver Planes ↗
-                </a>
+                   class="btn btn-primary btn-sm shrink-0">Ver Planes</a>
             </div>
             @endif
 
@@ -1806,92 +1482,48 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
         <!-- Tab: Analytics -->
         <div id="tab-analytics" class="tab-content">
 
-            {{-- ── KPI Stat Cards ────────────────────────────────────────── --}}
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-
-                {{-- Visitas --}}
-                <div class="card bg-base-100 shadow-sm border border-base-content/10">
-                    <div class="card-body p-4">
-                        <div class="flex items-center justify-between mb-3">
-                            <div class="avatar avatar-placeholder">
-                                <div class="bg-primary/10 text-primary rounded-field size-10">
-                                    <span class="icon-[tabler--eye] size-5"></span>
-                                </div>
-                            </div>
-                            <span class="badge badge-soft badge-sm badge-primary">Hoy</span>
+            {{-- ── KPI Cards — compact single grid ──────────────────────── --}}
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 mb-4">
+                @php
+                    $kpis = [
+                        ['id' => 'visitors-today',   'label' => 'Visitantes hoy',    'icon' => 'tabler--eye',             'color' => 'primary', 'badge' => 'Hoy'],
+                        ['id' => 'visitors-week',    'label' => 'Visitantes 7d',     'icon' => 'tabler--users',           'color' => 'info',    'badge' => '7d'],
+                        ['id' => 'whatsapp-clicks',  'label' => 'WhatsApp',          'icon' => 'tabler--brand-whatsapp',  'color' => 'success', 'badge' => '7d'],
+                        ['id' => 'qr-scans',         'label' => 'Escaneos QR',       'icon' => 'tabler--qrcode',          'color' => 'warning', 'badge' => '7d'],
+                        ['id' => 'call-clicks',      'label' => 'Llamadas',          'icon' => 'tabler--phone',           'color' => 'error',   'badge' => '7d'],
+                        ['id' => 'currency-toggles',  'label' => 'Cambios moneda',   'icon' => 'tabler--currency-dollar', 'color' => 'secondary','badge' => '7d'],
+                        ['id' => 'avg-time',          'label' => 'Tiempo prom. (s)', 'icon' => 'tabler--clock',           'color' => 'accent',  'badge' => '7d'],
+                    ];
+                @endphp
+                @foreach($kpis as $kpi)
+                <div class="rounded-lg border border-base-content/10 bg-base-100 p-3">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="size-8 rounded-field bg-{{ $kpi['color'] }}/10 text-{{ $kpi['color'] }} flex items-center justify-center">
+                            <span class="icon-[{{ $kpi['icon'] }}] size-4"></span>
                         </div>
-                        <div class="text-2xl font-bold text-base-content">0</div>
-                        <div class="text-xs text-base-content/55 mt-0.5">Visitas al sitio</div>
+                        <span class="badge badge-soft badge-xs badge-{{ $kpi['color'] }}">{{ $kpi['badge'] }}</span>
                     </div>
+                    <div id="{{ $kpi['id'] }}" class="text-xl font-bold text-base-content leading-none">-</div>
+                    <div class="text-[11px] text-base-content/50 mt-1">{{ $kpi['label'] }}</div>
                 </div>
-
-                {{-- WhatsApp --}}
-                <div class="card bg-base-100 shadow-sm border border-base-content/10">
-                    <div class="card-body p-4">
-                        <div class="flex items-center justify-between mb-3">
-                            <div class="avatar avatar-placeholder">
-                                <div class="bg-success/10 text-success rounded-field size-10">
-                                    <span class="icon-[tabler--brand-whatsapp] size-5"></span>
-                                </div>
-                            </div>
-                            <span class="badge badge-soft badge-sm badge-success">Hoy</span>
-                        </div>
-                        <div class="text-2xl font-bold text-base-content">0</div>
-                        <div class="text-xs text-base-content/55 mt-0.5">Clicks WhatsApp</div>
-                    </div>
-                </div>
-
-                {{-- QR --}}
-                <div class="card bg-base-100 shadow-sm border border-base-content/10">
-                    <div class="card-body p-4">
-                        <div class="flex items-center justify-between mb-3">
-                            <div class="avatar avatar-placeholder">
-                                <div class="bg-warning/10 text-warning rounded-field size-10">
-                                    <span class="icon-[tabler--qrcode] size-5"></span>
-                                </div>
-                            </div>
-                            <span class="badge badge-soft badge-sm badge-warning">Hoy</span>
-                        </div>
-                        <div class="text-2xl font-bold text-base-content">0</div>
-                        <div class="text-xs text-base-content/55 mt-0.5">Escaneos QR</div>
-                    </div>
-                </div>
-
-                {{-- Productos vistos --}}
-                <div class="card bg-base-100 shadow-sm border border-base-content/10">
-                    <div class="card-body p-4">
-                        <div class="flex items-center justify-between mb-3">
-                            <div class="avatar avatar-placeholder">
-                                <div class="bg-info/10 text-info rounded-field size-10">
-                                    <span class="icon-[tabler--package] size-5"></span>
-                                </div>
-                            </div>
-                            <span class="badge badge-soft badge-sm badge-info">Hoy</span>
-                        </div>
-                        <div class="text-2xl font-bold text-base-content">0</div>
-                        <div class="text-xs text-base-content/55 mt-0.5">Productos vistos</div>
-                    </div>
-                </div>
+                @endforeach
             </div>
 
-            {{-- ── Charts Row ────────────────────────────────────────────── --}}
+            {{-- ── Gráfico + Distribución side-by-side ──────────────────── --}}
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
-
-                {{-- Actividad 7 días (área) --}}
-                <div class="card bg-base-100 shadow-sm border border-base-content/10 lg:col-span-2">
+                <div class="lg:col-span-2 card bg-base-100 shadow-sm border border-base-content/10">
                     <div class="card-header flex items-center justify-between">
-                        <h4 class="card-title text-base">Actividad — últimos 7 días</h4>
-                        <span class="badge badge-soft badge-primary badge-sm">Próximamente</span>
+                        <h4 class="card-title text-base">Visitantes — últimos 7 días</h4>
+                        <button onclick="loadAnalytics()" class="btn btn-sm btn-ghost gap-2">
+                            <span class="icon-[tabler--refresh] size-4"></span>
+                            Actualizar
+                        </button>
                     </div>
-                    <div class="card-body pt-0">
-                        <div id="analytics-area-chart"></div>
-                        <p class="text-xs text-base-content/40 text-center mt-2">
-                            La analítica detallada estará disponible en la próxima versión
-                        </p>
+                    <div class="card-body pt-2">
+                        <canvas id="analytics-chart" class="max-h-[250px]"></canvas>
                     </div>
                 </div>
 
-                {{-- Distribución (donut) --}}
                 <div class="card bg-base-100 shadow-sm border border-base-content/10">
                     <div class="card-header">
                         <h4 class="card-title text-base">Distribución</h4>
@@ -2022,32 +1654,41 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
             {{-- Branch list + Forms (shown only when enabled) --}}
             <div id="branches-content" {{ $branchesEnabled ? '' : 'style="display:none"' }}>
 
-                {{-- Existing branches --}}
-                <div id="branches-list" class="space-y-3 mb-4">
+                {{-- Existing branches — intelligent grid: 1=12col, 2=6+6, 3=4+4+4 --}}
+                @php
+                    $branchGridClass = match($currentBranchCount) {
+                        0 => 'grid-cols-1',
+                        1 => 'grid-cols-1',
+                        2 => 'grid-cols-1 sm:grid-cols-2',
+                        default => 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3',
+                    };
+                @endphp
+                <div id="branches-list" class="grid {{ $branchGridClass }} gap-3 mb-4">
                     @foreach($branches as $branch)
-                    <div class="card bg-base-100 shadow-sm border border-base-content/10 branch-card" id="branch-card-{{ $branch->id }}">
-                        <div class="card-body flex-row items-start justify-between gap-3">
+                    <div class="rounded-lg border border-base-content/10 bg-base-200/30 p-4 transition-all hover:border-primary/30 branch-card" id="branch-card-{{ $branch->id }}">
+                        <div class="flex items-start gap-3 mb-3">
+                            <div class="size-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                                <span class="icon-[tabler--map-pin] size-5 text-primary" aria-hidden="true"></span>
+                            </div>
                             <div class="flex-1 min-w-0">
-                                <div class="flex items-center gap-2 mb-1">
-                                    <span class="icon-[tabler--map-pin] size-4 text-primary shrink-0" aria-hidden="true"></span>
-                                    <h3 class="branch-name font-semibold text-base-content">{{ $branch->name }}</h3>
-                                </div>
-                                <p class="branch-address text-sm text-base-content/60 leading-relaxed">{{ $branch->address }}</p>
+                                <h3 class="branch-name text-sm font-semibold text-base-content truncate">{{ $branch->name }}</h3>
+                                <p class="branch-address text-xs text-base-content/50 line-clamp-2 mt-0.5">{{ $branch->address }}</p>
                             </div>
-                            <div class="flex gap-1 shrink-0">
-                                <button type="button"
-                                        class="btn btn-circle btn-text btn-sm text-base-content/60 hover:text-primary"
-                                        onclick="editBranch({{ $branch->id }}, '{{ addslashes($branch->name) }}', '{{ addslashes($branch->address) }}')"
-                                        title="Editar" aria-label="Editar sucursal">
-                                    <span class="icon-[tabler--pencil] size-4" aria-hidden="true"></span>
-                                </button>
-                                <button type="button"
-                                        class="btn btn-circle btn-text btn-sm text-base-content/60 hover:text-error"
-                                        onclick="deleteBranch({{ $branch->id }})"
-                                        title="Eliminar" aria-label="Eliminar sucursal">
-                                    <span class="icon-[tabler--trash] size-4" aria-hidden="true"></span>
-                                </button>
-                            </div>
+                        </div>
+                        <div class="flex gap-1.5">
+                            <button type="button"
+                                    class="btn btn-soft btn-sm flex-1 gap-1"
+                                    onclick="editBranch({{ $branch->id }}, '{{ addslashes($branch->name) }}', '{{ addslashes($branch->address) }}')"
+                                    title="Editar">
+                                <span class="icon-[tabler--pencil] size-3.5" aria-hidden="true"></span>
+                                Editar
+                            </button>
+                            <button type="button"
+                                    class="btn btn-soft btn-error btn-sm btn-square"
+                                    onclick="deleteBranch({{ $branch->id }})"
+                                    title="Eliminar" aria-label="Eliminar sucursal">
+                                <span class="icon-[tabler--trash] size-3.5" aria-hidden="true"></span>
+                            </button>
                         </div>
                     </div>
                     @endforeach
@@ -2101,6 +1742,68 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
 
         <!-- Tab: Config -->
         <div id="tab-config" class="tab-content">
+
+            {{-- ═══════════════════════════════════════════════════════════
+                 Section: Horario de Atención (Business Hours)
+            ═══════════════════════════════════════════════════════════ --}}
+            @php
+                $businessHours = $tenant->business_hours ?? [];
+                $daysMap = [
+                    'monday'    => 'Lunes',
+                    'tuesday'   => 'Martes',
+                    'wednesday' => 'Miércoles',
+                    'thursday'  => 'Jueves',
+                    'friday'    => 'Viernes',
+                    'saturday'  => 'Sábado',
+                    'sunday'    => 'Domingo',
+                ];
+            @endphp
+            <div class="card bg-base-100 shadow-sm border border-base-content/10 mb-4">
+                <div class="card-header">
+                    <h3 class="card-title flex items-center gap-2">
+                        <span class="icon-[tabler--clock] size-5 text-primary" aria-hidden="true"></span>
+                        Horario de Atención
+                    </h3>
+                    <p class="text-xs text-base-content/50 mt-0.5">Define el horario de tu negocio para cada día de la semana</p>
+                </div>
+                <div class="card-body pt-2">
+                    <div class="section-scroll space-y-2" id="business-hours-list">
+                        @foreach($daysMap as $dayKey => $dayLabel)
+                        @php
+                            $dayData = $businessHours[$dayKey] ?? null;
+                            $isClosed = is_null($dayData);
+                            $openTime = $dayData['open'] ?? '08:00';
+                            $closeTime = $dayData['close'] ?? '18:00';
+                        @endphp
+                        <div class="flex items-center gap-3 p-3 rounded-lg bg-base-200/40 border border-base-content/10">
+                            <span class="text-sm font-semibold text-base-content w-24 shrink-0">{{ $dayLabel }}</span>
+                            <div class="flex items-center gap-2 flex-1 flex-wrap">
+                                <input type="time" id="bh-{{ $dayKey }}-open"
+                                       class="input input-sm input-bordered w-28"
+                                       value="{{ $openTime }}"
+                                       {{ $isClosed ? 'disabled' : '' }}>
+                                <span class="text-xs text-base-content/40">a</span>
+                                <input type="time" id="bh-{{ $dayKey }}-close"
+                                       class="input input-sm input-bordered w-28"
+                                       value="{{ $closeTime }}"
+                                       {{ $isClosed ? 'disabled' : '' }}>
+                            </div>
+                            <label class="label cursor-pointer gap-2 shrink-0">
+                                <span class="label-text text-xs text-base-content/50">Cerrado</span>
+                                <input type="checkbox" id="bh-{{ $dayKey }}-closed"
+                                       class="toggle toggle-error toggle-sm"
+                                       {{ $isClosed ? 'checked' : '' }}
+                                       onchange="toggleDayClosed('{{ $dayKey }}', this.checked)">
+                            </label>
+                        </div>
+                        @endforeach
+                    </div>
+                    <button type="button" onclick="saveBusinessHours()" class="btn btn-primary w-full gap-2 mt-3">
+                        <span class="icon-[tabler--device-floppy] size-4" aria-hidden="true"></span>
+                        Guardar Horario
+                    </button>
+                </div>
+            </div>
 
             {{-- ═══════════════════════════════════════════════════════════
                  Section 0: Social Networks
@@ -2170,22 +1873,18 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
                     </div>
 
                     @else
-                    {{-- ── Plan 2 + 3: all 6 networks ── --}}
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4" id="social-all-fields">
+                    {{-- ── Plan 2 + 3: grid cubo Rubik ── --}}
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-4" id="social-all-fields">
                         @foreach($availableKeys as $key)
                         @php $meta = $allNetworksMeta[$key]; $current = $socialNetworks[$key] ?? ''; @endphp
-                        <div class="form-control">
-                            <label class="label" for="social-{{ $key }}">
-                                <span class="label-text flex items-center gap-1.5 font-medium">
-                                    <span class="icon-[{{ $meta['icon'] }}] size-4 text-base-content/60" aria-hidden="true"></span>
-                                    {{ $meta['label'] }}
-                                </span>
-                            </label>
+                        <div class="flex flex-col items-center gap-2 p-3 rounded-lg border border-base-content/10 bg-base-200/40 transition-all hover:border-primary/30 hover:bg-primary/5">
+                            <span class="icon-[{{ $meta['icon'] }}] size-7 text-primary" aria-hidden="true"></span>
+                            <span class="text-[11px] font-semibold text-base-content/70">{{ $meta['label'] }}</span>
                             <input type="text" id="social-{{ $key }}" name="social_{{ $key }}"
                                    value="{{ $current }}"
                                    placeholder="{{ $meta['placeholder'] }}"
                                    maxlength="255"
-                                   class="input input-bordered w-full">
+                                   class="input input-bordered input-sm w-full text-center text-xs">
                         </div>
                         @endforeach
                     </div>
@@ -2267,20 +1966,17 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
                     </p>
 
                     <p class="text-xs font-semibold uppercase tracking-wide text-base-content/40 mb-2">Nacionales / Divisas</p>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4">
+                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1.5 mb-4">
                         @foreach($allPayMeta as $mkey => $m)
                         @php $checked = in_array($mkey, $globalEnabled); @endphp
                         <label id="pay-label-{{ $mkey }}" onclick="togglePayMethod('{{ $mkey }}')"
-                               class="flex items-center gap-2 cursor-pointer p-2.5 rounded-box border transition-all select-none
-                                      {{ $checked ? 'bg-primary/20 border-primary/50 text-primary font-semibold' : 'bg-base-200/50 border-base-content/10 text-base-content hover:border-base-content/20' }}">
+                               class="flex items-center gap-1.5 cursor-pointer px-2.5 py-2 rounded-lg border transition-all select-none
+                                      {{ $checked ? 'bg-primary/15 border-primary/40 text-primary font-semibold' : 'bg-base-200/40 border-base-content/10 text-base-content hover:border-base-content/20' }}">
                             <input type="checkbox" id="pay-check-{{ $mkey }}" value="{{ $mkey }}" {{ $checked ? 'checked' : '' }} class="hidden">
-                            <span class="text-base">{{ $m['icon'] }}</span>
-                            <div class="flex-1 min-w-0">
-                                <div class="text-xs font-medium {{ $checked ? 'text-primary' : 'text-base-content' }}">{{ $m['label'] }}</div>
-                                <div class="text-xs {{ $checked ? 'text-primary/70' : 'text-base-content/40' }}">{{ $m['desc'] }}</div>
-                            </div>
+                            <span class="text-sm">{{ $m['icon'] }}</span>
+                            <span class="text-xs font-medium flex-1 truncate {{ $checked ? 'text-primary' : 'text-base-content' }}">{{ $m['label'] }}</span>
                             <span id="pay-check-icon-{{ $mkey }}"
-                                  class="icon-[tabler--check] size-4 shrink-0 transition-opacity {{ $checked ? 'text-primary opacity-100' : 'opacity-0' }}"
+                                  class="icon-[tabler--check] size-3.5 shrink-0 transition-opacity {{ $checked ? 'text-primary opacity-100' : 'opacity-0' }}"
                                   aria-hidden="true"></span>
                         </label>
                         @endforeach
@@ -2331,16 +2027,16 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
                                     <span class="icon-[tabler--map-pin] size-4 text-base-content/50" aria-hidden="true"></span>
                                     <span class="font-semibold text-sm text-base-content">{{ $branch->name }}</span>
                                 </div>
-                                <div class="grid grid-cols-2 gap-1.5">
+                                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1.5">
                                     @foreach($allPayMeta as $mkey => $m)
                                     @php $bchecked = in_array($mkey, $bEnabled); @endphp
                                     <label id="pay-branch-label-{{ $branch->id }}-{{ $mkey }}"
                                            onclick="toggleBranchPayMethod({{ $branch->id }}, '{{ $mkey }}')"
-                                           class="flex items-center gap-1.5 cursor-pointer p-2 rounded-lg border transition-all select-none
-                                                  {{ $bchecked ? 'bg-primary/20 border-primary/50 text-primary font-semibold' : 'bg-base-100 border-base-content/10 text-base-content hover:border-base-content/20' }}">
+                                           class="flex items-center gap-1.5 cursor-pointer px-2 py-1.5 rounded-lg border transition-all select-none
+                                                  {{ $bchecked ? 'bg-primary/15 border-primary/40 text-primary font-semibold' : 'bg-base-100 border-base-content/10 text-base-content hover:border-base-content/20' }}">
                                         <input type="checkbox" id="pay-branch-check-{{ $branch->id }}-{{ $mkey }}" value="{{ $mkey }}" {{ $bchecked ? 'checked' : '' }} class="hidden">
                                         <span class="text-sm">{{ $m['icon'] }}</span>
-                                        <span class="text-xs {{ $bchecked ? 'text-primary' : 'text-base-content' }} flex-1">{{ $m['label'] }}</span>
+                                        <span class="text-xs {{ $bchecked ? 'text-primary' : 'text-base-content' }} flex-1 truncate">{{ $m['label'] }}</span>
                                         <span id="pay-branch-check-icon-{{ $branch->id }}-{{ $mkey }}"
                                               class="icon-[tabler--check] size-3.5 shrink-0 transition-opacity {{ $bchecked ? 'text-primary opacity-100' : 'opacity-0' }}"
                                               aria-hidden="true"></span>
@@ -2413,81 +2109,80 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
                 </div>
             </div>
 
-            <!-- Section 2: Change PIN -->
-            <div class="config-section" style="background: #0f1c32; border-radius: 12px; padding: 24px; margin-bottom: 24px;">
-                <h3 style="color: #fff; font-size: 18px; font-weight: 600; margin-bottom: 24px;">Cambiar PIN de Acceso</h3>
-                
-                <form id="pin-form" style="display: flex; flex-direction: column; gap: 16px;">
-                    <div>
-                        <label style="color: #e5e7eb; font-size: 13px; display: block; margin-bottom: 6px;">PIN Actual</label>
-                        <input type="password" id="current-pin" maxlength="4" pattern="[0-9]{4}" required
-                            style="width: 100%; background: #07101F; border: 1px solid #1e2a42; border-radius: 8px; padding: 12px 16px; color: #fff; font-size: 15px;"
-                            placeholder="••••">
-                    </div>
-                    
-                    <div>
-                        <label style="color: #e5e7eb; font-size: 13px; display: block; margin-bottom: 6px;">PIN Nuevo</label>
-                        <input type="password" id="new-pin" maxlength="4" pattern="[0-9]{4}" required
-                            style="width: 100%; background: #07101F; border: 1px solid #1e2a42; border-radius: 8px; padding: 12px 16px; color: #fff; font-size: 15px;"
-                            placeholder="••••">
-                    </div>
-                    
-                    <div>
-                        <label style="color: #e5e7eb; font-size: 13px; display: block; margin-bottom: 6px;">Confirmar PIN Nuevo</label>
-                        <input type="password" id="confirm-pin" maxlength="4" pattern="[0-9]{4}" required
-                            style="width: 100%; background: #07101F; border: 1px solid #1e2a42; border-radius: 8px; padding: 12px 16px; color: #fff; font-size: 15px;"
-                            placeholder="••••">
-                    </div>
-                    
-                    <button type="button" onclick="updatePin()"
-                        style="background: #2B6FFF; color: #fff; border: none; border-radius: 8px; padding: 12px 24px; font-size: 15px; font-weight: 500; cursor: pointer; transition: all 0.2s;"
-                        onmouseover="this.style.background='#1e5ce6'"
-                        onmouseout="this.style.background='#2B6FFF'">
+            {{-- ── Cambiar PIN ──────────────────────────────────── --}}
+            <div class="card bg-base-100 shadow-sm border border-base-content/10 mb-4">
+                <div class="card-header">
+                    <h3 class="card-title flex items-center gap-2">
+                        <span class="icon-[tabler--lock] size-5 text-primary" aria-hidden="true"></span>
+                        Cambiar PIN de Acceso
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <form id="pin-form" class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div class="form-control">
+                            <label class="label pb-1"><span class="label-text font-medium text-sm">PIN Actual</span></label>
+                            <input type="password" id="current-pin" maxlength="4" pattern="[0-9]{4}" required
+                                   class="input input-bordered w-full" placeholder="••••">
+                        </div>
+                        <div class="form-control">
+                            <label class="label pb-1"><span class="label-text font-medium text-sm">PIN Nuevo</span></label>
+                            <input type="password" id="new-pin" maxlength="4" pattern="[0-9]{4}" required
+                                   class="input input-bordered w-full" placeholder="••••">
+                        </div>
+                        <div class="form-control">
+                            <label class="label pb-1"><span class="label-text font-medium text-sm">Confirmar PIN</span></label>
+                            <input type="password" id="confirm-pin" maxlength="4" pattern="[0-9]{4}" required
+                                   class="input input-bordered w-full" placeholder="••••">
+                        </div>
+                    </form>
+                    <button type="button" onclick="updatePin()" class="btn btn-primary w-full sm:w-auto gap-2 mt-3">
+                        <span class="icon-[tabler--device-floppy] size-4" aria-hidden="true"></span>
                         Guardar PIN
                     </button>
-                </form>
+                </div>
             </div>
 
-            <!-- Section 3: Plan Information -->
-            <div class="config-section" style="background: #0f1c32; border-radius: 12px; padding: 24px;">
-                <h3 style="color: #fff; font-size: 18px; font-weight: 600; margin-bottom: 24px;">Información del Plan</h3>
-                
-                <div style="display: flex; flex-direction: column; gap: 16px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #1e2a42;">
-                        <span style="color: #94a3b8; font-size: 14px;">Plan actual</span>
-                        <span style="color: #fff; font-size: 15px; font-weight: 600;">{{ $plan->name }}</span>
+            {{-- ── Información del Plan ────────────────────────── --}}
+            <div class="card bg-base-100 shadow-sm border border-base-content/10">
+                <div class="card-header flex items-center justify-between gap-2 flex-wrap">
+                    <h3 class="card-title flex items-center gap-2">
+                        <span class="icon-[tabler--crown] size-5 text-primary" aria-hidden="true"></span>
+                        Información del Plan
+                    </h3>
+                    <span class="badge badge-soft badge-sm {{ $plan->id === 1 ? 'badge-warning' : ($plan->id === 2 ? 'badge-success' : 'badge-info') }}">
+                        {{ $plan->name }}
+                    </span>
+                </div>
+                <div class="card-body p-0">
+                    <div class="divide-y divide-base-content/10">
+                        <div class="flex items-center justify-between px-4 py-3">
+                            <span class="text-sm text-base-content/60">Plan actual</span>
+                            <span class="text-sm font-semibold text-base-content">{{ $plan->name }}</span>
+                        </div>
+                        <div class="flex items-center justify-between px-4 py-3">
+                            <span class="text-sm text-base-content/60">Productos</span>
+                            <span class="text-sm font-semibold text-base-content">{{ $products->count() }} / {{ $plan->products_limit }}</span>
+                        </div>
+                        <div class="flex items-center justify-between px-4 py-3">
+                            <span class="text-sm text-base-content/60">Servicios</span>
+                            <span class="text-sm font-semibold text-base-content">{{ $services->count() }} / {{ $plan->services_limit }}</span>
+                        </div>
+                        <div class="flex items-center justify-between px-4 py-3">
+                            <span class="text-sm text-base-content/60">Miembro desde</span>
+                            <span class="text-sm font-semibold text-base-content">{{ $tenant->created_at->format('d/m/Y') }}</span>
+                        </div>
+                        <div class="flex items-center justify-between px-4 py-3">
+                            <span class="text-sm text-base-content/60">Renovación</span>
+                            <span class="text-sm font-semibold text-base-content">Por definir</span>
+                        </div>
                     </div>
-                    
-                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #1e2a42;">
-                        <span style="color: #94a3b8; font-size: 14px;">Productos</span>
-                        <span style="color: #fff; font-size: 15px; font-weight: 600;">
-                            {{ $products->count() }} de {{ $plan->products_limit }}
-                        </span>
+                    <div class="px-4 pb-4 pt-2">
+                        <a href="https://syntiweb.com/planes" target="_blank" rel="noopener noreferrer"
+                           class="btn btn-soft btn-primary btn-sm btn-block gap-2">
+                            <span class="icon-[tabler--external-link] size-4" aria-hidden="true"></span>
+                            Ver planes disponibles
+                        </a>
                     </div>
-                    
-                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #1e2a42;">
-                        <span style="color: #94a3b8; font-size: 14px;">Servicios</span>
-                        <span style="color: #fff; font-size: 15px; font-weight: 600;">
-                            {{ $services->count() }} de {{ $plan->services_limit }}
-                        </span>
-                    </div>
-                    
-                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #1e2a42;">
-                        <span style="color: #94a3b8; font-size: 14px;">Miembro desde</span>
-                        <span style="color: #fff; font-size: 15px; font-weight: 600;">{{ $tenant->created_at->format('d/m/Y') }}</span>
-                    </div>
-                    
-                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #1e2a42;">
-                        <span style="color: #94a3b8; font-size: 14px;">Renovación</span>
-                        <span style="color: #fff; font-size: 15px; font-weight: 600;">Por definir</span>
-                    </div>
-                    
-                    <a href="https://syntiweb.com/planes" target="_blank" rel="noopener noreferrer"
-                       style="color: #2B6FFF; font-size: 14px; font-weight: 500; text-decoration: none; margin-top: 8px; display: inline-block;"
-                        onmouseover="this.style.textDecoration='underline'"
-                        onmouseout="this.style.textDecoration='none'">
-                        Ver planes disponibles ↗
-                    </a>
                 </div>
             </div>
 
@@ -2567,6 +2262,93 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
             });
         });
 
+        // Toggle Hours Indicator Fields
+        function toggleHoursIndicatorFields() {
+            const toggle = document.getElementById('show-hours-toggle');
+            const fields = document.getElementById('hours-indicator-fields');
+            
+            if (toggle.checked) {
+                fields.classList.remove('hidden');
+                updateCharCount();
+                updatePreview();
+            } else {
+                fields.classList.add('hidden');
+            }
+        }
+
+        // Update character count for closed message
+        function updateCharCount() {
+            const textarea = document.getElementById('closed-message-input');
+            const charCount = document.getElementById('char-count');
+            if (textarea && charCount) {
+                charCount.textContent = `${textarea.value.length} / 150`;
+            }
+        }
+
+        // Update preview message in real-time
+        function updatePreview() {
+            const textarea = document.getElementById('closed-message-input');
+            const preview = document.getElementById('preview-message');
+            if (textarea && preview) {
+                preview.textContent = textarea.value || 'Estamos cerrados. Te responderemos durante nuestro horario de atención.';
+            }
+        }
+
+        // Initialize character count on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCharCount();
+            updatePreview();
+        });
+
+        // ── Business Hours ────────────────────────────────────────
+        function toggleDayClosed(dayKey, isClosed) {
+            const openInput = document.getElementById('bh-' + dayKey + '-open');
+            const closeInput = document.getElementById('bh-' + dayKey + '-close');
+            if (openInput) openInput.disabled = isClosed;
+            if (closeInput) closeInput.disabled = isClosed;
+        }
+
+        async function saveBusinessHours() {
+            const days = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday'];
+            const payload = {};
+
+            days.forEach(day => {
+                const closedToggle = document.getElementById('bh-' + day + '-closed');
+                const openInput = document.getElementById('bh-' + day + '-open');
+                const closeInput = document.getElementById('bh-' + day + '-close');
+
+                if (closedToggle && closedToggle.checked) {
+                    payload[day] = { closed: true };
+                } else {
+                    payload[day] = {
+                        open: openInput ? openInput.value : '08:00',
+                        close: closeInput ? closeInput.value : '18:00'
+                    };
+                }
+            });
+
+            try {
+                const response = await fetch('/tenant/{{ $tenant->id }}/update-business-hours', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    window.showToast ? window.showToast('✅ Horario guardado', 'success') : alert('✓ Horario guardado');
+                } else {
+                    window.showToast ? window.showToast('❌ ' + (result.message || 'Error'), 'error') : alert('✗ ' + (result.message || 'Error'));
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                window.showToast ? window.showToast('❌ Error de red', 'error') : alert('✗ Error al guardar horario');
+            }
+        }
+
         // Save Info Form
         async function saveInfo(event) {
             event.preventDefault();
@@ -2641,23 +2423,21 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
             if (next) {
                 const nextQty = type === 'producto' ? next.prods : next.svcs;
                 msg.innerHTML =
-                    `<strong style="color:#fff;">Has alcanzado el máximo de ${max} ${noun}</strong> del Plan <em>${planName}</em>.<br><br>` +
-                    `Actualiza al Plan <strong style="color:#22c55e;">${next.name}</strong> y gestiona hasta ` +
-                    `<strong style="color:#fff;">${nextQty} ${noun}</strong> en tu landing.`;
+                    `<strong class="text-base-content">Has alcanzado el máximo de ${max} ${noun}</strong> del Plan <em>${planName}</em>.<br><br>` +
+                    `Actualiza al Plan <strong class="text-success">${next.name}</strong> y gestiona hasta ` +
+                    `<strong class="text-base-content">${nextQty} ${noun}</strong> en tu landing.`;
                 cta.innerHTML =
-                    `<a href="https://syntiweb.com/planes" target="_blank" rel="noopener noreferrer" style="background:#22c55e;color:#000;font-weight:700;text-decoration:none;` +
-                    `padding:10px 22px;border-radius:8px;display:inline-block;cursor:pointer;font-size:13px;">` +
-                    `\uD83D\DE80 Quiero el Plan ${next.name}</a>`;
+                    `<a href="https://syntiweb.com/planes" target="_blank" rel="noopener noreferrer" class="btn btn-success btn-sm gap-2">` +
+                    `🚀 Quiero el Plan ${next.name}</a>`;
             } else {
                 // Plan 3 — last plan → contact support
                 msg.innerHTML =
-                    `<strong style="color:#fff;">Has alcanzado el máximo de ${max} ${noun}</strong> del Plan <em>${planName}</em>.<br><br>` +
+                    `<strong class="text-base-content">Has alcanzado el máximo de ${max} ${noun}</strong> del Plan <em>${planName}</em>.<br><br>` +
                     `Para necesidades especiales, nuestro equipo puede diseñar una solución ` +
                     `personalizada para tu negocio. Contáctanos directamente.`;
                 cta.innerHTML =
                     `<a href="${SUPPORT_WA}?text=${encodeURIComponent('Hola, soy cliente del Plan VISIÓN y necesito soporte personalizado.')}" ` +
-                    `target="_blank" style="background:#25d366;color:#000;font-weight:700;text-decoration:none;` +
-                    `padding:10px 22px;border-radius:8px;display:inline-block;font-size:13px;">` +
+                    `target="_blank" class="btn btn-success btn-sm gap-2">` +
                     `💬 Contactar Soporte</a>`;
             }
 
@@ -2753,7 +2533,7 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
             
             if (thumbsContainer) thumbsContainer.innerHTML = '';
             if (previewsContainer) previewsContainer.innerHTML = '';
-            if (existingContainer) existingContainer.style.display = 'none';
+            if (existingContainer) existingContainer.classList.add('hidden');
             
             // Reset file inputs
             const g1 = document.getElementById('product-gallery-1');
@@ -2775,7 +2555,7 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
             thumbsContainer.innerHTML = '';
 
             if (galleryImages.length > 0) {
-                existingContainer.style.display = 'block';
+                existingContainer.classList.remove('hidden');
                 
                 galleryImages.forEach(img => {
                     const thumb = document.createElement('div');
@@ -2802,8 +2582,8 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
             if (!slot1 || !slot2) return;
 
             const availableSlots = 2 - existingCount;
-            slot1.style.display = availableSlots >= 1 ? 'block' : 'none';
-            slot2.style.display = availableSlots >= 2 ? 'block' : 'none';
+            slot1.classList.toggle('hidden', availableSlots < 1);
+            slot2.classList.toggle('hidden', availableSlots < 2);
         }
 
         /**
@@ -2858,7 +2638,7 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
                         showGallerySlots(product.gallery_images.length);
                         
                         if (product.gallery_images.length === 0) {
-                            document.getElementById('product-gallery-existing').style.display = 'none';
+                            document.getElementById('product-gallery-existing').classList.add('hidden');
                         }
                     }
                 } else {
@@ -3363,6 +3143,96 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
             }
         }
 
+        // ── Image Uploads: Logo, Hero + Drag & Drop ─────────────
+        async function _uploadImage(file, type) {
+            if (!file || !file.type.startsWith('image/')) {
+                showToast('❌ Selecciona un archivo de imagen válido', 'error');
+                return;
+            }
+            if (file.size > 5 * 1024 * 1024) {
+                showToast('❌ La imagen no debe superar 5MB', 'error');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('image', file);
+
+            const dropzone = document.getElementById(type + '-dropzone');
+            if (dropzone) dropzone.style.opacity = '0.5';
+
+            try {
+                const response = await fetch('/tenant/{{ $tenant->id }}/upload/' + type, {
+                    method: 'POST',
+                    headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content },
+                    body: formData
+                });
+
+                const result = await response.json();
+                if (dropzone) dropzone.style.opacity = '1';
+
+                if (result.success) {
+                    const previewId = type + '-preview';
+                    const placeholderId = type + '-placeholder';
+                    const placeholder = document.getElementById(placeholderId);
+                    let preview = document.getElementById(previewId);
+
+                    if (placeholder) placeholder.style.display = 'none';
+
+                    const newSrc = result.url + '?t=' + Date.now();
+                    const imgClass = type === 'logo' ? 'max-w-full max-h-full object-contain' : 'w-full h-full object-cover';
+
+                    if (preview) {
+                        preview.src = newSrc;
+                        preview.style.display = 'block';
+                    } else {
+                        const img = document.createElement('img');
+                        img.id = previewId;
+                        img.src = newSrc;
+                        img.alt = type.charAt(0).toUpperCase() + type.slice(1);
+                        img.className = imgClass;
+                        const dz = document.getElementById(type + '-dropzone');
+                        if (dz) dz.appendChild(img);
+                    }
+                    showToast('✅ ' + (type === 'logo' ? 'Logo' : 'Imagen hero') + ' actualizado correctamente');
+                } else {
+                    showToast('❌ Error al subir ' + type + ': ' + (result.error || result.message || 'Error desconocido'), 'error');
+                }
+            } catch (err) {
+                if (dropzone) dropzone.style.opacity = '1';
+                console.error('upload ' + type + ':', err);
+                showToast('❌ Error de red al subir ' + type, 'error');
+            }
+        }
+
+        function uploadLogo(event) { _uploadImage(event.target.files[0], 'logo'); }
+        function uploadHero(event) { _uploadImage(event.target.files[0], 'hero'); }
+
+        function handleDropUpload(event, type) {
+            const file = event.dataTransfer.files[0];
+            if (file) _uploadImage(file, type);
+        }
+
+        function downloadQRSVG() {
+            const qrContainer = document.getElementById('qr-display');
+            if (!qrContainer) return;
+            const svgEl = qrContainer.querySelector('svg');
+            if (!svgEl) {
+                showToast('❌ No se encontró el SVG del QR', 'error');
+                return;
+            }
+            const svgData = new XMLSerializer().serializeToString(svgEl);
+            const blob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'qr-{{ $tenant->subdomain }}.svg';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+        // ── End Image Uploads ────────────────────────────────────────
+
         // Design Tab: Custom Palette (Plan 3)
         function applyCustomPalette() {
             const colors = {
@@ -3419,85 +3289,114 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
             });
         }
 
-        // Design Tab: Upload Logo
-        async function uploadLogo(event) {
-            const file = event.target.files[0];
-            if (!file) return;
+        // (Duplicates removed — unified upload functions are above)
 
-            const formData = new FormData();
-            formData.append('image', file);
+        // ══════════════════════════════════════════════════════════════
+        // Analytics Tab: Load Analytics Data
+        // ══════════════════════════════════════════════════════════════
+        let analyticsChart = null;
+
+        async function loadAnalytics() {
+            const kpiIds = ['visitors-today','visitors-week','whatsapp-clicks','qr-scans','call-clicks','currency-toggles','avg-time'];
+
+            // Loading state — Resiliencia Visual
+            kpiIds.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) { el.innerHTML = '<span class="loading loading-dots loading-xs"></span>'; }
+            });
 
             try {
-                const response = await fetch('/tenant/{{ $tenant->id }}/upload/logo', {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content
-                    },
-                    body: formData
-                });
-
+                const response = await fetch('/tenant/{{ $tenant->id }}/analytics');
+                if (!response.ok) throw new Error('HTTP ' + response.status);
                 const result = await response.json();
 
                 if (result.success) {
-                    // Update preview
-                    const preview = document.getElementById('logo-preview');
-                    const placeholder = document.getElementById('logo-placeholder');
-                    
-                    if (preview) {
-                        preview.src = result.url + '?t=' + new Date().getTime();
-                    } else if (placeholder) {
-                        placeholder.parentElement.innerHTML = `<img id="logo-preview" src="${result.url}" alt="Logo" style="max-width: 100%; max-height: 100%; object-fit: contain;">`;
-                    }
-                    
-                    alert('✓ Logo actualizado correctamente');
+                    const data = result.data;
+
+                    document.getElementById('visitors-today').textContent = data.visitors_today || 0;
+                    document.getElementById('visitors-week').textContent = data.visitors_week || 0;
+                    document.getElementById('whatsapp-clicks').textContent = data.whatsapp_clicks || 0;
+                    document.getElementById('qr-scans').textContent = data.qr_scans || 0;
+                    document.getElementById('call-clicks').textContent = data.call_clicks || 0;
+                    document.getElementById('currency-toggles').textContent = data.currency_toggles || 0;
+                    document.getElementById('avg-time').textContent = data.avg_time_on_page || 0;
+
+                    renderAnalyticsChart(data.last_7_days);
                 } else {
-                    alert('✗ Error al subir logo: ' + (result.message || 'Error desconocido'));
+                    // Error state
+                    kpiIds.forEach(id => {
+                        const el = document.getElementById(id);
+                        if (el) el.textContent = '—';
+                    });
                 }
             } catch (error) {
-                console.error('Error:', error);
-                alert('✗ Error al subir el logo');
-            }
-        }
-
-        // Design Tab: Upload Hero
-        async function uploadHero(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            const formData = new FormData();
-            formData.append('image', file);
-
-            try {
-                const response = await fetch('/tenant/{{ $tenant->id }}/upload/hero', {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content
-                    },
-                    body: formData
+                console.error('Error loading analytics:', error);
+                // Error state — Resiliencia Visual
+                kpiIds.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.textContent = '—';
                 });
-
-                const result = await response.json();
-
-                if (result.success) {
-                    // Update preview
-                    const preview = document.getElementById('hero-preview');
-                    const placeholder = document.getElementById('hero-placeholder');
-                    
-                    if (preview) {
-                        preview.src = result.url + '?t=' + new Date().getTime();
-                    } else if (placeholder) {
-                        placeholder.parentElement.innerHTML = `<img id="hero-preview" src="${result.url}" alt="Hero" style="max-width: 100%; max-height: 100%; object-fit: cover; border-radius: 8px;">`;
-                    }
-                    
-                    alert('✓ Imagen Hero actualizada correctamente');
-                } else {
-                    alert('✗ Error al subir hero: ' + (result.message || 'Error desconocido'));
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('✗ Error al subir la imagen hero');
+                showToast('❌ Error al cargar analytics', 'error');
             }
         }
+
+        function renderAnalyticsChart(last7Days) {
+            const ctx = document.getElementById('analytics-chart');
+            if (!ctx) return;
+
+            // Destruir gráfico anterior si existe
+            if (analyticsChart) {
+                analyticsChart.destroy();
+            }
+
+            const labels = last7Days.map(d => {
+                const date = new Date(d.date);
+                return date.toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric' });
+            });
+            const visitors = last7Days.map(d => d.visitors);
+
+            analyticsChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Visitantes',
+                        data: visitors,
+                        backgroundColor: 'rgba(87, 13, 248, 0.1)',
+                        borderColor: 'rgba(87, 13, 248, 1)',
+                        borderWidth: 2,
+                        borderRadius: 8,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Cargar analytics cuando se abre el tab
+        document.addEventListener('DOMContentLoaded', function() {
+            const analyticsTab = document.getElementById('tab-analytics-btn');
+            if (analyticsTab) {
+                analyticsTab.addEventListener('click', function() {
+                    setTimeout(() => loadAnalytics(), 100);
+                });
+            }
+        });
 
         // Analytics Tab: Update Dollar Rate
         async function updateDollarRate() {
@@ -3687,10 +3586,14 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
             // Update selected state
             selectedSocialNetwork = key;
 
-            // Update radio labels visually
+            // Update radio labels visually using FlyonUI classes
             @foreach($plan1Networks as $k)
-            document.getElementById('social-radio-label-{{ $k }}').style.border    = key === '{{ $k }}' ? '1px solid #2B6FFF' : '1px solid #1e2a42';
-            document.getElementById('social-radio-label-{{ $k }}').style.background = key === '{{ $k }}' ? '#1a2f5e' : 'transparent';
+            const el_{{ $k }} = document.getElementById('social-radio-label-{{ $k }}');
+            if (key === '{{ $k }}') {
+                el_{{ $k }}.className = 'btn btn-sm gap-1.5 btn-primary cursor-pointer';
+            } else {
+                el_{{ $k }}.className = 'btn btn-sm gap-1.5 btn-ghost border border-base-content/20 cursor-pointer';
+            }
             @endforeach
 
             // Update label and placeholder
@@ -3812,12 +3715,11 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
                 }
             });
             if (selected.length === 0) {
-                preview.innerHTML = '<span style="color:#6b7280; font-size:12px;">Selecciona métodos para ver la previa</span>';
+                preview.innerHTML = '<span class="text-base-content/40 text-xs">Selecciona métodos para ver la previa</span>';
                 return;
             }
             preview.innerHTML = selected.map(item => 
-                `<span style="display:inline-flex; align-items:center; gap:6px; padding:6px 12px; border-radius:20px;
-                         background:#0d2f18; border:1px solid #22c55e60; color:#86efac; font-size:12px; font-weight:500; white-space:nowrap;">
+                `<span class="badge badge-soft badge-success badge-sm gap-1.5">
                     <iconify-icon icon="${item.icon}" width="14"></iconify-icon> ${item.label}
                 </span>`
             ).join('');
@@ -3917,12 +3819,10 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
                     const statusText = document.getElementById('branches-status-text');
 
                     content.style.display = enabled ? '' : 'none';
-                    status.style.background = enabled ? '#0d3320' : '#1e2a42';
-                    status.style.borderLeftColor = enabled ? '#22c55e' : '#6b7280';
-                    statusText.style.color = enabled ? '#86efac' : '#94a3b8';
+                    status.className = enabled ? 'alert alert-success' : 'alert alert-info';
                     statusText.textContent = enabled
-                        ? '✅ Sección visible en tu landing pública'
-                        : '⏸️ Sección oculta en tu landing pública';
+                        ? 'Sección visible en tu landing pública'
+                        : 'Sección oculta en tu landing pública';
                 } else {
                     // Revert toggle
                     document.getElementById('branches-toggle').checked = !enabled;

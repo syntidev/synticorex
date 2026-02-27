@@ -36,7 +36,7 @@
             {{-- COLUMNA IMAGEN: Grande, 4:3 y con Borde Blanco de 6px --}}
             <div class="w-full lg:w-1/2 flex justify-center lg:justify-end">
                 <div class="relative w-full max-w-[600px] aspect-[4/3] overflow-hidden rounded-[2.5rem] shadow-2xl border-[6px] border-base-100 bg-base-100">
-                    <img src="{{ $customization->hero_filename ? asset('storage/' . $customization->hero_filename) : 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=800' }}" 
+                    <img src="{{ $customization->hero_main_filename ? asset('storage/tenants/' . $tenant->id . '/' . $customization->hero_main_filename) : 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=800' }}" 
                          class="w-full h-full object-cover">
                 </div>
             </div>

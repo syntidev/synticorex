@@ -89,7 +89,7 @@
             <div class="relative h-[500px] lg:h-[600px] hidden lg:block">
                 {{-- Imagen principal flotante con animación --}}
                 <div class="absolute top-0 right-0 w-80 h-80 rounded-3xl overflow-hidden shadow-2xl transform hover:scale-105 transition-transform duration-500 animate-float">
-                    <img src="{{ $customization->hero_main_filename ? asset('storage/tenants/'.$tenant->id.'/'.$customization->hero_main_filename) : ($customization->hero_filename ? asset('storage/tenants/'.$tenant->id.'/'.$customization->hero_filename) : 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80') }}" 
+                    <img src="{{ $customization->hero_main_filename ? asset('storage/tenants/'.$tenant->id.'/'.$customization->hero_main_filename) : 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80' }}" 
                          alt="{{ $tenant->business_name }}" 
                          class="w-full h-full object-cover">
                 </div>

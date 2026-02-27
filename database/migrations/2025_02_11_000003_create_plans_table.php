@@ -21,8 +21,8 @@ return new class extends Migration
             
             // Límites de productos y servicios
             $table->unsignedSmallInteger('products_limit')->default(6);
-            $table->unsignedSmallInteger('services_limit')->default(4);
-            $table->unsignedTinyInteger('images_limit')->default(10);
+            $table->unsignedSmallInteger('services_limit')->default(3);
+            $table->unsignedTinyInteger('images_limit')->default(15);
             $table->unsignedTinyInteger('color_palettes')->default(5);
             $table->unsignedTinyInteger('social_networks_limit')->nullable(); // ✅ NULLABLE
             

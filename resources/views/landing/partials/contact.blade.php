@@ -110,8 +110,16 @@
                         @if($phoneClean)
                             <a href="https://wa.me/{{ $phoneClean }}"
                                target="_blank" rel="noopener noreferrer"
+                               onclick="trackAnalyticsEvent('whatsapp_click', {phone: '{{ $phoneClean }}', section: 'contact'})"
                                class="block text-success hover:text-success/80 transition-colors font-medium mb-1">
                                 +{{ $phoneClean }}
+                            </a>
+                            {{-- Botón de llamada telefónica --}}
+                            <a href="tel:+{{ $phoneClean }}"
+                               onclick="trackAnalyticsEvent('phone_click', {phone: '{{ $phoneClean }}', section: 'contact'})"
+                               class="inline-flex items-center gap-1.5 mt-2 px-3 py-1.5 bg-primary/10 hover:bg-primary/20 text-primary rounded-lg transition-colors text-sm font-medium">
+                                <iconify-icon icon="tabler:phone-call" width="16" height="16"></iconify-icon>
+                                Llamar ahora
                             </a>
                         @endif
                         @if($phone2Clean)

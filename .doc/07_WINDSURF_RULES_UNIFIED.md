@@ -1,6 +1,6 @@
-# 🧠 CURSOR RULES - SYNTIWEB ENGINE
+# 🧠 WINDSURF RULES - SYNTIWEB ENGINE
 
-**Sistema de desarrollo asistido para SYNTIWEB**  
+**Sistema de desarrollo asistido para SYNTIWEB con Windsurf**  
 Arquitectura + Validación en un solo documento
 
 ---

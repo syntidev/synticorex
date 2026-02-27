@@ -61,7 +61,7 @@
   ├── logo.webp
   ├── hero.webp
   ├── service_01.webp ... service_15.webp
-  └── product_01.webp ... product_40.webp
+  └── product_01.webp ... product_18.webp
 ```
 
 ### Reglas de Procesamiento:
@@ -74,8 +74,8 @@
 | Plan | Logo | Hero | Servicios | Productos | Total |
 |------|------|------|-----------|-----------|-------|
 | OPORTUNIDAD | 1 | 1 | 0 (solo iconos) | 6 | 8 |
-| CRECIMIENTO | 1 | 1 | 6 | 18 | 26 |
-| VISIÓN | 1 | 1 | 15 | 40 | 57 |
+| CRECIMIENTO | 1 | 1 | 6 | 12 | 20 |
+| VISIÓN | 1 | 1 | 9 | 18 | 29 |
 
 ---
 

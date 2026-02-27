@@ -87,7 +87,7 @@
                 
                 {{-- Imagen Hero Principal --}}
                 <div class="relative rounded-3xl overflow-hidden shadow-2xl">
-                    <img src="{{ $customization->hero_main_filename ? asset('storage/tenants/'.$tenant->id.'/'.$customization->hero_main_filename) : ($customization->hero_filename ? asset('storage/tenants/'.$tenant->id.'/'.$customization->hero_filename) : 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=1920&q=80') }}" 
+                    <img src="{{ $customization->hero_main_filename ? asset('storage/tenants/'.$tenant->id.'/'.$customization->hero_main_filename) : 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=1920&q=80' }}" 
                          alt="{{ $tenant->business_name }}" 
                          class="w-full h-[500px] lg:h-[600px] object-cover">
                     

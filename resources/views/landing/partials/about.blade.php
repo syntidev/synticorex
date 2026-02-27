@@ -5,8 +5,8 @@
 
     // Imagen de la sección: hero > logo > placeholder
     $businessImage = null;
-    if (!empty($customization->hero_filename)) {
-        $businessImage = asset('storage/tenants/' . $tenant->id . '/' . $customization->hero_filename);
+    if (!empty($customization->hero_main_filename)) {
+        $businessImage = asset('storage/tenants/' . $tenant->id . '/' . $customization->hero_main_filename);
     }
 
     $logoImage = null;

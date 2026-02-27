@@ -51,9 +51,9 @@ CREATE TABLE plans (
     price_usd DECIMAL(6,2) NOT NULL,     -- 49.00, 89.00, 159.00
     
     -- Límites
-    products_limit TINYINT UNSIGNED NOT NULL,    -- 6, 18, 40
-    services_limit TINYINT UNSIGNED NOT NULL,    -- 3, 6, 15
-    images_limit TINYINT UNSIGNED NOT NULL,      -- 8, 26, 57
+    products_limit TINYINT UNSIGNED NOT NULL,    -- 6, 12, 18
+    services_limit TINYINT UNSIGNED NOT NULL,    -- 3, 6, 9
+    images_limit TINYINT UNSIGNED NOT NULL,      -- 15, 25, 70 (con Factor de Holgura +4)
     color_palettes TINYINT UNSIGNED NOT NULL,    -- 5, 10, 20
     social_networks_limit TINYINT UNSIGNED,      -- 1, NULL (todas), NULL
     
@@ -83,9 +83,9 @@ CREATE TABLE plans (
 ```sql
 INSERT INTO plans (name, slug, price_usd, products_limit, services_limit, images_limit, 
                    color_palettes, social_networks_limit, analytics_level, seo_level) VALUES
-('OPORTUNIDAD', 'oportunidad', 49.00, 6, 3, 8, 5, 1, 'basic', 'basic'),
-('CRECIMIENTO', 'crecimiento', 89.00, 18, 6, 26, 10, NULL, 'standard', 'improved'),
-('VISIÓN', 'vision', 159.00, 40, 15, 57, 20, NULL, 'advanced', 'advanced');
+('OPORTUNIDAD', 'oportunidad', 49.00, 6, 3, 15, 5, 1, 'basic', 'basic'),
+('CRECIMIENTO', 'crecimiento', 89.00, 12, 6, 25, 10, NULL, 'standard', 'improved'),
+('VISIÓN', 'vision', 159.00, 18, 9, 70, 20, NULL, 'advanced', 'advanced');
 
 UPDATE plans SET 
     show_dollar_rate = TRUE,

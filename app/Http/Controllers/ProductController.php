@@ -161,8 +161,9 @@ class ProductController extends Controller
                 return response()->json([
                     'success' => false,
                     'data' => null,
-                    'message' => "Product limit reached ({$plan->products_limit} products for {$plan->name} plan)",
-                ], 422);
+                    'message' => "Has alcanzado el límite de {$plan->products_limit} productos para el plan {$plan->name}",
+                    'upgrade_url' => 'https://syntiweb.com/planes',
+                ], 403);
             }
 
             $validated = $request->validate([

@@ -9,6 +9,7 @@ use App\Models\Tenant;
 use App\Models\TenantBranch;
 use App\Services\DollarRateService;
 use App\Services\FlyonUIThemeService;
+use App\Services\QRService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -18,9 +19,11 @@ class DashboardController extends Controller
 {
     /**
      * @param DollarRateService $dollarRateService
+     * @param QRService $qrService
      */
     public function __construct(
-        private readonly DollarRateService $dollarRateService
+        private readonly DollarRateService $dollarRateService,
+        private readonly QRService $qrService
     ) {}
 
     /**
@@ -74,6 +77,10 @@ class DashboardController extends Controller
             $hasCustomPalette = !empty($customPalette);
             $activeTheme = $hasCustomPalette ? 'custom' : $currentTheme;
 
+            // Generate QR code for traffic tracking (private - only visible in dashboard)
+            $trackingQR = $this->qrService->generateQR($tenant->id, 300);
+            $trackingShortlink = $this->qrService->getTrackingShortlink($tenant->id);
+
             return view('dashboard.index', compact(
                 'tenant',
                 'plan',
@@ -89,7 +96,9 @@ class DashboardController extends Controller
                 'palettes',
                 'currentTheme',
                 'activeTheme',
-                'hasCustomPalette'
+                'hasCustomPalette',
+                'trackingQR',
+                'trackingShortlink'
             ));
         } catch (\Exception $e) {
             return response()->view('errors.404', [], 404);
@@ -126,15 +135,27 @@ class DashboardController extends Controller
                 'contact_title' => 'nullable|string|max:120',
                 'contact_subtitle' => 'nullable|string|max:255',
                 'phone_secondary' => 'nullable|string|max:20',
+                'show_hours_indicator' => 'nullable|boolean',
+                'closed_message' => 'nullable|string|max:255',
             ]);
 
             // Update tenant fields (excluding settings-only fields)
-            $settingsOnlyKeys = ['contact_maps_url', 'contact_title', 'contact_subtitle', 'phone_secondary'];
+            $settingsOnlyKeys = ['contact_maps_url', 'contact_title', 'contact_subtitle', 'phone_secondary', 'show_hours_indicator', 'closed_message'];
             $tenant->update(collect($validated)->except($settingsOnlyKeys)->toArray());
 
-            // Save contact settings in settings JSON (Plan 2+)
+            // Save settings in settings JSON
+            $settings = $tenant->settings ?? [];
+            
+            // Hours indicator feature (all plans)
+            if ($request->has('show_hours_indicator')) {
+                data_set($settings, 'engine_settings.features.show_hours_indicator', $validated['show_hours_indicator'] ?? false);
+            }
+            if ($request->has('closed_message')) {
+                data_set($settings, 'business_info.closed_message', $validated['closed_message'] ?? 'Estamos cerrados. Te responderemos durante nuestro horario de atención.');
+            }
+            
+            // Contact settings (Plan 2+)
             if ($tenant->plan_id >= 2) {
-                $settings = $tenant->settings ?? [];
                 if ($request->has('contact_maps_url')) {
                     data_set($settings, 'business_info.contact.maps_url', $validated['contact_maps_url'] ?? '');
                 }
@@ -147,9 +168,10 @@ class DashboardController extends Controller
                 if ($request->has('phone_secondary')) {
                     data_set($settings, 'contact_info.phone_secondary', $validated['phone_secondary'] ?? '');
                 }
-                $tenant->settings = $settings;
-                $tenant->save();
             }
+            
+            $tenant->settings = $settings;
+            $tenant->save();
 
             return response()->json([
                 'success' => true,
@@ -177,16 +199,6 @@ class DashboardController extends Controller
                 ->where('id', $tenantId)
                 ->where('status', 'active')
                 ->firstOrFail();
-
-            // Check plan limits (reads from DB)
-            $maxProducts = $tenant->plan->products_limit;
-            
-            if ($tenant->products->count() >= $maxProducts) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Has alcanzado el límite de productos de tu plan'
-                ], 422);
-            }
 
             // Validate input
             $validated = $request->validate([
@@ -1095,6 +1107,57 @@ class DashboardController extends Controller
                 'success' => false,
                 'message' => 'Error: ' . $e->getMessage()
             ], 422);
+        }
+    }
+
+    /**
+     * Update business hours (stored in tenant.business_hours JSON).
+     */
+    public function updateBusinessHours(Request $request, int $tenantId): JsonResponse
+    {
+        $days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+
+        $rules = [];
+        foreach ($days as $day) {
+            $rules["{$day}"]        = 'nullable|array';
+            $rules["{$day}.closed"] = 'nullable|boolean';
+            $rules["{$day}.open"]   = 'nullable|date_format:H:i';
+            $rules["{$day}.close"]  = 'nullable|date_format:H:i';
+        }
+
+        $validated = $request->validate($rules);
+
+        try {
+            $tenant = Tenant::where('id', $tenantId)
+                ->where('status', 'active')
+                ->firstOrFail();
+
+            $hours = [];
+            foreach ($days as $day) {
+                $dayData = $validated[$day] ?? null;
+
+                if (!is_array($dayData) || !empty($dayData['closed'])) {
+                    $hours[$day] = null;
+                    continue;
+                }
+
+                if (!empty($dayData['open']) && !empty($dayData['close'])) {
+                    $hours[$day] = [
+                        'open'  => $dayData['open'],
+                        'close' => $dayData['close'],
+                    ];
+                    continue;
+                }
+
+                $hours[$day] = null;
+            }
+
+            $tenant->business_hours = $hours;
+            $tenant->save();
+
+            return response()->json(['success' => true, 'message' => 'Horario actualizado correctamente']);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Error: ' . $e->getMessage()], 422);
         }
     }
 

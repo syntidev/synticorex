@@ -1,7 +1,8 @@
 <header id="main-nav" 
-        class="fixed top-0 z-[100] w-full border-b border-base-200 !bg-base-100/95 backdrop-blur-md"
-        style="{{ $tenant->plan_id >= 2 ? 'top: 40px;' : '' }} transition: top 0.3s ease;">
-    <div class="container mx-auto flex items-center justify-between px-6 py-4">
+        class="fixed top-0 z-[100] w-full border-b border-base-200 bg-base-100"
+        data-has-header-top="{{ $tenant->plan_id >= 2 ? '1' : '0' }}"
+        style="{{ $tenant->plan_id >= 2 ? 'top: 40px;' : 'top: 0px;' }}">
+    <div class="container mx-auto flex items-center justify-between px-6 py-3">
         {{-- Logo Dinámico --}}
         <div class="flex items-center gap-3">
             <a href="#home" class="flex items-center gap-3">
@@ -66,14 +67,23 @@
             </div>
             @endif
 
-            <span class="inline-flex items-center gap-1.5 rounded-full {{ $tenant->is_open ? 'bg-success/10 text-success' : 'bg-error/10 text-error' }} px-3 py-1 text-xs font-bold">
-                <span class="h-1.5 w-1.5 rounded-full {{ $tenant->is_open ? 'bg-success' : 'bg-error' }} animate-pulse"></span>
-                {{ $tenant->is_open ? 'ABIERTO' : 'CERRADO' }}
+            {{-- Indicador de Horario (Opcional) --}}
+            @if($showHoursIndicator ?? false)
+            <span class="inline-flex items-center gap-1.5 rounded-full {{ $isOpen ? 'bg-success/10 text-success' : 'bg-error/10 text-error' }} px-3 py-1 text-xs font-bold">
+                <span class="h-1.5 w-1.5 rounded-full {{ $isOpen ? 'bg-success' : 'bg-error' }} animate-pulse"></span>
+                {{ $isOpen ? '🟢 ABIERTO' : '🔴 CERRADO' }}
             </span>
+            @endif
             
-            @php $wa = $tenant->whatsapp_sales ?? $tenant->whatsapp ?? null; @endphp
+            {{-- Botón WhatsApp con mensaje dinámico según horario --}}
+            @php 
+                $wa = $tenant->whatsapp_sales ?? $tenant->whatsapp ?? null;
+                $waMessage = ($showHoursIndicator && !$isOpen) 
+                    ? $closedMessage 
+                    : 'Hola, vi tu vitrina';
+            @endphp
             @if($wa)
-                <a href="https://wa.me/{{ $wa }}" target="_blank" rel="noopener noreferrer"
+                <a href="https://wa.me/{{ $wa }}?text={{ urlencode($waMessage) }}" target="_blank" rel="noopener noreferrer"
                    class="btn btn-sm btn-success hidden sm:flex font-bold rounded-xl shadow-lg shadow-success/20">WhatsApp</a>
             @endif
         </div>

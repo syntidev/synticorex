@@ -196,8 +196,8 @@ php artisan migrate:reset
 
 ### Planes (3):
 - **OPORTUNIDAD**: $49/mes - 6 productos, 3 servicios
-- **CRECIMIENTO**: $89/mes - 18 productos, 6 servicios
-- **VISIÓN**: $159/mes - 40 productos, 15 servicios
+- **CRECIMIENTO**: $89/mes - 12 productos, 6 servicios
+- **VISIÓN**: $159/mes - 18 productos, 9 servicios
 
 ### Paletas de colores (20):
 - **10 clásicas** (disponibles para todos)

@@ -1,8 +1,8 @@
 {{-- Hero Section - FlyonUI Landing V2 (Estructura Original) --}}
 <section id="home">
     <div class="gap-18 md:pt-45 lg:gap-35 lg:pt-47.5 flex h-full flex-col justify-between bg-cover bg-center bg-no-repeat py-8 pt-40 sm:py-16 md:gap-24 lg:py-24"
-         @if($customization->hero_filename)
-         style="background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('{{ asset('storage/tenants/'.$tenant->id.'/'.$customization->hero_filename) }}');"
+         @if($customization->hero_main_filename)
+         style="background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('{{ asset('storage/tenants/'.$tenant->id.'/'.$customization->hero_main_filename) }}');"
          @else
          style="background-image: linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)), url('https://images.unsplash.com/photo-1552664730-d307ca884978?w=1920&q=80');"
          @endif

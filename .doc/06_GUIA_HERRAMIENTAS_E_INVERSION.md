@@ -155,8 +155,8 @@ Copilot autocompleta estructura HTML completa.
 ```
 Siguiendo MATRIZ_FEATURES_DEFINITIVA.md:
 - Plan OPORTUNIDAD: 6 productos
-- Plan CRECIMIENTO: 18 productos  
-- Plan VISIÓN: 40 productos con lazy loading
+- Plan CRECIMIENTO: 12 productos  
+- Plan VISIÓN: 18 productos con lazy loading
 
 Crea la sección de productos en Blade que:
 1. Renderice grid responsive

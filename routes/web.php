@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TenantRendererController;
 use App\Http\Controllers\ImageUploadController;
+use App\Http\Controllers\AnalyticsController;
+use App\Http\Controllers\QRTrackingController;
 
 Route::domain('app.synticorex.test')->group(function () {
     Route::get('/', fn() => redirect()->route('login'));
@@ -17,6 +19,11 @@ Route::domain('app.synticorex.test')->group(function () {
 
     require __DIR__ . '/auth.php';
 });
+
+// QR Tracking shortlink (debe ir ANTES de la ruta de landing para evitar conflictos)
+Route::get('/t/{tenantId}/{code}', [QRTrackingController::class, 'handleShortlink'])
+    ->where(['tenantId' => '[0-9]+', 'code' => '[a-z0-9]+'])
+    ->name('qr.track');
 
 // Landing page pública por subdomain
 Route::get('/{subdomain}', [TenantRendererController::class, 'show'])
@@ -37,9 +44,11 @@ Route::prefix('tenant/{tenantId}/upload')->group(function () {
 // Tenant panel actions
 Route::post('/tenant/{tenantId}/verify-pin',    [TenantRendererController::class, 'verifyPin']);
 Route::post('/tenant/{tenantId}/toggle-status', [TenantRendererController::class, 'toggleStatus']);
+Route::get('/tenant/{tenantId}/hours/status',   [TenantRendererController::class, 'getHoursStatus']);
 
 // Tenant dashboard
 Route::get('/tenant/{tenantId}/dashboard',      [DashboardController::class, 'index']);
+Route::get('/tenant/{tenantId}/qr/download',    [QRTrackingController::class, 'downloadQR']);
 Route::post('/tenant/{tenantId}/update-info',   [DashboardController::class, 'updateInfo']);
 Route::post('/tenant/{tenantId}/update-theme',  [DashboardController::class, 'updateTheme']);
 Route::post('/tenant/{tenantId}/update-palette', [DashboardController::class, 'updatePalette']); // Legacy
@@ -56,6 +65,12 @@ Route::delete('/tenant/{tenantId}/services/{serviceId}', [DashboardController::c
 
 // Branches (Plan 3 / VISIÓN)
 Route::post('/tenant/{tenantId}/branches/toggle',          [DashboardController::class, 'toggleBranches']);
+
+// Analytics tracking (public - sin autenticación)
+Route::post('/api/analytics/track', [AnalyticsController::class, 'track']);
+
+// Analytics data (dashboard)
+Route::get('/tenant/{tenantId}/analytics', [AnalyticsController::class, 'getData']);
 Route::post('/tenant/{tenantId}/branches',                 [DashboardController::class, 'saveBranch']);
 Route::delete('/tenant/{tenantId}/branches/{branchId}',    [DashboardController::class, 'deleteBranch']);
 
@@ -81,3 +96,4 @@ Route::post('/tenant/{tenantId}/update-currency-config',  [DashboardController::
 Route::post('/tenant/{tenantId}/update-pin',              [DashboardController::class, 'updatePin']);
 Route::post('/tenant/{tenantId}/update-testimonials',     [DashboardController::class, 'updateTestimonials']);
 Route::post('/tenant/{tenantId}/update-faq',              [DashboardController::class, 'updateFaq']);
+Route::post('/tenant/{tenantId}/update-business-hours',   [DashboardController::class, 'updateBusinessHours']);

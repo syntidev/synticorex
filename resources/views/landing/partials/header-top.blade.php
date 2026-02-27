@@ -17,6 +17,7 @@
     $phone    = data_get($tenant->settings, 'contact_info.phone',
                     preg_replace('/[^0-9]/', '', $tenant->whatsapp_number ?? ''));
     $delivery = (bool) data_get($tenant->settings, 'business_info.delivery_available', false);
+    $bannerText = data_get($tenant->settings, 'business_info.top_nav_banner', '');
 
     // Número limpio para tel: y wa.me
     $phoneClean = preg_replace('/[^0-9]/', '', $phone);
@@ -27,13 +28,6 @@
     <div class="container mx-auto px-4 md:px-6 flex items-center justify-between gap-4 text-xs font-medium">
 
         {{-- ── Izquierda: Horario ──────────────────────────── --}}
-        @php
-            $schedule = data_get($tenant->settings, 'business_info.schedule_display', 'Lun-Sab 9:00-18:00');
-            $phone = $tenant->whatsapp_number ?? data_get($tenant->settings, 'contact_info.phone', '');
-            $phoneClean = preg_replace('/[^0-9]/', '', $phone);
-            $deliveryAvailable = data_get($tenant->settings, 'business_info.delivery_available', false);
-        @endphp
-
         @if($schedule)
         <div class="flex items-center gap-1.5 text-base-content/60 min-w-0">
             <iconify-icon icon="tabler:clock" width="14" height="14" class="shrink-0 text-primary/70"></iconify-icon>
@@ -43,12 +37,18 @@
         </div>
         @endif
 
-        {{-- ── Centro: Delivery badge ──────────────────────── --}}
-        @if($deliveryAvailable)
-        <div class="hidden md:flex items-center gap-1.5 text-base-content/60">
-            <iconify-icon icon="tabler:motorbike" width="14" height="14" class="text-primary/70 shrink-0"></iconify-icon>
-            <span>Delivery disponible</span>
-        </div>
+        {{-- ── Centro: Banner o Delivery ───────────────────── --}}
+        @if($tenant->plan_id === 3 && $bannerText)
+            <div class="flex items-center gap-1.5 text-primary font-semibold animate-pulse">
+                <iconify-icon icon="tabler:campaign" width="14" height="14" class="shrink-0"></iconify-icon>
+                <span class="hidden sm:block">{{ $bannerText }}</span>
+                <span class="sm:hidden" title="{{ $bannerText }}">📢</span>
+            </div>
+        @elseif($delivery)
+            <div class="hidden md:flex items-center gap-1.5 text-base-content/60">
+                <iconify-icon icon="tabler:motorbike" width="14" height="14" class="text-primary/70 shrink-0"></iconify-icon>
+                <span>Delivery disponible</span>
+            </div>
         @endif
 
         {{-- ── Derecha: Teléfono ───────────────────────────── --}}
@@ -70,37 +70,78 @@
     </div>
 </div>
 
+<style>
+    /* Header-top transitions */
+    #header-top {
+        transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+    
+    #main-nav {
+        transition: top 0.3s ease;
+    }
+    
+    /* Cuando body tiene clase 'scrolled', ocultar header-top */
+    body.scrolled #header-top {
+        transform: translateY(-100%);
+        opacity: 0;
+        pointer-events: none;
+    }
+    
+    /* Cuando body tiene clase 'scrolled', ajustar main-nav */
+    body.scrolled #main-nav[data-has-header-top="1"] {
+        top: 0 !important;
+    }
+</style>
+
 <script>
 (function() {
-    // header-top ya existe en DOM aquí, pero main-nav NO (se incluye después).
-    // Por eso buscamos main-nav de forma lazy dentro de cada handler.
-
-    var headerTop = document.getElementById('header-top');
-    var _nav = null;
-    function getNav() {
-        if (!_nav) _nav = document.getElementById('main-nav');
-        return _nav;
-    }
-
-    // Fade-in header-top
-    if (headerTop) {
-        setTimeout(function() {
-            headerTop.style.opacity    = '1';
-            headerTop.style.visibility = 'visible';
-        }, 100);
-    }
-
-    // Scroll: ocultar header-top + subir nav a top:0
-    window.addEventListener('scroll', function() {
-        var scrolled = window.pageYOffset > 50;
-        var nav = getNav();
-
-        if (headerTop) {
-            headerTop.style.transform = scrolled ? 'translateY(-100%)' : 'translateY(0)';
+    'use strict';
+    
+    // Early Return Pattern: validaciones iniciales
+    const headerTop = document.getElementById('header-top');
+    if (!headerTop) return;
+    
+    const SCROLL_THRESHOLD = 50;
+    let ticking = false;
+    let lastScrollY = window.scrollY;
+    
+    function updateScrollState() {
+        const scrollY = window.scrollY;
+        
+        // Early Return: no cambió suficiente
+        if (Math.abs(scrollY - lastScrollY) < 5) {
+            ticking = false;
+            return;
         }
-        if (nav) {
-            nav.style.top = scrolled ? '0px' : '40px';
+        
+        // Toggle clase 'scrolled' en body
+        if (scrollY > SCROLL_THRESHOLD) {
+            document.body.classList.add('scrolled');
+        } else {
+            document.body.classList.remove('scrolled');
         }
-    });
+        
+        lastScrollY = scrollY;
+        ticking = false;
+    }
+    
+    function onScroll() {
+        // Early Return: ya hay un frame pendiente
+        if (ticking) return;
+        
+        ticking = true;
+        requestAnimationFrame(updateScrollState);
+    }
+    
+    // Event listener con passive para mejor performance
+    window.addEventListener('scroll', onScroll, { passive: true });
+    
+    // Inicialización: mostrar header-top suavemente
+    setTimeout(() => {
+        headerTop.style.opacity = '1';
+        headerTop.style.visibility = 'visible';
+        updateScrollState();
+    }, 100);
+    
 })();
 </script>

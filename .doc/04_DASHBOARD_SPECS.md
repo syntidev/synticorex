@@ -215,8 +215,8 @@ async function verifyPin() {
 
 **Límites por plan:**
 - OPORTUNIDAD: 6 productos max
-- CRECIMIENTO: 18 productos max
-- VISIÓN: 40 productos max
+- CRECIMIENTO: 12 productos max
+- VISIÓN: 18 productos max
 
 **Validaciones:**
 - Nombre: Obligatorio, max 255 chars

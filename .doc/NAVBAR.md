@@ -2,7 +2,7 @@
 
 ## 📋 Información General
 
-**Archivo:** `resources/views/landing-v2/partials/navbar.blade.php`  
+**Archivo:** `resources/views/landing/partials/navbar.blade.php`  
 **Framework:** Laravel 12 + FlyonUI + Tailwind CSS v4  
 **Responsive:** ✅ Completo (mobile + desktop)  
 **Sticky:** ✅ Fixed top con z-10  
@@ -155,24 +155,24 @@ http://synticorex.test/test/hero-*      # Navbar + Hero
 <body>
     
     {{-- Navbar --}}
-    @include('landing-v2.partials.navbar')
+    @include('landing.partials.navbar')
 
     {{-- Hero dinámico --}}
     @switch($customization->hero_layout)
-        @case('split') @include('landing-v2.partials.hero-split') @break
-        @case('gradient') @include('landing-v2.partials.hero-gradient') @break
-        @case('cards') @include('landing-v2.partials.hero-cards') @break
-        @default @include('landing-v2.partials.hero-fullscreen')
+        @case('split') @include('landing.partials.hero-split-v2') @break
+        @case('gradient') @include('landing.partials.hero-gradient-v2') @break
+        @case('cards') @include('landing.partials.hero-cards') @break
+        @default @include('landing.partials.hero-fullscreen-v2')
     @endswitch
 
     {{-- Resto de secciones --}}
-    @include('landing-v2.partials.about')
-    @include('landing-v2.partials.products')
-    @include('landing-v2.partials.services')
-    @include('landing-v2.partials.testimonials')
-    @include('landing-v2.partials.faq')
-    @include('landing-v2.partials.contact')
-    @include('landing-v2.partials.footer')
+    @include('landing.partials.about')
+    @include('landing.partials.products')
+    @include('landing.partials.services')
+    @include('landing.partials.testimonials')
+    @include('landing.partials.faq')
+    @include('landing.partials.contact')
+    @include('landing.partials.footer')
 
 </body>
 </html>

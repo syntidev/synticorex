@@ -95,8 +95,14 @@
         @if($product->price_usd && !($hidePrice ?? false))
             <div class="pt-2 border-t border-base-200">
                 <div class="text-xl font-black text-base-content"
-                     data-price-usd="{{ $product->price_usd }}">
-                    <span class="text-xs font-medium opacity-50 mr-1">REF</span>{{ number_format($product->price_usd, 2) }}
+                     data-price-usd="{{ $product->price_usd }}"
+                     data-rate="{{ $dollarRate ?? 1 }}">
+                    <div class="price-display">
+                        <span class="text-xs font-medium opacity-50 mr-1">REF</span>{{ number_format($product->price_usd, 2) }}
+                    </div>
+                    <div class="price-display-bs hidden">
+                        <span class="text-xs font-medium opacity-50 mr-1">Bs.</span>{{ number_format($product->price_usd * ($dollarRate ?? 1), 2) }}
+                    </div>
                 </div>
             </div>
         @endif

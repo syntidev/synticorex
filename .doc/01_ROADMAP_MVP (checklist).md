@@ -161,7 +161,7 @@ SEMANA 4: Analytics + Polish ████████████████░
 ### Riesgo 1: API BCV falla constantemente
 **Mitigación:** Implementar fallback manual + caché de última tasa
 
-### Riesgo 2: Performance en Plan VISIÓN (40 productos)
+### Riesgo 2: Performance en Plan VISIÓN (18 productos)
 **Mitigación:** Lazy loading + paginación opcional
 
 ### Riesgo 3: Complejidad del multidominio en shared hosting

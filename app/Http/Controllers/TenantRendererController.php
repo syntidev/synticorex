@@ -6,6 +6,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Tenant;
 use App\Services\DollarRateService;
+use App\Services\QRService;
+use App\Services\BusinessHoursService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -18,9 +20,13 @@ class TenantRendererController extends Controller
 {
     /**
      * @param DollarRateService $dollarRateService
+     * @param QRService $qrService
+     * @param BusinessHoursService $businessHoursService
      */
     public function __construct(
-        private readonly DollarRateService $dollarRateService
+        private readonly DollarRateService $dollarRateService,
+        private readonly QRService $qrService,
+        private readonly BusinessHoursService $businessHoursService
     ) {}
 
     /**
@@ -122,7 +128,16 @@ class TenantRendererController extends Controller
                 'symbols' => data_get($tenant->settings, 'engine_settings.currency.display.symbols', ['reference' => 'REF', 'bolivares' => 'Bs.']),
             ];
 
-            return view('landing.base', compact('tenant', 'plan', 'products', 'services', 'dollarRate', 'themeSlug', 'meta', 'customization', 'currencySettings', 'displayMode', 'savedDisplayMode', 'showReference', 'showBolivares', 'hidePrice'));
+            // Generate QR for traffic tracking in Floating Panel (private - only visible after PIN)
+            $trackingQRSmall = $this->qrService->generateQR($tenant->id, 150);
+            $trackingShortlink = $this->qrService->getTrackingShortlink($tenant->id);
+
+            // Business hours indicator
+            $showHoursIndicator = $this->businessHoursService->isHoursFeatureEnabled($tenant);
+            $isOpen = $this->businessHoursService->isOpen($tenant);
+            $closedMessage = data_get($tenant->settings, 'business_info.closed_message', 'Estamos cerrados. Te responderemos durante nuestro horario de atención.');
+
+            return view('landing.base', compact('tenant', 'plan', 'products', 'services', 'dollarRate', 'themeSlug', 'meta', 'customization', 'currencySettings', 'displayMode', 'savedDisplayMode', 'showReference', 'showBolivares', 'hidePrice', 'trackingQRSmall', 'trackingShortlink', 'showHoursIndicator', 'isOpen', 'closedMessage'));
         } catch (Throwable $e) {
             Log::error('TenantRendererController: Error rendering landing page', [
                 'subdomain' => $subdomain,
@@ -341,7 +356,7 @@ class TenantRendererController extends Controller
             'keywords' => $tenant->meta_keywords ?? $tenant->business_segment ?? '',
             'og_title' => $tenant->meta_title ?? $businessName,
             'og_description' => $tenant->meta_description ?? $tenant->slogan ?? '',
-            'og_image' => $tenant->customization?->hero_filename ?? null,
+            'og_image' => $tenant->customization?->hero_main_filename ?? null,
             'canonical' => $this->buildCanonicalUrl($tenant),
         ];
     }
@@ -432,6 +447,39 @@ class TenantRendererController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Error al verificar PIN'
+            ], 500);
+        }
+    }
+
+    /**
+     * Get business hours status (AJAX endpoint)
+     * 
+     * Route: GET /tenant/{id}/hours/status
+     * 
+     * @param int $tenantId
+     * @return JsonResponse
+     */
+    public function getHoursStatus(int $tenantId): JsonResponse
+    {
+        try {
+            $tenant = Tenant::findOrFail($tenantId);
+            
+            $showIndicator = $this->businessHoursService->isHoursFeatureEnabled($tenant);
+            $isOpen = $this->businessHoursService->isOpen($tenant);
+            $nextOpen = !$isOpen ? $this->businessHoursService->getNextOpenTime($tenant) : null;
+            $closedMessage = data_get($tenant->settings, 'business_info.closed_message', 'Estamos cerrados. Te responderemos durante nuestro horario de atención.');
+            
+            return response()->json([
+                'success' => true,
+                'is_open' => $isOpen,
+                'next_open' => $nextOpen,
+                'show_indicator' => $showIndicator,
+                'closed_message' => $closedMessage,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error fetching hours status'
             ], 500);
         }
     }

@@ -1,0 +1,6 @@
+# SYNTIWEB RULES
+Importa y aplica siempre las reglas de:
+- .doc/.rules/CURSOR_PHILOSOPHY.md
+- .doc/.rules/CURSOR_VALIDATION.md
+
+Nota: Ignora que el nombre diga "Cursor", aplica el Mandato Principal y la Auto-Validación en cada cambio que hagas en Laravel 12.

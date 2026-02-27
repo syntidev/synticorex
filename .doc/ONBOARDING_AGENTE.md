@@ -1,5 +1,5 @@
 # 🧠 ONBOARDING COMPLETO - SYNTIWEB
-**Para:** Claude (nueva sesión) + Agentes Cursor
+**Para:** Claude (nueva sesión) + Agentes Windsurf
 **Versión:** 2026-02-22
 
 ---
@@ -22,7 +22,7 @@ SaaS multitenant: landing pages dinámicas para negocios venezolanos pequeños. 
 
 ### Los 3 actores:
 ```
-[YO - Arquitecto]  ←→  [CLAUDE - claude.ai]  ←→  [AGENTES - Cursor/VS]
+[YO - Arquitecto]  ←→  [CLAUDE - claude.ai]  ←→  [AGENTES - Windsurf/VS]
    Humano               Consultor/Revisor          Ejecutores de código
 ```
 
@@ -30,7 +30,7 @@ SaaS multitenant: landing pages dinámicas para negocios venezolanos pequeños. 
 ```
 1. YO describo el objetivo/problema
 2. CLAUDE genera el prompt exacto para el agente
-3. YO ejecuto el prompt en Cursor
+3. YO ejecuto el prompt en Windsurf
 4. YO traigo el resultado (código/screenshot/error)
 5. CLAUDE evalúa, certifica o corrige
 6. Si hay error → CLAUDE genera fix → vuelve al paso 3
@@ -194,8 +194,8 @@ CURRENCY_MODE en base.blade.php resuelve conflicto PHP/JS
 ### Planes:
 ```
 Plan 1 OPORTUNIDAD:  6 productos,  3 servicios
-Plan 2 CRECIMIENTO: 18 productos,  6 servicios
-Plan 3 VISIÓN:      40 productos, 15 servicios
+Plan 2 CRECIMIENTO: 12 productos,  6 servicios
+Plan 3 VISIÓN:      18 productos,  9 servicios
 ```
 
 ---

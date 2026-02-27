@@ -786,14 +786,14 @@ Cliente nuestro "Repuestos El Rayo":
 
 ANTES:
 • Dólar subía
-• Tenía que editar 40 productos en Instagram
+• Tenía que editar 18 productos en Instagram
 • Tardaba 3-4 horas
 • Mientras tanto: clientes veían precios viejos
 • Reclamos, confusión, ventas perdidas
 
 DESPUÉS:
 • Dólar sube
-• Sistema actualiza los 40 productos SOLO
+• Sistema actualiza los 18 productos SOLO
 • En 1 segundo
 • Él ni se entera
 • Clientes siempre ven precio correcto
