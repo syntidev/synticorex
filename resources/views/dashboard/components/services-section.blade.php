@@ -63,10 +63,10 @@
                 @endif
 
                 @if($services->count() > 0)
-                <div class="card-body pt-2">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                <div class="card-body px-6 pt-2 pb-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         @foreach($services as $service)
-                        <div class="rounded-lg border border-base-content/10 bg-base-200/30 p-3 transition-all hover:border-secondary/30 hover:shadow-sm">
+                        <div class="rounded-xl border border-base-content/8 bg-base-100 p-4 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 group">
                             <div class="flex items-start gap-3 mb-2">
                                 {{-- Icon/Image --}}
                                 <div class="size-12 rounded-lg shrink-0 flex items-center justify-center overflow-hidden
@@ -94,14 +94,14 @@
                                 @endif
                             </div>
                             {{-- Actions --}}
-                            <div class="flex gap-2">
+                            <div class="flex gap-2 mt-3 pt-3 border-t border-base-content/5">
                                 <button onclick="editService({{ $service->id }})"
-                                        class="btn btn-secondary btn-sm btn-square" title="Editar">
-                                    <span class="iconify tabler--pencil size-5" aria-hidden="true"></span>
+                                        class="btn btn-secondary btn-sm flex-1 gap-1.5" title="Editar">
+                                    <span class="iconify tabler--pencil size-4" aria-hidden="true"></span> Editar
                                 </button>
                                 <button onclick="deleteService({{ $service->id }})"
-                                        class="btn btn-error btn-sm btn-square" title="Eliminar">
-                                    <span class="iconify tabler--trash size-5" aria-hidden="true"></span>
+                                        class="btn btn-soft btn-error btn-sm btn-square" title="Eliminar">
+                                    <span class="iconify tabler--trash size-4" aria-hidden="true"></span>
                                 </button>
                             </div>
                         </div>
@@ -109,10 +109,15 @@
                     </div>
                 </div>
                 @else
-                <div class="card-body flex flex-col items-center justify-center py-10 text-center">
-                    <span class="iconify tabler--tool size-10 text-base-content/20 mb-2" aria-hidden="true"></span>
-                    <h3 class="font-semibold text-sm text-base-content/60 mb-1">No hay servicios aún</h3>
-                    <p class="text-xs text-base-content/40">Comienza agregando tu primer servicio</p>
+                <div class="card-body flex flex-col items-center justify-center py-16 text-center">
+                    <div class="size-16 rounded-2xl bg-secondary/5 flex items-center justify-center mb-4">
+                        <span class="iconify tabler--tool size-8 text-secondary/30" aria-hidden="true"></span>
+                    </div>
+                    <h3 class="font-bold text-base text-base-content/70 mb-1">No hay servicios aún</h3>
+                    <p class="text-sm text-base-content/40 mb-4">Comienza agregando tu primer servicio</p>
+                    <button onclick="checkAndOpenServiceModal()" class="btn btn-secondary btn-sm gap-1.5 shadow-md">
+                        <span class="iconify tabler--plus size-4"></span> Agregar Servicio
+                    </button>
                 </div>
                 @endif
             </div>

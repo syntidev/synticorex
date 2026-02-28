@@ -21,7 +21,7 @@
 
                         <div class="flex gap-3 pt-6 border-t border-base-content/10 justify-end">
                             <button type="button" class="btn btn-soft" onclick="closeBranchModal()">Cancelar</button>
-                            <button type="submit" class="btn btn-primary gap-2">
+                            <button type="submit" class="btn btn-primary gap-2 shadow-md shadow-primary/20 hover:shadow-lg">
                                 <span class="iconify tabler--device-floppy size-4" aria-hidden="true"></span>
                                 Guardar
                             </button>
@@ -70,7 +70,7 @@
 
                         <div class="flex gap-3 pt-6 border-t border-base-content/10 justify-end">
                             <button type="button" class="btn btn-soft" onclick="closeTestimonialModal()">Cancelar</button>
-                            <button type="submit" class="btn btn-primary gap-2">
+                            <button type="submit" class="btn btn-primary gap-2 shadow-md shadow-primary/20 hover:shadow-lg">
                                 <span class="iconify tabler--device-floppy size-4" aria-hidden="true"></span>
                                 Guardar
                             </button>
@@ -103,7 +103,7 @@
 
                         <div class="flex gap-3 pt-6 border-t border-base-content/10 justify-end">
                             <button type="button" class="btn btn-soft" onclick="closeFaqModal()">Cancelar</button>
-                            <button type="submit" class="btn btn-secondary gap-2">
+                            <button type="submit" class="btn btn-secondary gap-2 shadow-md shadow-secondary/20 hover:shadow-lg">
                                 <span class="iconify tabler--device-floppy size-4" aria-hidden="true"></span>
                                 Guardar
                             </button>

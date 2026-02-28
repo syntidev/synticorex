@@ -29,8 +29,8 @@
             </div>
 
             {{-- ── Gráfico + Distribución side-by-side ──────────────────── --}}
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
-                <div class="lg:col-span-2 card bg-base-100 shadow-sm border border-base-content/10">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-6">
+                <div class="lg:col-span-2 card bg-base-100 shadow-md border border-base-content/8 card-elevated">
                     <div class="card-header flex items-center justify-between">
                         <h4 class="card-title text-base">Visitantes — últimos 7 días</h4>
                         <button onclick="loadAnalytics()" class="btn btn-sm btn-ghost gap-2">
@@ -43,7 +43,7 @@
                     </div>
                 </div>
 
-                <div class="card bg-base-100 shadow-sm border border-base-content/10">
+                <div class="card bg-base-100 shadow-md border border-base-content/8 card-elevated">
                     <div class="card-header">
                         <h4 class="card-title text-base">Distribución</h4>
                     </div>
@@ -77,10 +77,10 @@
             </div>
 
             {{-- ── Herramientas de negocio ───────────────────────────────── --}}
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
 
                 {{-- Tasa del Dólar --}}
-                <div class="card bg-base-100 shadow-sm border border-base-content/10">
+                <div class="card bg-base-100 shadow-md border border-base-content/8 card-elevated">
                     <div class="card-header">
                         <div class="flex items-center gap-2">
                             <span class="iconify tabler--currency-dollar size-5 text-success"></span>
@@ -102,7 +102,7 @@
                 </div>
 
                 {{-- Estado del negocio --}}
-                <div class="card bg-base-100 shadow-sm border border-base-content/10">
+                <div class="card bg-base-100 shadow-md border border-base-content/8 card-elevated">
                     <div class="card-header">
                         <div class="flex items-center gap-2">
                             <span class="iconify tabler--building-store size-5 text-primary"></span>

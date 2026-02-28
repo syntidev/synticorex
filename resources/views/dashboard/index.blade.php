@@ -18,11 +18,11 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
     <style>
-        /* ══ SYNTIWEB Dashboard — Minimal CSS ══ */
+        /* ══ SYNTIWEB Dashboard — Premium Design System ══ */
         :root { --synti: #4D8FFF; --synti-glow: rgba(77,143,255,0.14); --synti-bdr: rgba(77,143,255,0.22); --synti-soft: rgba(77,143,255,0.10); }
 
         /* Sidebar */
-        #layout-sidebar { position:fixed; top:0; bottom:0; left:0; width:16rem; z-index:80; background:var(--color-base-100); transform:translateX(-100%); transition:transform .3s ease; display:flex !important; }
+        #layout-sidebar { position:fixed; top:0; bottom:0; left:0; width:16rem; z-index:80; transform:translateX(-100%); transition:transform .3s ease; display:flex !important; }
         #layout-sidebar.opened, #layout-sidebar.open { transform:translateX(0); }
         @media(min-width:1024px){ #layout-sidebar { transform:translateX(0); z-index:50; } }
 
@@ -30,14 +30,25 @@
         .tab-content { display:none; } .tab-content.active { display:block; }
 
         /* Brand fonts */
-        .card-title, .table-title, .crud-dialog-title { font-family:'Plus Jakarta Sans',sans-serif !important; color:var(--synti) !important; letter-spacing:-0.3px; }
+        .card-title, .table-title, .crud-dialog-title { font-family:'Plus Jakarta Sans',sans-serif !important; letter-spacing:-0.3px; }
         .sidebar-logo-text { font-family:'Plus Jakarta Sans',sans-serif; font-size:1.2rem; font-weight:800; letter-spacing:-0.5px; line-height:1; }
-        .sidebar-logo-synti { color:#4D8FFF; } .sidebar-logo-web { color:var(--color-base-content); }
+        .sidebar-logo-synti { color:#fff; } .sidebar-logo-web { color:rgba(255,255,255,.7); }
         #live-clock { font-family:'Plus Jakarta Sans',sans-serif; font-size:.8rem; font-weight:700; color:var(--synti); letter-spacing:.5px; }
 
-        /* Sidebar active */
-        .menu li button.menu-active, .menu li button[aria-selected="true"] { background:linear-gradient(90deg,rgba(77,143,255,.18) 0%,rgba(77,143,255,.04) 100%) !important; color:#4D8FFF !important; border-left:3px solid #4D8FFF; padding-left:calc(.75rem - 3px); font-weight:600; }
-        .menu li button:not(.menu-active):not([aria-selected="true"]):hover { background:rgba(77,143,255,.07) !important; color:#4D8FFF !important; }
+        /* Sidebar dark elegant */
+        #layout-sidebar > .drawer-body { background:linear-gradient(180deg,#0f172a 0%,#1e293b 100%); color:#e2e8f0; }
+        #layout-sidebar .sidebar-footer-link { color:#e2e8f0 !important; }
+        #layout-sidebar .menu li button {
+            color:rgba(226,232,240,.65); border-left:3px solid transparent;
+            padding:.65rem 1rem; border-radius:0 .5rem .5rem 0; margin-bottom:2px;
+            transition:all .2s ease;
+        }
+        #layout-sidebar .menu li button:hover { background:rgba(77,143,255,.12); color:#93c5fd; border-left-color:rgba(77,143,255,.5); }
+        #layout-sidebar .menu li button.menu-active,
+        #layout-sidebar .menu li button[aria-selected="true"] {
+            background:linear-gradient(90deg,rgba(77,143,255,.22) 0%,rgba(77,143,255,.06) 100%);
+            color:#60a5fa; border-left:3px solid #60a5fa; font-weight:600;
+        }
 
         /* Breathing dots */
         @keyframes synti-breathe { 0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(34,197,94,.5)} 50%{opacity:.7;box-shadow:0 0 0 4px rgba(34,197,94,0)} }
@@ -45,30 +56,31 @@
         .dot-online { display:inline-block; width:8px; height:8px; border-radius:50%; background:#22c55e; flex-shrink:0; animation:synti-breathe 2.5s ease-in-out infinite; }
         .dot-offline { display:inline-block; width:8px; height:8px; border-radius:50%; background:#ef4444; flex-shrink:0; animation:synti-breathe-off 2s ease-in-out infinite; }
 
-        /* CRUD Modals */
-        .crud-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.55); backdrop-filter:blur(4px); z-index:9999; align-items:center; justify-content:center; padding:1rem; }
+        /* CRUD Modals — elevated */
+        .crud-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.5); backdrop-filter:blur(8px); z-index:9999; align-items:center; justify-content:center; padding:1rem; }
         .crud-overlay.show { display:flex; }
-        .crud-dialog { background:var(--color-base-100); border-radius:var(--radius-box); width:100%; max-width:600px; max-height:90vh; overflow-y:auto; z-index:10000; box-shadow:0 25px 80px rgba(0,0,0,.25); border:1px solid color-mix(in oklch,var(--color-base-content) 10%,transparent); }
-        .crud-dialog-header { padding:1rem 1.25rem; border-bottom:1px solid color-mix(in oklch,var(--color-base-content) 10%,transparent); display:flex; justify-content:space-between; align-items:center; }
-        .crud-dialog-close { background:color-mix(in oklch,var(--color-base-content) 8%,transparent); border:1px solid color-mix(in oklch,var(--color-base-content) 12%,transparent); color:var(--color-base-content); cursor:pointer; width:32px; height:32px; display:flex; align-items:center; justify-content:center; border-radius:var(--radius-field); transition:all .2s; }
-        .crud-dialog-close:hover { background:var(--synti-soft); color:var(--synti); }
-        .crud-dialog-body { padding:1.25rem; }
-        @media(max-width:639px) { .crud-dialog { max-width:100%; max-height:100vh; border-radius:0; height:100%; } }
+        .crud-dialog { background:var(--color-base-100); border-radius:1rem; width:100%; max-width:600px; max-height:90vh; overflow-y:auto; z-index:10000; box-shadow:0 25px 60px -12px rgba(0,0,0,.35); border:1px solid color-mix(in oklch,var(--color-base-content) 8%,transparent); }
+        .crud-dialog-header { padding:1.25rem 1.5rem; background:linear-gradient(135deg,#2563eb 0%,#3b82f6 100%); color:#fff; display:flex; justify-content:space-between; align-items:center; border-radius:1rem 1rem 0 0; }
+        .crud-dialog-title { color:#fff !important; font-size:1.1rem; }
+        .crud-dialog-close { background:rgba(255,255,255,.15); border:none; color:#fff; cursor:pointer; width:32px; height:32px; display:flex; align-items:center; justify-content:center; border-radius:50%; transition:all .2s; backdrop-filter:blur(4px); }
+        .crud-dialog-close:hover { background:rgba(255,255,255,.3); transform:scale(1.05); }
+        .crud-dialog-body { padding:1.5rem; }
+        @media(max-width:639px) { .crud-dialog { max-width:100%; max-height:100vh; border-radius:0; height:100%; } .crud-dialog-header { border-radius:0; } }
 
         /* Form focus ring (FlyonUI native inputs) */
-        .input:focus, .textarea:focus, .select:focus, .file-input:focus { box-shadow:0 0 0 3px var(--synti-glow); }
+        .input:focus, .textarea:focus, .select:focus, .file-input:focus { box-shadow:0 0 0 3px var(--synti-glow); border-color:var(--synti); }
 
         /* Image previews */
-        .image-preview { margin-bottom:1rem; text-align:center; }
-        .image-preview img { max-width:200px; max-height:200px; border-radius:var(--radius-box); object-fit:cover; border:2px solid var(--synti-bdr); }
+        .image-preview { margin-bottom:1rem; text-align:center; position:relative; }
+        .image-preview img { max-width:200px; max-height:200px; border-radius:.75rem; object-fit:cover; border:2px solid var(--synti-bdr); }
         .gallery-thumb { position:relative; display:inline-block; }
-        .gallery-thumb img { width:80px; height:80px; border-radius:6px; object-fit:cover; border:2px solid color-mix(in oklch,var(--color-base-content) 15%,transparent); }
+        .gallery-thumb img { width:80px; height:80px; border-radius:8px; object-fit:cover; border:2px solid color-mix(in oklch,var(--color-base-content) 15%,transparent); }
         .gallery-thumb-delete { position:absolute; top:-6px; right:-6px; width:20px; height:20px; border-radius:50%; background:var(--color-error); color:#fff; border:none; font-size:12px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
-        .gallery-preview-thumb img { width:80px; height:80px; border-radius:6px; object-fit:cover; border:2px dashed var(--synti-bdr); }
+        .gallery-preview-thumb img { width:80px; height:80px; border-radius:8px; object-fit:cover; border:2px dashed var(--synti-bdr); }
 
         /* Icon picker */
         #icon-picker-grid { scrollbar-width:thin; scrollbar-color:var(--synti-bdr) transparent; }
-        .icon-pick-item { transition:all .18s; border:1px solid color-mix(in oklch,var(--color-base-content) 10%,transparent) !important; background:var(--color-base-200) !important; color:var(--color-base-content) !important; }
+        .icon-pick-item { transition:all .18s; border:1px solid color-mix(in oklch,var(--color-base-content) 10%,transparent) !important; background:var(--color-base-200) !important; color:var(--color-base-content) !important; border-radius:.5rem; }
         .icon-pick-item:hover { background:var(--synti-soft) !important; border-color:var(--synti-bdr) !important; color:var(--synti) !important; transform:translateY(-2px); }
         .icon-pick-item.selected { background:var(--synti) !important; border-color:var(--synti) !important; color:#fff !important; }
 
@@ -77,7 +89,10 @@
         .svc-segment button { display:flex; align-items:center; gap:6px; padding:.45rem 1rem; border-radius:calc(var(--radius-box) - 3px); font-size:.8125rem; font-weight:600; border:none; cursor:pointer; transition:all .2s; color:color-mix(in oklch,var(--color-base-content) 55%,transparent); background:transparent; }
         .svc-segment button.seg-active { background:var(--color-base-100); color:var(--synti); box-shadow:0 1px 6px rgba(0,0,0,.1); }
 
-        /* (Legacy toggle removed — migrated to FlyonUI .toggle component) */
+        /* Card elevation system */
+        .card { transition:all .3s ease; }
+        .card-elevated { border-radius:1rem !important; }
+        .card-elevated:hover { box-shadow:0 10px 25px -5px rgba(0,0,0,.08), 0 4px 6px -2px rgba(0,0,0,.04); transform:translateY(-1px); }
 
         /* Focus WCAG */
         :focus-visible { outline:2px solid var(--synti) !important; outline-offset:2px !important; }
@@ -106,13 +121,13 @@
 <div class="bg-base-200 flex min-h-screen flex-col">
 
     <!-- ══ HEADER ════════════════════════════════════════════════════════ -->
-    <div class="bg-base-100 border-base-content/20 lg:ps-64 sticky top-0 z-50 flex border-b">
+    <div class="lg:ps-64 sticky top-0 z-50" style="background:linear-gradient(135deg,#1e40af 0%,#2563eb 50%,#3b82f6 100%);">
         <div class="mx-auto w-full">
-            <nav class="navbar py-2 px-3">
-                <div class="navbar-start items-center gap-2">
+            <nav class="navbar py-3 px-4 lg:px-6">
+                <div class="navbar-start items-center gap-3">
                     {{-- Hamburger: visible solo en móvil --}}
                     <button type="button"
-                            class="btn btn-soft btn-square btn-sm lg:hidden"
+                            class="btn btn-sm btn-square border-0 bg-white/10 text-white hover:bg-white/20 lg:hidden"
                             aria-haspopup="dialog"
                             aria-expanded="false"
                             aria-controls="layout-sidebar"
@@ -120,15 +135,15 @@
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
                     </button>
                     {{-- Logo mobile --}}
-                    <span class="sidebar-logo-text text-base lg:hidden">
-                        <span class="sidebar-logo-synti">SYNTI</span><span class="sidebar-logo-web">web</span>
+                    <span class="sidebar-logo-text text-base lg:hidden text-white">
+                        <span class="text-white">SYNTI</span><span class="text-blue-200">web</span>
                     </span>
                     {{-- Negocio + dot de estado (desktop) --}}
-                    <div class="hidden lg:flex items-center gap-2 min-w-0">
+                    <div class="hidden lg:flex items-center gap-3 min-w-0">
                         <span class="{{ $tenant->is_open ? 'dot-online' : 'dot-offline' }}"></span>
-                        <span class="text-sm font-semibold text-base-content truncate max-w-52">{{ $tenant->business_name }}</span>
-                        <span class="badge badge-soft badge-xs shrink-0
-                            {{ $plan->id === 1 ? 'badge-warning' : ($plan->id === 2 ? 'badge-success' : 'badge-info') }}">
+                        <span class="text-sm font-semibold text-white truncate max-w-52">{{ $tenant->business_name }}</span>
+                        <span class="badge badge-sm font-bold border-0
+                            {{ $plan->id === 1 ? 'bg-amber-400/90 text-amber-900' : ($plan->id === 2 ? 'bg-emerald-400/90 text-emerald-900' : 'bg-sky-300/90 text-sky-900') }}">
                             {{ $plan->name }}
                         </span>
                     </div>
@@ -136,13 +151,13 @@
 
                 {{-- Center: reloj + tasa BCV --}}
                 <div id="header-extras" class="navbar-center hidden md:flex items-center gap-3">
-                    <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-box bg-base-200/70 border border-base-content/8">
-                        <span class="iconify tabler--clock size-3.5 text-base-content/50"></span>
-                        <span id="live-clock" aria-label="Hora actual">--:--</span>
+                    <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 backdrop-blur-sm border border-white/10">
+                        <span class="iconify tabler--clock size-3.5 text-blue-200"></span>
+                        <span id="live-clock" class="text-xs font-bold text-white tracking-wide" aria-label="Hora actual">--:--</span>
                     </div>
-                    <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-box bg-base-200/70 border border-base-content/8">
-                        <span class="iconify tabler--currency-dollar size-3.5 text-green-500"></span>
-                        <span class="text-xs font-semibold text-base-content/70">
+                    <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 backdrop-blur-sm border border-white/10">
+                        <span class="iconify tabler--currency-dollar size-3.5 text-emerald-300"></span>
+                        <span class="text-xs font-semibold text-white">
                             Bs. <span id="header-dollar-rate">{{ number_format($dollarRate, 2) }}</span>
                         </span>
                     </div>
@@ -152,7 +167,7 @@
                 <div class="navbar-end items-center gap-2">
                     <span class="{{ $tenant->is_open ? 'dot-online' : 'dot-offline' }} lg:hidden"></span>
                     <a href="/{{ $tenant->subdomain }}"
-                       class="btn btn-soft btn-sm gap-1.5">
+                       class="btn btn-sm gap-1.5 border-0 bg-white/15 text-white hover:bg-white/25 backdrop-blur-sm">
                         <span class="iconify tabler--layout-sidebar-right-collapse size-4"></span>
                         <span class="hidden sm:inline">Cerrar</span>
                     </a>
@@ -166,38 +181,41 @@
            class="overlay [--auto-close:lg]"
            aria-label="Sidebar"
            tabindex="-1">
-        <div class="drawer-body border-base-content/20 h-full border-e p-0">
+        <div class="drawer-body h-full border-e border-white/5 p-0">
             <div class="flex h-full max-h-full flex-col">
                 {{-- Close (mobile) --}}
                 <button type="button"
-                        class="btn btn-text btn-circle btn-sm absolute end-3 top-3 lg:hidden"
+                        class="btn btn-text btn-circle btn-sm absolute end-3 top-3 lg:hidden text-white/60 hover:text-white hover:bg-white/10"
                         aria-label="Close"
                         data-overlay="#layout-sidebar">
                     <span class="iconify tabler--x size-4.5"></span>
                 </button>
 
                 {{-- Logo --}}
-                <div class="text-base-content border-base-content/20 flex items-center gap-3 border-b px-5 py-5">
-                    <svg viewBox="0 0 900 900" class="size-8 shrink-0" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="0" y="0" width="560" height="80" fill="currentColor"/>
-                        <rect x="0" y="80" width="80" height="480" fill="currentColor"/>
-                        <rect x="820" y="300" width="80" height="520" fill="currentColor"/>
-                        <rect x="340" y="820" width="560" height="80" fill="currentColor"/>
-                        <rect x="0" y="700" width="80" height="120" fill="currentColor"/>
-                        <rect x="0" y="820" width="200" height="80" fill="currentColor"/>
-                        <circle cx="780" cy="120" r="120" fill="#4D8FFF"/>
-                    </svg>
+                <div class="flex items-center gap-3 border-b border-white/8 px-5 py-5">
+                    <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/20 shrink-0">
+                        <svg viewBox="0 0 900 900" class="size-5" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="0" y="0" width="560" height="80" fill="white"/>
+                            <rect x="0" y="80" width="80" height="480" fill="white"/>
+                            <rect x="820" y="300" width="80" height="520" fill="white"/>
+                            <rect x="340" y="820" width="560" height="80" fill="white"/>
+                            <rect x="0" y="700" width="80" height="120" fill="white"/>
+                            <rect x="0" y="820" width="200" height="80" fill="white"/>
+                            <circle cx="780" cy="120" r="120" fill="#93c5fd"/>
+                        </svg>
+                    </div>
                     <div>
                         <span class="sidebar-logo-text">
                             <span class="sidebar-logo-synti">SYNTI</span><span class="sidebar-logo-web">web</span>
                         </span>
-                        <p class="text-base-content/60 text-xs">{{ $tenant->business_name }}</p>
+                        <p class="text-slate-400 text-xs mt-0.5">{{ $tenant->business_name }}</p>
                     </div>
                 </div>
 
                 {{-- Navigation --}}
-                <div class="h-full overflow-y-auto">
-                    <ul class="menu menu-sm gap-1 p-3" role="tablist">
+                <div class="h-full overflow-y-auto py-2">
+                    <p class="px-5 py-2 text-[10px] font-bold uppercase tracking-widest text-slate-500">Menú</p>
+                    <ul class="menu menu-sm gap-0.5 px-3" role="tablist">
                         <li role="presentation">
                             <button class="menu-active w-full text-start" role="tab"
                                     aria-selected="true" aria-controls="tab-info"
@@ -260,9 +278,9 @@
                 </div>
 
                 {{-- Footer --}}
-                <div class="border-base-content/20 border-t p-3 mt-auto">
+                <div class="border-t border-white/8 p-3 mt-auto">
                     <a href="/{{ $tenant->subdomain }}" target="_blank" rel="noopener noreferrer"
-                       class="btn btn-soft btn-block btn-sm gap-2">
+                       class="sidebar-footer-link btn btn-block btn-sm gap-2 border-0 bg-white/8 hover:bg-white/15 transition-all">
                         <span class="iconify tabler--external-link size-4"></span>
                         Ver mi sitio
                     </a>
@@ -311,7 +329,7 @@
     {{-- ── End Plan Expiry Notices ─────────────────────────────────────── --}}
 
     <!-- Content -->
-    <main id="main-content" class="mx-auto w-full max-w-[1200px] flex-1 grow p-4 lg:p-6" tabindex="-1">
+    <main id="main-content" class="mx-auto w-full max-w-[1200px] flex-1 grow p-5 lg:p-8" tabindex="-1">
         
     @include('dashboard.components.info-section')
 

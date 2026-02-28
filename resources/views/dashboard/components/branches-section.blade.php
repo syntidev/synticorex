@@ -8,14 +8,16 @@
             @endphp
 
             {{-- ── Sucursales header card ──────────────────────────────── --}}
-            <div class="card bg-base-100 shadow-sm border border-base-content/10 mb-4">
-                <div class="card-header flex items-center justify-between gap-3">
-                    <div>
-                        <h2 class="card-title flex items-center gap-2">
+            <div class="card bg-base-100 shadow-md border border-base-content/8 mb-6 card-elevated">
+                <div class="card-header px-6 pt-6 pb-4 flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-3">
+                        <div class="size-10 rounded-xl bg-primary/10 flex items-center justify-center">
                             <span class="iconify tabler--map-pin size-5 text-primary" aria-hidden="true"></span>
-                            Sucursales
-                        </h2>
-                        <p class="text-xs text-base-content/50 mt-0.5">Muestra hasta 3 sucursales en tu landing pública</p>
+                        </div>
+                        <div>
+                            <h2 class="text-xl font-bold text-base-content">Sucursales</h2>
+                            <p class="text-xs text-base-content/50">Muestra hasta 3 sucursales en tu landing pública</p>
+                        </div>
                     </div>
                     <input type="checkbox" id="branches-toggle"
                            class="switch switch-success"

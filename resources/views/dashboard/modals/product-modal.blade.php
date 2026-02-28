@@ -100,9 +100,9 @@
                             <input type="checkbox" id="product-is-featured" class="toggle toggle-warning">
                         </div>
 
-                        <div class="flex gap-2 pt-3 border-t border-base-content/10 mt-2">
-                            <button type="button" class="btn btn-ghost flex-1" onclick="closeProductModal()">Cancelar</button>
-                            <button type="submit" class="btn btn-primary flex-1 gap-2">
+                        <div class="flex gap-3 pt-5 border-t border-base-content/10 mt-3">
+                            <button type="button" class="btn btn-soft flex-1" onclick="closeProductModal()">Cancelar</button>
+                            <button type="submit" class="btn btn-primary flex-1 gap-2 shadow-md shadow-primary/20 hover:shadow-lg">
                                 <span class="iconify tabler--device-floppy size-4" aria-hidden="true"></span>
                                 Guardar Producto
                             </button>

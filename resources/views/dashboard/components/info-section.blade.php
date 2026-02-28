@@ -2,10 +2,10 @@
         <div id="tab-info" class="tab-content active">
 
             {{-- ══ Visual Assets: Logo + Hero + QR ═══════════════════════════ --}}
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-6">
                 {{-- Logo Card (200x200) --}}
-                <div class="card bg-base-100 shadow-sm border border-base-content/10">
-                    <div class="card-body p-4">
+                <div class="card bg-base-100 shadow-md border border-base-content/8 card-elevated">
+                    <div class="card-body p-5">
                         <p class="text-xs font-bold text-base-content/40 uppercase tracking-wider mb-2">Logo</p>
                         <div id="logo-dropzone"
                              class="bg-base-200 rounded-box h-40 flex items-center justify-center mb-3 overflow-hidden border-2 border-dashed border-transparent transition-colors cursor-pointer"
@@ -34,8 +34,8 @@
                 </div>
 
                 {{-- Hero Card (400x300) --}}
-                <div class="card bg-base-100 shadow-sm border border-base-content/10">
-                    <div class="card-body p-4">
+                <div class="card bg-base-100 shadow-md border border-base-content/8 card-elevated">
+                    <div class="card-body p-5">
                         <p class="text-xs font-bold text-base-content/40 uppercase tracking-wider mb-2">Hero</p>
                         <div id="hero-dropzone"
                              class="bg-base-200 rounded-box h-40 flex items-center justify-center mb-3 overflow-hidden border-2 border-dashed border-transparent transition-colors cursor-pointer"
@@ -64,8 +64,8 @@
                 </div>
 
                 {{-- QR Card (200x200) --}}
-                <div class="card bg-base-100 shadow-sm border border-base-content/10">
-                    <div class="card-body p-4">
+                <div class="card bg-base-100 shadow-md border border-base-content/8 card-elevated">
+                    <div class="card-body p-5">
                         <p class="text-xs font-bold text-base-content/40 uppercase tracking-wider mb-2">QR Tracking</p>
                         <div class="flex justify-center mb-2">
                             <div class="bg-white p-2 rounded-lg border border-base-content/10" style="width:140px;height:140px;overflow:hidden;">
@@ -91,13 +91,17 @@
 
             {{-- ══ Info Form ══════════════════════════════════════════════════ --}}
             <form id="form-info" onsubmit="saveInfo(event)">
-                <div class="card bg-base-100 shadow-sm border border-base-content/10">
-                    <div class="card-header">
-                        <h2 class="card-title flex items-center gap-2">
-                            <span class="iconify tabler--building-store size-5 text-primary"></span>
-                            Información del Negocio
-                        </h2>
-                        <p class="text-xs text-base-content/50 mt-0.5">Datos que se muestran en tu landing pública</p>
+                <div class="card bg-base-100 shadow-md border border-base-content/8 card-elevated">
+                    <div class="card-header px-6 pt-6 pb-4">
+                        <div class="flex items-center gap-3 mb-1">
+                            <div class="size-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                                <span class="iconify tabler--building-store size-5 text-primary"></span>
+                            </div>
+                            <div>
+                                <h2 class="text-xl font-bold text-base-content">Información del Negocio</h2>
+                                <p class="text-xs text-base-content/50">Datos que se muestran en tu landing pública</p>
+                            </div>
+                        </div>
                     </div>
                     <div class="card-body pt-2">
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -295,8 +299,8 @@
                     'thursday' => 'Jue', 'friday' => 'Vie', 'saturday' => 'Sáb', 'sunday' => 'Dom',
                 ];
             @endphp
-            <div class="card bg-base-100 shadow-sm border border-base-content/10 mt-4">
-                <div class="card-header flex items-center justify-between gap-2">
+            <div class="card bg-base-100 shadow-md border border-base-content/8 mt-6 card-elevated">
+                <div class="card-header flex items-center justify-between gap-2 px-6 pt-5 pb-3">
                     <h3 class="card-title flex items-center gap-2 text-sm">
                         <span class="iconify tabler--clock size-4 text-primary" aria-hidden="true"></span>
                         Horario de Atención

@@ -29,13 +29,17 @@
                 $satClosed = is_null($satData) || !empty($satData['closed']);
                 $sunClosed = is_null($sunData) || !empty($sunData['closed']);
             @endphp
-            <div class="card bg-base-100 shadow-sm border border-base-content/10 mb-4">
-                <div class="card-header">
-                    <h3 class="card-title flex items-center gap-2">
-                        <span class="iconify tabler--clock size-5 text-primary" aria-hidden="true"></span>
-                        Horario de Atención
-                    </h3>
-                    <p class="text-xs text-base-content/50 mt-0.5">Define cuándo tu negocio está abierto para tus clientes</p>
+            <div class="card bg-base-100 shadow-md border border-base-content/8 card-elevated mb-6">
+                <div class="card-header px-6 pt-6 pb-4">
+                    <div class="flex items-center gap-3 mb-1">
+                        <div class="size-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                            <span class="iconify tabler--clock size-5 text-primary" aria-hidden="true"></span>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-base-content">Horario de Atención</h3>
+                            <p class="text-xs text-base-content/50">Define cuándo tu negocio está abierto para tus clientes</p>
+                        </div>
+                    </div>
                 </div>
                 <div class="card-body pt-2">
                     {{-- Mode switcher --}}
@@ -149,7 +153,7 @@
             {{-- ═══════════════════════════════════════════════════════════
                  Section 0: Social Networks
             ═══════════════════════════════════════════════════════════ --}}
-            <div class="card bg-base-100 shadow-sm border border-base-content/10 mb-4">
+            <div class="card bg-base-100 shadow-md border border-base-content/8 card-elevated mb-6">
                 @php
                     $rawSocial      = $customization->social_networks ?? [];
                     $socialNetworks = is_array($rawSocial) ? $rawSocial : [];
@@ -167,11 +171,13 @@
                     $plan1Handle    = $plan1Selected ? ($socialNetworks[$plan1Selected] ?? '') : '';
                 @endphp
 
-                <div class="card-header flex items-center justify-between gap-2 flex-wrap">
-                    <h3 class="card-title flex items-center gap-2">
-                        <span class="iconify tabler--social size-5 text-primary" aria-hidden="true"></span>
-                        Redes Sociales
-                    </h3>
+                <div class="card-header px-6 pt-6 pb-4 flex items-center justify-between gap-2 flex-wrap">
+                    <div class="flex items-center gap-3">
+                        <div class="size-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                            <span class="iconify tabler--social size-5 text-primary" aria-hidden="true"></span>
+                        </div>
+                        <h3 class="text-lg font-bold text-base-content">Redes Sociales</h3>
+                    </div>
                     @if($plan->id === 1)
                         <span class="badge badge-soft badge-warning badge-sm">Plan OPORTUNIDAD — 1 red social</span>
                     @else
@@ -239,7 +245,7 @@
             </div>
 
             {{-- ── Medios de Pago card ─────────────────────────────────── --}}
-            <div class="card bg-base-100 shadow-sm border border-base-content/10 mb-4">
+            <div class="card bg-base-100 shadow-md border border-base-content/8 card-elevated mb-6">
                 @php
                     $payMethods      = $customization->payment_methods ?? [];
                     $globalEnabled   = $payMethods['global'] ?? [];
@@ -266,11 +272,13 @@
                     $activeBranchList = $branches->where('is_active', true);
                 @endphp
 
-                <div class="card-header flex items-center justify-between gap-2 flex-wrap">
-                    <h3 class="card-title flex items-center gap-2">
-                        <span class="iconify tabler--credit-card size-5 text-primary" aria-hidden="true"></span>
-                        Medios de Pago
-                    </h3>
+                <div class="card-header px-6 pt-6 pb-4 flex items-center justify-between gap-2 flex-wrap">
+                    <div class="flex items-center gap-3">
+                        <div class="size-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                            <span class="iconify tabler--credit-card size-5 text-primary" aria-hidden="true"></span>
+                        </div>
+                        <h3 class="text-lg font-bold text-base-content">Medios de Pago</h3>
+                    </div>
                     @if($plan->id === 1)
                         <span class="badge badge-soft badge-warning badge-sm">Plan OPORTUNIDAD — fijos</span>
                     @elseif($plan->id === 2)
@@ -399,7 +407,7 @@
             </div>
 
             {{-- ── Configuración de Moneda card ──────────────────────────── --}}
-            <div class="card bg-base-100 shadow-sm border border-base-content/10 mb-4">
+            <div class="card bg-base-100 shadow-md border border-base-content/8 card-elevated mb-6">
                 <div class="card-header">
                     <h3 class="card-title flex items-center gap-2">
                         <span class="iconify tabler--currency-dollar size-5 text-primary" aria-hidden="true"></span>
@@ -451,7 +459,7 @@
             </div>
 
             {{-- ── Cambiar PIN ──────────────────────────────────── --}}
-            <div class="card bg-base-100 shadow-sm border border-base-content/10 mb-4">
+            <div class="card bg-base-100 shadow-md border border-base-content/8 card-elevated mb-6">
                 <div class="card-header">
                     <h3 class="card-title flex items-center gap-2">
                         <span class="iconify tabler--lock size-5 text-primary" aria-hidden="true"></span>
@@ -484,7 +492,7 @@
             </div>
 
             {{-- ── Información del Plan ────────────────────────── --}}
-            <div class="card bg-base-100 shadow-sm border border-base-content/10">
+            <div class="card bg-base-100 shadow-md border border-base-content/8 card-elevated">
                 <div class="card-header flex items-center justify-between gap-2 flex-wrap">
                     <h3 class="card-title flex items-center gap-2">
                         <span class="iconify tabler--crown size-5 text-primary" aria-hidden="true"></span>

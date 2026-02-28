@@ -40,13 +40,17 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
 @endphp
 
 {{-- ── Temas FlyonUI ─────────────────────────────────── --}}
-<div class="card bg-base-100 shadow-sm border border-base-content/10 mb-4">
-    <div class="card-header">
-        <h2 class="card-title flex items-center gap-2">
-            <span class="iconify tabler--palette size-5 text-primary" aria-hidden="true"></span>
-            Tema Visual
-        </h2>
-        <p class="text-xs text-base-content/50 mt-0.5">Elige el tema que mejor represente tu marca</p>
+<div class="card bg-base-100 shadow-md border border-base-content/8 card-elevated mb-6">
+    <div class="card-header px-6 pt-6 pb-4">
+        <div class="flex items-center gap-3 mb-1">
+            <div class="size-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                <span class="iconify tabler--palette size-5 text-primary" aria-hidden="true"></span>
+            </div>
+            <div>
+                <h2 class="text-lg font-bold text-base-content">Tema Visual</h2>
+                <p class="text-xs text-base-content/50">Elige el tema que mejor represente tu marca</p>
+            </div>
+        </div>
     </div>
     <div class="card-body pt-2">
         <div id="theme-success-message" class="alert alert-success mb-3" style="display:none;">
@@ -91,13 +95,17 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
 
 @if($tenant->plan_id === 3)
 {{-- ── Paleta Personalizada (Plan VISIÓN) ──────────── --}}
-<div class="card bg-base-100 shadow-sm border border-base-content/10 mb-4">
-    <div class="card-header">
-        <h3 class="card-title flex items-center gap-2">
-            <span class="iconify tabler--color-swatch size-5 text-primary" aria-hidden="true"></span>
-            Paleta Personalizada
-            <span class="badge badge-soft badge-info badge-xs">Plan VISIÓN</span>
-        </h3>
+<div class="card bg-base-100 shadow-md border border-base-content/8 card-elevated mb-6">
+    <div class="card-header px-6 pt-6 pb-4">
+        <div class="flex items-center gap-3">
+            <div class="size-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                <span class="iconify tabler--color-swatch size-5 text-primary" aria-hidden="true"></span>
+            </div>
+            <div>
+                <h3 class="text-lg font-bold text-base-content">Paleta Personalizada</h3>
+                <span class="badge badge-soft badge-info badge-xs">Plan VISIÓN</span>
+            </div>
+        </div>
     </div>
     <div class="card-body">
         @php
@@ -124,13 +132,17 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
             {{-- ══════════════════════════════════════════════════════════════
                  SECCIÓN: Orden de Secciones (Drag & Drop)
             ══════════════════════════════════════════════════════════════ --}}
-            <div class="card bg-base-100 shadow-sm border border-base-content/10 mb-4">
-                <div class="card-header">
-                    <h2 class="card-title flex items-center gap-2">
-                        <span class="iconify tabler--list-check size-5 text-primary" aria-hidden="true"></span>
-                        Orden de Secciones
-                    </h2>
-                    <p class="text-xs text-base-content/50 mt-0.5">Arrastra para reordenar. Las secciones apagadas no aparecen en tu landing.</p>
+            <div class="card bg-base-100 shadow-md border border-base-content/8 card-elevated mb-6">
+                <div class="card-header px-6 pt-6 pb-4">
+                    <div class="flex items-center gap-3 mb-1">
+                        <div class="size-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                            <span class="iconify tabler--list-check size-5 text-primary" aria-hidden="true"></span>
+                        </div>
+                        <div>
+                            <h2 class="text-lg font-bold text-base-content">Orden de Secciones</h2>
+                            <p class="text-xs text-base-content/50">Arrastra para reordenar. Las secciones apagadas no aparecen en tu landing.</p>
+                        </div>
+                    </div>
                 </div>
                 <div class="card-body pt-2">
 
@@ -251,15 +263,18 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
             ═══════════════════════════════════════════════════════ --}}
             @if($plan->id >= 2)
             {{-- $savedTestimonials is provided by DashboardController --}}
-            <div class="card bg-base-100 shadow-sm border border-base-content/10 mt-4">
-                <div class="card-header flex items-center justify-between gap-3 flex-wrap">
-                    <div>
-                        <h3 class="card-title flex items-center gap-2">
+            <div class="card bg-base-100 shadow-md border border-base-content/8 card-elevated mt-6">
+                <div class="card-header px-6 pt-6 pb-4 flex items-center justify-between gap-3 flex-wrap">
+                    <div class="flex items-center gap-3">
+                        <div class="size-10 rounded-xl bg-primary/10 flex items-center justify-center">
                             <span class="iconify tabler--message-star size-5 text-primary"></span>
-                            Testimonios de Clientes
-                            <span class="badge badge-soft badge-primary badge-xs ms-1">Plan CRECIMIENTO+</span>
-                        </h3>
-                        <p class="text-base-content/50 text-xs mt-0.5">Agrega, edita y elimina los testimonios que desees.</p>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-base-content">Testimonios de Clientes</h3>
+                            <p class="text-base-content/50 text-xs">Agrega, edita y elimina los testimonios que desees.
+                                <span class="badge badge-soft badge-primary badge-xs ms-1">Plan CRECIMIENTO+</span>
+                            </p>
+                        </div>
                     </div>
                 </div>
                 <div class="card-body pt-2">
@@ -313,15 +328,18 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
             @php
                 $savedFaq = data_get($tenant->settings, 'business_info.faq', []);
             @endphp
-            <div class="card bg-base-100 shadow-sm border border-base-content/10 mt-4">
-                <div class="card-header flex items-center justify-between gap-3 flex-wrap">
-                    <div>
-                        <h3 class="card-title flex items-center gap-2">
-                            <span class="iconify tabler--help-circle size-5 text-primary"></span>
-                            Preguntas Frecuentes (FAQ)
-                            <span class="badge badge-soft badge-secondary badge-xs ms-1">Plan VISIÓN</span>
-                        </h3>
-                        <p class="text-base-content/50 text-xs mt-0.5">Agrega, edita y elimina las preguntas frecuentes que desees.</p>
+            <div class="card bg-base-100 shadow-md border border-base-content/8 card-elevated mt-6">
+                <div class="card-header px-6 pt-6 pb-4 flex items-center justify-between gap-3 flex-wrap">
+                    <div class="flex items-center gap-3">
+                        <div class="size-10 rounded-xl bg-secondary/10 flex items-center justify-center">
+                            <span class="iconify tabler--help-circle size-5 text-secondary"></span>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-base-content">Preguntas Frecuentes (FAQ)</h3>
+                            <p class="text-base-content/50 text-xs">Agrega, edita y elimina las preguntas frecuentes que desees.
+                                <span class="badge badge-soft badge-secondary badge-xs ms-1">Plan VISIÓN</span>
+                            </p>
+                        </div>
                     </div>
                 </div>
                 <div class="card-body pt-2">

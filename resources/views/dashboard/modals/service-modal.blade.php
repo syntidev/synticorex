@@ -121,9 +121,9 @@
                             </label>
                         </div>
 
-                        <div class="flex gap-3 pt-6 border-t border-base-content/10 justify-end">
+                        <div class="flex gap-3 pt-5 border-t border-base-content/10 justify-end">
                             <button type="button" class="btn btn-soft" onclick="closeServiceModal()">Cancelar</button>
-                            <button type="submit" class="btn btn-primary gap-2">
+                            <button type="submit" class="btn btn-primary gap-2 shadow-md shadow-primary/20 hover:shadow-lg">
                                 <span class="iconify tabler--device-floppy size-4" aria-hidden="true"></span>
                                 Guardar Servicio
                             </button>
