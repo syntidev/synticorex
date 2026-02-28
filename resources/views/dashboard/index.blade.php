@@ -569,22 +569,22 @@
                                 </label>
                             </div>
 
-                            <div class="alert alert-warning">
+                            <div class="alert alert-info">
                                 <span class="icon-[tabler--eye] size-5 shrink-0"></span>
                                 <div class="text-xs">
                                     <p class="font-semibold mb-2">Así se verá en tu navbar</p>
                                     <div class="flex items-center gap-2 flex-wrap">
-                                        <span class="badge badge-sm gap-1 bg-success/20 text-success border-success/30">
+                                        <span class="badge badge-sm gap-1 bg-success text-white border-success">
                                             <span class="icon-[tabler--circle-filled] size-3"></span>
                                             ABIERTO
                                         </span>
                                         <span class="text-base-content/30">o</span>
-                                        <span class="badge badge-sm gap-1 bg-error/20 text-error border-error/30">
+                                        <span class="badge badge-sm gap-1 bg-error text-white border-error">
                                             <span class="icon-[tabler--circle-filled] size-3"></span>
                                             CERRADO
                                         </span>
                                     </div>
-                                    <p class="mt-3 p-2 bg-base-100/50 rounded text-xs italic border-l-2 border-warning">
+                                    <p class="mt-3 p-2 bg-base-100/50 rounded text-xs text-base-content border-l-2 border-info">
                                         <span class="font-semibold">Mensaje WhatsApp:</span> <span id="preview-message">{{ data_get($tenant->settings, 'business_info.closed_message', 'Estamos cerrados. Te responderemos durante nuestro horario de atención.') }}</span>
                                     </p>
                                 </div>
@@ -718,15 +718,14 @@
                                     @endif
                                 </div>
                                 {{-- Actions --}}
-                                <div class="flex gap-1.5">
+                                <div class="flex gap-2">
                                     <button onclick="editProduct({{ $product->id }})"
-                                            class="btn btn-soft btn-sm flex-1 gap-1" title="Editar">
-                                        <span class="icon-[tabler--pencil] size-3.5" aria-hidden="true"></span>
-                                        Editar
+                                            class="btn btn-primary btn-sm btn-square" title="Editar">
+                                        <span class="icon-[tabler--pencil] size-5" aria-hidden="true"></span>
                                     </button>
                                     <button onclick="deleteProduct({{ $product->id }})"
-                                            class="btn btn-soft btn-error btn-sm btn-square" title="Eliminar" aria-label="Eliminar producto">
-                                        <span class="icon-[tabler--trash] size-3.5" aria-hidden="true"></span>
+                                            class="btn btn-error btn-sm btn-square" title="Eliminar">
+                                        <span class="icon-[tabler--trash] size-5" aria-hidden="true"></span>
                                     </button>
                                 </div>
                             </div>
@@ -942,15 +941,14 @@
                                 @endif
                             </div>
                             {{-- Actions --}}
-                            <div class="flex gap-1.5">
+                            <div class="flex gap-2">
                                 <button onclick="editService({{ $service->id }})"
-                                        class="btn btn-soft btn-sm flex-1 gap-1" title="Editar">
-                                    <span class="icon-[tabler--pencil] size-3.5" aria-hidden="true"></span>
-                                    Editar
+                                        class="btn btn-secondary btn-sm btn-square" title="Editar">
+                                    <span class="icon-[tabler--pencil] size-5" aria-hidden="true"></span>
                                 </button>
                                 <button onclick="deleteService({{ $service->id }})"
-                                        class="btn btn-soft btn-error btn-sm btn-square" title="Eliminar" aria-label="Eliminar servicio">
-                                    <span class="icon-[tabler--trash] size-3.5" aria-hidden="true"></span>
+                                        class="btn btn-error btn-sm btn-square" title="Eliminar">
+                                    <span class="icon-[tabler--trash] size-5" aria-hidden="true"></span>
                                 </button>
                             </div>
                         </div>
@@ -1083,6 +1081,121 @@
                             <button type="submit" class="btn btn-primary gap-2">
                                 <span class="icon-[tabler--device-floppy] size-4" aria-hidden="true"></span>
                                 Guardar Servicio
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal: Agregar/Editar Sucursal -->
+        <div id="branch-modal" class="crud-overlay"
+             role="dialog" aria-modal="true" aria-labelledby="branch-modal-title" aria-hidden="true">
+            <div class="crud-dialog max-w-md">
+                <div class="crud-dialog-header">
+                    <h3 class="crud-dialog-title" id="branch-modal-title">+ Agregar Sucursal</h3>
+                    <button class="crud-dialog-close" onclick="closeBranchModal()" aria-label="Cerrar modal">&times;</button>
+                </div>
+                <div class="crud-dialog-body">
+                    <input type="hidden" id="branch-edit-id" value="">
+                    <form id="branch-form" onsubmit="saveBranch(event)" class="flex flex-col gap-3">
+                        <div class="form-control py-2">
+                            <label for="branch-name" class="label"><span class="label-text text-sm font-medium">Nombre *</span></label>
+                            <input type="text" id="branch-name" class="input input-bordered w-full" required maxlength="150" placeholder="Sede Centro, Sucursal Altamira...">
+                        </div>
+
+                        <div class="form-control py-2">
+                            <label for="branch-address" class="label"><span class="label-text text-sm font-medium">Dirección *</span></label>
+                            <textarea id="branch-address" class="textarea textarea-bordered w-full" rows="2" required maxlength="500" placeholder="Av. Libertador, Torre X, Piso 3..."></textarea>
+                        </div>
+
+                        <div class="flex gap-3 pt-6 border-t border-base-content/10 justify-end">
+                            <button type="button" class="btn btn-soft" onclick="closeBranchModal()">Cancelar</button>
+                            <button type="submit" class="btn btn-primary gap-2">
+                                <span class="icon-[tabler--device-floppy] size-4" aria-hidden="true"></span>
+                                Guardar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal: Editar Testimonial -->
+        <div id="testimonial-modal" class="crud-overlay"
+             role="dialog" aria-modal="true" aria-labelledby="testimonial-modal-title" aria-hidden="true">
+            <div class="crud-dialog max-w-md">
+                <div class="crud-dialog-header">
+                    <h3 class="crud-dialog-title" id="testimonial-modal-title">Editar Testimonial</h3>
+                    <button class="crud-dialog-close" onclick="closeTestimonialModal()" aria-label="Cerrar modal">&times;</button>
+                </div>
+                <div class="crud-dialog-body">
+                    <input type="hidden" id="testimonial-edit-index" value="">
+                    <form id="testimonial-form" onsubmit="saveTestimonialItem(event)" class="flex flex-col gap-3">
+                        <div class="form-control py-2">
+                            <label for="testimonial-name" class="label"><span class="label-text text-sm font-medium">Nombre *</span></label>
+                            <input type="text" id="testimonial-name" class="input input-bordered w-full" required maxlength="100" placeholder="Juan Pérez...">
+                        </div>
+
+                        <div class="form-control py-2">
+                            <label for="testimonial-title" class="label"><span class="label-text text-sm font-medium">Cargo/Rol</span></label>
+                            <input type="text" id="testimonial-title" class="input input-bordered w-full" maxlength="100" placeholder="CEO de Empresa...">
+                        </div>
+
+                        <div class="form-control py-2">
+                            <label for="testimonial-text" class="label"><span class="label-text text-sm font-medium">Testimonio *</span></label>
+                            <textarea id="testimonial-text" class="textarea textarea-bordered w-full" rows="3" required maxlength="200" placeholder="Excelente servicio..."></textarea>
+                        </div>
+
+                        <div class="form-control py-2">
+                            <label for="testimonial-rating" class="label"><span class="label-text text-sm font-medium">Calificación</span></label>
+                            <select id="testimonial-rating" class="select select-bordered w-full">
+                                <option value="5" selected>★★★★★ Excelente (5)</option>
+                                <option value="4">★★★★☆ Muy bueno (4)</option>
+                                <option value="3">★★★☆☆ Bueno (3)</option>
+                                <option value="2">★★☆☆☆ Aceptable (2)</option>
+                                <option value="1">★☆☆☆☆ Pobre (1)</option>
+                            </select>
+                        </div>
+
+                        <div class="flex gap-3 pt-6 border-t border-base-content/10 justify-end">
+                            <button type="button" class="btn btn-soft" onclick="closeTestimonialModal()">Cancelar</button>
+                            <button type="submit" class="btn btn-primary gap-2">
+                                <span class="icon-[tabler--device-floppy] size-4" aria-hidden="true"></span>
+                                Guardar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal: Editar FAQ -->
+        <div id="faq-modal" class="crud-overlay"
+             role="dialog" aria-modal="true" aria-labelledby="faq-modal-title" aria-hidden="true">
+            <div class="crud-dialog max-w-md">
+                <div class="crud-dialog-header">
+                    <h3 class="crud-dialog-title" id="faq-modal-title">Editar Pregunta</h3>
+                    <button class="crud-dialog-close" onclick="closeFaqModal()" aria-label="Cerrar modal">&times;</button>
+                </div>
+                <div class="crud-dialog-body">
+                    <input type="hidden" id="faq-edit-index" value="">
+                    <form id="faq-form" onsubmit="saveFaqItem(event)" class="flex flex-col gap-3">
+                        <div class="form-control py-2">
+                            <label for="faq-question" class="label"><span class="label-text text-sm font-medium">Pregunta *</span></label>
+                            <input type="text" id="faq-question" class="input input-bordered w-full" required maxlength="150" placeholder="¿Cuáles son tus horarios?...">
+                        </div>
+
+                        <div class="form-control py-2">
+                            <label for="faq-answer" class="label"><span class="label-text text-sm font-medium">Respuesta *</span></label>
+                            <textarea id="faq-answer" class="textarea textarea-bordered w-full" rows="3" required maxlength="300" placeholder="Abierto de lunes a viernes..."></textarea>
+                        </div>
+
+                        <div class="flex gap-3 pt-6 border-t border-base-content/10 justify-end">
+                            <button type="button" class="btn btn-soft" onclick="closeFaqModal()">Cancelar</button>
+                            <button type="submit" class="btn btn-secondary gap-2">
+                                <span class="icon-[tabler--device-floppy] size-4" aria-hidden="true"></span>
+                                Guardar
                             </button>
                         </div>
                     </form>
@@ -1360,13 +1473,7 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
                  EDITOR TESTIMONIOS (Plan 2+)
             ═══════════════════════════════════════════════════════ --}}
             @if($plan->id >= 2)
-            @php
-                $savedTestimonials = data_get($tenant->settings, 'business_info.testimonials', []);
-                // Pad a 5 slots vacíos para el editor
-                while (count($savedTestimonials) < 5) {
-                    $savedTestimonials[] = ['name' => '', 'title' => '', 'text' => '', 'rating' => 5];
-                }
-            @endphp
+            {{-- $savedTestimonials is provided by DashboardController --}}
             <div class="card bg-base-100 shadow-sm border border-base-content/10 mt-4">
                 <div class="card-header flex items-center justify-between gap-3 flex-wrap">
                     <div>
@@ -1375,42 +1482,49 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
                             Testimonios de Clientes
                             <span class="badge badge-soft badge-primary badge-xs ms-1">Plan CRECIMIENTO+</span>
                         </h3>
-                        <p class="text-base-content/50 text-xs mt-0.5">Hasta 5 testimonios. Deja vacíos los que no uses.</p>
+                        <p class="text-base-content/50 text-xs mt-0.5">Agrega, edita y elimina los testimonios que desees.</p>
                     </div>
                 </div>
                 <div class="card-body pt-2 section-scroll">
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                     @foreach($savedTestimonials as $ti => $testim)
                     @php $hasContent = !empty($testim['name']) || !empty($testim['text']); @endphp
-                    <div class="rounded-lg border p-3 space-y-2 transition-all
-                        {{ $hasContent ? 'border-primary/20 bg-primary/5' : 'border-base-content/10 bg-base-200/30' }}">
-                        <div class="flex items-center justify-between mb-1">
+                    <div class="rounded-lg border p-3 transition-all"
+                         data-testimonial-index="{{ $ti }}"
+                        {{ $hasContent ? 'class="border-primary/20 bg-primary/5"' : 'class="border-base-content/10 bg-base-200/30"' }}>
+                        <div class="flex items-start justify-between mb-2">
                             <span class="text-[10px] font-bold text-base-content/40 uppercase tracking-wider">#{{ $ti + 1 }}</span>
-                            <select id="testim_rating_{{ $ti }}" class="select select-xs w-16 text-xs">
-                                @for($s = 5; $s >= 1; $s--)
-                                    <option value="{{ $s }}" {{ ($testim['rating'] ?? 5) == $s ? 'selected' : '' }}>{{ $s }}★</option>
-                                @endfor
-                            </select>
+                            <span class="text-sm text-yellow-500">{{ str_repeat('★', $testim['rating'] ?? 5) }}</span>
                         </div>
-                        <div class="grid grid-cols-2 gap-1.5">
-                            <input type="text" id="testim_name_{{ $ti }}"
-                                   class="input input-xs w-full" placeholder="Nombre"
-                                   value="{{ $testim['name'] ?? '' }}">
-                            <input type="text" id="testim_title_{{ $ti }}"
-                                   class="input input-xs w-full" placeholder="Cargo"
-                                   value="{{ $testim['title'] ?? '' }}">
+                        <h4 class="text-sm font-semibold text-base-content line-clamp-1">{{ $testim['name'] ?? '(vacío)' }}</h4>
+                        <p class="text-xs text-base-content/50 line-clamp-1">{{ $testim['title'] ?? '(sin cargo)' }}</p>
+                        <p class="text-xs text-base-content/60 line-clamp-2 mt-1">{{ $testim['text'] ?? '(vacío)' }}</p>
+                        
+                        <div class="flex gap-2 mt-3">
+                            <button type="button" class="btn btn-primary btn-sm btn-square"
+                                    onclick="editTestimonial({{ $ti }}, '{{ addslashes($testim['name'] ?? '') }}', '{{ addslashes($testim['title'] ?? '') }}', '{{ addslashes($testim['text'] ?? '') }}', {{ $testim['rating'] ?? 5 }})"
+                                    title="Editar">
+                                <span class="icon-[tabler--pencil] size-4" aria-hidden="true"></span>
+                            </button>
+                            <button type="button" class="btn btn-error btn-sm btn-square"
+                                    onclick="deleteTestimonial({{ $ti }})"
+                                    title="Eliminar">
+                                <span class="icon-[tabler--trash] size-4" aria-hidden="true"></span>
+                            </button>
                         </div>
-                        <textarea id="testim_text_{{ $ti }}" rows="2"
-                                  class="textarea textarea-xs w-full resize-none text-xs"
-                                  maxlength="200"
-                                  placeholder="Excelente servicio...">{{ $testim['text'] ?? '' }}</textarea>
                     </div>
                     @endforeach
                     </div>
-                    <button type="button" onclick="saveTestimonials()" class="btn btn-primary w-full gap-2 mt-3">
-                        <span class="icon-[tabler--device-floppy] size-4"></span>
-                        Guardar Testimonios
-                    </button>
+                    <div class="flex gap-2 mt-3">
+                        <button type="button" onclick="addTestimonial()" class="btn btn-primary flex-1 gap-2">
+                            <span class="icon-[tabler--plus] size-4"></span>
+                            Agregar Testimonio
+                        </button>
+                        <button type="button" onclick="saveTestimonials()" class="btn btn-primary flex-1 gap-2">
+                            <span class="icon-[tabler--device-floppy] size-4"></span>
+                            Guardar Testimonios
+                        </button>
+                    </div>
                 </div>
             </div>
             @endif
@@ -1421,9 +1535,6 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
             @if($plan->id >= 3)
             @php
                 $savedFaq = data_get($tenant->settings, 'business_info.faq', []);
-                while (count($savedFaq) < 5) {
-                    $savedFaq[] = ['question' => '', 'answer' => ''];
-                }
             @endphp
             <div class="card bg-base-100 shadow-sm border border-base-content/10 mt-4">
                 <div class="card-header flex items-center justify-between gap-3 flex-wrap">
@@ -1433,32 +1544,45 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
                             Preguntas Frecuentes (FAQ)
                             <span class="badge badge-soft badge-secondary badge-xs ms-1">Plan VISIÓN</span>
                         </h3>
-                        <p class="text-base-content/50 text-xs mt-0.5">Hasta 5 preguntas. Vacías = respuestas automáticas.</p>
+                        <p class="text-base-content/50 text-xs mt-0.5">Agrega, edita y elimina las preguntas frecuentes que desees.</p>
                     </div>
                 </div>
                 <div class="card-body pt-2 section-scroll">
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                         @foreach($savedFaq as $fi => $fitem)
                         @php $hasFaqContent = !empty($fitem['question']) || !empty($fitem['answer']); @endphp
-                        <div class="rounded-lg border p-3 space-y-2 transition-all
-                            {{ $hasFaqContent ? 'border-secondary/20 bg-secondary/5' : 'border-base-content/10 bg-base-200/30' }}">
+                        <div class="rounded-lg border p-3 transition-all"
+                             data-faq-index="{{ $fi }}"
+                            {{ $hasFaqContent ? 'style="border-color: var(--fallback-sc, oklch(var(--sc)/var(--tw-border-opacity)))" (class="border-secondary/20 bg-secondary/5")' : 'class="border-base-content/10 bg-base-200/30"' }}>
                             <span class="text-[10px] font-bold text-base-content/40 uppercase tracking-wider">#{{ $fi + 1 }}</span>
-                            <input type="text" id="faq_question_{{ $fi }}"
-                                   class="input input-xs w-full font-medium"
-                                   placeholder="¿Pregunta?"
-                                   maxlength="150"
-                                   value="{{ $fitem['question'] ?? '' }}">
-                            <textarea id="faq_answer_{{ $fi }}" rows="2"
-                                      class="textarea textarea-xs w-full resize-none text-xs"
-                                      maxlength="300"
-                                      placeholder="Respuesta...">{{ $fitem['answer'] ?? '' }}</textarea>
+                            <h4 class="text-sm font-semibold text-base-content mt-1 line-clamp-2">{{ $fitem['question'] ?? '(vacío)' }}</h4>
+                            <p class="text-xs text-base-content/50 mt-1 line-clamp-2">{{ $fitem['answer'] ?? '(vacío)' }}</p>
+                            
+                            <div class="flex gap-2 mt-3">
+                                <button type="button" class="btn btn-secondary btn-sm btn-square"
+                                        onclick="editFaq({{ $fi }}, '{{ addslashes($fitem['question'] ?? '') }}', '{{ addslashes($fitem['answer'] ?? '') }}')"
+                                        title="Editar">
+                                    <span class="icon-[tabler--pencil] size-4" aria-hidden="true"></span>
+                                </button>
+                                <button type="button" class="btn btn-error btn-sm btn-square"
+                                        onclick="deleteFaq({{ $fi }})"
+                                        title="Eliminar">
+                                    <span class="icon-[tabler--trash] size-4" aria-hidden="true"></span>
+                                </button>
+                            </div>
                         </div>
                         @endforeach
                     </div>
-                    <button type="button" onclick="saveFaq()" class="btn btn-primary w-full gap-2 mt-3">
-                        <span class="icon-[tabler--device-floppy] size-4"></span>
-                        Guardar FAQ
-                    </button>
+                    <div class="flex gap-2 mt-3">
+                        <button type="button" onclick="addFaq()" class="btn btn-secondary flex-1 gap-2">
+                            <span class="icon-[tabler--plus] size-4"></span>
+                            Agregar Pregunta
+                        </button>
+                        <button type="button" onclick="saveFaq()" class="btn btn-secondary flex-1 gap-2">
+                            <span class="icon-[tabler--device-floppy] size-4"></span>
+                            Guardar FAQ
+                        </button>
+                    </div>
                 </div>
             </div>
             @endif
@@ -1675,66 +1799,33 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
                                 <p class="branch-address text-xs text-base-content/50 line-clamp-2 mt-0.5">{{ $branch->address }}</p>
                             </div>
                         </div>
-                        <div class="flex gap-1.5">
+                        <div class="flex gap-2">
                             <button type="button"
-                                    class="btn btn-soft btn-sm flex-1 gap-1"
+                                    class="btn btn-primary btn-sm btn-square"
                                     onclick="editBranch({{ $branch->id }}, '{{ addslashes($branch->name) }}', '{{ addslashes($branch->address) }}')"
                                     title="Editar">
-                                <span class="icon-[tabler--pencil] size-3.5" aria-hidden="true"></span>
-                                Editar
+                                <span class="icon-[tabler--pencil] size-5" aria-hidden="true"></span>
                             </button>
                             <button type="button"
-                                    class="btn btn-soft btn-error btn-sm btn-square"
+                                    class="btn btn-error btn-sm btn-square"
                                     onclick="deleteBranch({{ $branch->id }})"
-                                    title="Eliminar" aria-label="Eliminar sucursal">
-                                <span class="icon-[tabler--trash] size-3.5" aria-hidden="true"></span>
+                                    title="Eliminar">
+                                <span class="icon-[tabler--trash] size-5" aria-hidden="true"></span>
                             </button>
                         </div>
                     </div>
-                    @endforeach
-                </div>
-
-                {{-- Add/Edit Branch Form --}}
-                <div id="branch-form-container" class="card bg-base-100 shadow-sm border border-base-content/10"
-                     {{ $currentBranchCount >= $maxBranches ? 'style="display:none"' : '' }}>
-                    <div class="card-header">
-                        <h3 id="branch-form-title" class="card-title text-base flex items-center gap-2">
-                            <span class="icon-[tabler--plus] size-4 text-primary" aria-hidden="true"></span>
-                            Agregar Sucursal
-                        </h3>
-                    </div>
-                    <div class="card-body">
-                        <input type="hidden" id="branch-edit-id" value="">
-                        <div class="flex flex-col gap-4">
-                            <div class="form-control">
-                                <label class="label" for="branch-name">
-                                    <span class="label-text font-medium">Nombre de la Sucursal *</span>
-                                </label>
-                                <input type="text" id="branch-name" maxlength="150" required
-                                       class="input input-bordered w-full"
-                                       placeholder="Ej: Sede Centro, Sucursal Altamira...">
+                    @if($currentBranchCount < $maxBranches)
+                    <div class="rounded-lg border border-base-content/10 bg-base-200/30 p-4 flex items-center justify-center transition-all hover:border-primary/30 cursor-pointer" onclick="openBranchModal()">
+                        <div class="text-center">
+                            <div class="size-10 rounded-lg bg-primary/10 flex items-center justify-center mx-auto mb-2">
+                                <span class="icon-[tabler--plus] size-5 text-primary" aria-hidden="true"></span>
                             </div>
-                            <div class="form-control">
-                                <label class="label" for="branch-address">
-                                    <span class="label-text font-medium">Dirección *</span>
-                                </label>
-                                <textarea id="branch-address" maxlength="500" rows="2" required
-                                          class="textarea textarea-bordered w-full"
-                                          placeholder="Ej: Av. Libertador, Torre X, Piso 3, Caracas"></textarea>
-                            </div>
-                            <div class="flex items-center gap-3 pt-2 border-t border-base-content/10">
-                                <button type="button" onclick="saveBranch()" class="btn btn-primary flex-1 gap-2">
-                                    <span class="icon-[tabler--device-floppy] size-4" aria-hidden="true"></span>
-                                    Guardar Sucursal
-                                </button>
-                                <button type="button" id="branch-cancel-btn" onclick="cancelBranchEdit()"
-                                        class="btn btn-ghost hidden">
-                                    Cancelar
-                                </button>
-                            </div>
+                            <p class="text-sm font-semibold text-base-content">Agregar Sucursal</p>
+                            <p class="text-xs text-base-content/50">{{ $currentBranchCount }} de {{ $maxBranches }} usadas</p>
                         </div>
-                        <p class="text-xs text-base-content/40 mt-3">{{ $currentBranchCount }} de {{ $maxBranches }} sucursales usadas</p>
                     </div>
+                    @endif
+                    @endforeach
                 </div>
             </div>
         </div>
@@ -1954,9 +2045,9 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
                         </div>
                         @endforeach
                     </div>
-                    <div class="alert alert-warning">
+                    <div class="alert alert-info">
                         <span class="icon-[tabler--lock] size-4" aria-hidden="true"></span>
-                        <span class="text-sm">Para elegir los medios de pago, mejora al Plan CRECIMIENTO o superior.</span>
+                        <span class="text-sm font-medium">Para elegir más métodos de pago, mejora al Plan CRECIMIENTO o superior.</span>
                     </div>
 
                     @else
@@ -3835,29 +3926,30 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
             }
         }
 
+        function openBranchModal() {
+            document.getElementById('branch-modal-title').textContent = '+ Agregar Sucursal';
+            document.getElementById('branch-edit-id').value = '';
+            document.getElementById('branch-form').reset();
+            document.getElementById('branch-modal').style.display = 'flex';
+        }
+
         function editBranch(id, name, address) {
+            document.getElementById('branch-modal-title').textContent = '✏️ Editar Sucursal';
             document.getElementById('branch-edit-id').value = id;
             document.getElementById('branch-name').value = name;
             document.getElementById('branch-address').value = address;
-            document.getElementById('branch-form-title').textContent = '✏️ Editar Sucursal';
-            document.getElementById('branch-cancel-btn').style.display = '';
-            document.getElementById('branch-form-container').style.display = '';
+            document.getElementById('branch-modal').style.display = 'flex';
         }
 
-        function cancelBranchEdit() {
+        function closeBranchModal() {
+            document.getElementById('branch-modal').style.display = 'none';
+            document.getElementById('branch-form').reset();
             document.getElementById('branch-edit-id').value = '';
-            document.getElementById('branch-name').value = '';
-            document.getElementById('branch-address').value = '';
-            document.getElementById('branch-form-title').textContent = '+ Agregar Sucursal';
-            document.getElementById('branch-cancel-btn').style.display = 'none';
-
-            // Hide form if at max
-            if (branchCount >= 3) {
-                document.getElementById('branch-form-container').style.display = 'none';
-            }
         }
 
-        async function saveBranch() {
+        async function saveBranch(event) {
+            event.preventDefault();
+            
             const name = document.getElementById('branch-name').value.trim();
             const address = document.getElementById('branch-address').value.trim();
             const editId = document.getElementById('branch-edit-id').value;
@@ -3883,6 +3975,7 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
                 const result = await response.json();
 
                 if (result.success) {
+                    closeBranchModal();
                     alert('✓ ' + result.message);
                     location.reload();
                 } else {
@@ -4020,41 +4113,179 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
             saveSectionsOrder();
         }
 
-        // ── Guardar Testimonios ───────────────────────────────────────
-        function saveTestimonials() {
-            const testimonials = [];
-            for (let i = 0; i < 5; i++) {
-                const name  = document.getElementById(`testim_name_${i}`)?.value.trim();
-                const title = document.getElementById(`testim_title_${i}`)?.value.trim();
-                const text  = document.getElementById(`testim_text_${i}`)?.value.trim();
-                const rating = parseInt(document.getElementById(`testim_rating_${i}`)?.value || '5');
-                if (name && text) testimonials.push({ name, title, text, rating });
+        // ── Testimonials Global Storage ────────────────────────────────
+        let testimonialData = [
+            @foreach($savedTestimonials as $ti => $testim)
+            { name: '{{ addslashes($testim['name'] ?? '') }}', title: '{{ addslashes($testim['title'] ?? '') }}', text: '{{ addslashes($testim['text'] ?? '') }}', rating: {{ $testim['rating'] ?? 5 }} },
+            @endforeach
+        ];
+
+        function editTestimonial(index, name, title, text, rating) {
+            document.getElementById('testimonial-edit-index').value = index;
+            document.getElementById('testimonial-name').value = name;
+            document.getElementById('testimonial-title').value = title;
+            document.getElementById('testimonial-text').value = text;
+            document.getElementById('testimonial-rating').value = rating;
+            document.getElementById('testimonial-modal').style.display = 'flex';
+        }
+
+        function closeTestimonialModal() {
+            document.getElementById('testimonial-modal').style.display = 'none';
+            document.getElementById('testimonial-form').reset();
+            document.getElementById('testimonial-edit-index').value = '';
+        }
+
+        function saveTestimonialItem(event) {
+            event.preventDefault();
+            const indexStr = document.getElementById('testimonial-edit-index').value;
+            const name = document.getElementById('testimonial-name').value.trim();
+            const title = document.getElementById('testimonial-title').value.trim();
+            const text = document.getElementById('testimonial-text').value.trim();
+            const rating = parseInt(document.getElementById('testimonial-rating').value);
+
+            if (!name || !text) {
+                alert('✗ Nombre y testimonio son obligatorios');
+                return;
             }
+
+            if (indexStr === '') {
+                // Nuevo item
+                testimonialData.push({ name, title, text, rating });
+            } else {
+                // Editar item existente
+                const index = parseInt(indexStr);
+                testimonialData[index] = { name, title, text, rating };
+            }
+            closeTestimonialModal();
+        }
+
+        function deleteTestimonial(index) {
+            if (!confirm('¿Eliminar este testimonial?')) return;
+            // REMOVER del array inmediatamente (como Branches)
+            testimonialData.splice(index, 1);
+            // Oculta la card visualmente
+            const cardElement = document.querySelector(`[data-testimonial-index="${index}"]`);
+            if (cardElement) {
+                cardElement.style.opacity = '0';
+                cardElement.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    cardElement.style.display = 'none';
+                }, 300);
+            }
+        }
+
+        function addTestimonial() {
+            // Abre el modal en modo "crear nuevo" (sin índice)
+            document.getElementById('testimonial-edit-index').value = '';
+            document.getElementById('testimonial-name').value = '';
+            document.getElementById('testimonial-title').value = '';
+            document.getElementById('testimonial-text').value = '';
+            document.getElementById('testimonial-rating').value = '5';
+            document.getElementById('testimonial-modal').style.display = 'flex';
+        }
+
+        // ── Guardar Testimonios ────────────────────────────────────────
+        function saveTestimonials() {
+            // Ya no hay items vacíos porque los removemos con splice()
             fetch(`/tenant/{{ $tenant->id }}/update-testimonials`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
-                body: JSON.stringify({ testimonials })
+                body: JSON.stringify({ testimonials: testimonialData })
             })
             .then(r => r.json())
-            .then(d => window.showToast(d.success ? '✅ Testimonios guardados' : '✗ Error', d.success ? 'success' : 'error'))
+            .then(d => {
+                if (d.success) {
+                    window.showToast('✅ Testimonios guardados', 'success');
+                    location.reload();
+                } else {
+                    window.showToast('✗ Error', 'error');
+                }
+            })
             .catch(() => window.showToast('✗ Error de red', 'error'));
+        }
+
+        // ── FAQ Global Storage ────────────────────────────────────────
+        let faqData = [
+            @foreach($savedFaq as $fi => $fitem)
+            { question: '{{ addslashes($fitem['question'] ?? '') }}', answer: '{{ addslashes($fitem['answer'] ?? '') }}' },
+            @endforeach
+        ];
+
+        function editFaq(index, question, answer) {
+            document.getElementById('faq-edit-index').value = index;
+            document.getElementById('faq-question').value = question;
+            document.getElementById('faq-answer').value = answer;
+            document.getElementById('faq-modal').style.display = 'flex';
+        }
+
+        function closeFaqModal() {
+            document.getElementById('faq-modal').style.display = 'none';
+            document.getElementById('faq-form').reset();
+            document.getElementById('faq-edit-index').value = '';
+        }
+
+        function saveFaqItem(event) {
+            event.preventDefault();
+            const indexStr = document.getElementById('faq-edit-index').value;
+            const question = document.getElementById('faq-question').value.trim();
+            const answer = document.getElementById('faq-answer').value.trim();
+
+            if (!question || !answer) {
+                alert('✗ Pregunta y respuesta son obligatorias');
+                return;
+            }
+
+            if (indexStr === '') {
+                // Nuevo item
+                faqData.push({ question, answer });
+            } else {
+                // Editar item existente
+                const index = parseInt(indexStr);
+                faqData[index] = { question, answer };
+            }
+            closeFaqModal();
+        }
+
+        function deleteFaq(index) {
+            if (!confirm('¿Eliminar esta pregunta?')) return;
+            // REMOVER del array inmediatamente (como Branches)
+            faqData.splice(index, 1);
+            // Oculta la card visualmente
+            const cardElement = document.querySelector(`[data-faq-index="${index}"]`);
+            if (cardElement) {
+                cardElement.style.opacity = '0';
+                cardElement.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    cardElement.style.display = 'none';
+                }, 300);
+            }
+        }
+
+        function addFaq() {
+            // Abre el modal en modo "crear nuevo" (sin índice)
+            document.getElementById('faq-edit-index').value = '';
+            document.getElementById('faq-question').value = '';
+            document.getElementById('faq-answer').value = '';
+            document.getElementById('faq-modal').style.display = 'flex';
         }
 
         // ── Guardar FAQ ───────────────────────────────────────────────
         function saveFaq() {
-            const faq = [];
-            for (let i = 0; i < 5; i++) {
-                const question = document.getElementById(`faq_question_${i}`)?.value.trim();
-                const answer   = document.getElementById(`faq_answer_${i}`)?.value.trim();
-                if (question && answer) faq.push({ question, answer });
-            }
+            // Ya no hay items vacíos porque los removemos con splice()
             fetch(`/tenant/{{ $tenant->id }}/update-faq`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
-                body: JSON.stringify({ faq })
+                body: JSON.stringify({ faq: faqData })
             })
             .then(r => r.json())
-            .then(d => window.showToast(d.success ? '✅ FAQ guardado' : '✗ Error', d.success ? 'success' : 'error'))
+            .then(d => {
+                if (d.success) {
+                    window.showToast('✅ FAQ guardado', 'success');
+                    location.reload();
+                } else {
+                    window.showToast('✗ Error', 'error');
+                }
+            })
             .catch(() => window.showToast('✗ Error de red', 'error'));
         }
 

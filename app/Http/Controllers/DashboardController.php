@@ -81,6 +81,9 @@ class DashboardController extends Controller
             $trackingQR = $this->qrService->generateQR($tenant->id, 300);
             $trackingShortlink = $this->qrService->getTrackingShortlink($tenant->id);
 
+            // ── Testimonials data ─────────────────────────────────────────
+            $savedTestimonials = data_get($tenant->settings, 'business_info.testimonials', []);
+
             return view('dashboard.index', compact(
                 'tenant',
                 'plan',
@@ -98,7 +101,8 @@ class DashboardController extends Controller
                 'activeTheme',
                 'hasCustomPalette',
                 'trackingQR',
-                'trackingShortlink'
+                'trackingShortlink',
+                'savedTestimonials'
             ));
         } catch (\Exception $e) {
             return response()->view('errors.404', [], 404);
