@@ -1,8 +1,10 @@
-        <!-- Tab: Productos -->
+        <!-- Tab: {{ $itemLabel ?? 'Productos' }} -->
         <div id="tab-productos" class="tab-content">
             @php
-                $maxProducts = (int) ($plan->products_limit ?? 6);
+                $maxProducts = $maxItems ?? (int) ($plan->products_limit ?? 6);
                 $currentCount = $products->count();
+                $dynLabel = $itemLabel ?? 'Productos';
+                $dynSingular = $itemSingular ?? 'Producto';
             @endphp
 
             {{-- ── Productos card ─────────────────────────────────── --}}
@@ -14,8 +16,8 @@
                                 <span class="iconify tabler--package size-5 text-primary" aria-hidden="true"></span>
                             </div>
                             <div>
-                                <h2 class="text-xl font-bold text-base-content">Productos</h2>
-                                <p class="text-xs text-base-content/50">{{ $currentCount }} de {{ $maxProducts }} productos activos</p>
+                                <h2 class="text-xl font-bold text-base-content">{{ $dynLabel }}</h2>
+                                <p class="text-xs text-base-content/50">{{ $currentCount }} de {{ $maxProducts }} {{ strtolower($dynLabel) }} activos</p>
                             </div>
                         </div>
                     </div>
@@ -23,7 +25,7 @@
                             onclick="checkAndOpenProductModal()"
                             title="Agregar nuevo producto">
                         <span class="iconify tabler--plus size-4" aria-hidden="true"></span>
-                        Agregar Producto
+                        Agregar {{ $dynSingular }}
                     </button>
                 </div>
 
@@ -32,7 +34,7 @@
                     <div class="flex items-center gap-3">
                         <span class="iconify tabler--info-circle size-5 shrink-0" aria-hidden="true"></span>
                         <div>
-                            <p class="font-semibold text-sm">Límite alcanzado ({{ $maxProducts }}/{{ $maxProducts }} productos)</p>
+                            <p class="font-semibold text-sm">Límite alcanzado ({{ $maxProducts }}/{{ $maxProducts }} {{ strtolower($dynLabel) }})</p>
                             <p class="text-xs opacity-70">
                                 @if($plan->id === 1)Plan CRECIMIENTO: hasta 12 · Plan VISIÓN: hasta 18
                                 @else Plan VISIÓN: hasta 18 productos @endif
@@ -109,10 +111,10 @@
                     <div class="size-16 rounded-2xl bg-primary/5 flex items-center justify-center mb-4">
                         <span class="iconify tabler--package size-8 text-primary/30" aria-hidden="true"></span>
                     </div>
-                    <h3 class="font-bold text-base text-base-content/70 mb-1">No hay productos aún</h3>
-                    <p class="text-sm text-base-content/40 mb-4">Comienza agregando tu primer producto al catálogo</p>
+                    <h3 class="font-bold text-base text-base-content/70 mb-1">No hay {{ strtolower($dynLabel) }} aún</h3>
+                    <p class="text-sm text-base-content/40 mb-4">Comienza agregando tu primer {{ strtolower($dynSingular) }}</p>
                     <button onclick="checkAndOpenProductModal()" class="btn btn-primary btn-sm gap-1.5 shadow-md">
-                        <span class="iconify tabler--plus size-4"></span> Agregar Producto
+                        <span class="iconify tabler--plus size-4"></span> Agregar {{ $dynSingular }}
                     </button>
                 </div>
                 @endif

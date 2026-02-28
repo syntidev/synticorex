@@ -71,6 +71,12 @@ class DashboardController extends Controller
                 ->orderBy('min_plan_id')
                 ->get();
 
+            // ── Blueprint system ─────────────────────────────────────────
+            $blueprint  = $tenant->getBlueprint();
+            $maxItems   = $tenant->getMaxItems();
+            $itemLabel  = $tenant->getItemLabel();
+            $itemSingular = $tenant->getItemSingular();
+
             // THEME SYSTEM - Single Source of Truth: theme_slug
             $currentTheme = $tenant->customization->theme_slug ?? 'light';
             $customPalette = $tenant->settings['engine_settings']['visual']['custom_palette'] ?? null;
@@ -137,7 +143,11 @@ class DashboardController extends Controller
                 'savedFaq',
                 'allPayMeta',
                 'allCurrencyMeta',
-                'activeBranchList'
+                'activeBranchList',
+                'blueprint',
+                'maxItems',
+                'itemLabel',
+                'itemSingular'
             ));
         } catch (\Exception $e) {
             return response()->view('errors.404', [], 404);
@@ -239,6 +249,19 @@ class DashboardController extends Controller
                 ->where('status', 'active')
                 ->firstOrFail();
 
+            // Check blueprint-aware limits
+            $maxItems = $tenant->getMaxItems();
+            $currentCount = $tenant->products->count();
+
+            if ($currentCount >= $maxItems) {
+                $label = $tenant->getItemLabel();
+
+                return response()->json([
+                    'success' => false,
+                    'message' => "Has alcanzado el límite de {$maxItems} {$label} en tu plan. Actualiza para agregar más."
+                ], 422);
+            }
+
             // Validate input
             $validated = $request->validate([
                 'name' => 'required|string|max:100',
@@ -259,7 +282,7 @@ class DashboardController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Producto creado',
+                'message' => $tenant->getItemSingular() . ' creado',
                 'product' => $product
             ]);
         } catch (\Exception $e) {
@@ -383,13 +406,17 @@ class DashboardController extends Controller
                 ->where('status', 'active')
                 ->firstOrFail();
 
-            // Check plan limits
-            $maxServices = $tenant->plan->services_limit;
-            
+            // Check blueprint-aware limits (fallback to plan limits)
+            $maxServices = $tenant->plan->services_limit ?? 3;
+            $blueprint = $tenant->getBlueprint();
+            if ($blueprint) {
+                $maxServices = (int) data_get($blueprint, "feature_limits.{$tenant->plan_id}.max_items", $maxServices);
+            }
+
             if ($tenant->services->count() >= $maxServices) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Has alcanzado el límite de servicios de tu plan'
+                    'message' => "Has alcanzado el límite de {$maxServices} servicios en tu plan. Actualiza para agregar más."
                 ], 422);
             }
 

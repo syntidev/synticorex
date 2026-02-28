@@ -146,6 +146,11 @@
                             {{ $plan->id === 1 ? 'bg-amber-400/90 text-amber-900' : ($plan->id === 2 ? 'bg-emerald-400/90 text-emerald-900' : 'bg-sky-300/90 text-sky-900') }}">
                             {{ $plan->name }}
                         </span>
+                        @if($tenant->industry_segment)
+                        <span class="badge badge-sm font-medium border-0 bg-white/20 text-white backdrop-blur-sm" title="{{ $tenant->getBlueprintLabel() }}">
+                            {{ $tenant->getItemLabel() }}
+                        </span>
+                        @endif
                     </div>
                 </div>
 
@@ -229,7 +234,7 @@
                                     aria-selected="false" aria-controls="tab-productos"
                                     id="tab-productos-btn" data-tab="productos" tabindex="-1">
                                 <span class="iconify tabler--package size-4.5"></span>
-                                <span class="grow">Productos</span>
+                                <span class="grow">{{ $itemLabel ?? 'Productos' }}</span>
                             </button>
                         </li>
                         <li role="presentation">

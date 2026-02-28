@@ -46,6 +46,25 @@ $effectiveTheme = $customPalette ? 'custom' : $themeSlug;
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('styles')
+
+    {{-- ═══ Schema.org automático según Blueprint ═══ --}}
+    @php $schemaType = ($blueprint['schema_type'] ?? null) ?: $tenant->getSchemaType(); @endphp
+    @switch($schemaType)
+        @case('Restaurant')
+            @include('landing.schemas.restaurant', compact('tenant'))
+            @break
+        @case('Store')
+            @include('landing.schemas.store', compact('tenant'))
+            @break
+        @case('HealthAndBeautyBusiness')
+            @include('landing.schemas.health', compact('tenant'))
+            @break
+        @case('ProfessionalService')
+            @include('landing.schemas.professional', compact('tenant'))
+            @break
+        @default
+            @include('landing.schemas.local-business', compact('tenant'))
+    @endswitch
 </head>
 
 <body class="min-h-screen bg-base-100 text-base-content antialiased transition-colors duration-500">
@@ -176,88 +195,14 @@ $effectiveTheme = $customPalette ? 'custom' : $themeSlug;
         }
 
         function toggleCurrency() {
-            const oldCurrency = currentCurrency;
             currentCurrency = (currentCurrency === 'Bs.') ? CURRENCY_SYMBOL : 'Bs.';
             renderAllPrices();
             updateToggleButton();
-            
-            // Analytics: Track currency toggle
-            trackAnalyticsEvent('click_toggle_currency', {
-                from_currency: oldCurrency,
-                to_currency: currentCurrency,
-                rate: EXCHANGE_RATE
-            });
         }
-
-        // ══════════════════════════════════════════════════════════════
-        // ANALYTICS TRACKER - Tracking de eventos en tiempo real
-        // ══════════════════════════════════════════════════════════════
-        const TENANT_ID = {{ $tenant->id }};
-        let timeOnPageInterval = null;
-
-        function trackAnalyticsEvent(eventType, metadata = {}) {
-            fetch('/api/analytics/track', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                },
-                body: JSON.stringify({
-                    tenant_id: TENANT_ID,
-                    event_type: eventType,
-                    metadata: metadata
-                })
-            }).catch(err => console.debug('Analytics:', err));
-        }
-
-        // Track pageview on load
-        document.addEventListener('DOMContentLoaded', function() {
-            trackAnalyticsEvent('pageview');
-
-            // Time on page: enviar evento cada 30 segundos
-            timeOnPageInterval = setInterval(() => {
-                trackAnalyticsEvent('time_on_page');
-            }, 30000);
-
-            // Track WhatsApp clicks
-            document.querySelectorAll('a[href*="wa.me"], a[href*="whatsapp"]').forEach(link => {
-                link.addEventListener('click', () => {
-                    trackAnalyticsEvent('click_whatsapp');
-                });
-            });
-
-            // Track Call clicks
-            document.querySelectorAll('a[href^="tel:"]').forEach(link => {
-                link.addEventListener('click', () => {
-                    trackAnalyticsEvent('click_call');
-                });
-            });
-        });
-
-        // Cleanup interval on page unload
-        window.addEventListener('beforeunload', () => {
-            if (timeOnPageInterval) {
-                clearInterval(timeOnPageInterval);
-            }
-        });
 
         function renderAllPrices() {
             document.querySelectorAll('[data-price-usd]').forEach(el => {
                 el.innerHTML = formatPrice(el.getAttribute('data-price-usd'));
-            });
-            
-            // ── Update product cards when currency changes ─────────────────────
-            document.querySelectorAll('.price-display, .price-display-bs').forEach(el => {
-                const card = el.closest('[data-price-usd]');
-                if (card) {
-                    if (currentCurrency === 'Bs.') {
-                        card.querySelector('.price-display')?.classList.add('hidden');
-                        card.querySelector('.price-display-bs')?.classList.remove('hidden');
-                    } else {
-                        card.querySelector('.price-display')?.classList.remove('hidden');
-                        card.querySelector('.price-display-bs')?.classList.add('hidden');
-                    }
-                }
             });
         }
 

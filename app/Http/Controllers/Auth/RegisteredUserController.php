@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
@@ -33,6 +35,7 @@ class RegisteredUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'industry_segment' => ['required', 'in:FOOD_BEVERAGE,RETAIL,HEALTH_WELLNESS,PROFESSIONAL_SERVICES,ON_DEMAND'],
         ]);
 
         $user = User::create([
@@ -40,6 +43,9 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
+
+        // Store industry_segment in session for tenant creation flow
+        session(['pending_industry_segment' => $request->industry_segment]);
 
         event(new Registered($user));
 
