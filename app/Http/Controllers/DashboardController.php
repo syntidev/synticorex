@@ -84,6 +84,35 @@ class DashboardController extends Controller
             // ── Testimonials data ─────────────────────────────────────────
             $savedTestimonials = data_get($tenant->settings, 'business_info.testimonials', []);
 
+            // ── Social Networks & FAQ ─────────────────────────────────────
+            $plan1NetworksList = ['instagram', 'facebook', 'tiktok', 'linkedin', 'youtube', 'twitter'];
+            $plan1Networks     = $plan1NetworksList;
+            $savedFaq          = data_get($tenant->settings, 'business_info.faq', []);
+
+            // ── Payment Methods & Currency Metadata ───────────────────────
+            $allPayMeta = [
+                'pago_movil'  => ['icon' => 'tabler--phone',         'label' => 'Pago Móvil'],
+                'efectivo'    => ['icon' => 'tabler--cash',           'label' => 'Efectivo'],
+                'punto_venta' => ['icon' => 'tabler--credit-card',    'label' => 'Punto de Venta'],
+                'biopago'     => ['icon' => 'tabler--building-bank',  'label' => 'Biopago'],
+                'cashea'      => ['icon' => 'tabler--wallet',         'label' => 'Cashea'],
+                'krece'       => ['icon' => 'tabler--trending-up',    'label' => 'Krece'],
+                'wepa'        => ['icon' => 'tabler--send',           'label' => 'Wepa'],
+                'listy'       => ['icon' => 'tabler--list',           'label' => 'Lysty'],
+                'chollo'      => ['icon' => 'tabler--gift',           'label' => 'Chollo'],
+                'zelle'       => ['icon' => 'tabler--exchange',       'label' => 'Zelle'],
+                'zinli'       => ['icon' => 'tabler--coin',           'label' => 'Zinli'],
+                'paypal'      => ['icon' => 'tabler--brand-paypal',   'label' => 'PayPal'],
+            ];
+
+            $allCurrencyMeta = [
+                'usd' => ['symbol' => '$', 'label' => 'Dólares (USD)'],
+                'eur' => ['symbol' => '€', 'label' => 'Euros (€)'],
+            ];
+
+            // ── Branches (Plan 3) ─────────────────────────────────────────
+            $activeBranchList = $tenant->branches()->where('is_active', true)->get();
+
             return view('dashboard.index', compact(
                 'tenant',
                 'plan',
@@ -102,7 +131,13 @@ class DashboardController extends Controller
                 'hasCustomPalette',
                 'trackingQR',
                 'trackingShortlink',
-                'savedTestimonials'
+                'savedTestimonials',
+                'plan1NetworksList',
+                'plan1Networks',
+                'savedFaq',
+                'allPayMeta',
+                'allCurrencyMeta',
+                'activeBranchList'
             ));
         } catch (\Exception $e) {
             return response()->view('errors.404', [], 404);

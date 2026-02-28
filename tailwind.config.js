@@ -53,7 +53,23 @@ export default {
         'tabler--layout-columns', 'tabler--color-swatch', 'tabler--cards',
         'tabler--info-circle', 'tabler--arrow-left', 'tabler--arrow-right', 'tabler--bulb',
         'tabler--brand-whatsapp', 'tabler--brand-instagram', 'tabler--brand-facebook',
-        'tabler--brand-tiktok', 'tabler--brand-x', 'tabler--currency-dollar',
+        'tabler--brand-tiktok', 'tabler--brand-linkedin', 'tabler--brand-youtube',
+        'tabler--brand-x', 'tabler--currency-dollar', 'tabler--qrcode',
+        // Dashboard CRUD & UI icons (previously missing — causa iconos invisibles)
+        'tabler--trash', 'tabler--plus', 'tabler--device-floppy',
+        'tabler--cloud-upload', 'tabler--upload', 'tabler--photo-scan', 'tabler--photo-up',
+        'tabler--download', 'tabler--file-type-svg',
+        'tabler--layout-sidebar-right-collapse', 'tabler--external-link',
+        'tabler--chart-bar', 'tabler--alert-triangle', 'tabler--circle-x',
+        'tabler--circle-filled', 'tabler--check', 'tabler--list-check', 'tabler--pause',
+        'tabler--refresh', 'tabler--lock', 'tabler--help-circle',
+        'tabler--cash', 'tabler--credit-card',
+        'tabler--color-picker', 'tabler--message-star', 'tabler--sparkles',
+        'tabler--social',
+        // Payment method icons
+        'tabler--building-bank', 'tabler--wallet', 'tabler--trending-up',
+        'tabler--send', 'tabler--gift', 'tabler--exchange', 'tabler--coin',
+        'tabler--brand-paypal', 'tabler--list',
     ],
 
     theme: {

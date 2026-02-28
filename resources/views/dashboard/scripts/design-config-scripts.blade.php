@@ -1,0 +1,752 @@
+        function downloadQRSVG() {
+            const qrContainer = document.getElementById('qr-display');
+            if (!qrContainer) return;
+            const svgEl = qrContainer.querySelector('svg');
+            if (!svgEl) {
+                showToast('❌ No se encontró el SVG del QR', 'error');
+                return;
+            }
+            const svgData = new XMLSerializer().serializeToString(svgEl);
+            const blob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'qr-{{ $tenant->subdomain }}.svg';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+        // ── End Image Uploads ────────────────────────────────────────
+
+        // Design Tab: Custom Palette (Plan 3)
+        function applyCustomPalette() {
+            const colors = {
+                primary: document.getElementById('custom-primary').value,
+                secondary: document.getElementById('custom-secondary').value,
+                accent: document.getElementById('custom-accent').value,
+                base: document.getElementById('custom-base').value
+            };
+            
+            fetch(`/tenant/{{ $tenant->id }}/dashboard/save-custom-palette`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify(colors)
+            })
+            .then(r => r.json())
+            .then(data => {
+                if(data.success) {
+                    showToast('✅ Paleta personalizada guardada');
+                    
+                    // Aplicar HEX directo (FlyonUI acepta hex en vars CSS)
+                    document.documentElement.style.setProperty('--color-primary', colors.primary);
+                    document.documentElement.style.setProperty('--color-secondary', colors.secondary);
+                    document.documentElement.style.setProperty('--color-accent', colors.accent);
+                    document.documentElement.style.setProperty('--color-base-100', colors.base);
+                    
+                    setTimeout(() => location.reload(), 1500);
+                }
+            })
+            .catch(err => showToast('❌ Error al aplicar paleta'));
+        }
+
+        // Design Tab: Theme Update (FlyonUI)
+        function updateTheme(theme) {
+            fetch(`/tenant/{{ $tenant->id }}/update-theme`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({
+                    theme_slug: theme,
+                    clear_custom: true
+                })
+            })
+            .then(r => r.json())
+            .then(data => {
+                if(data.success) {
+                    showToast('✅ Tema ' + theme + ' aplicado');
+                    setTimeout(() => location.reload(), 1000);
+                }
+            });
+        }
+
+        // (Duplicates removed — unified upload functions are above)
+
+        // ══════════════════════════════════════════════════════════════
+        // Analytics Tab: Load Analytics Data
+        // ══════════════════════════════════════════════════════════════
+        let analyticsChart = null;
+
+        async function loadAnalytics() {
+            const kpiIds = ['visitors-today','visitors-week','whatsapp-clicks','qr-scans','call-clicks','currency-toggles','avg-time'];
+
+            // Loading state — Resiliencia Visual
+            kpiIds.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) { el.innerHTML = '<span class="loading loading-dots loading-xs"></span>'; }
+            });
+
+            try {
+                const response = await fetch('/tenant/{{ $tenant->id }}/analytics');
+                if (!response.ok) throw new Error('HTTP ' + response.status);
+                const result = await response.json();
+
+                if (result.success) {
+                    const data = result.data;
+
+                    document.getElementById('visitors-today').textContent = data.visitors_today || 0;
+                    document.getElementById('visitors-week').textContent = data.visitors_week || 0;
+                    document.getElementById('whatsapp-clicks').textContent = data.whatsapp_clicks || 0;
+                    document.getElementById('qr-scans').textContent = data.qr_scans || 0;
+                    document.getElementById('call-clicks').textContent = data.call_clicks || 0;
+                    document.getElementById('currency-toggles').textContent = data.currency_toggles || 0;
+                    document.getElementById('avg-time').textContent = data.avg_time_on_page || 0;
+
+                    renderAnalyticsChart(data.last_7_days);
+                } else {
+                    // Error state
+                    kpiIds.forEach(id => {
+                        const el = document.getElementById(id);
+                        if (el) el.textContent = '—';
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading analytics:', error);
+                // Error state — Resiliencia Visual
+                kpiIds.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.textContent = '—';
+                });
+                showToast('❌ Error al cargar analytics', 'error');
+            }
+        }
+
+        function renderAnalyticsChart(last7Days) {
+            const ctx = document.getElementById('analytics-chart');
+            if (!ctx) return;
+
+            // Destruir gráfico anterior si existe
+            if (analyticsChart) {
+                analyticsChart.destroy();
+            }
+
+            const labels = last7Days.map(d => {
+                const date = new Date(d.date);
+                return date.toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric' });
+            });
+            const visitors = last7Days.map(d => d.visitors);
+
+            analyticsChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Visitantes',
+                        data: visitors,
+                        backgroundColor: 'rgba(87, 13, 248, 0.1)',
+                        borderColor: 'rgba(87, 13, 248, 1)',
+                        borderWidth: 2,
+                        borderRadius: 8,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Cargar analytics cuando se abre el tab
+        document.addEventListener('DOMContentLoaded', function() {
+            const analyticsTab = document.getElementById('tab-analytics-btn');
+            if (analyticsTab) {
+                analyticsTab.addEventListener('click', function() {
+                    setTimeout(() => loadAnalytics(), 100);
+                });
+            }
+        });
+
+        // Analytics Tab: Update Dollar Rate
+        async function updateDollarRate() {
+            try {
+                const response = await fetch('/api/dollar-rate');
+                const result = await response.json();
+
+                if (result.success && result.rate) {
+                    // Actualizar el valor en pantalla
+                    document.getElementById('dollar-rate-value').textContent = result.rate.toFixed(2);
+                    alert('✓ Tasa del dólar actualizada correctamente');
+                } else {
+                    alert('✗ No se pudo actualizar la tasa del dólar');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('✗ Error al actualizar la tasa');
+            }
+        }
+
+        // Analytics Tab: Toggle Business Status (Large)
+        async function toggleBusinessStatusLarge() {
+            const toggle = document.getElementById('status-toggle-large');
+            const tenantId = {{ $tenant->id }};
+            
+            try {
+                const response = await fetch(`/tenant/${tenantId}/toggle-status`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    }
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    // Actualizar UI
+                    const statusText = document.querySelector('#tab-analytics span[style*="color: #00cc66"]');
+                    if (statusText) {
+                        const isOpen = toggle.checked;
+                        statusText.textContent = isOpen ? '🟢 Abierto' : '🔴 Cerrado';
+                    }
+                } else {
+                    // Revertir el toggle si falla
+                    toggle.checked = !toggle.checked;
+                    alert('✗ Error al cambiar estado');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                toggle.checked = !toggle.checked;
+                alert('✗ Error al cambiar el estado');
+            }
+        }
+
+        // Config Tab: Currency Symbol Toggle UI Only
+        function updateCurrencySymbolUI() {
+            const toggle = document.getElementById('currency-symbol-switch');
+            const slider = document.getElementById('currency-slider');
+            const refLabel = document.getElementById('symbol-ref-label');
+            const dollarLabel = document.getElementById('symbol-dollar-label');
+            
+            // Update UI only
+            if (toggle.checked) {
+                slider.style.transform = 'translateX(26px)';
+                slider.style.backgroundColor = '#2B6FFF';
+                slider.parentElement.children[1].style.backgroundColor = '#2B6FFF';
+                refLabel.style.color = '#6b7280';
+                dollarLabel.style.color = '#2B6FFF';
+            } else {
+                slider.style.transform = 'translateX(0)';
+                slider.style.backgroundColor = '#6b7280';
+                slider.parentElement.children[1].style.backgroundColor = '#1e2a42';
+                refLabel.style.color = '#2B6FFF';
+                dollarLabel.style.color = '#6b7280';
+            }
+        }
+
+        // Config Tab: Save Complete Currency Configuration
+        async function saveCurrencyConfig() {
+            const symbol = document.getElementById('currency-symbol-switch').checked ? '$' : 'REF';
+            const display_mode = document.querySelector('input[name="display_mode"]:checked')?.value;
+            const tenantId = {{ $tenant->id }};
+            
+            console.log('Payload moneda:', {symbol, display_mode});
+            
+            if (!display_mode) {
+                alert('✗ Seleccioná un modo de visualización');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`/tenant/${tenantId}/update-currency-config`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    },
+                    body: JSON.stringify({ 
+                        symbol: symbol,
+                        display_mode: display_mode
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    alert('✓ Configuración de moneda guardada correctamente');
+                } else {
+                    alert('✗ ' + (data.message || 'Error al guardar configuración'));
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('✗ Error al guardar configuración');
+            }
+        }
+
+        // Config Tab: Update PIN
+        async function updatePin() {
+            const currentPin = document.getElementById('current-pin').value;
+            const newPin = document.getElementById('new-pin').value;
+            const confirmPin = document.getElementById('confirm-pin').value;
+            const tenantId = {{ $tenant->id }};
+            
+            // Validation
+            if (!currentPin || !newPin || !confirmPin) {
+                alert('✗ Todos los campos son obligatorios');
+                return;
+            }
+            
+            if (!/^\d{4}$/.test(currentPin) || !/^\d{4}$/.test(newPin)) {
+                alert('✗ El PIN debe tener exactamente 4 dígitos');
+                return;
+            }
+            
+            if (newPin !== confirmPin) {
+                alert('✗ El PIN nuevo y la confirmación no coinciden');
+                return;
+            }
+            
+            if (currentPin === newPin) {
+                alert('✗ El PIN nuevo debe ser diferente al actual');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`/tenant/${tenantId}/update-pin`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    },
+                    body: JSON.stringify({
+                        current_pin: currentPin,
+                        new_pin: newPin,
+                        new_pin_confirmation: confirmPin
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    alert('✓ PIN actualizado correctamente');
+                    document.getElementById('pin-form').reset();
+                } else {
+                    alert('✗ ' + (data.message || 'Error al actualizar PIN'));
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('✗ Error al actualizar PIN');
+            }
+        }
+
+        // Reset Form
+        function resetForm(formId) {
+            document.getElementById(formId).reset();
+        }
+
+        // ── Social Networks ──────────────────────────────────────────
+        @php
+            $plan1NetworksList = ['instagram', 'facebook', 'tiktok', 'linkedin'];
+            $allNetworksList   = ['instagram', 'facebook', 'tiktok', 'linkedin', 'youtube', 'x'];
+        @endphp
+        let selectedSocialNetwork = '{{ $plan1Selected ?? '' }}';
+
+        function selectSocialNetwork(key) {
+            // Update selected state
+            selectedSocialNetwork = key;
+
+            // Update radio labels visually using FlyonUI classes
+            @foreach($plan1NetworksList as $k)
+            const el_{{ $k }} = document.getElementById('social-radio-label-{{ $k }}');
+            if (key === '{{ $k }}') {
+                el_{{ $k }}.className = 'btn btn-sm gap-1.5 btn-primary cursor-pointer';
+            } else {
+                el_{{ $k }}.className = 'btn btn-sm gap-1.5 btn-ghost border border-base-content/20 cursor-pointer';
+            }
+            @endforeach
+
+            // Update label and placeholder
+            const meta = {
+                instagram: { label: 'Instagram',   placeholder: '@tuusuario' },
+                facebook:  { label: 'Facebook',    placeholder: '@pagina o URL' },
+                tiktok:    { label: 'TikTok',      placeholder: '@tuusuario' },
+                linkedin:  { label: 'LinkedIn',    placeholder: 'URL o usuario' },
+            };
+            const networkLabel = document.getElementById('social-plan1-network-label');
+            const handleInput  = document.getElementById('social-plan1-handle');
+            if (networkLabel) networkLabel.textContent = '(' + (meta[key]?.label || '') + ')';
+            if (handleInput) {
+                handleInput.placeholder = meta[key]?.placeholder || '';
+                handleInput.disabled = false;
+            }
+        }
+
+        async function saveSocialNetworks() {
+            const tenantId = {{ $tenant->id }};
+            const plan = {{ $plan->id }};
+            let payload = {};
+
+            if (plan === 1) {
+                if (!selectedSocialNetwork) {
+                    alert('✗ Selecciona una red social primero');
+                    return;
+                }
+                const handle = document.getElementById('social-plan1-handle')?.value?.trim();
+                if (!handle) {
+                    alert('✗ Ingresa el usuario o enlace de tu red social');
+                    return;
+                }
+                payload[selectedSocialNetwork] = handle;
+            } else {
+                @foreach($allNetworksList as $k)
+                const val_{{ $k }} = document.getElementById('social-{{ $k }}')?.value?.trim();
+                if (val_{{ $k }}) payload['{{ $k }}'] = val_{{ $k }};
+                @endforeach
+            }
+
+            try {
+                const response = await fetch(`/tenant/${tenantId}/update-social-networks`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    alert('✓ Redes sociales guardadas correctamente');
+                } else {
+                    alert('✗ ' + (result.message || 'Error al guardar'));
+                }
+            } catch (err) {
+                console.error('Error:', err);
+                alert('✗ Error al guardar redes sociales');
+            }
+        }
+        // ── End Social Networks ─────────────────────────────────────
+
+        // ── Payment Methods ──────────────────────────────────────────
+        @if($plan->id !== 1)
+        const payAllKeys  = @json(array_keys($allPayMeta));
+        const currAllKeys = @json(array_keys($allCurrencyMeta));
+        const allPayMetaData  = @json($allPayMeta);
+        const allCurrMetaData = @json($allCurrencyMeta);
+        const divisaKeys  = ['zelle', 'zinli', 'paypal'];
+
+        function togglePayMethod(key) {
+            const check = document.getElementById('pay-check-' + key);
+            const label = document.getElementById('pay-label-' + key);
+            const icon  = document.getElementById('pay-check-icon-' + key);
+            if (!check || !label) return;
+            check.checked = !check.checked;
+            const on = check.checked;
+            // Swap all state classes cleanly
+            label.classList.remove('bg-primary/15', 'border-primary/40', 'text-primary', 'font-semibold',
+                                   'bg-primary/20', 'border-primary/50',
+                                   'bg-base-200/40', 'bg-base-200/50', 'border-base-content/10', 'text-base-content');
+            if (on) {
+                label.classList.add('bg-primary/15', 'border-primary/40', 'text-primary', 'font-semibold');
+            } else {
+                label.classList.add('bg-base-200/40', 'border-base-content/10', 'text-base-content');
+            }
+            // Checkmark icon
+            if (icon) {
+                icon.classList.toggle('opacity-100', on);
+                icon.classList.toggle('text-primary', on);
+                icon.classList.toggle('opacity-0', !on);
+            }
+            // Inner label text color
+            const txtSpan = label.querySelector('.flex-1');
+            if (txtSpan) {
+                txtSpan.classList.remove('text-primary', 'text-base-content');
+                txtSpan.classList.add(on ? 'text-primary' : 'text-base-content');
+            }
+            updatePaymentPreview();
+        }
+
+        function toggleCurrency(key) {
+            const check = document.getElementById('curr-check-' + key);
+            const label = document.getElementById('curr-label-' + key);
+            const icon  = document.getElementById('curr-check-icon-' + key);
+            if (!check || !label) return;
+            check.checked = !check.checked;
+            const on = check.checked;
+            label.classList.remove('bg-primary/20', 'border-primary/50', 'text-primary', 'font-semibold',
+                                   'bg-base-200/50', 'border-base-content/10', 'text-base-content');
+            if (on) {
+                label.classList.add('bg-primary/20', 'border-primary/50', 'text-primary', 'font-semibold');
+            } else {
+                label.classList.add('bg-base-200/50', 'border-base-content/10', 'text-base-content');
+            }
+            if (icon) {
+                icon.classList.toggle('opacity-100', on);
+                icon.classList.toggle('text-primary', on);
+                icon.classList.toggle('opacity-0', !on);
+            }
+            // Inner label/desc text color
+            label.querySelectorAll('.flex-1 div').forEach(d => {
+                d.classList.remove('text-primary', 'text-primary/70', 'text-base-content', 'text-base-content/40');
+            });
+            const divs = label.querySelectorAll('.flex-1 div');
+            if (divs[0]) divs[0].classList.add(on ? 'text-primary' : 'text-base-content');
+            if (divs[1]) divs[1].classList.add(on ? 'text-primary/70' : 'text-base-content/40');
+            updatePaymentPreview();
+        }
+
+        function updatePaymentPreview() {
+            const preview = document.getElementById('payment-preview');
+            if (!preview) return;
+            const selected = [];
+            payAllKeys.forEach(k => {
+                const el = document.getElementById('pay-check-' + k);
+                if (el && el.checked) {
+                    selected.push({ key: k, ...allPayMetaData[k], type: 'method' });
+                }
+            });
+            currAllKeys.forEach(k => {
+                const el = document.getElementById('curr-check-' + k);
+                if (el && el.checked) {
+                    selected.push({ key: k, ...allCurrMetaData[k], type: 'currency' });
+                }
+            });
+            if (selected.length === 0) {
+                preview.innerHTML = '<span class="text-base-content/40 text-xs">Selecciona métodos para ver la previa</span>';
+                return;
+            }
+            preview.innerHTML = selected.map(item => 
+                `<span class="badge badge-soft badge-success badge-sm gap-1.5">
+                    <iconify-icon icon="${item.icon}" width="14"></iconify-icon> ${item.label}
+                </span>`
+            ).join('');
+        }
+
+        // Inicializar previa al cargar
+        document.addEventListener('DOMContentLoaded', updatePaymentPreview);
+
+        @if($plan->id === 3)
+        function toggleBranchPayMethod(branchId, key) {
+            const check = document.getElementById('pay-branch-check-' + branchId + '-' + key);
+            const label = document.getElementById('pay-branch-label-' + branchId + '-' + key);
+            const icon  = document.getElementById('pay-branch-check-icon-' + branchId + '-' + key);
+            if (!check || !label) return;
+            check.checked = !check.checked;
+            const on = check.checked;
+            label.classList.remove('bg-primary/15', 'border-primary/40', 'text-primary', 'font-semibold',
+                                   'bg-primary/20', 'border-primary/50',
+                                   'bg-base-100', 'border-base-content/10', 'text-base-content');
+            if (on) {
+                label.classList.add('bg-primary/15', 'border-primary/40', 'text-primary', 'font-semibold');
+            } else {
+                label.classList.add('bg-base-100', 'border-base-content/10', 'text-base-content');
+            }
+            if (icon) {
+                icon.classList.toggle('opacity-100', on);
+                icon.classList.toggle('text-primary', on);
+                icon.classList.toggle('opacity-0', !on);
+            }
+            const txtSpan = label.querySelector('.flex-1');
+            if (txtSpan) {
+                txtSpan.classList.remove('text-primary', 'text-base-content');
+                txtSpan.classList.add(on ? 'text-primary' : 'text-base-content');
+            }
+        }
+        @endif
+
+        async function savePaymentMethods() {
+            const tenantId = {{ $tenant->id }};
+            const globalSelected = payAllKeys.filter(k => {
+                const el = document.getElementById('pay-check-' + k);
+                return el && el.checked;
+            });
+            const currencySelected = currAllKeys.filter(k => {
+                const el = document.getElementById('curr-check-' + k);
+                return el && el.checked;
+            });
+            const payload = { global: globalSelected, currency: currencySelected };
+
+            @if($plan->id === 3)
+            const branchData = {};
+            @foreach($activeBranchList as $branch)
+            const bMethods_{{ $branch->id }} = payAllKeys.filter(k => {
+                const el = document.getElementById('pay-branch-check-{{ $branch->id }}-' + k);
+                return el && el.checked;
+            });
+            if (bMethods_{{ $branch->id }}.length > 0) {
+                branchData['{{ $branch->id }}'] = bMethods_{{ $branch->id }};
+            }
+            @endforeach
+            payload.branches = branchData;
+            @endif
+
+            try {
+                const response = await fetch('/tenant/' + tenantId + '/update-payment-methods', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content
+                    },
+                    body: JSON.stringify(payload)
+                });
+                const result = await response.json();
+                if (result.success) {
+                    alert('✓ Medios de pago y denominaciones guardados correctamente');
+                } else {
+                    alert('✗ ' + (result.message || 'Error al guardar'));
+                }
+            } catch (err) {
+                console.error('Error:', err);
+                alert('✗ Error al guardar medios de pago');
+            }
+        }
+        @endif
+        // ── End Payment Methods ──────────────────────────────────────
+
+        // ── Branches (Plan 3 / VISIÓN) ──────────────────────────────
+        @if($plan->id === 3)
+        let branchCount = {{ $branches->count() }};
+
+        async function toggleBranchesSection() {
+            const enabled = document.getElementById('branches-toggle').checked;
+
+            try {
+                const response = await fetch('/tenant/{{ $tenant->id }}/branches/toggle', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content
+                    },
+                    body: JSON.stringify({ enabled })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    const content = document.getElementById('branches-content');
+                    const status = document.getElementById('branches-status');
+                    const statusText = document.getElementById('branches-status-text');
+
+                    content.style.display = enabled ? '' : 'none';
+                    status.className = enabled ? 'alert alert-success' : 'alert alert-info';
+                    statusText.textContent = enabled
+                        ? 'Sección visible en tu landing pública'
+                        : 'Sección oculta en tu landing pública';
+                } else {
+                    // Revert toggle
+                    document.getElementById('branches-toggle').checked = !enabled;
+                    alert('✗ ' + (result.message || 'Error'));
+                }
+            } catch (err) {
+                document.getElementById('branches-toggle').checked = !enabled;
+                console.error('Error:', err);
+                alert('✗ Error al cambiar estado de sucursales');
+            }
+        }
+
+        function openBranchModal() {
+            document.getElementById('branch-modal-title').textContent = '+ Agregar Sucursal';
+            document.getElementById('branch-edit-id').value = '';
+            document.getElementById('branch-form').reset();
+            document.getElementById('branch-modal').style.display = 'flex';
+        }
+
+        function editBranch(id, name, address) {
+            document.getElementById('branch-modal-title').textContent = '✏️ Editar Sucursal';
+            document.getElementById('branch-edit-id').value = id;
+            document.getElementById('branch-name').value = name;
+            document.getElementById('branch-address').value = address;
+            document.getElementById('branch-modal').style.display = 'flex';
+        }
+
+        function closeBranchModal() {
+            document.getElementById('branch-modal').style.display = 'none';
+            document.getElementById('branch-form').reset();
+            document.getElementById('branch-edit-id').value = '';
+        }
+
+        async function saveBranch(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('branch-name').value.trim();
+            const address = document.getElementById('branch-address').value.trim();
+            const editId = document.getElementById('branch-edit-id').value;
+
+            if (!name || !address) {
+                alert('✗ Nombre y dirección son obligatorios');
+                return;
+            }
+
+            const payload = { name, address, is_active: true };
+            if (editId) payload.id = parseInt(editId);
+
+            try {
+                const response = await fetch('/tenant/{{ $tenant->id }}/branches', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    closeBranchModal();
+                    alert('✓ ' + result.message);
+                    location.reload();
+                } else {
+                    alert('✗ ' + (result.message || 'Error desconocido'));
+                }
+            } catch (err) {
+                console.error('Error:', err);
+                alert('✗ Error al guardar sucursal');
+            }
+        }
+
+        async function deleteBranch(branchId) {
+            if (!confirm('¿Eliminar esta sucursal?')) return;
+
+            try {
+                const response = await fetch(`/tenant/{{ $tenant->id }}/branches/${branchId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content
+                    }
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    alert('✓ Sucursal eliminada');
+                    location.reload();
+                } else {
+                    alert('✗ ' + (result.message || 'Error'));
+                }
+            } catch (err) {
+                console.error('Error:', err);
+                alert('✗ Error al eliminar sucursal');
+            }
+        }
+        @endif
+        // ── End Branches ────────────────────────────────────────────
+    </script>
