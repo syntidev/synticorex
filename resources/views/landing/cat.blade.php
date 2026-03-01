@@ -1,7 +1,7 @@
 {{-- ═══════════════════════════════════════════════════════════════════════════════
-     SYNTIcat — Catálogo mínimo + Carrito WhatsApp
+     SYNTIcat — Catálogo eCommerce + Carrito WhatsApp
      Template independiente, NO hereda de base.blade.php
-     CSS/JS inline — un solo request
+     FlyonUI 2.4.1 + Tailwind v4 classes
 ═══════════════════════════════════════════════════════════════════════════════ --}}
 @php
     $customPalette = $tenant->settings['engine_settings']['visual']['custom_palette'] ?? null;
@@ -27,22 +27,22 @@
         $currencyEnabled = [];
     }
     $allPayMeta = [
-        'pagoMovil'  => ['label' => 'Pago Móvil',    'icon' => '📱'],
-        'cash'       => ['label' => 'Efectivo',       'icon' => '💵'],
-        'puntoventa' => ['label' => 'Punto de Venta', 'icon' => '💳'],
-        'biopago'    => ['label' => 'Biopago',        'icon' => '🖐️'],
-        'cashea'     => ['label' => 'Cashea',         'icon' => '🛒'],
-        'krece'      => ['label' => 'Krece',          'icon' => '📈'],
-        'wepa'       => ['label' => 'Wepa',           'icon' => '📲'],
-        'lysto'      => ['label' => 'Lysto',          'icon' => '📅'],
-        'chollo'     => ['label' => 'Chollo',         'icon' => '🏷️'],
-        'zelle'      => ['label' => 'Zelle',          'icon' => '⚡'],
-        'zinli'      => ['label' => 'Zinli',          'icon' => '👛'],
-        'paypal'     => ['label' => 'PayPal',         'icon' => '🅿️'],
+        'pagoMovil'  => ['label' => 'Pago Móvil',    'icon' => 'device-mobile'],
+        'cash'       => ['label' => 'Efectivo',       'icon' => 'cash'],
+        'puntoventa' => ['label' => 'Punto de Venta', 'icon' => 'credit-card'],
+        'biopago'    => ['label' => 'Biopago',        'icon' => 'fingerprint'],
+        'cashea'     => ['label' => 'Cashea',         'icon' => 'shopping-cart-dollar'],
+        'krece'      => ['label' => 'Krece',          'icon' => 'trending-up'],
+        'wepa'       => ['label' => 'Wepa',           'icon' => 'device-mobile-dollar'],
+        'lysto'      => ['label' => 'Lysto',          'icon' => 'calendar-dollar'],
+        'chollo'     => ['label' => 'Chollo',         'icon' => 'tag'],
+        'zelle'      => ['label' => 'Zelle',          'icon' => 'bolt'],
+        'zinli'      => ['label' => 'Zinli',          'icon' => 'wallet'],
+        'paypal'     => ['label' => 'PayPal',         'icon' => 'brand-paypal'],
     ];
     $allCurrencyMeta = [
-        'usd' => ['label' => 'Dólares USD', 'icon' => '💲'],
-        'eur' => ['label' => 'Euros',        'icon' => '💶'],
+        'usd' => ['label' => 'Dólares USD', 'icon' => 'currency-dollar'],
+        'eur' => ['label' => 'Euros',        'icon' => 'currency-euro'],
     ];
     $visibleMethods    = array_filter($allPayMeta,      fn($k) => in_array($k, $globalEnabled),   ARRAY_FILTER_USE_KEY);
     $visibleCurrencies = array_filter($allCurrencyMeta, fn($k) => in_array($k, $currencyEnabled), ARRAY_FILTER_USE_KEY);
@@ -55,9 +55,12 @@
     // Logo
     $logoFilename = $customization->logo_filename ?? null;
     $logoUrl = $logoFilename ? asset('storage/tenants/' . $tenant->id . '/' . $logoFilename) : null;
+
+    // Showcase products (first 3 for hero grid)
+    $showcase = $products->take(3);
 @endphp
 <!DOCTYPE html>
-<html data-theme="{{ $effectiveTheme }}" lang="es">
+<html data-theme="{{ $effectiveTheme }}" lang="es" class="scroll-smooth">
 @if($customPalette)
 <style>
 [data-theme="custom"]{
@@ -84,239 +87,273 @@
 <meta property="og:description" content="{{ $meta['og_description'] ?? $tenant->description }}">
 <meta property="og:type" content="website">
 @vite(['resources/css/app.css', 'resources/js/app.js'])
+<link rel="preload" href="https://api.iconify.design/tabler.css" as="style">
 <style>
-/* ═══ SYNTIcat inline styles ═══ */
-*{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{font-family:system-ui,-apple-system,sans-serif;min-height:100vh;display:flex;flex-direction:column}
-
-/* Navbar */
-.sc-nav{position:sticky;top:0;z-index:100;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid oklch(var(--bc)/.08)}
-.sc-nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:.75rem 1rem;gap:.75rem}
-.sc-nav-brand{display:flex;align-items:center;gap:.6rem;text-decoration:none;color:oklch(var(--bc));font-weight:800;font-size:1.1rem}
-.sc-nav-brand img{height:36px;width:36px;object-fit:contain;border-radius:8px}
-.sc-nav-brand-icon{height:36px;width:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1rem;color:#fff;background:oklch(var(--p))}
-.sc-nav-actions{display:flex;align-items:center;gap:.5rem}
-
-/* Currency toggle pills */
-.sc-curr-toggle{display:flex;border-radius:10px;overflow:hidden;border:1px solid oklch(var(--bc)/.1);background:oklch(var(--b1))}
-.sc-curr-btn{padding:4px 10px;font-size:11px;font-weight:800;cursor:pointer;border:none;background:transparent;color:oklch(var(--bc)/.4);transition:all .2s}
-.sc-curr-btn.active{background:oklch(var(--p));color:#fff;box-shadow:0 1px 4px oklch(var(--p)/.25)}
-
-/* Cart badge */
-.sc-cart-btn{position:relative;display:flex;align-items:center;gap:.35rem;padding:6px 14px;border-radius:10px;font-weight:700;font-size:.8rem;cursor:pointer;border:1px solid oklch(var(--p)/.3);background:oklch(var(--p)/.08);color:oklch(var(--p));transition:all .2s}
-.sc-cart-btn:hover{background:oklch(var(--p)/.15)}
-.sc-cart-badge{position:absolute;top:-6px;right:-6px;min-width:18px;height:18px;border-radius:9px;background:oklch(var(--p));color:#fff;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;padding:0 4px;transition:transform .2s}
-.sc-cart-badge.bump{animation:bump .3s}
-@keyframes bump{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
-
-/* Hero */
-.sc-hero{position:relative;min-height:280px;display:flex;align-items:center;justify-content:center;text-align:center;padding:3rem 1rem;overflow:hidden}
-.sc-hero-bg{position:absolute;inset:0;background-size:cover;background-position:center;filter:brightness(.45)}
-.sc-hero-bg.sc-hero-gradient{filter:none}
-.sc-hero-content{position:relative;z-index:2;max-width:600px}
-.sc-hero h1{color:#fff;font-size:clamp(1.6rem,5vw,2.6rem);font-weight:900;letter-spacing:-.02em;line-height:1.15;text-shadow:0 2px 12px rgba(0,0,0,.4)}
-.sc-hero p{color:rgba(255,255,255,.85);margin-top:.6rem;font-size:clamp(.9rem,2.5vw,1.15rem);font-weight:500}
-
-/* Product grid */
-.sc-grid-section{max-width:1200px;margin:0 auto;padding:2rem 1rem 3rem}
-.sc-grid-title{text-align:center;font-size:1.6rem;font-weight:800;color:oklch(var(--bc));margin-bottom:1.5rem;letter-spacing:-.02em}
-.sc-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.75rem}
-@media(min-width:640px){.sc-grid{grid-template-columns:repeat(3,1fr);gap:1rem}}
-@media(min-width:1024px){.sc-grid{grid-template-columns:repeat(4,1fr);gap:1.1rem}}
-
-/* Product card */
-.sc-card{border-radius:12px;overflow:hidden;border:1px solid oklch(var(--bc)/.07);background:oklch(var(--b1));transition:box-shadow .2s,transform .15s}
-.sc-card:hover{box-shadow:0 8px 24px oklch(var(--bc)/.08);transform:translateY(-2px)}
-.sc-card-img{aspect-ratio:1/1;width:100%;object-fit:cover;background:oklch(var(--bc)/.05);display:block}
-.sc-card-placeholder{aspect-ratio:1/1;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,oklch(var(--p)/.08),oklch(var(--s,var(--p))/.12));gap:.35rem}
-.sc-card-placeholder svg{width:36px;height:36px;color:oklch(var(--p)/.35)}
-.sc-card-placeholder span{font-size:.65rem;font-weight:700;color:oklch(var(--p)/.4);letter-spacing:.04em;text-transform:uppercase}
-.sc-card-body{padding:.65rem .75rem .75rem}
-.sc-card-name{font-size:.82rem;font-weight:700;color:oklch(var(--bc));line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.sc-card-price{font-size:.9rem;font-weight:800;color:oklch(var(--bc));margin-top:.25rem}
-.sc-card-price .sym{font-size:.65rem;opacity:.5;font-weight:600;margin-right:2px}
-.sc-card-actions{display:flex;gap:.4rem;margin-top:.5rem}
-.sc-btn-pedir{flex:1;display:flex;align-items:center;justify-content:center;gap:.3rem;padding:6px 0;border-radius:8px;font-weight:700;font-size:.72rem;cursor:pointer;border:none;background:oklch(var(--p));color:#fff;transition:opacity .2s}
-.sc-btn-pedir:hover{opacity:.85}
-.sc-btn-pedir svg{width:14px;height:14px;flex-shrink:0}
-.sc-btn-qty{width:28px;height:28px;border-radius:6px;border:1px solid oklch(var(--bc)/.12);background:oklch(var(--b1));display:flex;align-items:center;justify-content:center;cursor:pointer;font-weight:800;font-size:.85rem;color:oklch(var(--bc)/.6);transition:all .15s}
-.sc-btn-qty:hover{border-color:oklch(var(--p)/.4);color:oklch(var(--p))}
-.sc-card-qty-row{display:flex;align-items:center;justify-content:center;gap:.5rem;margin-top:.4rem}
-.sc-card-qty-val{font-size:.8rem;font-weight:700;min-width:18px;text-align:center;color:oklch(var(--bc))}
-
-/* Floating cart drawer */
+/* ═══ SYNTIcat — Drawer + Cart animations ═══ */
 .sc-drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;opacity:0;pointer-events:none;transition:opacity .25s}
 .sc-drawer-overlay.open{opacity:1;pointer-events:auto}
-.sc-drawer{position:fixed;right:0;top:0;bottom:0;width:min(380px,92vw);background:oklch(var(--b1));z-index:201;transform:translateX(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;box-shadow:-4px 0 24px rgba(0,0,0,.1)}
+.sc-drawer{position:fixed;right:0;top:0;bottom:0;width:min(380px,92vw);z-index:201;transform:translateX(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;box-shadow:-4px 0 24px rgba(0,0,0,.1)}
 .sc-drawer.open{transform:translateX(0)}
-.sc-drawer-header{padding:.85rem 1rem;border-bottom:1px solid oklch(var(--bc)/.08);display:flex;align-items:center;justify-content:space-between}
-.sc-drawer-header h3{font-size:1.05rem;font-weight:800;color:oklch(var(--bc))}
-.sc-drawer-close{width:32px;height:32px;border-radius:8px;border:none;background:oklch(var(--bc)/.06);cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;color:oklch(var(--bc)/.5);transition:all .15s}
-.sc-drawer-close:hover{background:oklch(var(--bc)/.12);color:oklch(var(--bc))}
-.sc-drawer-body{flex:1;overflow-y:auto;padding:.75rem 1rem}
-.sc-drawer-empty{text-align:center;padding:3rem 1rem;color:oklch(var(--bc)/.35);font-size:.9rem}
-.sc-drawer-item{display:flex;align-items:center;gap:.65rem;padding:.6rem 0;border-bottom:1px solid oklch(var(--bc)/.05)}
-.sc-drawer-item-img{width:44px;height:44px;border-radius:8px;object-fit:cover;flex-shrink:0;background:oklch(var(--bc)/.05)}
-.sc-drawer-item-info{flex:1;min-width:0}
-.sc-drawer-item-name{font-size:.8rem;font-weight:700;color:oklch(var(--bc));white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sc-drawer-item-meta{font-size:.72rem;color:oklch(var(--bc)/.5);margin-top:1px}
-.sc-drawer-item-rm{width:24px;height:24px;border-radius:6px;border:none;background:oklch(var(--bc)/.06);cursor:pointer;font-size:.8rem;color:oklch(var(--bc)/.4);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.sc-drawer-item-rm:hover{background:#fee2e2;color:#ef4444}
-.sc-drawer-footer{padding:.85rem 1rem;border-top:1px solid oklch(var(--bc)/.08)}
-.sc-drawer-total{display:flex;justify-content:space-between;align-items:center;margin-bottom:.65rem}
-.sc-drawer-total-label{font-size:.85rem;font-weight:600;color:oklch(var(--bc)/.6)}
-.sc-drawer-total-val{font-size:1.15rem;font-weight:900;color:oklch(var(--bc))}
-.sc-btn-wa{width:100%;display:flex;align-items:center;justify-content:center;gap:.5rem;padding:12px;border-radius:10px;border:none;background:#25D366;color:#fff;font-weight:800;font-size:.9rem;cursor:pointer;transition:opacity .2s}
-.sc-btn-wa:hover{opacity:.88}
-.sc-btn-wa svg{width:20px;height:20px;flex-shrink:0}
-
-/* Payment section */
-.sc-pay-section{padding:2rem 1rem;text-align:center;background:oklch(var(--bc)/.03)}
-.sc-pay-title{font-size:1.2rem;font-weight:800;color:oklch(var(--bc));margin-bottom:1rem}
-.sc-pay-pills{display:flex;flex-wrap:wrap;justify-content:center;gap:.4rem}
-.sc-pay-pill{display:inline-flex;align-items:center;gap:.3rem;padding:5px 12px;border-radius:20px;border:1px solid oklch(var(--bc)/.08);background:oklch(var(--b1));font-size:.78rem;font-weight:600;color:oklch(var(--bc)/.7)}
-.sc-pay-note{font-size:.7rem;color:oklch(var(--bc)/.35);margin-top:.75rem}
-
-/* Footer */
-.sc-footer{margin-top:auto;padding:1.5rem 1rem;border-top:1px solid oklch(var(--bc)/.06);text-align:center}
-.sc-footer-biz{font-size:.85rem;font-weight:700;color:oklch(var(--bc)/.6)}
-.sc-footer-biz a{color:oklch(var(--p));text-decoration:none}
-.sc-footer-powered{font-size:.68rem;color:oklch(var(--bc)/.3);margin-top:.4rem;font-weight:600;letter-spacing:.03em}
+@keyframes bump{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
+.bump{animation:bump .3s}
 </style>
 </head>
-<body>
+<body class="min-h-screen bg-base-100 text-base-content antialiased flex flex-col">
 
 {{-- ═══════════════════════════════════════════════════════════════════════════
-  1. NAVBAR
+  1. NAVBAR — FlyonUI sticky
 ═══════════════════════════════════════════════════════════════════════════ --}}
-<nav class="sc-nav" style="background:oklch(var(--b1)/.92)">
-    <div class="sc-nav-inner">
+<header class="sticky top-0 z-[100] w-full border-b border-base-content/10 bg-base-100/95 backdrop-blur-md">
+    <div class="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8 flex items-center justify-between py-3">
         {{-- Brand --}}
-        <a href="#" class="sc-nav-brand">
+        <a href="#" class="flex items-center gap-2.5 no-underline">
             @if($logoUrl)
-                <img src="{{ $logoUrl }}" alt="{{ $tenant->business_name }}">
+                <img src="{{ $logoUrl }}" alt="{{ $tenant->business_name }}" class="h-9 w-9 object-contain rounded-lg">
             @else
-                <span class="sc-nav-brand-icon">{{ mb_substr($tenant->business_name, 0, 1) }}</span>
+                <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-white font-bold text-sm shadow-sm">
+                    {{ mb_substr($tenant->business_name, 0, 1) }}
+                </div>
             @endif
-            <span>{{ $tenant->business_name }}</span>
+            <span class="text-base font-bold tracking-tight text-base-content">{{ $tenant->business_name }}</span>
         </a>
 
-        <div class="sc-nav-actions">
+        <div class="flex items-center gap-3">
             {{-- Currency toggle --}}
             @if($savedDisplayMode === 'both_toggle')
-            <div class="sc-curr-toggle">
-                <button class="sc-curr-btn active" data-currency="ref" onclick="setCurrency('ref')">{{ $currencySymbol }}</button>
-                <button class="sc-curr-btn" data-currency="bs" onclick="setCurrency('bs')">Bs.</button>
+            <div class="flex items-center bg-base-200 p-0.5 rounded-lg border border-base-content/10">
+                <button class="sc-curr-btn px-2.5 py-1 text-[10px] font-black rounded-md transition-all bg-base-100 shadow-sm text-primary" data-currency="ref" onclick="setCurrency('ref')">{{ $currencySymbol }}</button>
+                <button class="sc-curr-btn px-2.5 py-1 text-[10px] font-black rounded-md transition-all text-base-content/40" data-currency="bs" onclick="setCurrency('bs')">Bs.</button>
             </div>
             @elseif($savedDisplayMode === 'euro_toggle')
-            <div class="sc-curr-toggle">
-                <button class="sc-curr-btn active" data-currency="eur" onclick="setCurrency('eur')">€</button>
-                <button class="sc-curr-btn" data-currency="bs" onclick="setCurrency('bs')">Bs.</button>
+            <div class="flex items-center bg-base-200 p-0.5 rounded-lg border border-base-content/10">
+                <button class="sc-curr-btn px-2.5 py-1 text-[10px] font-black rounded-md transition-all bg-base-100 shadow-sm text-primary" data-currency="eur" onclick="setCurrency('eur')">€</button>
+                <button class="sc-curr-btn px-2.5 py-1 text-[10px] font-black rounded-md transition-all text-base-content/40" data-currency="bs" onclick="setCurrency('bs')">Bs.</button>
             </div>
             @endif
 
             {{-- Cart button --}}
-            <button class="sc-cart-btn" onclick="toggleDrawer()" id="sc-cart-trigger">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-                <span>Pedido</span>
-                <span class="sc-cart-badge" id="sc-cart-count" style="display:none">0</span>
+            <button onclick="toggleDrawer()" id="sc-cart-trigger"
+                    class="relative flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold text-xs border border-primary/30 bg-primary/5 text-primary hover:bg-primary/10 transition-colors cursor-pointer">
+                <span class="icon-[tabler--shopping-cart] size-4"></span>
+                <span class="hidden sm:inline">Pedido</span>
+                <span class="absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] rounded-full bg-primary text-white text-[10px] font-black flex items-center justify-center px-1 transition-transform"
+                      id="sc-cart-count" style="display:none">0</span>
             </button>
         </div>
     </div>
-</nav>
+</header>
 
 {{-- ═══════════════════════════════════════════════════════════════════════════
-  2. HERO
+  2. HERO — Asymmetric grid showcase (first 3 products)
 ═══════════════════════════════════════════════════════════════════════════ --}}
-<section class="sc-hero">
-    @if($heroUrl)
-        <div class="sc-hero-bg" style="background-image:url('{{ $heroUrl }}')"></div>
-    @else
-        <div class="sc-hero-bg sc-hero-gradient" style="background:linear-gradient(135deg,oklch(var(--p)),oklch(var(--s,var(--p))/.7));"></div>
-    @endif
-    <div class="sc-hero-content">
-        <h1>{{ $tenant->business_name }}</h1>
-        @if($tenant->slogan)
-            <p>{{ $tenant->slogan }}</p>
-        @elseif($tenant->description)
-            <p>{{ Str::limit($tenant->description, 120) }}</p>
-        @endif
-    </div>
-</section>
+<section class="bg-base-200 py-8 sm:py-12 lg:py-16">
+    <div class="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8">
 
-{{-- ═══════════════════════════════════════════════════════════════════════════
-  3. GRID PRODUCTOS
-═══════════════════════════════════════════════════════════════════════════ --}}
-<section class="sc-grid-section" id="productos">
-    <h2 class="sc-grid-title">Nuestros Productos</h2>
-    <div class="sc-grid">
-        @foreach($products as $product)
-        <div class="sc-card" data-product-id="{{ $product->id }}">
-            {{-- Image --}}
-            @if($product->image_filename)
-                <img class="sc-card-img"
-                     src="{{ asset('storage/tenants/' . $tenant->id . '/' . $product->image_filename) }}"
-                     alt="{{ $product->name }}"
-                     loading="lazy">
-            @else
-                <div class="sc-card-placeholder">
-                    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"/></svg>
-                    <span>{{ Str::limit($product->name, 18) }}</span>
-                </div>
+        {{-- Title area --}}
+        <div class="mb-6 sm:mb-8">
+            <h1 class="text-base-content text-2xl font-bold md:text-3xl lg:text-4xl tracking-tight">{{ $tenant->business_name }}</h1>
+            @if($tenant->slogan)
+                <p class="text-base-content/60 mt-1.5 text-sm sm:text-base">{{ $tenant->slogan }}</p>
+            @elseif($tenant->description)
+                <p class="text-base-content/60 mt-1.5 text-sm sm:text-base">{{ Str::limit($tenant->description, 120) }}</p>
             @endif
+        </div>
 
-            <div class="sc-card-body">
-                <div class="sc-card-name">{{ $product->name }}</div>
+        @if($showcase->count() >= 3)
+        {{-- Asymmetric grid: 1 large left + 2 stacked right --}}
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5 lg:gap-5">
+            @php $hero1 = $showcase[0]; $hero2 = $showcase[1]; $hero3 = $showcase[2]; @endphp
 
-                @if($product->price_usd && !$hidePrice)
-                    <div class="sc-card-price" data-price-usd="{{ $product->price_usd }}">
-                        <span class="sym">{{ $currencySymbol }}</span>{{ number_format((float)$product->price_usd, 2) }}
-                    </div>
-                @elseif($hidePrice)
-                    <div class="sc-card-price" style="font-size:.75rem;opacity:.5">Consultar precio</div>
-                @endif
-
-                {{-- Add to cart --}}
-                <div class="sc-card-actions">
-                    <button class="sc-btn-pedir"
-                            onclick="addToCart({{ $product->id }}, '{{ addslashes($product->name) }}', {{ $product->price_usd ?? 0 }}, '{{ $product->image_filename ? asset('storage/tenants/' . $tenant->id . '/' . $product->image_filename) : '' }}')">
-                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.588-5.946 0-6.556 5.332-11.887 11.887-11.887 3.18 0 6.171 1.242 8.425 3.496 2.257 2.253 3.496 5.244 3.496 8.425 0 6.557-5.331 11.89-11.887 11.89-2.018 0-4.003-.513-5.753-1.487l-6.267 1.672zm6.208-3.766l.348.206c1.517.896 3.268 1.369 5.068 1.369 5.451 0 9.887-4.436 9.887-9.889 0-2.641-1.03-5.123-2.9-6.992-1.868-1.87-4.35-2.903-6.993-2.903-5.452 0-9.889 4.437-9.889 9.889 0 1.883.53 3.722 1.534 5.312l.226.358-1.001 3.655 3.743-.984z"/></svg>
-                        Pedir
-                    </button>
+            {{-- Large card (spans 3 cols on lg) --}}
+            <div class="lg:col-span-3 group relative overflow-hidden rounded-2xl bg-base-100 border border-base-content/10 cursor-pointer"
+                 onclick="addToCart({{ $hero1->id }}, '{{ addslashes($hero1->name) }}', {{ $hero1->price_usd ?? 0 }}, '{{ $hero1->image_filename ? asset('storage/tenants/' . $tenant->id . '/' . $hero1->image_filename) : ($hero1->image_url ?? '') }}')">
+                <div class="aspect-[4/3] sm:aspect-[16/10] overflow-hidden">
+                    @if($hero1->image_filename)
+                        <img src="{{ asset('storage/tenants/' . $tenant->id . '/' . $hero1->image_filename) }}"
+                             alt="{{ $hero1->name }}"
+                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    @elseif($hero1->image_url)
+                        <img src="{{ $hero1->image_url }}"
+                             alt="{{ $hero1->name }}"
+                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
+                    @else
+                        <div class="w-full h-full bg-gradient-to-br from-primary/10 to-secondary/10 flex items-center justify-center">
+                            <span class="icon-[tabler--shopping-bag] size-16 text-primary/20"></span>
+                        </div>
+                    @endif
                 </div>
-
-                {{-- Qty controls (hidden until added) --}}
-                <div class="sc-card-qty-row" id="qty-row-{{ $product->id }}" style="display:none">
-                    <button class="sc-btn-qty" onclick="changeQty({{ $product->id }}, -1)">−</button>
-                    <span class="sc-card-qty-val" id="qty-val-{{ $product->id }}">1</span>
-                    <button class="sc-btn-qty" onclick="changeQty({{ $product->id }}, 1)">+</button>
+                <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent p-4 sm:p-6">
+                    @if($hero1->badge)
+                        <span class="badge badge-accent badge-sm mb-2">{{ ucfirst($hero1->badge) }}</span>
+                    @endif
+                    <h3 class="text-white text-lg sm:text-xl font-bold">{{ $hero1->name }}</h3>
+                    @if($hero1->price_usd && !$hidePrice)
+                        <p class="text-white/90 text-sm font-bold mt-1" data-price-usd="{{ $hero1->price_usd }}">
+                            <span class="text-xs opacity-60 mr-0.5">{{ $currencySymbol }}</span>{{ number_format((float)$hero1->price_usd, 2) }}
+                        </p>
+                    @endif
                 </div>
             </div>
+
+            {{-- Right column: 2 stacked cards (spans 2 cols on lg) --}}
+            <div class="lg:col-span-2 grid grid-cols-2 sm:grid-cols-1 gap-4 lg:gap-5">
+                @foreach([$hero2, $hero3] as $heroProduct)
+                <div class="group relative overflow-hidden rounded-2xl bg-base-100 border border-base-content/10 cursor-pointer"
+                     onclick="addToCart({{ $heroProduct->id }}, '{{ addslashes($heroProduct->name) }}', {{ $heroProduct->price_usd ?? 0 }}, '{{ $heroProduct->image_filename ? asset('storage/tenants/' . $tenant->id . '/' . $heroProduct->image_filename) : ($heroProduct->image_url ?? '') }}')">
+                    <div class="aspect-[4/3] overflow-hidden">
+                        @if($heroProduct->image_filename)
+                            <img src="{{ asset('storage/tenants/' . $tenant->id . '/' . $heroProduct->image_filename) }}"
+                                 alt="{{ $heroProduct->name }}"
+                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        @elseif($heroProduct->image_url)
+                            <img src="{{ $heroProduct->image_url }}"
+                                 alt="{{ $heroProduct->name }}"
+                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
+                        @else
+                            <div class="w-full h-full bg-gradient-to-br from-primary/10 to-secondary/10 flex items-center justify-center">
+                                <span class="icon-[tabler--shopping-bag] size-10 text-primary/20"></span>
+                            </div>
+                        @endif
+                    </div>
+                    <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/70 to-transparent p-3 sm:p-4">
+                        @if($heroProduct->badge)
+                            <span class="badge badge-accent badge-sm mb-1">{{ ucfirst($heroProduct->badge) }}</span>
+                        @endif
+                        <h3 class="text-white text-sm sm:text-base font-bold">{{ $heroProduct->name }}</h3>
+                        @if($heroProduct->price_usd && !$hidePrice)
+                            <p class="text-white/90 text-xs font-bold mt-0.5" data-price-usd="{{ $heroProduct->price_usd }}">
+                                <span class="text-[10px] opacity-60 mr-0.5">{{ $currencySymbol }}</span>{{ number_format((float)$heroProduct->price_usd, 2) }}
+                            </p>
+                        @endif
+                    </div>
+                </div>
+                @endforeach
+            </div>
         </div>
-        @endforeach
+        @elseif($heroUrl)
+        {{-- Fallback: hero image if less than 3 products --}}
+        <div class="relative rounded-2xl overflow-hidden aspect-[21/9]">
+            <img src="{{ $heroUrl }}" alt="{{ $tenant->business_name }}" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+        </div>
+        @endif
+
     </div>
 </section>
 
 {{-- ═══════════════════════════════════════════════════════════════════════════
-  4. CARRITO WHATSAPP (Drawer lateral)
+  3. TODOS LOS PRODUCTOS — Grid 2/4 col
+═══════════════════════════════════════════════════════════════════════════ --}}
+<section class="py-8 sm:py-16 lg:py-24" id="productos">
+    <div class="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8">
+
+        {{-- Section header --}}
+        <div class="mb-8 sm:mb-12 flex items-end justify-between">
+            <div>
+                <h2 class="text-base-content text-xl font-semibold sm:text-2xl md:text-3xl">Todos los productos</h2>
+                <p class="text-base-content/60 text-sm mt-1">{{ $products->count() }} producto{{ $products->count() !== 1 ? 's' : '' }} disponibles</p>
+            </div>
+            @if($wa)
+            <a href="https://wa.me/{{ $waClean }}" target="_blank" rel="noopener noreferrer"
+               class="btn btn-sm btn-outline btn-primary hidden sm:inline-flex">
+                <span class="icon-[tabler--brand-whatsapp] size-4"></span>
+                Consultar
+            </a>
+            @endif
+        </div>
+
+        {{-- Product Grid --}}
+        <div class="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 lg:grid-cols-4 lg:gap-5">
+            @foreach($products as $product)
+            @php
+                $productImgSrc = null;
+                if ($product->image_filename) {
+                    $productImgSrc = asset('storage/tenants/' . $tenant->id . '/' . $product->image_filename);
+                } elseif ($product->image_url) {
+                    $productImgSrc = $product->image_url;
+                }
+            @endphp
+            <div class="card card-border shadow-none hover:shadow-md transition-shadow duration-300 bg-base-100 group" data-product-id="{{ $product->id }}">
+                {{-- Image --}}
+                <figure class="relative overflow-hidden">
+                    @if($productImgSrc)
+                        <img src="{{ $productImgSrc }}"
+                             alt="{{ $product->name }}"
+                             class="aspect-square w-full object-cover group-hover:scale-105 transition-transform duration-500"
+                             loading="lazy">
+                    @else
+                        <div class="aspect-square w-full bg-gradient-to-br from-base-200 to-base-300 flex items-center justify-center">
+                            <span class="icon-[tabler--shopping-bag] size-10 text-base-content/15"></span>
+                        </div>
+                    @endif
+                    @if($product->badge)
+                        <span class="badge badge-accent badge-sm absolute top-2 left-2 shadow-sm">{{ ucfirst($product->badge) }}</span>
+                    @endif
+                </figure>
+
+                {{-- Body --}}
+                <div class="card-body gap-1.5 p-3 sm:p-4">
+                    <h3 class="card-title text-sm font-semibold leading-tight line-clamp-2">{{ $product->name }}</h3>
+
+                    @if($product->price_usd && !$hidePrice)
+                        <p class="text-accent font-bold text-sm" data-price-usd="{{ $product->price_usd }}">
+                            <span class="text-[10px] font-medium opacity-50 mr-0.5">{{ $currencySymbol }}</span>{{ number_format((float)$product->price_usd, 2) }}
+                        </p>
+                    @elseif($hidePrice)
+                        <p class="text-base-content/40 text-xs italic">Consultar precio</p>
+                    @endif
+
+                    {{-- Actions --}}
+                    <div class="card-actions mt-1">
+                        <button class="btn btn-primary btn-sm btn-block gap-1.5"
+                                onclick="addToCart({{ $product->id }}, '{{ addslashes($product->name) }}', {{ $product->price_usd ?? 0 }}, '{{ $productImgSrc ?? '' }}')">
+                            <span class="icon-[tabler--shopping-cart-plus] size-4"></span>
+                            Pedir
+                        </button>
+                    </div>
+
+                    {{-- Qty controls (appear after first add) --}}
+                    <div class="flex items-center justify-center gap-3 mt-1" id="qty-row-{{ $product->id }}" style="display:none">
+                        <button class="btn btn-xs btn-square btn-outline" onclick="changeQty({{ $product->id }}, -1)">−</button>
+                        <span class="text-sm font-bold min-w-[18px] text-center" id="qty-val-{{ $product->id }}">1</span>
+                        <button class="btn btn-xs btn-square btn-outline" onclick="changeQty({{ $product->id }}, 1)">+</button>
+                    </div>
+                </div>
+            </div>
+            @endforeach
+        </div>
+
+    </div>
+</section>
+
+{{-- ═══════════════════════════════════════════════════════════════════════════
+  4. CARRITO WHATSAPP (Drawer lateral) — Lógica intacta
 ═══════════════════════════════════════════════════════════════════════════ --}}
 <div class="sc-drawer-overlay" id="sc-overlay" onclick="toggleDrawer()"></div>
-<aside class="sc-drawer" id="sc-drawer">
-    <div class="sc-drawer-header">
-        <h3>🛒 Tu Pedido</h3>
-        <button class="sc-drawer-close" onclick="toggleDrawer()">✕</button>
+<aside class="sc-drawer bg-base-100" id="sc-drawer">
+    <div class="px-4 py-3 border-b border-base-content/10 flex items-center justify-between">
+        <h3 class="text-base font-bold flex items-center gap-2">
+            <span class="icon-[tabler--shopping-cart] size-5 text-primary"></span>
+            Tu Pedido
+        </h3>
+        <button onclick="toggleDrawer()" class="btn btn-xs btn-square btn-ghost">
+            <span class="icon-[tabler--x] size-4"></span>
+        </button>
     </div>
-    <div class="sc-drawer-body" id="sc-drawer-body">
-        <div class="sc-drawer-empty" id="sc-empty">Tu carrito está vacío.<br>Agrega productos para armar tu pedido.</div>
-    </div>
-    <div class="sc-drawer-footer" id="sc-drawer-footer" style="display:none">
-        <div class="sc-drawer-total">
-            <span class="sc-drawer-total-label">Total:</span>
-            <span class="sc-drawer-total-val" id="sc-total">REF 0.00</span>
+    <div class="flex-1 overflow-y-auto px-4 py-3" id="sc-drawer-body">
+        <div class="text-center py-12 text-base-content/30 text-sm" id="sc-empty">
+            <span class="icon-[tabler--shopping-cart-off] size-10 mb-3 block mx-auto opacity-40"></span>
+            Tu carrito está vacío.<br>Agrega productos para armar tu pedido.
         </div>
-        <button class="sc-btn-wa" onclick="sendWhatsApp()">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.588-5.946 0-6.556 5.332-11.887 11.887-11.887 3.18 0 6.171 1.242 8.425 3.496 2.257 2.253 3.496 5.244 3.496 8.425 0 6.557-5.331 11.89-11.887 11.89-2.018 0-4.003-.513-5.753-1.487l-6.267 1.672zm6.208-3.766l.348.206c1.517.896 3.268 1.369 5.068 1.369 5.451 0 9.887-4.436 9.887-9.889 0-2.641-1.03-5.123-2.9-6.992-1.868-1.87-4.35-2.903-6.993-2.903-5.452 0-9.889 4.437-9.889 9.889 0 1.883.53 3.722 1.534 5.312l.226.358-1.001 3.655 3.743-.984z"/></svg>
+    </div>
+    <div class="px-4 py-3 border-t border-base-content/10" id="sc-drawer-footer" style="display:none">
+        <div class="flex justify-between items-center mb-3">
+            <span class="text-sm font-medium text-base-content/60">Total:</span>
+            <span class="text-lg font-black text-base-content" id="sc-total">REF 0.00</span>
+        </div>
+        <button onclick="sendWhatsApp()"
+                class="btn btn-block bg-[#25D366] hover:bg-[#20BD5A] text-white border-none font-bold gap-2">
+            <span class="icon-[tabler--brand-whatsapp] size-5"></span>
             Enviar pedido por WhatsApp
         </button>
     </div>
@@ -326,27 +363,36 @@ body{font-family:system-ui,-apple-system,sans-serif;min-height:100vh;display:fle
   5. MEDIOS DE PAGO
 ═══════════════════════════════════════════════════════════════════════════ --}}
 @if(!empty($visiblePay))
-<section class="sc-pay-section" id="pagos">
-    <h2 class="sc-pay-title">Medios de Pago</h2>
-    <div class="sc-pay-pills">
-        @foreach($visiblePay as $pm)
-            <span class="sc-pay-pill">{{ $pm['icon'] }} {{ $pm['label'] }}</span>
-        @endforeach
+<section class="py-8 sm:py-16 lg:py-24 bg-base-200/50" id="pagos">
+    <div class="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="text-base-content text-xl font-semibold sm:text-2xl mb-6">Medios de Pago</h2>
+        <div class="flex flex-wrap justify-center gap-2 sm:gap-3">
+            @foreach($visiblePay as $pm)
+                <span class="inline-flex items-center gap-1.5 px-3 py-2 rounded-full bg-base-100 border border-base-content/10 text-xs sm:text-sm font-medium text-base-content hover:border-primary/30 transition-colors">
+                    <span class="icon-[tabler--{{ $pm['icon'] }}] size-4 text-primary"></span>
+                    {{ $pm['label'] }}
+                </span>
+            @endforeach
+        </div>
+        <p class="text-xs text-base-content/40 mt-4">Información de medios de pago que aceptamos. Nuestro sitio web no es pasarela de pago.</p>
     </div>
-    <p class="sc-pay-note">Información de medios de pago que aceptamos. Nuestro sitio web no es pasarela de pago.</p>
 </section>
 @endif
 
 {{-- ═══════════════════════════════════════════════════════════════════════════
   6. FOOTER
 ═══════════════════════════════════════════════════════════════════════════ --}}
-<footer class="sc-footer">
-    <div class="sc-footer-biz">
-        {{ $tenant->business_name }}
-        @if($tenant->city) · {{ $tenant->city }} @endif
-        @if($wa) · <a href="https://wa.me/{{ $waClean }}" target="_blank" rel="noopener">WhatsApp</a> @endif
+<footer class="mt-auto border-t border-base-content/10 py-6 sm:py-8">
+    <div class="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8 text-center space-y-2">
+        <p class="text-sm font-medium text-base-content/50">
+            {{ $tenant->business_name }}
+            @if($tenant->city) · {{ $tenant->city }} @endif
+            @if($wa)
+                · <a href="https://wa.me/{{ $waClean }}" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">WhatsApp</a>
+            @endif
+        </p>
+        <p class="text-[10px] uppercase tracking-[0.4em] text-base-content/25 font-semibold">Powered by <strong>SYNTIcat</strong></p>
     </div>
-    <div class="sc-footer-powered">Powered by <strong>SYNTIcat</strong></div>
 </footer>
 
 {{-- ═══════════════════════════════════════════════════════════════════════════
@@ -374,12 +420,12 @@ body{font-family:system-ui,-apple-system,sans-serif;min-height:100vh;display:fle
         if (isNaN(val)) return '';
         if (currentCurrency === 'Bs.') {
             const rate = CURRENCY_MODE === 'euro_toggle' ? EURO_RATE : EXCHANGE_RATE;
-            return '<span class="sym">Bs.</span>' + (val * rate).toLocaleString('es-VE', {minimumFractionDigits:2, maximumFractionDigits:2});
+            return '<span class="text-[10px] font-medium opacity-50 mr-0.5">Bs.</span>' + (val * rate).toLocaleString('es-VE', {minimumFractionDigits:2, maximumFractionDigits:2});
         }
         if (currentCurrency === '€') {
-            return '<span class="sym">€</span>' + val.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
+            return '<span class="text-[10px] font-medium opacity-50 mr-0.5">€</span>' + val.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
         }
-        return '<span class="sym">' + CURRENCY_SYMBOL + '</span>' + val.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
+        return '<span class="text-[10px] font-medium opacity-50 mr-0.5">' + CURRENCY_SYMBOL + '</span>' + val.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
     }
 
     function formatPricePlain(usdPrice) {
@@ -406,7 +452,10 @@ body{font-family:system-ui,-apple-system,sans-serif;min-height:100vh;display:fle
             if (c === 'ref' && currentCurrency === CURRENCY_SYMBOL) isActive = true;
             if (c === 'bs'  && currentCurrency === 'Bs.')          isActive = true;
             if (c === 'eur' && currentCurrency === '€')            isActive = true;
-            btn.classList.toggle('active', isActive);
+            btn.classList.toggle('bg-base-100', isActive);
+            btn.classList.toggle('shadow-sm', isActive);
+            btn.classList.toggle('text-primary', isActive);
+            btn.classList.toggle('text-base-content/40', !isActive);
         });
     }
 
@@ -514,14 +563,14 @@ body{font-family:system-ui,-apple-system,sans-serif;min-height:100vh;display:fle
             totalUsd += item.price * item.qty;
 
             var div = document.createElement('div');
-            div.className = 'sc-drawer-item';
+            div.className = 'sc-drawer-item flex items-center gap-3 py-2.5 border-b border-base-content/5';
             div.innerHTML =
-                (item.img ? '<img class="sc-drawer-item-img" src="' + item.img + '" alt="">' : '<div class="sc-drawer-item-img"></div>') +
-                '<div class="sc-drawer-item-info">' +
-                    '<div class="sc-drawer-item-name">' + item.name + '</div>' +
-                    '<div class="sc-drawer-item-meta">' + item.qty + ' × ' + formatPricePlain(item.price) + '</div>' +
+                (item.img ? '<img class="w-11 h-11 rounded-lg object-cover flex-shrink-0 bg-base-200" src="' + item.img + '" alt="">' : '<div class="w-11 h-11 rounded-lg bg-base-200 flex-shrink-0"></div>') +
+                '<div class="flex-1 min-w-0">' +
+                    '<div class="text-sm font-semibold truncate">' + item.name + '</div>' +
+                    '<div class="text-xs text-base-content/50 mt-0.5">' + item.qty + ' × ' + formatPricePlain(item.price) + '</div>' +
                 '</div>' +
-                '<button class="sc-drawer-item-rm" data-rm-id="' + id + '" title="Quitar">✕</button>';
+                '<button class="sc-drawer-item-rm btn btn-xs btn-square btn-ghost text-base-content/40 hover:text-error hover:bg-error/10" data-rm-id="' + id + '" title="Quitar"><span class="icon-[tabler--x] size-3.5"></span></button>';
             body.appendChild(div);
         });
 
