@@ -279,11 +279,12 @@
 
         // Config Tab: Save Complete Currency Configuration
         async function saveCurrencyConfig() {
-            const symbol = document.getElementById('currency-symbol-switch').checked ? '$' : 'REF';
+            const symbol       = document.getElementById('currency-symbol-switch').checked ? '$' : 'REF';
             const display_mode = document.querySelector('input[name="display_mode"]:checked')?.value;
-            const tenantId = {{ $tenant->id }};
+            const show_euro    = document.getElementById('show-euro-check')?.checked ?? false;
+            const tenantId     = {{ $tenant->id }};
             
-            console.log('Payload moneda:', {symbol, display_mode});
+            console.log('Payload moneda:', {symbol, display_mode, show_euro});
             
             if (!display_mode) {
                 alert('✗ Seleccioná un modo de visualización');
@@ -298,8 +299,9 @@
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
                     },
                     body: JSON.stringify({ 
-                        symbol: symbol,
-                        display_mode: display_mode
+                        symbol:       symbol,
+                        display_mode: display_mode,
+                        show_euro:    show_euro
                     })
                 });
                 

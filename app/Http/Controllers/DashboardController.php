@@ -761,14 +761,14 @@ class DashboardController extends Controller
 
             // Get request values
             $displayMode = $request->input('display_mode', 'reference_only');
-            $symbol = $request->input('symbol', 'REF');
+            $symbol      = $request->input('symbol', 'REF');
+            $showEuro    = filter_var($request->input('show_euro', false), FILTER_VALIDATE_BOOLEAN);
 
-            // Mapear display_mode a flags booleanos
-            $showReference = in_array($displayMode, ['reference_only', 'both_toggle', 'euro_toggle']);
+            // Mapear display_mode a flags booleanos (euro es independiente del modo principal)
+            $showReference = in_array($displayMode, ['reference_only', 'both_toggle']);
             $showBolivares = in_array($displayMode, ['bolivares_only', 'both_toggle']);
-            $showEuro      = $displayMode === 'euro_toggle';
             $hidePrice     = $displayMode === 'hidden';
-            $hasToggle     = in_array($displayMode, ['both_toggle', 'euro_toggle']);
+            $hasToggle     = $displayMode === 'both_toggle';
 
             $settings['engine_settings']['currency']['display']['show_reference'] = $showReference;
             $settings['engine_settings']['currency']['display']['show_bolivares'] = $showBolivares;

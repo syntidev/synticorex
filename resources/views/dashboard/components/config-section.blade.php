@@ -36,7 +36,8 @@
         'eur' => ['label' => 'Euros (€)',     'icon' => '💶'],
     ];
     $activeBranchList = $branches->where('is_active', true);
-    $savedMode = $tenant->settings['engine_settings']['currency']['display']['saved_display_mode'] ?? 'reference_only';
+    $savedMode     = $tenant->settings['engine_settings']['currency']['display']['saved_display_mode'] ?? 'reference_only';
+    $savedShowEuro  = (bool)($tenant->settings['engine_settings']['currency']['display']['show_euro'] ?? false);
 @endphp
 
             {{-- ══ ROW 1: Tasas BCV (compact bar) ═══════════════ --}}
@@ -217,14 +218,13 @@
                                 </div>
                             </div>
 
-                            {{-- Display mode --}}
-                            <p class="text-[10px] font-bold text-base-content/40 uppercase tracking-wider mb-2">Modo de precio</p>
+                            {{-- SECCIÓN 1: Moneda principal --}}
+                            <p class="text-[10px] font-bold text-base-content/40 uppercase tracking-wider mb-2">Moneda principal</p>
                             <div class="space-y-1.5 mb-4">
                                 @foreach([
                                     'reference_only' => ['Solo Referencia (REF/$)', 'tabler--tag'],
                                     'bolivares_only' => ['Solo Bolívares (Bs.)', 'tabler--bold'],
                                     'both_toggle'    => ['Ambos con toggle (REF/Bs.)', 'tabler--switch-horizontal'],
-                                    'euro_toggle'    => ['Toggle con Euro (REF/€)', 'tabler--currency-euro'],
                                     'hidden'         => ['Ocultar → "Más Info"', 'tabler--eye-off'],
                                 ] as $val => [$label, $icon])
                                 <label class="flex items-center gap-2 cursor-pointer px-2.5 py-2 rounded-lg border transition-all
@@ -237,6 +237,19 @@
                                 </label>
                                 @endforeach
                             </div>
+
+                            {{-- SECCIÓN 2: ¿Mostrar también en Euro? --}}
+                            <p class="text-[10px] font-bold text-base-content/40 uppercase tracking-wider mb-2">Precio en Euro (opcional)</p>
+                            <label class="flex items-center justify-between gap-3 cursor-pointer px-2.5 py-2.5 rounded-lg border transition-all
+                                          {{ $savedShowEuro ? 'bg-info/10 border-info/30' : 'border-base-content/10 hover:border-base-content/20' }} mb-4">
+                                <div class="flex items-center gap-2">
+                                    <span class="iconify tabler--currency-euro size-3.5 {{ $savedShowEuro ? 'text-info' : 'text-base-content/40' }}" aria-hidden="true"></span>
+                                    <span class="text-xs text-base-content">Mostrar botón € / Bs. adicional</span>
+                                </div>
+                                <input type="checkbox" name="show_euro" id="show-euro-check"
+                                       {{ $savedShowEuro ? 'checked' : '' }}
+                                       class="switch switch-info switch-xs">
+                            </label>
 
                             <button type="button" onclick="saveCurrencyConfig()" class="btn btn-primary btn-sm w-full gap-2">
                                 <span class="iconify tabler--device-floppy size-4" aria-hidden="true"></span>

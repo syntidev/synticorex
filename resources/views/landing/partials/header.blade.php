@@ -50,7 +50,7 @@
 
         {{-- Acciones y Moneda --}}
         <div class="flex items-center gap-4">
-            {{-- Switch de Moneda — solo visible cuando el tenant configura "Ambos con toggle" o "euro_toggle" --}}
+            {{-- Toggle Principal (REF ↔ Bs.) — solo si modo = both_toggle --}}
             @php $currencyMode = $savedDisplayMode ?? $displayMode ?? 'reference_only'; @endphp
             @if($currencyMode === 'both_toggle')
             <div id="currency-toggle-btn" class="hidden sm:flex items-center bg-base-200 p-1 rounded-xl border border-base-300">
@@ -65,18 +65,21 @@
                     class="px-3 py-1 text-[10px] font-black rounded-lg transition-all text-base-content/40"
                 >Bs.</button>
             </div>
-            @elseif($currencyMode === 'euro_toggle')
-            <div id="currency-toggle-btn" class="hidden sm:flex items-center bg-base-200 p-1 rounded-xl border border-base-300">
-                <button
-                    onclick="setCurrency('ref')"
-                    data-currency="ref"
-                    class="px-3 py-1 text-[10px] font-black rounded-lg transition-all bg-base-100 shadow-sm text-primary"
-                >{{ $currencySettings['symbols']['reference'] ?? 'REF' }}</button>
+            @endif
+
+            {{-- Toggle Euro (€ ↔ Bs.) — adicional, independiente del toggle principal --}}
+            @if($showEuro ?? false)
+            <div id="euro-toggle-btn" class="hidden sm:flex items-center bg-base-200 p-1 rounded-xl border border-base-300">
                 <button
                     onclick="setCurrency('eur')"
                     data-currency="eur"
-                    class="px-3 py-1 text-[10px] font-black rounded-lg transition-all text-base-content/40"
+                    class="px-3 py-1 text-[10px] font-black rounded-lg transition-all bg-base-100 shadow-sm text-primary"
                 >€</button>
+                <button
+                    onclick="setCurrency('bs_eur')"
+                    data-currency="bs_eur"
+                    class="px-3 py-1 text-[10px] font-black rounded-lg transition-all text-base-content/40"
+                >Bs.</button>
             </div>
             @endif
 
