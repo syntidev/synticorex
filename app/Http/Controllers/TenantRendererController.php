@@ -23,11 +23,26 @@ class TenantRendererController extends Controller
      * @param QRService $qrService
      * @param BusinessHoursService $businessHoursService
      */
+    /** @var array<string, string> Templates disponibles */
+    private const TEMPLATE_MAP = [
+        'synticat' => 'landing.cat',
+    ];
+
     public function __construct(
         private readonly DollarRateService $dollarRateService,
         private readonly QRService $qrService,
         private readonly BusinessHoursService $businessHoursService
     ) {}
+
+    /**
+     * Resolve which Blade view to render based on tenant settings.
+     */
+    private function resolveTemplate(Tenant $tenant): string
+    {
+        $templateKey = data_get($tenant->settings, 'engine_settings.template', 'default');
+
+        return self::TEMPLATE_MAP[$templateKey] ?? 'landing.base';
+    }
 
     /**
      * Render tenant landing page by subdomain.
@@ -144,7 +159,7 @@ class TenantRendererController extends Controller
 
             $schema = $this->buildSchema($tenant);
 
-            return view('landing.base', compact('tenant', 'plan', 'products', 'services', 'dollarRate', 'euroRate', 'themeSlug', 'meta', 'customization', 'currencySettings', 'displayMode', 'savedDisplayMode', 'showReference', 'showBolivares', 'showEuro', 'hidePrice', 'trackingQRSmall', 'trackingShortlink', 'showHoursIndicator', 'isOpen', 'closedMessage', 'blueprint', 'schema'));
+            return view($this->resolveTemplate($tenant), compact('tenant', 'plan', 'products', 'services', 'dollarRate', 'euroRate', 'themeSlug', 'meta', 'customization', 'currencySettings', 'displayMode', 'savedDisplayMode', 'showReference', 'showBolivares', 'showEuro', 'hidePrice', 'trackingQRSmall', 'trackingShortlink', 'showHoursIndicator', 'isOpen', 'closedMessage', 'blueprint', 'schema'));
         } catch (Throwable $e) {
             Log::error('TenantRendererController: Error rendering landing page', [
                 'subdomain' => $subdomain,
@@ -234,7 +249,7 @@ class TenantRendererController extends Controller
                 'tenant_id' => $tenant->id,
             ]);
 
-            return view('landing.base', $viewData);
+            return view($this->resolveTemplate($tenant), $viewData);
         } catch (Throwable $e) {
             Log::error('TenantRendererController: Error rendering by domain', [
                 'domain' => $domain,
@@ -304,7 +319,7 @@ class TenantRendererController extends Controller
                 'tenant_id' => $tenantId,
             ]);
 
-            return view('landing.base', $viewData);
+            return view($this->resolveTemplate($tenant), $viewData);
         } catch (Throwable $e) {
             Log::error('TenantRendererController: Error in preview', [
                 'tenant_id' => $tenantId,
