@@ -161,7 +161,7 @@
                                 <input id="info-city" type="text" class="input input-bordered w-full"
                                        name="city" value="{{ $tenant->city }}" autocomplete="address-level2">
                             </div>
-                            @if($tenant->plan_id >= 2)
+                            @if($tenant->isAtLeastCrecimiento())
                             <div class="form-control">
                                 <label class="label pb-1">
                                     <span class="label-text font-medium text-sm flex items-center gap-1">

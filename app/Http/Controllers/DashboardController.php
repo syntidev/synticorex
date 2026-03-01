@@ -204,7 +204,7 @@ class DashboardController extends Controller
             }
             
             // Contact settings (Plan 2+)
-            if ($tenant->plan_id >= 2) {
+            if ($tenant->isAtLeastCrecimiento()) {
                 if ($request->has('contact_maps_url')) {
                     data_set($settings, 'business_info.contact.maps_url', $validated['contact_maps_url'] ?? '');
                 }
@@ -253,7 +253,7 @@ class DashboardController extends Controller
                 ->where('status', 'active')
                 ->firstOrFail();
 
-            if ($tenant->plan_id < 2) {
+            if (!$tenant->isAtLeastCrecimiento()) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Header Top requiere Plan CRECIMIENTO o superior'
@@ -904,7 +904,7 @@ class DashboardController extends Controller
                 ->where('status', 'active')
                 ->firstOrFail();
 
-            if ((int) $tenant->plan_id !== 3) {
+            if (!$tenant->isVision()) {
                 return response()->json([
                     'success' => false,
                     'message' => 'La sección de sucursales solo está disponible en el Plan Visión'
@@ -944,7 +944,7 @@ class DashboardController extends Controller
                 ->where('status', 'active')
                 ->firstOrFail();
 
-            if ((int) $tenant->plan_id !== 3) {
+            if (!$tenant->isVision()) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Solo disponible en Plan Visión'
@@ -1224,7 +1224,7 @@ class DashboardController extends Controller
                 ->where('status', 'active')
                 ->firstOrFail();
 
-            if ((int) $tenant->plan_id !== 3) {
+            if (!$tenant->isVision()) {
                 return response()->json([
                     'success' => false,
                     'message' => 'La paleta personalizada solo está disponible en el Plan Visión'

@@ -97,7 +97,7 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
 
     {{-- â•â•â• RIGHT: Paleta Personalizada (4/12) â•â•â• --}}
     <div class="lg:col-span-4">
-        @if($tenant->plan_id === 3)
+        @if($tenant->isVision())
         <div class="card bg-base-100 shadow-md border border-base-content/8 card-elevated h-full">
             <div class="card-header px-5 pt-5 pb-3">
                 <div class="flex items-center gap-3">

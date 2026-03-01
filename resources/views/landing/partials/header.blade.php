@@ -1,7 +1,7 @@
 <header id="main-nav" 
         class="fixed top-0 z-[100] w-full border-b border-base-200 bg-base-100"
-        data-has-header-top="{{ $tenant->plan_id >= 2 ? '1' : '0' }}"
-        style="{{ $tenant->plan_id >= 2 ? 'top: 40px;' : 'top: 0px;' }}">
+        data-has-header-top="{{ $tenant->isAtLeastCrecimiento() ? '1' : '0' }}"
+        style="{{ $tenant->isAtLeastCrecimiento() ? 'top: 40px;' : 'top: 0px;' }}">
     <div class="container mx-auto flex items-center justify-between px-6 py-3">
         {{-- Logo Dinámico --}}
         <div class="flex items-center gap-3">

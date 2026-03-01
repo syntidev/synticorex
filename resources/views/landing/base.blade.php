@@ -75,7 +75,7 @@ $effectiveTheme = $customPalette ? 'custom' : $themeSlug;
          SECCIONES FIJAS - SIEMPRE VISIBLES
     ══════════════════════════════════════════════ --}}
 
-    @if($tenant->plan_id >= 2)
+    @if($tenant->isAtLeastCrecimiento())
         {{-- Barra informativa: horario, teléfono, delivery --}}
         @include('landing.partials.header-top')
     @endif
@@ -83,7 +83,7 @@ $effectiveTheme = $customPalette ? 'custom' : $themeSlug;
     @include('landing.partials.header')
 
     {{-- Wrapper que compensa las barras fixed: header-top (40px plan2+) + nav (60px) --}}
-    <div class="{{ $tenant->plan_id >= 2 ? 'pt-[100px]' : 'pt-[60px]' }}">
+    <div class="{{ $tenant->isAtLeastCrecimiento() ? 'pt-[100px]' : 'pt-[60px]' }}">
 
     @php $sConfig = $customization->getSectionConfig('hero'); @endphp
     @include('landing.partials.hero', ['sConfig' => $sConfig])

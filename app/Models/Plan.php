@@ -12,38 +12,35 @@ class Plan extends Model
 {
     use HasFactory;
 
+    /** @var int Plan OPORTUNIDAD (básico) */
+    public const OPORTUNIDAD = 1;
+
+    /** @var int Plan CRECIMIENTO (intermedio) */
+    public const CRECIMIENTO = 2;
+
+    /** @var int Plan VISIÓN (premium) */
+    public const VISION = 3;
+
     /**
      * The attributes that are mass assignable.
      *
-     * @var array<int, string>
-     */
-    protected $fillable = [
-        'slug',
         'name',
-        'price_usd',
-        'products_limit',
-        'services_limit',
-        'images_limit',
-        'color_palettes',
-        'social_networks_limit',
-        'show_dollar_rate',
-        'show_header_top',
-        'show_about_section',
-        'show_payment_methods',
-        'show_faq',
-        'show_cta_special',
-        'analytics_level',
-        'seo_level',
-        'whatsapp_numbers',
-        'whatsapp_hour_filter',
+        'email',
+        'email_verified_at',
+        'password',
+        'remember_token',
     ];
 
     /**
      * The attributes that should be hidden for serialization.
      *
+
      * @var array<int, string>
      */
-    protected $hidden = [];
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
 
     /**
      * Get the attributes that should be cast.

@@ -254,4 +254,20 @@ class Tenant extends Model
 
         return $available;
     }
+
+    /**
+     * Si el tenant tiene Plan CRECIMIENTO o superior (plan_id >= 2).
+     */
+    public function isAtLeastCrecimiento(): bool
+    {
+        return (int) $this->plan_id >= Plan::CRECIMIENTO;
+    }
+
+    /**
+     * Si el tenant tiene Plan VISIÓN (plan_id === 3).
+     */
+    public function isVision(): bool
+    {
+        return (int) $this->plan_id === Plan::VISION;
+    }
 }

@@ -38,7 +38,7 @@
         @endif
 
         {{-- ── Centro: Banner o Delivery ───────────────────── --}}
-        @if($tenant->plan_id === 3 && $bannerText)
+        @if($tenant->isVision() && $bannerText)
             <div class="flex items-center gap-1.5 text-primary font-semibold animate-pulse">
                 <iconify-icon icon="tabler:campaign" width="14" height="14" class="shrink-0"></iconify-icon>
                 <span class="hidden sm:block">{{ $bannerText }}</span>
