@@ -1,0 +1,2147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SYNTIweb · Maquetador v2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bg:#07070f;
+  --panel:#0e0e1a;
+  --panel2:#13131f;
+  --border:#1c1c2e;
+  --accent:#7c6dff;
+  --accent2:#ff6b9d;
+  --text:#dde0f0;
+  --muted:#5a5a7a;
+  --success:#3dd68c;
+  --warn:#f59e0b;
+}
+html,body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);height:100vh;overflow:hidden;display:flex;flex-direction:column;}
+
+/* TOP NAV */
+.topnav{height:48px;background:var(--panel);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 16px;gap:16px;flex-shrink:0;z-index:100;}
+.logo{font-family:'Syne',sans-serif;font-weight:800;font-size:15px;letter-spacing:-0.3px;white-space:nowrap;}
+.logo .s{color:var(--accent);}
+.logo .w{color:var(--accent2);}
+.logo .tag{font-size:10px;font-weight:400;font-family:'Inter',sans-serif;color:var(--muted);margin-left:6px;}
+.nav-divider{width:1px;height:20px;background:var(--border);}
+.theme-pills{display:flex;gap:4px;}
+.theme-pill{background:transparent;border:1px solid var(--border);border-radius:6px;padding:3px 10px;color:var(--muted);cursor:pointer;font-size:11px;font-weight:600;font-family:'Inter',sans-serif;transition:all 0.15s;}
+.theme-pill:hover,.theme-pill.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+.nav-right{margin-left:auto;display:flex;gap:8px;align-items:center;}
+.btn-code{background:rgba(61,214,140,0.1);border:1px solid rgba(61,214,140,0.25);border-radius:6px;padding:5px 14px;color:var(--success);cursor:pointer;font-size:11px;font-weight:700;font-family:'Inter',sans-serif;transition:all 0.15s;display:flex;align-items:center;gap:6px;}
+.btn-code:hover{background:rgba(61,214,140,0.2);}
+.btn-code svg{flex-shrink:0;}
+.section-title-nav{font-size:12px;font-weight:600;color:var(--text);}
+.section-title-nav span{color:var(--muted);font-weight:400;margin-left:4px;font-size:11px;}
+
+/* BODY LAYOUT */
+.body-layout{flex:1;display:flex;overflow:hidden;}
+
+/* SIDEBAR */
+.sidebar{width:260px;min-width:260px;background:var(--panel);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;}
+.sidebar-search{padding:10px 12px;border-bottom:1px solid var(--border);}
+.search-input{width:100%;background:#1a1a2c;border:1px solid var(--border);border-radius:8px;padding:7px 12px;color:var(--text);font-size:12px;font-family:'Inter',sans-serif;outline:none;}
+.search-input::placeholder{color:var(--muted);}
+.sidebar-scroll{flex:1;overflow-y:auto;padding:10px 8px;}
+.sidebar-scroll::-webkit-scrollbar{width:3px;}
+.sidebar-scroll::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+.group-header{font-size:9px;font-weight:700;color:var(--muted);letter-spacing:0.18em;text-transform:uppercase;padding:10px 8px 6px;opacity:0.7;}
+.sec-item{width:100%;background:transparent;border:1px solid transparent;border-radius:9px;padding:8px 10px;color:var(--text);cursor:pointer;text-align:left;font-family:'Inter',sans-serif;margin-bottom:3px;transition:all 0.15s;display:flex;align-items:center;gap:10px;}
+.sec-item:hover{background:rgba(124,109,255,0.07);border-color:rgba(124,109,255,0.2);}
+.sec-item.active{background:rgba(124,109,255,0.14);border-color:var(--accent);}
+.sec-icon{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+.sec-name{font-size:12px;font-weight:600;line-height:1.2;}
+.sec-sub{font-size:10px;color:var(--muted);margin-top:1px;}
+.sec-item.active .sec-sub{color:rgba(124,109,255,0.7);}
+
+/* MAIN */
+.main-area{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+.variant-bar{height:40px;background:var(--panel2);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 12px;gap:8px;flex-shrink:0;overflow-x:auto;}
+.variant-bar::-webkit-scrollbar{height:0;}
+.var-btn{background:transparent;border:1px solid var(--border);border-radius:6px;padding:3px 12px;color:var(--muted);cursor:pointer;font-size:11px;font-weight:600;font-family:'Inter',sans-serif;transition:all 0.15s;white-space:nowrap;flex-shrink:0;}
+.var-btn:hover{border-color:var(--accent);color:var(--accent);}
+.var-btn.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+.preview-wrap{flex:1;overflow:hidden;position:relative;background:#e5e7eb;}
+.preview-iframe{width:100%;height:100%;border:none;display:block;}
+.preview-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:12px;background:#f3f4f6;}
+.preview-empty .big-arrow{font-size:56px;animation:bounce 2s infinite;}
+.preview-empty h2{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:#1e1e3a;text-align:center;}
+.preview-empty p{font-size:13px;color:#888;text-align:center;max-width:320px;line-height:1.6;}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+
+/* RIGHT PANEL */
+.right-panel{width:260px;min-width:260px;background:var(--panel);border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;}
+.rp-tabs{display:flex;border-bottom:1px solid var(--border);}
+.rp-tab{flex:1;background:transparent;border:none;padding:10px 4px;color:var(--muted);cursor:pointer;font-size:11px;font-weight:600;font-family:'Inter',sans-serif;transition:all 0.15s;border-bottom:2px solid transparent;}
+.rp-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+.rp-body{flex:1;overflow-y:auto;padding:14px 12px;}
+.rp-body::-webkit-scrollbar{width:3px;}
+.rp-body::-webkit-scrollbar-thumb{background:var(--border);}
+
+/* Options */
+.opt-group{margin-bottom:18px;}
+.opt-group-label{font-size:9px;font-weight:700;color:var(--muted);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:8px;}
+.opt-row{margin-bottom:8px;}
+.opt-row label{font-size:11px;color:var(--muted);display:block;margin-bottom:3px;}
+.opt-input{width:100%;background:#161624;border:1px solid var(--border);border-radius:7px;padding:7px 10px;color:var(--text);font-size:12px;font-family:'Inter',sans-serif;outline:none;transition:border-color 0.15s;}
+.opt-input:focus{border-color:var(--accent);}
+.opt-select{width:100%;background:#161624;border:1px solid var(--border);border-radius:7px;padding:7px 10px;color:var(--text);font-size:12px;font-family:'Inter',sans-serif;outline:none;}
+.img-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:6px;}
+.img-btn{background:#161624;border:1px solid var(--border);border-radius:6px;padding:6px 4px;cursor:pointer;font-size:10px;color:var(--muted);font-family:'Inter',sans-serif;transition:all 0.15s;text-align:center;}
+.img-btn:hover,.img-btn.sel{border-color:var(--accent);color:var(--accent);}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:6px 0;}
+.toggle-label-txt{font-size:12px;color:var(--text);}
+.toggle{position:relative;width:34px;height:18px;}
+.toggle input{opacity:0;width:0;height:0;}
+.tslider{position:absolute;cursor:pointer;inset:0;background:#2a2a40;border-radius:18px;transition:0.2s;}
+.tslider:before{position:absolute;content:"";height:12px;width:12px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:0.2s;}
+.toggle input:checked+.tslider{background:var(--accent);}
+.toggle input:checked+.tslider:before{transform:translateX(16px);}
+
+/* Info tab */
+.info-badge{display:inline-flex;align-items:center;gap:4px;border-radius:6px;padding:3px 8px;font-size:10px;font-weight:700;margin-bottom:6px;}
+.badge-ready{background:rgba(61,214,140,0.1);color:var(--success);}
+.badge-tenant{background:rgba(124,109,255,0.1);color:var(--accent);}
+.badge-mkt{background:rgba(255,107,157,0.1);color:var(--accent2);}
+.info-file{font-family:'Menlo',monospace;font-size:11px;color:var(--accent);background:rgba(124,109,255,0.08);padding:4px 8px;border-radius:5px;display:block;margin-bottom:10px;}
+.info-text{font-size:11px;color:var(--muted);line-height:1.6;}
+.tip-card{background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.2);border-radius:8px;padding:10px;margin-bottom:12px;}
+.tip-card .tip-t{font-size:10px;font-weight:700;color:var(--warn);margin-bottom:4px;}
+.tip-card p{font-size:11px;color:var(--muted);line-height:1.55;}
+
+/* CODE MODAL */
+.code-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:9999;align-items:center;justify-content:center;}
+.code-modal.open{display:flex;}
+.code-box{background:#0e0e1a;border:1px solid var(--border);border-radius:16px;width:92%;max-width:860px;max-height:88vh;display:flex;flex-direction:column;}
+.code-box-head{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.code-box-head h3{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;}
+.code-box-actions{display:flex;gap:8px;align-items:center;}
+.btn-copy-modal{background:rgba(61,214,140,0.12);border:1px solid rgba(61,214,140,0.25);border-radius:6px;padding:5px 14px;color:var(--success);cursor:pointer;font-size:11px;font-weight:700;font-family:'Inter',sans-serif;}
+.btn-close{background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:18px;line-height:1;padding:2px 6px;}
+.code-pre-wrap{flex:1;overflow-y:auto;padding:18px;}
+.code-pre-wrap pre{font-family:'Menlo','Courier New',monospace;font-size:12px;line-height:1.75;color:#98d4a3;white-space:pre-wrap;word-break:break-word;}
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="topnav">
+  <div class="logo"><span class="s">SYNTI</span><span class="w">web</span> <span class="tag">Maquetador v2</span></div>
+  <div class="nav-divider"></div>
+  <div id="topnav-title" class="section-title-nav">Selecciona una sección <span>← panel izquierdo</span></div>
+  <div class="nav-right">
+    <div id="assets-status" style="font-size:10px;padding:3px 10px;border-radius:5px;background:rgba(245,158,11,0.12);color:#f59e0b;border:1px solid rgba(245,158,11,0.2);white-space:nowrap;">⏳ Verificando assets...</div>
+    <div class="nav-divider"></div>
+    <div style="font-size:10px;color:var(--muted);">Tema:</div>
+    <div class="theme-pills">
+      <button class="theme-pill active" onclick="setTheme('light',this)">☀️ Light</button>
+      <button class="theme-pill" onclick="setTheme('dark',this)">🌙 Dark</button>
+      <button class="theme-pill" onclick="setTheme('dracula',this)">🧛 Dracula</button>
+      <button class="theme-pill" onclick="setTheme('corporate',this)">🏢 Corp</button>
+      <button class="theme-pill" onclick="setTheme('retro',this)">🎮 Retro</button>
+    </div>
+    <div class="nav-divider"></div>
+    <button class="btn-code" id="btn-show-code" onclick="showCode()" style="display:none;">
+      <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+      Blade
+    </button>
+  </div>
+</nav>
+
+<!-- BODY -->
+<div class="body-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-search">
+      <input class="search-input" placeholder="🔍 Buscar sección..." oninput="filterSections(this.value)">
+    </div>
+    <div class="sidebar-scroll" id="sidebar-list">
+
+      <div class="group-header" data-group>🦸 HERO / BANNER</div>
+
+      <button class="sec-item" data-key="hero-fullscreen" onclick="loadSec(this,'hero-fullscreen')">
+        <div class="sec-icon" style="background:rgba(124,109,255,0.15);">🖼️</div>
+        <div><div class="sec-name">Fullscreen</div><div class="sec-sub">Imagen fondo · 3 estilos</div></div>
+      </button>
+      <button class="sec-item" data-key="hero-split" onclick="loadSec(this,'hero-split')">
+        <div class="sec-icon" style="background:rgba(255,107,157,0.15);">◧</div>
+        <div><div class="sec-name">Split 50/50</div><div class="sec-sub">Texto · imagen lateral</div></div>
+      </button>
+      <button class="sec-item" data-key="hero-gradient" onclick="loadSec(this,'hero-gradient')">
+        <div class="sec-icon" style="background:rgba(61,214,140,0.15);">✨</div>
+        <div><div class="sec-name">Gradient Animado</div><div class="sec-sub">Desde tu blade hero-gradient</div></div>
+      </button>
+      <button class="sec-item" data-key="hero-magazine" onclick="loadSec(this,'hero-magazine')">
+        <div class="sec-icon" style="background:rgba(251,191,36,0.15);">📰</div>
+        <div><div class="sec-name">Magazine</div><div class="sec-sub">Editorial · tipografía XL</div></div>
+      </button>
+      <button class="sec-item" data-key="hero-particles" onclick="loadSec(this,'hero-particles')">
+        <div class="sec-icon" style="background:rgba(168,85,247,0.15);">🌌</div>
+        <div><div class="sec-name">Particles + Geo</div><div class="sec-sub">Partículas · formas animadas</div></div>
+      </button>
+
+      <div class="group-header" data-group>📣 CTA BANNERS</div>
+
+      <button class="sec-item" data-key="cta-gradient-border" onclick="loadSec(this,'cta-gradient-border')">
+        <div class="sec-icon" style="background:rgba(239,68,68,0.15);">🎯</div>
+        <div><div class="sec-name">CTA Gradient Border</div><div class="sec-sub">Borde animado · desde REFERENCE</div></div>
+      </button>
+      <button class="sec-item" data-key="cta-split" onclick="loadSec(this,'cta-split')">
+        <div class="sec-icon" style="background:rgba(234,88,12,0.15);">🔥</div>
+        <div><div class="sec-name">CTA Split</div><div class="sec-sub">Texto izq · Botones der</div></div>
+      </button>
+      <button class="sec-item" data-key="cta-card" onclick="loadSec(this,'cta-card')">
+        <div class="sec-icon" style="background:rgba(124,58,237,0.15);">💳</div>
+        <div><div class="sec-name">CTA Card</div><div class="sec-sub">Card elevada · glow</div></div>
+      </button>
+
+      <div class="group-header" data-group>🎴 PRODUCTOS</div>
+
+      <button class="sec-item" data-key="products-grid" onclick="loadSec(this,'products-grid')">
+        <div class="sec-icon" style="background:rgba(16,185,129,0.15);">🛍️</div>
+        <div><div class="sec-name">Grid de Productos</div><div class="sec-sub">3 cols · hover card-border</div></div>
+      </button>
+      <button class="sec-item" data-key="products-masonry" onclick="loadSec(this,'products-masonry')">
+        <div class="sec-icon" style="background:rgba(59,130,246,0.15);">🎲</div>
+        <div><div class="sec-name">Masonry Mix</div><div class="sec-sub">Tamaños variables · featured</div></div>
+      </button>
+
+      <div class="group-header" data-group>⭐ TESTIMONIOS</div>
+
+      <button class="sec-item" data-key="testimonials-carousel" onclick="loadSec(this,'testimonials-carousel')">
+        <div class="sec-icon" style="background:rgba(245,158,11,0.15);">💬</div>
+        <div><div class="sec-name">Carousel</div><div class="sec-sub">FlyonUI carousel · flechas</div></div>
+      </button>
+      <button class="sec-item" data-key="testimonials-wall" onclick="loadSec(this,'testimonials-wall')">
+        <div class="sec-icon" style="background:rgba(20,184,166,0.15);">❝</div>
+        <div><div class="sec-name">Wall de Reviews</div><div class="sec-sub">Grid 3 cols · avatars</div></div>
+      </button>
+
+      <div class="group-header" data-group>🔧 SERVICIOS</div>
+
+      <button class="sec-item" data-key="services-dark" onclick="loadSec(this,'services-dark')">
+        <div class="sec-icon" style="background:rgba(99,102,241,0.15);">⚙️</div>
+        <div><div class="sec-name">Dark + Iconos</div><div class="sec-sub">bg-base-content · cards</div></div>
+      </button>
+      <button class="sec-item" data-key="services-split" onclick="loadSec(this,'services-split')">
+        <div class="sec-icon" style="background:rgba(236,72,153,0.15);">📋</div>
+        <div><div class="sec-name">Split Imagen</div><div class="sec-sub">Imagen + lista checkmark</div></div>
+      </button>
+
+      <div class="group-header" data-group>📐 DECORACIONES</div>
+
+      <button class="sec-item" data-key="deco-grid3d" onclick="loadSec(this,'deco-grid3d')">
+        <div class="sec-icon" style="background:rgba(168,85,247,0.15);">▦</div>
+        <div><div class="sec-name">Grid 3D Perspectiva</div><div class="sec-sub">Malla animada · dark</div></div>
+      </button>
+      <button class="sec-item" data-key="deco-blobs" onclick="loadSec(this,'deco-blobs')">
+        <div class="sec-icon" style="background:rgba(16,185,129,0.15);">🫧</div>
+        <div><div class="sec-name">Blobs + Partículas</div><div class="sec-sub">Formas orgánicas visibles</div></div>
+      </button>
+      <button class="sec-item" data-key="deco-geo" onclick="loadSec(this,'deco-geo')">
+        <div class="sec-icon" style="background:rgba(251,191,36,0.15);">◆</div>
+        <div><div class="sec-name">Geometría Pura</div><div class="sec-sub">Líneas · hexágonos · diagonales</div></div>
+      </button>
+      <button class="sec-item" data-key="deco-noise" onclick="loadSec(this,'deco-noise')">
+        <div class="sec-icon" style="background:rgba(239,68,68,0.15);">🌀</div>
+        <div><div class="sec-name">Noise + Grain</div><div class="sec-sub">Textura · depth effect</div></div>
+      </button>
+
+      <div class="group-header" data-group>📄 ABOUT / ABOUT-US</div>
+
+      <button class="sec-item" data-key="about-split" onclick="loadSec(this,'about-split')">
+        <div class="sec-icon" style="background:rgba(59,130,246,0.15);">ℹ️</div>
+        <div><div class="sec-name">About Split</div><div class="sec-sub">Imagen + stats overlay</div></div>
+      </button>
+
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main-area">
+    <div class="variant-bar" id="variant-bar">
+      <span style="font-size:11px;color:var(--muted);">← Elige una sección para ver variantes</span>
+    </div>
+    <div class="preview-wrap">
+      <div class="preview-empty" id="preview-empty">
+        <div class="big-arrow">👈</div>
+        <h2>Tu estudio de diseño</h2>
+        <p>Selecciona cualquier sección del panel izquierdo. Cada una tiene variantes con efectos mezclados: gradientes, geometría, partículas, blur, ondas...</p>
+      </div>
+      <iframe id="preview-frame" class="preview-iframe" style="display:none;"></iframe>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="right-panel">
+    <div class="rp-tabs">
+      <button class="rp-tab active" onclick="switchTab('options',this)">⚙️ Opciones</button>
+      <button class="rp-tab" onclick="switchTab('info',this)">📂 Info</button>
+    </div>
+    <div class="rp-body" id="rp-options">
+      <div style="color:var(--muted);font-size:12px;text-align:center;padding:24px 0;line-height:1.7;">Las opciones de contenido<br>aparecerán aquí</div>
+    </div>
+    <div class="rp-body" id="rp-info" style="display:none;">
+      <div style="color:var(--muted);font-size:12px;text-align:center;padding:24px 0;">Selecciona una sección</div>
+    </div>
+  </div>
+</div>
+
+<!-- CODE MODAL -->
+<div class="code-modal" id="code-modal">
+  <div class="code-box">
+    <div class="code-box-head">
+      <h3 id="modal-title">Código Blade</h3>
+      <div class="code-box-actions">
+        <button class="btn-copy-modal" onclick="copyBlade()" id="copy-btn">📋 Copiar</button>
+        <button class="btn-close" onclick="document.getElementById('code-modal').classList.remove('open')">✕</button>
+      </div>
+    </div>
+    <div class="code-pre-wrap">
+      <pre id="code-output"></pre>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// VERIFICACIÓN DE ASSETS
+// Si ves ✅ verde = FlyonUI cargado, las previsualizaciones funcionan
+// Si ves ❌ rojo  = mover el archivo al root del proyecto
+// ============================================================
+window.addEventListener('load', () => {
+  const el = document.getElementById('assets-status');
+  fetch('assets/dist/css/output.css', { method: 'HEAD' })
+    .then(r => {
+      if (r.ok) {
+        el.textContent = '✅ FlyonUI cargado';
+        el.style.background = 'rgba(61,214,140,0.12)';
+        el.style.color = '#3dd68c';
+        el.style.borderColor = 'rgba(61,214,140,0.25)';
+      } else { showError(el); }
+    })
+    .catch(() => showError(el));
+});
+function showError(el) {
+  el.innerHTML = '❌ assets/ no encontrado &nbsp;<b>→ ver instrucciones</b>';
+  el.style.background = 'rgba(239,68,68,0.12)';
+  el.style.color = '#ef4444';
+  el.style.borderColor = 'rgba(239,68,68,0.25)';
+  el.style.cursor = 'pointer';
+  el.onclick = () => alert(
+    'INSTRUCCIÓN:\n\n' +
+    'Este archivo debe estar en:\n' +
+    'flyonui-free-landing-page/syntiweb-maquetador.html\n\n' +
+    'Es decir, en la misma carpeta que:\n' +
+    '  - index.html\n' +
+    '  - hire-us.html\n' +
+    '  - la carpeta assets/\n\n' +
+    'NO dentro de html/'
+  );
+}
+
+
+let currentSec = null;
+let currentVar = 0;
+let currentTheme = 'light';
+let opts = {
+  business: 'Mi Negocio VE',
+  slogan: 'Calidad que se siente,\nservicio que se recuerda',
+  desc: 'Llevamos años ofreciendo los mejores productos de Venezuela con atención personalizada y precios justos para tu comunidad.',
+  whatsapp: '04141234567',
+  img: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&q=80',
+  showBadge: true,
+  showStats: true,
+  showWave: true,
+  showGeo: true,
+};
+
+// ============================================================
+// PATHS — maquetador vive en el ROOT del proyecto
+// C:\laragon\www\synticorex\reference\flyonui-free-landing-page\
+// assets/ está al mismo nivel que este archivo ✅
+// ============================================================
+
+// ============================================================
+// IFRAME WRAPPER — Blob URL con base href apuntando al root
+// ============================================================
+let _lastBlobUrl = null;
+
+function iframeDoc(body, extraHead='') {
+  // Calcula la ruta base exacta del documento actual (el root)
+  const baseHref = window.location.href.replace(/[^\/]*$/, '');
+
+  const html = `<!DOCTYPE html>
+<html lang="es" data-theme="${currentTheme}">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<base href="${baseHref}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/dist/libs/flatpickr/dist/flatpickr.css">
+<link rel="stylesheet" href="assets/dist/css/output.css">
+${extraHead}
+<style>
+*{box-sizing:border-box;}
+body { font-family: 'Inter', sans-serif; margin:0; }
+@keyframes gradient-xy {
+  0%,100%{background-position:0% 0%;}
+  25%{background-position:100% 0%;}
+  50%{background-position:100% 100%;}
+  75%{background-position:0% 100%;}
+}
+@keyframes float {
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-20px);}
+}
+@keyframes float2 {
+  0%,100%{transform:translateY(0) rotate(0deg);}
+  50%{transform:translateY(-12px) rotate(8deg);}
+}
+@keyframes pulse-ring {
+  0%{transform:scale(1);opacity:0.4;}
+  100%{transform:scale(1.8);opacity:0;}
+}
+@keyframes spin-slow { to{transform:rotate(360deg);} }
+@keyframes particle-drift {
+  0%{transform:translateY(0) translateX(0);}
+  33%{transform:translateY(-30px) translateX(15px);}
+  66%{transform:translateY(-10px) translateX(-20px);}
+  100%{transform:translateY(0) translateX(0);}
+}
+.anim-gradient-xy { background-size:400% 400%; animation:gradient-xy 12s ease infinite; }
+.anim-float { animation:float 6s ease-in-out infinite; }
+.anim-float2 { animation:float2 8s ease-in-out infinite; }
+.anim-spin { animation:spin-slow 20s linear infinite; }
+.particle { animation:particle-drift var(--dur,6s) ease-in-out infinite; animation-delay:var(--delay,0s); }
+</style>
+</head>
+<body class="bg-base-100">
+${body}
+<script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js" defer><\/script>
+<script src="assets/dist/libs/tailwindcss-intersect/dist/observer.min.js" defer><\/script>
+<script src="assets/dist/libs/flyonui/flyonui.js"><\/script>
+</body>
+</html>`;
+
+  const blob = new Blob([html], { type: 'text/html' });
+  return URL.createObjectURL(blob);
+}
+}
+
+// ============================================================
+// SECTIONS
+// ============================================================
+const SECTIONS = {
+
+  // ── HERO FULLSCREEN ─────────────────────────────────────────
+  'hero-fullscreen': {
+    name:'Hero Fullscreen', cat:'tenant',
+    file:'hero-fullscreen-v2_blade.php',
+    variants:['Original FlyonUI + SVG underline','Dark overlay + geo circles','Overlay suave + onda inferior + blur card'],
+    info:'Replica exacta de tu blade hero-fullscreen-v2. Imagen de fondo con overlay, badge, título con SVG underline y CTA.',
+    render:(v)=>{
+      const base = `
+<section id="home">
+  <div class="flex h-full flex-col justify-between bg-cover bg-center bg-no-repeat py-8 pt-40 sm:py-16 lg:py-24 lg:pt-48 gap-18 lg:gap-36"
+       style="background-image:linear-gradient(rgba(0,0,0,${v===1?'0.55':'0.38'}),rgba(0,0,0,${v===1?'0.55':'0.38'})),url('${opts.img}');">
+
+    ${v===1?`
+    <!-- GEO CIRCLES visibles -->
+    <div class="absolute top-8 left-8 w-48 h-48 border-2 border-white/20 rounded-full pointer-events-none"></div>
+    <div class="absolute top-16 left-16 w-32 h-32 border border-white/10 rounded-full pointer-events-none"></div>
+    <div class="absolute bottom-20 right-12 w-64 h-64 border-2 border-white/15 rounded-full pointer-events-none"></div>
+    <div class="absolute bottom-8 right-4 w-96 h-96 border border-white/08 rounded-full pointer-events-none"></div>
+    `:''}
+
+    <div class="mx-auto flex max-w-7xl flex-col items-center gap-6 justify-self-center px-4 text-center sm:px-6 lg:px-8 relative z-10">
+
+      ${opts.showBadge?`<div class="bg-base-200/20 backdrop-blur-sm border border-white/20 w-fit rounded-full px-3 py-1 text-white">
+        <span>🎉 Sirviendo con calidad desde 2018</span></div>`:''}
+
+      <h1 class="text-white z-1 relative text-5xl font-bold leading-[1.15] max-md:text-2xl md:max-w-3xl">
+        <span>${opts.slogan.replace(/\n/,'<br>')}</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="348" height="10" viewBox="0 0 348 10" fill="none" class="absolute -bottom-1.5 left-0 w-full max-md:hidden">
+          <path d="M1.85645 8.23715C62.4821 3.49284 119.04 1.88864 180.031 1.88864C225.103 1.88864 275.146 1.32978 319.673 4.85546C328.6 5.24983 336.734 6.33887 346.695 7.60269" stroke="url(#svgu)" stroke-width="2.5" stroke-linecap="round"/>
+          <defs><linearGradient id="svgu" x1="0" y1="0" x2="348" y2="0" gradientUnits="userSpaceOnUse">
+            <stop stop-color="var(--color-primary)"/><stop offset="1" stop-color="var(--color-secondary)"/>
+          </linearGradient></defs>
+        </svg>
+      </h1>
+
+      <p class="text-white/80 max-w-2xl">${opts.desc}</p>
+
+      ${v===2?`
+      <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 max-w-lg text-left text-white/90 text-sm leading-relaxed">
+        ✨ ${opts.desc.substring(0,100)}...
+      </div>`:''}
+
+      <a href="https://wa.me/${opts.whatsapp}" class="btn btn-primary btn-gradient btn-lg">
+        Contactar por WhatsApp
+        <iconify-icon icon="tabler:arrow-right" class="size-5"></iconify-icon>
+      </a>
+    </div>
+
+    ${opts.showWave && v!==1?`
+    <svg viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full">
+      <path d="M0,40L60,45C120,50,240,60,360,55C480,50,600,30,720,28C840,26,960,36,1080,40C1200,44,1320,40,1380,38L1440,36L1440,80L0,80Z" fill="var(--color-base-100)"/>
+    </svg>`:'<div class="h-20"></div>'}
+  </div>
+</section>`;
+      return iframeDoc(base);
+    },
+    code:(v)=>`{{-- Hero Fullscreen v2 — Variante ${v+1} --}}
+{{-- Archivo: resources/views/landing/partials/hero-fullscreen-v2.blade.php --}}
+<section id="home">
+    <div class="gap-18 md:pt-45 lg:gap-35 lg:pt-47.5 flex h-full flex-col justify-between bg-cover bg-center bg-no-repeat py-8 pt-40 sm:py-16 md:gap-24 lg:py-24"
+         @if($customization->hero_main_filename)
+         style="background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)), url('{{ asset('storage/tenants/'.$tenant->id.'/'.$customization->hero_main_filename) }}');"
+         @else
+         style="background-image: linear-gradient(rgba(0,0,0,0.35),rgba(0,0,0,0.35)), url('https://images.unsplash.com/photo-1552664730-d307ca884978?w=1920&q=80');"
+         @endif>
+        <div class="mx-auto flex max-w-7xl flex-col items-center gap-6 px-4 text-center sm:px-6 lg:px-8">
+            @if($tenant->created_at)
+            <div class="bg-base-200/20 backdrop-blur-sm border border-white/20 w-fit rounded-full border px-3 py-1 text-white">
+                <span>🎉 {{ $tenant->tagline ?? 'Sirviendo con calidad desde '.$tenant->created_at->format('Y') }}</span>
+            </div>
+            @endif
+            <h1 class="text-white z-1 relative text-5xl font-bold leading-[1.15] max-md:text-2xl md:max-w-3xl">
+                <span>{!! nl2br(e($tenant->slogan ?? $tenant->business_name)) !!}</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="348" height="10" viewBox="0 0 348 10" fill="none" class="-z-1 left-25 absolute -bottom-1.5 max-lg:left-4 max-md:hidden">
+                    <path d="M1.85645 8.23715C62.4821 3.49284 119.04 1.88864 180.031 1.88864C225.103 1.88864 275.146 1.32978 319.673 4.85546C328.6 5.24983 336.734 6.33887 346.695 7.60269" stroke="url(#svgul)" stroke-width="2" stroke-linecap="round"/>
+                    <defs><linearGradient id="svgul" x1="29.7873" y1="1.85626" x2="45.2975" y2="69.7387" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="var(--color-primary)"/><stop offset="1" stop-color="var(--color-primary-content)"/>
+                    </linearGradient></defs>
+                </svg>
+            </h1>
+            <p class="text-white/80 max-w-2xl">{{ Str::limit($customization->about_text ?? $tenant->description, 200) }}</p>
+            <a href="https://wa.me/{{ $tenant->whatsapp }}" class="btn btn-primary btn-gradient btn-lg">
+                Contactar por WhatsApp
+                <span class="iconify tabler--arrow-right size-5"></span>
+            </a>
+        </div>
+        {{-- Onda inferior decorativa --}}
+        <svg viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full">
+            <path d="M0,40L60,45C120,50,240,60,360,55C480,50,600,30,720,28C840,26,960,36,1080,40C1200,44,1320,40,1380,38L1440,36L1440,80L0,80Z" fill="var(--color-base-100)"/>
+        </svg>
+    </div>
+</section>`,
+  },
+
+  // ── HERO SPLIT ──────────────────────────────────────────────
+  'hero-split': {
+    name:'Hero Split 50/50', cat:'tenant',
+    file:'hero-split-v2_blade.php',
+    variants:['Imagen derecha + estadísticas','Imagen izquierda + blur card','Diagonal clip-path'],
+    info:'Tu blade hero-split-v2. Layout grid 2 cols, imagen con rotación, badge y CTAs.',
+    render:(v)=>{
+      const imgRight = v !== 1;
+      const stats = `
+<div class="flex gap-8 pt-6 border-t border-base-content/10">
+  <div><div class="text-3xl font-black text-primary">10+</div><div class="text-xs text-base-content/50">Años</div></div>
+  <div><div class="text-3xl font-black text-primary">500+</div><div class="text-xs text-base-content/50">Clientes</div></div>
+  <div><div class="text-3xl font-black text-primary">24/7</div><div class="text-xs text-base-content/50">Soporte</div></div>
+</div>`;
+      const imgBlock = `
+<div class="relative ${v===2?'':''}">
+  ${v===2?`<div class="absolute -inset-4 bg-gradient-to-br from-primary/20 to-secondary/10 rounded-3xl -z-10 blur-xl"></div>`:''}
+  <div class="relative rounded-3xl overflow-hidden shadow-2xl ${v===1?'':'rotate-2 hover:rotate-0 transition-transform duration-500'}">
+    <img src="${opts.img}" alt="hero" class="w-full h-[480px] object-cover">
+    ${v===0?`<div class="absolute top-4 right-4 bg-base-100 rounded-xl px-4 py-2 shadow-lg text-sm font-bold flex items-center gap-2">
+      <span class="w-2 h-2 bg-success rounded-full animate-pulse"></span> Abierto ahora
+    </div>`:''}
+    ${v===1?`<div class="absolute inset-0 bg-gradient-to-t from-base-content/30 to-transparent"></div>`:''}
+  </div>
+  ${v===2?`
+  <div class="absolute -bottom-6 -left-6 w-24 h-24 bg-primary/20 rounded-full blur-2xl pointer-events-none"></div>
+  <div class="absolute -top-4 -right-4 w-32 h-32 border-2 border-primary/30 rounded-full pointer-events-none anim-spin"></div>
+  `:''}
+</div>`;
+      const textBlock = `
+<div class="space-y-6">
+  ${opts.showBadge?`<span class="badge badge-primary badge-lg">🎉 Desde 2018</span>`:''}
+  <h1 class="text-4xl lg:text-6xl font-bold text-base-content leading-tight">
+    ${opts.slogan.replace(/\n/,'<br>')}
+  </h1>
+  <p class="text-lg text-base-content/70 max-w-xl">${opts.desc}</p>
+  <div class="flex flex-wrap gap-4">
+    <a href="https://wa.me/${opts.whatsapp}" class="btn btn-primary btn-gradient btn-lg">
+      <iconify-icon icon="tabler:brand-whatsapp" class="size-5"></iconify-icon> WhatsApp
+    </a>
+    <a href="#about" class="btn btn-outline btn-primary btn-lg">Ver más</a>
+  </div>
+  ${opts.showStats?stats:''}
+</div>`;
+      const body = `
+<section class="relative min-h-screen bg-base-200 flex items-center overflow-hidden">
+  ${v===2?`
+  <!-- DIAGONAL DECO -->
+  <div class="absolute top-0 right-0 w-1/2 h-full bg-primary/5 clip-diagonal pointer-events-none" style="clip-path:polygon(20% 0,100% 0,100% 100%,0% 100%)"></div>
+  <div class="absolute top-0 right-0 w-1/3 h-full bg-primary/8 pointer-events-none" style="clip-path:polygon(40% 0,100% 0,100% 100%,20% 100%)"></div>
+  `:''}
+  <div class="container mx-auto px-4 py-16 lg:py-24">
+    <div class="grid lg:grid-cols-2 gap-16 items-center">
+      ${imgRight ? `${textBlock}${imgBlock}` : `${imgBlock}${textBlock}`}
+    </div>
+  </div>
+</section>`;
+      return iframeDoc(body);
+    },
+    code:(v)=>`{{-- Hero Split v2 — Variante ${v+1} --}}
+{{-- Archivo: hero-split-v2.blade.php --}}
+<section id="home" class="relative min-h-screen bg-base-200 flex items-center">
+    <div class="container mx-auto px-4 py-16 lg:py-24">
+        <div class="grid lg:grid-cols-2 gap-12 items-center">
+            <div class="space-y-6 max-lg:text-center">
+                @if($tenant->tagline)
+                <span class="badge badge-primary badge-lg">{{ $tenant->tagline }}</span>
+                @endif
+                <h1 class="text-4xl lg:text-6xl font-bold text-base-content leading-tight">
+                    {!! nl2br(e($tenant->slogan ?? $tenant->business_name)) !!}
+                </h1>
+                <p class="text-lg text-base-content/70">
+                    {{ Str::limit($customization->about_text ?? $tenant->description, 250) }}
+                </p>
+                <div class="flex flex-wrap gap-4 max-lg:justify-center">
+                    @if($tenant->whatsapp)
+                    <a href="https://wa.me/{{ $tenant->whatsapp }}" class="btn btn-primary btn-gradient btn-lg">
+                        <span class="iconify tabler--brand-whatsapp size-5"></span>
+                        WhatsApp
+                    </a>
+                    @endif
+                    <a href="#about" class="btn btn-outline btn-primary btn-lg">Ver más</a>
+                </div>
+            </div>
+            <div class="relative">
+                <img src="{{ $customization->hero_main_filename
+                    ? asset('storage/tenants/'.$tenant->id.'/'.$customization->hero_main_filename)
+                    : 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200' }}"
+                     class="w-full h-[480px] object-cover rounded-3xl shadow-2xl rotate-2 hover:rotate-0 transition-transform duration-500">
+            </div>
+        </div>
+    </div>
+</section>`,
+  },
+
+  // ── HERO GRADIENT ────────────────────────────────────────────
+  'hero-gradient': {
+    name:'Hero Gradient Animado', cat:'tenant',
+    file:'hero-gradient-v2_blade.php',
+    variants:['Original desde tu blade','Dark + partículas flotantes','Neon glow + hexágonos'],
+    info:'Tu blade hero-gradient-v2 completo. Fondo animado from-primary via-secondary to-accent. Imagen flotante animada.',
+    render:(v)=>{
+      const particles = Array.from({length:12},(_,i)=>`
+<div class="particle absolute rounded-full bg-white/20"
+     style="width:${4+Math.random()*8|0}px;height:${4+Math.random()*8|0}px;top:${Math.random()*90|0}%;left:${Math.random()*90|0}%;--dur:${5+Math.random()*4|0}s;--delay:-${Math.random()*4|0}s;"></div>`).join('');
+      const hexBg = `<div class="absolute inset-0 opacity-15 pointer-events-none" style="background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2252%22%3E%3Cpolygon points=%2230,0 60,15 60,37 30,52 0,37 0,15%22 fill=%22none%22 stroke=%22white%22 stroke-width=%221%22/%3E%3C/svg%3E');background-size:60px 52px;"></div>`;
+      const dotPattern = `<div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image:url('data:image/svg+xml,%3Csvg width=%2260%22 height=%2260%22 viewBox=%220 0 60 60%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cg fill=%22none%22 fill-rule=%22evenodd%22%3E%3Cg fill=%22%23ffffff%22 fill-opacity=%220.4%22%3E%3Cpath d=%22M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');background-size:60px 60px;"></div>`;
+      const gradients = [
+        'from-primary via-secondary to-accent',
+        'from-base-content via-primary/80 to-base-content',
+        'from-violet-600 via-primary to-cyan-500'
+      ];
+      const neonGlow = v===2?`<div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse 80% 60% at 50% 0%,var(--color-primary)/30,transparent)"></div>`:'';
+      const body = `
+<section class="relative min-h-screen overflow-hidden">
+  <div class="absolute inset-0 bg-gradient-to-br ${gradients[v]} anim-gradient-xy"></div>
+  <div class="absolute inset-0 bg-base-content/15"></div>
+  ${v===0?dotPattern:''}
+  ${v===1?particles:''}
+  ${v===2?hexBg:''}
+  ${neonGlow}
+  <div class="relative container mx-auto px-4 py-16 lg:py-24 min-h-screen flex items-center">
+    <div class="grid lg:grid-cols-2 gap-12 items-center w-full">
+      <div class="space-y-8 text-base-100 relative z-10">
+        ${opts.showBadge?`<div class="inline-block">
+          <span class="badge badge-lg bg-base-100/20 backdrop-blur-sm text-base-100 border-base-100/30">
+            ✨ ${opts.business}
+          </span>
+        </div>`:''}
+        <h1 class="text-5xl lg:text-7xl font-bold leading-tight drop-shadow-2xl">
+          ${opts.slogan.replace(/\n/,'<br>')}
+        </h1>
+        <p class="text-xl text-base-100/90 max-w-xl backdrop-blur-sm bg-base-content/10 rounded-2xl p-4">
+          ${opts.desc}
+        </p>
+        <div class="flex flex-wrap gap-4">
+          <a href="https://wa.me/${opts.whatsapp}" class="btn btn-lg bg-base-100 text-primary hover:bg-base-100/90 border-0 shadow-2xl">
+            <iconify-icon icon="tabler:brand-whatsapp" class="size-6"></iconify-icon>
+            Contactar Ahora
+          </a>
+          <a href="#about" class="btn btn-lg bg-base-100/10 backdrop-blur-sm text-base-100 border-base-100/30 hover:bg-base-100/20">
+            Descubrir Más <iconify-icon icon="tabler:arrow-right" class="size-5"></iconify-icon>
+          </a>
+        </div>
+        <div class="flex flex-wrap gap-6 pt-2">
+          <div class="flex items-center gap-2 text-base-100/90"><iconify-icon icon="tabler:check" class="size-5 text-success"></iconify-icon> Calidad Premium</div>
+          <div class="flex items-center gap-2 text-base-100/90"><iconify-icon icon="tabler:check" class="size-5 text-success"></iconify-icon> Servicio Rápido</div>
+          <div class="flex items-center gap-2 text-base-100/90"><iconify-icon icon="tabler:check" class="size-5 text-success"></iconify-icon> Atención 24/7</div>
+        </div>
+      </div>
+      <div class="relative h-[500px] hidden lg:block">
+        <div class="absolute top-0 right-0 w-80 h-80 rounded-3xl overflow-hidden shadow-2xl anim-float">
+          <img src="${opts.img}" alt="hero" class="w-full h-full object-cover">
+          ${v===2?`<div class="absolute inset-0 ring-2 ring-white/20 rounded-3xl pointer-events-none"></div>`:''}
+        </div>
+        <div class="absolute top-10 left-10 w-16 h-16 bg-base-100/20 rounded-full animate-pulse"></div>
+        <div class="absolute top-40 right-10 w-12 h-12 bg-base-100/20 rounded-full animate-pulse" style="animation-delay:0.5s"></div>
+        <div class="absolute bottom-32 left-20 w-20 h-20 bg-base-100/20 rounded-full animate-pulse" style="animation-delay:1s"></div>
+        ${v===2?`
+        <div class="absolute -bottom-4 right-16 w-40 h-2 bg-white/30 rounded-full blur-sm"></div>
+        <div class="absolute top-4 left-4 w-20 h-20 border-2 border-white/30 rounded-full anim-spin"></div>
+        `:''}
+      </div>
+    </div>
+  </div>
+  ${opts.showWave?`
+  <div class="absolute bottom-0 left-0 right-0 pointer-events-none">
+    <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full">
+      <path d="M0,64L48,69.3C96,75,192,85,288,80C384,75,480,53,576,48C672,43,768,53,864,58.7C960,64,1056,64,1152,58.7C1248,53,1344,43,1392,37.3L1440,32L1440,120L0,120Z" fill="var(--color-base-100)"/>
+    </svg>
+  </div>`:''}
+</section>`;
+      return iframeDoc(body);
+    },
+    code:(v)=>`{{-- Hero Gradient v2 — Variante ${v+1} --}}
+{{-- Archivo: hero-gradient-v2.blade.php --}}
+<section id="home" class="relative min-h-screen overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-primary via-secondary to-accent animate-gradient-xy"></div>
+    <div class="absolute inset-0 bg-base-content/20"></div>
+    {{-- Patrón decorativo --}}
+    <div class="absolute inset-0 opacity-10" style="background-image:url('data:image/svg+xml,...');"></div>
+
+    <div class="relative container mx-auto px-4 py-16 lg:py-24 min-h-screen flex items-center">
+        <div class="grid lg:grid-cols-2 gap-12 items-center w-full">
+            <div class="space-y-8 text-base-100">
+                @if($tenant->tagline)
+                <span class="badge badge-lg bg-base-100/20 backdrop-blur-sm text-base-100 border-base-100/30">
+                    ✨ {{ $tenant->tagline }}
+                </span>
+                @endif
+                <h1 class="text-5xl lg:text-7xl font-bold leading-tight drop-shadow-2xl">
+                    {!! nl2br(e($tenant->slogan ?? $tenant->business_name)) !!}
+                </h1>
+                <p class="text-xl text-base-100/90 backdrop-blur-sm bg-base-content/10 rounded-2xl p-6">
+                    {{ Str::limit($customization->about_text ?? $tenant->description, 200) }}
+                </p>
+                <div class="flex flex-wrap gap-4">
+                    <a href="https://wa.me/{{ $tenant->whatsapp }}"
+                       class="btn btn-lg bg-base-100 text-primary hover:bg-base-100/90 border-0 shadow-2xl">
+                        <span class="iconify tabler--brand-whatsapp size-6"></span>
+                        Contactar Ahora
+                    </a>
+                    <a href="#about" class="btn btn-lg bg-base-100/10 backdrop-blur-sm text-base-100 border-base-100/30">
+                        Descubrir Más
+                    </a>
+                </div>
+            </div>
+            <div class="relative h-[500px] hidden lg:block">
+                <div class="absolute top-0 right-0 w-80 h-80 rounded-3xl overflow-hidden shadow-2xl animate-float">
+                    <img src="{{ asset('storage/tenants/'.$tenant->id.'/'.$customization->hero_main_filename) }}"
+                         class="w-full h-full object-cover">
+                </div>
+                <div class="absolute top-10 left-10 w-16 h-16 bg-base-100/20 rounded-full animate-pulse"></div>
+            </div>
+        </div>
+    </div>
+    <div class="absolute bottom-0 left-0 right-0">
+        <svg viewBox="0 0 1440 120" fill="none" class="w-full">
+            <path d="M0,64L48,69.3C96,75,192,85,288,80C384,75,480,53,576,48C672,43,768,53,864,58.7C960,64,1056,64,1152,58.7C1248,53,1344,43,1392,37.3L1440,32L1440,120L0,120Z" fill="var(--color-base-100)"/>
+        </svg>
+    </div>
+</section>`,
+  },
+
+  // ── HERO MAGAZINE ─────────────────────────────────────────────
+  'hero-magazine': {
+    name:'Hero Magazine', cat:'nuevo',
+    file:'hero-magazine (nuevo)',
+    variants:['Editorial dark + clip','Tipografía 9rem','Asimétrico + círculo'],
+    info:'Nuevo layout editorial con tipografía XL y composición asimétrica. Ideal para marcas premium.',
+    render:(v)=>{
+      if(v===0) return iframeDoc(`
+<section class="min-h-screen bg-base-content flex overflow-hidden">
+  <div class="flex-1 p-16 flex flex-col justify-center relative">
+    <div class="text-xs tracking-[0.4em] text-primary mb-8 uppercase font-bold">${opts.business} — Est. 2018</div>
+    <h1 class="text-7xl lg:text-8xl font-black text-base-100 leading-[0.9] mb-10 tracking-tighter">${opts.slogan.replace(/\n/,'<br>')}</h1>
+    <div class="w-20 h-1 bg-primary mb-8"></div>
+    <p class="text-base-100/50 text-lg max-w-md mb-10 leading-relaxed">${opts.desc}</p>
+    <a href="https://wa.me/${opts.whatsapp}" class="btn btn-primary btn-lg w-fit">Contáctanos</a>
+    <!-- Geo -->
+    <div class="absolute top-8 right-8 w-32 h-32 border-2 border-primary/30 rounded-full"></div>
+    <div class="absolute top-16 right-16 w-16 h-16 border border-primary/20 rounded-full"></div>
+    <div class="absolute bottom-12 right-4 w-48 h-48 border border-primary/10 rounded-full"></div>
+  </div>
+  <div class="w-[42%] bg-cover bg-center relative overflow-hidden"
+       style="background-image:url('${opts.img}');clip-path:polygon(10% 0,100% 0,100% 100%,0% 100%);">
+    <div class="absolute inset-0 bg-gradient-to-r from-base-content/40 to-transparent"></div>
+  </div>
+</section>`);
+      if(v===1) return iframeDoc(`
+<section class="min-h-screen bg-base-100 flex flex-col justify-center px-12 py-16 relative overflow-hidden">
+  <div class="absolute top-0 right-0 w-1/2 h-full opacity-8 pointer-events-none bg-cover bg-center" style="background-image:url('${opts.img}');mask-image:linear-gradient(to left,rgba(0,0,0,0.15),transparent)"></div>
+  <div class="relative max-w-5xl">
+    <h1 class="font-black text-base-content leading-[0.85] tracking-tighter mb-12" style="font-size:clamp(4rem,10vw,8rem)">${opts.slogan.toUpperCase().replace(/\n/,'<br>')}</h1>
+    <div class="flex items-end gap-16">
+      <div class="flex-1 border-l-4 border-primary pl-6">
+        <p class="text-base-content/60 text-lg leading-relaxed">${opts.desc}</p>
+      </div>
+      <a href="https://wa.me/${opts.whatsapp}" class="btn btn-primary btn-lg shrink-0">WhatsApp →</a>
+    </div>
+  </div>
+</section>`);
+      return iframeDoc(`
+<section class="min-h-screen bg-base-200 flex items-center relative overflow-hidden">
+  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] border-2 border-primary/20 rounded-full pointer-events-none"></div>
+  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] border border-primary/15 rounded-full pointer-events-none"></div>
+  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[200px] h-[200px] border border-primary/10 rounded-full pointer-events-none"></div>
+  <div class="container mx-auto px-6 py-20 relative z-10">
+    <div class="grid lg:grid-cols-2 gap-20 items-center">
+      <div>
+        <div class="badge badge-primary mb-6">${opts.business}</div>
+        <h1 class="text-5xl lg:text-7xl font-black text-base-content leading-tight mb-6">${opts.slogan.replace(/\n/,'<br>')}</h1>
+        <p class="text-base-content/60 mb-8 leading-relaxed">${opts.desc}</p>
+        <a href="https://wa.me/${opts.whatsapp}" class="btn btn-primary btn-lg">Contactar →</a>
+      </div>
+      <div class="relative flex items-center justify-center">
+        <div class="w-72 h-72 rounded-full overflow-hidden border-8 border-base-100 shadow-2xl relative z-10">
+          <img src="${opts.img}" class="w-full h-full object-cover">
+        </div>
+        <div class="absolute -top-4 -right-4 w-24 h-24 bg-primary/20 rounded-full blur-xl pointer-events-none"></div>
+        <div class="absolute -bottom-6 -left-6 w-32 h-32 bg-secondary/15 rounded-full blur-2xl pointer-events-none"></div>
+      </div>
+    </div>
+  </div>
+</section>`);
+    },
+    code:(v)=>`{{-- Hero Magazine — Variante ${v+1} --}}
+{{-- Este es un nuevo componente. Crear como: hero-magazine.blade.php --}}
+<section id="home" class="min-h-screen bg-base-content flex overflow-hidden">
+    <div class="flex-1 p-16 flex flex-col justify-center relative">
+        <div class="text-xs tracking-[0.4em] text-primary mb-8 uppercase font-bold">
+            {{ $tenant->business_name }} — Est. {{ $tenant->created_at?->format('Y') }}
+        </div>
+        <h1 class="text-8xl font-black text-base-100 leading-[0.9] mb-10 tracking-tighter">
+            {!! nl2br(e($tenant->slogan ?? $tenant->business_name)) !!}
+        </h1>
+        <div class="w-20 h-1 bg-primary mb-8"></div>
+        <p class="text-base-100/50 text-lg max-w-md mb-10">
+            {{ Str::limit($tenant->description, 200) }}
+        </p>
+        <a href="https://wa.me/{{ $tenant->whatsapp }}" class="btn btn-primary btn-lg w-fit">
+            Contáctanos
+        </a>
+    </div>
+    <div class="w-[42%] bg-cover bg-center"
+         style="background-image:url('{{ asset(\\\"storage/tenants/{$tenant->id}/{$customization->hero_main_filename}\\\") }}');
+                clip-path:polygon(10% 0, 100% 0, 100% 100%, 0% 100%);">
+    </div>
+</section>`,
+  },
+
+  // ── HERO PARTICLES ────────────────────────────────────────────
+  'hero-particles': {
+    name:'Hero Particles + Geo', cat:'nuevo',
+    file:'(nuevo — decorativo)',
+    variants:['Partículas + blobs','Grid 3D + texto centrado','Constelación de puntos'],
+    info:'Sección decorativa nueva con partículas animadas, blobs y geometría visible. Mezcla varios efectos.',
+    render:(v)=>{
+      const pts = (n,col='white')=>Array.from({length:n},(_,i)=>`<div class="particle absolute rounded-full" style="background:${col};opacity:${0.15+Math.random()*0.3};width:${3+Math.random()*6|0}px;height:${3+Math.random()*6|0}px;top:${Math.random()*95|0}%;left:${Math.random()*95|0}%;--dur:${5+Math.random()*6|0}s;--delay:-${Math.random()*5|0}s;"></div>`).join('');
+      if(v===0) return iframeDoc(`
+<section class="relative min-h-screen bg-base-content overflow-hidden flex items-center">
+  <!-- BLOBS -->
+  <div class="absolute -top-32 -left-32 w-96 h-96 bg-primary/30 rounded-full blur-3xl pointer-events-none"></div>
+  <div class="absolute -bottom-24 -right-24 w-80 h-80 bg-secondary/25 rounded-full blur-3xl pointer-events-none"></div>
+  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-accent/15 rounded-full blur-2xl pointer-events-none"></div>
+  <!-- CIRCLES GEO -->
+  <div class="absolute top-12 right-12 w-64 h-64 border-2 border-primary/40 rounded-full pointer-events-none"></div>
+  <div class="absolute top-24 right-24 w-40 h-40 border border-primary/25 rounded-full pointer-events-none"></div>
+  <div class="absolute bottom-16 left-12 w-48 h-48 border-2 border-secondary/35 rounded-full pointer-events-none anim-spin" style="animation-duration:25s"></div>
+  <!-- PARTICLES -->
+  ${pts(20,'var(--color-primary)')}
+  <!-- CONTENT -->
+  <div class="container mx-auto px-6 py-20 relative z-10">
+    <div class="grid lg:grid-cols-2 gap-12 items-center">
+      <div class="text-base-100 space-y-6">
+        ${opts.showBadge?`<span class="badge badge-primary badge-lg">✨ ${opts.business}</span>`:''}
+        <h1 class="text-5xl lg:text-7xl font-bold leading-tight drop-shadow-xl">${opts.slogan.replace(/\n/,'<br>')}</h1>
+        <p class="text-base-100/70 text-lg leading-relaxed backdrop-blur-sm bg-white/5 rounded-2xl p-4">${opts.desc}</p>
+        <div class="flex flex-wrap gap-4">
+          <a href="https://wa.me/${opts.whatsapp}" class="btn btn-primary btn-lg">Contactar →</a>
+          <a href="#about" class="btn btn-ghost btn-lg text-base-100 border-base-100/20">Ver más</a>
+        </div>
+      </div>
+      <div class="relative h-96 hidden lg:block">
+        <div class="absolute inset-8 rounded-3xl overflow-hidden shadow-2xl anim-float">
+          <img src="${opts.img}" class="w-full h-full object-cover">
+          <div class="absolute inset-0 ring-1 ring-white/10 rounded-3xl pointer-events-none"></div>
+        </div>
+        <div class="absolute -top-4 -left-4 w-8 h-8 bg-primary rounded-full opacity-80 anim-float2"></div>
+        <div class="absolute -bottom-2 -right-2 w-6 h-6 bg-secondary rounded-full opacity-60 anim-float" style="animation-delay:-2s"></div>
+      </div>
+    </div>
+  </div>
+</section>`);
+      if(v===1) return iframeDoc(`
+<section class="relative min-h-screen bg-base-content overflow-hidden flex items-center justify-center text-center">
+  <!-- GRID 3D -->
+  <div class="absolute inset-0 pointer-events-none" style="
+    background-image:linear-gradient(to right,var(--color-primary)/0.25 1px,transparent 1px),linear-gradient(to bottom,var(--color-primary)/0.25 1px,transparent 1px);
+    background-size:50px 50px;
+    transform:perspective(800px) rotateX(25deg) translateY(-30%);
+    transform-origin:top center;
+    mask-image:linear-gradient(to bottom,rgba(0,0,0,0.6) 0%,transparent 70%);
+  "></div>
+  <!-- GLOW CENTER -->
+  <div class="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/15 rounded-full blur-3xl pointer-events-none"></div>
+  <!-- FLOATING RINGS -->
+  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] border border-primary/20 rounded-full pointer-events-none anim-spin" style="animation-duration:30s"></div>
+  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] border border-secondary/25 rounded-full pointer-events-none anim-spin" style="animation-duration:20s;animation-direction:reverse"></div>
+  <!-- CONTENT -->
+  <div class="relative z-10 max-w-3xl mx-auto px-6 text-base-100">
+    ${opts.showBadge?`<div class="inline-block mb-6"><span class="badge badge-outline badge-lg text-primary border-primary">${opts.business}</span></div>`:''}
+    <h1 class="text-6xl lg:text-8xl font-black mb-8 drop-shadow-2xl">${opts.slogan.replace(/\n/,'<br>')}</h1>
+    <p class="text-xl text-base-100/70 mb-10 max-w-xl mx-auto">${opts.desc}</p>
+    <div class="flex justify-center gap-4 flex-wrap">
+      <a href="https://wa.me/${opts.whatsapp}" class="btn btn-primary btn-lg">Contactar</a>
+      <a href="#about" class="btn btn-ghost text-base-100 btn-lg border-base-100/20">Descubrir</a>
+    </div>
+  </div>
+  ${pts(15,'var(--color-primary)')}
+</section>`);
+      // v2 — constelación
+      const lines = Array.from({length:8},(_,i)=>`<line x1="${Math.random()*100|0}%" y1="${Math.random()*100|0}%" x2="${Math.random()*100|0}%" y2="${Math.random()*100|0}%" stroke="var(--color-primary)" stroke-width="0.5" opacity="0.3"/>`).join('');
+      const dots = Array.from({length:15},(_,i)=>`<circle cx="${Math.random()*100|0}%" cy="${Math.random()*100|0}%" r="${1+Math.random()*2}" fill="var(--color-primary)" opacity="${0.3+Math.random()*0.4}"/>`).join('');
+      return iframeDoc(`
+<section class="relative min-h-screen bg-base-content overflow-hidden flex items-center">
+  <!-- CONSTELACIÓN SVG -->
+  <svg class="absolute inset-0 w-full h-full pointer-events-none" xmlns="http://www.w3.org/2000/svg">
+    ${lines}${dots}
+  </svg>
+  <!-- BLOBS -->
+  <div class="absolute top-0 right-0 w-72 h-72 bg-primary/20 rounded-full blur-3xl pointer-events-none"></div>
+  <div class="absolute bottom-0 left-0 w-60 h-60 bg-secondary/20 rounded-full blur-3xl pointer-events-none"></div>
+  <!-- GEO SHAPES -->
+  <div class="absolute top-20 right-20 w-40 h-40 border-2 border-primary/40 rotate-45 pointer-events-none"></div>
+  <div class="absolute bottom-20 left-20 w-24 h-24 border-2 border-secondary/40 rotate-12 pointer-events-none"></div>
+  <!-- CONTENT -->
+  <div class="container mx-auto px-6 relative z-10">
+    <div class="grid lg:grid-cols-2 gap-16 items-center">
+      <div class="text-base-100 space-y-6">
+        <span class="badge badge-primary">${opts.business}</span>
+        <h1 class="text-5xl lg:text-7xl font-black leading-tight">${opts.slogan.replace(/\n/,'<br>')}</h1>
+        <p class="text-base-100/60 text-lg">${opts.desc}</p>
+        <a href="https://wa.me/${opts.whatsapp}" class="btn btn-primary btn-lg">WhatsApp →</a>
+      </div>
+      <div class="relative h-96 hidden lg:block">
+        <div class="absolute inset-0 m-8 rounded-3xl overflow-hidden shadow-2xl anim-float border-2 border-white/10">
+          <img src="${opts.img}" class="w-full h-full object-cover">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>`);
+    },
+    code:(_)=>`{{-- Hero Particles/Geo — decorativo --}}
+{{-- Combinar con hero-gradient-v2 o hero-split-v2 añadiendo estas capas --}}
+
+{{-- BLOBS (dentro de la section con position:relative) --}}
+<div class="absolute -top-32 -left-32 w-96 h-96 bg-primary/20 rounded-full blur-3xl pointer-events-none"></div>
+<div class="absolute -bottom-24 -right-24 w-80 h-80 bg-secondary/15 rounded-full blur-3xl pointer-events-none"></div>
+
+{{-- CIRCLES GEO --}}
+<div class="absolute top-12 right-12 w-64 h-64 border-2 border-primary/30 rounded-full pointer-events-none"></div>
+<div class="absolute bottom-16 left-12 w-48 h-48 border border-secondary/20 rounded-full pointer-events-none animate-spin" style="animation-duration:25s"></div>
+
+{{-- GRID 3D (dark sections) --}}
+<div class="absolute inset-0 pointer-events-none opacity-20"
+     style="background-image:linear-gradient(to right,oklch(var(--p)/0.3) 1px,transparent 1px),linear-gradient(to bottom,oklch(var(--p)/0.3) 1px,transparent 1px);
+            background-size:50px 50px;
+            transform:perspective(800px) rotateX(25deg) translateY(-30%);
+            transform-origin:top center;
+            mask-image:linear-gradient(to bottom,black 0%,transparent 70%);">
+</div>`,
+  },
+
+  // ── CTA GRADIENT BORDER ───────────────────────────────────────
+  'cta-gradient-border': {
+    name:'CTA Gradient Border', cat:'tenant',
+    file:'cta.blade.php / cta-final.blade.php',
+    variants:['Desde REFERENCE · borde animado','Dark + imagen decorativa','Full width solid'],
+    info:'Réplica del CTA del REFERENCE.html con borde degradado exterior. Muy elegante.',
+    render:(v)=>{
+      if(v===0) return iframeDoc(`
+<section class="bg-base-100 py-16 lg:py-24">
+  <div class="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8">
+    <div class="from-primary/30 to-error/30 p-0.5 overflow-hidden rounded-3xl bg-gradient-to-r">
+      <div class="bg-base-100 rounded-3xl p-0.5">
+        <div class="from-primary/6 to-error/6 relative rounded-3xl bg-gradient-to-r to-50% p-8 lg:p-16">
+          <div class="flex justify-between gap-8 max-md:flex-col items-center">
+            <div class="max-w-lg space-y-4">
+              <h2 class="text-base-content text-xl font-bold md:text-3xl">¡Contáctanos hoy y transforma tu negocio!</h2>
+              <p class="text-base-content/70">${opts.desc}</p>
+              <a href="https://wa.me/${opts.whatsapp}" class="btn btn-primary btn-gradient">
+                WhatsApp <iconify-icon icon="tabler:arrow-right"></iconify-icon>
+              </a>
+            </div>
+            <div class="w-40 h-40 rounded-3xl overflow-hidden shadow-xl flex-shrink-0">
+              <img src="${opts.img}" class="w-full h-full object-cover">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>`);
+      if(v===1) return iframeDoc(`
+<section class="bg-base-content py-16">
+  <div class="max-w-5xl mx-auto px-6">
+    <div class="relative rounded-3xl overflow-hidden bg-gradient-to-br from-primary/20 to-secondary/10 border border-white/10 p-12">
+      <div class="absolute -top-16 -right-16 w-64 h-64 bg-primary/20 rounded-full blur-3xl"></div>
+      <div class="absolute -bottom-12 -left-12 w-48 h-48 bg-secondary/15 rounded-full blur-2xl"></div>
+      <div class="relative z-10 flex flex-wrap items-center justify-between gap-8">
+        <div>
+          <h2 class="text-3xl font-bold text-base-100 mb-4">¿Listo para empezar?</h2>
+          <p class="text-base-100/60 max-w-md">${opts.desc.substring(0,120)}...</p>
+        </div>
+        <a href="https://wa.me/${opts.whatsapp}" class="btn btn-primary btn-lg shadow-xl shadow-primary/30">
+          Contactar Ahora →
+        </a>
+      </div>
+    </div>
+  </div>
+</section>`);
+      return iframeDoc(`
+<section class="bg-primary py-16 text-center">
+  <div class="max-w-3xl mx-auto px-6">
+    <h2 class="text-4xl font-black text-primary-content mb-4">¡Contáctanos hoy!</h2>
+    <p class="text-primary-content/80 text-lg mb-8">${opts.desc.substring(0,120)}...</p>
+    <a href="https://wa.me/${opts.whatsapp}" class="btn btn-lg bg-primary-content text-primary font-bold hover:bg-primary-content/90">
+      WhatsApp →
+    </a>
+  </div>
+</section>`);
+    },
+    code:(v)=>`{{-- CTA Section — Variante ${v+1} --}}
+{{-- Archivo: cta.blade.php o cta-final.blade.php --}}
+<section id="cta" class="bg-base-100 py-16 lg:py-24">
+    <div class="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8">
+        <div class="from-primary/30 to-error/30 p-0.5 overflow-hidden rounded-3xl bg-gradient-to-r">
+            <div class="bg-base-100 rounded-3xl p-0.5">
+                <div class="from-primary/6 to-error/6 relative rounded-3xl bg-gradient-to-r to-50% p-8 lg:p-16">
+                    <div class="flex justify-between gap-8 max-md:flex-col md:items-center">
+                        <div class="max-w-lg space-y-4">
+                            <h2 class="text-base-content text-xl font-bold md:text-3xl">
+                                {{ $customization->cta_title ?? '¡Contáctanos hoy!' }}
+                            </h2>
+                            <p class="text-base-content/70">
+                                {{ $tenant->slogan ?? Str::limit($tenant->description, 150) }}
+                            </p>
+                            <a href="https://wa.me/{{ $tenant->whatsapp_sales }}" class="btn btn-gradient btn-primary">
+                                WhatsApp <span class="iconify tabler--arrow-right"></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>`,
+  },
+
+  // ── CTA SPLIT ─────────────────────────────────────────────────
+  'cta-split': {
+    name:'CTA Split', cat:'tenant',
+    file:'cta.blade.php',
+    variants:['Texto izq · Botón der','Con badge + íconos','bg-base-200 sutil'],
+    info:'CTA horizontal simple. Texto a la izquierda, botón derecho. Perfecto como separador entre secciones.',
+    render:(v)=>{
+      const bgs = ['bg-primary/5 border-y border-primary/10','bg-base-content text-base-100','bg-base-200'];
+      return iframeDoc(`
+<section class="${bgs[v]} py-12">
+  <div class="container mx-auto max-w-6xl px-6 flex flex-wrap items-center justify-between gap-6">
+    <div>
+      ${v===1?`<span class="badge badge-primary mb-3">Oferta especial</span>`:''}
+      <h2 class="text-2xl lg:text-3xl font-bold ${v===1?'text-base-100':'text-base-content'}">¿Listo para comenzar?</h2>
+      <p class="${v===1?'text-base-100/60':'text-base-content/60'}">${opts.desc.substring(0,100)}...</p>
+      ${v===1?`<div class="flex gap-4 mt-3 text-sm text-base-100/50">
+        <span class="flex items-center gap-1"><iconify-icon icon="tabler:check"></iconify-icon> Sin contrato</span>
+        <span class="flex items-center gap-1"><iconify-icon icon="tabler:check"></iconify-icon> Pago en Bs</span>
+      </div>`:''}
+    </div>
+    <div class="flex gap-3 flex-wrap">
+      <a href="https://wa.me/${opts.whatsapp}" class="btn btn-primary${v===0?'':' shadow-xl shadow-primary/25'}">WhatsApp</a>
+      <a href="#contact" class="btn btn-outline ${v===1?'btn-ghost text-base-100 border-base-100/20':'btn-primary'}">Ver más</a>
+    </div>
+  </div>
+</section>`);
+    },
+    code:(_)=>`{{-- CTA Split --}}
+<section class="py-12 bg-primary/5 border-y border-primary/10">
+    <div class="container mx-auto max-w-6xl px-6 flex flex-wrap items-center justify-between gap-6">
+        <div>
+            <h2 class="text-2xl lg:text-3xl font-bold text-base-content">¿Listo para comenzar?</h2>
+            <p class="text-base-content/60">{{ Str::limit($tenant->slogan ?? $tenant->description, 120) }}</p>
+        </div>
+        <div class="flex gap-3">
+            <a href="https://wa.me/{{ $tenant->whatsapp }}" class="btn btn-primary">WhatsApp</a>
+            <a href="#contact" class="btn btn-outline btn-primary">Ver más</a>
+        </div>
+    </div>
+</section>`,
+  },
+
+  // ── CTA CARD ──────────────────────────────────────────────────
+  'cta-card': {
+    name:'CTA Card Flotante', cat:'tenant',
+    file:'cta-final.blade.php',
+    variants:['Card light centrada','Card dark + glow','Card con anillo animado'],
+    info:'Card elevada sobre fondo. Ideal como sección final antes del footer.',
+    render:(v)=>{
+      const cardBg = v===1?'bg-base-content border border-white/10':'bg-base-100';
+      const tc = v===1?'text-base-100':'text-base-content';
+      const mc = v===1?'text-base-100/50':'text-base-content/60';
+      return iframeDoc(`
+<section class="${v===0?'bg-base-200':v===1?'bg-base-content/90':'bg-base-200'} py-20">
+  ${v===2?`
+  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 border-2 border-primary/20 rounded-full pointer-events-none anim-spin" style="animation-duration:20s"></div>
+  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 border border-primary/15 rounded-full pointer-events-none anim-spin" style="animation-duration:15s;animation-direction:reverse"></div>
+  `:''}
+  <div class="max-w-2xl mx-auto px-6 relative z-10">
+    <div class="${cardBg} rounded-3xl p-12 lg:p-16 text-center shadow-2xl ${v===1?'shadow-primary/20':''} relative overflow-hidden">
+      ${v===1?`<div class="absolute -top-16 left-1/2 -translate-x-1/2 w-64 h-64 bg-primary/20 rounded-full blur-3xl pointer-events-none"></div>`:''}
+      <div class="badge badge-primary badge-lg mb-6">${opts.business}</div>
+      <h2 class="text-4xl font-black ${tc} mb-4">¿Hablamos?</h2>
+      <p class="${mc} mb-8 text-lg leading-relaxed">${opts.desc.substring(0,130)}...</p>
+      <a href="https://wa.me/${opts.whatsapp}" class="btn btn-primary btn-lg shadow-xl shadow-primary/30">
+        <iconify-icon icon="tabler:brand-whatsapp" class="size-6"></iconify-icon>
+        Escribir por WhatsApp
+      </a>
+      ${opts.showStats?`
+      <div class="mt-10 grid grid-cols-3 gap-4 pt-8 border-t ${v===1?'border-white/10':'border-base-content/10'}">
+        <div><div class="text-2xl font-black text-primary">10+</div><div class="text-xs ${mc}">Años</div></div>
+        <div><div class="text-2xl font-black text-primary">500+</div><div class="text-xs ${mc}">Clientes</div></div>
+        <div><div class="text-2xl font-black text-primary">★4.9</div><div class="text-xs ${mc}">Rating</div></div>
+      </div>`:''}
+    </div>
+  </div>
+</section>`);
+    },
+    code:(v)=>`{{-- CTA Card Flotante — Variante ${v+1} --}}
+<section class="py-20 bg-base-200 relative">
+    <div class="max-w-2xl mx-auto px-6">
+        <div class="bg-base-100 rounded-3xl p-12 lg:p-16 text-center shadow-2xl">
+            <div class="badge badge-primary badge-lg mb-6">{{ $tenant->business_name }}</div>
+            <h2 class="text-4xl font-black text-base-content mb-4">¿Hablamos?</h2>
+            <p class="text-base-content/60 mb-8 text-lg">
+                {{ Str::limit($tenant->description, 150) }}
+            </p>
+            <a href="https://wa.me/{{ $tenant->whatsapp }}" class="btn btn-primary btn-lg shadow-xl shadow-primary/30">
+                <span class="iconify tabler--brand-whatsapp size-6"></span>
+                Escribir por WhatsApp
+            </a>
+        </div>
+    </div>
+</section>`,
+  },
+
+  // ── PRODUCTS GRID ─────────────────────────────────────────────
+  'products-grid': {
+    name:'Grid de Productos', cat:'tenant', file:'products.blade.php + product-card.blade.php',
+    variants:['Cards FlyonUI border','Cards hover elevation','Cards con badge oferta'],
+    info:'Replicando el estilo card-border de FlyonUI con hover:border-primary.',
+    render:(v)=>{
+      const prods = ['Producto Premium A','Combo Especial B','Artículo Destacado C','Oferta del Día D','Nuevo Lanzamiento E','Bestseller F'];
+      const prices = ['$25.00','$18.50','$32.00','$15.00','$44.99','$9.99'];
+      const tags = ['','OFERTA','NUEVO','','POPULAR',''];
+      const colors = ['bg-primary/10','bg-secondary/10','bg-accent/10','bg-success/10','bg-warning/10','bg-error/10'];
+      const icons = ['🛍️','🎁','⭐','🔥','🚀','💎'];
+      return iframeDoc(`
+<section class="py-16 bg-base-100">
+  <div class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <span class="badge badge-primary badge-lg mb-4">Catálogo</span>
+      <h2 class="text-4xl font-bold text-base-content">Nuestros <span class="text-primary italic">Productos</span></h2>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      ${prods.map((p,i)=>`
+      <div class="card card-border hover:border-primary transition-all duration-300 ${v===1?'hover:shadow-xl hover:-translate-y-1':''}">
+        <figure class="${colors[i]} h-44 relative flex items-center justify-center text-5xl">
+          ${icons[i]}
+          ${v===2&&tags[i]?`<span class="absolute top-3 right-3 badge badge-sm ${i===1?'badge-error':'badge-primary'}">${tags[i]}</span>`:''}
+        </figure>
+        <div class="card-body gap-3">
+          <h3 class="card-title text-base-content">${p}</h3>
+          <p class="text-base-content/60 text-sm">Descripción del producto. Calidad garantizada.</p>
+          <div class="flex items-center justify-between mt-2">
+            <span class="text-xl font-bold text-primary">${prices[i]}</span>
+            <a href="https://wa.me/${opts.whatsapp}" class="btn btn-sm btn-primary">
+              <iconify-icon icon="tabler:brand-whatsapp"></iconify-icon> Pedir
+            </a>
+          </div>
+        </div>
+      </div>`).join('')}
+    </div>
+  </div>
+</section>`);
+    },
+    code:(_)=>`{{-- Grid de Productos --}}
+<section id="products" class="py-20 bg-base-100">
+    <div class="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h2 class="text-4xl font-bold text-base-content">
+                Nuestros <span class="text-primary italic">Productos</span>
+            </h2>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            @foreach($products->take($plan->products_limit ?? 6) as $product)
+                @include('landing.partials.product-card', compact('product','tenant','plan'))
+            @endforeach
+        </div>
+    </div>
+</section>`,
+  },
+
+  // ── PRODUCTS MASONRY ─────────────────────────────────────────
+  'products-masonry': {
+    name:'Productos Masonry Mix', cat:'nuevo',
+    file:'products.blade.php (modificado)',
+    variants:['Featured grande + 4 chicas','Horizontal scroll','3 cols + card featured top'],
+    info:'Layout asimétrico con producto destacado grande y resto en grid. Llama la atención visualmente.',
+    render:(v)=>{
+      if(v===1) return iframeDoc(`
+<section class="py-16 bg-base-200">
+  <div class="max-w-[1280px] mx-auto">
+    <div class="px-6 mb-8"><h2 class="text-3xl font-bold text-base-content">Productos <span class="text-primary italic">Destacados</span></h2></div>
+    <div class="flex gap-4 overflow-x-auto pb-4 px-6 snap-x scrollbar-thin">
+      ${['Premium','Classic','Special','Deluxe','Gold','Silver'].map((n,i)=>`
+      <div class="flex-shrink-0 w-52 snap-start card card-border hover:border-primary transition-all">
+        <figure class="h-36 bg-primary/10 flex items-center justify-center text-4xl">🛍️</figure>
+        <div class="card-body p-4">
+          <h3 class="font-bold text-base-content text-sm">Producto ${n}</h3>
+          <div class="flex items-center justify-between mt-1">
+            <span class="font-bold text-primary text-sm">$24.99</span>
+            <a href="#" class="btn btn-xs btn-primary">WA</a>
+          </div>
+        </div>
+      </div>`).join('')}
+    </div>
+  </div>
+</section>`);
+      return iframeDoc(`
+<section class="py-16 bg-base-100">
+  <div class="max-w-[1280px] mx-auto px-6">
+    <div class="text-center mb-10">
+      <h2 class="text-4xl font-bold text-base-content">Productos <span class="text-primary italic">Destacados</span></h2>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 ${v===2?'':'auto-rows-[200px]'}">
+      ${v===0?`
+      <!-- FEATURED -->
+      <div class="card card-border hover:border-primary col-span-2 row-span-2 transition-all hover:shadow-xl">
+        <figure class="h-full bg-gradient-to-br from-primary/20 to-secondary/10 flex flex-col items-center justify-center gap-4">
+          <span class="text-7xl">⭐</span>
+          <span class="badge badge-primary">DESTACADO</span>
+        </figure>
+        <div class="card-body">
+          <h3 class="card-title">Producto Estrella Premium</h3>
+          <p class="text-base-content/60 text-sm">El más vendido de nuestra colección.</p>
+          <div class="flex justify-between items-center">
+            <span class="text-2xl font-black text-primary">$44.99</span>
+            <a href="#" class="btn btn-primary">Pedir por WA</a>
+          </div>
+        </div>
+      </div>
+      <!-- SMALL CARDS -->
+      ${['🎁','🔥','🚀','💎'].map((ic,i)=>`
+      <div class="card card-border hover:border-primary hover:-translate-y-1 transition-all duration-300">
+        <figure class="h-24 bg-base-200 flex items-center justify-center text-3xl">${ic}</figure>
+        <div class="card-body p-3">
+          <h3 class="font-bold text-sm">Producto ${i+2}</h3>
+          <span class="text-primary font-bold text-sm">$${15+i*5}.00</span>
+        </div>
+      </div>`).join('')}`:
+      // v2
+      `${['⭐','🎁','🔥','🚀','💎','🛍️'].map((ic,i)=>`
+      <div class="card card-border hover:border-primary transition-all ${i===0?'col-span-2 row-span-2':''} hover:shadow-lg">
+        <figure class="${i===0?'h-48':'h-24'} bg-gradient-to-br from-primary/10 to-secondary/5 flex items-center justify-center text-${i===0?'6xl':'3xl'}">${ic}</figure>
+        <div class="card-body p-3">
+          <h3 class="font-bold text-sm text-base-content">Producto ${i+1}</h3>
+          <div class="flex items-center justify-between">
+            <span class="text-primary font-bold text-sm">$${15+i*7}.99</span>
+            <a href="#" class="btn btn-xs btn-primary">WA</a>
+          </div>
+        </div>
+      </div>`).join('')}`}
+    </div>
+  </div>
+</section>`);
+    },
+    code:(_)=>`{{-- Masonry Productos — requires CSS grid customization --}}
+<section id="products" class="py-16 bg-base-100">
+    <div class="max-w-[1280px] mx-auto px-6">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            @php $featured = $products->first(); $rest = $products->skip(1)->take(4); @endphp
+            {{-- Featured --}}
+            @if($featured)
+            <div class="card card-border hover:border-primary col-span-2 row-span-2 transition-all">
+                <figure class="h-64 bg-gradient-to-br from-primary/20 to-secondary/10">
+                    @if($featured->image_filename)
+                    <img src="{{ asset('storage/tenants/'.$tenant->id.'/'.$featured->image_filename) }}"
+                         class="w-full h-full object-cover">
+                    @endif
+                </figure>
+                <div class="card-body">
+                    <h3 class="card-title">{{ $featured->name }}</h3>
+                    <p class="text-base-content/60 text-sm">{{ $featured->description }}</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-2xl font-black text-primary">{{ $featured->formatted_price }}</span>
+                        <a href="https://wa.me/{{ $tenant->whatsapp }}" class="btn btn-primary">Pedir</a>
+                    </div>
+                </div>
+            </div>
+            @endif
+            @foreach($rest as $product)
+                @include('landing.partials.product-card', compact('product','tenant','plan'))
+            @endforeach
+        </div>
+    </div>
+</section>`,
+  },
+
+  // ── TESTIMONIALS CAROUSEL ────────────────────────────────────
+  'testimonials-carousel': {
+    name:'Testimonios Carousel', cat:'tenant',
+    file:'testimonials.blade.php',
+    variants:['FlyonUI carousel (REFERENCE)','Grid 2 cols + counter','Single quote XL'],
+    info:'Carousel real de FlyonUI con flechas. Exactamente como en el REFERENCE.html.',
+    render:(v)=>{
+      const cards = [
+        {name:'María García',role:'Cliente fiel',text:'Increíble servicio y calidad. Los recomiendo a todos mis conocidos sin dudar.',stars:5},
+        {name:'Carlos López',role:'Emprendedor',text:'Excelente atención al cliente. Siempre responden rápido y resuelven todo eficientemente.',stars:5},
+        {name:'Ana Martínez',role:'Ama de casa',text:'Los precios son muy buenos y la calidad supera mis expectativas cada vez.',stars:5},
+        {name:'Pedro Díaz',role:'Profesional',text:'Llevo años siendo cliente y nunca me han fallado. ¡100% recomendados!',stars:4},
+      ];
+      const starsHtml = (n)=>`<div class="flex gap-1">${Array(5).fill(0).map((_,i)=>`<iconify-icon icon="tabler:star-filled" class="size-5 ${i<n?'text-warning':'text-base-content/20'}"></iconify-icon>`).join('')}</div>`;
+      const cardHtml = (c)=>`
+<div class="card card-border hover:border-primary transition-all duration-300 h-full shadow-none">
+  <div class="card-body gap-4">
+    <div class="flex items-center gap-3">
+      <div class="avatar placeholder"><div class="bg-primary text-primary-content rounded-full w-10 h-10 flex items-center justify-center font-bold">${c.name[0]}</div></div>
+      <div><h4 class="font-medium text-base-content">${c.name}</h4><p class="text-sm text-base-content/60">${c.role}</p></div>
+    </div>
+    ${starsHtml(c.stars)}
+    <p class="text-base-content/70">"${c.text}"</p>
+  </div>
+</div>`;
+      if(v===0) return iframeDoc(`
+<section class="bg-base-200 py-16 lg:py-24">
+  <div class="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8">
+    <div id="testimonials-slide" data-carousel='{"loadingClasses":"opacity-0","slidesQty":{"xs":1,"md":2}}' class="relative flex w-full gap-12 max-lg:flex-col md:gap-16 lg:items-center lg:gap-24">
+      <div>
+        <div class="space-y-4">
+          <h2 class="text-base-content text-2xl font-semibold md:text-3xl lg:text-4xl">Lo que dicen nuestros Clientes</h2>
+          <p class="text-base-content/70 text-lg">La confianza de nuestra comunidad es nuestro mayor orgullo.</p>
+          <div class="flex gap-4">
+            <button class="btn btn-square btn-sm carousel-prev btn-primary carousel-disabled:opacity-100 carousel-disabled:btn-outline" disabled>
+              <iconify-icon icon="tabler:arrow-left" class="size-5"></iconify-icon>
+            </button>
+            <button class="btn btn-square btn-sm carousel-next btn-primary carousel-disabled:opacity-100 carousel-disabled:btn-outline">
+              <iconify-icon icon="tabler:arrow-right" class="size-5"></iconify-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="carousel rounded-box flex-1">
+        <div class="carousel-body gap-6 opacity-0">
+          ${cards.map(c=>`<div class="carousel-slide">${cardHtml(c)}</div>`).join('')}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>`);
+      if(v===1) return iframeDoc(`
+<section class="bg-base-100 py-16">
+  <div class="max-w-[1280px] mx-auto px-6">
+    <div class="grid lg:grid-cols-2 gap-8">
+      <div class="space-y-4 flex flex-col justify-center">
+        <h2 class="text-4xl font-bold text-base-content">Lo que dicen<br><span class="text-primary italic">nuestros clientes</span></h2>
+        <div class="grid grid-cols-2 gap-4 mt-6">
+          <div class="bg-primary/10 rounded-2xl p-4 text-center">
+            <div class="text-3xl font-black text-primary">500+</div>
+            <div class="text-sm text-base-content/60">Clientes felices</div>
+          </div>
+          <div class="bg-success/10 rounded-2xl p-4 text-center">
+            <div class="text-3xl font-black text-success">★4.9</div>
+            <div class="text-sm text-base-content/60">Rating promedio</div>
+          </div>
+        </div>
+      </div>
+      <div class="space-y-4">
+        ${cards.slice(0,2).map(c=>cardHtml(c)).join('')}
+      </div>
+    </div>
+  </div>
+</section>`);
+      const c = cards[0];
+      return iframeDoc(`
+<section class="bg-base-content py-24 text-center">
+  <div class="max-w-3xl mx-auto px-6">
+    <div class="text-7xl text-primary leading-none mb-6">❝</div>
+    <p class="text-2xl lg:text-3xl text-base-100 font-light italic leading-relaxed mb-8">"${c.text}"</p>
+    <div class="flex items-center justify-center gap-3">
+      <div class="avatar placeholder"><div class="bg-primary text-primary-content rounded-full w-12 h-12 flex items-center justify-center font-bold text-lg">${c.name[0]}</div></div>
+      <div class="text-left">
+        <div class="font-bold text-primary">${c.name}</div>
+        <div class="text-sm text-base-100/50">${c.role}</div>
+      </div>
+    </div>
+    <div class="flex justify-center gap-1 mt-4">${Array(5).fill('<iconify-icon icon="tabler:star-filled" class="size-5 text-warning"></iconify-icon>').join('')}</div>
+  </div>
+</section>`);
+    },
+    code:(_)=>`{{-- Testimonios Carousel --}}
+{{-- Archivo: testimonials.blade.php --}}
+<section id="testimonials" class="bg-base-200 py-16 lg:py-24">
+    <div class="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8">
+        <div id="multi-slide" data-carousel='{"loadingClasses":"opacity-0","slidesQty":{"xs":1,"md":2}}'
+             class="relative flex w-full gap-12 max-lg:flex-col md:gap-16 lg:items-center lg:gap-24">
+            <div class="space-y-4">
+                <h2 class="text-base-content text-2xl font-semibold md:text-3xl lg:text-4xl">
+                    Lo que dicen nuestros Clientes
+                </h2>
+                <div class="flex gap-4">
+                    <button class="btn btn-square btn-sm carousel-prev btn-primary" disabled>
+                        <span class="iconify tabler--arrow-left size-5"></span>
+                    </button>
+                    <button class="btn btn-square btn-sm carousel-next btn-primary">
+                        <span class="iconify tabler--arrow-right size-5"></span>
+                    </button>
+                </div>
+            </div>
+            <div class="carousel rounded-box flex-1">
+                <div class="carousel-body gap-6 opacity-0">
+                    @foreach(collect(data_get($tenant->settings,'business_info.testimonials',[])) as $t)
+                    <div class="carousel-slide">
+                        <div class="card card-border hover:border-primary h-full shadow-none duration-300">
+                            <div class="card-body gap-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="avatar placeholder">
+                                        <div class="bg-primary text-primary-content rounded-full w-10">
+                                            <span>{{ strtoupper(substr($t['name'],0,1)) }}</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-medium text-base-content">{{ $t['name'] }}</h4>
+                                        <p class="text-sm text-base-content/60">{{ $t['role'] ?? 'Cliente' }}</p>
+                                    </div>
+                                </div>
+                                <p class="text-base-content/70">"{{ $t['text'] }}"</p>
+                            </div>
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    </div>
+</section>`,
+  },
+
+  // ── TESTIMONIALS WALL ────────────────────────────────────────
+  'testimonials-wall': {
+    name:'Wall de Reviews', cat:'tenant', file:'testimonials.blade.php',
+    variants:['Grid 3 cols','Grid 2 cols grande','Masonry 3 cols'],
+    info:'Grid de cards de reviews. Más visual que el carousel. Muestra muchos testimonios a la vez.',
+    render:(v)=>{
+      const revs=[
+        {n:'María G.',r:'Cliente',t:'Increíble calidad. Totalmente recomendados.',s:5},
+        {n:'Carlos L.',r:'Empresa',t:'Atención rápida y profesional. Sin igual.',s:5},
+        {n:'Ana M.',r:'Familia',t:'Los precios son excelentes. La mejor opción.',s:5},
+        {n:'Pedro D.',r:'Frecuente',t:'Años siendo cliente. Siempre son perfectos.',s:4},
+        {n:'Laura R.',r:'Primera vez',t:'Me sorprendió la calidad. Volveré pronto.',s:5},
+        {n:'Jorge C.',r:'Comercio',t:'Confianza total. Los recomiendo al 100%.',s:5},
+      ];
+      const card=(r,big=false)=>`
+<div class="card card-border hover:border-primary transition-all duration-300${big?' row-span-2':''}">
+  <div class="card-body gap-3 ${big?'p-8':''}">
+    <div class="flex gap-1">${Array(5).fill(0).map((_,i)=>`<iconify-icon icon="tabler:star-filled" class="size-4 ${i<r.s?'text-warning':'text-base-content/15'}"></iconify-icon>`).join('')}</div>
+    <p class="text-base-content/70 text-sm${big?' text-base leading-relaxed':''}">"${r.t}"</p>
+    <div class="flex items-center gap-2 mt-auto">
+      <div class="avatar placeholder"><div class="bg-primary/20 text-primary rounded-full w-8 flex items-center justify-center font-bold text-xs">${r.n[0]}</div></div>
+      <div><div class="font-bold text-xs text-base-content">${r.n}</div><div class="text-xs text-base-content/40">${r.r}</div></div>
+    </div>
+  </div>
+</div>`;
+      const cols = v===1?'md:grid-cols-2':'md:grid-cols-3';
+      return iframeDoc(`
+<section class="py-16 bg-base-100">
+  <div class="max-w-[1280px] mx-auto px-6">
+    <div class="text-center mb-10">
+      <h2 class="text-4xl font-bold text-base-content">Lo que dicen<br><span class="text-primary italic">nuestros clientes</span></h2>
+    </div>
+    <div class="grid grid-cols-1 ${cols} gap-5">
+      ${v===2?revs.map((r,i)=>card(r,i===0)).join(''):revs.map(r=>card(r)).join('')}
+    </div>
+  </div>
+</section>`);
+    },
+    code:(_)=>`{{-- Wall de Reviews --}}
+<section id="testimonials" class="py-16 bg-base-100">
+    <div class="max-w-[1280px] mx-auto px-6">
+        <div class="text-center mb-10">
+            <h2 class="text-4xl font-bold text-base-content">
+                Lo que dicen <span class="text-primary italic">nuestros clientes</span>
+            </h2>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+            @foreach(collect(data_get($tenant->settings,'business_info.testimonials',[])) as $t)
+            <div class="card card-border hover:border-primary transition-all duration-300">
+                <div class="card-body gap-3">
+                    <div class="flex gap-1">
+                        @for($i=0;$i<($t['stars']??5);$i++)
+                        <span class="iconify tabler--star-filled text-warning size-4"></span>
+                        @endfor
+                    </div>
+                    <p class="text-base-content/70">"{{ $t['text'] }}"</p>
+                    <div class="font-bold text-sm text-base-content">{{ $t['name'] }}</div>
+                </div>
+            </div>
+            @endforeach
+        </div>
+    </div>
+</section>`,
+  },
+
+  // ── SERVICES DARK ─────────────────────────────────────────────
+  'services-dark': {
+    name:'Servicios Dark + Iconos', cat:'tenant',
+    file:'services.blade.php / services-spotlight.blade.php',
+    variants:['Dark grid 3 cols','Spotlight hover','Cards con número'],
+    info:'Sección servicios sobre bg-base-content (dark). Cards con iconos y descripción breve.',
+    render:(v)=>{
+      const svcs = [
+        {ic:'tabler:briefcase',n:'Consultoría',d:'Asesoría personalizada para tu negocio.'},
+        {ic:'tabler:headset',n:'Soporte 24/7',d:'Atención continua cuando lo necesitas.'},
+        {ic:'tabler:tools',n:'Instalación',d:'Configuración profesional garantizada.'},
+        {ic:'tabler:settings',n:'Mantenimiento',d:'Preventivo y correctivo de calidad.'},
+        {ic:'tabler:school',n:'Capacitación',d:'Aprende a sacar el máximo provecho.'},
+        {ic:'tabler:shield-check',n:'Garantía',d:'Cobertura completa en todos los servicios.'},
+      ];
+      return iframeDoc(`
+<section class="py-16 lg:py-24 bg-base-content">
+  <div class="max-w-[1280px] mx-auto px-6">
+    <div class="text-center mb-12">
+      <span class="badge badge-primary mb-4">Servicios</span>
+      <h2 class="text-3xl lg:text-4xl font-bold text-base-100">Servicios <span class="text-primary italic">Especializados</span></h2>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      ${svcs.map((s,i)=>`
+      <div class="group ${v===1?'p-6 rounded-2xl border border-white/5 hover:border-primary/40 hover:bg-primary/5 transition-all duration-300 cursor-default':'card card-border border-white/8 hover:border-primary transition-all duration-300'}">
+        <div class="${v===1?'':'card-body'} gap-4 ${v!==1?'p-6':''}">
+          ${v===2?`<div class="text-5xl font-black text-white/10 leading-none">${String(i+1).padStart(2,'0')}</div>`:''}
+          <div class="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center">
+            <iconify-icon icon="${s.ic}" class="size-6 text-primary"></iconify-icon>
+          </div>
+          <h3 class="font-bold text-base-100 text-lg">${s.n}</h3>
+          <p class="text-base-100/50 text-sm leading-relaxed">${s.d}</p>
+          <a href="#" class="text-primary text-sm font-bold group-hover:underline">Saber más →</a>
+        </div>
+      </div>`).join('')}
+    </div>
+  </div>
+</section>`);
+    },
+    code:(_)=>`{{-- Servicios Dark Grid --}}
+<section id="services" class="py-16 lg:py-24 bg-base-content">
+    <div class="max-w-[1280px] mx-auto px-6">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl lg:text-4xl font-bold text-base-100">
+                Servicios <span class="text-primary italic">Especializados</span>
+            </h2>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            @foreach($services as $service)
+            <div class="card card-border border-white/8 hover:border-primary transition-all duration-300">
+                <div class="card-body gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center">
+                        <span class="iconify tabler--briefcase size-6 text-primary"></span>
+                    </div>
+                    <h3 class="font-bold text-base-100 text-lg">{{ $service->name }}</h3>
+                    <p class="text-base-100/50 text-sm">{{ $service->description }}</p>
+                </div>
+            </div>
+            @endforeach
+        </div>
+    </div>
+</section>`,
+  },
+
+  // ── SERVICES SPLIT ────────────────────────────────────────────
+  'services-split': {
+    name:'Servicios Split + Imagen', cat:'tenant', file:'services.blade.php',
+    variants:['Imagen izq · Lista der','Lista izq · Imagen der','Solo lista numerada'],
+    info:'Layout 2 columnas con imagen del negocio y lista de servicios con checkmarks.',
+    render:(v)=>{
+      const svcs = ['Consultoría personalizada','Soporte y mantenimiento','Instalación profesional','Capacitación del equipo','Garantía extendida'];
+      const imgBlock = `
+<div class="relative">
+  <div class="rounded-3xl overflow-hidden shadow-2xl">
+    <img src="${opts.img}" class="w-full h-[420px] object-cover">
+    <div class="absolute inset-0 bg-gradient-to-t from-base-content/20 to-transparent rounded-3xl pointer-events-none"></div>
+  </div>
+  <div class="absolute -bottom-4 -right-4 bg-base-100 rounded-2xl px-5 py-3 shadow-xl flex items-center gap-2">
+    <iconify-icon icon="tabler:star-filled" class="size-5 text-warning"></iconify-icon>
+    <span class="font-bold text-sm">Top Rated</span>
+  </div>
+</div>`;
+      const listBlock = `
+<div class="space-y-6">
+  <div class="badge badge-primary">Servicios</div>
+  <h2 class="text-4xl font-bold text-base-content leading-tight">Todo lo que <span class="text-primary italic">necesitas</span></h2>
+  <div class="space-y-4">
+    ${svcs.map((s,i)=>`
+    <div class="flex items-start gap-4 group">
+      <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center flex-shrink-0 mt-0.5 shadow-md shadow-primary/30">
+        ${v===2?`<span class="text-primary-content text-xs font-black">${String(i+1).padStart(2,'0')}</span>`:`<iconify-icon icon="tabler:check" class="size-4 text-primary-content"></iconify-icon>`}
+      </div>
+      <div>
+        <h3 class="font-bold text-base-content">${s}</h3>
+        <p class="text-sm text-base-content/55 mt-0.5">Calidad y profesionalismo garantizado.</p>
+      </div>
+    </div>`).join('')}
+  </div>
+  <a href="https://wa.me/${opts.whatsapp}" class="btn btn-primary btn-lg mt-4">Ver todos →</a>
+</div>`;
+      const dir = v===1?`${listBlock}${imgBlock}`:`${imgBlock}${listBlock}`;
+      return iframeDoc(`
+<section class="py-16 lg:py-24 bg-base-200">
+  <div class="max-w-[1280px] mx-auto px-6">
+    <div class="grid lg:grid-cols-2 gap-16 items-center">
+      ${v===2?listBlock:dir}
+    </div>
+  </div>
+</section>`);
+    },
+    code:(v)=>`{{-- Servicios Split — Variante ${v+1} --}}
+<section id="services" class="py-16 bg-base-200">
+    <div class="max-w-[1280px] mx-auto px-6">
+        <div class="grid lg:grid-cols-2 gap-16 items-center">
+            <div class="relative">
+                <img src="{{ $customization->hero_main_filename
+                    ? asset('storage/tenants/'.$tenant->id.'/'.$customization->hero_main_filename)
+                    : 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200' }}"
+                     class="w-full h-96 object-cover rounded-3xl shadow-2xl">
+            </div>
+            <div class="space-y-6">
+                <h2 class="text-4xl font-bold text-base-content">
+                    Servicios <span class="text-primary italic">Especializados</span>
+                </h2>
+                @foreach($services as $service)
+                <div class="flex items-start gap-4">
+                    <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center flex-shrink-0">
+                        <span class="iconify tabler--check size-4 text-primary-content"></span>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-base-content">{{ $service->name }}</h3>
+                        <p class="text-sm text-base-content/55">{{ $service->description }}</p>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+        </div>
+    </div>
+</section>`,
+  },
+
+  // ── DECORACIONES ─────────────────────────────────────────────
+  'deco-grid3d': {
+    name:'Grid 3D Perspectiva', cat:'deco', file:'(decorativo)',
+    variants:['Dark · grid hacia horizonte','Fondo claro · grid sutil','Grid con glow + partículas'],
+    info:'Patrón de malla en perspectiva 3D. Muy popular en landing dark. Combínalo con cualquier sección.',
+    render:(v)=>{
+      const dark = v!==1;
+      return iframeDoc(`
+<section class="relative min-h-[60vh] ${dark?'bg-base-content':'bg-base-100'} overflow-hidden flex items-center justify-center text-center">
+  <!-- GRID 3D -->
+  <div class="absolute inset-0 pointer-events-none"
+       style="background-image:linear-gradient(to right,${dark?'rgba(var(--color-primary-rgb,124,109,255),0.35)':'rgba(var(--color-primary-rgb,124,109,255),0.15)'} 1px,transparent 1px),linear-gradient(to bottom,${dark?'rgba(var(--color-primary-rgb,124,109,255),0.35)':'rgba(var(--color-primary-rgb,124,109,255),0.12)'} 1px,transparent 1px);background-size:50px 50px;transform:perspective(800px) rotateX(25deg) translateY(-35%);transform-origin:top center;mask-image:linear-gradient(to bottom,${dark?'rgba(0,0,0,0.7)':'rgba(0,0,0,0.5)'} 0%,transparent 65%);"></div>
+  ${v===2?`
+  <!-- GLOW -->
+  <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-80 bg-primary/20 rounded-full blur-3xl pointer-events-none"></div>
+  <!-- PARTICLES -->
+  ${Array.from({length:12},(_,i)=>`<div class="particle absolute rounded-full bg-primary/40" style="width:${3+Math.random()*5|0}px;height:${3+Math.random()*5|0}px;top:${20+Math.random()*60|0}%;left:${Math.random()*90|0}%;--dur:${5+Math.random()*4|0}s;--delay:-${Math.random()*4|0}s;"></div>`).join('')}
+  `:''}
+  <!-- CONTENT -->
+  <div class="relative z-10 max-w-2xl mx-auto px-6 py-24">
+    <span class="badge badge-primary mb-4">Decoración Grid 3D</span>
+    <h2 class="text-4xl lg:text-5xl font-bold ${dark?'text-base-100':'text-base-content'} mb-4">Agrega esta capa<br>a cualquier sección</h2>
+    <p class="${dark?'text-base-100/60':'text-base-content/60'} text-lg">Copia el snippet de la capa y pégalo dentro de tu sección con <code class="text-primary">position:relative overflow-hidden</code></p>
+  </div>
+</section>`);
+    },
+    code:(v)=>`{{-- Decoración: Grid 3D Perspectiva --}}
+{{-- Pegar DENTRO de la section que tenga relative + overflow-hidden --}}
+
+{{-- VERSIÓN DARK (bg-base-content) --}}
+<div class="absolute inset-0 pointer-events-none"
+     style="background-image:
+       linear-gradient(to right, oklch(var(--p)/0.3) 1px, transparent 1px),
+       linear-gradient(to bottom, oklch(var(--p)/0.3) 1px, transparent 1px);
+       background-size:50px 50px;
+       transform:perspective(800px) rotateX(25deg) translateY(-35%);
+       transform-origin:top center;
+       mask-image:linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, transparent 65%);">
+</div>
+
+{{-- VERSIÓN LIGHT (bg-base-100 o bg-base-200) --}}
+<div class="absolute inset-0 pointer-events-none opacity-30"
+     style="background-image:
+       linear-gradient(to right, oklch(var(--p)/0.15) 1px, transparent 1px),
+       linear-gradient(to bottom, oklch(var(--p)/0.12) 1px, transparent 1px);
+       background-size:50px 50px;
+       transform:perspective(800px) rotateX(25deg) translateY(-35%);
+       transform-origin:top center;
+       mask-image:linear-gradient(to bottom, black 0%, transparent 65%);">
+</div>`,
+  },
+
+  'deco-blobs': {
+    name:'Blobs + Partículas', cat:'deco', file:'(decorativo)',
+    variants:['Blobs grandes + circles','Partículas + linea constelación','Blob glow center'],
+    info:'Decoraciones orgánicas con blur. Los blobs grandes dan profundidad sin distraer. Ahora bien visibles.',
+    render:(v)=>{
+      const pts = (n,col)=>Array.from({length:n},(_,i)=>`<div class="particle absolute rounded-full" style="background:${col};opacity:${0.25+Math.random()*0.35};width:${4+Math.random()*7|0}px;height:${4+Math.random()*7|0}px;top:${Math.random()*90|0}%;left:${Math.random()*90|0}%;--dur:${4+Math.random()*5|0}s;--delay:-${Math.random()*4|0}s;"></div>`).join('');
+      return iframeDoc(`
+<section class="relative min-h-[60vh] bg-base-100 overflow-hidden flex items-center justify-center text-center">
+
+  ${v===0?`
+  <!-- BLOBS GRANDES Y VISIBLES -->
+  <div class="absolute -top-20 -left-20 w-[400px] h-[400px] bg-primary/20 rounded-full blur-2xl pointer-events-none"></div>
+  <div class="absolute -bottom-16 -right-16 w-[360px] h-[360px] bg-secondary/18 rounded-full blur-2xl pointer-events-none"></div>
+  <div class="absolute top-1/3 right-1/4 w-[240px] h-[240px] bg-accent/12 rounded-full blur-xl pointer-events-none"></div>
+  <!-- CIRCLES GEO VISIBLES -->
+  <div class="absolute top-8 right-8 w-56 h-56 border-2 border-primary/35 rounded-full pointer-events-none"></div>
+  <div class="absolute top-20 right-20 w-36 h-36 border border-primary/20 rounded-full pointer-events-none"></div>
+  <div class="absolute bottom-12 left-8 w-48 h-48 border-2 border-secondary/30 rounded-full pointer-events-none anim-spin" style="animation-duration:20s"></div>
+  `:''}
+
+  ${v===1?`
+  <!-- CONSTELACIÓN SVG -->
+  <svg class="absolute inset-0 w-full h-full pointer-events-none opacity-40" xmlns="http://www.w3.org/2000/svg">
+    ${Array.from({length:10},(_,i)=>`<line x1="${Math.random()*100|0}%" y1="${Math.random()*100|0}%" x2="${Math.random()*100|0}%" y2="${Math.random()*100|0}%" stroke="var(--color-primary)" stroke-width="0.8" opacity="0.4"/>`).join('')}
+    ${Array.from({length:18},(_,i)=>`<circle cx="${Math.random()*100|0}%" cy="${Math.random()*100|0}%" r="${1+Math.random()*2.5}" fill="var(--color-primary)" opacity="${0.35+Math.random()*0.45}"/>`).join('')}
+  </svg>
+  <!-- PARTICLES -->
+  ${pts(16,'var(--color-primary)')}
+  <div class="absolute top-0 right-0 w-72 h-72 bg-primary/15 rounded-full blur-3xl pointer-events-none"></div>
+  <div class="absolute bottom-0 left-0 w-60 h-60 bg-secondary/12 rounded-full blur-3xl pointer-events-none"></div>
+  `:''}
+
+  ${v===2?`
+  <!-- GLOW CENTER BLOB -->
+  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/15 rounded-full blur-3xl pointer-events-none anim-float"></div>
+  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-secondary/10 rounded-full blur-2xl pointer-events-none anim-float2"></div>
+  <!-- RING LINES -->
+  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] border border-primary/15 rounded-full pointer-events-none anim-spin" style="animation-duration:30s"></div>
+  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] border border-secondary/12 rounded-full pointer-events-none anim-spin" style="animation-duration:22s;animation-direction:reverse"></div>
+  `:''}
+
+  <div class="relative z-10 max-w-2xl mx-auto px-6 py-24">
+    <span class="badge badge-primary mb-4">Decoración Blobs</span>
+    <h2 class="text-4xl lg:text-5xl font-bold text-base-content mb-4">Profundidad visual<br>sin complicaciones</h2>
+    <p class="text-base-content/60 text-lg">Estos blobs son capas absolutas. Pégalos en cualquier sección.</p>
+  </div>
+</section>`);
+    },
+    code:(_)=>`{{-- Decoración Blobs + Partículas --}}
+{{-- BLOBS (pegar dentro de section con relative + overflow-hidden) --}}
+<div class="absolute -top-20 -left-20 w-96 h-96 bg-primary/20 rounded-full blur-2xl pointer-events-none"></div>
+<div class="absolute -bottom-16 -right-16 w-80 h-80 bg-secondary/15 rounded-full blur-2xl pointer-events-none"></div>
+<div class="absolute top-1/2 right-1/4 w-64 h-64 bg-accent/10 rounded-full blur-xl pointer-events-none"></div>
+
+{{-- CIRCLES GEOMÉTRICOS --}}
+<div class="absolute top-8 right-8 w-56 h-56 border-2 border-primary/30 rounded-full pointer-events-none"></div>
+<div class="absolute bottom-12 left-8 w-48 h-48 border border-secondary/25 rounded-full pointer-events-none animate-spin" style="animation-duration:25s"></div>
+
+{{-- GLOW CENTER (secciones dark) --}}
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/15 rounded-full blur-3xl pointer-events-none"></div>`,
+  },
+
+  'deco-geo': {
+    name:'Geometría Pura', cat:'deco', file:'(decorativo)',
+    variants:['Hexágonos + líneas','Cuadrícula diagonal','Rombo + diagonales animadas'],
+    info:'Patrones de fondo con geometría definida. Más estructura que los blobs. Muy elegante.',
+    render:(v)=>{
+      const hexPattern = `url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2252%22%3E%3Cpolygon points=%2230,2 58,16 58,44 30,58 2,44 2,16%22 fill=%22none%22 stroke=%22currentColor%22 stroke-width=%221.5%22 opacity=%220.4%22/%3E%3C/svg%3E')`;
+      const diagPattern = `url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2240%22 height=%2240%22%3E%3Cpath d=%22M0 40L40 0M-5 5L5 -5M35 45L45 35%22 stroke=%22currentColor%22 stroke-width=%221%22 opacity=%220.3%22/%3E%3C/svg%3E')`;
+      const dotPattern = `url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2230%22 height=%2230%22%3E%3Ccircle cx=%2215%22 cy=%2215%22 r=%221.5%22 fill=%22currentColor%22 opacity=%220.4%22/%3E%3C/svg%3E')`;
+      const patterns = [hexPattern,diagPattern,dotPattern];
+      const sizes = ['60px 52px','40px 40px','30px 30px'];
+      return iframeDoc(`
+<section class="relative min-h-[60vh] bg-base-100 overflow-hidden flex items-center justify-center text-center">
+  <!-- PATRÓN GEOMÉTRICO -->
+  <div class="absolute inset-0 text-primary pointer-events-none" style="background-image:${patterns[v]};background-size:${sizes[v]};${v===1?'transform:rotate(-10deg) scale(1.2);':''}" ></div>
+  ${v===0?`
+  <!-- ACCENT BLOBS -->
+  <div class="absolute top-0 left-0 w-64 h-64 bg-primary/10 rounded-full blur-3xl pointer-events-none"></div>
+  <div class="absolute bottom-0 right-0 w-56 h-56 bg-secondary/10 rounded-full blur-2xl pointer-events-none"></div>
+  `:''}
+  ${v===2?`
+  <!-- DIAGONALES ANIMADAS -->
+  <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary/50 to-transparent anim-float" style="transform:rotate(-15deg) scale(2);transform-origin:left center;"></div>
+  <div class="absolute bottom-0 right-0 w-full h-1 bg-gradient-to-l from-transparent via-secondary/40 to-transparent anim-float2" style="transform:rotate(-15deg) scale(2);transform-origin:right center;"></div>
+  <!-- ROMBO CENTRAL -->
+  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 border-2 border-primary/25 rotate-45 pointer-events-none"></div>
+  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 border border-primary/15 rotate-45 pointer-events-none anim-spin" style="animation-duration:15s"></div>
+  `:''}
+  <div class="relative z-10 max-w-2xl mx-auto px-6 py-24">
+    <span class="badge badge-primary mb-4">Geometría ${['Hexágonos','Diagonal','Rombo'][v]}</span>
+    <h2 class="text-4xl lg:text-5xl font-bold text-base-content mb-4">Estructura visual<br>con elegancia</h2>
+    <p class="text-base-content/60 text-lg">Patrón repetitivo de fondo. Varía la opacidad según el contexto.</p>
+  </div>
+</section>`);
+    },
+    code:(v)=>`{{-- Geometría de fondo — Variante ${v+1} --}}
+{{-- Pegar dentro de section con relative + overflow-hidden --}}
+
+{{-- HEXÁGONOS --}}
+<div class="absolute inset-0 text-primary/30 pointer-events-none"
+     style="background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2252%22%3E%3Cpolygon points=%2230,2 58,16 58,44 30,58 2,44 2,16%22 fill=%22none%22 stroke=%22currentColor%22 stroke-width=%221.5%22 opacity=%220.4%22/%3E%3C/svg%3E');
+            background-size:60px 52px;">
+</div>
+
+{{-- DIAGONAL LINES --}}
+<div class="absolute inset-0 text-primary/20 pointer-events-none"
+     style="background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2240%22 height=%2240%22%3E%3Cpath d=%22M0 40L40 0%22 stroke=%22currentColor%22 stroke-width=%221%22 opacity=%220.3%22/%3E%3C/svg%3E');
+            background-size:40px 40px;">
+</div>
+
+{{-- ROMBO + GIRO --}}
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 border-2 border-primary/25 rotate-45 pointer-events-none"></div>
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 border border-primary/15 rotate-45 pointer-events-none animate-spin" style="animation-duration:15s"></div>`,
+  },
+
+  'deco-noise': {
+    name:'Noise + Grain', cat:'deco', file:'(decorativo)',
+    variants:['Noise texture overlay','Grain + vignette','Noise + gradient mesh'],
+    info:'Textura de grano fotográfico para dar profundidad y carácter. Muy usado en diseño premium.',
+    render:(v)=>{
+      const noiseSvg = `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E")`;
+      return iframeDoc(`
+<section class="relative min-h-[60vh] overflow-hidden flex items-center justify-center text-center ${v===1?'bg-base-content':v===2?'bg-primary/5':'bg-base-200'}">
+
+  ${v===0?`
+  <!-- NOISE OVERLAY -->
+  <div class="absolute inset-0 pointer-events-none opacity-60" style="background-image:${noiseSvg};background-size:200px 200px;"></div>
+  <!-- GRADIENT SUBTLE -->
+  <div class="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5 pointer-events-none"></div>
+  `:''}
+
+  ${v===1?`
+  <!-- NOISE DARK -->
+  <div class="absolute inset-0 pointer-events-none opacity-40" style="background-image:${noiseSvg};background-size:150px 150px;"></div>
+  <!-- VIGNETTE -->
+  <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.5) 100%);"></div>
+  <!-- LIGHT LEAK -->
+  <div class="absolute top-0 left-1/4 w-64 h-32 bg-primary/20 rounded-full blur-3xl pointer-events-none transform -rotate-12"></div>
+  `:''}
+
+  ${v===2?`
+  <!-- GRADIENT MESH -->
+  <div class="absolute inset-0 pointer-events-none" style="
+    background:
+      radial-gradient(ellipse at 20% 50%, var(--color-primary)/0.15, transparent 60%),
+      radial-gradient(ellipse at 80% 20%, var(--color-secondary)/0.12, transparent 50%),
+      radial-gradient(ellipse at 50% 80%, var(--color-accent)/0.10, transparent 55%);
+  "></div>
+  <!-- NOISE OVER MESH -->
+  <div class="absolute inset-0 pointer-events-none opacity-50" style="background-image:${noiseSvg};background-size:180px 180px;"></div>
+  `:''}
+
+  <div class="relative z-10 max-w-2xl mx-auto px-6 py-24">
+    <span class="badge badge-primary mb-4">Noise ${['Texture','+ Vignette','+ Mesh'][v]}</span>
+    <h2 class="text-4xl font-bold ${v===1?'text-base-100':'text-base-content'} mb-4">Textura y profundidad<br>de nivel premium</h2>
+    <p class="${v===1?'text-base-100/60':'text-base-content/60'} text-lg">El grain sutil eleva el diseño sin distraer al usuario.</p>
+  </div>
+</section>`);
+    },
+    code:(_)=>`{{-- Noise + Grain decorativo --}}
+{{-- NOISE OVERLAY (pegar en cualquier section con relative) --}}
+<div class="absolute inset-0 pointer-events-none opacity-50"
+     style="background-image:url('data:image/svg+xml,%3Csvg viewBox=%220 0 256 256%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.9%22 numOctaves=%224%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23n)%22 opacity=%220.08%22/%3E%3C/svg%3E');
+            background-size:200px 200px;">
+</div>
+
+{{-- GRADIENT MESH --}}
+<div class="absolute inset-0 pointer-events-none"
+     style="background:
+       radial-gradient(ellipse at 20% 50%, oklch(var(--p)/0.15) 0%, transparent 60%),
+       radial-gradient(ellipse at 80% 20%, oklch(var(--s)/0.12) 0%, transparent 50%),
+       radial-gradient(ellipse at 50% 80%, oklch(var(--a)/0.10) 0%, transparent 55%);">
+</div>
+
+{{-- VIGNETTE (secciones dark) --}}
+<div class="absolute inset-0 pointer-events-none"
+     style="background:radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.45) 100%);">
+</div>`,
+  },
+
+  // ── ABOUT SPLIT ───────────────────────────────────────────────
+  'about-split': {
+    name:'About Split', cat:'tenant', file:'about.blade.php',
+    variants:['Original con stats overlay','Dark con imagen circular','Minimalista con línea'],
+    info:'Tu blade about.blade.php. Imagen del negocio con stats flotantes superpuestos.',
+    render:(v)=>{
+      if(v===0) return iframeDoc(`
+<section class="py-16 bg-base-200/50">
+  <div class="container mx-auto px-6 max-w-6xl">
+    <div class="flex flex-col lg:flex-row gap-12 lg:gap-16 items-center">
+      <div class="flex-1 lg:basis-2/3 space-y-4">
+        <span class="text-primary text-xs font-black uppercase tracking-[0.2em]">Acerca de nosotros</span>
+        <h2 class="text-3xl md:text-4xl font-black tracking-tight text-base-content">${opts.business}</h2>
+        <p class="text-base-content/50 text-sm italic">"${opts.slogan.replace(/\n/,' ')}"</p>
+        <p class="text-base-content/75 leading-relaxed">${opts.desc}</p>
+        <div class="inline-flex items-center gap-2 bg-primary/10 text-primary text-xs font-bold px-3 py-1.5 rounded-full mt-2">
+          <span class="w-1.5 h-1.5 bg-primary rounded-full animate-pulse"></span> Caracas, Venezuela
+        </div>
+      </div>
+      <div class="lg:basis-1/3 w-full flex items-center justify-center">
+        <div class="relative w-full max-w-xs">
+          <div class="absolute -top-3 -right-3 w-24 h-24 bg-primary/10 rounded-full blur-2xl pointer-events-none"></div>
+          <div class="absolute -bottom-3 -left-3 w-20 h-20 bg-primary/5 rounded-full blur-xl pointer-events-none"></div>
+          <div class="relative rounded-3xl overflow-hidden shadow-xl border border-base-content/10">
+            <img src="${opts.img}" class="w-full h-64 object-cover">
+          </div>
+          <div class="absolute -bottom-4 -right-4 bg-base-100 rounded-xl px-4 py-2 shadow-xl border border-base-content/10">
+            <div class="text-xs font-bold text-primary flex items-center gap-1">
+              <iconify-icon icon="tabler:star-filled" class="text-warning size-4"></iconify-icon> Calidad Top
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>`);
+      if(v===1) return iframeDoc(`
+<section class="py-20 bg-base-content">
+  <div class="container mx-auto px-6 max-w-5xl">
+    <div class="grid lg:grid-cols-2 gap-16 items-center">
+      <div class="flex justify-center">
+        <div class="relative">
+          <div class="w-72 h-72 rounded-full overflow-hidden border-4 border-primary/50 shadow-2xl shadow-primary/20">
+            <img src="${opts.img}" class="w-full h-full object-cover">
+          </div>
+          <div class="absolute -bottom-4 -right-4 w-20 h-20 bg-primary/20 rounded-full blur-xl pointer-events-none"></div>
+          <div class="absolute -top-4 -left-4 w-24 h-24 border-2 border-primary/30 rounded-full pointer-events-none anim-spin" style="animation-duration:12s"></div>
+        </div>
+      </div>
+      <div class="space-y-4">
+        <span class="text-primary text-xs font-bold uppercase tracking-widest">Quiénes somos</span>
+        <h2 class="text-4xl font-black text-base-100 leading-tight">${opts.business}</h2>
+        <p class="text-base-100/60 leading-relaxed">${opts.desc}</p>
+        ${opts.showStats?`<div class="grid grid-cols-2 gap-4 mt-4">
+          <div class="bg-white/5 rounded-xl p-4"><div class="text-2xl font-black text-primary">10+</div><div class="text-xs text-base-100/50">Años de experiencia</div></div>
+          <div class="bg-white/5 rounded-xl p-4"><div class="text-2xl font-black text-primary">500+</div><div class="text-xs text-base-100/50">Clientes satisfechos</div></div>
+        </div>`:''}
+      </div>
+    </div>
+  </div>
+</section>`);
+      return iframeDoc(`
+<section class="py-20 bg-base-100">
+  <div class="container mx-auto px-6 max-w-5xl">
+    <div class="flex flex-wrap items-center gap-16">
+      <div class="flex-1 min-w-64">
+        <div class="w-16 h-1 bg-primary mb-8"></div>
+        <h2 class="text-4xl font-black text-base-content mb-6">${opts.business}</h2>
+        <p class="text-base-content/60 leading-relaxed text-lg border-l-4 border-primary/30 pl-6">${opts.desc}</p>
+        <div class="w-16 h-1 bg-primary mt-8"></div>
+      </div>
+      <div class="flex-shrink-0">
+        <div class="w-64 h-80 rounded-2xl overflow-hidden shadow-xl relative">
+          <img src="${opts.img}" class="w-full h-full object-cover">
+          <div class="absolute inset-0 bg-gradient-to-t from-base-content/30 to-transparent pointer-events-none"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>`);
+    },
+    code:(v)=>`{{-- About Section — Variante ${v+1} --}}
+{{-- Archivo: about.blade.php --}}
+<section id="about" class="py-16 bg-base-200/50">
+    <div class="container mx-auto px-6 max-w-6xl">
+        <div class="flex flex-col lg:flex-row gap-12 lg:gap-16 items-center">
+            <div class="flex-1 lg:basis-2/3 space-y-4">
+                <span class="text-primary text-xs font-black uppercase tracking-[0.2em]">
+                    Acerca de nosotros
+                </span>
+                <h2 class="text-3xl md:text-4xl font-black text-base-content">
+                    {{ $tenant->business_name }}
+                </h2>
+                @if($tenant->slogan)
+                <p class="text-base-content/50 italic">"{{ $tenant->slogan }}"</p>
+                @endif
+                <p class="text-base-content/75 leading-relaxed">
+                    {{ $tenant->description ?? $customization->about_text }}
+                </p>
+                @if($tenant->city)
+                <div class="inline-flex items-center gap-2 bg-primary/10 text-primary text-xs font-bold px-3 py-1.5 rounded-full">
+                    <span class="w-1.5 h-1.5 bg-primary rounded-full animate-pulse"></span>
+                    {{ $tenant->city }}
+                </div>
+                @endif
+            </div>
+            <div class="lg:basis-1/3 relative">
+                <div class="rounded-3xl overflow-hidden shadow-xl">
+                    <img src="{{ $customization->hero_main_filename
+                        ? asset('storage/tenants/'.$tenant->id.'/'.$customization->hero_main_filename)
+                        : '' }}"
+                         class="w-full h-64 object-cover">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>`,
+  },
+
+};
+
+// ============================================================
+// ENGINE
+// ============================================================
+function loadSec(el, key) {
+  currentSec = key;
+  currentVar = 0;
+  document.querySelectorAll('.sec-item').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  const sec = SECTIONS[key];
+  document.getElementById('topnav-title').innerHTML = `${sec.name} <span>${sec.variants.length} variantes · ${sec.cat==='tenant'?'🏪 Tenant':sec.cat==='mkt'?'📣 Marketing':'⚡ Nuevo'}</span>`;
+  document.getElementById('btn-show-code').style.display = 'flex';
+  // Variants
+  const bar = document.getElementById('variant-tabs');
+  bar.innerHTML = sec.variants.map((v,i)=>`<button class="var-btn${i===0?' active':''}" onclick="switchVar(${i})">${i+1}. ${v}</button>`).join('');
+  render();
+  renderInfoTab(sec);
+  renderOptions();
+}
+
+function switchVar(i) {
+  currentVar = i;
+  document.querySelectorAll('.var-btn').forEach((b,j)=>b.classList.toggle('active',j===i));
+  render();
+}
+
+function render() {
+  if(!currentSec) return;
+  const sec = SECTIONS[currentSec];
+  const blobUrl = sec.render(currentVar);
+  const frame = document.getElementById('preview-frame');
+  document.getElementById('preview-empty').style.display='none';
+  frame.style.display='block';
+  if(_lastBlobUrl) URL.revokeObjectURL(_lastBlobUrl);
+  _lastBlobUrl = blobUrl;
+  frame.src = blobUrl;
+}
+
+function setTheme(t, el) {
+  currentTheme = t;
+  document.querySelectorAll('.theme-pill').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  if(currentSec) render();
+}
+
+function renderOptions() {
+  const html = `
+<div class="tip-card"><div class="tip-t">💡 NOTA</div><p>Los colores los gestiona el sistema de temas FlyonUI. Aquí puedes cambiar el contenido de muestra.</p></div>
+<div class="opt-group">
+  <div class="opt-group-label">Negocio</div>
+  <div class="opt-row"><label>Nombre</label><input class="opt-input" value="${opts.business}" oninput="opts.business=this.value;render()"></div>
+  <div class="opt-row"><label>Slogan</label><textarea class="opt-input" rows="2" oninput="opts.slogan=this.value;render()">${opts.slogan}</textarea></div>
+  <div class="opt-row"><label>Descripción</label><textarea class="opt-input" rows="3" oninput="opts.desc=this.value;render()">${opts.desc}</textarea></div>
+  <div class="opt-row"><label>WhatsApp</label><input class="opt-input" value="${opts.whatsapp}" oninput="opts.whatsapp=this.value;render()"></div>
+</div>
+<div class="opt-group">
+  <div class="opt-group-label">Imagen de muestra</div>
+  <div class="opt-row"><label>URL</label><input class="opt-input" value="${opts.img}" oninput="opts.img=this.value;render()"></div>
+  <div class="img-grid">
+    ${[['Negocio','https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&q=80'],
+       ['Comida','https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1200&q=80'],
+       ['Tienda','https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=1200&q=80'],
+       ['Tech','https://images.unsplash.com/photo-1518770660439-4636190af475?w=1200&q=80'],
+       ['Salud','https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=1200&q=80'],
+       ['Moda','https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=1200&q=80'],
+    ].map(([l,u])=>`<button class="img-btn" onclick="opts.img='${u}';render();document.querySelectorAll('.img-btn').forEach(b=>b.classList.remove('sel'));this.classList.add('sel')">${l}</button>`).join('')}
+  </div>
+</div>
+<div class="opt-group">
+  <div class="opt-group-label">Elementos</div>
+  <div class="toggle-row">
+    <span class="toggle-label-txt">Badge / etiqueta</span>
+    <label class="toggle"><input type="checkbox" ${opts.showBadge?'checked':''} onchange="opts.showBadge=this.checked;render()"><span class="tslider"></span></label>
+  </div>
+  <div class="toggle-row">
+    <span class="toggle-label-txt">Estadísticas</span>
+    <label class="toggle"><input type="checkbox" ${opts.showStats?'checked':''} onchange="opts.showStats=this.checked;render()"><span class="tslider"></span></label>
+  </div>
+  <div class="toggle-row">
+    <span class="toggle-label-txt">Onda inferior (wave)</span>
+    <label class="toggle"><input type="checkbox" ${opts.showWave?'checked':''} onchange="opts.showWave=this.checked;render()"><span class="tslider"></span></label>
+  </div>
+</div>`;
+  document.getElementById('rp-options').innerHTML = html;
+}
+
+function renderInfoTab(sec) {
+  const catLabel = {tenant:'🏪 Tenant Landing',mkt:'📣 Marketing Landing',nuevo:'⚡ Nuevo Componente',deco:'🎨 Decorativo'}[sec.cat]||sec.cat;
+  document.getElementById('rp-info').innerHTML = `
+<div class="info-badge ${sec.cat==='tenant'?'badge-tenant':sec.cat==='deco'?'badge-ready':'badge-mkt'}">${catLabel}</div>
+<code class="info-file">📄 ${sec.file}</code>
+<p class="info-text">${sec.info}</p>
+<div class="tip-card" style="margin-top:14px;">
+  <div class="tip-t">📋 VARIANTES DISPONIBLES</div>
+  <p>${sec.variants.map((v,i)=>`${i+1}. ${v}`).join('<br>')}</p>
+</div>`;
+}
+
+function switchTab(tab, el) {
+  document.querySelectorAll('.rp-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('rp-options').style.display = tab==='options'?'block':'none';
+  document.getElementById('rp-info').style.display = tab==='info'?'block':'none';
+}
+
+function showCode() {
+  if(!currentSec) return;
+  const sec = SECTIONS[currentSec];
+  const code = sec.code(currentVar);
+  document.getElementById('modal-title').textContent = `${sec.name} · Variante ${currentVar+1}: ${sec.variants[currentVar]}`;
+  document.getElementById('code-output').textContent = code;
+  document.getElementById('code-modal').classList.add('open');
+}
+
+function copyBlade() {
+  const code = document.getElementById('code-output').textContent;
+  navigator.clipboard.writeText(code).then(()=>{
+    const b = document.getElementById('copy-btn');
+    b.textContent = '✅ ¡Copiado!';
+    setTimeout(()=>b.textContent='📋 Copiar', 2000);
+  });
+}
+
+function filterSections(q) {
+  document.querySelectorAll('.sec-item').forEach(b=>{
+    const txt = b.querySelector('.sec-name').textContent.toLowerCase()+b.querySelector('.sec-sub').textContent.toLowerCase();
+    b.style.display = (!q||txt.includes(q.toLowerCase()))?'flex':'none';
+  });
+}
+</script>
+</body>
+</html>

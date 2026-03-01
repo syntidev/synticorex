@@ -103,11 +103,6 @@
         /* QR display — force SVG to fill container exactly */
         #qr-display svg { width:100% !important; height:100% !important; display:block; }
 
-        /* Drag handles */
-        .drag-handle { cursor: grab !important; color: rgba(148,163,184,0.55); transition: color .18s; }
-        .drag-handle:hover { color: #4D8FFF !important; }
-        .drag-handle:active { cursor: grabbing !important; }
-
         /* Responsive */
         @media(max-width:639px) { #header-extras { display:none !important; } }
     </style>
@@ -161,13 +156,13 @@
 
                 {{-- Center: reloj + tasa BCV --}}
                 <div id="header-extras" class="navbar-center hidden md:flex items-center gap-3">
-                    <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border" style="background:rgba(255,255,255,0.18);border-color:rgba(255,255,255,0.25)">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#bfdbfe" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                        <span id="live-clock" class="text-xs font-bold tracking-wide" style="color:#fff" aria-label="Hora actual">--:--</span>
+                    <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 backdrop-blur-sm border border-white/10">
+                        <span class="iconify tabler--clock size-3.5 text-blue-200"></span>
+                        <span id="live-clock" class="text-xs font-bold text-white tracking-wide" aria-label="Hora actual">--:--</span>
                     </div>
-                    <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border" style="background:rgba(255,255,255,0.18);border-color:rgba(255,255,255,0.25)">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6ee7b7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                        <span class="text-xs font-semibold" style="color:#fff">
+                    <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 backdrop-blur-sm border border-white/10">
+                        <span class="iconify tabler--currency-dollar size-3.5 text-emerald-300"></span>
+                        <span class="text-xs font-semibold text-white">
                             Bs. <span id="header-dollar-rate">{{ number_format($dollarRate, 2) }}</span>
                         </span>
                     </div>
@@ -177,17 +172,16 @@
                 <div class="navbar-end items-center gap-2">
                     <span class="{{ $tenant->is_open ? 'dot-online' : 'dot-offline' }} lg:hidden"></span>
                     <a href="/{{ $tenant->subdomain }}"
-                       class="btn btn-sm gap-1.5 border-0 hover:opacity-90 transition-opacity"
-                       style="background:rgba(255,255,255,0.2);color:#fff;border:1px solid rgba(255,255,255,0.3)">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
-                        <span class="hidden sm:inline" style="color:#fff">Ver sitio</span>
+                       class="btn btn-sm gap-1.5 border-0 bg-white/15 text-white hover:bg-white/25 backdrop-blur-sm">
+                        <span class="iconify tabler--layout-sidebar-right-collapse size-4"></span>
+                        <span class="hidden sm:inline">Cerrar</span>
                     </a>
                 </div>
             </nav>
         </div>
     </div>
 
-    <!-- ══ SIDEBAR — 4 Menús Lógicos ════════════════════════════════════ -->
+    <!-- ══ SIDEBAR ═══════════════════════════════════════════════════════ -->
     <aside id="layout-sidebar"
            class="overlay [--auto-close:lg]"
            aria-label="Sidebar"
@@ -223,7 +217,7 @@
                     </div>
                 </div>
 
-                {{-- Navigation — 4 Menús --}}
+                {{-- Navigation --}}
                 <div class="h-full overflow-y-auto py-2">
                     <p class="px-5 py-2 text-[10px] font-bold uppercase tracking-widest text-slate-500">Menú</p>
                     <ul class="menu menu-sm gap-0.5 px-3" role="tablist">
@@ -232,7 +226,7 @@
                                     aria-selected="true" aria-controls="tab-info"
                                     id="tab-info-btn" data-tab="info" tabindex="0">
                                 <span class="iconify tabler--info-circle size-4.5"></span>
-                                <span class="grow">Tu Información</span>
+                                <span class="grow">Información</span>
                             </button>
                         </li>
                         <li role="presentation">
@@ -240,7 +234,15 @@
                                     aria-selected="false" aria-controls="tab-productos"
                                     id="tab-productos-btn" data-tab="productos" tabindex="-1">
                                 <span class="iconify tabler--package size-4.5"></span>
-                                <span class="grow">Qué Vendes</span>
+                                <span class="grow">{{ $itemLabel ?? 'Productos' }}</span>
+                            </button>
+                        </li>
+                        <li role="presentation">
+                            <button class="w-full text-start" role="tab"
+                                    aria-selected="false" aria-controls="tab-servicios"
+                                    id="tab-servicios-btn" data-tab="servicios" tabindex="-1">
+                                <span class="iconify tabler--tool size-4.5"></span>
+                                <span class="grow">Servicios</span>
                             </button>
                         </li>
                         <li role="presentation">
@@ -248,25 +250,27 @@
                                     aria-selected="false" aria-controls="tab-diseno"
                                     id="tab-diseno-btn" data-tab="diseno" tabindex="-1">
                                 <span class="iconify tabler--palette size-4.5"></span>
-                                <span class="grow">Cómo Se Ve</span>
+                                <span class="grow">Diseño</span>
                             </button>
                         </li>
                         <li role="presentation">
                             <button class="w-full text-start" role="tab"
-                                    aria-selected="false" aria-controls="tab-mensaje"
-                                    id="tab-mensaje-btn" data-tab="mensaje" tabindex="-1">
-                                <span class="iconify tabler--writing size-4.5"></span>
-                                <span class="grow">Tu Mensaje</span>
-                            </button>
-                        </li>
-                        <li role="presentation">
-                            <button class="w-full text-start" role="tab"
-                                    aria-selected="false" aria-controls="tab-ventas"
-                                    id="tab-ventas-btn" data-tab="ventas" tabindex="-1">
+                                    aria-selected="false" aria-controls="tab-analytics"
+                                    id="tab-analytics-btn" data-tab="analytics" tabindex="-1">
                                 <span class="iconify tabler--chart-bar size-4.5"></span>
-                                <span class="grow">Pulso del Negocio</span>
+                                <span class="grow">Analytics</span>
                             </button>
                         </li>
+                        @if($plan->id === 3)
+                        <li role="presentation">
+                            <button class="w-full text-start" role="tab"
+                                    aria-selected="false" aria-controls="tab-sucursales"
+                                    id="tab-sucursales-btn" data-tab="sucursales" tabindex="-1">
+                                <span class="iconify tabler--map-pin size-4.5"></span>
+                                <span class="grow">Sucursales</span>
+                            </button>
+                        </li>
+                        @endif
                         <li role="presentation">
                             <button class="w-full text-start" role="tab"
                                     aria-selected="false" aria-controls="tab-config"
@@ -332,36 +336,31 @@
     <!-- Content -->
     <main id="main-content" class="mx-auto w-full max-w-[1200px] flex-1 grow p-5 lg:p-8" tabindex="-1">
         
-    {{-- ═══ TAB 1: TU INFORMACIÓN ═══ --}}
     @include('dashboard.components.info-section')
 
-    {{-- ═══ TAB 2: QUÉ VENDES (Productos + Servicios) ═══ --}}
     @include('dashboard.components.products-section')
     @include('dashboard.modals.product-modal')
+
     @include('dashboard.components.services-section')
     @include('dashboard.modals.service-modal')
 
-    {{-- ═══ Modales compartidos ═══ --}}
     @include('dashboard.modals.shared-modals')
 
-    {{-- ═══ TAB 3: CÓMO SE VE ═══ --}}
     @include('dashboard.components.design-section')
 
-    {{-- ═══ TAB 4: TU MENSAJE ═══ --}}
-    @include('dashboard.components.message-section')
+    @include('dashboard.components.analytics-section')
 
-    {{-- ═══ TAB 5: PULSO DEL NEGOCIO ═══ --}}
-    @include('dashboard.components.sales-section')
+    @include('dashboard.components.branches-section')
 
-    {{-- ═══ TAB 6: CONFIGURACIÓN ═══ --}}
     @include('dashboard.components.config-section')
 
     </main>
 
-    {{-- ═══ SCRIPTS ═══ --}}
+
     @include('dashboard.scripts.tab-product-scripts')
     @include('dashboard.scripts.service-scripts')
     @include('dashboard.scripts.design-config-scripts')
+
     @include('dashboard.scripts.sortable-scripts')
 
     </div>{{-- /lg:ps-64 content wrapper --}}

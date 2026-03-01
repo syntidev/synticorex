@@ -184,22 +184,25 @@
             }
         });
 
-        // Analytics Tab: Update Dollar Rate
+        // Config Tab: Update Dollar Rate
         async function updateDollarRate() {
             try {
                 const response = await fetch('/api/dollar-rate');
                 const result = await response.json();
 
                 if (result.success && result.rate) {
-                    // Actualizar el valor en pantalla
-                    document.getElementById('dollar-rate-value').textContent = result.rate.toFixed(2);
-                    alert('✓ Tasa del dólar actualizada correctamente');
+                    const formatted = result.rate.toFixed(2);
+                    const dvEl = document.getElementById('dollar-rate-value');
+                    const hdEl = document.getElementById('header-dollar-rate');
+                    if (dvEl) dvEl.textContent = formatted;
+                    if (hdEl) hdEl.textContent = formatted;
+                    showToast('✅ Tasa BCV actualizada: Bs. ' + formatted, 'success');
                 } else {
-                    alert('✗ No se pudo actualizar la tasa del dólar');
+                    showToast('❌ No se pudo actualizar la tasa', 'error');
                 }
             } catch (error) {
                 console.error('Error:', error);
-                alert('✗ Error al actualizar la tasa');
+                showToast('❌ Error al actualizar la tasa', 'error');
             }
         }
 
@@ -749,4 +752,73 @@
         }
         @endif
         // ── End Branches ────────────────────────────────────────────
+
+        // ── Header Top (Plan 2+) ────────────────────────────────────
+        async function saveHeaderTop() {
+            const enabled = document.getElementById('header-top-toggle')?.checked ?? false;
+            const text = document.getElementById('header-top-text')?.value?.trim() ?? '';
+            try {
+                const res = await fetch(`/tenant/{{ $tenant->id }}/update-header-top`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+                    body: JSON.stringify({ enabled, text })
+                });
+                const result = await res.json();
+                if (result.success) {
+                    showToast('✓ Header Top actualizado', 'success');
+                } else {
+                    showToast('✗ ' + (result.message || 'Error'), 'error');
+                }
+            } catch (err) {
+                console.error('Error:', err);
+                showToast('✗ Error al guardar Header Top', 'error');
+            }
+        }
+
+        // ── Acerca de (description) ────────────────────────────────
+        async function saveAboutText() {
+            const description = document.getElementById('about-text')?.value?.trim() ?? '';
+            try {
+                const res = await fetch(`/tenant/{{ $tenant->id }}/update-info`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+                    body: JSON.stringify({ description })
+                });
+                const result = await res.json();
+                if (result.success) {
+                    showToast('✓ Descripción actualizada', 'success');
+                } else {
+                    showToast('✗ ' + (result.message || 'Error'), 'error');
+                }
+            } catch (err) {
+                console.error('Error:', err);
+                showToast('✗ Error al guardar descripción', 'error');
+            }
+        }
+
+        // ── CTA Especial (Plan 3) ──────────────────────────────────
+        async function saveCtaConfig() {
+            const data = {
+                cta_title: document.getElementById('cta-title')?.value?.trim() ?? '',
+                cta_subtitle: document.getElementById('cta-subtitle')?.value?.trim() ?? '',
+                cta_button_text: document.getElementById('cta-btn-text')?.value?.trim() ?? '',
+                cta_button_link: document.getElementById('cta-btn-link')?.value?.trim() ?? ''
+            };
+            try {
+                const res = await fetch(`/tenant/{{ $tenant->id }}/update-cta`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+                    body: JSON.stringify(data)
+                });
+                const result = await res.json();
+                if (result.success) {
+                    showToast('✓ CTA actualizado', 'success');
+                } else {
+                    showToast('✗ ' + (result.message || 'Error'), 'error');
+                }
+            } catch (err) {
+                console.error('Error:', err);
+                showToast('✗ Error al guardar CTA', 'error');
+            }
+        }
     </script>

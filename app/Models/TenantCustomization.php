@@ -24,10 +24,7 @@ class TenantCustomization extends Model
     protected $fillable = [
         'tenant_id',
         'logo_filename',
-        'hero_main_filename',  // Main hero image (was hero_filename)
-        'hero_secondary_filename',
-        'hero_tertiary_filename',
-        'hero_layout',
+        'hero_filename',
         'theme_slug',          // FlyonUI official theme (light, dark, cupcake, etc.)
         'social_networks',
         'payment_methods',
@@ -37,6 +34,7 @@ class TenantCustomization extends Model
         'cta_button_text',
         'cta_button_link',
         'visual_effects',
+        'about_text',
     ];
 
     /**

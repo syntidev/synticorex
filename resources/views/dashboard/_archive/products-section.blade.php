@@ -1,4 +1,4 @@
-        <!-- Tab: Qué Vendes (Productos + Servicios) -->
+        <!-- Tab: {{ $itemLabel ?? 'Productos' }} -->
         <div id="tab-productos" class="tab-content">
             @php
                 $maxProducts = $maxItems ?? (int) ($plan->products_limit ?? 6);
@@ -69,10 +69,6 @@
                                             class="btn btn-sm btn-primary shadow-lg" title="Editar">
                                         <span class="iconify tabler--pencil size-4" aria-hidden="true"></span> Editar
                                     </button>
-                                    <button onclick="shareProduct({{ $product->id }}, '{{ addslashes($product->name) }}', {{ $product->price_usd }})"
-                                            class="btn btn-sm btn-success shadow-lg" title="Compartir">
-                                        <span class="iconify tabler--share size-4" aria-hidden="true"></span>
-                                    </button>
                                     <button onclick="deleteProduct({{ $product->id }})"
                                             class="btn btn-sm btn-error shadow-lg" title="Eliminar">
                                         <span class="iconify tabler--trash size-4" aria-hidden="true"></span>
@@ -123,8 +119,5 @@
                 </div>
                 @endif
             </div>
-
-{{-- ══════════════════════════════════════════════════════════════════════
-     Divider visual between Products and Services (same tab)
-══════════════════════════════════════════════════════════════════════ --}}
+        </div>
 

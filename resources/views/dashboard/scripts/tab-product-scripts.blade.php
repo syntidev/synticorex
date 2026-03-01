@@ -34,8 +34,8 @@
                     }
                 }
 
-                // Re-init SortableJS cada vez que se abre el tab Diseño
-                if (tabId === 'diseno') {
+                // Re-init SortableJS cada vez que se abre el tab Tu Mensaje
+                if (tabId === 'mensaje') {
                     requestAnimationFrame(function() { window.initSortable(); });
                 }
             }
@@ -208,6 +208,7 @@
 
                 const result = await response.json();
                 if (result.success) {
+                    refreshHoursSummary(payload);
                     window.showToast ? window.showToast('✅ Horario guardado', 'success') : alert('✓ Horario guardado');
                 } else {
                     window.showToast ? window.showToast('❌ ' + (result.message || 'Error'), 'error') : alert('✗ ' + (result.message || 'Error'));
@@ -216,6 +217,32 @@
                 console.error('Error:', error);
                 window.showToast ? window.showToast('❌ Error de red', 'error') : alert('✗ Error al guardar horario');
             }
+        }
+
+        // Rebuild compact summary line from saved payload
+        function refreshHoursSummary(payload) {
+            const shortNames = {monday:'Lun',tuesday:'Mar',wednesday:'Mié',thursday:'Jue',friday:'Vie',saturday:'Sáb',sunday:'Dom'};
+            const order = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday'];
+            const grouped = [];
+            let prev = null;
+            order.forEach(day => {
+                const d = payload[day] || {};
+                const key = d.closed ? 'closed' : ((d.open || '08:00') + '-' + (d.close || '18:00'));
+                if (key === prev && grouped.length) {
+                    grouped[grouped.length - 1].days.push(day);
+                } else {
+                    grouped.push({ days: [day], key: key, closed: !!d.closed, open: d.open || '08:00', close: d.close || '18:00' });
+                }
+                prev = key;
+            });
+            const parts = grouped.map(g => {
+                const first = shortNames[g.days[0]];
+                const last  = shortNames[g.days[g.days.length - 1]];
+                const range = g.days.length > 1 ? first + '-' + last : first;
+                return range + ': ' + (g.closed ? 'Cerrado' : g.open + ' - ' + g.close);
+            });
+            const el = document.getElementById('hours-summary-line');
+            if (el) el.textContent = parts.join('  •  ') || 'Sin horario configurado';
         }
 
         // Save Info Form
@@ -664,6 +691,24 @@
             } catch (error) {
                 console.error('Error:', error);
                 alert('✗ Error al eliminar el producto');
+            }
+        }
+
+        /**
+         * Share product via Web Share API with WhatsApp fallback
+         */
+        function shareProduct(productId, productName, priceUsd) {
+            const tenantName = @json($tenant->business_name);
+            const siteUrl = window.location.origin + '/{{ $tenant->subdomain }}';
+            const text = `${productName} — $${Number(priceUsd).toFixed(2)} en ${tenantName}`;
+            const url = siteUrl;
+
+            if (navigator.share) {
+                navigator.share({ title: productName, text: text, url: url }).catch(() => {});
+            } else {
+                // Fallback: copy to clipboard or open WhatsApp
+                const waText = encodeURIComponent(text + '\n' + url);
+                window.open('https://wa.me/?text=' + waText, '_blank');
             }
         }
 

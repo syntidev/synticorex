@@ -1,4 +1,4 @@
-        <!-- Tab: Tu Información -->
+        <!-- Tab: Info -->
         <div id="tab-info" class="tab-content active">
 
             {{-- ══ Visual Assets: Logo + Hero + QR ═══════════════════════════ --}}
@@ -291,293 +291,37 @@
                 </div>
             </form>
 
-            {{-- ═══════════════════════════════════════════════════════════
-                 Horario de Atención — Compact collapse / expand
-            ═══════════════════════════════════════════════════════════ --}}
+            {{-- ══ Horario de Atención (solo lectura) ══════════════════════════ --}}
             @php
-                $businessHours = $tenant->business_hours ?? [];
-                $daysMap = [
-                    'monday'    => 'Lunes',
-                    'tuesday'   => 'Martes',
-                    'wednesday' => 'Miércoles',
-                    'thursday'  => 'Jueves',
-                    'friday'    => 'Viernes',
-                    'saturday'  => 'Sábado',
-                    'sunday'    => 'Domingo',
-                ];
-                $shortDaysMap = [
+                $bhReadonly = $tenant->business_hours ?? [];
+                $daysReadonly = [
                     'monday' => 'Lun', 'tuesday' => 'Mar', 'wednesday' => 'Mié',
                     'thursday' => 'Jue', 'friday' => 'Vie', 'saturday' => 'Sáb', 'sunday' => 'Dom',
                 ];
-                $weekdays = ['monday','tuesday','wednesday','thursday','friday'];
-
-                // Build compact summary string
-                $summaryParts = [];
-                $grouped = [];
-                $prevKey = null;
-                foreach ($daysMap as $dayKey => $dayLabel) {
-                    $d = $businessHours[$dayKey] ?? null;
-                    $isClosed = is_null($d) || !empty($d['closed']);
-                    $key = $isClosed ? 'closed' : ($d['open'] ?? '08:00') . '-' . ($d['close'] ?? '18:00');
-                    if ($key === $prevKey && !empty($grouped)) {
-                        $grouped[count($grouped) - 1]['days'][] = $dayKey;
-                    } else {
-                        $grouped[] = ['days' => [$dayKey], 'key' => $key, 'closed' => $isClosed,
-                                      'open' => $d['open'] ?? '08:00', 'close' => $d['close'] ?? '18:00'];
-                    }
-                    $prevKey = $key;
-                }
-                foreach ($grouped as $g) {
-                    $first = $shortDaysMap[$g['days'][0]];
-                    $last  = $shortDaysMap[end($g['days'])];
-                    $range = count($g['days']) > 1 ? "{$first}-{$last}" : $first;
-                    $summaryParts[] = $range . ': ' . ($g['closed'] ? 'Cerrado' : $g['open'] . ' - ' . $g['close']);
-                }
-                $hoursSummary = implode('  •  ', $summaryParts);
-
-                // Detect simple mode — default to 'simple' unless weekdays clearly differ
-                $wdHours = array_filter(array_map(fn($d) => $businessHours[$d] ?? null, $weekdays));
-                $wdOpens  = array_filter(array_column($wdHours, 'open'), fn($v) => $v !== null);
-                $wdCloses = array_filter(array_column($wdHours, 'close'), fn($v) => $v !== null);
-                $allSame = empty($wdOpens)
-                    || (count($wdOpens) === 5 && count(array_unique($wdOpens)) === 1 && count(array_unique($wdCloses)) === 1);
-                $defaultMode = (empty($businessHours) || $allSame) ? 'simple' : 'custom';
-                $wdOpen  = $wdHours ? (reset($wdHours)['open'] ?? '08:00') : '08:00';
-                $wdClose = $wdHours ? (reset($wdHours)['close'] ?? '18:00') : '18:00';
-                $satData = $businessHours['saturday'] ?? null;
-                $sunData = $businessHours['sunday'] ?? null;
-                $satClosed = is_null($satData) || !empty($satData['closed']);
-                $sunClosed = is_null($sunData) || !empty($sunData['closed']);
             @endphp
-            <div class="card bg-base-100 shadow-md border border-base-content/8 card-elevated mt-6 mb-6"
-                 x-data="{ hoursOpen: false }">
-
-                {{-- ── Compact header — always visible ── --}}
-                <div class="card-body px-5 py-4 cursor-pointer select-none"
-                     @click="hoursOpen = !hoursOpen">
-                    <div class="flex items-center gap-3">
-                        <div class="size-9 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-                            <span class="iconify tabler--clock size-5 text-primary" aria-hidden="true"></span>
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <div class="flex items-center gap-2 mb-0.5">
-                                <h3 class="text-sm font-bold text-base-content">Horario de Atención</h3>
-                            </div>
-                            <p id="hours-summary-line" class="text-xs text-base-content/60 truncate">
-                                {{ $hoursSummary ?: 'Sin horario configurado' }}
-                            </p>
-                        </div>
-                        <span class="iconify tabler--chevron-down size-5 text-base-content/40 shrink-0 transition-transform duration-200"
-                              :class="hoursOpen && 'rotate-180'" aria-hidden="true"></span>
-                    </div>
+            <div class="card bg-base-100 shadow-md border border-base-content/8 mt-6 card-elevated">
+                <div class="card-header flex items-center justify-between gap-2 px-6 pt-5 pb-3">
+                    <h3 class="card-title flex items-center gap-2 text-sm">
+                        <span class="iconify tabler--clock size-4 text-primary" aria-hidden="true"></span>
+                        Horario de Atención
+                    </h3>
+                    <span class="text-[10px] text-base-content/40">Editar en Configuración</span>
                 </div>
-
-                {{-- ── Expandable editor ── --}}
-                <div x-show="hoursOpen" x-collapse x-cloak>
-                    <div class="card-body pt-0 px-5 pb-5">
-                        <div class="border-t border-base-content/10 pt-4">
-
-                            {{-- Mode switcher --}}
-                            <div class="flex rounded-lg bg-base-200/60 p-1 mb-4 gap-1">
-                                <button type="button" id="hours-mode-simple" onclick="setHoursMode('simple')"
-                                        class="flex-1 py-2 px-3 rounded-md text-sm font-semibold transition-all {{ $defaultMode === 'simple' ? 'bg-primary text-primary-content shadow-sm' : 'text-base-content/60 hover:text-base-content' }}">
-                                    Rápido
-                                </button>
-                                <button type="button" id="hours-mode-custom" onclick="setHoursMode('custom')"
-                                        class="flex-1 py-2 px-3 rounded-md text-sm font-semibold transition-all {{ $defaultMode === 'custom' ? 'bg-primary text-primary-content shadow-sm' : 'text-base-content/60 hover:text-base-content' }}">
-                                    Por día
-                                </button>
-                            </div>
-
-                            {{-- ── SIMPLE MODE ── --}}
-                            <div id="hours-simple-mode" class="{{ $defaultMode === 'simple' ? '' : 'hidden' }}">
-                                <div class="space-y-3">
-                                    {{-- Weekdays --}}
-                                    <div class="p-3 rounded-lg bg-base-200/40 border border-base-content/10">
-                                        <div class="flex items-center gap-2 mb-2.5">
-                                            <span class="text-sm font-semibold text-base-content">Lunes a Viernes</span>
-                                            <span class="badge badge-soft badge-primary badge-xs">5 días</span>
-                                        </div>
-                                        <div class="flex items-center gap-2 flex-wrap">
-                                            <input type="time" id="bh-simple-wd-open" class="input input-sm input-bordered w-28" value="{{ $wdOpen }}">
-                                            <span class="text-xs text-base-content/40 font-medium">a</span>
-                                            <input type="time" id="bh-simple-wd-close" class="input input-sm input-bordered w-28" value="{{ $wdClose }}">
-                                        </div>
-                                    </div>
-
-                                    {{-- Saturday --}}
-                                    <div class="p-3 rounded-lg bg-base-200/40 border border-base-content/10">
-                                        <div class="flex items-center justify-between mb-2.5">
-                                            <span class="text-sm font-semibold text-base-content">Sábado</span>
-                                            <label class="flex items-center gap-2 cursor-pointer">
-                                                <span class="text-xs text-base-content/50">Cerrado</span>
-                                                <input type="checkbox" id="bh-simple-sat-closed" class="toggle toggle-error toggle-sm"
-                                                       {{ $satClosed ? 'checked' : '' }}
-                                                       onchange="document.getElementById('bh-simple-sat-times').classList.toggle('hidden', this.checked)">
-                                            </label>
-                                        </div>
-                                        <div id="bh-simple-sat-times" class="flex items-center gap-2 flex-wrap {{ $satClosed ? 'hidden' : '' }}">
-                                            <input type="time" id="bh-simple-sat-open" class="input input-sm input-bordered w-28" value="{{ $satData['open'] ?? '09:00' }}">
-                                            <span class="text-xs text-base-content/40 font-medium">a</span>
-                                            <input type="time" id="bh-simple-sat-close" class="input input-sm input-bordered w-28" value="{{ $satData['close'] ?? '17:00' }}">
-                                        </div>
-                                    </div>
-
-                                    {{-- Sunday --}}
-                                    <div class="p-3 rounded-lg bg-base-200/40 border border-base-content/10">
-                                        <div class="flex items-center justify-between mb-2.5">
-                                            <span class="text-sm font-semibold text-base-content">Domingo</span>
-                                            <label class="flex items-center gap-2 cursor-pointer">
-                                                <span class="text-xs text-base-content/50">Cerrado</span>
-                                                <input type="checkbox" id="bh-simple-sun-closed" class="toggle toggle-error toggle-sm"
-                                                       {{ $sunClosed ? 'checked' : '' }}
-                                                       onchange="document.getElementById('bh-simple-sun-times').classList.toggle('hidden', this.checked)">
-                                            </label>
-                                        </div>
-                                        <div id="bh-simple-sun-times" class="flex items-center gap-2 flex-wrap {{ $sunClosed ? 'hidden' : '' }}">
-                                            <input type="time" id="bh-simple-sun-open" class="input input-sm input-bordered w-28" value="{{ $sunData['open'] ?? '09:00' }}">
-                                            <span class="text-xs text-base-content/40 font-medium">a</span>
-                                            <input type="time" id="bh-simple-sun-close" class="input input-sm input-bordered w-28" value="{{ $sunData['close'] ?? '14:00' }}">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {{-- ── CUSTOM MODE (per day) ── --}}
-                            <div id="hours-custom-mode" class="{{ $defaultMode === 'custom' ? '' : 'hidden' }}">
-                                <div class="space-y-2">
-                                    @foreach($daysMap as $dayKey => $dayLabel)
-                                    @php
-                                        $dayData = $businessHours[$dayKey] ?? null;
-                                        $isClosed = is_null($dayData) || !empty($dayData['closed']);
-                                        $openTime = $dayData['open'] ?? '08:00';
-                                        $closeTime = $dayData['close'] ?? '18:00';
-                                    @endphp
-                                    <div class="flex items-center gap-3 p-3 rounded-lg bg-base-200/40 border border-base-content/10">
-                                        <span class="text-sm font-semibold text-base-content w-24 shrink-0">{{ $dayLabel }}</span>
-                                        <div class="flex items-center gap-2 flex-1 flex-wrap">
-                                            <input type="time" id="bh-{{ $dayKey }}-open"
-                                                   class="input input-sm input-bordered w-28"
-                                                   value="{{ $openTime }}"
-                                                   {{ $isClosed ? 'disabled' : '' }}>
-                                            <span class="text-xs text-base-content/40">a</span>
-                                            <input type="time" id="bh-{{ $dayKey }}-close"
-                                                   class="input input-sm input-bordered w-28"
-                                                   value="{{ $closeTime }}"
-                                                   {{ $isClosed ? 'disabled' : '' }}>
-                                        </div>
-                                        <label class="label cursor-pointer gap-2 shrink-0">
-                                            <span class="label-text text-xs text-base-content/50">Cerrado</span>
-                                            <input type="checkbox" id="bh-{{ $dayKey }}-closed"
-                                                   class="toggle toggle-error toggle-sm"
-                                                   {{ $isClosed ? 'checked' : '' }}
-                                                   onchange="toggleDayClosed('{{ $dayKey }}', this.checked)">
-                                        </label>
-                                    </div>
-                                    @endforeach
-                                </div>
-                            </div>
-
-                            <button type="button" onclick="saveBusinessHours()" class="btn btn-primary w-full gap-2 mt-4">
-                                <span class="iconify tabler--device-floppy size-4" aria-hidden="true"></span>
-                                Guardar Horario
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {{-- ═══════════════════════════════════════════════════════════
-                 Redes Sociales
-            ═══════════════════════════════════════════════════════════ --}}
-            <div class="card bg-base-100 shadow-md border border-base-content/8 card-elevated mb-6">
-                @php
-                    $rawSocial      = $customization->social_networks ?? [];
-                    $socialNetworks = is_array($rawSocial) ? $rawSocial : [];
-                    $allNetworksMeta = [
-                        'instagram' => ['label' => 'Instagram',  'placeholder' => '@tuusuario',    'icon' => 'tabler--brand-instagram'],
-                        'facebook'  => ['label' => 'Facebook',   'placeholder' => '@pagina o URL', 'icon' => 'tabler--brand-facebook'],
-                        'tiktok'    => ['label' => 'TikTok',     'placeholder' => '@tuusuario',    'icon' => 'tabler--brand-tiktok'],
-                        'linkedin'  => ['label' => 'LinkedIn',   'placeholder' => 'URL o usuario', 'icon' => 'tabler--brand-linkedin'],
-                        'youtube'   => ['label' => 'YouTube',    'placeholder' => '@canal o URL',  'icon' => 'tabler--brand-youtube'],
-                        'x'         => ['label' => 'Twitter / X','placeholder' => '@tuusuario',    'icon' => 'tabler--brand-x'],
-                    ];
-                    $plan1Networks  = ['instagram', 'facebook', 'tiktok', 'linkedin'];
-                    $availableKeys  = $plan->id === 1 ? $plan1Networks : array_keys($allNetworksMeta);
-                    $plan1Selected  = array_key_first(array_intersect_key($socialNetworks, array_flip($plan1Networks))) ?? '';
-                    $plan1Handle    = $plan1Selected ? ($socialNetworks[$plan1Selected] ?? '') : '';
-                @endphp
-
-                <div class="card-header px-6 pt-6 pb-4 flex items-center justify-between gap-2 flex-wrap">
-                    <div class="flex items-center gap-3">
-                        <div class="size-10 rounded-xl bg-primary/10 flex items-center justify-center">
-                            <span class="iconify tabler--social size-5 text-primary" aria-hidden="true"></span>
-                        </div>
-                        <h3 class="text-lg font-bold text-base-content">Redes Sociales</h3>
-                    </div>
-                    @if($plan->id === 1)
-                        <span class="badge badge-soft badge-warning badge-sm">Plan OPORTUNIDAD — 1 red social</span>
-                    @else
-                        <span class="badge badge-soft badge-success badge-sm">Plan {{ $plan->name }} — Todas las redes</span>
-                    @endif
-                </div>
-                <div class="card-body">
-                    @if($plan->id === 1)
-                    {{-- ── Plan 1: radio select + single handle ── --}}
-                    <div class="mb-4">
-                        <label class="label"><span class="label-text font-medium">Elige tu red social</span></label>
-                        <div class="flex flex-wrap gap-2 mb-4" id="social-radio-group">
-                            @foreach($plan1Networks as $key)
-                            @php $meta = $allNetworksMeta[$key]; @endphp
-                            <label id="social-radio-label-{{ $key }}"
-                                   onclick="selectSocialNetwork('{{ $key }}')"
-                                   class="btn btn-sm gap-1.5 {{ $plan1Selected === $key ? 'btn-primary' : 'btn-ghost border border-base-content/20' }} cursor-pointer">
-                                <input type="radio" name="social_plan1_choice" value="{{ $key }}"
-                                       {{ $plan1Selected === $key ? 'checked' : '' }} class="hidden">
-                                <span class="iconify {{ $meta['icon'] }} size-4" aria-hidden="true"></span>
-                                {{ $meta['label'] }}
-                            </label>
-                            @endforeach
-                        </div>
-                        <div class="form-control">
-                            <label class="label">
-                                <span class="label-text font-medium">
-                                    Tu usuario o enlace
-                                    <span id="social-plan1-network-label" class="text-primary ml-1">
-                                        {{ $plan1Selected ? '(' . $allNetworksMeta[$plan1Selected]['label'] . ')' : '' }}
-                                    </span>
-                                </span>
-                            </label>
-                            <input type="text" id="social-plan1-handle"
-                                   value="{{ $plan1Handle }}"
-                                   placeholder="{{ $plan1Selected ? $allNetworksMeta[$plan1Selected]['placeholder'] : 'Selecciona una red primero' }}"
-                                   class="input input-bordered w-full"
-                                   {{ !$plan1Selected ? 'disabled' : '' }}>
-                        </div>
-                    </div>
-
-                    @else
-                    {{-- ── Plan 2 + 3: grid cubo Rubik ── --}}
-                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-4" id="social-all-fields">
-                        @foreach($availableKeys as $key)
-                        @php $meta = $allNetworksMeta[$key]; $current = $socialNetworks[$key] ?? ''; @endphp
-                        <div class="flex flex-col items-center gap-2 p-3 rounded-lg border border-base-content/10 bg-base-200/40 transition-all hover:border-primary/30 hover:bg-primary/5">
-                            <span class="iconify {{ $meta['icon'] }} size-7 text-primary" aria-hidden="true"></span>
-                            <span class="text-[11px] font-semibold text-base-content/70">{{ $meta['label'] }}</span>
-                            <input type="text" id="social-{{ $key }}" name="social_{{ $key }}"
-                                   value="{{ $current }}"
-                                   placeholder="{{ $meta['placeholder'] }}"
-                                   maxlength="255"
-                                   class="input input-bordered input-sm w-full text-center text-xs">
+                <div class="card-body pt-0 pb-3">
+                    <div class="flex flex-wrap gap-2">
+                        @foreach($daysReadonly as $dk => $dl)
+                        @php $dData = $bhReadonly[$dk] ?? null; @endphp
+                        <div class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs
+                            {{ $dData ? 'bg-success/10 text-success border border-success/20' : 'bg-base-200 text-base-content/40 border border-base-content/10' }}">
+                            <span class="font-semibold">{{ $dl }}</span>
+                            @if($dData)
+                                <span>{{ $dData['open'] ?? '?' }}–{{ $dData['close'] ?? '?' }}</span>
+                            @else
+                                <span>Cerrado</span>
+                            @endif
                         </div>
                         @endforeach
                     </div>
-                    @endif
-
-                    <button type="button" onclick="saveSocialNetworks()" class="btn btn-primary w-full gap-2">
-                        <span class="iconify tabler--device-floppy size-4" aria-hidden="true"></span>
-                        Guardar Redes Sociales
-                    </button>
                 </div>
             </div>
 

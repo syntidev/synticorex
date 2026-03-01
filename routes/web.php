@@ -6,6 +6,9 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MarketingController;
 use App\Http\Controllers\TenantRendererController;
 use App\Http\Controllers\ImageUploadController;
+use App\Http\Controllers\AnalyticsController;
+use App\Http\Controllers\QRTrackingController;
+use App\Services\DollarRateService;
 
 // ═══ Marketing Landing Page (root domain) ═══════════════════════════════
 Route::get('/', [MarketingController::class, 'index'])->name('home');
@@ -85,3 +88,21 @@ Route::post('/tenant/{tenantId}/update-currency-config',  [DashboardController::
 Route::post('/tenant/{tenantId}/update-pin',              [DashboardController::class, 'updatePin']);
 Route::post('/tenant/{tenantId}/update-testimonials',     [DashboardController::class, 'updateTestimonials']);
 Route::post('/tenant/{tenantId}/update-faq',              [DashboardController::class, 'updateFaq']);
+Route::post('/tenant/{tenantId}/update-header-top',       [DashboardController::class, 'updateHeaderTop']);
+Route::post('/tenant/{tenantId}/update-cta',              [DashboardController::class, 'updateCta']);
+Route::post('/tenant/{tenantId}/update-business-hours',   [DashboardController::class, 'updateBusinessHours']);
+
+// Analytics
+Route::get('/tenant/{tenantId}/analytics',                [AnalyticsController::class, 'getData']);
+Route::post('/api/analytics/track',                       [AnalyticsController::class, 'track']);
+
+// QR download
+Route::get('/tenant/{tenantId}/qr/download',              [QRTrackingController::class, 'downloadQR']);
+
+// Dollar rate API (public)
+Route::get('/api/dollar-rate', function (DollarRateService $service) {
+    return response()->json([
+        'success' => true,
+        'rate'    => $service->getCurrentRate(),
+    ]);
+});

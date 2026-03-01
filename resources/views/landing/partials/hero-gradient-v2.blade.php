@@ -38,8 +38,8 @@
                 
                 {{-- Descripción con backdrop blur --}}
                 <p class="text-xl text-base-100/90 max-w-2xl max-lg:mx-auto backdrop-blur-sm bg-base-content/10 rounded-2xl p-6">
-                    @if($customization->about_text)
-                        {{ Str::limit($customization->about_text, 200) }}
+                    @if($customization->about_text ?? $tenant->description)
+                        {{ Str::limit($customization->about_text ?? $tenant->description, 200) }}
                     @else
                         Transformamos tu visión en realidad con soluciones innovadoras y un servicio excepcional que supera todas las expectativas.
                     @endif

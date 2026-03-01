@@ -1,4 +1,5 @@
-{{-- ══ Servicios (dentro del tab "Qué Vendes") ══════════════════════════ --}}
+        <!-- Tab: Servicios -->
+        <div id="tab-servicios" class="tab-content">
             @php
                 $maxServices = (int) ($plan->services_limit ?? 3);
                 $currentServiceCount = $services->count();
@@ -120,6 +121,5 @@
                 </div>
                 @endif
             </div>
-
-        </div>{{-- /tab-productos --}}
+        </div>
 

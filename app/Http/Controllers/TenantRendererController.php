@@ -140,7 +140,9 @@ class TenantRendererController extends Controller
             // Blueprint system
             $blueprint = $tenant->getBlueprint();
 
-            return view('landing.base', compact('tenant', 'plan', 'products', 'services', 'dollarRate', 'themeSlug', 'meta', 'customization', 'currencySettings', 'displayMode', 'savedDisplayMode', 'showReference', 'showBolivares', 'hidePrice', 'trackingQRSmall', 'trackingShortlink', 'showHoursIndicator', 'isOpen', 'closedMessage', 'blueprint'));
+            $schema = $this->buildSchema($tenant);
+
+            return view('landing.base', compact('tenant', 'plan', 'products', 'services', 'dollarRate', 'themeSlug', 'meta', 'customization', 'currencySettings', 'displayMode', 'savedDisplayMode', 'showReference', 'showBolivares', 'hidePrice', 'trackingQRSmall', 'trackingShortlink', 'showHoursIndicator', 'isOpen', 'closedMessage', 'blueprint', 'schema'));
         } catch (Throwable $e) {
             Log::error('TenantRendererController: Error rendering landing page', [
                 'subdomain' => $subdomain,
@@ -220,6 +222,8 @@ class TenantRendererController extends Controller
                 'blueprint' => $tenant->getBlueprint(),
             ];
 
+            $viewData['schema'] = $this->buildSchema($tenant);
+
             Log::info('TenantRendererController: Rendering by custom domain', [
                 'domain' => $domain,
                 'tenant_id' => $tenant->id,
@@ -286,6 +290,8 @@ class TenantRendererController extends Controller
                 'isPreview' => true,
             ];
 
+            $viewData['schema'] = $this->buildSchema($tenant);
+
             Log::debug('TenantRendererController: Preview mode', [
                 'tenant_id' => $tenantId,
             ]);
@@ -299,6 +305,44 @@ class TenantRendererController extends Controller
 
             return $this->renderError($e->getMessage());
         }
+    }
+
+    /**
+     * Build Schema.org LocalBusiness structured data.
+     */
+    private function buildSchema(Tenant $tenant): array
+    {
+        $schema = [
+            '@context' => 'https://schema.org',
+            '@type'    => 'LocalBusiness',
+            'name'     => $tenant->business_name,
+            'description' => $tenant->description ?? '',
+            'address'  => [
+                '@type'           => 'PostalAddress',
+                'streetAddress'   => $tenant->address ?? '',
+                'addressLocality' => $tenant->city ?? '',
+                'addressCountry'  => 'VE',
+            ],
+            'url' => url('/' . $tenant->subdomain),
+        ];
+
+        if ($tenant->customization?->logo_filename) {
+            $schema['image'] = asset('storage/tenants/' . $tenant->id . '/' . $tenant->customization->logo_filename);
+        }
+        if ($tenant->phone) {
+            $schema['telephone'] = $tenant->phone;
+        }
+        if ($tenant->email) {
+            $schema['email'] = $tenant->email;
+        }
+        if ($tenant->whatsapp_sales) {
+            $schema['potentialAction'] = [
+                '@type'  => 'CommunicateAction',
+                'target' => 'https://wa.me/' . preg_replace('/[^0-9]/', '', $tenant->whatsapp_sales),
+            ];
+        }
+
+        return $schema;
     }
 
     /**

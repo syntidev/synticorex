@@ -27,8 +27,8 @@
                 
                 {{-- Descripción --}}
                 <p class="text-lg text-base-content/80 max-w-xl max-lg:mx-auto">
-                    @if($customization->about_text)
-                        {{ Str::limit($customization->about_text, 250) }}
+                    @if($customization->about_text ?? $tenant->description)
+                        {{ Str::limit($customization->about_text ?? $tenant->description, 250) }}
                     @else
                         Bienvenido a una experiencia donde la calidad, frescura y hospitalidad se unen. Ya sea tu primera visita o la número cien, cada momento está diseñado para impresionarte.
                     @endif

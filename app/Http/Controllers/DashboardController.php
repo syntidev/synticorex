@@ -171,14 +171,14 @@ class DashboardController extends Controller
 
             // Validate input
             $validated = $request->validate([
-                'business_name' => 'required|string|max:255',
+                'business_name' => 'sometimes|required|string|max:255',
                 'slogan' => 'nullable|string|max:255',
                 'phone' => 'nullable|string|max:20',
                 'whatsapp_sales' => 'nullable|string|max:20',
                 'email' => 'nullable|email|max:255',
                 'address' => 'nullable|string|max:255',
                 'city' => 'nullable|string|max:100',
-                'description' => 'nullable|string|max:500',
+                'description' => 'nullable|string|max:1000',
                 'is_open' => 'nullable|boolean',
                 'contact_maps_url' => 'nullable|string|max:1000',
                 'contact_title' => 'nullable|string|max:120',
@@ -222,6 +222,11 @@ class DashboardController extends Controller
             $tenant->settings = $settings;
             $tenant->save();
 
+            // Sync about_text to customization (used by hero partials)
+            if ($request->has('description') && $tenant->customization) {
+                $tenant->customization->update(['about_text' => $validated['description'] ?? '']);
+            }
+
             return response()->json([
                 'success' => true,
                 'message' => 'Información actualizada'
@@ -230,6 +235,88 @@ class DashboardController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Error al actualizar información: ' . $e->getMessage()
+            ], 422);
+        }
+    }
+
+    /**
+     * Update Header Top bar settings (Plan 2+).
+     *
+     * @param Request $request
+     * @param int $tenantId
+     * @return JsonResponse
+     */
+    public function updateHeaderTop(Request $request, int $tenantId): JsonResponse
+    {
+        try {
+            $tenant = Tenant::where('id', $tenantId)
+                ->where('status', 'active')
+                ->firstOrFail();
+
+            if ($tenant->plan_id < 2) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Header Top requiere Plan CRECIMIENTO o superior'
+                ], 403);
+            }
+
+            $validated = $request->validate([
+                'enabled' => 'required|boolean',
+                'text' => 'nullable|string|max:120',
+            ]);
+
+            $settings = $tenant->settings ?? [];
+            data_set($settings, 'engine_settings.header_top', [
+                'enabled' => $validated['enabled'],
+                'text' => $validated['text'] ?? '',
+            ]);
+            $tenant->settings = $settings;
+            $tenant->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Header Top actualizado'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al actualizar Header Top: ' . $e->getMessage()
+            ], 422);
+        }
+    }
+
+    /**
+     * Update CTA special section (Plan 3).
+     *
+     * @param Request $request
+     * @param int $tenantId
+     * @return JsonResponse
+     */
+    public function updateCta(Request $request, int $tenantId): JsonResponse
+    {
+        try {
+            $tenant = Tenant::where('id', $tenantId)
+                ->where('status', 'active')
+                ->with('customization')
+                ->firstOrFail();
+
+            $validated = $request->validate([
+                'cta_title' => 'nullable|string|max:100',
+                'cta_subtitle' => 'nullable|string|max:200',
+                'cta_button_text' => 'nullable|string|max:50',
+                'cta_button_link' => 'nullable|url|max:500',
+            ]);
+
+            $tenant->customization->update($validated);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'CTA actualizado'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al actualizar CTA: ' . $e->getMessage()
             ], 422);
         }
     }
