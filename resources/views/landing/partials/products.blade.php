@@ -35,16 +35,16 @@
             @endif
         </div>
 
-        {{-- Botón "Ver más" — solo si hay productos extra (Plan 2/3) --}}
+        {{-- Botón "Ver más" — solo si hay productos extra (Plan 2/3), carga 3 en 3 --}}
         @if($hasMore)
-            <div id="load-more-container" class="mt-20 text-center">
+            @php $firstBatch = min(3, $hidden->count()); @endphp
+            <div id="load-more-products-container" class="mt-20 text-center">
                 <button
-                    id="btn-load-more"
+                    id="btn-load-more-products"
                     onclick="loadMoreProducts(this)"
-                    data-remaining="{{ $hidden->count() }}"
                     class="group inline-flex items-center gap-4 px-12 py-5 bg-primary text-white font-black rounded-2xl shadow-2xl shadow-primary/40 active:scale-95 transition-all">
-                    <span class="btn-label uppercase tracking-[0.3em] text-[10px]">Ver {{ $hidden->count() }} producto{{ $hidden->count() > 1 ? 's' : '' }} más</span>
-                    <svg class="w-4 h-4 btn-arrow transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <span class="btn-label uppercase tracking-[0.3em] text-[10px]">Ver {{ $firstBatch }} producto{{ $firstBatch > 1 ? 's' : '' }} más</span>
+                    <svg class="w-4 h-4 btn-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"></path>
                     </svg>
                 </button>
@@ -53,20 +53,32 @@
             @push('scripts')
             <script>
                 function loadMoreProducts(btn) {
-                    const extras = document.querySelectorAll('#product-grid .product-extra');
-                    const arrow   = btn.querySelector('.btn-arrow');
-                    const label   = btn.querySelector('.btn-label');
-                    const isHidden = extras[0] && extras[0].classList.contains('hidden');
+                    const hiddenItems = Array.from(
+                        document.querySelectorAll('#product-grid .product-extra.hidden')
+                    );
+                    if (!hiddenItems.length) return;
 
-                    extras.forEach(el => el.classList.toggle('hidden', !isHidden));
+                    const batch = hiddenItems.slice(0, 3);
+                    batch.forEach(el => {
+                        el.classList.remove('hidden');
+                        el.style.opacity = '0';
+                        el.style.transform = 'translateY(20px)';
+                        requestAnimationFrame(() => {
+                            requestAnimationFrame(() => {
+                                el.style.transition = 'opacity 300ms ease, transform 300ms ease';
+                                el.style.opacity = '1';
+                                el.style.transform = 'translateY(0)';
+                            });
+                        });
+                    });
 
-                    if (isHidden) {
-                        label.textContent = 'Ver menos';
-                        arrow.style.transform = 'rotate(180deg)';
+                    const remaining = hiddenItems.length - batch.length;
+                    if (remaining === 0) {
+                        document.getElementById('load-more-products-container').style.display = 'none';
                     } else {
-                        const count = parseInt(btn.dataset.remaining);
-                        label.textContent = 'Ver ' + count + ' producto' + (count > 1 ? 's' : '') + ' más';
-                        arrow.style.transform = 'rotate(0deg)';
+                        const next = Math.min(3, remaining);
+                        btn.querySelector('.btn-label').textContent =
+                            'Ver ' + next + ' producto' + (next > 1 ? 's' : '') + ' más';
                     }
                 }
             </script>
