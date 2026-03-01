@@ -46,6 +46,13 @@ Route::get('/api/dollar-rate', function (DollarRateService $service) {
     ]);
 });
 
+Route::get('/api/euro-rate', function (DollarRateService $service) {
+    return response()->json([
+        'success' => true,
+        'rate'    => $service->getCurrentEuroRate(),
+    ]);
+});
+
 // ═══ Dashboard — requiere autenticación ══════════════════════════════════════
 Route::middleware(['auth'])->group(function () {
 

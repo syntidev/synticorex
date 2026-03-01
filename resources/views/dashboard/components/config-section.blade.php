@@ -39,15 +39,27 @@
     $savedMode = $tenant->settings['engine_settings']['currency']['display']['saved_display_mode'] ?? 'reference_only';
 @endphp
 
-            {{-- ══ ROW 1: Tasa BCV (compact bar, no card) ═══════ --}}
+            {{-- ══ ROW 1: Tasas BCV (compact bar) ═══════════════ --}}
             <div class="flex items-center justify-between p-3 rounded-xl bg-base-100 border border-base-content/8 shadow-sm mb-5">
-                <div class="flex items-center gap-3">
-                    <div class="size-8 rounded-lg bg-success/10 flex items-center justify-center">
-                        <span class="iconify tabler--currency-dollar size-4.5 text-success" aria-hidden="true"></span>
+                <div class="flex items-center gap-4">
+                    <div class="flex items-center gap-3">
+                        <div class="size-8 rounded-lg bg-success/10 flex items-center justify-center">
+                            <span class="iconify tabler--currency-dollar size-4.5 text-success" aria-hidden="true"></span>
+                        </div>
+                        <div>
+                            <span class="text-xs font-semibold text-base-content/60">USD</span>
+                            <span class="text-sm font-bold text-primary ml-1">Bs. <span id="dollar-rate-value">{{ $dollarRate }}</span></span>
+                        </div>
                     </div>
-                    <div>
-                        <span class="text-sm font-semibold text-base-content">Tasa BCV</span>
-                        <span class="text-sm font-bold text-primary ml-2">Bs. <span id="dollar-rate-value">{{ $dollarRate }}</span></span>
+                    <div class="w-px h-6 bg-base-content/10"></div>
+                    <div class="flex items-center gap-3">
+                        <div class="size-8 rounded-lg bg-info/10 flex items-center justify-center">
+                            <span class="iconify tabler--currency-euro size-4.5 text-info" aria-hidden="true"></span>
+                        </div>
+                        <div>
+                            <span class="text-xs font-semibold text-base-content/60">EUR</span>
+                            <span class="text-sm font-bold text-info ml-1">Bs. <span id="euro-rate-value">{{ $euroRate ?? '—' }}</span></span>
+                        </div>
                     </div>
                 </div>
                 <button onclick="updateDollarRate()" class="btn btn-sm btn-soft btn-primary gap-1.5">
@@ -211,7 +223,8 @@
                                 @foreach([
                                     'reference_only' => ['Solo Referencia (REF/$)', 'tabler--tag'],
                                     'bolivares_only' => ['Solo Bolívares (Bs.)', 'tabler--bold'],
-                                    'both_toggle'    => ['Ambos con toggle', 'tabler--switch-horizontal'],
+                                    'both_toggle'    => ['Ambos con toggle (REF/Bs.)', 'tabler--switch-horizontal'],
+                                    'euro_toggle'    => ['Toggle con Euro (REF/€)', 'tabler--currency-euro'],
                                     'hidden'         => ['Ocultar → "Más Info"', 'tabler--eye-off'],
                                 ] as $val => [$label, $icon])
                                 <label class="flex items-center gap-2 cursor-pointer px-2.5 py-2 rounded-lg border transition-all

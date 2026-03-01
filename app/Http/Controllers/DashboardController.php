@@ -58,8 +58,9 @@ class DashboardController extends Controller
             $services      = $tenant->services;
             $branches      = $tenant->branches;
 
-            // Get current dollar rate
+            // Get current dollar and euro rates
             $dollarRate = $this->dollarRateService->getCurrentRate();
+            $euroRate   = $this->dollarRateService->getCurrentEuroRate();
 
             // ── Plan expiry data ─────────────────────────────────────────
             $daysUntilExpiry   = $tenant->daysUntilExpiry();
@@ -127,6 +128,7 @@ class DashboardController extends Controller
                 'services',
                 'branches',
                 'dollarRate',
+                'euroRate',
                 'daysUntilExpiry',
                 'isExpiringSoon',
                 'isFrozen',
@@ -762,13 +764,15 @@ class DashboardController extends Controller
             $symbol = $request->input('symbol', 'REF');
 
             // Mapear display_mode a flags booleanos
-            $showReference = in_array($displayMode, ['reference_only', 'both_toggle']);
+            $showReference = in_array($displayMode, ['reference_only', 'both_toggle', 'euro_toggle']);
             $showBolivares = in_array($displayMode, ['bolivares_only', 'both_toggle']);
+            $showEuro      = $displayMode === 'euro_toggle';
             $hidePrice     = $displayMode === 'hidden';
-            $hasToggle     = $displayMode === 'both_toggle';
+            $hasToggle     = in_array($displayMode, ['both_toggle', 'euro_toggle']);
 
             $settings['engine_settings']['currency']['display']['show_reference'] = $showReference;
             $settings['engine_settings']['currency']['display']['show_bolivares'] = $showBolivares;
+            $settings['engine_settings']['currency']['display']['show_euro']      = $showEuro;
             $settings['engine_settings']['currency']['display']['hide_price']     = $hidePrice;
             $settings['engine_settings']['currency']['display']['has_toggle']     = $hasToggle;
             $settings['engine_settings']['currency']['display']['symbols']['reference'] = $symbol;

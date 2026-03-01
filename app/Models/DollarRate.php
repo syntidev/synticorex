@@ -24,10 +24,27 @@ class DollarRate extends Model
     protected $fillable = [
         'rate',
         'source',
+        'currency_type',
         'effective_from',
         'effective_until',
         'is_active',
     ];
+
+    /**
+     * Scope: only USD rates.
+     */
+    public function scopeUsd($query)
+    {
+        return $query->where('currency_type', 'USD');
+    }
+
+    /**
+     * Scope: only EUR rates.
+     */
+    public function scopeEur($query)
+    {
+        return $query->where('currency_type', 'EUR');
+    }
 
     /**
      * Get the attributes that should be cast.

@@ -184,19 +184,32 @@
             }
         });
 
-        // Config Tab: Update Dollar Rate
+        // Config Tab: Update Dollar Rate (USD + EUR)
         async function updateDollarRate() {
             try {
-                const response = await fetch('/api/dollar-rate');
-                const result = await response.json();
+                const [usdRes, eurRes] = await Promise.all([
+                    fetch('/api/dollar-rate'),
+                    fetch('/api/euro-rate'),
+                ]);
+                const usd = await usdRes.json();
+                const eur = await eurRes.json();
 
-                if (result.success && result.rate) {
-                    const formatted = result.rate.toFixed(2);
+                if (usd.success && usd.rate) {
+                    const formatted = usd.rate.toFixed(2);
                     const dvEl = document.getElementById('dollar-rate-value');
                     const hdEl = document.getElementById('header-dollar-rate');
                     if (dvEl) dvEl.textContent = formatted;
                     if (hdEl) hdEl.textContent = formatted;
-                    showToast('✅ Tasa BCV actualizada: Bs. ' + formatted, 'success');
+                }
+
+                if (eur.success && eur.rate) {
+                    const eurEl = document.getElementById('euro-rate-value');
+                    if (eurEl) eurEl.textContent = eur.rate.toFixed(2);
+                }
+
+                if (usd.success) {
+                    const eurMsg = eur.success ? ` | € ${eur.rate?.toFixed(2)}` : '';
+                    showToast('✅ USD Bs. ' + usd.rate.toFixed(2) + eurMsg, 'success');
                 } else {
                     showToast('❌ No se pudo actualizar la tasa', 'error');
                 }

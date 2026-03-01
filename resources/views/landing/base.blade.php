@@ -178,24 +178,34 @@ $effectiveTheme = $customPalette ? 'custom' : $themeSlug;
         const CURRENCY_MODE   = @json($savedDisplayMode ?? $displayMode ?? 'reference_only');
         const CURRENCY_SYMBOL = @json($currencySettings['symbols']['reference'] ?? 'REF');
         const EXCHANGE_RATE   = @json($dollarRate ?? 36.50);
-        let currentCurrency   = CURRENCY_SYMBOL; // 'REF' o '$'
+        const EURO_RATE       = @json($euroRate ?? 40.00);
+        let currentCurrency   = CURRENCY_SYMBOL; // 'REF', 'Bs.' o '€'
 
         function formatPrice(usdPrice) {
             const val = parseFloat(usdPrice);
             if (currentCurrency === 'Bs.') {
                 return `<span class="text-xs font-medium opacity-50 mr-1">Bs.</span>${(val * EXCHANGE_RATE).toLocaleString('es-VE', {minimumFractionDigits: 2})}`;
             }
+            if (currentCurrency === '€') {
+                return `<span class="text-xs font-medium opacity-50 mr-1">€</span>${(val * EURO_RATE / EXCHANGE_RATE).toLocaleString('es-VE', {minimumFractionDigits: 2})}`;
+            }
             return `<span class="text-xs font-medium opacity-50 mr-1">${CURRENCY_SYMBOL}</span>${val.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
         }
 
         function setCurrency(mode) {
-            currentCurrency = (mode === 'bs') ? 'Bs.' : CURRENCY_SYMBOL;
+            if (mode === 'bs') currentCurrency = 'Bs.';
+            else if (mode === 'eur') currentCurrency = '€';
+            else currentCurrency = CURRENCY_SYMBOL;
             renderAllPrices();
             updateToggleButton();
         }
 
         function toggleCurrency() {
-            currentCurrency = (currentCurrency === 'Bs.') ? CURRENCY_SYMBOL : 'Bs.';
+            if (CURRENCY_MODE === 'euro_toggle') {
+                currentCurrency = (currentCurrency === '€') ? CURRENCY_SYMBOL : '€';
+            } else {
+                currentCurrency = (currentCurrency === 'Bs.') ? CURRENCY_SYMBOL : 'Bs.';
+            }
             renderAllPrices();
             updateToggleButton();
         }
@@ -209,29 +219,45 @@ $effectiveTheme = $customPalette ? 'custom' : $themeSlug;
         function updateToggleButton() {
             const btn = document.getElementById('currency-toggle-btn');
             if (!btn) return;
-            if (CURRENCY_MODE !== 'both_toggle') {
+            if (CURRENCY_MODE !== 'both_toggle' && CURRENCY_MODE !== 'euro_toggle') {
                 btn.style.display = 'none';
             } else {
                 btn.style.display = '';
-                // Actualiza estado visual activo
-                const btnRef = btn.querySelector('[data-currency="ref"]');
-                const btnBs  = btn.querySelector('[data-currency="bs"]');
-                if (btnRef && btnBs) {
-                    const active  = 'bg-base-100 shadow-sm text-primary';
-                    const inactive = 'text-base-content/40';
-                    if (currentCurrency === 'Bs.') {
-                        btnBs.className  = `px-3 py-1 text-[10px] font-black rounded-lg transition-all ${active}`;
-                        btnRef.className = `px-3 py-1 text-[10px] font-black rounded-lg transition-all ${inactive}`;
-                    } else {
-                        btnRef.className = `px-3 py-1 text-[10px] font-black rounded-lg transition-all ${active}`;
-                        btnBs.className  = `px-3 py-1 text-[10px] font-black rounded-lg transition-all ${inactive}`;
+                const active   = 'bg-base-100 shadow-sm text-primary';
+                const inactive = 'text-base-content/40';
+
+                if (CURRENCY_MODE === 'euro_toggle') {
+                    const btnRef = btn.querySelector('[data-currency="ref"]');
+                    const btnEur = btn.querySelector('[data-currency="eur"]');
+                    if (btnRef && btnEur) {
+                        if (currentCurrency === '€') {
+                            btnEur.className = `px-3 py-1 text-[10px] font-black rounded-lg transition-all ${active}`;
+                            btnRef.className = `px-3 py-1 text-[10px] font-black rounded-lg transition-all ${inactive}`;
+                        } else {
+                            btnRef.className = `px-3 py-1 text-[10px] font-black rounded-lg transition-all ${active}`;
+                            btnEur.className = `px-3 py-1 text-[10px] font-black rounded-lg transition-all ${inactive}`;
+                        }
+                    }
+                } else {
+                    const btnRef = btn.querySelector('[data-currency="ref"]');
+                    const btnBs  = btn.querySelector('[data-currency="bs"]');
+                    if (btnRef && btnBs) {
+                        if (currentCurrency === 'Bs.') {
+                            btnBs.className  = `px-3 py-1 text-[10px] font-black rounded-lg transition-all ${active}`;
+                            btnRef.className = `px-3 py-1 text-[10px] font-black rounded-lg transition-all ${inactive}`;
+                        } else {
+                            btnRef.className = `px-3 py-1 text-[10px] font-black rounded-lg transition-all ${active}`;
+                            btnBs.className  = `px-3 py-1 text-[10px] font-black rounded-lg transition-all ${inactive}`;
+                        }
                     }
                 }
             }
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-            currentCurrency = (CURRENCY_MODE === 'bolivares_only') ? 'Bs.' : CURRENCY_SYMBOL;
+            if (CURRENCY_MODE === 'bolivares_only') currentCurrency = 'Bs.';
+            else if (CURRENCY_MODE === 'euro_toggle') currentCurrency = CURRENCY_SYMBOL;
+            else currentCurrency = CURRENCY_SYMBOL;
             renderAllPrices();
             updateToggleButton();
         });
