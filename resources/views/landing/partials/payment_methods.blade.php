@@ -41,8 +41,8 @@
 @endphp
 
 @if($hasAnything)
-<section id="medios-de-pago" class="py-14 bg-base-200/50">
-    <div class="container mx-auto px-4 md:px-8 max-w-5xl">
+<section id="payment_methods" class="py-8 sm:py-16 lg:py-24 bg-base-200/50">
+    <div class="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8">
 
         {{-- Título único --}}
         <div class="text-center mb-8">

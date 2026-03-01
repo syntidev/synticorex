@@ -12,8 +12,8 @@
     if ($testimonials->isEmpty()) return;
 @endphp
 
-<section id="testimonials" class="py-16 sm:py-20 bg-base-100">
-    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+<section id="testimonials" class="py-8 sm:py-16 lg:py-24 bg-base-100">
+    <div class="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8">
         <div
             id="testimonials-carousel"
             data-carousel='{ "loadingClasses": "opacity-0", "slidesQty": { "xs": 1, "md": 2 } }'

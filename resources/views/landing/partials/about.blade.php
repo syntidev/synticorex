@@ -5,8 +5,8 @@
 
     // Imagen de la sección: hero > logo > placeholder
     $businessImage = null;
-    if (!empty($customization->hero_main_filename)) {
-        $businessImage = asset('storage/tenants/' . $tenant->id . '/' . $customization->hero_main_filename);
+    if (!empty($customization->hero_filename)) {
+        $businessImage = asset('storage/tenants/' . $tenant->id . '/' . $customization->hero_filename);
     }
 
     $logoImage = null;
@@ -15,8 +15,8 @@
     }
 @endphp
 
-<section id="about" class="py-16 bg-base-200/50">
-    <div class="container mx-auto px-6 max-w-6xl">
+<section id="about" class="py-8 sm:py-16 lg:py-24 bg-base-200/50">
+    <div class="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col lg:flex-row gap-10 lg:gap-16 items-center">
 
             {{-- Col 8/12 — Descripción principal --}}

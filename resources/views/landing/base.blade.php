@@ -130,19 +130,9 @@ $effectiveTheme = $customPalette ? 'custom' : $themeSlug;
                                 'spotlight' => 'landing.partials.services-spotlight',
                                 default     => 'landing.partials.services',
                             };
-                            $usesDarkWrapper = ($sConfig['variant'] ?? 'cards') === 'cards';
                         @endphp
 
-                        @if($usesDarkWrapper)
-                            {{-- Variante original: oscura con glow --}}
-                            <div class="relative bg-base-200 pt-32 pb-24">
-                                <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[700px] bg-primary/10 blur-[130px] rounded-full pointer-events-none"></div>
-                                @include($servicesView, ['sConfig' => $sConfig])
-                            </div>
-                        @else
-                            {{-- Variante spotlight: sin wrapper, la sección maneja su propio fondo y geometría --}}
-                            @include($servicesView, ['sConfig' => $sConfig])
-                        @endif
+                        @include($servicesView, ['sConfig' => $sConfig])
                         @break
 
                     @case('testimonials')

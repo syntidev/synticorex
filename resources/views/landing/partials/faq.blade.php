@@ -49,11 +49,11 @@
     }
 @endphp
 
-<section id="faq" class="py-24 bg-base-100 relative overflow-hidden">
+<section id="faq" class="py-8 sm:py-16 lg:py-24 bg-base-100 relative overflow-hidden">
 
     <div class="absolute -top-24 -left-24 w-96 h-96 bg-primary/5 blur-[100px] rounded-full pointer-events-none" aria-hidden="true"></div>
 
-    <div class="container mx-auto max-w-4xl px-6 relative z-10">
+    <div class="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8 relative z-10">
 
         <div class="text-center mb-16">
             <h2 class="text-4xl md:text-5xl font-black tracking-tight text-base-content">

@@ -1,5 +1,5 @@
-<footer class="bg-base-100 border-t border-base-content/10 py-12">
-    <div class="container mx-auto px-6">
+<footer class="bg-base-100 border-t border-base-content/10 py-8 sm:py-16 lg:py-24">
+    <div class="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8">
         {{-- Fila Principal --}}
         <div class="flex flex-col md:flex-row items-center justify-between gap-10 mb-12">
             

@@ -19,8 +19,8 @@
 @endphp
 
 @if(isset($plan) && (int) $plan->id === 3 && $branchesEnabled && $activeBranches->isNotEmpty())
-<section id="sucursales" class="py-24 bg-base-100">
-    <div class="container mx-auto px-8 md:px-16">
+<section id="branches" class="py-8 sm:py-16 lg:py-24 bg-base-100">
+    <div class="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8">
 
         {{-- Header --}}
         <div class="text-center mb-16">
