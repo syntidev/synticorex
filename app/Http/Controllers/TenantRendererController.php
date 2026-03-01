@@ -308,16 +308,22 @@ class TenantRendererController extends Controller
     }
 
     /**
-     * Build Schema.org LocalBusiness structured data.
+     * Build Schema.org structured data.
+     *
+     * The @type is derived from the tenant's blueprint (via getSchemaType()).
+     * Supported types: LocalBusiness, Restaurant, Store,
+     *                  HealthAndBeautyBusiness, ProfessionalService.
      */
     private function buildSchema(Tenant $tenant): array
     {
+        $schemaType = $tenant->getSchemaType(); // from HasBlueprint trait
+
         $schema = [
-            '@context' => 'https://schema.org',
-            '@type'    => 'LocalBusiness',
-            'name'     => $tenant->business_name,
+            '@context'    => 'https://schema.org',
+            '@type'       => $schemaType,
+            'name'        => $tenant->business_name,
             'description' => $tenant->description ?? '',
-            'address'  => [
+            'address'     => [
                 '@type'           => 'PostalAddress',
                 'streetAddress'   => $tenant->address ?? '',
                 'addressLocality' => $tenant->city ?? '',
@@ -326,6 +332,7 @@ class TenantRendererController extends Controller
             'url' => url('/' . $tenant->subdomain),
         ];
 
+        // ── Optional base fields ──────────────────────────────────────────
         if ($tenant->customization?->logo_filename) {
             $schema['image'] = asset('storage/tenants/' . $tenant->id . '/' . $tenant->customization->logo_filename);
         }
@@ -335,14 +342,56 @@ class TenantRendererController extends Controller
         if ($tenant->email) {
             $schema['email'] = $tenant->email;
         }
+
+        // ── Type-specific fields ──────────────────────────────────────────
+        match ($schemaType) {
+            'Restaurant' => $this->applyRestaurantSchema($schema, $tenant),
+            'HealthAndBeautyBusiness' => $this->applyHealthSchema($schema, $tenant),
+            default => $this->applyDefaultSchema($schema, $tenant),
+        };
+
+        return $schema;
+    }
+
+    /**
+     * Apply Restaurant-specific schema fields.
+     */
+    private function applyRestaurantSchema(array &$schema, Tenant $tenant): void
+    {
+        $schema['servesCuisine'] = $tenant->business_segment ?? 'General';
+
+        if ($tenant->whatsapp_sales) {
+            $schema['potentialAction'] = [
+                '@type'  => 'OrderAction',
+                'target' => 'https://wa.me/' . preg_replace('/[^0-9]/', '', $tenant->whatsapp_sales),
+            ];
+        }
+    }
+
+    /**
+     * Apply HealthAndBeautyBusiness-specific schema fields.
+     */
+    private function applyHealthSchema(array &$schema, Tenant $tenant): void
+    {
+        if ($tenant->whatsapp_sales) {
+            $schema['potentialAction'] = [
+                '@type'  => 'ReserveAction',
+                'target' => 'https://wa.me/' . preg_replace('/[^0-9]/', '', $tenant->whatsapp_sales),
+            ];
+        }
+    }
+
+    /**
+     * Apply default schema fields (LocalBusiness, Store, ProfessionalService).
+     */
+    private function applyDefaultSchema(array &$schema, Tenant $tenant): void
+    {
         if ($tenant->whatsapp_sales) {
             $schema['potentialAction'] = [
                 '@type'  => 'CommunicateAction',
                 'target' => 'https://wa.me/' . preg_replace('/[^0-9]/', '', $tenant->whatsapp_sales),
             ];
         }
-
-        return $schema;
     }
 
     /**

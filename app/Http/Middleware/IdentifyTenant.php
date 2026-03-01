@@ -13,8 +13,11 @@ final class IdentifyTenant
 {
     /**
      * Identifica el tenant por host (ecosistema multidominio):
-     * - Dominios centrales (tu.menu, menu.vip, etc.): subdominio = slug.
-     * - Dominio personalizado: columna tenants.dominio = host.
+     *
+     * MODO SUBDOMINIO (producción): pepe.tu.menu → subdomain='pepe'
+     * MODO PATH (local):            synticorex.test/pepe → path segment 1 = 'pepe'
+     * CUSTOM DOMAIN:                host = tenants.custom_domain
+     *
      * No resuelve tenant en admin_domains (panel/marketing).
      * Inyecta el tenant en el contenedor para que el resto de la app no vuelva a consultar la DB.
      *
@@ -32,7 +35,7 @@ final class IdentifyTenant
             return $next($request);
         }
 
-        $tenant = $this->resolveTenant($host);
+        $tenant = $this->resolveTenant($host, $request);
         if ($tenant === null) {
             abort(404, 'Sitio no encontrado o inactivo');
         }
@@ -45,19 +48,38 @@ final class IdentifyTenant
     }
 
     /**
-     * Resuelve el tenant: por slug (si host pertenece a central_domains) o por dominio personalizado.
+     * Resuelve el tenant por tres vías (en orden):
+     *
+     * 1. SUBDOMINIO: host tiene prefijo sobre un central_domain → pepe.tu.menu
+     * 2. PATH-MODE:  host ES un central_domain raíz sin subdominio → synticorex.test/pepe
+     * 3. CUSTOM DOMAIN: host coincide con tenants.custom_domain
      */
-    private function resolveTenant(string $host): ?Tenant
+    private function resolveTenant(string $host, Request $request): ?Tenant
     {
-        $slug = $this->slugFromCentralDomain($host);
-        if ($slug !== null) {
-            return Tenant::where('slug', $slug)->where('activo', true)->first();
+        // 1. Modo subdominio: pepe.tu.menu → subdomain = 'pepe'
+        $subdomain = $this->slugFromCentralDomain($host);
+        if ($subdomain !== null) {
+            return Tenant::where('subdomain', $subdomain)->where('status', 'active')->first();
         }
-        return Tenant::where('dominio', $host)->where('activo', true)->first();
+
+        // 2. Path-mode: host ES el dominio raíz → leer tenant del primer segmento de la URL
+        //    Ej: synticorex.test/pepe → segment(1) = 'pepe'
+        $centralDomains = config('tenancy.central_domains', []);
+        $hostLower = strtolower($host);
+        if (in_array($hostLower, array_map('strtolower', $centralDomains), true)) {
+            $pathSlug = $request->segment(1);
+            if ($pathSlug !== null && $pathSlug !== '') {
+                return Tenant::where('subdomain', $pathSlug)->where('status', 'active')->first();
+            }
+            return null;
+        }
+
+        // 3. Custom domain: host = tenants.custom_domain
+        return Tenant::where('custom_domain', $host)->where('status', 'active')->first();
     }
 
     /**
-     * Si el host termina en un central_domain, devuelve el subdominio como slug; si no, null.
+     * Si el host termina en un central_domain, devuelve el subdominio; si no, null.
      * Ej: pepe.tu.menu → 'pepe' | tu.menu → null (sin subdominio).
      */
     private function slugFromCentralDomain(string $host): ?string
