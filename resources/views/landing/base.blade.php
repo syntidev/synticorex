@@ -3,7 +3,7 @@
 $customPalette = $tenant->settings['engine_settings']['visual']['custom_palette'] ?? null;
 $effectiveTheme = $customPalette ? 'custom' : $themeSlug;
 @endphp
-<html data-theme="{{ $effectiveTheme }}" lang="es" class="scroll-smooth">
+<html data-theme="{{ $effectiveTheme }}" lang="es" class="scroll-smooth" style="scroll-padding-top:64px">
 
 @if($customPalette)
 <style>
@@ -82,9 +82,6 @@ $effectiveTheme = $customPalette ? 'custom' : $themeSlug;
 
     @include('landing.partials.header')
 
-    {{-- Wrapper que compensa las barras fixed: header-top (40px plan2+) + nav (60px) --}}
-    <div class="{{ $tenant->isAtLeastCrecimiento() ? 'pt-[100px]' : 'pt-[60px]' }}">
-
     @if($tenant->plan_id === 1)
         @include('landing.sections.hero-split')
     @elseif($tenant->plan_id === 2)
@@ -161,7 +158,7 @@ $effectiveTheme = $customPalette ? 'custom' : $themeSlug;
 
     </main>
 
-    </div>{{-- /pt wrapper --}}
+
 
     {{-- ══════════════════════════════════════════════
          FOOTER FIJO
