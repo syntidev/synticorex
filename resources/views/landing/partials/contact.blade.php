@@ -1,31 +1,17 @@
-{{--
-    Contact Section — SYNTIweb
-    ─────────────────────────────────────────
-    Plan 1  : 3 bloques (Ubicación, Contacto, Horario) centrados, sin mapa
-    Plan 2-3: Mapa embed + 3 bloques, teléfono secundario
-    Variables:
-      $tenant->plan_id
-      $tenant->settings['business_info']['contact']['maps_url']
-      $tenant->address, $tenant->city, $tenant->whatsapp_number, $tenant->phone, $tenant->email
-      $tenant->settings['business_info']['schedule_display']
-      $tenant->settings['contact_info']['phone_secondary']
+﻿{{--
+    Contact Section — SYNTIweb FlyonUI
+    Centralizado: img + cards grid (Horario, Direccion, WhatsApp, Email)
 --}}
 
 @php
     $embedUrl     = data_get($tenant->settings, 'business_info.contact.maps_url', '');
-    $hasMaps      = $tenant->plan_id >= 2 && !empty($embedUrl);
+    $hasMaps      = $tenant->isAtLeastCrecimiento() && !empty($embedUrl);
 
     $address      = $tenant->address ?? data_get($tenant->settings, 'contact_info.address', '');
     $city         = $tenant->city ?? '';
     $phone        = $tenant->whatsapp_number ?? $tenant->phone ?? '';
     $phoneClean   = preg_replace('/[^0-9]/', '', $phone);
     $schedule     = data_get($tenant->settings, 'business_info.schedule_display', '');
-    $contactTitle = data_get($tenant->settings, 'business_info.contact.title', 'Contáctanos');
-    $contactSub   = data_get($tenant->settings, 'business_info.contact.subtitle', 'Estamos aquí para atenderte');
-
-    // Teléfono secundario (Plan 2-3 only)
-    $phone2      = $tenant->plan_id >= 2 ? data_get($tenant->settings, 'contact_info.phone_secondary', '') : '';
-    $phone2Clean = preg_replace('/[^0-9]/', '', $phone2);
 
     // Social networks
     $socialNetworks = is_array($customization->social_networks ?? null) ? $customization->social_networks : [];
@@ -47,148 +33,132 @@
     }
 @endphp
 
-<section id="contact" class="relative py-20 bg-base-100">
-    <div class="container mx-auto px-4 md:px-6">
-
-        {{-- Título de sección --}}
-        <div class="text-center mb-16">
-            <h2 class="text-4xl md:text-5xl font-bold mb-4 text-base-content">
-                {{ $contactTitle }}
-            </h2>
-            <p class="text-base-content/60 max-w-2xl mx-auto text-lg">
-                {{ $contactSub }}
-            </p>
-        </div>
-
-        {{-- Grid condicional: 2 cols (mapa + info) para Plan 2-3 con URL, 1 col centrada para Plan 1 --}}
-        <div class="grid {{ $hasMaps ? 'grid-cols-1 lg:grid-cols-2 items-start gap-12' : 'grid-cols-1' }}">
-
-            @if($hasMaps)
-                {{-- ── COLUMNA MAPA (Plan 2-3 con URL configurada) ── --}}
-                <div class="rounded-2xl overflow-hidden shadow-xl border border-base-200">
-                    <iframe src="{{ $embedUrl }}"
-                            width="100%"
-                            height="320"
-                            style="border:0;"
-                            allowfullscreen=""
-                            loading="lazy"
-                            referrerpolicy="no-referrer-when-downgrade"
-                            class="w-full block">
-                    </iframe>
-                </div>
-            @endif
-
-            {{-- ── COLUMNA INFO (todos los planes) ── --}}
-            <div class="{{ $hasMaps ? '' : 'max-w-4xl mx-auto w-full' }}">
-
-                {{-- 3 bloques: Ubicación · Contacto · Horario --}}
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-
-                    {{-- 1. Ubicación --}}
-                    <div class="p-6">
-                        <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-primary/10
-                                    flex items-center justify-center">
-                            <iconify-icon icon="tabler:map-pin" width="32" class="text-primary"></iconify-icon>
-                        </div>
-                        <h3 class="font-bold text-lg mb-2">Ubicación</h3>
-                        @if($address || $city)
-                            <p class="text-base-content/70 text-sm leading-relaxed">
-                                {{ $address }}@if($address && $city), @endif{{ $city }}
-                            </p>
-                        @else
-                            <p class="text-base-content/30 text-sm italic">No configurada</p>
-                        @endif
-                    </div>
-
-                    {{-- 2. Contacto --}}
-                    <div class="p-6">
-                        <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-success/10
-                                    flex items-center justify-center">
-                            <iconify-icon icon="tabler:phone" width="32" class="text-success"></iconify-icon>
-                        </div>
-                        <h3 class="font-bold text-lg mb-2">Contacto</h3>
-                        @if($phoneClean)
-                            <a href="https://wa.me/{{ $phoneClean }}"
-                               target="_blank" rel="noopener noreferrer"
-                               onclick="trackAnalyticsEvent('whatsapp_click', {phone: '{{ $phoneClean }}', section: 'contact'})"
-                               class="block text-success hover:text-success/80 transition-colors font-medium mb-1">
-                                +{{ $phoneClean }}
-                            </a>
-                            {{-- Botón de llamada telefónica --}}
-                            <a href="tel:+{{ $phoneClean }}"
-                               onclick="trackAnalyticsEvent('phone_click', {phone: '{{ $phoneClean }}', section: 'contact'})"
-                               class="inline-flex items-center gap-1.5 mt-2 px-3 py-1.5 bg-primary/10 hover:bg-primary/20 text-primary rounded-lg transition-colors text-sm font-medium">
-                                <iconify-icon icon="tabler:phone-call" width="16" height="16"></iconify-icon>
-                                Llamar ahora
-                            </a>
-                        @endif
-                        @if($phone2Clean)
-                            <a href="tel:+{{ $phone2Clean }}"
-                               class="block text-base-content/60 hover:text-base-content/90 transition-colors text-sm mb-1">
-                                +{{ $phone2Clean }}
-                            </a>
-                        @endif
-                        @if($tenant->email)
-                            <a href="mailto:{{ $tenant->email }}"
-                               class="block text-base-content/60 hover:text-base-content/90 transition-colors text-sm break-all">
-                                {{ $tenant->email }}
-                            </a>
-                        @endif
-                        @if(!$phoneClean && !$tenant->email)
-                            <p class="text-base-content/30 text-sm italic">No configurado</p>
-                        @endif
-                    </div>
-
-                    {{-- 3. Horario --}}
-                    <div class="p-6">
-                        <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-warning/10
-                                    flex items-center justify-center">
-                            <iconify-icon icon="tabler:clock" width="32" class="text-warning"></iconify-icon>
-                        </div>
-                        <h3 class="font-bold text-lg mb-2">Horario</h3>
-                        @if($schedule)
-                            <p class="text-base-content/70 text-sm leading-relaxed">{{ $schedule }}</p>
-                        @else
-                            <p class="text-base-content/30 text-sm italic">No configurado</p>
-                        @endif
-                    </div>
-
-                </div>
-
-                {{-- Redes Sociales --}}
-                @if(count($resolvedSocial))
-                    <div class="mt-10 flex flex-wrap justify-center gap-3">
-                        @foreach($resolvedSocial as $net)
-                            <a href="{{ $net['url'] }}"
-                               target="_blank" rel="noopener noreferrer"
-                               title="{{ $net['label'] }}"
-                               class="flex items-center gap-2 px-4 py-2 rounded-xl
-                                      bg-base-200 hover:bg-primary/10 hover:text-primary
-                                      border border-base-content/10 hover:border-primary/30
-                                      text-sm font-semibold transition-all">
-                                <iconify-icon icon="{{ $net['icon'] }}" width="20"></iconify-icon>
-                                {{ $net['label'] }}
-                            </a>
-                        @endforeach
-                    </div>
-                @endif
-
-                {{-- CTA WhatsApp --}}
-                @if($phoneClean)
-                    <div class="mt-10 text-center">
-                        <a href="https://wa.me/{{ $phoneClean }}?text={{ urlencode('Hola, vengo desde la web') }}"
-                           target="_blank" rel="noopener noreferrer"
-                           class="btn btn-success btn-lg gap-3
-                                  shadow-lg shadow-success/20 hover:shadow-success/30
-                                  transition-all">
-                            <iconify-icon icon="tabler:brand-whatsapp" width="24"></iconify-icon>
-                            Escríbenos por WhatsApp
-                        </a>
-                    </div>
-                @endif
-
-            </div>
-        </div>
-
+<section id="contacto" class="bg-base-200 py-8 sm:py-16 lg:py-24">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="relative mx-auto mb-12 w-fit">
+      <h2 class="text-base-content text-2xl font-semibold md:text-3xl lg:text-4xl">Contactanos</h2>
+      <span class="from-primary/40 to-primary/5 absolute start-0 top-9 h-1 w-full rounded-full bg-gradient-to-r"></span>
     </div>
+    <div class="grid items-center gap-12 lg:grid-cols-2">
+      <img src="{{ $customization->contact_image_url ?? 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=800' }}"
+           alt="Contactanos" class="size-full rounded-2xl object-cover">
+      <div>
+        <h3 class="text-base-content mb-6 text-xl font-semibold">
+          {{ $tenant->tagline ?? 'Estamos para ayudarte!' }}
+        </h3>
+        <p class="text-base-content/80 mb-10 text-lg font-medium">
+          {{ $tenant->description ?? 'Contactanos y te atendemos a la brevedad.' }}
+        </p>
+        <div class="grid gap-6 md:grid-cols-2">
+          <div class="card shadow-none">
+            <div class="card-body items-center gap-3">
+              <div class="avatar avatar-placeholder">
+                <div class="border-primary/20 text-primary w-9 rounded-full border">
+                  <span class="icon-[tabler--clock] text-primary size-6"></span>
+                </div>
+              </div>
+              <h4 class="text-base-content text-base font-medium">Horario</h4>
+              <div class="text-center text-base-content/80">
+                @if($schedule)
+                  <p>{{ $schedule }}</p>
+                @elseif($tenant->business_hours)
+                  @foreach($tenant->business_hours as $day => $hours)
+                    <p>{{ $day }}: {{ $hours }}</p>
+                  @endforeach
+                @else
+                  <p>Lun-Sab 9:00-18:00</p>
+                @endif
+              </div>
+            </div>
+          </div>
+          <div class="card shadow-none">
+            <div class="card-body items-center gap-3">
+              <div class="avatar avatar-placeholder">
+                <div class="border-primary/20 text-primary w-9 rounded-full border">
+                  <span class="icon-[tabler--map-pin] text-primary size-6"></span>
+                </div>
+              </div>
+              <h4 class="text-base-content text-base font-medium">Direccion</h4>
+              <address class="text-base-content/80 text-center not-italic">
+                {{ $address }}<br>
+                {{ $city }}{{ $tenant->state ? ', ' . $tenant->state : '' }}
+              </address>
+            </div>
+          </div>
+          <div class="card shadow-none">
+            <div class="card-body items-center gap-3">
+              <div class="avatar avatar-placeholder">
+                <div class="border-primary/20 text-primary w-9 rounded-full border">
+                  <span class="icon-[tabler--brand-whatsapp] text-primary size-6"></span>
+                </div>
+              </div>
+              <h4 class="text-base-content text-base font-medium">WhatsApp</h4>
+              @if($phoneClean)
+                <a href="https://wa.me/{{ $phoneClean }}"
+                   class="text-primary font-semibold hover:underline">
+                  +{{ $phoneClean }}
+                </a>
+              @else
+                <p class="text-base-content/40 text-sm italic">No configurado</p>
+              @endif
+            </div>
+          </div>
+          <div class="card shadow-none">
+            <div class="card-body items-center gap-3">
+              <div class="avatar avatar-placeholder">
+                <div class="border-primary/20 text-primary w-9 rounded-full border">
+                  <span class="icon-[tabler--mail] text-primary size-6"></span>
+                </div>
+              </div>
+              <h4 class="text-base-content text-base font-medium">Email</h4>
+              <div class="text-center text-base-content/80">
+                @if($tenant->email)
+                  <p>{{ $tenant->email }}</p>
+                @endif
+                @if($tenant->phone)
+                  <p>{{ $tenant->phone }}</p>
+                @endif
+                @if(!$tenant->email && !$tenant->phone)
+                  <p class="text-base-content/40 text-sm italic">No configurado</p>
+                @endif
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {{-- Redes Sociales --}}
+        @if(count($resolvedSocial))
+            <div class="mt-10 flex flex-wrap justify-center gap-3">
+                @foreach($resolvedSocial as $net)
+                    <a href="{{ $net['url'] }}"
+                       target="_blank" rel="noopener noreferrer"
+                       title="{{ $net['label'] }}"
+                       class="flex items-center gap-2 px-4 py-2 rounded-xl
+                              bg-base-100 hover:bg-primary/10 hover:text-primary
+                              border border-base-content/10 hover:border-primary/30
+                              text-sm font-semibold transition-all">
+                        <iconify-icon icon="{{ $net['icon'] }}" width="20"></iconify-icon>
+                        {{ $net['label'] }}
+                    </a>
+                @endforeach
+            </div>
+        @endif
+
+        {{-- CTA WhatsApp --}}
+        @if($phoneClean)
+            <div class="mt-10 text-center">
+                <a href="https://wa.me/{{ $phoneClean }}?text={{ urlencode('Hola, vengo desde la web') }}"
+                   target="_blank" rel="noopener noreferrer"
+                   class="btn btn-success btn-lg gap-3
+                          shadow-lg shadow-success/20 hover:shadow-success/30
+                          transition-all">
+                    <span class="icon-[tabler--brand-whatsapp] size-6"></span>
+                    Escribenos por WhatsApp
+                </a>
+            </div>
+        @endif
+
+      </div>
+    </div>
+  </div>
 </section>
