@@ -103,7 +103,7 @@ class DollarRateService
 
                 if ($rate === null) {
                     Log::warning('DollarRateService: No active EUR rate found, using fallback');
-                    return 500.00;
+                    return 495.00;
                 }
 
                 Log::debug('DollarRateService: EUR rate retrieved from database', [
@@ -118,7 +118,7 @@ class DollarRateService
                 'error' => $e->getMessage(),
             ]);
 
-            return 500.00;
+            return 495.00;
         }
     }
 
