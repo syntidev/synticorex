@@ -187,7 +187,8 @@ $effectiveTheme = $customPalette ? 'custom' : $themeSlug;
                 return `<span class="text-xs font-medium opacity-50 mr-1">Bs.</span>${(val * EXCHANGE_RATE).toLocaleString('es-VE', {minimumFractionDigits: 2})}`;
             }
             if (currentCurrency === '€') {
-                return `<span class="text-xs font-medium opacity-50 mr-1">€</span>${(val * EURO_RATE / EXCHANGE_RATE).toLocaleString('es-VE', {minimumFractionDigits: 2})}`;
+                // € replaces $ visually — same numeric value as USD price base
+                return `<span class="text-xs font-medium opacity-50 mr-1">€</span>${val.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
             }
             return `<span class="text-xs font-medium opacity-50 mr-1">${CURRENCY_SYMBOL}</span>${val.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
         }
