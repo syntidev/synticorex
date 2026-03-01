@@ -59,15 +59,13 @@
               </div>
               <h4 class="text-base-content text-base font-medium">Horario</h4>
               <div class="text-center text-base-content/80">
-                @if($schedule)
-                  <p>{{ $schedule }}</p>
-                @elseif($tenant->business_hours)
-                  @foreach($tenant->business_hours as $day => $hours)
-                    <p>{{ $day }}: {{ $hours }}</p>
-                  @endforeach
-                @else
-                  <p>Lun-Sab 9:00-18:00</p>
-                @endif
+                @php
+                  $hours = $tenant->business_hours;
+                  $hoursText = is_array($hours) 
+                    ? collect($hours)->map(fn($h,$d) => "$d: $h")->implode(' | ')
+                    : (is_string($hours) ? $hours : 'Lun–Sáb 9:00–18:00');
+                @endphp
+                <p>{{ $hoursText }}</p>
               </div>
             </div>
           </div>
