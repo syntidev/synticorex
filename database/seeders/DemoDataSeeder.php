@@ -18,6 +18,20 @@ use Illuminate\Support\Facades\Hash;
 class DemoDataSeeder extends Seeder
 {
     /**
+     * Remove stale products/services from previous seeder runs.
+     */
+    private function cleanStale(int $tenantId, array $productNames, array $serviceNames): void
+    {
+        Product::where('tenant_id', $tenantId)
+            ->whereNotIn('name', $productNames)
+            ->delete();
+
+        Service::where('tenant_id', $tenantId)
+            ->whereNotIn('name', $serviceNames)
+            ->delete();
+    }
+
+    /**
      * Run the database seeds.
      */
     public function run(): void
@@ -138,6 +152,13 @@ class DemoDataSeeder extends Seeder
             );
         }
 
+        // Cleanup stale data from previous seeds
+        $this->cleanStale(
+            $techStart->id,
+            array_column($techStartProducts, 'name'),
+            array_column($techStartServices, 'name')
+        );
+
         // ═══════════════════════════════════════════════════════════════════════════════
         // TENANT 2: Boutique Eleganza (Plan 2 - Crecimiento)
         // ═══════════════════════════════════════════════════════════════════════════════
@@ -240,6 +261,13 @@ class DemoDataSeeder extends Seeder
                 ]
             );
         }
+
+        // Cleanup stale data from previous seeds
+        $this->cleanStale(
+            $retailCo->id,
+            array_column($retailCoProducts, 'name'),
+            array_column($retailCoServices, 'name')
+        );
 
         // ═══════════════════════════════════════════════════════════════════════════════
         // TENANT 3: ServicePro Empresarial (Plan 3 - Visión)
@@ -349,6 +377,13 @@ class DemoDataSeeder extends Seeder
                 ]
             );
         }
+
+        // Cleanup stale data from previous seeds
+        $this->cleanStale(
+            $servicePro->id,
+            array_column($serviceProProducts, 'name'),
+            array_column($serviceProServices, 'name')
+        );
 
         // ═════════════════════════════════════════════════════════════════════════════════
         // Summary

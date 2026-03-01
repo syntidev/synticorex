@@ -113,6 +113,7 @@ body{font-family:system-ui,-apple-system,sans-serif;min-height:100vh;display:fle
 /* Hero */
 .sc-hero{position:relative;min-height:280px;display:flex;align-items:center;justify-content:center;text-align:center;padding:3rem 1rem;overflow:hidden}
 .sc-hero-bg{position:absolute;inset:0;background-size:cover;background-position:center;filter:brightness(.45)}
+.sc-hero-bg.sc-hero-gradient{filter:none}
 .sc-hero-content{position:relative;z-index:2;max-width:600px}
 .sc-hero h1{color:#fff;font-size:clamp(1.6rem,5vw,2.6rem);font-weight:900;letter-spacing:-.02em;line-height:1.15;text-shadow:0 2px 12px rgba(0,0,0,.4)}
 .sc-hero p{color:rgba(255,255,255,.85);margin-top:.6rem;font-size:clamp(.9rem,2.5vw,1.15rem);font-weight:500}
@@ -128,8 +129,9 @@ body{font-family:system-ui,-apple-system,sans-serif;min-height:100vh;display:fle
 .sc-card{border-radius:12px;overflow:hidden;border:1px solid oklch(var(--bc)/.07);background:oklch(var(--b1));transition:box-shadow .2s,transform .15s}
 .sc-card:hover{box-shadow:0 8px 24px oklch(var(--bc)/.08);transform:translateY(-2px)}
 .sc-card-img{aspect-ratio:1/1;width:100%;object-fit:cover;background:oklch(var(--bc)/.05);display:block}
-.sc-card-placeholder{aspect-ratio:1/1;width:100%;display:flex;align-items:center;justify-content:center;background:oklch(var(--bc)/.05)}
-.sc-card-placeholder svg{width:40px;height:40px;opacity:.15}
+.sc-card-placeholder{aspect-ratio:1/1;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,oklch(var(--p)/.08),oklch(var(--s,var(--p))/.12));gap:.35rem}
+.sc-card-placeholder svg{width:36px;height:36px;color:oklch(var(--p)/.35)}
+.sc-card-placeholder span{font-size:.65rem;font-weight:700;color:oklch(var(--p)/.4);letter-spacing:.04em;text-transform:uppercase}
 .sc-card-body{padding:.65rem .75rem .75rem}
 .sc-card-name{font-size:.82rem;font-weight:700;color:oklch(var(--bc));line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .sc-card-price{font-size:.9rem;font-weight:800;color:oklch(var(--bc));margin-top:.25rem}
@@ -231,7 +233,7 @@ body{font-family:system-ui,-apple-system,sans-serif;min-height:100vh;display:fle
     @if($heroUrl)
         <div class="sc-hero-bg" style="background-image:url('{{ $heroUrl }}')"></div>
     @else
-        <div class="sc-hero-bg" style="background:linear-gradient(135deg,oklch(var(--p)),oklch(var(--s,var(--p))))"></div>
+        <div class="sc-hero-bg sc-hero-gradient" style="background:linear-gradient(135deg,oklch(var(--p)),oklch(var(--s,var(--p))/.7));"></div>
     @endif
     <div class="sc-hero-content">
         <h1>{{ $tenant->business_name }}</h1>
@@ -259,7 +261,8 @@ body{font-family:system-ui,-apple-system,sans-serif;min-height:100vh;display:fle
                      loading="lazy">
             @else
                 <div class="sc-card-placeholder">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"/></svg>
+                    <span>{{ Str::limit($product->name, 18) }}</span>
                 </div>
             @endif
 
