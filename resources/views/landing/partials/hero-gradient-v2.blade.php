@@ -45,24 +45,26 @@
                     @endif
                 </p>
                 
-                {{-- CTAs con efectos hover --}}
+                {{-- CTAs --}}
                 <div class="flex flex-wrap gap-4 max-lg:justify-center">
+                    {{-- CTA principal: WhatsApp → btn-primary --}}
                     @if($tenant->whatsapp)
-                        <a href="https://wa.me/{{ $tenant->whatsapp }}?text={{ urlencode('Hola ' . $tenant->business_name . ', me gustaría obtener más información') }}" 
+                        <a href="https://wa.me/{{ $tenant->whatsapp }}?text={{ urlencode('Hola ' . $tenant->business_name . ', me gustaría obtener más información') }}"
                            target="_blank"
-                           class="btn btn-lg bg-base-100 text-primary hover:bg-base-100/90 border-0 shadow-2xl transform hover:scale-105 transition-all">
+                           class="btn btn-primary btn-lg shadow-2xl">
                             <span class="iconify tabler--brand-whatsapp size-6"></span>
                             Contactar Ahora
                         </a>
                     @elseif($tenant->phone)
-                        <a href="tel:{{ $tenant->phone }}" 
-                           class="btn btn-lg bg-base-100 text-primary hover:bg-base-100/90 border-0 shadow-2xl transform hover:scale-105 transition-all">
+                        <a href="tel:{{ $tenant->phone }}"
+                           class="btn btn-primary btn-lg shadow-2xl">
                             <span class="iconify tabler--phone size-6"></span>
                             Llamar Ahora
                         </a>
                     @endif
-                    
-                    <a href="#about" class="btn btn-lg bg-base-100/10 backdrop-blur-sm text-base-100 border-base-100/30 hover:bg-base-100/20">
+
+                    {{-- CTA secundario → btn-outline btn-secondary con glassmorphism para legibilidad en gradiente --}}
+                    <a href="#about" class="btn btn-outline btn-secondary btn-lg bg-base-100/10 backdrop-blur-sm">
                         Descubrir Más
                         <span class="iconify tabler--arrow-right size-5"></span>
                     </a>

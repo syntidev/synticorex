@@ -47,27 +47,36 @@
                 @endif
             </p>
 
-            {{-- Botón CTA Principal --}}
-            @if($tenant->whatsapp)
-                <a href="https://wa.me/{{ $tenant->whatsapp }}?text={{ urlencode('Hola ' . $tenant->business_name . ', me gustaría obtener más información') }}" 
-                   target="_blank"
-                   class="btn btn-primary btn-gradient btn-lg">
-                    Contactar por WhatsApp
-                    <span class="iconify tabler--arrow-right size-5 rtl:rotate-180"></span>
+            {{-- CTAs --}}
+            <div class="flex flex-wrap gap-4 justify-center">
+                {{-- CTA principal: WhatsApp → btn-primary --}}
+                @if($tenant->whatsapp)
+                    <a href="https://wa.me/{{ $tenant->whatsapp }}?text={{ urlencode('Hola ' . $tenant->business_name . ', me gustaría obtener más información') }}"
+                       target="_blank"
+                       class="btn btn-primary btn-gradient btn-lg">
+                        <span class="iconify tabler--brand-whatsapp size-5"></span>
+                        Contactar por WhatsApp
+                    </a>
+                @elseif($tenant->phone)
+                    <a href="tel:{{ $tenant->phone }}"
+                       class="btn btn-primary btn-gradient btn-lg">
+                        <span class="iconify tabler--phone size-5"></span>
+                        Llamar Ahora
+                    </a>
+                @else
+                    <a href="#contact-us"
+                       class="btn btn-primary btn-gradient btn-lg">
+                        Conocer Más
+                        <span class="iconify tabler--arrow-right size-5 rtl:rotate-180"></span>
+                    </a>
+                @endif
+
+                {{-- CTA secundario: ver catálogo → btn-outline btn-secondary --}}
+                <a href="#productos" class="btn btn-outline btn-secondary btn-lg">
+                    Ver Catálogo
+                    <span class="iconify tabler--arrow-down size-5"></span>
                 </a>
-            @elseif($tenant->phone)
-                <a href="tel:{{ $tenant->phone }}" 
-                   class="btn btn-primary btn-gradient btn-lg">
-                    Llamar Ahora
-                    <span class="iconify tabler--arrow-right size-5 rtl:rotate-180"></span>
-                </a>
-            @else
-                <a href="#contact-us" 
-                   class="btn btn-primary btn-gradient btn-lg">
-                    Conocer Más
-                    <span class="iconify tabler--arrow-right size-5 rtl:rotate-180"></span>
-                </a>
-            @endif
+            </div>
         </div>
     </div>
 </section>

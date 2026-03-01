@@ -51,7 +51,7 @@
                         </a>
                     @endif
                     
-                    <a href="#about" class="btn btn-outline btn-lg">
+                    <a href="#about" class="btn btn-outline btn-secondary btn-lg">
                         Conocer Más
                         <span class="iconify tabler--arrow-down size-5"></span>
                     </a>
