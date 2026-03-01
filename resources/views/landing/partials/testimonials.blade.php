@@ -2,6 +2,8 @@
     Testimonials Section — Plan 2+
     Datos: $tenant->settings['business_info']['testimonials']
     Array de { name, title, text, rating (1-5) } — máx 5 items
+    Plan 2: muestra solo si hay datos reales
+    Plan 3: siempre muestra (placeholder elegante si vacío)
 --}}
 @php
     $testimonials = collect(data_get($tenant->settings, 'business_info.testimonials', []))
@@ -9,7 +11,19 @@
         ->take(5)
         ->values();
 
-    if ($testimonials->isEmpty()) return;
+    $isVision = $tenant->isVision();
+
+    // Plan 2: solo si hay datos — Plan 3: siempre
+    if ($testimonials->isEmpty() && !$isVision) return;
+
+    // Plan 3 placeholder cuando no hay testimonios reales
+    if ($testimonials->isEmpty() && $isVision) {
+        $testimonials = collect([
+            ['name' => 'Cliente Satisfecho', 'title' => 'Comprador frecuente', 'text' => 'Excelente atención y productos de primera calidad. Siempre cumplen con lo prometido.', 'rating' => 5],
+            ['name' => 'María G.', 'title' => 'Clienta habitual', 'text' => 'Servicio rápido, precios justos y un trato muy profesional. Los recomiendo totalmente.', 'rating' => 5],
+            ['name' => 'Carlos R.', 'title' => 'Nuevo cliente', 'text' => 'Fue mi primera compra y quedé muy contento. Sin duda volveré a comprar.', 'rating' => 4],
+        ]);
+    }
 @endphp
 
 <section id="testimonials" class="py-8 sm:py-16 lg:py-24 bg-base-100">
