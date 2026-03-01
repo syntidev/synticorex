@@ -1,7 +1,8 @@
 {{-- Path: resources/views/landing/partials/branches.blade.php --}}
-{{-- Only renders for Plan 3 (VISIÓN) when branches section is enabled --}}
+{{-- Only renders for Plan 3 (VISIÓN) --}}
 @php
-    $branchesEnabled = data_get($tenant->settings, 'engine_settings.branches.enabled', false);
+    if (!$tenant->isVision()) return;
+
     $activeBranches = isset($tenant) && $tenant->relationLoaded('branches')
         ? $tenant->branches->where('is_active', true)
         : collect();
@@ -18,7 +19,7 @@
     $branchPayMethodsData = ($customization->payment_methods['branches'] ?? []);
 @endphp
 
-@if(isset($plan) && (int) $plan->id === 3 && $branchesEnabled && $activeBranches->isNotEmpty())
+@if($activeBranches->isNotEmpty())
 <section id="branches" class="py-8 sm:py-16 lg:py-24 bg-base-100">
     <div class="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8">
 
