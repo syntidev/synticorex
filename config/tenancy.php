@@ -7,10 +7,22 @@ return [
     |--------------------------------------------------------------------------
     | Dominios raíz del ecosistema (landings)
     |--------------------------------------------------------------------------
-    | Si el host termina en uno de estos, el subdominio es el slug del tenant.
-    | Ej: pepe.tu.menu → slug: pepe | menu.vip → sin subdominio (no aplica).
+    | Dos modos según cómo se accede:
+    |
+    | MODO SUBDOMINIO (producción):
+    |   Host tiene subdominio → extraer tenant del subdominio.
+    |   Ej: pepe.tu.menu → tenant subdomain='pepe'
+    |
+    | MODO PATH (local/desarrollo):
+    |   Host ES el dominio raíz → extraer tenant del primer segmento de la URL.
+    |   Ej: synticorex.test/pepe → tenant subdomain='pepe'
+    |
+    | El middleware IdentifyTenant detecta automáticamente cuál modo usar.
     */
     'central_domains' => [
+        'synticorex.test', // Entorno local (Laragon)
+        '127.0.0.1',       // php artisan serve / Herd local
+        'localhost',        // Docker / nginx local
         'tu.menu',
         'menu.vip',
         'alto.aqui',
