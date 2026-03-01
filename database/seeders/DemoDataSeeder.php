@@ -385,6 +385,80 @@ class DemoDataSeeder extends Seeder
             array_column($serviceProServices, 'name')
         );
 
+        // ═══════════════════════════════════════════════════════════════════════════════
+        // TENANT 4: Vitrina Demo (Plan 1 - template SYNTIcat)
+        // ═══════════════════════════════════════════════════════════════════════════════
+        $vitrina = Tenant::updateOrCreate(
+            ['subdomain' => 'vitrina'],
+            [
+                'user_id'          => $user->id,
+                'plan_id'          => $plans->first()?->id,
+                'business_name'    => 'Tienda Demo',
+                'business_segment' => 'Comercio',
+                'description'      => 'Catálogo de productos demo para SYNTIcat',
+                'slogan'           => 'Todo lo que necesitas, al mejor precio',
+                'email'            => 'demo@vitrina.local',
+                'phone'            => '+58 412 000 0001',
+                'whatsapp_sales'   => '+584120000001',
+                'whatsapp_support' => '+584120000001',
+                'address'          => 'Av. Principal 123',
+                'city'             => 'Caracas',
+                'country'          => 'Venezuela',
+                'domain_verified'  => true,
+                'status'           => 'active',
+                'base_domain'      => 'synticorex.test',
+                'is_open'          => true,
+                'edit_pin'         => Hash::make('1234'),
+                'settings'         => [
+                    'engine_settings' => [
+                        'template' => 'synticat',
+                        'currency' => [
+                            'auto_update'   => true,
+                            'exchange_rate' => 36.50,
+                            'euro_rate'     => 495.60,
+                            'source'        => 'dolarapi',
+                            'display'       => [
+                                'saved_display_mode' => 'both_toggle',
+                                'show_reference'     => true,
+                                'show_bolivares'     => true,
+                                'show_euro'          => false,
+                                'hide_price'         => false,
+                                'has_toggle'         => true,
+                                'symbols'            => ['reference' => 'REF', 'bolivares' => 'Bs.'],
+                            ],
+                        ],
+                    ],
+                ],
+            ]
+        );
+
+        // Products for Vitrina (6 demo products)
+        $vitrinaProducts = [
+            ['name' => 'Camiseta Básica',    'price' => 12.00, 'position' => 1],
+            ['name' => 'Pantalón Casual',    'price' => 25.00, 'position' => 2],
+            ['name' => 'Zapatos Deportivos', 'price' => 45.00, 'position' => 3],
+            ['name' => 'Bolso de Mano',      'price' => 30.00, 'position' => 4],
+            ['name' => 'Gorra Bordada',      'price' => 10.00, 'position' => 5],
+            ['name' => 'Reloj Casual',       'price' => 55.00, 'position' => 6],
+        ];
+
+        foreach ($vitrinaProducts as $prod) {
+            Product::updateOrCreate(
+                ['tenant_id' => $vitrina->id, 'name' => $prod['name']],
+                [
+                    'description' => $prod['name'] . ' — producto demo para SYNTIcat.',
+                    'price_usd'   => $prod['price'],
+                    'position'    => $prod['position'],
+                    'is_active'   => true,
+                ]
+            );
+        }
+
+        // Cleanup stale vitrina products
+        Product::where('tenant_id', $vitrina->id)
+            ->whereNotIn('name', array_column($vitrinaProducts, 'name'))
+            ->delete();
+
         // ═════════════════════════════════════════════════════════════════════════════════
         // Summary
         // ═════════════════════════════════════════════════════════════════════════════════
@@ -393,6 +467,7 @@ class DemoDataSeeder extends Seeder
         $this->command->info("   ✓ TechStart Venezuela (Plan 1) - 6 products, 3 services");
         $this->command->info("   ✓ Boutique Eleganza (Plan 2) - 12 products, 3 services");
         $this->command->info("   ✓ ServicePro Empresarial (Plan 3) - 18 products, 4 services");
+        $this->command->info("   ✓ Vitrina Demo (Plan 1, SYNTIcat) - 6 products");
         $this->command->info("\n🔑 Test Credentials:");
         $this->command->info("   Email: {$user->email}");
         $this->command->info("   Password: password123");
@@ -401,5 +476,6 @@ class DemoDataSeeder extends Seeder
         $this->command->info("   http://techstart.synticorex.test");
         $this->command->info("   http://retailco.synticorex.test");
         $this->command->info("   http://servicepro.synticorex.test");
+        $this->command->info("   http://vitrina.synticorex.test  ← SYNTIcat template");
     }
 }
