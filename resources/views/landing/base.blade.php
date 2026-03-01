@@ -85,12 +85,7 @@ $effectiveTheme = $customPalette ? 'custom' : $themeSlug;
     {{-- Wrapper que compensa las barras fixed: header-top (40px plan2+) + nav (60px) --}}
     <div class="{{ $tenant->isAtLeastCrecimiento() ? 'pt-[100px]' : 'pt-[60px]' }}">
 
-    @php $sConfig = $customization->getSectionConfig('hero'); @endphp
-    @if($tenant->plan_id === \App\Models\Plan::OPORTUNIDAD)
-        @include('landing.partials.hero-geometric', ['sConfig' => $sConfig])
-    @else
-        @include('landing.partials.hero-fullscreen-v2', ['sConfig' => $sConfig])
-    @endif
+    @include('landing.partials.hero-fullscreen-v2')
 
     {{-- ══════════════════════════════════════════════
          SECCIONES DINÁMICAS - ORDENABLES
