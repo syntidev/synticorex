@@ -70,10 +70,7 @@
         {{-- Badge --}}
         @if($product->badge)
             <div class="flex gap-2">
-                <span class="badge badge-sm {{
-                    $product->badge === 'HOT' ? 'badge-error' :
-                    ($product->badge === 'NEW' ? 'badge-success' : 'badge-warning')
-                }}">
+                <span class="badge badge-sm badge-accent">
                     {{ $product->badge }}
                 </span>
             </div>
@@ -94,15 +91,9 @@
         {{-- Precio: se oculta si el tenant activó "Ocultar precio" --}}
         @if($product->price_usd && !($hidePrice ?? false))
             <div class="pt-2 border-t border-base-200">
-                <div class="text-xl font-black text-base-content"
-                     data-price-usd="{{ $product->price_usd }}"
-                     data-rate="{{ $dollarRate ?? 1 }}">
-                    <div class="price-display">
-                        <span class="text-xs font-medium opacity-50 mr-1">REF</span>{{ number_format($product->price_usd, 2) }}
-                    </div>
-                    <div class="price-display-bs hidden">
-                        <span class="text-xs font-medium opacity-50 mr-1">Bs.</span>{{ number_format($product->price_usd * ($dollarRate ?? 1), 2) }}
-                    </div>
+                <div class="text-xl font-black text-accent"
+                     data-price-usd="{{ $product->price_usd }}">
+                    <span class="text-xs font-medium opacity-50 mr-1">REF</span>{{ number_format($product->price_usd, 2) }}
                 </div>
             </div>
         @endif
@@ -117,14 +108,14 @@
             @elseif($product->price_usd)
                 {{-- Con precio → botón WhatsApp --}}
                 <a href="#" class="btn btn-primary btn-sm flex-1" onclick="return false;">
-                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.588-5.946 0-6.556 5.332-11.887 11.887-11.887 3.18 0 6.171 1.242 8.425 3.496 2.257 2.253 3.496 5.244 3.496 8.425 0 6.557-5.331 11.89-11.887 11.89-2.018 0-4.003-.513-5.753-1.487l-6.267 1.672zm6.208-3.766l.348.206c1.517.896 3.268 1.369 5.068 1.369 5.451 0 9.887-4.436 9.887-9.889 0-2.641-1.03-5.123-2.9-6.992-1.868-1.87-4.35-2.903-6.993-2.903-5.452 0-9.889 4.437-9.889 9.889 0 1.883.53 3.722 1.534 5.312l.226.358-1.001 3.655 3.743-.984z"/></svg>
-                    Escribir
+                    <span class="iconify tabler--brand-whatsapp size-4"></span>
+                    Pedir por WhatsApp
                 </a>
             @else
                 {{-- Sin precio → WhatsApp + Más info --}}
                 <a href="#" class="btn btn-primary btn-sm flex-1" onclick="return false;">
-                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.588-5.946 0-6.556 5.332-11.887 11.887-11.887 3.18 0 6.171 1.242 8.425 3.496 2.257 2.253 3.496 5.244 3.496 8.425 0 6.557-5.331 11.89-11.887 11.89-2.018 0-4.003-.513-5.753-1.487l-6.267 1.672zm6.208-3.766l.348.206c1.517.896 3.268 1.369 5.068 1.369 5.451 0 9.887-4.436 9.887-9.889 0-2.641-1.03-5.123-2.9-6.992-1.868-1.87-4.35-2.903-6.993-2.903-5.452 0-9.889 4.437-9.889 9.889 0 1.883.53 3.722 1.534 5.312l.226.358-1.001 3.655 3.743-.984z"/></svg>
-                    WhatsApp
+                    <span class="iconify tabler--brand-whatsapp size-4"></span>
+                    Pedir por WhatsApp
                 </a>
                 <a href="#" class="btn btn-secondary btn-soft btn-sm flex-1" onclick="return false;">
                     Más info

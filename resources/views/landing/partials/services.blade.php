@@ -22,19 +22,21 @@
         <div id="service-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
             {{-- Primeros 3 — siempre visibles --}}
             @foreach($visibleServices as $service)
-                <article class="group relative bg-base-content/5 border border-base-content/10 rounded-[2.5rem] p-8 transition-all duration-500 hover:bg-base-content/10 hover:border-primary/30 hover:-translate-y-2 hover:shadow-glow-primary">
+                <article class="group relative bg-gradient-to-br from-primary/10 to-secondary/10 border border-base-content/10 rounded-[2.5rem] p-8 transition-all duration-500 hover:border-primary/30 hover:-translate-y-2 hover:shadow-glow-primary text-center">
                     
-                    {{-- Icon or Image --}}
-                    <div class="relative w-20 h-20 mb-8 rounded-2xl bg-primary/10 flex items-center justify-center overflow-hidden group-hover:bg-primary/20 transition-colors">
-                        @if($service->image_filename)
-                            <img 
-                                src="{{ asset('storage/tenants/' . $tenant->id . '/services/' . $service->image_filename) }}" 
-                                alt="{{ $service->name }}"
-                                class="w-full h-full object-cover"
-                            >
-                        @else
-                            <iconify-icon icon="tabler:{{ $service->icon_name ?? 'cog' }}" class="text-primary" width="40" height="40"></iconify-icon>
-                        @endif
+                    {{-- Icono centrado --}}
+                    <div class="flex justify-center mb-8">
+                        <div class="relative w-20 h-20 rounded-2xl bg-primary/10 flex items-center justify-center overflow-hidden group-hover:bg-primary/20 transition-colors">
+                            @if($service->image_filename)
+                                <img 
+                                    src="{{ asset('storage/tenants/' . $tenant->id . '/services/' . $service->image_filename) }}" 
+                                    alt="{{ $service->name }}"
+                                    class="w-full h-full object-cover"
+                                >
+                            @else
+                                <span class="iconify tabler--{{ $service->icon_name ?? 'star' }} text-primary text-4xl"></span>
+                            @endif
+                        </div>
                     </div>
                     
                     {{-- Información del Servicio --}}
@@ -43,11 +45,11 @@
                             {{ $service->name }}
                         </h3>
                         
-                        <p class="text-base-content/60 text-sm leading-relaxed line-clamp-3">
+                        <p class="text-base-content/70 text-sm leading-relaxed line-clamp-3">
                             {{ $service->description ?? 'Soluciones personalizadas diseñadas para elevar el estándar de tu negocio.' }}
                         </p>
                         
-                        {{-- Botón de Acción Refinado --}}
+                        {{-- Botón --}}
                         <div class="pt-6">
                             @php
                                 $ctaLink = $service->cta_link ?? ($tenant->whatsapp_sales 
@@ -56,9 +58,8 @@
                             @endphp
                             
                             <a href="{{ $ctaLink }}" 
-                               class="inline-flex items-center gap-2 text-primary font-black uppercase text-xs tracking-widest group/btn">
-                                <span>{{ $service->cta_text ?? 'Saber más' }}</span>
-                                <iconify-icon icon="tabler:arrow-right" class="transition-transform group-hover/btn:translate-x-2" width="16" height="16"></iconify-icon>
+                               class="btn btn-outline btn-secondary btn-sm">
+                                <span>{{ $service->cta_text ?? 'Más información' }}</span>
                             </a>
                         </div>
                     </div>
@@ -69,23 +70,25 @@
             @if($hasMoreServices)
                 @foreach($hiddenServices as $service)
                     <div class="service-extra hidden">
-                        <article class="group relative bg-base-content/5 border border-base-content/10 rounded-[2.5rem] p-8 transition-all duration-500 hover:bg-base-content/10 hover:border-primary/30 hover:-translate-y-2 hover:shadow-glow-primary">
-                            <div class="relative w-20 h-20 mb-8 rounded-2xl bg-primary/10 flex items-center justify-center overflow-hidden group-hover:bg-primary/20 transition-colors">
-                                @if($service->image_filename)
-                                    <img 
-                                        src="{{ asset('storage/tenants/' . $tenant->id . '/services/' . $service->image_filename) }}" 
-                                        alt="{{ $service->name }}"
-                                        class="w-full h-full object-cover"
-                                    >
-                                @else
-                                    <iconify-icon icon="tabler:{{ $service->icon_name ?? 'cog' }}" class="text-primary" width="40" height="40"></iconify-icon>
-                                @endif
+                        <article class="group relative bg-gradient-to-br from-primary/10 to-secondary/10 border border-base-content/10 rounded-[2.5rem] p-8 transition-all duration-500 hover:border-primary/30 hover:-translate-y-2 hover:shadow-glow-primary text-center">
+                            <div class="flex justify-center mb-8">
+                                <div class="relative w-20 h-20 rounded-2xl bg-primary/10 flex items-center justify-center overflow-hidden group-hover:bg-primary/20 transition-colors">
+                                    @if($service->image_filename)
+                                        <img 
+                                            src="{{ asset('storage/tenants/' . $tenant->id . '/services/' . $service->image_filename) }}" 
+                                            alt="{{ $service->name }}"
+                                            class="w-full h-full object-cover"
+                                        >
+                                    @else
+                                        <span class="iconify tabler--{{ $service->icon_name ?? 'star' }} text-primary text-4xl"></span>
+                                    @endif
+                                </div>
                             </div>
                             <div class="space-y-4">
                                 <h3 class="text-2xl font-bold text-base-content tracking-tight group-hover:text-primary transition-colors">
                                     {{ $service->name }}
                                 </h3>
-                                <p class="text-base-content/60 text-sm leading-relaxed line-clamp-3">
+                                <p class="text-base-content/70 text-sm leading-relaxed line-clamp-3">
                                     {{ $service->description ?? 'Soluciones personalizadas diseñadas para elevar el estándar de tu negocio.' }}
                                 </p>
                                 <div class="pt-6">
@@ -95,9 +98,8 @@
                                             : '#');
                                     @endphp
                                     <a href="{{ $ctaLink }}" 
-                                       class="inline-flex items-center gap-2 text-primary font-black uppercase text-xs tracking-widest group/btn">
-                                        <span>{{ $service->cta_text ?? 'Saber más' }}</span>
-                                        <iconify-icon icon="tabler:arrow-right" class="transition-transform group-hover/btn:translate-x-2" width="16" height="16"></iconify-icon>
+                                       class="btn btn-outline btn-secondary btn-sm">
+                                        <span>{{ $service->cta_text ?? 'Más información' }}</span>
                                     </a>
                                 </div>
                             </div>
