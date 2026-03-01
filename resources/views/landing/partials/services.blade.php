@@ -7,7 +7,7 @@
     $hiddenServices         = $displayServices->slice($defaultVisibleServices);
     $hasMoreServices        = $servicePlanLimit > $defaultVisibleServices && $hiddenServices->count() > 0;
 @endphp
-<section id="servicios" class="bg-base-200 py-8 sm:py-16 lg:py-24">
+<section id="services" class="bg-base-200 py-8 sm:py-16 lg:py-24">
 
     <div class="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8">
 

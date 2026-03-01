@@ -15,8 +15,8 @@
 
             {{-- Navegación: Etiquetas con Espaciado (tracking-widest) --}}
             <nav class="flex flex-wrap justify-center gap-x-12 gap-y-4">
-                <a href="#productos" class="text-sm font-bold text-base-content/70 hover:text-primary transition-all uppercase tracking-[0.3em]">Productos | </a>
-                <a href="#servicios" class="text-sm font-bold text-base-content/70 hover:text-primary transition-all uppercase tracking-[0.3em]">Servicios | </a>
+                <a href="#products" class="text-sm font-bold text-base-content/70 hover:text-primary transition-all uppercase tracking-[0.3em]">Productos | </a>
+                <a href="#services" class="text-sm font-bold text-base-content/70 hover:text-primary transition-all uppercase tracking-[0.3em]">Servicios | </a>
                 <a href="#faq" class="text-sm font-bold text-base-content/70 hover:text-primary transition-all uppercase tracking-[0.2em]">Ayuda </a>
             </nav>
 

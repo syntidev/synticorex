@@ -8,7 +8,7 @@
     $hasMore         = $planLimit > $defaultVisible && $hidden->count() > 0;
 @endphp
 
-<section id="productos" class="bg-base-100 py-8 sm:py-16 lg:py-24">
+<section id="products" class="bg-base-100 py-8 sm:py-16 lg:py-24">
     <div class="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8">
 
         {{-- Section Header (FlyonUI pattern) --}}
