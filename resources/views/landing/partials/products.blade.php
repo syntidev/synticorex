@@ -8,18 +8,17 @@
     $hasMore         = $planLimit > $defaultVisible && $hidden->count() > 0;
 @endphp
 
-<section id="productos" class="py-40 bg-base-100"> {{-- Aumentamos padding de sección --}}
-    <div class="container mx-auto px-8 md:px-16">
-        
-        <div class="text-center mb-32"> {{-- Más espacio bajo el título principal --}}
-            <h2 class="text-4xl md:text-6xl font-black text-base-content mb-8 tracking-tighter">
-                Nuestros <span class="text-primary italic">Productos</span>
-            </h2>
-            <div class="w-24 h-2 bg-primary mx-auto rounded-full"></div>
+<section id="productos" class="bg-base-100 py-8 sm:py-16 lg:py-24">
+    <div class="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8">
+
+        {{-- Section Header (FlyonUI pattern) --}}
+        <div class="mb-12 space-y-4 text-center sm:mb-16 lg:mb-24">
+            <h2 class="text-base-content text-2xl font-semibold md:text-3xl lg:text-4xl">Nuestros Productos</h2>
+            <p class="text-base-content/80 text-xl">Descubrí lo mejor que tenemos para ofrecerte, seleccionado con calidad y dedicación.</p>
         </div>
 
-        {{-- GRID CON GAP DE SEGURIDAD (gap-y-32 para evitar el efecto siamés) --}}
-        <div id="product-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16 md:gap-y-32 items-stretch mb-32">
+        {{-- Product Grid --}}
+        <div id="product-grid" class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {{-- Primeros 6 — siempre visibles --}}
             @foreach($visible as $product)
                 @include('landing.partials.product-card', ['product' => $product, 'tenant' => $tenant, 'plan' => $plan])
@@ -38,15 +37,13 @@
         {{-- Botón "Ver más" — solo si hay productos extra (Plan 2/3), carga 3 en 3 --}}
         @if($hasMore)
             @php $firstBatch = min(3, $hidden->count()); @endphp
-            <div id="load-more-products-container" class="mt-20 text-center">
+            <div id="load-more-products-container" class="mt-12 text-center">
                 <button
                     id="btn-load-more-products"
                     onclick="loadMoreProducts(this)"
-                    class="group inline-flex items-center gap-4 px-12 py-5 bg-primary text-white font-black rounded-2xl shadow-2xl shadow-primary/40 active:scale-95 transition-all">
-                    <span class="btn-label uppercase tracking-[0.3em] text-[10px]">Ver {{ $firstBatch }} producto{{ $firstBatch > 1 ? 's' : '' }} más</span>
-                    <svg class="w-4 h-4 btn-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"></path>
-                    </svg>
+                    class="btn btn-primary btn-gradient">
+                    <span class="btn-label">Ver {{ $firstBatch }} producto{{ $firstBatch > 1 ? 's' : '' }} más</span>
+                    <span class="icon-[tabler--chevron-down] size-5"></span>
                 </button>
             </div>
 

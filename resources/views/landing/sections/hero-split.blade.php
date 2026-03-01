@@ -1,31 +1,46 @@
-{{-- Hero Split Layout --}}
-<section id="home" class="min-h-screen bg-base-200 flex items-center">
-    <div class="container mx-auto px-6 py-20">
-        <div class="grid lg:grid-cols-2 gap-16 items-center">
-            <div class="space-y-6">
-                @if($tenant->tagline)
-                    <span class="badge badge-primary badge-lg">{{ $tenant->tagline }}</span>
-                @endif
-                <h1 class="text-5xl lg:text-6xl font-black text-base-content">
-                    {!! nl2br(e($tenant->slogan ?? $tenant->business_name)) !!}
-                </h1>
-                <p class="text-lg text-base-content/70">
-                    {{ Str::limit($customization->about_text ?? $tenant->description, 250) }}
-                </p>
-                <div class="flex flex-wrap gap-4">
-                    @if($tenant->whatsapp)
-                    <a href="https://wa.me/{{ $tenant->whatsapp }}" class="btn btn-primary btn-lg">
-                        WhatsApp
-                    </a>
+{{-- Hero Split Layout — adapted from FlyonUI official landing template --}}
+<section id="home">
+    <div class="bg-base-200 py-8 sm:py-16 lg:py-24">
+        <div class="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8">
+            <div class="grid gap-12 lg:grid-cols-2 lg:gap-24 items-center">
+                {{-- Contenido --}}
+                <div class="space-y-6 max-lg:text-center">
+                    @if($tenant->tagline)
+                        <div class="bg-base-100 border-base-content/20 w-fit rounded-full border px-3 py-1 max-lg:mx-auto">
+                            <span>✨ {{ $tenant->tagline }}</span>
+                        </div>
                     @endif
-                    <a href="#about" class="btn btn-outline btn-lg">Conocer más ↓</a>
+
+                    <h1 class="text-base-content text-4xl font-bold leading-[1.15] md:text-5xl lg:text-6xl">
+                        {!! nl2br(e($tenant->slogan ?? $tenant->business_name)) !!}
+                    </h1>
+
+                    <p class="text-base-content/80 text-lg max-w-xl max-lg:mx-auto">
+                        {{ Str::limit($customization->about_text ?? $tenant->description, 250) }}
+                    </p>
+
+                    <div class="flex flex-wrap gap-4 max-lg:justify-center">
+                        @if($tenant->whatsapp)
+                            <a href="https://wa.me/{{ $tenant->whatsapp }}" class="btn btn-primary btn-gradient btn-lg">
+                                <span class="icon-[tabler--brand-whatsapp] size-5"></span>
+                                Contáctanos
+                            </a>
+                        @endif
+                        <a href="#productos" class="btn btn-outline btn-secondary btn-lg">
+                            Ver Productos
+                            <span class="icon-[tabler--arrow-down] size-5"></span>
+                        </a>
+                    </div>
                 </div>
-            </div>
-            <div class="relative">
-                <img src="{{ $customization->hero_main_filename 
-                    ? asset('storage/tenants/'.$tenant->id.'/'.$customization->hero_main_filename) 
-                    : 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200' }}"
-                     class="w-full h-[500px] object-cover rounded-3xl shadow-2xl">
+
+                {{-- Imagen --}}
+                <div class="relative max-lg:order-first">
+                    <img src="{{ $customization->hero_main_filename
+                        ? asset('storage/tenants/'.$tenant->id.'/'.$customization->hero_main_filename)
+                        : 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200' }}"
+                         alt="{{ $tenant->business_name }}"
+                         class="w-full h-[400px] lg:h-[500px] object-cover rounded-3xl shadow-2xl">
+                </div>
             </div>
         </div>
     </div>
