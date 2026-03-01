@@ -54,6 +54,11 @@
                 <img src="{{ asset('storage/tenants/' . ($tenant->id ?? '') . '/' . $product->image_filename) }}"
                      class="w-full h-full object-cover"
                      alt="{{ $product->name }}">
+            @elseif($product->image_url)
+                <img src="{{ $product->image_url }}"
+                     class="w-full h-full object-cover"
+                     alt="{{ $product->name }}"
+                     loading="lazy">
             @else
                 <div class="w-full h-full bg-gradient-to-br from-base-300 to-base-200 flex items-center justify-center">
                     <svg class="w-16 h-16 text-base-content/20" fill="none" stroke="currentColor" viewBox="0 0 24 24">

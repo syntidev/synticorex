@@ -22,6 +22,7 @@ class Product extends Model
         'price_usd',
         'price_bs',
         'image_filename',
+        'image_url',
         'position',
         'is_active',
         'is_featured',
