@@ -18,7 +18,7 @@
             <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-success/10 flex items-center justify-center">
                 <iconify-icon icon="tabler:motorbike" width="32" class="text-success"></iconify-icon>
             </div>
-            <h2 class="text-2xl font-bold mb-2">Información de Delivery</h2>
+            <h2 class="text-base-content text-2xl font-semibold md:text-3xl lg:text-4xl mb-2">Información de Delivery</h2>
             <p class="text-base-content/70">Llevamos tu pedido hasta la puerta de tu casa</p>
         </div>
 
@@ -30,7 +30,7 @@
                     <div class="w-10 h-10 rounded-lg bg-warning/10 flex items-center justify-center">
                         <iconify-icon icon="tabler:clock" width="20" class="text-warning"></iconify-icon>
                     </div>
-                    <h3 class="font-semibold">Tiempo de Entrega</h3>
+                    <h3 class="text-xl font-semibold">Tiempo de Entrega</h3>
                 </div>
                 <p class="text-2xl font-bold text-warning mb-1">{{ $deliveryTime }}</p>
                 <p class="text-sm text-base-content/60">Promedio estimado</p>
@@ -42,7 +42,7 @@
                     <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
                         <iconify-icon icon="tabler:currency-dollar" width="20" class="text-primary"></iconify-icon>
                     </div>
-                    <h3 class="font-semibold">Costo de Delivery</h3>
+                    <h3 class="text-xl font-semibold">Costo de Delivery</h3>
                 </div>
                 <p class="text-2xl font-bold text-primary mb-1">
                     @if($deliveryCost > 0)
@@ -66,7 +66,7 @@
                     <div class="w-10 h-10 rounded-lg bg-success/10 flex items-center justify-center">
                         <iconify-icon icon="tabler:map-2" width="20" class="text-success"></iconify-icon>
                     </div>
-                    <h3 class="font-semibold">Zonas de Cobertura</h3>
+                    <h3 class="text-xl font-semibold">Zonas de Cobertura</h3>
                 </div>
                 @if($deliveryZones->isNotEmpty())
                     <div class="space-y-2">

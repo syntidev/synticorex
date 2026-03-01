@@ -26,7 +26,7 @@
         {{-- Header --}}
         <div class="text-center mb-16">
             <span class="inline-block text-xs font-bold uppercase tracking-[0.3em] text-primary mb-4">Nuestras sedes</span>
-            <h2 class="text-3xl md:text-5xl font-black text-base-content tracking-tighter">
+            <h2 class="text-base-content text-2xl font-semibold md:text-3xl lg:text-4xl">
                 Encuéntranos <span class="text-primary italic">Cerca de Ti</span>
             </h2>
             <div class="w-20 h-1.5 bg-primary mx-auto rounded-full mt-6"></div>
@@ -45,7 +45,7 @@
                 </div>
 
                 {{-- Branch Name --}}
-                <h3 class="text-xl font-bold text-base-content mb-3 group-hover:text-primary transition-colors">
+                <h3 class="text-xl font-semibold text-base-content mb-3 group-hover:text-primary transition-colors">
                     {{ $branch->name }}
                 </h3>
 

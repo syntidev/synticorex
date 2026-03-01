@@ -24,7 +24,7 @@
                 <span class="text-primary text-xs font-black uppercase tracking-[0.2em] mb-3 block">
                     Acerca de nosotros
                 </span>
-                <h2 class="text-3xl md:text-4xl font-black tracking-tight text-base-content mb-4 leading-tight">
+                <h2 class="text-base-content text-2xl font-semibold md:text-3xl lg:text-4xl mb-4">
                     {{ $tenant->business_name }}
                 </h2>
                 @if($slogan)

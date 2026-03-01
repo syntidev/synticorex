@@ -17,7 +17,7 @@
     <div class="container mx-auto px-8 relative" style="z-index:2;">
 
         <div class="text-center mb-16">
-            <h2 class="text-4xl md:text-5xl font-black tracking-tight mb-4" style="color:#111827;">
+            <h2 class="text-base-content text-2xl font-semibold md:text-3xl lg:text-4xl mb-4">
                 {{ $tenant->section_services_title ?? 'Nuestros' }}
                 <span class="text-primary italic">{{ $tenant->section_services_highlight ?? 'Servicios' }}</span>
             </h2>
@@ -57,7 +57,7 @@
                         @endif
                     </div>
 
-                    <h3 class="text-base font-bold mb-2 group-hover:text-primary transition-colors" style="color:#111827;">
+                    <h3 class="text-xl font-semibold text-base-content mb-2 group-hover:text-primary transition-colors">
                         {{ $service->name }}
                     </h3>
 

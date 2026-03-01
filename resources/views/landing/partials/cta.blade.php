@@ -20,7 +20,7 @@
 
     <div class="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8 relative z-10 text-center">
 
-        <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
+        <h2 class="text-2xl font-semibold md:text-3xl lg:text-4xl text-white mb-4">
             {{ $ctaTitle }}
         </h2>
 

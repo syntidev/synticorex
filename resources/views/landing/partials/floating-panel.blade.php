@@ -1,4 +1,4 @@
-{{-- Floating Panel Partial --}}
+﻿{{-- Floating Panel Partial --}}
 <div id="synti-panel" class="synti-panel">
     <!-- Header del panel -->
     <div class="synti-panel-header">
@@ -12,7 +12,7 @@
     <!-- PIN Modal -->
     <div id="synti-pin-modal" class="synti-pin-modal">
         <div class="synti-pin-content">
-            <h3>Acceso propietario</h3>
+            <h3 class="text-xl font-semibold">Acceso propietario</h3>
             <p class="synti-pin-subtitle">Ingrese su PIN de 4 dígitos</p>
             
             <div class="synti-pin-inputs">
@@ -32,7 +32,7 @@
         
         <!-- Radar / KPIs -->
         <div class="synti-section">
-            <h4 class="synti-section-title">📊 Radar</h4>
+            <h4 class="text-base font-medium">📊 Radar</h4>
             <div class="synti-kpi-grid">
                 <div class="synti-kpi-card">
                     <div class="synti-kpi-value" id="kpi-visits">-</div>
@@ -52,7 +52,7 @@
         <!-- Tasa Dólar -->
         <div class="synti-section">
             <div class="synti-flex-between">
-                <h4 class="synti-section-title">💵 Tasa del Dólar</h4>
+                <h4 class="text-base font-medium">💵 Tasa del Dólar</h4>
                 <button onclick="refreshDollarRate()" class="synti-btn-icon" title="Actualizar">
                     <svg class="synti-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -66,7 +66,7 @@
 
         <!-- Estado del negocio -->
         <div class="synti-section">
-            <h4 class="synti-section-title">🏪 Estado del Negocio</h4>
+            <h4 class="text-base font-medium">🏪 Estado del Negocio</h4>
             <div class="synti-toggle-container">
                 <label class="synti-toggle">
                     <input type="checkbox" id="business-status-toggle" {{ $tenant->is_open ? 'checked' : '' }} onchange="toggleBusinessStatus()">
@@ -80,7 +80,7 @@
 
         <!-- QR Code Tracking -->
         <div class="synti-section">
-            <h4 class="synti-section-title">📱 QR de tu Vitrina</h4>
+            <h4 class="text-base font-medium">📱 QR de tu Vitrina</h4>
             <div class="synti-qr-container">
                 <div id="qr-floating-display" class="synti-qr-wrapper">
                     {!! $trackingQRSmall !!}
