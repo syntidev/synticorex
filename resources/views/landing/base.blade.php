@@ -178,7 +178,7 @@ $effectiveTheme = $customPalette ? 'custom' : $themeSlug;
         const CURRENCY_MODE   = @json($savedDisplayMode ?? $displayMode ?? 'reference_only');
         const CURRENCY_SYMBOL = @json($currencySettings['symbols']['reference'] ?? 'REF');
         const EXCHANGE_RATE   = @json($dollarRate ?? 36.50);
-        const EURO_RATE       = @json($euroRate ?? 40.00);
+        const EURO_RATE       = @json($euroRate ?? 500.00);
         // currentCurrency: CURRENCY_SYMBOL (REF/$) | 'Bs.' | '€'
         let currentCurrency = CURRENCY_SYMBOL;
 

@@ -39,18 +39,29 @@ Route::post('/tenant/{tenantId}/toggle-status', [TenantRendererController::class
 
 // ═══ APIs públicas ════════════════════════════════════════════════════════════
 Route::post('/api/analytics/track', [AnalyticsController::class, 'track']);
+
+// Retorna la tasa actual desde cache/BD (lectura)
 Route::get('/api/dollar-rate', function (DollarRateService $service) {
-    return response()->json([
-        'success' => true,
-        'rate'    => $service->getCurrentRate(),
-    ]);
+    return response()->json(['success' => true, 'rate' => $service->getCurrentRate()]);
+});
+Route::get('/api/euro-rate', function (DollarRateService $service) {
+    return response()->json(['success' => true, 'rate' => $service->getCurrentEuroRate()]);
 });
 
-Route::get('/api/euro-rate', function (DollarRateService $service) {
-    return response()->json([
-        'success' => true,
-        'rate'    => $service->getCurrentEuroRate(),
-    ]);
+// Actualizar tasa desde DolarAPI y propagarla a tenants (escribe en BD)
+Route::post('/api/dollar-rate/refresh', function (DollarRateService $service) {
+    $result = $service->fetchAndStore();
+    if ($result['success']) {
+        $service->propagateRateToTenants($result['rate']);
+    }
+    return response()->json($result);
+});
+Route::post('/api/euro-rate/refresh', function (DollarRateService $service) {
+    $result = $service->fetchAndStoreEuro();
+    if ($result['success']) {
+        $service->propagateEuroRateToTenants($result['rate']);
+    }
+    return response()->json($result);
 });
 
 // ═══ Dashboard — requiere autenticación ══════════════════════════════════════

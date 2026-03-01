@@ -187,9 +187,10 @@
         // Config Tab: Update Dollar Rate (USD + EUR)
         async function updateDollarRate() {
             try {
+                const csrf = document.querySelector('meta[name="csrf-token"]').content;
                 const [usdRes, eurRes] = await Promise.all([
-                    fetch('/api/dollar-rate'),
-                    fetch('/api/euro-rate'),
+                    fetch('/api/dollar-rate/refresh', { method: 'POST', headers: { 'X-CSRF-TOKEN': csrf } }),
+                    fetch('/api/euro-rate/refresh',   { method: 'POST', headers: { 'X-CSRF-TOKEN': csrf } }),
                 ]);
                 const usd = await usdRes.json();
                 const eur = await eurRes.json();
