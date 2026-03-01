@@ -50,7 +50,7 @@
 
         {{-- Acciones y Moneda --}}
         <div class="flex items-center gap-4">
-            {{-- Toggle Principal (REF ↔ Bs.) — solo si modo = both_toggle --}}
+            {{-- Toggle de Moneda — un solo toggle según el modo elegido por el tenant --}}
             @php $currencyMode = $savedDisplayMode ?? $displayMode ?? 'reference_only'; @endphp
             @if($currencyMode === 'both_toggle')
             <div id="currency-toggle-btn" class="hidden sm:flex items-center bg-base-200 p-1 rounded-xl border border-base-300">
@@ -65,19 +65,16 @@
                     class="px-3 py-1 text-[10px] font-black rounded-lg transition-all text-base-content/40"
                 >Bs.</button>
             </div>
-            @endif
-
-            {{-- Toggle Euro (€ ↔ Bs.) — adicional, independiente del toggle principal --}}
-            @if($showEuro ?? false)
-            <div id="euro-toggle-btn" class="hidden sm:flex items-center bg-base-200 p-1 rounded-xl border border-base-300">
+            @elseif($currencyMode === 'euro_toggle')
+            <div id="currency-toggle-btn" class="hidden sm:flex items-center bg-base-200 p-1 rounded-xl border border-base-300">
                 <button
                     onclick="setCurrency('eur')"
                     data-currency="eur"
                     class="px-3 py-1 text-[10px] font-black rounded-lg transition-all bg-base-100 shadow-sm text-primary"
                 >€</button>
                 <button
-                    onclick="setCurrency('bs_eur')"
-                    data-currency="bs_eur"
+                    onclick="setCurrency('bs')"
+                    data-currency="bs"
                     class="px-3 py-1 text-[10px] font-black rounded-lg transition-all text-base-content/40"
                 >Bs.</button>
             </div>

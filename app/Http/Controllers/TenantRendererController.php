@@ -118,9 +118,9 @@ class TenantRendererController extends Controller
             $savedDisplayMode = data_get($tenant->settings, 'engine_settings.currency.display.saved_display_mode', 'reference_only');
             $displayMode      = $savedDisplayMode;
 
-            $showReference = in_array($savedDisplayMode, ['reference_only', 'both_toggle']);
-            $showBolivares = in_array($savedDisplayMode, ['bolivares_only', 'both_toggle']);
-            $showEuro      = (bool) data_get($tenant->settings, 'engine_settings.currency.display.show_euro', false);
+            $showReference = in_array($savedDisplayMode, ['reference_only', 'both_toggle', 'euro_toggle']);
+            $showBolivares = in_array($savedDisplayMode, ['bolivares_only', 'both_toggle', 'euro_toggle']);
+            $showEuro      = $savedDisplayMode === 'euro_toggle';
             $hidePrice     = $savedDisplayMode === 'hidden';
 
             $currencySettings = [
@@ -220,9 +220,9 @@ class TenantRendererController extends Controller
                 'currencySettings' => $currencySettings,
                 'savedDisplayMode' => data_get($tenant->settings, 'engine_settings.currency.display.saved_display_mode', 'reference_only'),
                 'displayMode' => data_get($tenant->settings, 'engine_settings.currency.display.saved_display_mode', 'reference_only'),
-                'showReference' => in_array(data_get($tenant->settings, 'engine_settings.currency.display.saved_display_mode', 'reference_only'), ['reference_only', 'both_toggle']),
-                'showBolivares' => in_array(data_get($tenant->settings, 'engine_settings.currency.display.saved_display_mode', 'reference_only'), ['bolivares_only', 'both_toggle']),
-                'showEuro' => (bool) data_get($tenant->settings, 'engine_settings.currency.display.show_euro', false),
+                'showReference' => in_array(data_get($tenant->settings, 'engine_settings.currency.display.saved_display_mode', 'reference_only'), ['reference_only', 'both_toggle', 'euro_toggle']),
+                'showBolivares' => in_array(data_get($tenant->settings, 'engine_settings.currency.display.saved_display_mode', 'reference_only'), ['bolivares_only', 'both_toggle', 'euro_toggle']),
+                'showEuro' => data_get($tenant->settings, 'engine_settings.currency.display.saved_display_mode', 'reference_only') === 'euro_toggle',
                 'hidePrice' => data_get($tenant->settings, 'engine_settings.currency.display.saved_display_mode', 'reference_only') === 'hidden',
                 'blueprint' => $tenant->getBlueprint(),
             ];
@@ -290,9 +290,9 @@ class TenantRendererController extends Controller
                 'currencySettings' => $currencySettings,
                 'savedDisplayMode' => data_get($tenant->settings, 'engine_settings.currency.display.saved_display_mode', 'reference_only'),
                 'displayMode' => data_get($tenant->settings, 'engine_settings.currency.display.saved_display_mode', 'reference_only'),
-                'showReference' => in_array(data_get($tenant->settings, 'engine_settings.currency.display.saved_display_mode', 'reference_only'), ['reference_only', 'both_toggle']),
-                'showBolivares' => in_array(data_get($tenant->settings, 'engine_settings.currency.display.saved_display_mode', 'reference_only'), ['bolivares_only', 'both_toggle']),
-                'showEuro' => (bool) data_get($tenant->settings, 'engine_settings.currency.display.show_euro', false),
+                'showReference' => in_array(data_get($tenant->settings, 'engine_settings.currency.display.saved_display_mode', 'reference_only'), ['reference_only', 'both_toggle', 'euro_toggle']),
+                'showBolivares' => in_array(data_get($tenant->settings, 'engine_settings.currency.display.saved_display_mode', 'reference_only'), ['bolivares_only', 'both_toggle', 'euro_toggle']),
+                'showEuro' => data_get($tenant->settings, 'engine_settings.currency.display.saved_display_mode', 'reference_only') === 'euro_toggle',
                 'hidePrice' => data_get($tenant->settings, 'engine_settings.currency.display.saved_display_mode', 'reference_only') === 'hidden',
                 'blueprint' => $tenant->getBlueprint(),
                 'isPreview' => true,

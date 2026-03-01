@@ -281,10 +281,9 @@
         async function saveCurrencyConfig() {
             const symbol       = document.getElementById('currency-symbol-switch').checked ? '$' : 'REF';
             const display_mode = document.querySelector('input[name="display_mode"]:checked')?.value;
-            const show_euro    = document.getElementById('show-euro-check')?.checked ?? false;
             const tenantId     = {{ $tenant->id }};
             
-            console.log('Payload moneda:', {symbol, display_mode, show_euro});
+            console.log('Payload moneda:', {symbol, display_mode});
             
             if (!display_mode) {
                 alert('✗ Seleccioná un modo de visualización');
@@ -300,8 +299,7 @@
                     },
                     body: JSON.stringify({ 
                         symbol:       symbol,
-                        display_mode: display_mode,
-                        show_euro:    show_euro
+                        display_mode: display_mode
                     })
                 });
                 
