@@ -85,7 +85,13 @@ $effectiveTheme = $customPalette ? 'custom' : $themeSlug;
     {{-- Wrapper que compensa las barras fixed: header-top (40px plan2+) + nav (60px) --}}
     <div class="{{ $tenant->isAtLeastCrecimiento() ? 'pt-[100px]' : 'pt-[60px]' }}">
 
-    @include('landing.partials.hero-fullscreen-v2')
+    @if($tenant->plan_id === 1)
+        @include('landing.sections.hero-split')
+    @elseif($tenant->plan_id === 2)
+        @include('landing.partials.hero-fullscreen-v2')
+    @else
+        @include('landing.sections.hero-gradient')
+    @endif
 
     {{-- ══════════════════════════════════════════════
          SECCIONES DINÁMICAS - ORDENABLES
