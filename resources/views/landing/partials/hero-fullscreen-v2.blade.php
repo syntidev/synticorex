@@ -1,22 +1,25 @@
-{{-- Hero Section - FlyonUI Landing V2 (Estructura Original) --}}
+{{-- Hero Section - FlyonUI Landing V2 (Plan 2+ / fullscreen con imagen) --}}
 <section id="home">
-    <div class="gap-18 md:pt-45 lg:gap-35 lg:pt-47.5 flex h-full flex-col justify-between bg-cover bg-center bg-no-repeat py-8 pt-40 sm:py-16 md:gap-24 lg:py-24"
+    <div class="relative gap-18 md:pt-45 lg:gap-35 lg:pt-47.5 flex h-full flex-col justify-between bg-cover bg-center bg-no-repeat py-8 pt-40 sm:py-16 md:gap-24 lg:py-24"
          @if($customization->hero_main_filename)
-         style="background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('{{ asset('storage/tenants/'.$tenant->id.'/'.$customization->hero_main_filename) }}');"
+         style="background-image: url('{{ asset('storage/tenants/'.$tenant->id.'/'.$customization->hero_main_filename) }}');"
          @else
-         style="background-image: linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)), url('https://images.unsplash.com/photo-1552664730-d307ca884978?w=1920&q=80');"
+         style="background-image: url('https://images.unsplash.com/photo-1552664730-d307ca884978?w=1920&q=80');"
          @endif
     >
-        <div class="mx-auto flex max-w-7xl flex-col items-center gap-6 justify-self-center px-4 text-center sm:px-6 lg:px-8">
+        {{-- Overlay de legibilidad --}}
+        <div class="absolute inset-0 bg-gradient-to-b from-black/30 to-black/65 pointer-events-none"></div>
+
+        <div class="relative z-10 mx-auto flex max-w-7xl flex-col items-center gap-6 justify-self-center px-4 text-center sm:px-6 lg:px-8">
             {{-- Badge Superior --}}
             @if($tenant->created_at)
-                <div class="bg-base-200 border-base-content/20 w-fit rounded-full border px-3 py-1">
+                <div class="bg-white/10 backdrop-blur-sm border-white/20 w-fit rounded-full border px-3 py-1 text-white">
                     <span>🎉 {{ $tenant->tagline ?? 'Sirviendo con calidad desde ' . $tenant->created_at->format('Y') }}</span>
                 </div>
             @endif
 
             {{-- Título Principal con SVG Underline --}}
-            <h1 class="text-base-content z-1 relative text-5xl font-bold leading-[1.15] max-md:text-2xl md:max-w-3xl">
+            <h1 class="text-white z-1 relative text-5xl font-bold leading-[1.15] max-md:text-2xl md:max-w-3xl">
                 <span>
                     @if($tenant->slogan)
                         {!! nl2br(e($tenant->slogan)) !!}
@@ -39,7 +42,7 @@
             </h1>
 
             {{-- Descripción --}}
-            <p class="text-base-content/80 max-w-3xl">
+            <p class="text-white/80 max-w-3xl">
                 @if($customization->about_text ?? $tenant->description)
                     {{ Str::limit($customization->about_text ?? $tenant->description, 200) }}
                 @else
@@ -71,8 +74,8 @@
                     </a>
                 @endif
 
-                {{-- CTA secundario: ver catálogo → btn-outline btn-secondary --}}
-                <a href="#productos" class="btn btn-outline btn-secondary btn-lg">
+                {{-- CTA secundario: borde blanco sobre imagen oscura --}}
+                <a href="#productos" class="btn btn-outline border-white text-white hover:bg-white/10 btn-lg">
                     Ver Catálogo
                     <span class="iconify tabler--arrow-down size-5"></span>
                 </a>

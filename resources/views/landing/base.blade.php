@@ -86,7 +86,11 @@ $effectiveTheme = $customPalette ? 'custom' : $themeSlug;
     <div class="{{ $tenant->isAtLeastCrecimiento() ? 'pt-[100px]' : 'pt-[60px]' }}">
 
     @php $sConfig = $customization->getSectionConfig('hero'); @endphp
-    @include('landing.partials.hero', ['sConfig' => $sConfig])
+    @if($tenant->plan_id === \App\Models\Plan::OPORTUNIDAD)
+        @include('landing.partials.hero-geometric', ['sConfig' => $sConfig])
+    @else
+        @include('landing.partials.hero-fullscreen-v2', ['sConfig' => $sConfig])
+    @endif
 
     {{-- ══════════════════════════════════════════════
          SECCIONES DINÁMICAS - ORDENABLES
