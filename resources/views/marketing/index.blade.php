@@ -88,17 +88,8 @@
             <div class="flex items-center justify-between h-16 lg:h-20">
                 {{-- Logo --}}
                 <a href="#hero" class="flex items-center gap-2 group">
-                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-blue-500/20">
-                        <svg viewBox="0 0 900 900" class="w-4 h-4" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <rect x="0" y="0" width="560" height="80" fill="white"/>
-                            <rect x="0" y="80" width="80" height="480" fill="white"/>
-                            <rect x="820" y="300" width="80" height="520" fill="white"/>
-                            <rect x="340" y="820" width="560" height="80" fill="white"/>
-                            <rect x="0" y="700" width="80" height="120" fill="white"/>
-                            <rect x="0" y="820" width="200" height="80" fill="white"/>
-                            <circle cx="780" cy="120" r="120" fill="#93c5fd"/>
-                        </svg>
-                    </div>
+                    <img src="{{ asset('brand/syntiweb-logo-positive.svg') }}" 
+                         alt="SYNTIweb" width="32" height="32" class="transition-opacity group-hover:opacity-80">
                     <span class="text-xl font-extrabold tracking-tight">
                         <span class="nav-logo-light transition-colors" :class="scrolled ? 'text-blue-700' : 'text-white'">SYNTI</span><span class="nav-logo-accent transition-colors" :class="scrolled ? 'text-slate-400' : 'text-blue-300'">web</span>
                     </span>
@@ -157,15 +148,9 @@
                 {{-- Brand --}}
                 <div class="md:col-span-2">
                     <div class="flex items-center gap-2 mb-4">
-                        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
-                            <svg viewBox="0 0 900 900" class="w-4 h-4" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <rect x="0" y="0" width="560" height="80" fill="white"/><rect x="0" y="80" width="80" height="480" fill="white"/>
-                                <rect x="820" y="300" width="80" height="520" fill="white"/><rect x="340" y="820" width="560" height="80" fill="white"/>
-                                <rect x="0" y="700" width="80" height="120" fill="white"/><rect x="0" y="820" width="200" height="80" fill="white"/>
-                                <circle cx="780" cy="120" r="120" fill="#93c5fd"/>
-                            </svg>
-                        </div>
-                        <span class="text-xl font-extrabold text-white">SYNTI<span class="text-slate-500">web</span></span>
+                        <img src="{{ asset('brand/syntiweb-logo-negative.svg') }}" 
+                             alt="SYNTIweb" width="32" height="32">
+                        <span class="text-xl font-extrabold text-white">SYNTI<span class="text-blue-400">web</span></span>
                     </div>
                     <p class="text-sm leading-relaxed max-w-sm">Tu negocio merece estar en Google. SYNTIweb genera tu presencia digital automáticamente, para que tú te enfoques en lo que mejor haces.</p>
                 </div>

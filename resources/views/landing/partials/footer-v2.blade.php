@@ -4,20 +4,15 @@
         <div class="flex items-center justify-between gap-3 max-md:flex-col">
             {{-- Logo & Business Name --}}
             <a href="#home" class="text-base-content flex items-center gap-3 text-xl font-semibold">
-                @if($customization->logo_filename)
-                    <img 
-                        src="{{ asset('storage/tenants/' . $tenant->id . '/' . $customization->logo_filename) }}" 
-                        alt="{{ $tenant->business_name }}"
-                        class="h-8 w-auto"
-                    />
-                @else
-                    <span class="text-primary">
-                        <svg width="32" height="32" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <rect width="34" height="34" rx="8.5" fill="currentColor"/>
-                            <path d="M17 8L25 24H9L17 8Z" fill="white" fill-opacity="0.9"/>
-                        </svg>
-                    </span>
-                @endif
+                {{-- Logo SVG inline --}}
+                <svg xmlns="http://www.w3.org/2000/svg" 
+                     viewBox="0 0 100 100" 
+                     width="36" height="36">
+                  <path d="M 30,22 L 78,22 L 78,70 Q 78,78 70,78 L 62,78 
+                           L 62,38 L 22,38 L 22,30 Q 22,22 30,22 Z" 
+                        fill="#1a1a1a"/>
+                  <circle cx="38" cy="63" r="14" fill="#4A80E4"/>
+                </svg>
                 <span>{{ $tenant->business_name }}</span>
             </a>
             

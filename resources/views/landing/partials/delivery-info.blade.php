@@ -18,8 +18,11 @@
             <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-success/10 flex items-center justify-center">
                 <iconify-icon icon="tabler:motorbike" width="32" class="text-success"></iconify-icon>
             </div>
-            <h2 class="text-base-content text-2xl font-semibold md:text-3xl lg:text-4xl mb-2">Información de Delivery</h2>
-            <p class="text-base-content/70">Llevamos tu pedido hasta la puerta de tu casa</p>
+            <h2 class="text-base-content text-2xl font-semibold md:text-3xl lg:text-4xl">
+                Información de <span class="text-primary italic">Delivery</span>
+            </h2>
+            <div class="w-16 h-1 bg-primary mx-auto mt-4 rounded-full"></div>
+            <p class="text-base-content/70 mt-2">Llevamos tu pedido hasta la puerta de tu casa</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

@@ -37,6 +37,7 @@ class TenantCustomization extends Model
         'cta_button_text',
         'cta_button_link',
         'visual_effects',
+        'content_blocks',
         'about_text',
     ];
 
@@ -52,6 +53,7 @@ class TenantCustomization extends Model
             'payment_methods' => 'array',
             'faq_items' => 'array',
             'visual_effects' => 'array',
+            'content_blocks' => 'array',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
         ];
@@ -230,5 +232,61 @@ class TenantCustomization extends Model
         }
 
         $this->update(['visual_effects' => $visualEffects]);
+    }
+
+    // ─── Content Blocks helpers ────────────────────────────────────────────────
+
+    /**
+     * Get a value from the content_blocks JSON by section and key.
+     *
+     * @param string $section  e.g. 'hero', 'about'
+     * @param string $key      e.g. 'title', 'subtitle', 'text'
+     * @param mixed  $default
+     * @return mixed
+     */
+    public function getContentBlock(string $section, string $key, mixed $default = null): mixed
+    {
+        return data_get($this->content_blocks, "{$section}.{$key}", $default);
+    }
+
+    /**
+     * Hero title: content_blocks > tenant slogan.
+     */
+    public function getHeroTitle(): ?string
+    {
+        return $this->getContentBlock('hero', 'title')
+            ?? $this->tenant->slogan
+            ?? null;
+    }
+
+    /**
+     * Hero subtitle / description, never equal to the slogan.
+     * Priority: content_blocks.hero.subtitle > tenant.description > customization.about_text
+     */
+    public function getHeroSubtitle(): ?string
+    {
+        $slogan   = $this->tenant->slogan ?? '';
+        $subtitle = $this->getContentBlock('hero', 'subtitle');
+        $desc     = $this->tenant->description ?? '';
+
+        if ($subtitle && $subtitle !== $slogan) {
+            return $subtitle;
+        }
+
+        if ($desc && $desc !== $slogan) {
+            return $desc;
+        }
+
+        return null;
+    }
+
+    /**
+     * About section text: about_text column > content_blocks.about.text.
+     */
+    public function getAboutText(): ?string
+    {
+        return $this->about_text
+            ?? $this->getContentBlock('about', 'text')
+            ?? null;
     }
 }

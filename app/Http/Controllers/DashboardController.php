@@ -188,6 +188,11 @@ class DashboardController extends Controller
                 'phone_secondary' => 'nullable|string|max:20',
                 'show_hours_indicator' => 'nullable|boolean',
                 'closed_message' => 'nullable|string|max:255',
+                'content_blocks'                   => 'nullable|array',
+                'content_blocks.hero'              => 'nullable|array',
+                'content_blocks.hero.title'        => 'nullable|string|max:100',
+                'content_blocks.hero.subtitle'     => 'nullable|string|max:200',
+                'about_text'                       => 'nullable|string|max:1000',
             ]);
 
             // Update tenant fields (excluding settings-only fields)
@@ -227,6 +232,23 @@ class DashboardController extends Controller
             // Sync about_text to customization (used by hero partials)
             if ($request->has('description') && $tenant->customization) {
                 $tenant->customization->update(['about_text' => $validated['description'] ?? '']);
+            }
+
+            // Save content_blocks and explicit about_text to customization
+            if ($tenant->customization) {
+                $customizationData = [];
+
+                if ($request->has('content_blocks')) {
+                    $customizationData['content_blocks'] = $validated['content_blocks'] ?? null;
+                }
+
+                if ($request->has('about_text')) {
+                    $customizationData['about_text'] = $validated['about_text'] ?? null;
+                }
+
+                if (!empty($customizationData)) {
+                    $tenant->customization->update($customizationData);
+                }
             }
 
             return response()->json([

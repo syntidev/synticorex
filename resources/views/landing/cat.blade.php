@@ -52,10 +52,6 @@
     $heroFilename = $customization->hero_main_filename ?? $customization->hero_filename ?? null;
     $heroUrl = $heroFilename ? asset('storage/tenants/' . $tenant->id . '/' . $heroFilename) : null;
 
-    // Logo
-    $logoFilename = $customization->logo_filename ?? null;
-    $logoUrl = $logoFilename ? asset('storage/tenants/' . $tenant->id . '/' . $logoFilename) : null;
-
     // Showcase products (first 3 for hero grid)
     $showcase = $products->take(3);
 @endphp
@@ -107,13 +103,15 @@
     <div class="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8 flex items-center justify-between py-3">
         {{-- Brand --}}
         <a href="#" class="flex items-center gap-2.5 no-underline">
-            @if($logoUrl)
-                <img src="{{ $logoUrl }}" alt="{{ $tenant->business_name }}" class="h-9 w-9 object-contain rounded-lg">
-            @else
-                <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-white font-bold text-sm shadow-sm">
-                    {{ mb_substr($tenant->business_name, 0, 1) }}
-                </div>
-            @endif
+            {{-- Logo SVG inline --}}
+            <svg xmlns="http://www.w3.org/2000/svg" 
+                 viewBox="0 0 100 100" 
+                 width="36" height="36">
+              <path d="M 30,22 L 78,22 L 78,70 Q 78,78 70,78 L 62,78 
+                       L 62,38 L 22,38 L 22,30 Q 22,22 30,22 Z" 
+                    fill="#1a1a1a"/>
+              <circle cx="38" cy="63" r="14" fill="#4A80E4"/>
+            </svg>
             <span class="text-base font-bold tracking-tight text-base-content">{{ $tenant->business_name }}</span>
         </a>
 

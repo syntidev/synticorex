@@ -8,11 +8,6 @@
     if (!empty($customization->hero_filename)) {
         $businessImage = asset('storage/tenants/' . $tenant->id . '/' . $customization->hero_filename);
     }
-
-    $logoImage = null;
-    if (!empty($customization->logo_filename)) {
-        $logoImage = asset('storage/tenants/' . $tenant->id . '/' . $customization->logo_filename);
-    }
 @endphp
 
 <section id="about" class="py-8 sm:py-16 lg:py-24 bg-base-200/50">
@@ -66,9 +61,15 @@
                     <div class="relative w-full max-w-xs">
                         <div class="absolute -top-3 -right-3 w-24 h-24 bg-primary/10 rounded-full blur-2xl pointer-events-none"></div>
                         <div class="relative bg-base-100 border border-base-content/10 rounded-3xl p-10 shadow-sm flex items-center justify-center aspect-square">
-                            <img src="{{ $logoImage }}"
-                                 alt="{{ $tenant->business_name }}"
-                                 class="max-w-[70%] max-h-[70%] object-contain">
+                            {{-- Logo SVG inline --}}
+                            <svg xmlns="http://www.w3.org/2000/svg" 
+                                 viewBox="0 0 100 100" 
+                                 width="80" height="80">
+                              <path d="M 30,22 L 78,22 L 78,70 Q 78,78 70,78 L 62,78 
+                                       L 62,38 L 22,38 L 22,30 Q 22,22 30,22 Z" 
+                                    fill="#1a1a1a"/>
+                              <circle cx="38" cy="63" r="14" fill="#4A80E4"/>
+                            </svg>
                         </div>
                     </div>
                 @else

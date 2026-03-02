@@ -13,7 +13,7 @@ Se han creado **4 layouts profesionales de hero section** basados en FlyonUI, ca
 ### Archivos Creados
 
 ```
-resources/views/landing/partials/
+resources/views/landing-v2/partials/
 ├── hero-fullscreen.blade.php  (renombrado de hero.blade.php)
 ├── hero-split.blade.php       (NUEVO)
 ├── hero-gradient.blade.php    (NUEVO)
@@ -299,22 +299,22 @@ Barra opcional con 4 métricas:
 
 ### Configurar Layout Dinámico
 
-Edita `resources/views/landing/base.blade.php`:
+Edita `resources/views/landing-v2/base.blade.php`:
 
 ```blade
 {{-- Hero Section (dinámico según hero_layout) --}}
 @switch($customization->hero_layout)
     @case('split')
-        @include('landing.partials.hero-split-v2')
+        @include('landing-v2.partials.hero-split')
         @break
     @case('gradient')
-        @include('landing.partials.hero-gradient-v2')
+        @include('landing-v2.partials.hero-gradient')
         @break
     @case('cards')
-        @include('landing.partials.hero-cards')
+        @include('landing-v2.partials.hero-cards')
         @break
     @default
-        @include('landing.partials.hero-fullscreen-v2')
+        @include('landing-v2.partials.hero-fullscreen')
 @endswitch
 ```
 

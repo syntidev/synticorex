@@ -10,6 +10,7 @@
       <h2 class="text-base-content text-2xl font-semibold md:text-3xl lg:text-4xl">
         Testimonios de <span class="text-primary italic">Clientes</span>
       </h2>
+      <div class="w-16 h-1 bg-primary mx-auto mt-4 rounded-full"></div>
     </div>
     <div class="grid md:grid-cols-2 gap-6">
       <div class="card card-border shadow-none">

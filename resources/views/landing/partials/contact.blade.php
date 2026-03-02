@@ -16,9 +16,11 @@
 
 <section id="contacto" class="bg-base-200 py-8 sm:py-16 lg:py-24">
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-    <div class="relative mx-auto mb-12 w-fit">
-      <h2 class="text-base-content text-2xl font-semibold md:text-3xl lg:text-4xl">Contactanos</h2>
-      <span class="from-primary/40 to-primary/5 absolute start-0 top-9 h-1 w-full rounded-full bg-gradient-to-r"></span>
+    <div class="text-center mb-12">
+      <h2 class="text-base-content text-2xl font-semibold md:text-3xl lg:text-4xl">
+        Contácta<span class="text-primary italic">nos</span>
+      </h2>
+      <div class="w-16 h-1 bg-primary mx-auto mt-4 rounded-full"></div>
     </div>
     <div class="grid items-center gap-12 lg:grid-cols-2">
       @if($customization->google_maps_embed)

@@ -139,10 +139,11 @@
                             data-overlay="#layout-sidebar">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
                     </button>
-                    {{-- Logo mobile --}}
-                    <span class="sidebar-logo-text text-base lg:hidden text-white">
-                        <span class="text-white">SYNTI</span><span class="text-blue-200">web</span>
-                    </span>
+                    <a href="/" class="flex items-center gap-1.5 lg:hidden">
+                        <img src="{{ asset('brand/syntiweb-logo-negative.svg') }}" 
+                             alt="SYNTIweb" width="28" height="28">
+                        <span class="font-bold text-base tracking-tight"><span style="color:#4A80E4">SYNTI</span><span style="color:#FFFFFF">web</span></span>
+                    </a>
                     {{-- Negocio + dot de estado (desktop) --}}
                     <div class="hidden lg:flex items-center gap-3 min-w-0">
                         <span class="{{ $tenant->is_open ? 'dot-online' : 'dot-offline' }}"></span>
@@ -202,26 +203,16 @@
                     <span class="iconify tabler--x size-4.5"></span>
                 </button>
 
-                {{-- Logo --}}
-                <div class="flex items-center gap-3 border-b border-white/8 px-5 py-5">
-                    <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/20 shrink-0">
-                        <svg viewBox="0 0 900 900" class="size-5" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <rect x="0" y="0" width="560" height="80" fill="white"/>
-                            <rect x="0" y="80" width="80" height="480" fill="white"/>
-                            <rect x="820" y="300" width="80" height="520" fill="white"/>
-                            <rect x="340" y="820" width="560" height="80" fill="white"/>
-                            <rect x="0" y="700" width="80" height="120" fill="white"/>
-                            <rect x="0" y="820" width="200" height="80" fill="white"/>
-                            <circle cx="780" cy="120" r="120" fill="#93c5fd"/>
-                        </svg>
-                    </div>
+                <a href="/" class="flex items-center gap-3">
+                    <img src="{{ asset('brand/syntiweb-logo-negative.svg') }}" 
+                         alt="SYNTIweb" width="36" height="36">
                     <div>
                         <span class="sidebar-logo-text">
-                            <span class="sidebar-logo-synti">SYNTI</span><span class="sidebar-logo-web">web</span>
+                            <span style="color:#4A80E4">SYNTI</span><span style="color:#FFFFFF">web</span>
                         </span>
                         <p class="text-slate-400 text-xs mt-0.5">{{ $tenant->business_name }}</p>
                     </div>
-                </div>
+                </a>
 
                 {{-- Navigation — 4 Menús --}}
                 <div class="h-full overflow-y-auto py-2">

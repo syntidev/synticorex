@@ -12,9 +12,12 @@
     <div class="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8">
 
         {{-- Section Header (FlyonUI pattern) --}}
-        <div class="mb-12 space-y-4 text-center sm:mb-16 lg:mb-24">
-            <h2 class="text-base-content text-2xl font-semibold md:text-3xl lg:text-4xl">Nuestros Servicios</h2>
-            <p class="text-base-content/80 text-xl">Soluciones diseñadas para hacer tu experiencia única, con calidad y dedicación.</p>
+        <div class="mb-12 text-center sm:mb-16 lg:mb-24">
+            <h2 class="text-base-content text-2xl font-semibold md:text-3xl lg:text-4xl">
+                Nuestros <span class="text-primary italic">Servicios</span>
+            </h2>
+            <div class="w-16 h-1 bg-primary mx-auto mt-4 rounded-full"></div>
+            <p class="text-base-content/80 text-xl mt-4">Soluciones diseñadas para hacer tu experiencia única, con calidad y dedicación.</p>
         </div>
 
         {{-- Service Grid --}}

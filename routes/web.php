@@ -8,6 +8,7 @@ use App\Http\Controllers\TenantRendererController;
 use App\Http\Controllers\ImageUploadController;
 use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\QRTrackingController;
+use App\Http\Controllers\OnboardingController;
 use App\Services\DollarRateService;
 
 // ═══ Marketing Landing Page (root domain) ═══════════════════════════════
@@ -132,3 +133,17 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/tenant/{tenantId}/qr/download',                  [QRTrackingController::class, 'downloadQR']);
 
 }); // end middleware(['auth'])
+
+// ═══ Onboarding Wizard ═══════════════════════════════════════════════════════
+Route::middleware(['web'])->group(function () {
+    Route::get('/onboarding/nuevo', [OnboardingController::class, 'index'])
+         ->name('onboarding.index');
+    Route::post('/onboarding/guardar', [OnboardingController::class, 'store'])
+         ->name('onboarding.store');
+    Route::get('/onboarding/subdomain-check', [OnboardingController::class, 'checkSubdomain'])
+         ->name('onboarding.subdomain-check');
+    Route::get('/onboarding/{tenant}/preview', [OnboardingController::class, 'preview'])
+         ->name('onboarding.preview');
+    Route::post('/onboarding/{tenant}/publicar', [OnboardingController::class, 'publish'])
+         ->name('onboarding.publish');
+});

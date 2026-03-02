@@ -46,7 +46,10 @@
 
         {{-- Título único --}}
         <div class="text-center mb-8">
-            <h2 class="text-base-content text-2xl font-semibold md:text-3xl lg:text-4xl">Medios de Pago</h2>
+            <h2 class="text-base-content text-2xl font-semibold md:text-3xl lg:text-4xl">
+                Medios de <span class="text-primary italic">Pago</span>
+            </h2>
+            <div class="w-16 h-1 bg-primary mx-auto mt-4 rounded-full"></div>
         </div>
 
         {{-- Una sola cinta responsive --}}

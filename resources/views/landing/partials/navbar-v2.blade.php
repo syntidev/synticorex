@@ -13,18 +13,8 @@
       {{-- LOGO + NOMBRE + BOTONES MOBILE --}}
       <div class="navbar-start items-center justify-between max-lg:w-full">
         <a class="text-base-content flex items-center gap-3 text-xl font-semibold" href="#home">
-          {{-- Logo condicional --}}
-          @if($customization->logo_filename)
-            <img src="{{ asset('storage/tenants/'.$tenant->id.'/'.$customization->logo_filename) }}" 
-                 alt="{{ $tenant->business_name }}" 
-                 class="h-10 w-10 object-contain rounded-lg">
-          @else
-            {{-- Placeholder: Primera letra con fondo primary --}}
-            <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-primary-content text-lg font-bold">
-              {{ strtoupper(substr($tenant->business_name, 0, 1)) }}
-            </span>
-          @endif
-          
+          <img src="{{ asset('brand/syntiweb-logo-positive.svg') }}" 
+               alt="SYNTIweb" width="36" height="36">
           {{-- Nombre del negocio --}}
           <span class="max-w-[180px] truncate">{{ $tenant->business_name }}</span>
         </a>

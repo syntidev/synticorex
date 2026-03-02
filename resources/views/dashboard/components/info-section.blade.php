@@ -18,9 +18,19 @@
                                      src="{{ asset('storage/tenants/' . $tenant->id . '/' . $customization->logo_filename) }}"
                                      alt="Logo" class="max-w-full max-h-full object-contain">
                             @else
-                                <div id="logo-placeholder" class="text-center text-base-content/30">
-                                    <span class="iconify tabler--cloud-upload size-8 mb-1 block mx-auto"></span>
-                                    <p class="text-xs">Arrastra o haz clic</p>
+                                <div id="logo-placeholder" class="text-center">
+                                    {{-- Logo SVG fallback --}}
+                                    <svg xmlns="http://www.w3.org/2000/svg" 
+                                         viewBox="0 0 100 100" 
+                                         width="64" height="64"
+                                         class="mx-auto text-primary/40"
+                                         style="opacity: 0.6;">
+                                      <path d="M 30,22 L 78,22 L 78,70 Q 78,78 70,78 L 62,78 
+                                               L 62,38 L 22,38 L 22,30 Q 22,22 30,22 Z" 
+                                            fill="currentColor"/>
+                                      <circle cx="38" cy="63" r="14" fill="currentColor"/>
+                                    </svg>
+                                    <p class="text-xs text-base-content/40 mt-2">Arrastra o haz clic</p>
                                 </div>
                             @endif
                         </div>
@@ -215,6 +225,43 @@
                             </label>
                             <textarea id="info-description" class="textarea textarea-bordered w-full min-h-20"
                                       name="description">{{ $tenant->description }}</textarea>
+                        </div>
+
+                        {{-- ══ Contenido Hero ════════════════════════════════════════ --}}
+                        <div class="divider text-xs text-base-content/40 mt-6 mb-4">Contenido del Hero</div>
+
+                        <div class="form-control mt-3">
+                            <label class="label pb-1" for="info-hero-title">
+                                <span class="label-text font-medium text-sm">Título Hero <span class="text-base-content/40 font-normal">(opcional)</span></span>
+                            </label>
+                            <input id="info-hero-title" type="text"
+                                   class="input input-bordered w-full"
+                                   name="content_blocks[hero][title]"
+                                   placeholder="Ej: La mejor pizzería de Maracaibo"
+                                   value="{{ $customization->getContentBlock('hero', 'title') }}">
+                            <span class="label-text-alt text-base-content/50 mt-1 text-xs">Si lo dejas vacío, usamos tu eslogan.</span>
+                        </div>
+
+                        <div class="form-control mt-3">
+                            <label class="label pb-1" for="info-hero-subtitle">
+                                <span class="label-text font-medium text-sm">Subtítulo Hero</span>
+                            </label>
+                            <input id="info-hero-subtitle" type="text"
+                                   class="input input-bordered w-full"
+                                   name="content_blocks[hero][subtitle]"
+                                   placeholder="Ej: Masa artesanal, ingredientes frescos, entrega en 30 min"
+                                   value="{{ $customization->getContentBlock('hero', 'subtitle') }}">
+                            <span class="label-text-alt text-base-content/50 mt-1 text-xs">Complementa el título. No repitas el eslogan.</span>
+                        </div>
+
+                        <div class="form-control mt-3">
+                            <label class="label pb-1" for="info-about-text">
+                                <span class="label-text font-medium text-sm">Texto Acerca De</span>
+                            </label>
+                            <textarea id="info-about-text" class="textarea textarea-bordered w-full" rows="4"
+                                      name="about_text"
+                                      placeholder="Cuéntale a tus clientes quiénes son, qué los hace especiales...">{{ $customization->about_text }}</textarea>
+                            <span class="label-text-alt text-base-content/50 mt-1 text-xs">Aparece en la sección "Acerca de" de tu página.</span>
                         </div>
 
                         {{-- ══ Indicador de Horario (Opcional) ═══════════════════════ --}}
