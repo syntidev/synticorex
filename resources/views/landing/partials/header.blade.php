@@ -46,6 +46,12 @@
             @endforeach
         </nav>
 
+        {{-- Hamburger: visible solo en mobile --}}
+        <button class="btn btn-ghost lg:hidden" 
+                onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
+          <span class="icon-[tabler--menu-2] size-6"></span>
+        </button>
+
         {{-- Acciones y Moneda --}}
         <div class="flex items-center gap-4">
             {{-- Toggle de Moneda — un solo toggle según el modo elegido por el tenant --}}
@@ -98,6 +104,17 @@
                    class="btn btn-sm btn-success hidden sm:flex font-bold rounded-xl shadow-lg shadow-success/20">WhatsApp</a>
             @endif
         </div>
+    </div>
+    {{-- Mobile menu dropdown --}}
+    <div id="mobile-menu" class="hidden lg:hidden border-t border-base-200 bg-base-100 px-4 py-3 space-y-2">
+      <a href="#home" class="block rounded-lg px-3 py-2 text-sm font-semibold text-base-content/70 hover:bg-primary/10 hover:text-primary transition-colors">Home</a>
+      @foreach($visibleNavLinks as $link)
+        <a href="{{ $link['anchor'] }}" 
+           onclick="document.getElementById('mobile-menu').classList.add('hidden')"
+           class="block rounded-lg px-3 py-2 text-sm font-semibold text-base-content/70 hover:bg-primary/10 hover:text-primary transition-colors">
+          {{ $link['label'] }}
+        </a>
+      @endforeach
     </div>
 </header>
 
