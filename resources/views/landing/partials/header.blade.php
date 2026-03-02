@@ -47,7 +47,7 @@
         </nav>
 
         {{-- Hamburger: visible solo en mobile --}}
-        <button class="btn btn-ghost lg:hidden" 
+        <button class="btn btn-ghost text-base-content lg:hidden" 
                 onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
           <span class="icon-[tabler--menu-2] size-6"></span>
         </button>

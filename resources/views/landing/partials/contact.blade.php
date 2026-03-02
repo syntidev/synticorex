@@ -22,11 +22,17 @@
     </div>
     <div class="grid items-center gap-12 lg:grid-cols-2">
       @if($customization->google_maps_embed)
-        <div class="rounded-2xl overflow-hidden" style="height:300px">
-          {!! $customization->google_maps_embed !!}
+        <div class="rounded-2xl overflow-hidden w-full" style="height:300px">
+          <iframe 
+            src="{{ $customization->google_maps_embed }}"
+            width="100%" height="300" 
+            style="border:0;" 
+            allowfullscreen="" loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
         </div>
       @else
-        <div class="rounded-2xl bg-base-200 flex items-center justify-center" style="height:300px">
+        <div class="rounded-2xl bg-base-200 flex items-center justify-center w-full" style="height:300px">
           <span class="icon-[tabler--map-pin] size-16 text-primary/30"></span>
         </div>
       @endif

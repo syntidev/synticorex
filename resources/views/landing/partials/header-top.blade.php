@@ -23,7 +23,7 @@
     $phoneDisplay = $phone ?: null;
 @endphp
 
-<div id="header-top" class="sticky top-0 z-[60] h-10 bg-base-200 border-b border-base-content/10 flex items-center">
+<div id="header-top" class="sticky top-0 z-40 h-10 bg-base-200 border-b border-base-content/10 flex items-center">
     <div class="container mx-auto px-4 md:px-6 flex items-center justify-between gap-4 text-xs font-medium">
 
         {{-- ── Izquierda: Horario ──────────────────────────── --}}

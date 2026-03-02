@@ -5,75 +5,45 @@
 
 <section id="testimonios" class="py-8 sm:py-16 lg:py-24">
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-    <div id="multi-slide"
-      data-carousel='{ "loadingClasses": "opacity-0", "slidesQty": { "xs": 1, "md": 2 } }'
-      class="relative flex w-full gap-12 max-lg:flex-col md:gap-16 lg:items-center lg:gap-24">
-      <div>
-        <div class="space-y-4">
-          <p class="text-primary text-sm font-medium uppercase">Lo que dicen</p>
-          <h2 class="text-base-content text-2xl font-semibold md:text-3xl lg:text-4xl">
-            Testimonios de <span class="text-primary italic">Clientes</span>
-          </h2>
-        </div>
-        <div class="mt-10 flex gap-4">
-          <button class="btn btn-square btn-sm carousel-prev btn-primary carousel-disabled:opacity-100 carousel-disabled:btn-outline" disabled>
-            <span class="icon-[tabler--arrow-left] size-5"></span>
-          </button>
-          <button class="btn btn-square btn-sm carousel-next btn-primary carousel-disabled:opacity-100 carousel-disabled:btn-outline">
-            <span class="icon-[tabler--arrow-right] size-5"></span>
-          </button>
+    <div class="space-y-4 text-center mb-10">
+      <p class="text-primary text-sm font-medium uppercase">Lo que dicen</p>
+      <h2 class="text-base-content text-2xl font-semibold md:text-3xl lg:text-4xl">
+        Testimonios de <span class="text-primary italic">Clientes</span>
+      </h2>
+    </div>
+    <div class="grid md:grid-cols-2 gap-6">
+      <div class="card card-border shadow-none">
+        <div class="card-body gap-5">
+          <div class="flex items-center gap-3">
+            <div class="avatar"><div class="size-10 rounded-full">
+              <img src="https://cdn.flyonui.com/fy-assets/avatar/avatar-17.png" alt="Cliente">
+            </div></div>
+            <div>
+              <h4 class="text-base font-medium">María González</h4>
+              <p class="text-sm text-base-content/80">Cliente satisfecha</p>
+            </div>
+          </div>
+          <div class="flex gap-1">
+            @for($i=1;$i<=5;$i++)<span class="icon-[tabler--star-filled] text-warning size-5"></span>@endfor
+          </div>
+          <p class="text-base-content/80">"Excelente servicio, superaron todas mis expectativas. 100% recomendados."</p>
         </div>
       </div>
-      <div class="carousel rounded-box">
-        <div class="carousel-body gap-6 opacity-0">
-          <div class="carousel-slide">
-            <div class="card card-border h-full shadow-none">
-              <div class="card-body gap-5">
-                <div class="flex items-center gap-3">
-                  <div class="avatar"><div class="size-10 rounded-full">
-                    <img src="https://cdn.flyonui.com/fy-assets/avatar/avatar-17.png" alt="Cliente">
-                  </div></div>
-                  <div>
-                    <h4 class="text-base-content font-medium">María González</h4>
-                    <p class="text-base-content/80 text-sm">Cliente satisfecha</p>
-                  </div>
-                </div>
-                <div class="flex gap-1">
-                  @for($i = 1; $i <= 5; $i++)
-                    <span class="icon-[tabler--star-filled] text-warning size-6 shrink-0"></span>
-                  @endfor
-                </div>
-                <p class="text-base-content/80">
-                  "Excelente servicio, superaron todas mis expectativas.
-                  100% recomendados para cualquier negocio venezolano."
-                </p>
-              </div>
+      <div class="card card-border shadow-none">
+        <div class="card-body gap-5">
+          <div class="flex items-center gap-3">
+            <div class="avatar"><div class="size-10 rounded-full">
+              <img src="https://cdn.flyonui.com/fy-assets/avatar/avatar-5.png" alt="Cliente">
+            </div></div>
+            <div>
+              <h4 class="text-base font-medium">Carlos Rodríguez</h4>
+              <p class="text-sm text-base-content/80">Emprendedor</p>
             </div>
           </div>
-          <div class="carousel-slide">
-            <div class="card card-border h-full shadow-none">
-              <div class="card-body gap-5">
-                <div class="flex items-center gap-3">
-                  <div class="avatar"><div class="size-10 rounded-full">
-                    <img src="https://cdn.flyonui.com/fy-assets/avatar/avatar-5.png" alt="Cliente">
-                  </div></div>
-                  <div>
-                    <h4 class="text-base-content font-medium">Carlos Rodríguez</h4>
-                    <p class="text-base-content/80 text-sm">Emprendedor</p>
-                  </div>
-                </div>
-                <div class="flex gap-1">
-                  @for($i = 1; $i <= 5; $i++)
-                    <span class="icon-[tabler--star-filled] text-warning size-6 shrink-0"></span>
-                  @endfor
-                </div>
-                <p class="text-base-content/80">
-                  "La mejor inversión para mi negocio.
-                  Profesionales, rápidos y con resultados reales."
-                </p>
-              </div>
-            </div>
+          <div class="flex gap-1">
+            @for($i=1;$i<=5;$i++)<span class="icon-[tabler--star-filled] text-warning size-5"></span>@endfor
           </div>
+          <p class="text-base-content/80">"La mejor inversión para mi negocio. Profesionales y con resultados reales."</p>
         </div>
       </div>
     </div>
