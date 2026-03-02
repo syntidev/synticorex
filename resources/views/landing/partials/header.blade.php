@@ -47,9 +47,11 @@
         </nav>
 
         {{-- Hamburger: visible solo en mobile --}}
-        <button class="btn btn-ghost text-base-content lg:hidden" 
-                onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
-          <span class="icon-[tabler--menu-2] size-6"></span>
+        <button 
+          class="btn btn-ghost btn-sm lg:hidden" 
+          onclick="document.getElementById('mobile-menu').classList.toggle('hidden')"
+          aria-label="Menú">
+          <span class="icon-[tabler--menu-2] size-6 text-base-content"></span>
         </button>
 
         {{-- Acciones y Moneda --}}
