@@ -1,19 +1,7 @@
 {{--
     Testimonials Section — FlyonUI Carousel oficial
-    Plan 2: muestra solo si hay datos reales
-    Plan 3: siempre muestra (placeholder elegante si vacío)
+    Hardcoded placeholders until dynamic testimonials system is connected
 --}}
-@php
-    $testimonials = collect(data_get($tenant->settings, 'business_info.testimonials', []))
-        ->filter(fn($t) => !empty($t['name']) && !empty($t['text']))
-        ->take(5)
-        ->values();
-
-    $isVision = $tenant->isVision();
-
-    // Plan 2: solo si hay datos — Plan 3: siempre
-    if ($testimonials->isEmpty() && !$isVision) return;
-@endphp
 
 <section id="testimonios" class="py-8 sm:py-16 lg:py-24">
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -38,39 +26,6 @@
       </div>
       <div class="carousel rounded-box">
         <div class="carousel-body gap-6 opacity-0">
-          @forelse($testimonials as $t)
-          <div class="carousel-slide">
-            <div class="card card-border hover:border-primary transition-border h-full shadow-none duration-300">
-              <div class="card-body gap-5">
-                <div class="flex items-center gap-3">
-                  <div class="avatar">
-                    <div class="size-10 rounded-full">
-                      <img src="{{ $t['avatar_url'] ?? 'https://cdn.flyonui.com/fy-assets/avatar/avatar-17.png' }}"
-                           alt="{{ $t['name'] }}">
-                    </div>
-                  </div>
-                  <div>
-                    <h4 class="text-base-content font-medium">{{ $t['name'] }}</h4>
-                    <p class="text-base-content/80 text-sm">
-                      {{ $t['title'] ?? '' }}
-                      @if(!empty($t['company']))
-                        en <span class="text-base-content font-semibold">{{ $t['company'] }}</span>
-                      @endif
-                    </p>
-                  </div>
-                </div>
-                <div class="flex gap-1">
-                  @php $rating = min(5, max(1, (int)($t['rating'] ?? 5))); @endphp
-                  @for($i = 1; $i <= 5; $i++)
-                    <span class="icon-[tabler--star-filled] text-warning size-6 shrink-0"
-                          @if($i > $rating) style="opacity:0.3" @endif></span>
-                  @endfor
-                </div>
-                <p class="text-base-content/80">{{ $t['text'] }}</p>
-              </div>
-            </div>
-          </div>
-          @empty
           <div class="carousel-slide">
             <div class="card card-border h-full shadow-none">
               <div class="card-body gap-5">
@@ -119,7 +74,6 @@
               </div>
             </div>
           </div>
-          @endforelse
         </div>
       </div>
     </div>
