@@ -15,9 +15,7 @@
       <div class="card card-border shadow-none">
         <div class="card-body gap-5">
           <div class="flex items-center gap-3">
-            <div class="avatar"><div class="size-10 rounded-full">
-              <img src="https://cdn.flyonui.com/fy-assets/avatar/avatar-17.png" alt="Cliente">
-            </div></div>
+            <img src="https://cdn.flyonui.com/fy-assets/avatar/avatar-17.png" alt="Cliente" class="size-10 rounded-full object-cover">
             <div>
               <h4 class="text-base font-medium">María González</h4>
               <p class="text-sm text-base-content/80">Cliente satisfecha</p>
@@ -32,9 +30,7 @@
       <div class="card card-border shadow-none">
         <div class="card-body gap-5">
           <div class="flex items-center gap-3">
-            <div class="avatar"><div class="size-10 rounded-full">
-              <img src="https://cdn.flyonui.com/fy-assets/avatar/avatar-5.png" alt="Cliente">
-            </div></div>
+            <img src="https://cdn.flyonui.com/fy-assets/avatar/avatar-5.png" alt="Cliente" class="size-10 rounded-full object-cover">
             <div>
               <h4 class="text-base font-medium">Carlos Rodríguez</h4>
               <p class="text-sm text-base-content/80">Emprendedor</p>

@@ -46,11 +46,7 @@
         <div class="grid gap-6 md:grid-cols-2">
           <div class="card shadow-none">
             <div class="card-body items-center gap-3">
-              <div class="avatar avatar-placeholder">
-                <div class="border-primary/20 text-primary w-9 rounded-full border">
-                  <span class="icon-[tabler--clock] text-primary size-6"></span>
-                </div>
-              </div>
+              <span class="icon-[tabler--clock] text-primary size-10"></span>
               <h4 class="text-base-content text-base font-medium">Horario</h4>
               <div class="text-center text-base-content/80">
                 @php
@@ -72,11 +68,7 @@
           </div>
           <div class="card shadow-none">
             <div class="card-body items-center gap-3">
-              <div class="avatar avatar-placeholder">
-                <div class="border-primary/20 text-primary w-9 rounded-full border">
-                  <span class="icon-[tabler--map-pin] text-primary size-6"></span>
-                </div>
-              </div>
+              <span class="icon-[tabler--map-pin] text-primary size-10"></span>
               <h4 class="text-base-content text-base font-medium">Direccion</h4>
               <address class="text-base-content/80 text-center not-italic">
                 {{ $address }}<br>
@@ -86,11 +78,7 @@
           </div>
           <div class="card shadow-none">
             <div class="card-body items-center gap-3">
-              <div class="avatar avatar-placeholder">
-                <div class="border-primary/20 text-primary w-9 rounded-full border">
-                  <span class="icon-[tabler--brand-whatsapp] text-primary size-6"></span>
-                </div>
-              </div>
+              <span class="icon-[tabler--brand-whatsapp] text-primary size-10"></span>
               <h4 class="text-base-content text-base font-medium">WhatsApp</h4>
               @if($phoneClean)
                 <a href="https://wa.me/{{ $phoneClean }}"
@@ -104,11 +92,7 @@
           </div>
           <div class="card shadow-none">
             <div class="card-body items-center gap-3">
-              <div class="avatar avatar-placeholder">
-                <div class="border-primary/20 text-primary w-9 rounded-full border">
-                  <span class="icon-[tabler--mail] text-primary size-6"></span>
-                </div>
-              </div>
+              <span class="icon-[tabler--mail] text-primary size-10"></span>
               <h4 class="text-base-content text-base font-medium">Email</h4>
               <div class="text-center text-base-content/80">
                 @if($tenant->email)
