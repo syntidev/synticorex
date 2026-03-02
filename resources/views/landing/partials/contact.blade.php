@@ -12,25 +12,6 @@
     $phone        = $tenant->whatsapp_number ?? $tenant->phone ?? '';
     $phoneClean   = preg_replace('/[^0-9]/', '', $phone);
     $schedule     = data_get($tenant->settings, 'business_info.schedule_display', '');
-
-    // Social networks
-    $socialNetworks = is_array($customization->social_networks ?? null) ? $customization->social_networks : [];
-    $socialMeta = [
-        'instagram' => ['icon' => 'tabler:brand-instagram', 'label' => 'Instagram', 'base' => 'https://instagram.com/'],
-        'facebook'  => ['icon' => 'tabler:brand-facebook',  'label' => 'Facebook',  'base' => 'https://facebook.com/'],
-        'tiktok'    => ['icon' => 'tabler:brand-tiktok',    'label' => 'TikTok',    'base' => 'https://tiktok.com/@'],
-        'linkedin'  => ['icon' => 'tabler:brand-linkedin',  'label' => 'LinkedIn',  'base' => 'https://linkedin.com/in/'],
-        'youtube'   => ['icon' => 'tabler:brand-youtube',   'label' => 'YouTube',   'base' => ''],
-        'x'         => ['icon' => 'tabler:brand-x',         'label' => 'Twitter/X', 'base' => 'https://x.com/'],
-    ];
-    $resolvedSocial = [];
-    foreach ($socialNetworks as $key => $value) {
-        if (!$value || !isset($socialMeta[$key])) continue;
-        $url = (str_starts_with($value, 'http') || str_starts_with($value, '/'))
-            ? $value
-            : $socialMeta[$key]['base'] . ltrim($value, '@');
-        $resolvedSocial[$key] = ['url' => $url, 'icon' => $socialMeta[$key]['icon'], 'label' => $socialMeta[$key]['label']];
-    }
 @endphp
 
 <section id="contacto" class="bg-base-200 py-8 sm:py-16 lg:py-24">
@@ -40,8 +21,15 @@
       <span class="from-primary/40 to-primary/5 absolute start-0 top-9 h-1 w-full rounded-full bg-gradient-to-r"></span>
     </div>
     <div class="grid items-center gap-12 lg:grid-cols-2">
-      <img src="{{ $customization->contact_image_url ?? 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=800' }}"
-           alt="Contactanos" class="size-full rounded-2xl object-cover">
+      @if($customization->google_maps_embed)
+        <div class="rounded-2xl overflow-hidden" style="height:300px">
+          {!! $customization->google_maps_embed !!}
+        </div>
+      @else
+        <div class="rounded-2xl bg-base-200 flex items-center justify-center" style="height:300px">
+          <span class="icon-[tabler--map-pin] size-16 text-primary/30"></span>
+        </div>
+      @endif
       <div>
         <h3 class="text-base-content mb-6 text-xl font-semibold">
           {{ $tenant->tagline ?? 'Estamos para ayudarte!' }}
@@ -60,12 +48,19 @@
               <h4 class="text-base-content text-base font-medium">Horario</h4>
               <div class="text-center text-base-content/80">
                 @php
-                  $hours = $tenant->business_hours;
-                  $hoursText = is_array($hours) 
-                    ? collect($hours)->map(fn($h,$d) => "$d: $h")->implode(' | ')
-                    : (is_string($hours) ? $hours : 'Lun–Sáb 9:00–18:00');
+                  $days = ['monday'=>'Lun','tuesday'=>'Mar','wednesday'=>'Mié',
+                           'thursday'=>'Jue','friday'=>'Vie','saturday'=>'Sáb','sunday'=>'Dom'];
+                  $hours = is_string($tenant->business_hours) 
+                    ? json_decode($tenant->business_hours, true) 
+                    : (is_array($tenant->business_hours) ? $tenant->business_hours : []);
+                  $open = collect($hours)->filter(fn($h) => $h && isset($h['open']))
+                    ->map(fn($h,$d) => ($days[$d] ?? $d).': '.$h['open'].'-'.$h['close']);
+                  $firstDay = $open->keys()->first();
+                  $lastDay = $open->keys()->last();
+                  $hoursStr = $open->isEmpty() ? 'Lun–Sáb 9:00–18:00' 
+                    : ($days[$firstDay].'–'.$days[$lastDay].': '.$hours[$firstDay]['open'].'–'.$hours[$lastDay]['close']);
                 @endphp
-                <p>{{ $hoursText }}</p>
+                <p>{{ $hoursStr }}</p>
               </div>
             </div>
           </div>
@@ -124,37 +119,6 @@
           </div>
         </div>
 
-        {{-- Redes Sociales --}}
-        @if(count($resolvedSocial))
-            <div class="mt-10 flex flex-wrap justify-center gap-3">
-                @foreach($resolvedSocial as $net)
-                    <a href="{{ $net['url'] }}"
-                       target="_blank" rel="noopener noreferrer"
-                       title="{{ $net['label'] }}"
-                       class="flex items-center gap-2 px-4 py-2 rounded-xl
-                              bg-base-100 hover:bg-primary/10 hover:text-primary
-                              border border-base-content/10 hover:border-primary/30
-                              text-sm font-semibold transition-all">
-                        <iconify-icon icon="{{ $net['icon'] }}" width="20"></iconify-icon>
-                        {{ $net['label'] }}
-                    </a>
-                @endforeach
-            </div>
-        @endif
-
-        {{-- CTA WhatsApp --}}
-        @if($phoneClean)
-            <div class="mt-10 text-center">
-                <a href="https://wa.me/{{ $phoneClean }}?text={{ urlencode('Hola, vengo desde la web') }}"
-                   target="_blank" rel="noopener noreferrer"
-                   class="btn btn-success btn-lg gap-3
-                          shadow-lg shadow-success/20 hover:shadow-success/30
-                          transition-all">
-                    <span class="icon-[tabler--brand-whatsapp] size-6"></span>
-                    Escribenos por WhatsApp
-                </a>
-            </div>
-        @endif
 
       </div>
     </div>
