@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html data-theme="theme-default" lang="es" class="scroll-smooth" style="scroll-padding-top:64px">
+<html data-theme="theme-{{ $themeSlug ?? 'default' }}" lang="es" class="scroll-smooth" style="scroll-padding-top:64px">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">

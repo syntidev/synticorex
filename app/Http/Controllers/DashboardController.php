@@ -8,7 +8,7 @@ use App\Models\ColorPalette;
 use App\Models\Tenant;
 use App\Models\TenantBranch;
 use App\Services\DollarRateService;
-use App\Services\FlyonUIThemeService;
+use App\Services\PrelineThemeService;
 use App\Services\QRService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
@@ -83,7 +83,7 @@ class DashboardController extends Controller
             $itemSingular = $tenant->getItemSingular();
 
             // THEME SYSTEM - Single Source of Truth: theme_slug
-            $currentTheme = $customization->theme_slug ?? 'light';
+            $currentTheme = $customization->theme_slug ?? 'default';
             $customPalette = $tenant->settings['engine_settings']['visual']['custom_palette'] ?? null;
             $hasCustomPalette = !empty($customPalette);
             $activeTheme = $hasCustomPalette ? 'custom' : $currentTheme;
@@ -651,7 +651,7 @@ class DashboardController extends Controller
     }
 
     /**
-     * Update tenant FlyonUI theme.
+     * Update tenant Preline theme.
      *
      * @param Request $request
      * @param int $tenantId
@@ -665,7 +665,7 @@ class DashboardController extends Controller
                 ->where('status', 'active')
                 ->firstOrFail();
 
-                        // SIEMPRE limpiar custom palette cuando se selecciona tema FlyonUI
+                        // SIEMPRE limpiar custom palette cuando se selecciona tema Preline
             $settings = $tenant->settings ?? [];
             if (isset($settings['engine_settings']['visual']['custom_palette'])) {
                 unset($settings['engine_settings']['visual']['custom_palette']);
@@ -673,9 +673,9 @@ class DashboardController extends Controller
                 $tenant->save();
             }
 
-            // Validate input using FlyonUIThemeService (single source of truth)
+            // Validate input using PrelineThemeService (single source of truth)
             $validated = $request->validate([
-                'theme_slug' => 'required|string|' . FlyonUIThemeService::getValidationRule($tenant->plan_id)
+                'theme_slug' => 'required|string|' . PrelineThemeService::getValidationRule($tenant->plan_id)
             ]);
 
             // Get or create customization record
@@ -716,9 +716,9 @@ class DashboardController extends Controller
                 ->where('status', 'active')
                 ->firstOrFail();
 
-            // Validate input using FlyonUIThemeService (single source of truth)
+            // Validate input using PrelineThemeService (single source of truth)
             $validated = $request->validate([
-                'theme' => 'required|string|' . FlyonUIThemeService::getValidationRule($tenant->plan_id)
+                'theme' => 'required|string|' . PrelineThemeService::getValidationRule($tenant->plan_id)
             ]);
 
             // Update settings JSON

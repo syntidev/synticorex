@@ -3,36 +3,20 @@
 @php
 // activeTheme ya viene desde el controller
 
-// Colores hardcodeados de cada tema FlyonUI (primary, secondary, accent, neutral, base)
-$flyonuiThemes = [
-    // DEFAULT
-    ['slug'=>'light', 'name'=>'Light', 'category'=>'Default', 'colors'=>['#570df8','#f000b8','#37cdbe','#ffffff']],
-    ['slug'=>'dark', 'name'=>'Dark', 'category'=>'Default', 'colors'=>['#661ae6','#d926a9','#1fb2a6','#2a303c']],
-    // DARK MODES
-    ['slug'=>'black', 'name'=>'Black', 'category'=>'Dark Modes', 'font'=>'Geist', 'colors'=>['#ffffff','#ffffff','#ffffff','#000000']],
-    ['slug'=>'spotify', 'name'=>'Spotify', 'category'=>'Dark Modes', 'font'=>'Montserrat', 'colors'=>['#1db954','#1ed760','#1db954','#121212']],
-    ['slug'=>'valorant', 'name'=>'Valorant', 'category'=>'Dark Modes', 'font'=>'Syne', 'colors'=>['#ff4655','#bd3944','#ff4655','#0f1923']],
-    // PROFESSIONAL
-    ['slug'=>'claude', 'name'=>'Claude', 'category'=>'Professional', 'font'=>'Lato', 'colors'=>['#da7756','#a0785a','#e8c9a0','#f5f0e8']],
-    ['slug'=>'corporate', 'name'=>'Corporate', 'category'=>'Professional', 'font'=>'Inter', 'colors'=>['#4b6bfb','#7b92b2','#67cba0','#ffffff']],
-    ['slug'=>'gourmet', 'name'=>'Gourmet', 'category'=>'Professional', 'font'=>'Montserrat', 'colors'=>['#9b2335','#d4a76a','#c8a97e','#fdfaf5']],
-    ['slug'=>'luxury', 'name'=>'Luxury', 'category'=>'Professional', 'font'=>'Rubik', 'colors'=>['#ffffff','#a08740','#c5a028','#09090b']],
-    // CREATIVE
-    ['slug'=>'ghibli', 'name'=>'Ghibli', 'category'=>'Creative', 'font'=>'Amaranth', 'colors'=>['#6b7c5c','#c49a6c','#e8a87c','#faf6f0']],
-    ['slug'=>'pastel', 'name'=>'Pastel', 'category'=>'Creative', 'font'=>'Open Sans', 'colors'=>['#d1c1f7','#f7d6c1','#c1f7d6','#ffffff']],
-    ['slug'=>'soft', 'name'=>'Soft', 'category'=>'Creative', 'font'=>'Rubik', 'colors'=>['#6b21a8','#db2777','#0891b2','#ffffff']],
-    // TECH
-    ['slug'=>'mintlify', 'name'=>'Mintlify', 'category'=>'Tech', 'font'=>'Work Sans', 'colors'=>['#0ea474','#7c3aed','#0ea5e9','#ffffff']],
-    ['slug'=>'perplexity', 'name'=>'Perplexity', 'category'=>'Tech', 'font'=>'Inter', 'colors'=>['#20b8cd','#1a9ab0','#15808f','#16191d']],
-    ['slug'=>'shadcn', 'name'=>'Shadcn', 'category'=>'Tech', 'font'=>'Geist', 'colors'=>['#18181b','#f4f4f5','#18181b','#ffffff']],
-    ['slug'=>'slack', 'name'=>'Slack', 'category'=>'Tech', 'font'=>'Lato', 'colors'=>['#4a154b','#1264a3','#ecb22e','#3f0e40']],
-    ['slug'=>'vscode', 'name'=>'VS Code', 'category'=>'Tech', 'font'=>'DM Mono', 'colors'=>['#007acc','#6a9955','#569cd6','#1e1e1e']],
+$prelineThemes = [
+    ['slug'=>'default',   'name'=>'Default',   'category'=>'Clean',  'colors'=>['#2563eb','#1e40af','#3b82f6','#ffffff']],
+    ['slug'=>'harvest',   'name'=>'Harvest',   'category'=>'Clean',  'colors'=>['#92400e','#b45309','#d97706','#fefce8']],
+    ['slug'=>'ocean',     'name'=>'Ocean',     'category'=>'Fresh',  'colors'=>['#0d9488','#0f766e','#14b8a6','#f0fdfa']],
+    ['slug'=>'cashmere',  'name'=>'Cashmere',  'category'=>'Fresh',  'colors'=>['#9f7272','#b08080','#c49090','#fdf6f0']],
+    ['slug'=>'olive',     'name'=>'Olive',     'category'=>'Fresh',  'colors'=>['#6b7c4a','#7d8f56','#8fa05e','#f7f7f0']],
+    ['slug'=>'retro',     'name'=>'Retro',     'category'=>'Bold',   'colors'=>['#c026d3','#a21caf','#d946ef','#fafafa']],
+    ['slug'=>'bubblegum', 'name'=>'Bubblegum', 'category'=>'Bold',   'colors'=>['#ec4899','#db2777','#f472b6','#fdf2f8']],
+    ['slug'=>'autumn',    'name'=>'Autumn',    'category'=>'Bold',   'colors'=>['#d97706','#b45309','#f59e0b','#fffbeb']],
+    ['slug'=>'moon',      'name'=>'Moon',      'category'=>'Dark',   'colors'=>['#3b82f6','#2563eb','#60a5fa','#0f172a']],
 ];
-
-// Filter to only the themes available for this tenant's plan (from DB)
-$allowedSlugs = $palettes->pluck('slug')->toArray();
-$flyonuiThemes = array_values(array_filter($flyonuiThemes, fn($t) => in_array($t['slug'], $allowedSlugs)));
-$themesByCategory = collect($flyonuiThemes)->groupBy('category');
+$allowedSlugs = \App\Services\PrelineThemeService::getThemesByPlan($tenant->plan_id);
+$prelineThemes = array_values(array_filter($prelineThemes, fn($t) => in_array($t['slug'], $allowedSlugs)));
+$themesByCategory = collect($prelineThemes)->groupBy('category');
 @endphp
 
 {{-- â”€â”€ Temas + Paleta â€” 2 columnas â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ --}}
@@ -69,7 +53,7 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
                             @php
                                 $isActive = $currentTheme === $theme['slug'];
                                 $bg      = $theme['colors'][3];
-                                $isDark  = in_array($theme['slug'], ['dark','black','spotify','valorant','luxury','perplexity','slack','vscode']);
+                                $isDark  = in_array($theme['slug'], ['moon']);
                             @endphp
                             <label class="theme-card cursor-pointer rounded-lg overflow-hidden border-2 transition-all hover:scale-105 {{ $isActive ? 'border-primary ring-2 ring-primary/25' : 'border-base-content/10 hover:border-base-content/25' }}"
                                  data-slug="{{ $theme['slug'] }}"

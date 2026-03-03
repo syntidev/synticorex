@@ -92,14 +92,12 @@ class TenantRendererController extends Controller
             $plan = $tenant->plan;
 
             // ═══════════════════════════════════════════════════════════════════════
-            // FLYONUI THEME SYSTEM (Reemplaza ColorPalette custom)
+            // THEME SYSTEM
             // ═══════════════════════════════════════════════════════════════════════
-            // Prioridad: customization->theme_slug > settings JSON > 'light'
+            // Prioridad: customization->theme_slug > 'default'
             // ═══════════════════════════════════════════════════════════════════════
             $customization = $tenant->customization;
-            $themeSlug = $customization?->theme_slug
-                ?? $tenant->settings['engine_settings']['visual']['theme']['flyonui_theme']
-                ?? 'light';
+            $themeSlug = $customization?->theme_slug ?? 'default';
 
             // Get current dollar + euro rates
             $dollarRate = $this->dollarRateService->getCurrentRate();
@@ -212,11 +210,9 @@ class TenantRendererController extends Controller
                 return response()->view('landing.frozen', [], 200);
             }
 
-            // FlyonUI Theme System
+            // Preline Theme System
             $customization = $tenant->customization;
-            $themeSlug = $customization?->theme_slug
-                ?? $tenant->settings['engine_settings']['visual']['theme']['flyonui_theme']
-                ?? 'light';
+            $themeSlug = $customization?->theme_slug ?? 'default';
             $dollarRate = $this->dollarRateService->getCurrentRate();
             $euroRate   = $this->dollarRateService->getCurrentEuroRate();
             $products = $this->calculateProductPrices($tenant->products, $dollarRate);
@@ -282,11 +278,9 @@ class TenantRendererController extends Controller
                 return $this->render404("Tenant #{$tenantId}");
             }
 
-            // FlyonUI Theme System
+            // Preline Theme System
             $customization = $tenant->customization;
-            $themeSlug = $customization?->theme_slug
-                ?? $tenant->settings['engine_settings']['visual']['theme']['flyonui_theme']
-                ?? 'light';
+            $themeSlug = $customization?->theme_slug ?? 'default';
             $dollarRate = $this->dollarRateService->getCurrentRate();
             $euroRate   = $this->dollarRateService->getCurrentEuroRate();
             $products = $this->calculateProductPrices($tenant->products, $dollarRate);

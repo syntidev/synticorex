@@ -69,6 +69,7 @@
             .then(r => r.json())
             .then(data => {
                 if(data.success) {
+                    document.documentElement.setAttribute('data-theme', 'theme-' + theme);
                     showToast('✅ Tema ' + theme + ' aplicado');
                     setTimeout(() => location.reload(), 1000);
                 }
