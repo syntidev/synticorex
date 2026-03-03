@@ -238,7 +238,7 @@
                                    class="input input-bordered w-full"
                                    name="content_blocks[hero][title]"
                                    placeholder="Ej: La mejor pizzería de Maracaibo"
-                                   value="{{ $customization->getContentBlock('hero', 'title') }}">
+                                   value="{{ $customization?->getContentBlock('hero', 'title') ?? '' }}">
                             <span class="label-text-alt text-base-content/50 mt-1 text-xs">Si lo dejas vacío, usamos tu eslogan.</span>
                         </div>
 
@@ -250,7 +250,7 @@
                                    class="input input-bordered w-full"
                                    name="content_blocks[hero][subtitle]"
                                    placeholder="Ej: Masa artesanal, ingredientes frescos, entrega en 30 min"
-                                   value="{{ $customization->getContentBlock('hero', 'subtitle') }}">
+                                   value="{{ $customization?->getContentBlock('hero', 'subtitle') ?? '' }}">
                             <span class="label-text-alt text-base-content/50 mt-1 text-xs">Complementa el título. No repitas el eslogan.</span>
                         </div>
 
@@ -260,7 +260,7 @@
                             </label>
                             <textarea id="info-about-text" class="textarea textarea-bordered w-full" rows="4"
                                       name="about_text"
-                                      placeholder="Cuéntale a tus clientes quiénes son, qué los hace especiales...">{{ $customization->about_text }}</textarea>
+                                      placeholder="Cuéntale a tus clientes quiénes son, qué los hace especiales...">{{ $customization?->about_text ?? '' }}</textarea>
                             <span class="label-text-alt text-base-content/50 mt-1 text-xs">Aparece en la sección "Acerca de" de tu página.</span>
                         </div>
 

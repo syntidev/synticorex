@@ -26,7 +26,8 @@
             <div class="product-slider relative w-full h-full" id="{{ $sliderId }}">
                 @foreach($allImages as $idx => $imageUrl)
                     <div class="product-slide absolute inset-0 transition-opacity duration-500 {{ $idx === 0 ? 'opacity-100 z-10' : 'opacity-0 z-0' }}" data-slide="{{ $idx }}">
-                        <img src="{{ $imageUrl }}" class="w-full h-full object-cover" alt="{{ $product->name }}">
+                        <img src="{{ $imageUrl }}" class="w-full h-full object-cover" alt="{{ $product->name }}"
+                             onerror="this.style.display='none'; this.parentElement.style.display='none';">
                     </div>
                 @endforeach
 
@@ -53,7 +54,8 @@
             @if($product->image_filename)
                 <img src="{{ asset('storage/tenants/' . ($tenant->id ?? '') . '/' . $product->image_filename) }}"
                      class="w-full h-full object-cover"
-                     alt="{{ $product->name }}">
+                     alt="{{ $product->name }}"
+                     onerror="this.style.display='none'; this.parentElement.style.display='none';">
             @elseif($product->image_url)
                 <img src="{{ $product->image_url }}"
                      class="w-full h-full object-cover"

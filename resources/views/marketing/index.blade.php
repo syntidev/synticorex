@@ -88,7 +88,7 @@
             <div class="flex items-center justify-between h-16 lg:h-20">
                 {{-- Logo --}}
                 <a href="#hero" class="flex items-center gap-2 group">
-                    <img src="{{ asset('brand/syntiweb-logo-positive.svg') }}" 
+                    <img src="{{ asset('brand/syntiweb-logo-negative.svg') }}" 
                          alt="SYNTIweb" width="32" height="32" class="transition-opacity group-hover:opacity-80">
                     <span class="text-xl font-extrabold tracking-tight">
                         <span class="nav-logo-light transition-colors" :class="scrolled ? 'text-blue-700' : 'text-white'">SYNTI</span><span class="nav-logo-accent transition-colors" :class="scrolled ? 'text-slate-400' : 'text-blue-300'">web</span>

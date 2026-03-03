@@ -53,7 +53,11 @@ class DashboardController extends Controller
             ->firstOrFail();
 
             $plan          = $tenant->plan;
-            $customization = $tenant->customization;
+            $customization = $tenant->customization
+                ?? \App\Models\TenantCustomization::create([
+                    'tenant_id'   => $tenant->id,
+                    'hero_layout' => 'gradient',
+                ]);
             $products      = $tenant->products;
             $services      = $tenant->services;
             $branches      = $tenant->branches;
@@ -79,7 +83,7 @@ class DashboardController extends Controller
             $itemSingular = $tenant->getItemSingular();
 
             // THEME SYSTEM - Single Source of Truth: theme_slug
-            $currentTheme = $tenant->customization->theme_slug ?? 'light';
+            $currentTheme = $customization->theme_slug ?? 'light';
             $customPalette = $tenant->settings['engine_settings']['visual']['custom_palette'] ?? null;
             $hasCustomPalette = !empty($customPalette);
             $activeTheme = $hasCustomPalette ? 'custom' : $currentTheme;

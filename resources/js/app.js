@@ -1,9 +1,11 @@
 import './bootstrap';
 
 import Alpine from 'alpinejs';
+import collapse from '@alpinejs/collapse';
 
 window.Alpine = Alpine;
 
+Alpine.plugin(collapse);
 Alpine.start();
 
 // FlyonUI overlay (drawer/modal JS system — handles data-overlay triggers,

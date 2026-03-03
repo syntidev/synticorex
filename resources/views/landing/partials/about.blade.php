@@ -8,6 +8,11 @@
     if (!empty($customization->hero_filename)) {
         $businessImage = asset('storage/tenants/' . $tenant->id . '/' . $customization->hero_filename);
     }
+    
+    // Verificar si existe logo
+    $logoImage = !empty($customization->logo_filename) 
+        ? asset('storage/tenants/' . $tenant->id . '/' . $customization->logo_filename)
+        : null;
 @endphp
 
 <section id="about" class="py-8 sm:py-16 lg:py-24 bg-base-200/50">
@@ -53,7 +58,8 @@
                         <div class="relative rounded-3xl overflow-hidden shadow-lg border border-base-content/10 aspect-square">
                             <img src="{{ $businessImage }}"
                                  alt="{{ $tenant->business_name }}"
-                                 class="w-full h-full object-cover">
+                                 class="w-full h-full object-cover"
+                                 onerror="this.parentElement.style.display='none'; this.closest('.relative').parentElement.style.display='none';">
                         </div>
                     </div>
                 @elseif($logoImage)

@@ -103,7 +103,7 @@ class OnboardingController extends Controller
                 'whatsapp_sales'   => $validated['whatsapp_sales'] ?? null,
                 'email'            => $validated['email'] ?? null,
                 'city'             => $validated['city'] ?? null,
-                'status'           => 'pending',
+                'status'           => 'active',
                 'plan_activated_at'    => Carbon::now(),
                 'subscription_ends_at' => Carbon::now()->addYear(),
                 'edit_pin'             => bcrypt('1234'),

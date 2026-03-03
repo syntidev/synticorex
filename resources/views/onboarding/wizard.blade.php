@@ -548,9 +548,9 @@
                             <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background:linear-gradient(135deg,#10b981,#059669)">
                                 <span class="iconify tabler--rocket size-5 text-white"></span>
                             </div>
-                            <h1 class="text-2xl font-bold text-slate-900">Todo listo — revisa antes de publicar</h1>
+                            <h1 class="text-2xl font-bold text-slate-900">¡Tu negocio ya tiene todo para brillar!</h1>
                         </div>
-                        <p class="text-slate-500 text-sm ml-[52px]">Verifica que todo esté correcto. Una vez creada, puedes editar cualquier dato desde el dashboard.</p>
+                        <p class="text-slate-500 text-sm ml-[52px]">Revisa que los datos estén correctos. En segundos tendrás una página web real. Siempre puedes editar desde tu panel.</p>
                     </div>
 
                     <div class="wiz-card p-6 space-y-4">
@@ -611,12 +611,48 @@
                         </div>
                     </div>
 
-                    {{-- Alert de confirmación --}}
-                    <div class="flex gap-3 p-4 rounded-xl mt-4" style="background:#eff6ff;border:1px solid #bfdbfe">
-                        <span class="iconify tabler--info-circle size-5 shrink-0" style="color:#3b82f6;margin-top:1px"></span>
-                        <div class="text-sm">
-                            <p class="font-semibold">La página se creará en estado <em>pendiente</em></p>
-                            <p class="text-xs opacity-80">Tendrás una vista previa antes de publicarla en <strong x-text="subdomain + '.syntiweb.com'"></strong></p>
+                    {{-- Lo que recibirás --}}
+                    <div class="mt-5 rounded-2xl overflow-hidden" style="border:1px solid #e2e8f0">
+                        <div class="px-5 py-3 text-xs font-bold uppercase tracking-widest text-white" style="background:linear-gradient(135deg,#0f172a,#1e3a5f)">
+                            <span class="iconify tabler--gift size-3.5 mr-1"></span>
+                            Lo que vas a recibir al hacer clic
+                        </div>
+                        <div class="divide-y divide-slate-100">
+
+                            {{-- URL pública local/dev --}}
+                            <div class="flex items-center gap-3 px-5 py-3.5">
+                                <div class="w-8 h-8 rounded-full flex items-center justify-center shrink-0" style="background:#eff6ff">
+                                    <span class="iconify tabler--world size-4" style="color:#3b82f6"></span>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-xs font-semibold text-slate-500 mb-0.5">Tu sitio web público</p>
+                                    <p class="text-sm font-mono text-blue-600 truncate">{{ config('app.url') }}/<span x-text="subdomain || 'tu-negocio'"></span></p>
+                                </div>
+                                <span class="text-xs font-medium px-2 py-0.5 rounded-full shrink-0" style="background:#dcfce7;color:#16a34a">ACTIVO</span>
+                            </div>
+
+                            {{-- URL producción --}}
+                            <div class="flex items-center gap-3 px-5 py-3.5">
+                                <div class="w-8 h-8 rounded-full flex items-center justify-center shrink-0" style="background:#f0fdf4">
+                                    <span class="iconify tabler--rocket size-4" style="color:#10b981"></span>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-xs font-semibold text-slate-500 mb-0.5">URL definitiva en producción</p>
+                                    <p class="text-sm font-mono text-emerald-700 truncate"><span x-text="subdomain || 'tu-negocio'"></span>.syntiweb.com</p>
+                                </div>
+                                <span class="text-xs font-medium px-2 py-0.5 rounded-full shrink-0" style="background:#fef9c3;color:#a16207">Pronto</span>
+                            </div>
+
+                            {{-- Dashboard --}}
+                            <div class="flex items-center gap-3 px-5 py-3.5 bg-slate-50">
+                                <div class="w-8 h-8 rounded-full flex items-center justify-center shrink-0" style="background:#eef2ff">
+                                    <span class="iconify tabler--layout-dashboard size-4" style="color:#4f46e5"></span>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="text-xs font-semibold text-slate-500 mb-0.5">Tu panel de administración</p>
+                                    <p class="text-xs text-slate-400">Agrega productos, cambia fotos, personaliza colores y mucho más.</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -648,12 +684,12 @@
                             :disabled="submitting"
                             class="wiz-btn-primary flex items-center gap-2 px-8 py-3 rounded-xl text-base ml-auto">
                         <span x-show="!submitting" class="flex items-center gap-2">
-                            <span class="iconify tabler--rocket size-5"></span>
-                            Crear Landing
+                            <span class="iconify tabler--sparkles size-5"></span>
+                            Crear mi página web
                         </span>
                         <span x-show="submitting" class="flex items-center gap-2">
                             <span class="loading loading-spinner loading-sm"></span>
-                            Generando tu página...
+                            Generando tu presencia digital...
                         </span>
                     </button>
                 </div>

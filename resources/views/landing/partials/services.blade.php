@@ -28,7 +28,8 @@
                     @if($service->image_filename)
                         <figure>
                             <img src="{{ asset('storage/tenants/' . $tenant->id . '/services/' . $service->image_filename) }}"
-                                 alt="{{ $service->name }}">
+                                 alt="{{ $service->name }}"
+                                 onerror="this.style.display='none'; this.parentElement.style.display='none';">
                         </figure>
                     @endif
                     <div class="card-body gap-3">
@@ -64,7 +65,8 @@
                             @if($service->image_filename)
                                 <figure>
                                     <img src="{{ asset('storage/tenants/' . $tenant->id . '/services/' . $service->image_filename) }}"
-                                         alt="{{ $service->name }}">
+                                         alt="{{ $service->name }}"
+                                         onerror="this.style.display='none'; this.parentElement.style.display='none';">
                                 </figure>
                             @endif
                             <div class="card-body gap-3">
