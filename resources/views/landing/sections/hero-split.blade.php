@@ -21,12 +21,12 @@
 
                     <div class="flex flex-wrap gap-4 max-lg:justify-center">
                         @if($tenant->whatsapp)
-                            <a href="https://wa.me/{{ $tenant->whatsapp }}" class="btn btn-primary btn-gradient btn-lg">
+                            <a href="https://wa.me/{{ $tenant->whatsapp }}" class="inline-flex items-center py-3 px-6 rounded-lg font-medium transition-colors text-lg bg-blue-600 text-white hover:bg-blue-700">
                                 <span class="icon-[tabler--brand-whatsapp] size-5"></span>
                                 Contáctanos
                             </a>
                         @endif
-                        <a href="#productos" class="btn btn-outline btn-secondary btn-lg">
+                        <a href="#productos" class="inline-flex items-center py-3 px-6 rounded-lg font-medium transition-colors text-lg border border-gray-300 text-gray-700 hover:bg-gray-50">
                             Ver Productos
                             <span class="icon-[tabler--arrow-down] size-5"></span>
                         </a>

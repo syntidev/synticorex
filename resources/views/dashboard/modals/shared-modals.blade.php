@@ -20,8 +20,8 @@
                         </div>
 
                         <div class="flex gap-3 pt-6 border-t border-base-content/10 justify-end">
-                            <button type="button" class="btn btn-soft" onclick="closeBranchModal()">Cancelar</button>
-                            <button type="submit" class="btn btn-primary gap-2 shadow-md shadow-primary/20 hover:shadow-lg">
+                            <button type="button" class="py-2 px-4 rounded-lg font-medium transition-colors text-gray-600 hover:bg-gray-100" onclick="closeBranchModal()">Cancelar</button>
+                            <button type="submit" class="inline-flex items-center py-2 px-4 rounded-lg font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 gap-2 shadow-md">
                                 <span class="iconify tabler--device-floppy size-4" aria-hidden="true"></span>
                                 Guardar
                             </button>
@@ -69,8 +69,8 @@
                         </div>
 
                         <div class="flex gap-3 pt-6 border-t border-base-content/10 justify-end">
-                            <button type="button" class="btn btn-soft" onclick="closeTestimonialModal()">Cancelar</button>
-                            <button type="submit" class="btn btn-primary gap-2 shadow-md shadow-primary/20 hover:shadow-lg">
+                            <button type="button" class="py-2 px-4 rounded-lg font-medium transition-colors text-gray-600 hover:bg-gray-100" onclick="closeTestimonialModal()">Cancelar</button>
+                            <button type="submit" class="inline-flex items-center py-2 px-4 rounded-lg font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 gap-2 shadow-md">
                                 <span class="iconify tabler--device-floppy size-4" aria-hidden="true"></span>
                                 Guardar
                             </button>
@@ -102,8 +102,8 @@
                         </div>
 
                         <div class="flex gap-3 pt-6 border-t border-base-content/10 justify-end">
-                            <button type="button" class="btn btn-soft" onclick="closeFaqModal()">Cancelar</button>
-                            <button type="submit" class="btn btn-secondary gap-2 shadow-md shadow-secondary/20 hover:shadow-lg">
+                            <button type="button" class="py-2 px-4 rounded-lg font-medium transition-colors text-gray-600 hover:bg-gray-100" onclick="closeFaqModal()">Cancelar</button>
+                            <button type="submit" class="inline-flex items-center py-2 px-4 rounded-lg font-medium transition-colors bg-gray-600 text-white hover:bg-gray-700 gap-2 shadow-md">
                                 <span class="iconify tabler--device-floppy size-4" aria-hidden="true"></span>
                                 Guardar
                             </button>
@@ -124,7 +124,7 @@
                 <div class="crud-dialog-body">
                     <p id="limit-modal-message" class="text-base-content/80 leading-relaxed mb-5"></p>
                     <div id="limit-modal-actions" class="flex gap-3 flex-wrap">
-                        <button onclick="closeLimitModal()" class="btn btn-ghost flex-1">Cerrar</button>
+                        <button onclick="closeLimitModal()" class="py-2 px-4 rounded-lg font-medium transition-colors text-gray-700 hover:bg-gray-100 flex-1">Cerrar</button>
                         <div id="limit-modal-cta"></div>
                     </div>
                 </div>

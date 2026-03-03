@@ -1,6 +1,6 @@
 {{-- Path: resources/views/landing/partials/product-card.blade.php --}}
 {{-- Rediseño con FlyonUI .card - Estructura optimizada para ecommerce --}}
-<div class="card sm:max-w-sm bg-base-100 shadow-sm hover:shadow-lg transition-shadow duration-300">
+<div class="bg-white border border-gray-200 rounded-xl shadow-sm sm:max-w-sm hover:shadow-lg transition-shadow duration-300">
 
     {{-- IMAGEN / SLIDER (65% del card) --}}
     <figure class="relative overflow-hidden bg-base-200 h-64">
@@ -72,19 +72,19 @@
     </figure>
 
     {{-- CONTENIDO (35% del card) --}}
-    <div class="card-body gap-3 p-4">
+    <div class="flex flex-col gap-3 p-4">
 
         {{-- Badge --}}
         @if($product->badge)
             <div class="flex gap-2">
-                <span class="badge badge-sm badge-accent">
+                <span class="inline-flex items-center py-0.5 px-2 rounded-full text-xs font-medium bg-primary/10 text-primary">
                     {{ $product->badge }}
                 </span>
             </div>
         @endif
 
         {{-- Título --}}
-        <h5 class="card-title text-lg font-bold line-clamp-2 leading-tight">
+        <h5 class="text-lg font-bold text-gray-900 line-clamp-2 leading-tight">
             {{ $product->name }}
         </h5>
 
@@ -106,25 +106,25 @@
         @endif
 
         {{-- Botones --}}
-        <div class="card-actions justify-stretch pt-2">
+        <div class="flex gap-2 mt-4 justify-stretch pt-2">
             @if($hidePrice ?? false)
                 {{-- Precio oculto → solo "Más info" --}}
-                <a href="#" class="btn btn-primary btn-sm flex-1" onclick="return false;">
+                <a href="#" class="inline-flex items-center justify-center text-sm py-1.5 px-3 rounded-lg font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 flex-1" onclick="return false;">
                     Más info
                 </a>
             @elseif($product->price_usd)
                 {{-- Con precio → botón WhatsApp --}}
-                <a href="#" class="btn btn-primary btn-sm flex-1" onclick="return false;">
+                <a href="#" class="inline-flex items-center justify-center text-sm py-1.5 px-3 rounded-lg font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 flex-1" onclick="return false;">
                     <span class="iconify tabler--brand-whatsapp size-4"></span>
                     Pedir por WhatsApp
                 </a>
             @else
                 {{-- Sin precio → WhatsApp + Más info --}}
-                <a href="#" class="btn btn-primary btn-sm flex-1" onclick="return false;">
+                <a href="#" class="inline-flex items-center justify-center text-sm py-1.5 px-3 rounded-lg font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 flex-1" onclick="return false;">
                     <span class="iconify tabler--brand-whatsapp size-4"></span>
                     Pedir por WhatsApp
                 </a>
-                <a href="#" class="btn btn-secondary btn-soft btn-sm flex-1" onclick="return false;">
+                <a href="#" class="inline-flex items-center justify-center text-sm py-1.5 px-3 rounded-lg font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200 flex-1" onclick="return false;">
                     Más info
                 </a>
             @endif

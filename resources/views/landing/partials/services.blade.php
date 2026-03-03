@@ -24,7 +24,7 @@
         <div id="service-grid" class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {{-- Primeros 3 — siempre visibles --}}
             @foreach($visibleServices as $service)
-                <div class="card card-border shadow-none hover:border-primary transition-border duration-300">
+                <div class="bg-white border border-gray-200 rounded-xl shadow-sm hover:border-primary transition-all duration-300">
                     @if($service->image_filename)
                         <figure>
                             <img src="{{ asset('storage/tenants/' . $tenant->id . '/services/' . $service->image_filename) }}"
@@ -32,23 +32,23 @@
                                  onerror="this.style.display='none'; this.parentElement.style.display='none';">
                         </figure>
                     @endif
-                    <div class="card-body gap-3">
+                    <div class="flex flex-col p-4 gap-3">
                         @if(!$service->image_filename)
                             <div class="mb-2">
                                 <span class="icon-[tabler--{{ $service->icon_name ?? 'star' }}] text-primary size-10"></span>
                             </div>
                         @endif
-                        <h5 class="card-title text-xl">{{ $service->name }}</h5>
+                        <h5 class="text-xl font-semibold text-gray-900">{{ $service->name }}</h5>
                         <p class="text-base-content/80 mb-5 line-clamp-3">
                             {{ $service->description ?? 'Soluciones personalizadas diseñadas para elevar el estándar de tu negocio.' }}
                         </p>
-                        <div class="card-actions">
+                        <div class="flex gap-2 mt-4">
                             @php
                                 $ctaLink = $service->cta_link ?? ($tenant->whatsapp_sales
                                     ? 'https://wa.me/' . preg_replace('/[^0-9]/', '', $tenant->whatsapp_sales) . '?text=' . urlencode('Hola! Me interesa el servicio: ' . $service->name)
                                     : '#');
                             @endphp
-                            <a href="{{ $ctaLink }}" class="btn btn-outline btn-secondary">
+                            <a href="{{ $ctaLink }}" class="inline-flex items-center py-2 px-4 rounded-lg font-medium transition-colors border border-gray-300 text-gray-700 hover:bg-gray-50">
                                 {{ $service->cta_text ?? 'Más información' }}
                                 <span class="icon-[tabler--arrow-right] size-5 rtl:rotate-180"></span>
                             </a>
@@ -61,7 +61,7 @@
             @if($hasMoreServices)
                 @foreach($hiddenServices as $service)
                     <div class="service-extra hidden">
-                        <div class="card card-border shadow-none hover:border-primary transition-border duration-300">
+                        <div class="bg-white border border-gray-200 rounded-xl shadow-sm hover:border-primary transition-all duration-300">
                             @if($service->image_filename)
                                 <figure>
                                     <img src="{{ asset('storage/tenants/' . $tenant->id . '/services/' . $service->image_filename) }}"
@@ -69,23 +69,23 @@
                                          onerror="this.style.display='none'; this.parentElement.style.display='none';">
                                 </figure>
                             @endif
-                            <div class="card-body gap-3">
+                            <div class="flex flex-col p-4 gap-3">
                                 @if(!$service->image_filename)
                                     <div class="mb-2">
                                         <span class="icon-[tabler--{{ $service->icon_name ?? 'star' }}] text-primary size-10"></span>
                                     </div>
                                 @endif
-                                <h5 class="card-title text-xl">{{ $service->name }}</h5>
+                                <h5 class="text-xl font-semibold text-gray-900">{{ $service->name }}</h5>
                                 <p class="text-base-content/80 mb-5 line-clamp-3">
                                     {{ $service->description ?? 'Soluciones personalizadas diseñadas para elevar el estándar de tu negocio.' }}
                                 </p>
-                                <div class="card-actions">
+                                <div class="flex gap-2 mt-4">
                                     @php
                                         $ctaLink = $service->cta_link ?? ($tenant->whatsapp_sales
                                             ? 'https://wa.me/' . preg_replace('/[^0-9]/', '', $tenant->whatsapp_sales) . '?text=' . urlencode('Hola! Me interesa el servicio: ' . $service->name)
                                             : '#');
                                     @endphp
-                                    <a href="{{ $ctaLink }}" class="btn btn-outline btn-secondary">
+                                    <a href="{{ $ctaLink }}" class="inline-flex items-center py-2 px-4 rounded-lg font-medium transition-colors border border-gray-300 text-gray-700 hover:bg-gray-50">
                                         {{ $service->cta_text ?? 'Más información' }}
                                         <span class="icon-[tabler--arrow-right] size-5 rtl:rotate-180"></span>
                                     </a>
@@ -103,7 +103,7 @@
             <div id="load-more-services-container" class="mt-12 text-center">
                 <button
                     onclick="loadMoreServices(this)"
-                    class="btn btn-primary btn-gradient">
+                    class="inline-flex items-center py-2 px-4 rounded-lg font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700">
                     <span class="btn-label">Ver {{ $firstServiceBatch }} servicio{{ $firstServiceBatch > 1 ? 's' : '' }} más</span>
                     <span class="icon-[tabler--chevron-down] size-5"></span>
                 </button>

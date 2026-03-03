@@ -5,17 +5,27 @@ SaaS multitenant Laravel 12. Landing pages dinámicas para negocios venezolanos.
 Ruta local: C:\laragon\www\synticorex\
 
 ## STACK REAL
-Laravel 12.51, PHP 8.3, MySQL, FlyonUI 2.4.1, Tailwind 4.2, Alpine.js 3.4.2, Vite 7, Intervention Image 3.11, QR: simplesoftwareio/simple-qrcode, Blade puro, JS vanilla.
+Laravel 12.51, PHP 8.3, MySQL, Preline 4.1.2, Tailwind 4.2, Alpine.js 3.4.2, Vite 7, Intervention Image 3.11, QR: simplesoftwareio/simple-qrcode, Blade puro, JS vanilla.
 
 ## REGLAS CRÍTICAS
 - declare(strict_types=1) en TODO archivo PHP
-- NUNCA bajar versión de FlyonUI (mantener 2.4.1) ni Tailwind (mantener 4.2)
+- NUNCA instalar FlyonUI ni DaisyUI — fueron removidos, stack UI es Preline 4.1.2
+- NUNCA bajar versión de Preline (4.1.2) ni Tailwind (4.2)
 - NUNCA usar asset() → siempre @vite()
 - NUNCA lógica compleja en Blade → va en Model/Controller
+- NUNCA usar clases DaisyUI: btn, card, modal, badge, drawer, collapse, dropdown, join, stat, toast, divider, menu, alert — usar Tailwind utilitario puro
 - Tenant isolation: siempre filtrar por tenant_id
 - Early return pattern obligatorio
 - Eager loading obligatorio (evitar N+1)
 - Imágenes: max 800px, convertir a WebP
+
+## COMPONENTES INTERACTIVOS — SOLO PRELINE
+- Modal/Overlay → hs-overlay + data-hs-overlay
+- Accordion/Collapse → hs-accordion + hs-accordion-toggle + hs-accordion-content
+- Dropdown → hs-dropdown + hs-dropdown-toggle + hs-dropdown-menu
+- Tabs → data-hs-tab + hs-tab-active:
+- Collapse navbar → hs-collapse + hs-collapse-toggle + data-hs-collapse
+- Alpine.js (x-data, x-show, x-on) es compatible con Preline — mantener intacto
 
 ## MULTITENANCY
 - Un tenant = un subdominio O un dominio personalizado
@@ -36,12 +46,10 @@ Laravel 12.51, PHP 8.3, MySQL, FlyonUI 2.4.1, Tailwind 4.2, Alpine.js 3.4.2, Vit
 - Variantes por sección: hero(fullscreen), products(grid3), services(cards/spotlight), about(split), faq(accordion), cta(centered)
 
 ## TEMAS
-- Plan 1: 10 paletas FlyonUI
-- Plan 2: 17 paletas FlyonUI
-- Plan 3: 17 paletas + custom infinito (4 colores: primary, secondary, accent, base)
-- data-theme siempre en <html>, nunca en divs internos
-- Custom palette: data-theme="custom" + CSS variables inline en <style>
-- Variables: --color-primary, --color-secondary, --color-accent, --color-base-100
+- Sistema de temas: CSS variables --brand-* definidas en resources/css/app.css
+- --brand-50, --brand-500, --brand-600, --brand-700 son las variables base
+- NO usar data-theme de DaisyUI/FlyonUI — sistema eliminado
+- Custom palette: usar CSS variables --brand-* directamente
 
 ## SISTEMA MONEDA
 - Símbolo REF (no $)
@@ -64,3 +72,4 @@ Laravel 12.51, PHP 8.3, MySQL, FlyonUI 2.4.1, Tailwind 4.2, Alpine.js 3.4.2, Vit
 - exec() o shell_exec() en producción
 - {!! !!} salvo Schema.org generado internamente
 - eval() o new Function() en JS
+- Cualquier clase DaisyUI/FlyonUI en HTML

@@ -1,25 +1,5 @@
 <!DOCTYPE html>
-@php
-$customPalette = $tenant->settings['engine_settings']['visual']['custom_palette'] ?? null;
-$effectiveTheme = $customPalette ? 'custom' : $themeSlug;
-@endphp
-<html data-theme="{{ $effectiveTheme }}" lang="es" class="scroll-smooth" style="scroll-padding-top:64px">
-
-@if($customPalette)
-<style>
-[data-theme="custom"] {
-    --color-primary: {{ $customPalette['primary'] ?? '#570DF8' }};
-    --p: {{ $customPalette['primary'] ?? '#570DF8' }};
-    --color-secondary: {{ $customPalette['secondary'] ?? '#F000B9' }};
-    --s: {{ $customPalette['secondary'] ?? '#F000B9' }};
-    --color-accent: {{ $customPalette['accent'] ?? '#1DCDBC' }};
-    --a: {{ $customPalette['accent'] ?? '#1DCDBC' }};
-    --color-base-100: {{ $customPalette['base'] ?? '#FFFFFF' }};
-    --b1: {{ $customPalette['base'] ?? '#FFFFFF' }};
-    --bc: #1f2937;
-}
-</style>
-@endif
+<html data-theme="theme-default" lang="es" class="scroll-smooth" style="scroll-padding-top:64px">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">

@@ -9,6 +9,16 @@
     
     <title>@yield('title', 'SYNTIweb Dashboard')</title>
     
+    @php($settings = $settings ?? auth()->user()?->tenant?->customization)
+    <style>
+        :root {
+            --brand-50: {{ $settings->color_light ?? '#eff6ff' }};
+            --brand-500: {{ $settings->color_main ?? '#3b82f6' }};
+            --brand-600: {{ $settings->color_hover ?? '#2563eb' }};
+            --brand-700: {{ $settings->color_dark ?? '#1d4ed8' }};
+        }
+    </style>
+
     <!-- FlyonUI + Tailwind CSS Compilado -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     

@@ -9,7 +9,8 @@ agent:
     2. Especifica siempre la ruta completa del archivo
     3. No toques lo que no te piden
     4. No instales paquetes sin confirmar
-    5. No cambies versiones de FlyonUI 2.4.1 ni Tailwind 4.2
+    5. NUNCA instalar FlyonUI ni DaisyUI — usar Preline 4.1.2
+    6. No cambies versiones de Preline 4.1.2 ni Tailwind 4.2
     
     ANTES DE GENERAR PHP:
     - declare(strict_types=1) obligatorio
@@ -18,14 +19,15 @@ agent:
     - Eager loading, no N+1
     - Sin lógica compleja en Blade
 
-    SKILL: flyonui-designer
-    - Stack UI: FlyonUI 2.4.1 + Tailwind 4.2 + Alpine.js 3.4.2
+    SKILL: preline-designer
+    - Stack UI: Preline 4.1.2 + Tailwind 4.2 + Alpine.js 3.4.2
+    - NUNCA usar clases DaisyUI: btn, card, modal, badge, drawer, collapse, dropdown, join, stat, toast, divider, menu, alert
+    - Usar Tailwind utilitario puro para estilos
+    - Componentes interactivos SOLO con atributos hs-* de Preline
     - Prioriza minimalismo y originalidad
     - Componentes con 4 estados: Loading, Success, Empty, Error
-    - data-theme siempre en <html>, nunca en divs internos
     - NUNCA usar clases de Tailwind v3
     - Íconos: @iconify-json/tabler únicamente
-    - Animaciones: solo las nativas de FlyonUI
     
     SKILL: architect-validator
     - Valida límites de plan antes de cualquier CRUD

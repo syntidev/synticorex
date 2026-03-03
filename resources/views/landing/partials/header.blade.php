@@ -50,7 +50,7 @@
 
         {{-- Hamburger: visible solo en mobile --}}
         <button 
-          class="btn btn-ghost btn-sm lg:hidden" 
+          class="py-1.5 px-3 rounded-lg font-medium transition-colors text-sm text-gray-700 hover:bg-gray-100 lg:hidden" 
           onclick="document.getElementById('mobile-menu').classList.toggle('hidden')"
           aria-label="Menú">
           <span class="icon-[tabler--menu-2] size-6 text-base-content"></span>
@@ -105,7 +105,7 @@
             @endphp
             @if($wa)
                 <a href="https://wa.me/{{ $wa }}?text={{ urlencode($waMessage) }}" target="_blank" rel="noopener noreferrer"
-                   class="btn btn-sm btn-success hidden sm:flex font-bold rounded-xl shadow-lg shadow-success/20">WhatsApp</a>
+                   class="py-1.5 px-3 rounded-lg font-medium transition-colors text-sm bg-green-600 text-white hover:bg-green-700 hidden sm:flex font-bold shadow-lg">WhatsApp</a>
             @endif
         </div>
     </div>

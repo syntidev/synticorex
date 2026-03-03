@@ -40,8 +40,8 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
 
     {{-- â•â•â• LEFT: Tema Visual (8/12) â•â•â• --}}
     <div class="lg:col-span-8">
-        <div class="card bg-base-100 shadow-md border border-base-content/8 card-elevated h-full">
-            <div class="card-header px-5 pt-5 pb-3">
+        <div class="bg-white rounded-xl shadow-md border border-gray-200 h-full">
+            <div class="px-5 pt-5 pb-3">
                 <div class="flex items-center gap-3">
                     <div class="size-9 rounded-lg bg-primary/10 flex items-center justify-center">
                         <span class="iconify tabler--palette size-5 text-primary" aria-hidden="true"></span>
@@ -52,8 +52,8 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
                     </div>
                 </div>
             </div>
-            <div class="card-body pt-1 px-5 pb-5">
-                <div id="theme-success-message" class="alert alert-success mb-3" style="display:none;">
+            <div class="pt-1 px-5 pb-5">
+                <div id="theme-success-message" class="flex p-4 rounded-lg border gap-3 bg-green-50 border-green-200 text-green-800 mb-3" style="display:none;">
                     <span class="iconify tabler--check size-4"></span>
                     <span class="text-sm">Tema actualizado correctamente</span>
                 </div>
@@ -98,19 +98,19 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
     {{-- â•â•â• RIGHT: Paleta Personalizada (4/12) â•â•â• --}}
     <div class="lg:col-span-4">
         @if($tenant->isVision())
-        <div class="card bg-base-100 shadow-md border border-base-content/8 card-elevated h-full">
-            <div class="card-header px-5 pt-5 pb-3">
+        <div class="bg-white rounded-xl shadow-md border border-gray-200 h-full">
+            <div class="px-5 pt-5 pb-3">
                 <div class="flex items-center gap-3">
                     <div class="size-9 rounded-lg bg-primary/10 flex items-center justify-center">
                         <span class="iconify tabler--color-swatch size-5 text-primary" aria-hidden="true"></span>
                     </div>
                     <div>
                         <h3 class="text-base font-bold text-base-content">Paleta Custom</h3>
-                        <span class="badge badge-soft badge-info badge-xs">Plan VISIÃ“N</span>
+                        <span class="inline-flex items-center py-0.5 px-2 rounded-full text-xs font-medium bg-blue-100 text-blue-700">Plan VISIÓN</span>
                     </div>
                 </div>
             </div>
-            <div class="card-body px-5 pb-5">
+            <div class="px-5 pb-5">
                 @php
                 $customPalette = $tenant->settings['engine_settings']['visual']['custom_palette'] ?? [
                     'primary' => '#570DF8', 'secondary' => '#F000B9', 'accent' => '#1DCDBC', 'base' => '#FFFFFF'
@@ -141,7 +141,7 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
                     <div class="flex-1" id="preview-base" style="background:{{ $customPalette['base'] }}"></div>
                 </div>
 
-                <button onclick="applyCustomPalette()" class="btn btn-primary btn-sm w-full gap-2 mt-4">
+                <button onclick="applyCustomPalette()" class="inline-flex items-center text-sm py-1.5 px-3 rounded-lg font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 w-full gap-2 mt-4">
                     <span class="iconify tabler--palette size-4"></span>
                     Aplicar Paleta Custom
                 </button>
@@ -149,19 +149,19 @@ $themesByCategory = collect($flyonuiThemes)->groupBy('category');
         </div>
         @else
         {{-- Non Plan 3: upsell --}}
-        <div class="card bg-base-100 shadow-md border border-base-content/8 card-elevated h-full">
-            <div class="card-body flex flex-col items-center justify-center text-center py-10 px-5">
+        <div class="bg-white rounded-xl shadow-md border border-gray-200 h-full">
+            <div class="flex flex-col items-center justify-center text-center py-10 px-5">
                 <div class="size-12 rounded-xl bg-primary/10 flex items-center justify-center mb-3">
                     <span class="iconify tabler--color-swatch size-6 text-primary" aria-hidden="true"></span>
                 </div>
                 <h3 class="text-sm font-bold text-base-content mb-1">Paleta Personalizada</h3>
                 <p class="text-xs text-base-content/50 mb-4">Crea tu propia combinaciÃ³n de colores con el Plan VISIÃ“N</p>
-                <span class="badge badge-soft badge-warning badge-sm mb-3">
+                <span class="inline-flex items-center py-0.5 px-2 rounded-full text-sm font-medium bg-yellow-100 text-yellow-700 mb-3">
                     <span class="iconify tabler--lock size-3 mr-1"></span>
                     Plan VISIÃ“N
                 </span>
                 <a href="https://syntiweb.com/planes" target="_blank" rel="noopener noreferrer"
-                   class="btn btn-soft btn-primary btn-xs gap-1">
+                   class="inline-flex items-center text-xs py-1 px-2 rounded-md font-medium transition-colors bg-blue-100 text-blue-700 hover:bg-blue-200 gap-1">
                     <span class="iconify tabler--external-link size-3"></span>
                     Ver Planes
                 </a>

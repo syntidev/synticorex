@@ -62,7 +62,7 @@
                         </div>
                     </div>
                 </div>
-                <button onclick="updateDollarRate()" class="btn btn-sm btn-soft btn-primary gap-1.5">
+                <button onclick="updateDollarRate()" class="inline-flex items-center text-sm py-1.5 px-3 rounded-lg font-medium transition-colors bg-blue-100 text-blue-700 hover:bg-blue-200 gap-1.5">
                     <span class="iconify tabler--refresh size-4"></span>
                     Actualizar
                 </button>
@@ -73,8 +73,8 @@
 
                 {{-- LEFT: Métodos de Pago (8 cols) --}}
                 <div class="lg:col-span-8">
-                    <div class="card bg-base-100 shadow-md border border-base-content/8 card-elevated h-full">
-                        <div class="card-header px-5 pt-5 pb-3">
+                    <div class="bg-white rounded-xl shadow-md border border-gray-200 h-full">
+                        <div class="px-5 pt-5 pb-3">
                             <div class="flex items-center gap-3">
                                 <div class="size-9 rounded-lg bg-primary/10 flex items-center justify-center">
                                     <span class="iconify tabler--credit-card size-5 text-primary" aria-hidden="true"></span>
@@ -84,13 +84,13 @@
                                     <p class="text-xs text-base-content/50">
                                         Activa los que aceptas
                                         @if($plan->id === 1)
-                                            <span class="badge badge-soft badge-warning badge-xs ms-1">fijos</span>
+                                            <span class="inline-flex items-center py-0.5 px-2 rounded-full text-xs font-medium bg-yellow-100 text-yellow-700 ms-1">fijos</span>
                                         @endif
                                     </p>
                                 </div>
                             </div>
                         </div>
-                        <div class="card-body px-5 pb-5 pt-1">
+                        <div class="px-5 pb-5 pt-1">
                             @if($plan->id === 1)
                             <div class="grid grid-cols-2 gap-2 mb-3">
                                 @foreach(['pagoMovil', 'cash'] as $mkey)
@@ -102,7 +102,7 @@
                                 </div>
                                 @endforeach
                             </div>
-                            <div class="alert alert-info alert-sm">
+                            <div class="flex p-3 rounded-lg border gap-3 bg-blue-50 border-blue-200 text-blue-800">
                                 <span class="iconify tabler--lock size-3.5" aria-hidden="true"></span>
                                 <span class="text-xs">Más métodos disponibles desde Plan CRECIMIENTO.</span>
                             </div>
@@ -183,7 +183,7 @@
                             </div>
                             @endif
 
-                            <button type="button" onclick="savePaymentMethods()" class="btn btn-primary btn-sm w-full gap-2 mt-2">
+                            <button type="button" onclick="savePaymentMethods()" class="inline-flex items-center text-sm py-1.5 px-3 rounded-lg font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 w-full gap-2 mt-2">
                                 <span class="iconify tabler--device-floppy size-4" aria-hidden="true"></span>
                                 Guardar Métodos de Pago
                             </button>
@@ -194,8 +194,8 @@
 
                 {{-- RIGHT: Moneda y Precios (4 cols) --}}
                 <div class="lg:col-span-4">
-                    <div class="card bg-base-100 shadow-md border border-base-content/8 card-elevated h-full">
-                        <div class="card-header px-5 pt-5 pb-3">
+                    <div class="bg-white rounded-xl shadow-md border border-gray-200 h-full">
+                        <div class="px-5 pt-5 pb-3">
                             <div class="flex items-center gap-3">
                                 <div class="size-9 rounded-lg bg-warning/10 flex items-center justify-center">
                                     <span class="iconify tabler--coins size-5 text-warning" aria-hidden="true"></span>
@@ -206,7 +206,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card-body px-5 pb-5 pt-1">
+                        <div class="px-5 pb-5 pt-1">
                             {{-- Symbol toggle --}}
                             <div class="flex items-center justify-between p-2.5 rounded-lg bg-base-200/40 border border-base-content/10 mb-4">
                                 <span class="text-xs font-medium text-base-content">Símbolo</span>
@@ -238,7 +238,7 @@
                                 @endforeach
                             </div>
 
-                            <button type="button" onclick="saveCurrencyConfig()" class="btn btn-primary btn-sm w-full gap-2">
+                            <button type="button" onclick="saveCurrencyConfig()" class="inline-flex items-center text-sm py-1.5 px-3 rounded-lg font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 w-full gap-2">
                                 <span class="iconify tabler--device-floppy size-4" aria-hidden="true"></span>
                                 Guardar Moneda
                             </button>
@@ -251,8 +251,8 @@
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
 
                 {{-- LEFT: Cambiar PIN --}}
-                <div class="card bg-base-100 shadow-md border border-base-content/8 card-elevated">
-                    <div class="card-header px-5 pt-5 pb-3">
+                <div class="bg-white rounded-xl shadow-md border border-gray-200">
+                    <div class="px-5 pt-5 pb-3">
                         <div class="flex items-center gap-3">
                             <div class="size-9 rounded-lg bg-error/10 flex items-center justify-center">
                                 <span class="iconify tabler--shield-lock size-5 text-error" aria-hidden="true"></span>
@@ -263,7 +263,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-body px-5 pb-5 pt-1">
+                    <div class="px-5 pb-5 pt-1">
                         <form id="pin-form" class="space-y-3">
                             <div class="grid grid-cols-3 gap-2">
                                 <div class="form-control">
@@ -282,7 +282,7 @@
                                            class="input input-bordered input-sm w-full text-center tracking-[.3em]" placeholder="••••">
                                 </div>
                             </div>
-                            <button type="button" onclick="updatePin()" class="btn btn-primary btn-sm w-full gap-2">
+                            <button type="button" onclick="updatePin()" class="inline-flex items-center text-sm py-1.5 px-3 rounded-lg font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 w-full gap-2">
                                 <span class="iconify tabler--device-floppy size-4" aria-hidden="true"></span>
                                 Guardar PIN
                             </button>
@@ -291,8 +291,8 @@
                 </div>
 
                 {{-- RIGHT: Plan Info --}}
-                <div class="card bg-base-100 shadow-md border border-base-content/8 card-elevated">
-                    <div class="card-header px-5 pt-5 pb-3 flex items-center justify-between gap-2 flex-wrap">
+                <div class="bg-white rounded-xl shadow-md border border-gray-200">
+                    <div class="px-5 pt-5 pb-3 flex items-center justify-between gap-2 flex-wrap">
                         <div class="flex items-center gap-3">
                             <div class="size-9 rounded-lg bg-info/10 flex items-center justify-center">
                                 <span class="iconify tabler--crown size-5 text-info" aria-hidden="true"></span>
@@ -302,11 +302,11 @@
                                 <p class="text-xs text-base-content/50">Límites y renovación</p>
                             </div>
                         </div>
-                        <span class="badge badge-soft badge-sm {{ $plan->id === 1 ? 'badge-warning' : ($plan->id === 2 ? 'badge-success' : 'badge-info') }}">
+                        <span class="inline-flex items-center py-0.5 px-2 rounded-full text-sm font-medium {{ $plan->id === 1 ? 'bg-yellow-100 text-yellow-700' : ($plan->id === 2 ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700') }}">
                             {{ $plan->name }}
                         </span>
                     </div>
-                    <div class="card-body p-0">
+                    <div class="p-0">
                         <div class="divide-y divide-base-content/8">
                             <div class="flex items-center justify-between px-5 py-2.5">
                                 <span class="text-xs text-base-content/50">Plan</span>
@@ -331,7 +331,7 @@
                         </div>
                         <div class="px-5 pb-4 pt-2">
                             <a href="https://syntiweb.com/planes" target="_blank" rel="noopener noreferrer"
-                               class="btn btn-soft btn-primary btn-sm btn-block gap-2">
+                               class="w-full inline-flex items-center justify-center text-sm py-1.5 px-3 rounded-lg font-medium transition-colors bg-blue-100 text-blue-700 hover:bg-blue-200 gap-2">
                                 <span class="iconify tabler--external-link size-4" aria-hidden="true"></span>
                                 Ver planes disponibles
                             </a>

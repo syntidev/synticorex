@@ -27,11 +27,11 @@
 
             {{-- CTAs --}}
             <div class="flex flex-col sm:flex-row gap-4 justify-center mb-10">
-                <a href="{{ route('register') }}" class="btn btn-lg bg-white text-blue-700 border-0 shadow-xl shadow-black/10 hover:shadow-black/20 hover:scale-[1.02] transition-all font-extrabold text-base px-10">
+                <a href="{{ route('register') }}" class="inline-flex items-center py-3 px-10 rounded-lg font-extrabold transition-all bg-white text-blue-700 border-0 shadow-xl shadow-black/10 hover:shadow-black/20 hover:scale-[1.02] text-base">
                     Crear mi página ahora
                     <span class="iconify tabler--arrow-right size-5"></span>
                 </a>
-                <a href="#planes" class="btn btn-lg btn-outline border-white/30 text-white hover:bg-white/10 font-medium">
+                <a href="#planes" class="inline-flex items-center py-3 px-6 rounded-lg font-medium transition-all border border-white/30 text-white hover:bg-white/10">
                     <span class="iconify tabler--eye size-5"></span>
                     Ver los planes
                 </a>

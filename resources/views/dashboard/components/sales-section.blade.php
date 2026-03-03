@@ -14,7 +14,7 @@
                         </h2>
                         <p class="text-xs text-base-content/50 mt-0.5">Métricas en vivo • últimos 7 días</p>
                     </div>
-                    <button onclick="loadAnalytics()" class="btn btn-sm btn-ghost gap-1.5 ml-auto" title="Actualizar métricas">
+                    <button onclick="loadAnalytics()" class="inline-flex items-center text-sm py-1.5 px-3 rounded-lg font-medium transition-colors text-gray-700 hover:bg-gray-100 gap-1.5 ml-auto" title="Actualizar métricas">
                         <span class="iconify tabler--refresh size-4"></span>
                         <span class="hidden sm:inline">Actualizar</span>
                     </button>
@@ -40,7 +40,7 @@
                         <div class="size-8 rounded-field bg-{{ $kpi['color'] }}/10 text-{{ $kpi['color'] }} flex items-center justify-center">
                             <span class="iconify {{ $kpi['icon'] }} size-4"></span>
                         </div>
-                        <span class="badge badge-soft badge-xs badge-{{ $kpi['color'] }}">{{ $kpi['badge'] }}</span>
+                        <span class="inline-flex items-center py-0.5 px-2 rounded-full text-xs font-medium bg-gray-100 text-gray-700">{{ $kpi['badge'] }}</span>
                     </div>
                     <div id="{{ $kpi['id'] }}" class="text-xl font-bold text-base-content leading-none">-</div>
                     <div class="text-[11px] text-base-content/50 mt-1">{{ $kpi['label'] }}</div>
@@ -50,20 +50,20 @@
 
             {{-- ── Gráfico + Distribución side-by-side ──────────────────── --}}
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-6">
-                <div class="lg:col-span-2 card bg-base-100 shadow-md border border-base-content/8 card-elevated">
-                    <div class="card-header flex items-center justify-between">
-                        <h4 class="card-title text-base">Visitantes — últimos 7 días</h4>
+                <div class="lg:col-span-2 bg-white rounded-xl shadow-md border border-gray-200">
+                    <div class="flex items-center justify-between">
+                        <h4 class="font-semibold text-gray-900 text-base">Visitantes — últimos 7 días</h4>
                     </div>
-                    <div class="card-body pt-2">
+                    <div class="pt-2">
                         <canvas id="analytics-chart" class="max-h-[250px]"></canvas>
                     </div>
                 </div>
 
-                <div class="card bg-base-100 shadow-md border border-base-content/8 card-elevated">
-                    <div class="card-header">
-                        <h4 class="card-title text-base">Distribución</h4>
+                <div class="bg-white rounded-xl shadow-md border border-gray-200">
+                    <div class="p-4">
+                        <h4 class="font-semibold text-gray-900 text-base">Distribución</h4>
                     </div>
-                    <div class="card-body pt-0 flex flex-col items-center">
+                    <div class="pt-0 flex flex-col items-center">
                         <div id="analytics-donut-chart"></div>
                         <div class="flex flex-col gap-2 w-full mt-2">
                             <div class="flex items-center justify-between text-xs">

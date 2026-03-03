@@ -38,14 +38,14 @@
         /* Sidebar dark elegant */
         #layout-sidebar > .drawer-body { background:linear-gradient(180deg,#0f172a 0%,#1e293b 100%); color:#e2e8f0; }
         #layout-sidebar .sidebar-footer-link { color:#e2e8f0 !important; }
-        #layout-sidebar .menu li button {
+        #layout-sidebar .sidebar-nav li button {
             color:rgba(226,232,240,.65); border-left:3px solid transparent;
             padding:.65rem 1rem; border-radius:0 .5rem .5rem 0; margin-bottom:2px;
             transition:all .2s ease;
         }
-        #layout-sidebar .menu li button:hover { background:rgba(77,143,255,.12); color:#93c5fd; border-left-color:rgba(77,143,255,.5); }
-        #layout-sidebar .menu li button.menu-active,
-        #layout-sidebar .menu li button[aria-selected="true"] {
+        #layout-sidebar .sidebar-nav li button:hover { background:rgba(77,143,255,.12); color:#93c5fd; border-left-color:rgba(77,143,255,.5); }
+        #layout-sidebar .sidebar-nav li button.menu-active,
+        #layout-sidebar .sidebar-nav li button[aria-selected="true"] {
             background:linear-gradient(90deg,rgba(77,143,255,.22) 0%,rgba(77,143,255,.06) 100%);
             color:#60a5fa; border-left:3px solid #60a5fa; font-weight:600;
         }
@@ -116,7 +116,7 @@
 
 {{-- Skip link accesibilidad: visible solo al recibir foco por teclado --}}
 <a href="#main-content"
-   class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:start-2 focus:z-[9999] focus:btn focus:btn-primary focus:btn-sm">
+   class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:start-2 focus:z-[9999] focus:inline-flex focus:py-2 focus:px-4 focus:rounded-lg focus:font-medium focus:bg-blue-600 focus:text-white focus:text-sm">
     Saltar al contenido principal
 </a>
 
@@ -132,11 +132,11 @@
                 <div class="navbar-start items-center gap-3">
                     {{-- Hamburger: visible solo en móvil --}}
                     <button type="button"
-                            class="btn btn-sm btn-square border-0 bg-white/10 text-white hover:bg-white/20 lg:hidden"
+                            class="p-2 rounded-lg border-0 bg-white/10 text-white hover:bg-white/20 lg:hidden transition-colors"
                             aria-haspopup="dialog"
                             aria-expanded="false"
                             aria-controls="layout-sidebar"
-                            data-overlay="#layout-sidebar">
+                            data-hs-overlay="#layout-sidebar">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
                     </button>
                     <a href="/" class="flex items-center gap-1.5 lg:hidden">
@@ -148,12 +148,12 @@
                     <div class="hidden lg:flex items-center gap-3 min-w-0">
                         <span class="{{ $tenant->is_open ? 'dot-online' : 'dot-offline' }}"></span>
                         <span class="text-sm font-semibold text-white truncate max-w-52">{{ $tenant->business_name }}</span>
-                        <span class="badge badge-sm font-bold border-0
+                        <span class="inline-flex items-center py-0.5 px-2 rounded-full text-xs font-bold border-0
                             {{ $plan->id === 1 ? 'bg-amber-400/90 text-amber-900' : ($plan->id === 2 ? 'bg-emerald-400/90 text-emerald-900' : 'bg-sky-300/90 text-sky-900') }}">
                             {{ $plan->name }}
                         </span>
                         @if($tenant->industry_segment)
-                        <span class="badge badge-sm font-medium border-0 bg-white/20 text-white backdrop-blur-sm" title="{{ $tenant->getBlueprintLabel() }}">
+                        <span class="inline-flex items-center py-0.5 px-2 rounded-full text-xs font-medium border-0 bg-white/20 text-white backdrop-blur-sm" title="{{ $tenant->getBlueprintLabel() }}">
                             {{ $tenant->getItemLabel() }}
                         </span>
                         @endif
@@ -178,7 +178,7 @@
                 <div class="navbar-end items-center gap-2">
                     <span class="{{ $tenant->is_open ? 'dot-online' : 'dot-offline' }} lg:hidden"></span>
                     <a href="/{{ $tenant->subdomain }}"
-                       class="btn btn-sm gap-1.5 border-0 hover:opacity-90 transition-opacity"
+                       class="inline-flex items-center text-sm py-1.5 px-3 rounded-lg font-medium gap-1.5 border-0 hover:opacity-90 transition-opacity"
                        style="background:rgba(255,255,255,0.2);color:#fff;border:1px solid rgba(255,255,255,0.3)">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
                         <span class="hidden sm:inline" style="color:#fff">Ver sitio</span>
@@ -190,16 +190,16 @@
 
     <!-- ══ SIDEBAR — 4 Menús Lógicos ════════════════════════════════════ -->
     <aside id="layout-sidebar"
-           class="overlay [--auto-close:lg]"
+           class="hs-overlay"
            aria-label="Sidebar"
            tabindex="-1">
         <div class="drawer-body h-full border-e border-white/5 p-0">
             <div class="flex h-full max-h-full flex-col">
                 {{-- Close (mobile) --}}
                 <button type="button"
-                        class="btn btn-text btn-circle btn-sm absolute end-3 top-3 lg:hidden text-white/60 hover:text-white hover:bg-white/10"
+                        class="p-2 rounded-full transition-colors absolute end-3 top-3 lg:hidden text-white/60 hover:text-white hover:bg-white/10"
                         aria-label="Close"
-                        data-overlay="#layout-sidebar">
+                        data-hs-overlay="#layout-sidebar">
                     <span class="iconify tabler--x size-4.5"></span>
                 </button>
 
@@ -217,7 +217,7 @@
                 {{-- Navigation — 4 Menús --}}
                 <div class="h-full overflow-y-auto py-2">
                     <p class="px-5 py-2 text-[10px] font-bold uppercase tracking-widest text-slate-500">Menú</p>
-                    <ul class="menu menu-sm gap-0.5 px-3" role="tablist">
+                    <ul class="sidebar-nav flex flex-col gap-0.5 px-3" role="tablist">
                         <li role="presentation">
                             <button class="menu-active w-full text-start" role="tab"
                                     aria-selected="true" aria-controls="tab-info"
@@ -272,7 +272,7 @@
                 {{-- Footer --}}
                 <div class="border-t border-white/8 p-3 mt-auto">
                     <a href="/{{ $tenant->subdomain }}" target="_blank" rel="noopener noreferrer"
-                       class="sidebar-footer-link btn btn-block btn-sm gap-2 border-0 bg-white/8 hover:bg-white/15 transition-all">
+                       class="sidebar-footer-link w-full inline-flex items-center justify-center text-sm py-1.5 px-3 rounded-lg gap-2 border-0 bg-white/8 hover:bg-white/15 transition-all">
                         <span class="iconify tabler--external-link size-4"></span>
                         Ver mi sitio
                     </a>
@@ -287,7 +287,7 @@
     {{-- ── Plan Expiry Notices ──────────────────────────────────────────── --}}
     @if($isFrozen)
     {{-- FROZEN: subscription expired --}}
-    <div class="alert alert-error rounded-none border-x-0 border-t-0 flex items-center gap-3 flex-wrap px-6">
+    <div class="flex p-4 rounded-lg border gap-3 bg-red-50 border-red-200 text-red-800 rounded-none border-x-0 border-t-0 items-center flex-wrap px-6">
         <span class="iconify tabler--circle-x size-6 shrink-0" aria-hidden="true"></span>
         <div class="flex-1 min-w-0">
             <p class="font-bold text-sm">Tu plan venció — tu landing pública está pausada</p>
@@ -299,13 +299,13 @@
                 @endif
             </p>
         </div>
-        <a href="mailto:soporte@synticorex.com" class="btn btn-sm btn-error border-error-content/30 text-error-content shrink-0">
+            <a href="mailto:soporte@synticorex.com" class="text-sm py-1.5 px-3 rounded-lg font-medium transition-colors bg-red-600 text-white hover:bg-red-700 border-error-content/30 text-error-content shrink-0">
             Renovar plan
         </a>
     </div>
     @elseif($isExpiringSoon && $daysUntilExpiry !== null)
     {{-- EXPIRING SOON: 30 days or fewer remaining --}}
-    <div class="alert alert-warning rounded-none border-x-0 border-t-0 flex items-center gap-3 flex-wrap px-6">
+    <div class="flex p-4 rounded-lg border gap-3 bg-yellow-50 border-yellow-200 text-yellow-800 rounded-none border-x-0 border-t-0 items-center flex-wrap px-6">
         <span class="iconify tabler--alert-triangle size-6 shrink-0" aria-hidden="true"></span>
         <div class="flex-1 min-w-0">
             <p class="font-bold text-sm">Tu plan vence en {{ $daysUntilExpiry }} día{{ $daysUntilExpiry === 1 ? '' : 's' }}</p>
@@ -313,7 +313,7 @@
                 Renueva antes del <strong>{{ $tenant->subscription_ends_at->format('d/m/Y') }}</strong> para mantener tu landing pública activa sin interrupciones.
             </p>
         </div>
-        <a href="mailto:soporte@synticorex.com" class="btn btn-sm btn-warning border-warning-content/30 text-warning-content shrink-0">
+            <a href="mailto:soporte@synticorex.com" class="text-sm py-1.5 px-3 rounded-lg font-medium transition-colors bg-yellow-500 text-white hover:bg-yellow-600 border-warning-content/30 text-warning-content shrink-0">
             Renovar ahora
         </a>
     </div>

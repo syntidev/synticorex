@@ -12,7 +12,7 @@
 
                         <div class="image-preview" id="product-image-preview" style="display: none;">
                             <img id="product-image-preview-img" src="" alt="Preview">
-                            <button type="button" onclick="cancelProductImage()" class="btn btn-xs btn-ghost btn-circle absolute top-1 right-1">
+                            <button type="button" onclick="cancelProductImage()" class="p-1 rounded-full transition-colors text-gray-500 hover:bg-gray-100 absolute top-1 right-1">
                                 <span class="iconify tabler--x size-3.5" aria-hidden="true"></span>
                             </button>
                         </div>
@@ -101,8 +101,8 @@
                         </div>
 
                         <div class="flex gap-3 pt-5 border-t border-base-content/10 mt-3">
-                            <button type="button" class="btn btn-soft flex-1" onclick="closeProductModal()">Cancelar</button>
-                            <button type="submit" class="btn btn-primary flex-1 gap-2 shadow-md shadow-primary/20 hover:shadow-lg">
+                            <button type="button" class="py-2 px-4 rounded-lg font-medium transition-colors text-gray-600 hover:bg-gray-100 flex-1" onclick="closeProductModal()">Cancelar</button>
+                            <button type="submit" class="inline-flex items-center py-2 px-4 rounded-lg font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 flex-1 gap-2 shadow-md">
                                 <span class="iconify tabler--device-floppy size-4" aria-hidden="true"></span>
                                 Guardar Producto
                             </button>

@@ -80,7 +80,7 @@
                                 <div class="bg-white px-4 py-2.5 border-b border-slate-100 flex items-center justify-between">
                                     <div class="flex items-center gap-2">
                                         <span class="text-xs font-bold text-slate-800">Productos</span>
-                                        <span class="badge badge-xs bg-blue-100 text-blue-600">6 / 6</span>
+                                        <span class="inline-flex items-center py-0.5 px-1.5 rounded-full text-[11px] font-medium bg-blue-100 text-blue-600">6 / 6</span>
                                     </div>
                                     <div class="w-16 h-5 bg-blue-500 rounded text-[9px] text-white font-bold flex items-center justify-center">
                                         + Nuevo

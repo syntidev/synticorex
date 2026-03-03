@@ -8,8 +8,8 @@
             @endphp
 
             {{-- ── Productos card ─────────────────────────────────── --}}
-            <div class="card bg-base-100 shadow-md border border-base-content/8 mb-6 card-elevated">
-                <div class="card-header px-6 pt-6 pb-4 flex items-center justify-between gap-3 flex-wrap">
+            <div class="bg-white rounded-xl shadow-md border border-gray-200 mb-6">
+                <div class="px-6 pt-6 pb-4 flex items-center justify-between gap-3 flex-wrap">
                     <div>
                         <div class="flex items-center gap-3 mb-1">
                             <div class="size-10 rounded-xl bg-primary/10 flex items-center justify-center">
@@ -21,7 +21,7 @@
                             </div>
                         </div>
                     </div>
-                    <button class="btn btn-primary btn-sm gap-1.5 shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30 transition-all"
+                    <button class="inline-flex items-center text-sm py-1.5 px-3 rounded-lg font-medium transition-all bg-blue-600 text-white hover:bg-blue-700 gap-1.5 shadow-md hover:shadow-lg"
                             onclick="checkAndOpenProductModal()"
                             title="Agregar nuevo producto">
                         <span class="iconify tabler--plus size-4" aria-hidden="true"></span>
@@ -30,7 +30,7 @@
                 </div>
 
                 @if($currentCount >= $maxProducts)
-                <div class="alert alert-info mx-4 mb-2 flex items-center justify-between gap-4 flex-wrap">
+                <div class="flex p-4 rounded-lg border bg-blue-50 border-blue-200 text-blue-800 mx-4 mb-2 items-center justify-between gap-4 flex-wrap">
                     <div class="flex items-center gap-3">
                         <span class="iconify tabler--info-circle size-5 shrink-0" aria-hidden="true"></span>
                         <div>
@@ -42,12 +42,12 @@
                         </div>
                     </div>
                     <a href="https://syntiweb.com/planes" target="_blank" rel="noopener noreferrer"
-                       class="btn btn-primary btn-sm shrink-0">Ver Planes ↗</a>
+                       class="inline-flex items-center text-sm py-1.5 px-3 rounded-lg font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 shrink-0">Ver Planes ↗</a>
                 </div>
                 @endif
 
                 @if($products->count() > 0)
-                <div class="card-body px-6 pt-2 pb-6">
+                <div class="px-6 pt-2 pb-6">
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         @foreach($products as $product)
                         <div class="group relative rounded-xl border border-base-content/8 bg-base-100 overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300">
@@ -66,27 +66,27 @@
                                 {{-- Hover overlay con acciones --}}
                                 <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-3 gap-2">
                                     <button onclick="editProduct({{ $product->id }})"
-                                            class="btn btn-sm btn-primary shadow-lg" title="Editar">
+                                            class="inline-flex items-center text-sm py-1.5 px-3 rounded-lg font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 shadow-lg" title="Editar">
                                         <span class="iconify tabler--pencil size-4" aria-hidden="true"></span> Editar
                                     </button>
                                     <button onclick="shareProduct({{ $product->id }}, '{{ addslashes($product->name) }}', {{ $product->price_usd }})"
-                                            class="btn btn-sm btn-success shadow-lg" title="Compartir">
+                                            class="inline-flex items-center text-sm py-1.5 px-3 rounded-lg font-medium transition-colors bg-green-600 text-white hover:bg-green-700 shadow-lg" title="Compartir">
                                         <span class="iconify tabler--share size-4" aria-hidden="true"></span>
                                     </button>
                                     <button onclick="deleteProduct({{ $product->id }})"
-                                            class="btn btn-sm btn-error shadow-lg" title="Eliminar">
+                                            class="inline-flex items-center text-sm py-1.5 px-3 rounded-lg font-medium transition-colors bg-red-600 text-white hover:bg-red-700 shadow-lg" title="Eliminar">
                                         <span class="iconify tabler--trash size-4" aria-hidden="true"></span>
                                     </button>
                                 </div>
                                 {{-- Badges flotantes --}}
                                 @if($product->is_featured)
                                 <div class="absolute top-2 left-2">
-                                    <span class="badge badge-warning badge-sm shadow-md">⭐ Destacado</span>
+                                    <span class="inline-flex items-center py-0.5 px-2 rounded-full text-sm font-medium bg-yellow-100 text-yellow-700 shadow-md">⭐ Destacado</span>
                                 </div>
                                 @endif
                                 @if(!$product->is_active)
                                 <div class="absolute top-2 right-2">
-                                    <span class="badge badge-error badge-sm shadow-md">Off</span>
+                                    <span class="inline-flex items-center py-0.5 px-2 rounded-full text-sm font-medium bg-red-100 text-red-700 shadow-md">Off</span>
                                 </div>
                                 @endif
                             </figure>
@@ -97,11 +97,11 @@
                                     <span class="text-lg font-extrabold text-primary">${{ number_format($product->price_usd, 2) }}</span>
                                     <div class="flex gap-1">
                                         @if($product->badge === 'hot')
-                                            <span class="badge badge-soft badge-error badge-xs">🔥 Hot</span>
+                                            <span class="inline-flex items-center py-0.5 px-2 rounded-full text-xs font-medium bg-red-100 text-red-700">🔥 Hot</span>
                                         @elseif($product->badge === 'new')
-                                            <span class="badge badge-soft badge-success badge-xs">✨ New</span>
+                                            <span class="inline-flex items-center py-0.5 px-2 rounded-full text-xs font-medium bg-green-100 text-green-700">✨ New</span>
                                         @elseif($product->badge === 'promo')
-                                            <span class="badge badge-soft badge-warning badge-xs">🎉 Promo</span>
+                                            <span class="inline-flex items-center py-0.5 px-2 rounded-full text-xs font-medium bg-yellow-100 text-yellow-700">🎉 Promo</span>
                                         @endif
                                     </div>
                                 </div>
@@ -111,13 +111,13 @@
                     </div>
                 </div>
                 @else
-                <div class="card-body flex flex-col items-center justify-center py-16 text-center">
+                <div class="flex flex-col items-center justify-center py-16 text-center">
                     <div class="size-16 rounded-2xl bg-primary/5 flex items-center justify-center mb-4">
                         <span class="iconify tabler--package size-8 text-primary/30" aria-hidden="true"></span>
                     </div>
                     <h3 class="font-bold text-base text-base-content/70 mb-1">No hay {{ strtolower($dynLabel) }} aún</h3>
                     <p class="text-sm text-base-content/40 mb-4">Comienza agregando tu primer {{ strtolower($dynSingular) }}</p>
-                    <button onclick="checkAndOpenProductModal()" class="btn btn-primary btn-sm gap-1.5 shadow-md">
+                    <button onclick="checkAndOpenProductModal()" class="inline-flex items-center text-sm py-1.5 px-3 rounded-lg font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 gap-1.5 shadow-md">
                         <span class="iconify tabler--plus size-4"></span> Agregar {{ $dynSingular }}
                     </button>
                 </div>

@@ -31,11 +31,11 @@
                 </p>
 
                 <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                    <a href="{{ route('register') }}" class="btn btn-lg bg-gradient-to-r from-blue-500 to-indigo-500 text-white border-0 shadow-xl shadow-blue-500/25 hover:shadow-blue-500/40 hover:scale-[1.02] transition-all font-bold text-base px-8">
+                    <a href="{{ route('register') }}" class="inline-flex items-center py-3 px-8 rounded-lg font-bold transition-all bg-gradient-to-r from-blue-500 to-indigo-500 text-white border-0 shadow-xl shadow-blue-500/25 hover:shadow-blue-500/40 hover:scale-[1.02] text-base">
                         Crear mi página gratis
                         <span class="iconify tabler--arrow-right size-5"></span>
                     </a>
-                    <a href="#solucion" class="btn btn-lg btn-outline border-white/20 text-white hover:bg-white/10 font-medium">
+                    <a href="#solucion" class="inline-flex items-center py-3 px-6 rounded-lg font-medium transition-all border border-white/20 text-white hover:bg-white/10">
                         <span class="iconify tabler--player-play size-5"></span>
                         Ver cómo funciona
                     </a>

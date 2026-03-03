@@ -62,23 +62,23 @@
             <div class="w-16 h-1 bg-primary mx-auto mt-4 rounded-full"></div>
         </div>
 
-        <div class="accordion accordion-border accordion-flush space-y-4">
+        <div class="hs-accordion-group space-y-4">
             @foreach($faqItems as $index => $faq)
-            <div class="accordion-item bg-base-100 border border-base-content/10 rounded-[2rem] overflow-hidden shadow-sm hover:border-primary/30 transition-all duration-300"
+            <div class="hs-accordion bg-base-100 border border-base-content/10 rounded-[2rem] overflow-hidden shadow-sm hover:border-primary/30 transition-all duration-300"
                  id="faq-item-{{ $index }}">
 
-                <button class="accordion-toggle inline-flex items-center justify-between text-start text-base font-bold px-6 py-5 w-full text-base-content hover:text-primary transition-colors"
+                <button class="hs-accordion-toggle inline-flex items-center justify-between text-start text-base font-bold px-6 py-5 w-full text-base-content hover:text-primary transition-colors"
                         aria-controls="faq-collapse-{{ $index }}"
                         aria-expanded="false">
                     <span class="pr-4">{{ $faq['question'] }}</span>
                     <span class="shrink-0">
-                        <iconify-icon icon="tabler:plus"  class="accordion-item-active:hidden  text-primary" width="20" height="20"></iconify-icon>
-                        <iconify-icon icon="tabler:minus" class="hidden accordion-item-active:inline-flex text-primary" width="20" height="20"></iconify-icon>
+                        <iconify-icon icon="tabler:plus"  class="hs-accordion-active:hidden text-primary" width="20" height="20"></iconify-icon>
+                        <iconify-icon icon="tabler:minus" class="hidden hs-accordion-active:inline-flex text-primary" width="20" height="20"></iconify-icon>
                     </span>
                 </button>
 
                 <div id="faq-collapse-{{ $index }}"
-                     class="accordion-content w-full overflow-hidden transition-[height] duration-300"
+                     class="hs-accordion-content hidden w-full overflow-hidden transition-[height] duration-300"
                      aria-labelledby="faq-item-{{ $index }}" role="region">
                     <div class="px-6 pb-5 pt-1 text-base-content/65 text-sm leading-relaxed border-t border-base-content/10">
                         {{ $faq['answer'] }}

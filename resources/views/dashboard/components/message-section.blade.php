@@ -26,8 +26,8 @@
 {{-- ════════════════════════════════════════════════════════════
      1. ORDEN DE SECCIONES (Drag & Drop)
 ════════════════════════════════════════════════════════════ --}}
-<div class="card bg-base-100 shadow-md border border-base-content/8 card-elevated mb-6">
-    <div class="card-header px-5 pt-5 pb-3">
+<div class="bg-white rounded-xl shadow-md border border-gray-200 mb-6">
+    <div class="px-5 pt-5 pb-3">
         <div class="flex items-center gap-3">
             <div class="size-9 rounded-lg bg-primary/10 flex items-center justify-center">
                 <span class="iconify tabler--list-check size-5 text-primary" aria-hidden="true"></span>
@@ -38,7 +38,7 @@
             </div>
         </div>
     </div>
-    <div class="card-body px-5 pb-5 pt-1">
+    <div class="px-5 pb-5 pt-1">
         <div id="sortable-sections" class="grid grid-cols-1 lg:grid-cols-2 gap-2">
             @php
                 $allSections = [
@@ -107,7 +107,7 @@
                         <span class="flex-1 text-sm font-medium text-base-content">
                             {{ $section['label'] }}
                             @if(!$hasAccess)
-                                <span class="badge badge-warning badge-soft badge-xs ms-1">
+                                <span class="inline-flex items-center py-0.5 px-2 rounded-full text-xs font-medium bg-yellow-100 text-yellow-700 ms-1">
                                     Plan {{ $planRequired == 2 ? 'CRECIMIENTO' : 'VISIÓN' }}
                                 </span>
                             @endif
@@ -120,16 +120,16 @@
                                    @checked($isVisible)
                                    onchange="toggleSection('{{ $key }}', this.checked)">
 
-                            <div class="join join-vertical flex-shrink-0">
+                            <div class="flex flex-col [&>*]:rounded-none [&>*:first-child]:rounded-t-lg [&>*:last-child]:rounded-b-lg flex-shrink-0">
                                 <button type="button"
                                         onclick="moveSection('{{ $key }}', -1)"
-                                        class="join-item btn btn-xs btn-square btn-ghost border border-base-content/10 hover:btn-primary transition-all"
+                                        class="p-1 text-gray-500 hover:bg-blue-600 hover:text-white rounded transition-colors border border-gray-200"
                                         title="Subir">
                                     <span class="iconify tabler--chevron-up size-3.5" aria-hidden="true"></span>
                                 </button>
                                 <button type="button"
                                         onclick="moveSection('{{ $key }}', 1)"
-                                        class="join-item btn btn-xs btn-square btn-ghost border border-base-content/10 hover:btn-primary transition-all"
+                                        class="p-1 text-gray-500 hover:bg-blue-600 hover:text-white rounded transition-colors border border-gray-200"
                                         title="Bajar">
                                     <span class="iconify tabler--chevron-down size-3.5" aria-hidden="true"></span>
                                 </button>
@@ -146,8 +146,8 @@
      2. HEADER TOP (Plan 2+)
 ════════════════════════════════════════════════════════════ --}}
 @if($plan->id >= 2)
-<div class="card bg-base-100 shadow-md border border-base-content/8 card-elevated mb-6">
-    <div class="card-header px-5 pt-5 pb-3">
+<div class="bg-white rounded-xl shadow-md border border-gray-200 mb-6">
+    <div class="px-5 pt-5 pb-3">
         <div class="flex items-center gap-3">
             <div class="size-9 rounded-lg bg-primary/10 flex items-center justify-center">
                 <span class="iconify tabler--layout-navbar size-5 text-primary" aria-hidden="true"></span>
@@ -155,12 +155,12 @@
             <div>
                 <h2 class="text-base font-bold text-base-content">Header Top</h2>
                 <p class="text-xs text-base-content/50">Barra superior con mensaje destacado
-                    <span class="badge badge-soft badge-primary badge-xs ms-1">CRECIMIENTO+</span>
+                    <span class="inline-flex items-center py-0.5 px-2 rounded-full text-xs font-medium bg-blue-100 text-blue-700 ms-1">CRECIMIENTO+</span>
                 </p>
             </div>
         </div>
     </div>
-    <div class="card-body px-5 pb-5 pt-1">
+    <div class="px-5 pb-5 pt-1">
         <div class="flex items-center gap-3 mb-3">
             <label class="text-xs font-medium text-base-content/70">Visible:</label>
             <input type="checkbox" id="header-top-toggle"
@@ -173,7 +173,7 @@
                    placeholder="Ej: Envío gratis en pedidos mayores a 50 REF"
                    value="{{ $headerTopText }}"
                    maxlength="120">
-            <button type="button" onclick="saveHeaderTop()" class="btn btn-primary btn-sm gap-1">
+            <button type="button" onclick="saveHeaderTop()" class="inline-flex items-center text-sm py-1.5 px-3 rounded-lg font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 gap-1">
                 <span class="iconify tabler--device-floppy size-4"></span>
                 Guardar
             </button>
@@ -186,8 +186,8 @@
      3. ACERCA DE (Plan 2+)
 ════════════════════════════════════════════════════════════ --}}
 @if($plan->id >= 2)
-<div class="card bg-base-100 shadow-md border border-base-content/8 card-elevated mb-6">
-    <div class="card-header px-5 pt-5 pb-3">
+<div class="bg-white rounded-xl shadow-md border border-gray-200 mb-6">
+    <div class="px-5 pt-5 pb-3">
         <div class="flex items-center gap-3">
             <div class="size-9 rounded-lg bg-primary/10 flex items-center justify-center">
                 <span class="iconify tabler--info-circle size-5 text-primary" aria-hidden="true"></span>
@@ -195,12 +195,12 @@
             <div>
                 <h2 class="text-base font-bold text-base-content">Acerca de</h2>
                 <p class="text-xs text-base-content/50">Texto de la sección "Nosotros" de tu landing
-                    <span class="badge badge-soft badge-primary badge-xs ms-1">CRECIMIENTO+</span>
+                    <span class="inline-flex items-center py-0.5 px-2 rounded-full text-xs font-medium bg-blue-100 text-blue-700 ms-1">CRECIMIENTO+</span>
                 </p>
             </div>
         </div>
     </div>
-    <div class="card-body px-5 pb-5 pt-1">
+    <div class="px-5 pb-5 pt-1">
         <textarea id="about-text"
                   class="textarea textarea-bordered w-full text-sm"
                   rows="4"
@@ -209,7 +209,7 @@
                   oninput="document.getElementById('about-char-count').textContent = this.value.length + '/1000'">{{ $tenant->description ?? '' }}</textarea>
         <div class="flex justify-between items-center mt-2">
             <span class="text-[10px] text-base-content/40" id="about-char-count">{{ strlen($tenant->description ?? '') }}/1000</span>
-            <button type="button" onclick="saveAboutText()" class="btn btn-primary btn-sm gap-1">
+            <button type="button" onclick="saveAboutText()" class="inline-flex items-center text-sm py-1.5 px-3 rounded-lg font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 gap-1">
                 <span class="iconify tabler--device-floppy size-4"></span>
                 Guardar
             </button>
@@ -222,8 +222,8 @@
      4. TESTIMONIOS (Plan 2+)
 ════════════════════════════════════════════════════════════ --}}
 @if($plan->id >= 2)
-<div class="card bg-base-100 shadow-md border border-base-content/8 card-elevated mb-6">
-    <div class="card-header px-5 pt-5 pb-3 flex items-center justify-between gap-3 flex-wrap">
+<div class="bg-white rounded-xl shadow-md border border-gray-200 mb-6">
+    <div class="px-5 pt-5 pb-3 flex items-center justify-between gap-3 flex-wrap">
         <div class="flex items-center gap-3">
             <div class="size-9 rounded-lg bg-primary/10 flex items-center justify-center">
                 <span class="iconify tabler--message-star size-5 text-primary" aria-hidden="true"></span>
@@ -231,12 +231,12 @@
             <div>
                 <h2 class="text-base font-bold text-base-content">Testimonios de Clientes</h2>
                 <p class="text-xs text-base-content/50">{{ count($savedTestimonials) }} testimonios
-                    <span class="badge badge-soft badge-primary badge-xs ms-1">CRECIMIENTO+</span>
+                    <span class="inline-flex items-center py-0.5 px-2 rounded-full text-xs font-medium bg-blue-100 text-blue-700 ms-1">CRECIMIENTO+</span>
                 </p>
             </div>
         </div>
     </div>
-    <div class="card-body px-5 pb-5 pt-1">
+    <div class="px-5 pb-5 pt-1">
         <div id="testimonials-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             @foreach($savedTestimonials as $ti => $testim)
             @php $hasContent = !empty($testim['name']) || !empty($testim['text']); @endphp
@@ -251,12 +251,12 @@
                 <p class="text-xs text-base-content/60 line-clamp-2 mt-1">{{ $testim['text'] ?? '(vacío)' }}</p>
                 
                 <div class="flex gap-2 mt-3">
-                    <button type="button" class="btn btn-primary btn-sm btn-square"
+                    <button type="button" class="p-1.5 text-sm bg-blue-600 text-white hover:bg-blue-700 rounded-lg transition-colors"
                             onclick="editTestimonial({{ $ti }}, '{{ addslashes($testim['name'] ?? '') }}', '{{ addslashes($testim['title'] ?? '') }}', '{{ addslashes($testim['text'] ?? '') }}', {{ $testim['rating'] ?? 5 }})"
                             title="Editar">
                         <span class="iconify tabler--pencil size-4" aria-hidden="true"></span>
                     </button>
-                    <button type="button" class="btn btn-error btn-sm btn-square"
+                    <button type="button" class="p-1.5 text-sm bg-red-600 text-white hover:bg-red-700 rounded-lg transition-colors"
                             onclick="deleteTestimonial({{ $ti }})"
                             title="Eliminar">
                         <span class="iconify tabler--trash size-4" aria-hidden="true"></span>
@@ -266,11 +266,11 @@
             @endforeach
         </div>
         <div class="flex gap-2 mt-3">
-            <button type="button" onclick="addTestimonial()" class="btn btn-primary flex-1 gap-2">
+            <button type="button" onclick="addTestimonial()" class="inline-flex items-center py-2 px-4 rounded-lg font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 flex-1 gap-2">
                 <span class="iconify tabler--plus size-4"></span>
                 Agregar Testimonio
             </button>
-            <button type="button" onclick="saveTestimonials()" class="btn btn-primary flex-1 gap-2">
+            <button type="button" onclick="saveTestimonials()" class="inline-flex items-center py-2 px-4 rounded-lg font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 flex-1 gap-2">
                 <span class="iconify tabler--device-floppy size-4"></span>
                 Guardar Testimonios
             </button>
@@ -283,8 +283,8 @@
      5. FAQ (Plan 3)
 ════════════════════════════════════════════════════════════ --}}
 @if($plan->id >= 3)
-<div class="card bg-base-100 shadow-md border border-base-content/8 card-elevated mb-6">
-    <div class="card-header px-5 pt-5 pb-3 flex items-center justify-between gap-3 flex-wrap">
+<div class="bg-white rounded-xl shadow-md border border-gray-200 mb-6">
+    <div class="px-5 pt-5 pb-3 flex items-center justify-between gap-3 flex-wrap">
         <div class="flex items-center gap-3">
             <div class="size-9 rounded-lg bg-secondary/10 flex items-center justify-center">
                 <span class="iconify tabler--help-circle size-5 text-secondary" aria-hidden="true"></span>
@@ -292,12 +292,12 @@
             <div>
                 <h2 class="text-base font-bold text-base-content">Preguntas Frecuentes (FAQ)</h2>
                 <p class="text-xs text-base-content/50">{{ count($savedFaq) }} preguntas
-                    <span class="badge badge-soft badge-secondary badge-xs ms-1">VISIÓN</span>
+                    <span class="inline-flex items-center py-0.5 px-2 rounded-full text-xs font-medium bg-gray-100 text-gray-700 ms-1">VISIÓN</span>
                 </p>
             </div>
         </div>
     </div>
-    <div class="card-body px-5 pb-5 pt-1">
+    <div class="px-5 pb-5 pt-1">
         <div id="faq-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             @foreach($savedFaq as $fi => $fitem)
             @php $hasFaqContent = !empty($fitem['question']) || !empty($fitem['answer']); @endphp
@@ -308,12 +308,12 @@
                 <p class="text-xs text-base-content/50 mt-1 line-clamp-2">{{ $fitem['answer'] ?? '(vacío)' }}</p>
                 
                 <div class="flex gap-2 mt-3">
-                    <button type="button" class="btn btn-secondary btn-sm btn-square"
+                    <button type="button" class="p-1.5 text-sm bg-gray-600 text-white hover:bg-gray-700 rounded-lg transition-colors"
                             onclick="editFaq({{ $fi }}, '{{ addslashes($fitem['question'] ?? '') }}', '{{ addslashes($fitem['answer'] ?? '') }}')"
                             title="Editar">
                         <span class="iconify tabler--pencil size-4" aria-hidden="true"></span>
                     </button>
-                    <button type="button" class="btn btn-error btn-sm btn-square"
+                    <button type="button" class="p-1.5 text-sm bg-red-600 text-white hover:bg-red-700 rounded-lg transition-colors"
                             onclick="deleteFaq({{ $fi }})"
                             title="Eliminar">
                         <span class="iconify tabler--trash size-4" aria-hidden="true"></span>
@@ -323,11 +323,11 @@
             @endforeach
         </div>
         <div class="flex gap-2 mt-3">
-            <button type="button" onclick="addFaq()" class="btn btn-secondary flex-1 gap-2">
+            <button type="button" onclick="addFaq()" class="inline-flex items-center py-2 px-4 rounded-lg font-medium transition-colors bg-gray-600 text-white hover:bg-gray-700 flex-1 gap-2">
                 <span class="iconify tabler--plus size-4"></span>
                 Agregar Pregunta
             </button>
-            <button type="button" onclick="saveFaq()" class="btn btn-secondary flex-1 gap-2">
+            <button type="button" onclick="saveFaq()" class="inline-flex items-center py-2 px-4 rounded-lg font-medium transition-colors bg-gray-600 text-white hover:bg-gray-700 flex-1 gap-2">
                 <span class="iconify tabler--device-floppy size-4"></span>
                 Guardar FAQ
             </button>
@@ -340,8 +340,8 @@
      6. CTA ESPECIAL (Plan 3)
 ════════════════════════════════════════════════════════════ --}}
 @if($plan->id >= 3)
-<div class="card bg-base-100 shadow-md border border-base-content/8 card-elevated mb-6">
-    <div class="card-header px-5 pt-5 pb-3">
+<div class="bg-white rounded-xl shadow-md border border-gray-200 mb-6">
+    <div class="px-5 pt-5 pb-3">
         <div class="flex items-center gap-3">
             <div class="size-9 rounded-lg bg-accent/10 flex items-center justify-center">
                 <span class="iconify tabler--speakerphone size-5 text-accent" aria-hidden="true"></span>
@@ -349,12 +349,12 @@
             <div>
                 <h2 class="text-base font-bold text-base-content">CTA Especial</h2>
                 <p class="text-xs text-base-content/50">Sección llamativa con botón personalizado
-                    <span class="badge badge-soft badge-accent badge-xs ms-1">VISIÓN</span>
+                    <span class="inline-flex items-center py-0.5 px-2 rounded-full text-xs font-medium bg-purple-100 text-purple-700 ms-1">VISIÓN</span>
                 </p>
             </div>
         </div>
     </div>
-    <div class="card-body px-5 pb-5 pt-1">
+    <div class="px-5 pb-5 pt-1">
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
                 <label class="text-xs font-medium text-base-content/70 mb-1 block">Título</label>
@@ -388,7 +388,7 @@
                        value="{{ $ctaBtnLink }}">
             </div>
         </div>
-        <button type="button" onclick="saveCtaConfig()" class="btn btn-primary btn-sm gap-1 mt-3">
+        <button type="button" onclick="saveCtaConfig()" class="inline-flex items-center text-sm py-1.5 px-3 rounded-lg font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 gap-1 mt-3">
             <span class="iconify tabler--device-floppy size-4"></span>
             Guardar CTA
         </button>
@@ -400,8 +400,8 @@
      7. SUCURSALES (Plan 3)
 ════════════════════════════════════════════════════════════ --}}
 @if($plan->id >= 3)
-<div class="card bg-base-100 shadow-md border border-base-content/8 card-elevated mb-6">
-    <div class="card-header px-5 pt-5 pb-3 flex items-center justify-between gap-3">
+<div class="bg-white rounded-xl shadow-md border border-gray-200 mb-6">
+    <div class="px-5 pt-5 pb-3 flex items-center justify-between gap-3">
         <div class="flex items-center gap-3">
             <div class="size-9 rounded-lg bg-primary/10 flex items-center justify-center">
                 <span class="iconify tabler--map-pin size-5 text-primary" aria-hidden="true"></span>
@@ -409,7 +409,7 @@
             <div>
                 <h2 class="text-base font-bold text-base-content">Sucursales</h2>
                 <p class="text-xs text-base-content/50">{{ $currentBranchCount }} de {{ $maxBranches }} sucursales
-                    <span class="badge badge-soft badge-secondary badge-xs ms-1">VISIÓN</span>
+                    <span class="inline-flex items-center py-0.5 px-2 rounded-full text-xs font-medium bg-gray-100 text-gray-700 ms-1">VISIÓN</span>
                 </p>
             </div>
         </div>
@@ -418,8 +418,8 @@
                {{ $branchesEnabled ? 'checked' : '' }}
                onchange="toggleBranchesSection()">
     </div>
-    <div class="card-body px-5 pb-5 pt-1">
-        <div id="branches-status" class="alert {{ $branchesEnabled ? 'alert-success' : 'alert-info' }} mb-3">
+    <div class="px-5 pb-5 pt-1">
+        <div id="branches-status" class="flex p-4 rounded-lg border gap-3 {{ $branchesEnabled ? 'bg-green-50 border-green-200 text-green-800' : 'bg-blue-50 border-blue-200 text-blue-800' }} mb-3">
             <span class="iconify {{ $branchesEnabled ? 'tabler--check' : 'tabler--pause' }} size-4" aria-hidden="true"></span>
             <p id="branches-status-text" class="text-sm">
                 {{ $branchesEnabled ? 'Sección visible en tu landing' : 'Sección oculta en tu landing' }}
@@ -440,13 +440,13 @@
                     </div>
                     <div class="flex gap-2">
                         <button type="button"
-                                class="btn btn-primary btn-sm btn-square"
+                                class="p-1.5 text-sm bg-blue-600 text-white hover:bg-blue-700 rounded-lg transition-colors"
                                 onclick="editBranch({{ $branch->id }}, '{{ addslashes($branch->name) }}', '{{ addslashes($branch->address) }}')"
                                 title="Editar">
                             <span class="iconify tabler--pencil size-5" aria-hidden="true"></span>
                         </button>
                         <button type="button"
-                                class="btn btn-error btn-sm btn-square"
+                                class="p-1.5 text-sm bg-red-600 text-white hover:bg-red-700 rounded-lg transition-colors"
                                 onclick="deleteBranch({{ $branch->id }})"
                                 title="Eliminar">
                             <span class="iconify tabler--trash size-5" aria-hidden="true"></span>
@@ -473,7 +473,7 @@
 
 {{-- ── Upsell Plan 1 ──────────────────────────────────── --}}
 @if($plan->id === 1)
-<div class="alert alert-info flex items-center justify-between gap-4 flex-wrap">
+<div class="flex p-4 rounded-lg border bg-blue-50 border-blue-200 text-blue-800 items-center justify-between gap-4 flex-wrap">
     <div class="flex items-center gap-3">
         <span class="iconify tabler--sparkles size-5 shrink-0" aria-hidden="true"></span>
         <div>
@@ -482,7 +482,7 @@
         </div>
     </div>
     <a href="https://syntiweb.com/planes" target="_blank" rel="noopener noreferrer"
-       class="btn btn-primary btn-sm shrink-0">Ver Planes</a>
+       class="inline-flex items-center text-sm py-1.5 px-3 rounded-lg font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 shrink-0">Ver Planes</a>
 </div>
 @endif
 

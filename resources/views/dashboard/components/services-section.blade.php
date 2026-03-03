@@ -6,20 +6,20 @@
 
             {{-- Global display mode selector (Plan 2/3 only) --}}
             @if($plan->id !== 1)
-            <div class="alert alert-info mb-4 flex items-center justify-between gap-4 flex-wrap">
+            <div class="flex p-4 rounded-lg border bg-blue-50 border-blue-200 text-blue-800 mb-4 items-center justify-between gap-4 flex-wrap">
                 <div>
                     <p class="font-semibold text-sm">Modo visual de servicios</p>
                     <p class="text-xs opacity-70">Elige entre íconos o imágenes — mantén la coherencia estética</p>
                 </div>
-                <div class="join">
+                <div class="flex [&>*]:rounded-none [&>*:first-child]:rounded-l-lg [&>*:last-child]:rounded-r-lg">
                     <button type="button" id="global-mode-icon-btn"
                             onclick="setGlobalServiceMode('icon')"
-                            class="btn btn-sm join-item btn-primary">
+                            class="inline-flex items-center text-sm py-1.5 px-3 font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700">
                         <span class="iconify tabler--palette size-4" aria-hidden="true"></span> Ícono
                     </button>
                     <button type="button" id="global-mode-image-btn"
                             onclick="setGlobalServiceMode('image')"
-                            class="btn btn-sm join-item btn-ghost">
+                            class="inline-flex items-center text-sm py-1.5 px-3 font-medium transition-colors text-gray-700 hover:bg-gray-100">
                         <span class="iconify tabler--photo size-4" aria-hidden="true"></span> Imagen
                     </button>
                 </div>
@@ -27,16 +27,16 @@
             @endif
 
             {{-- ── Servicios card ──────────────────────────────────── --}}
-            <div class="card bg-base-100 shadow-sm border border-base-content/10 mb-4">
-                <div class="card-header flex items-center justify-between gap-3 flex-wrap">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 mb-4">
+                <div class="flex items-center justify-between gap-3 flex-wrap">
                     <div>
-                        <h2 class="card-title flex items-center gap-2">
+                        <h2 class="font-semibold text-gray-900 flex items-center gap-2">
                             <span class="iconify tabler--tool size-5 text-secondary" aria-hidden="true"></span>
                             Servicios
                         </h2>
                         <p class="text-xs text-base-content/50 mt-0.5">{{ $currentServiceCount }} de {{ $maxServices }} servicios</p>
                     </div>
-                    <button class="btn btn-secondary btn-sm gap-1.5"
+                    <button class="inline-flex items-center text-sm py-1.5 px-3 rounded-lg font-medium transition-colors bg-gray-600 text-white hover:bg-gray-700 gap-1.5"
                             onclick="checkAndOpenServiceModal()"
                             title="Agregar nuevo servicio">
                         <span class="iconify tabler--plus size-4" aria-hidden="true"></span>
@@ -45,7 +45,7 @@
                 </div>
 
                 @if($currentServiceCount >= $maxServices)
-                <div class="alert alert-info mx-4 mb-2 flex items-center justify-between gap-4 flex-wrap">
+                <div class="flex p-4 rounded-lg border bg-blue-50 border-blue-200 text-blue-800 mx-4 mb-2 items-center justify-between gap-4 flex-wrap">
                     <div class="flex items-center gap-3">
                         <span class="iconify tabler--info-circle size-5 shrink-0" aria-hidden="true"></span>
                         <div>
@@ -57,12 +57,12 @@
                         </div>
                     </div>
                     <a href="https://syntiweb.com/planes" target="_blank" rel="noopener noreferrer"
-                       class="btn btn-primary btn-sm shrink-0">Ver Planes ↗</a>
+                       class="inline-flex items-center text-sm py-1.5 px-3 rounded-lg font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 shrink-0">Ver Planes ↗</a>
                 </div>
                 @endif
 
                 @if($services->count() > 0)
-                <div class="card-body px-6 pt-2 pb-6">
+                <div class="px-6 pt-2 pb-6">
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         @foreach($services as $service)
                         <div class="rounded-xl border border-base-content/8 bg-base-100 p-4 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 group">
@@ -89,17 +89,17 @@
                                     </p>
                                 </div>
                                 @if(!$service->is_active)
-                                    <span class="badge badge-soft badge-error badge-xs shrink-0">Off</span>
+                                    <span class="inline-flex items-center py-0.5 px-2 rounded-full text-xs font-medium bg-red-100 text-red-700 shrink-0">Off</span>
                                 @endif
                             </div>
                             {{-- Actions --}}
                             <div class="flex gap-2 mt-3 pt-3 border-t border-base-content/5">
                                 <button onclick="editService({{ $service->id }})"
-                                        class="btn btn-secondary btn-sm flex-1 gap-1.5" title="Editar">
+                                        class="inline-flex items-center text-sm py-1.5 px-3 rounded-lg font-medium transition-colors bg-gray-600 text-white hover:bg-gray-700 flex-1 gap-1.5" title="Editar">
                                     <span class="iconify tabler--pencil size-4" aria-hidden="true"></span> Editar
                                 </button>
                                 <button onclick="deleteService({{ $service->id }})"
-                                        class="btn btn-soft btn-error btn-sm btn-square" title="Eliminar">
+                                        class="p-1.5 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Eliminar">
                                     <span class="iconify tabler--trash size-4" aria-hidden="true"></span>
                                 </button>
                             </div>
@@ -108,13 +108,13 @@
                     </div>
                 </div>
                 @else
-                <div class="card-body flex flex-col items-center justify-center py-16 text-center">
+                <div class="flex flex-col items-center justify-center py-16 text-center">
                     <div class="size-16 rounded-2xl bg-secondary/5 flex items-center justify-center mb-4">
                         <span class="iconify tabler--tool size-8 text-secondary/30" aria-hidden="true"></span>
                     </div>
                     <h3 class="font-bold text-base text-base-content/70 mb-1">No hay servicios aún</h3>
                     <p class="text-sm text-base-content/40 mb-4">Comienza agregando tu primer servicio</p>
-                    <button onclick="checkAndOpenServiceModal()" class="btn btn-secondary btn-sm gap-1.5 shadow-md">
+                    <button onclick="checkAndOpenServiceModal()" class="inline-flex items-center text-sm py-1.5 px-3 rounded-lg font-medium transition-colors bg-gray-600 text-white hover:bg-gray-700 gap-1.5 shadow-md">
                         <span class="iconify tabler--plus size-4"></span> Agregar Servicio
                     </button>
                 </div>

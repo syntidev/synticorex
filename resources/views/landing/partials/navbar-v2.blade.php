@@ -25,7 +25,7 @@
           @if($tenant->whatsapp)
             <a href="https://wa.me/{{ $tenant->whatsapp }}" 
                target="_blank"
-               class="btn btn-circle btn-sm btn-ghost text-success"
+               class="p-2 rounded-full transition-colors text-sm text-green-600 hover:bg-green-50"
                title="WhatsApp: {{ $tenant->whatsapp }}">
               <span class="iconify tabler--brand-whatsapp size-5"></span>
             </a>
@@ -41,19 +41,20 @@
 
           {{-- Hamburger Toggle --}}
           <button type="button" 
-                  class="collapse-toggle btn btn-outline btn-secondary btn-square btn-sm" 
-                  data-collapse="#navbar-collapse" 
+                  class="hs-collapse-toggle p-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50" 
+                  data-hs-collapse="#navbar-collapse" 
                   aria-controls="navbar-collapse" 
+                  aria-expanded="false"
                   aria-label="Toggle navigation">
-            <span class="iconify tabler--menu-2 collapse-open:hidden size-5"></span>
-            <span class="iconify tabler--x collapse-open:block size-5 hidden"></span>
+            <span class="iconify tabler--menu-2 hs-collapse-open:hidden size-5"></span>
+            <span class="iconify tabler--x hs-collapse-open:block size-5 hidden"></span>
           </button>
         </div>
       </div>
 
       {{-- LINKS DE NAVEGACIÓN (DESKTOP Y MOBILE COLLAPSE) --}}
       <div id="navbar-collapse" 
-           class="lg:navbar-center transition-height collapse hidden grow overflow-hidden font-medium duration-300 lg:flex">
+           class="lg:navbar-center transition-height hs-collapse hidden grow overflow-hidden font-medium duration-300 lg:flex">
         <div class="text-base-content flex gap-6 text-base max-lg:mt-4 max-lg:flex-col lg:items-center">
           {{-- Links siempre visibles --}}
           <a href="#home" class="hover:text-primary nav-link">🏠 Home</a>
@@ -76,7 +77,7 @@
             @if($tenant->whatsapp)
               <a href="https://wa.me/{{ $tenant->whatsapp }}" 
                  target="_blank"
-                 class="btn btn-success btn-sm gap-2">
+                 class="inline-flex items-center py-1.5 px-3 rounded-lg font-medium transition-colors text-sm bg-green-600 text-white hover:bg-green-700 gap-2">
                 <span class="iconify tabler--brand-whatsapp size-5"></span>
                 WhatsApp
               </a>
@@ -85,7 +86,7 @@
             {{-- Toggle Moneda Mobile --}}
             @if($tenant->saved_display_mode === 'both_toggle')
               <button id="currency-toggle-mobile" 
-                      class="btn btn-outline btn-sm gap-2 currency-toggle">
+                      class="inline-flex items-center py-1.5 px-3 rounded-lg font-medium transition-colors text-sm border border-gray-300 text-gray-700 hover:bg-gray-50 gap-2 currency-toggle">
                 <span class="iconify tabler--currency-dollar size-5"></span>
                 <span class="currency-symbol">REF</span>
               </button>
@@ -99,7 +100,7 @@
         {{-- CONDICIONAL: Icono Delivery (no Oportunidad + has_delivery) --}}
         @if($tenant->plan->slug !== 'oportunidad' && $tenant->has_delivery)
           <div class="tooltip tooltip-bottom" data-tooltip="Servicio de Delivery">
-            <button class="btn btn-circle btn-ghost btn-sm text-primary">
+            <button class="p-2 rounded-full transition-colors text-sm text-primary hover:bg-primary/10">
               <span class="iconify tabler--truck-delivery size-5"></span>
             </button>
           </div>
@@ -117,7 +118,7 @@
         {{-- Toggle Moneda Desktop (PRIVADO) --}}
         @if($tenant->saved_display_mode === 'both_toggle')
           <button id="currency-toggle" 
-                  class="btn btn-sm gap-2 currency-toggle"
+                  class="inline-flex items-center py-1.5 px-3 rounded-lg font-medium transition-colors text-sm border border-gray-300 text-gray-700 hover:bg-gray-50 gap-2 currency-toggle"
                   title="Cambiar moneda">
             <span class="iconify tabler--currency-dollar size-5"></span>
             <span class="currency-symbol font-mono font-bold">REF</span>
@@ -128,7 +129,7 @@
         @if($tenant->whatsapp)
           <a href="https://wa.me/{{ $tenant->whatsapp }}?text=Hola%20{{ urlencode($tenant->business_name) }}%2C%20quisiera%20más%20información" 
              target="_blank"
-             class="btn btn-success gap-2">
+             class="inline-flex items-center py-2 px-4 rounded-lg font-medium transition-colors bg-green-600 text-white hover:bg-green-700 gap-2">
             <span class="iconify tabler--brand-whatsapp size-5"></span>
             WhatsApp
           </a>

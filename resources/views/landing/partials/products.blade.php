@@ -44,7 +44,7 @@
                 <button
                     id="btn-load-more-products"
                     onclick="loadMoreProducts(this)"
-                    class="btn btn-primary btn-gradient">
+                    class="inline-flex items-center py-2 px-4 rounded-lg font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700">
                     <span class="btn-label">Ver {{ $firstBatch }} producto{{ $firstBatch > 1 ? 's' : '' }} más</span>
                     <span class="icon-[tabler--chevron-down] size-5"></span>
                 </button>

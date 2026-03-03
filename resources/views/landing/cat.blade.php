@@ -148,7 +148,7 @@
 
             @if($waClean)
             <a href="https://wa.me/{{ $waClean }}" target="_blank"
-               class="hidden sm:flex btn btn-sm rounded-2xl gap-1.5 border-none font-bold text-white"
+               class="hidden sm:flex text-sm py-1.5 px-3 rounded-2xl font-medium transition-colors gap-1.5 border-none font-bold text-white"
                style="background:#25D366;">
                 <svg aria-hidden="true" focusable="false" class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M16.7 14.3c-.3-.2-1.7-.8-1.9-.9-.3-.1-.5-.2-.7.2s-.8.9-1 .9-.5 0-.9-.4c-.5-.4-1-1-1.2-1.3-.1-.3 0-.5.1-.6.2-.2.3-.3.5-.5.2-.2.2-.3.3-.5.1-.3 0-.5 0-.6s-.7-1.8-1-2.4c-.3-.6-.5-.6-.7-.6h-.6c-.2 0-.6.1-.9.4-.3.3-1.1 1-1.1 2.4s1.1 2.7 1.3 2.9c.2.2 2.1 3.2 5.1 4.3.7.3 1.2.4 1.6.5.7.1 1.4.1 1.9.1.6 0 1.7-.7 1.9-1.3.2-.6.2-1.2.2-1.3 0-.1-.3-.2-.6-.4z"></path>
@@ -158,7 +158,7 @@
             </a>
             @endif
 
-            <button onclick="toggleDrawer()" id="sc-cart-trigger" class="relative group btn btn-circle btn-primary shadow-xl shadow-primary/20">
+            <button onclick="toggleDrawer()" id="sc-cart-trigger" class="relative group p-2 rounded-full transition-colors bg-blue-600 text-white hover:bg-blue-700 shadow-xl shadow-primary/20">
                 <svg aria-hidden="true" focusable="false" class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="9" cy="21" r="1"></circle>
                     <circle cx="19" cy="21" r="1"></circle>
@@ -195,7 +195,7 @@
                              alt="{{ $s0->name }}" onerror="this.style.display='none';">
                     @endif
                     <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent p-8 flex flex-col justify-end">
-                        <span class="badge badge-primary badge-sm mb-3 uppercase font-black tracking-widest">Destacado</span>
+                        <span class="inline-flex items-center py-0.5 px-2 rounded-full text-xs font-medium bg-blue-100 text-blue-700 mb-3 uppercase font-black tracking-widest">Destacado</span>
                         <h2 class="text-3xl font-bold text-white leading-tight">{{ $s0->name }}</h2>
                         @if(!$hidePrice)
                         <p class="text-white/70 font-bold text-xl mt-2" data-price-usd="{{ $s0->price_usd ?? 0 }}">{{ $currencySymbol }} 0.00</p>
@@ -232,11 +232,11 @@
     <div class="mx-auto max-w-[1280px] px-5 sm:px-8">
         <div class="bg-base-100/95 backdrop-blur-xl shadow-sm border border-base-content/10 rounded-full py-2.5 px-3 flex items-center gap-3 overflow-x-auto no-scrollbar">
         <button onclick="filterCategory('all')" data-cat="all"
-                class="sc-cat-pill btn btn-sm rounded-2xl btn-primary px-6 shrink-0">Todos</button>
+                class="sc-cat-pill text-sm py-1.5 px-6 rounded-2xl font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 shrink-0">Todos</button>
         @if(isset($categories))
             @foreach($categories as $cat)
                 <button onclick="filterCategory('{{ $cat->id }}')" data-cat="{{ $cat->id }}"
-                        class="sc-cat-pill btn btn-sm rounded-2xl btn-ghost border border-base-content/10 whitespace-nowrap px-6 shrink-0">{{ $cat->name }}</button>
+                        class="sc-cat-pill text-sm py-1.5 px-6 rounded-2xl font-medium transition-colors text-gray-700 hover:bg-gray-100 border border-base-content/10 whitespace-nowrap shrink-0">{{ $cat->name }}</button>
             @endforeach
         @endif
         </div>
@@ -270,7 +270,7 @@
                     </button>
 
                     @if($product->badge)
-                        <span class="absolute top-3 left-3 badge badge-glass backdrop-blur-md text-white border-none uppercase text-[10px] font-black px-3 py-3">{{ $product->badge }}</span>
+                        <span class="absolute top-3 left-3 inline-flex items-center py-0.5 px-3 rounded-full text-xs font-medium bg-white/20 backdrop-blur-md text-white border-none uppercase text-[10px] font-black">{{ $product->badge }}</span>
                     @endif
                 </div>
 
@@ -303,7 +303,7 @@
             <h3 class="text-2xl font-black tracking-tighter">Mi Pedido</h3>
             <p class="text-[10px] text-base-content/30 font-black uppercase tracking-[.25em] mt-0.5">Shopping Bag</p>
         </div>
-        <button onclick="toggleDrawer()" class="btn btn-circle btn-ghost btn-sm bg-base-200/80">
+        <button onclick="toggleDrawer()" class="p-2 rounded-full text-sm transition-colors text-gray-700 hover:bg-gray-100 bg-base-200/80">
             <span class="icon-[tabler--x] size-5"></span>
         </button>
     </div>
@@ -363,13 +363,13 @@
         </div>
 
         @if($waClean)
-        <button onclick="sendWhatsApp()" class="btn btn-block h-14 rounded-[1.5rem] border-none font-black text-base gap-2.5 shadow-xl text-white"
+        <button onclick="sendWhatsApp()" class="flex items-center justify-center w-full h-14 rounded-[1.5rem] border-none font-black text-base gap-2.5 shadow-xl text-white transition-colors"
                 style="background:#25D366;">
             <span class="icon-[tabler--brand-whatsapp] size-6"></span>
             Finalizar por WhatsApp
         </button>
         @else
-        <button class="btn btn-block h-14 rounded-[1.5rem] btn-primary font-black text-base">
+        <button class="flex items-center justify-center w-full h-14 rounded-[1.5rem] bg-blue-600 text-white hover:bg-blue-700 font-black text-base transition-colors">
             Ir al resumen
         </button>
         @endif
@@ -391,7 +391,7 @@
                 <p class="text-lg font-black">Antes de enviar</p>
                 <p class="text-sm text-base-content/60">Déjanos tus datos para personalizar tu pedido.</p>
             </div>
-            <button onclick="closeDataModal()" class="btn btn-ghost btn-sm btn-circle">
+            <button onclick="closeDataModal()" class="p-2 rounded-full text-sm text-gray-700 hover:bg-gray-100 transition-colors">
                 <svg aria-hidden="true" focusable="false" class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M18 6 6 18M6 6l12 12"></path>
                 </svg>
@@ -412,8 +412,8 @@
         @endif
 
         <div class="flex gap-3">
-            <button onclick="confirmDataAndSend()" class="btn btn-primary flex-1 rounded-xl font-black">Enviar por WhatsApp</button>
-            <button onclick="closeDataModal()" class="btn btn-ghost rounded-xl">Cancelar</button>
+            <button onclick="confirmDataAndSend()" class="py-2 px-4 rounded-xl font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 flex-1 font-black">Enviar por WhatsApp</button>
+            <button onclick="closeDataModal()" class="py-2 px-4 rounded-xl font-medium transition-colors text-gray-700 hover:bg-gray-100">Cancelar</button>
         </div>
     </div>
 </div>
@@ -441,7 +441,7 @@
 
         @if($waClean)
         <a href="https://wa.me/{{ $waClean }}" target="_blank"
-           class="inline-flex items-center gap-2 btn btn-sm rounded-2xl mt-6 border-none font-bold text-white"
+           class="inline-flex items-center gap-2 text-sm py-1.5 px-3 rounded-2xl font-medium transition-colors mt-6 border-none font-bold text-white"
            style="background:#25D366;">
             <span class="icon-[tabler--brand-whatsapp] size-4"></span>
             Escribir por WhatsApp

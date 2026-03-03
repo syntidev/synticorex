@@ -56,26 +56,26 @@
                 @if($tenant->whatsapp)
                     <a href="https://wa.me/{{ $tenant->whatsapp }}?text={{ urlencode('Hola ' . $tenant->business_name . ', me gustaría obtener más información') }}"
                        target="_blank"
-                       class="btn btn-primary btn-gradient btn-lg">
+                       class="inline-flex items-center py-3 px-6 rounded-lg font-medium transition-colors text-lg bg-blue-600 text-white hover:bg-blue-700">
                         <span class="iconify tabler--brand-whatsapp size-5"></span>
                         Contactar por WhatsApp
                     </a>
                 @elseif($tenant->phone)
                     <a href="tel:{{ $tenant->phone }}"
-                       class="btn btn-primary btn-gradient btn-lg">
+                       class="inline-flex items-center py-3 px-6 rounded-lg font-medium transition-colors text-lg bg-blue-600 text-white hover:bg-blue-700">
                         <span class="iconify tabler--phone size-5"></span>
                         Llamar Ahora
                     </a>
                 @else
                     <a href="#contact-us"
-                       class="btn btn-primary btn-gradient btn-lg">
+                       class="inline-flex items-center py-3 px-6 rounded-lg font-medium transition-colors text-lg bg-blue-600 text-white hover:bg-blue-700">
                         Conocer Más
                         <span class="iconify tabler--arrow-right size-5 rtl:rotate-180"></span>
                     </a>
                 @endif
 
                 {{-- CTA secundario: borde blanco sobre imagen oscura --}}
-                <a href="#productos" class="btn btn-outline border-white text-white hover:bg-white/10 btn-lg">
+                <a href="#productos" class="inline-flex items-center py-3 px-6 rounded-lg font-medium transition-colors text-lg border border-white text-white hover:bg-white/10">
                     Ver Catálogo
                     <span class="iconify tabler--arrow-down size-5"></span>
                 </a>

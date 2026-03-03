@@ -4,8 +4,8 @@
             {{-- ══ Visual Assets: Logo + Hero + QR ═══════════════════════════ --}}
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-6">
                 {{-- Logo Card (200x200) --}}
-                <div class="card bg-base-100 shadow-md border border-base-content/8 card-elevated">
-                    <div class="card-body p-5">
+                <div class="bg-white rounded-xl shadow-md border border-gray-200">
+                    <div class="p-5">
                         <p class="text-xs font-bold text-base-content/40 uppercase tracking-wider mb-2">Logo</p>
                         <div id="logo-dropzone"
                              class="bg-base-200 rounded-box h-40 flex items-center justify-center mb-3 overflow-hidden border-2 border-dashed border-transparent transition-colors cursor-pointer"
@@ -36,7 +36,7 @@
                         </div>
                         <input type="file" id="logo-file" accept="image/*" class="hidden" onchange="uploadLogo(event)">
                         <button onclick="document.getElementById('logo-file').click()"
-                                class="btn btn-primary btn-block btn-sm gap-2">
+                                class="w-full inline-flex items-center justify-center text-sm py-1.5 px-3 rounded-lg font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 gap-2">
                             <span class="iconify tabler--upload size-4"></span>
                             Cambiar Logo
                         </button>
@@ -44,8 +44,8 @@
                 </div>
 
                 {{-- Hero Card (400x300) --}}
-                <div class="card bg-base-100 shadow-md border border-base-content/8 card-elevated">
-                    <div class="card-body p-5">
+                <div class="bg-white rounded-xl shadow-md border border-gray-200">
+                    <div class="p-5">
                         <p class="text-xs font-bold text-base-content/40 uppercase tracking-wider mb-2">Hero</p>
                         <div id="hero-dropzone"
                              class="bg-base-200 rounded-box h-40 flex items-center justify-center mb-3 overflow-hidden border-2 border-dashed border-transparent transition-colors cursor-pointer"
@@ -66,7 +66,7 @@
                         </div>
                         <input type="file" id="hero-file" accept="image/*" class="hidden" onchange="uploadHero(event)">
                         <button onclick="document.getElementById('hero-file').click()"
-                                class="btn btn-primary btn-block btn-sm gap-2">
+                                class="w-full inline-flex items-center justify-center text-sm py-1.5 px-3 rounded-lg font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 gap-2">
                             <span class="iconify tabler--upload size-4"></span>
                             Cambiar Hero
                         </button>
@@ -74,8 +74,8 @@
                 </div>
 
                 {{-- QR Card (200x200) --}}
-                <div class="card bg-base-100 shadow-md border border-base-content/8 card-elevated">
-                    <div class="card-body p-5">
+                <div class="bg-white rounded-xl shadow-md border border-gray-200">
+                    <div class="p-5">
                         <p class="text-xs font-bold text-base-content/40 uppercase tracking-wider mb-2">QR Tracking</p>
                         <div class="flex justify-center mb-2">
                             <div class="bg-white p-2 rounded-lg border border-base-content/10" style="width:140px;height:140px;overflow:hidden;">
@@ -86,11 +86,11 @@
                         </div>
                         <p class="text-[10px] text-base-content/40 text-center mb-2 break-all leading-tight select-all">{{ $trackingShortlink }}</p>
                         <div class="flex gap-2">
-                            <a href="/tenant/{{ $tenant->id }}/qr/download" class="btn btn-primary btn-sm gap-1 flex-1" download>
+                            <a href="/tenant/{{ $tenant->id }}/qr/download" class="inline-flex items-center text-sm py-1.5 px-3 rounded-lg font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 gap-1 flex-1" download>
                                 <span class="iconify tabler--download size-3.5"></span>
                                 PNG
                             </a>
-                            <button type="button" onclick="downloadQRSVG()" class="btn btn-soft btn-sm gap-1 flex-1">
+                            <button type="button" onclick="downloadQRSVG()" class="inline-flex items-center text-sm py-1.5 px-3 rounded-lg font-medium transition-colors text-gray-600 hover:bg-gray-100 gap-1 flex-1">
                                 <span class="iconify tabler--file-type-svg size-3.5"></span>
                                 SVG
                             </button>
@@ -101,8 +101,8 @@
 
             {{-- ══ Info Form ══════════════════════════════════════════════════ --}}
             <form id="form-info" onsubmit="saveInfo(event)">
-                <div class="card bg-base-100 shadow-md border border-base-content/8 card-elevated">
-                    <div class="card-header px-6 pt-6 pb-4">
+                <div class="bg-white rounded-xl shadow-md border border-gray-200">
+                    <div class="px-6 pt-6 pb-4">
                         <div class="flex items-center gap-3 mb-1">
                             <div class="size-10 rounded-xl bg-primary/10 flex items-center justify-center">
                                 <span class="iconify tabler--building-store size-5 text-primary"></span>
@@ -113,7 +113,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-body pt-2">
+                    <div class="pt-2">
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                             <div class="form-control">
                                 <label class="label pb-1" for="info-name">
@@ -176,7 +176,7 @@
                                 <label class="label pb-1">
                                     <span class="label-text font-medium text-sm flex items-center gap-1">
                                         Título Contacto
-                                        <span class="badge badge-soft badge-success badge-xs">{{ $plan->name }}</span>
+                                        <span class="inline-flex items-center py-0.5 px-2 rounded-full text-xs font-medium bg-green-100 text-green-700">{{ $plan->name }}</span>
                                     </span>
                                 </label>
                                 <input type="text" name="contact_title" class="input input-bordered w-full"
@@ -187,7 +187,7 @@
                                 <label class="label pb-1">
                                     <span class="label-text font-medium text-sm flex items-center gap-1">
                                         Subtítulo Contacto
-                                        <span class="badge badge-soft badge-success badge-xs">{{ $plan->name }}</span>
+                                        <span class="inline-flex items-center py-0.5 px-2 rounded-full text-xs font-medium bg-green-100 text-green-700">{{ $plan->name }}</span>
                                     </span>
                                 </label>
                                 <input type="text" name="contact_subtitle" class="input input-bordered w-full"
@@ -198,7 +198,7 @@
                                 <label class="label pb-1">
                                     <span class="label-text font-medium text-sm flex items-center gap-1">
                                         Teléfono Secundario
-                                        <span class="badge badge-soft badge-success badge-xs">{{ $plan->name }}</span>
+                                        <span class="inline-flex items-center py-0.5 px-2 rounded-full text-xs font-medium bg-green-100 text-green-700">{{ $plan->name }}</span>
                                     </span>
                                 </label>
                                 <input type="tel" name="phone_secondary" class="input input-bordered w-full"
@@ -209,7 +209,7 @@
                                 <label class="label pb-1">
                                     <span class="label-text font-medium text-sm flex items-center gap-1">
                                         URL Google Maps
-                                        <span class="badge badge-soft badge-success badge-xs">{{ $plan->name }}</span>
+                                        <span class="inline-flex items-center py-0.5 px-2 rounded-full text-xs font-medium bg-green-100 text-green-700">{{ $plan->name }}</span>
                                     </span>
                                 </label>
                                 <input type="url" name="contact_maps_url" class="input input-bordered w-full"
@@ -228,7 +228,7 @@
                         </div>
 
                         {{-- ══ Contenido Hero ════════════════════════════════════════ --}}
-                        <div class="divider text-xs text-base-content/40 mt-6 mb-4">Contenido del Hero</div>
+                        <div class="border-t border-gray-200 my-4 mt-6 text-xs text-gray-400">Contenido del Hero</div>
 
                         <div class="form-control mt-3">
                             <label class="label pb-1" for="info-hero-title">
@@ -265,9 +265,9 @@
                         </div>
 
                         {{-- ══ Indicador de Horario (Opcional) ═══════════════════════ --}}
-                        <div class="divider text-xs text-base-content/40 mt-6 mb-4">Indicador de Horario en Navbar</div>
+                        <div class="border-t border-gray-200 my-4 mt-6 text-xs text-gray-400">Indicador de Horario en Navbar</div>
 
-                        <div class="alert alert-info mb-4">
+                        <div class="flex p-4 rounded-lg border gap-3 bg-blue-50 border-blue-200 text-blue-800 mb-4">
                             <span class="iconify tabler--info-circle size-5 shrink-0"></span>
                             <div class="text-sm">
                                 <p class="font-semibold">Indicador de Estado Opcional</p>
@@ -305,17 +305,17 @@
                                 </label>
                             </div>
 
-                            <div class="alert alert-info">
+                            <div class="flex p-4 rounded-lg border gap-3 bg-blue-50 border-blue-200 text-blue-800">
                                 <span class="iconify tabler--eye size-5 shrink-0"></span>
                                 <div class="text-xs">
                                     <p class="font-semibold mb-2">Así se verá en tu navbar</p>
                                     <div class="flex items-center gap-2 flex-wrap">
-                                        <span class="badge badge-sm gap-1 bg-success text-white border-success">
+                                        <span class="inline-flex items-center py-0.5 px-2 rounded-full text-sm font-medium gap-1 bg-green-500 text-white">
                                             <span class="iconify tabler--circle-filled size-3"></span>
                                             ABIERTO
                                         </span>
                                         <span class="text-base-content/30">o</span>
-                                        <span class="badge badge-sm gap-1 bg-error text-white border-error">
+                                        <span class="inline-flex items-center py-0.5 px-2 rounded-full text-sm font-medium gap-1 bg-red-500 text-white">
                                             <span class="iconify tabler--circle-filled size-3"></span>
                                             CERRADO
                                         </span>
@@ -328,8 +328,8 @@
                         </div>
 
                         <div class="flex items-center gap-3 justify-end pt-4 border-t border-base-content/10 mt-4">
-                            <button type="button" class="btn btn-ghost" onclick="resetForm('form-info')">Cancelar</button>
-                            <button type="submit" class="btn btn-primary gap-2">
+                            <button type="button" class="py-2 px-4 rounded-lg font-medium transition-colors text-gray-700 hover:bg-gray-100" onclick="resetForm('form-info')">Cancelar</button>
+                            <button type="submit" class="inline-flex items-center py-2 px-4 rounded-lg font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 gap-2">
                                 <span class="iconify tabler--device-floppy size-4" aria-hidden="true"></span>
                                 Guardar Cambios
                             </button>
@@ -396,11 +396,11 @@
                 $satClosed = is_null($satData) || !empty($satData['closed']);
                 $sunClosed = is_null($sunData) || !empty($sunData['closed']);
             @endphp
-            <div class="card bg-base-100 shadow-md border border-base-content/8 card-elevated mt-6 mb-6"
+            <div class="bg-white rounded-xl shadow-md border border-gray-200 mt-6 mb-6"
                  x-data="{ hoursOpen: false }">
 
                 {{-- ── Compact header — always visible ── --}}
-                <div class="card-body px-5 py-4 cursor-pointer select-none"
+                <div class="px-5 py-4 cursor-pointer select-none"
                      @click="hoursOpen = !hoursOpen">
                     <div class="flex items-center gap-3">
                         <div class="size-9 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
@@ -421,7 +421,7 @@
 
                 {{-- ── Expandable editor ── --}}
                 <div x-show="hoursOpen" x-collapse x-cloak>
-                    <div class="card-body pt-0 px-5 pb-5">
+                    <div class="pt-0 px-5 pb-5">
                         <div class="border-t border-base-content/10 pt-4">
 
                             {{-- Mode switcher --}}
@@ -443,7 +443,7 @@
                                     <div class="p-3 rounded-lg bg-base-200/40 border border-base-content/10">
                                         <div class="flex items-center gap-2 mb-2.5">
                                             <span class="text-sm font-semibold text-base-content">Lunes a Viernes</span>
-                                            <span class="badge badge-soft badge-primary badge-xs">5 días</span>
+                                            <span class="inline-flex items-center py-0.5 px-2 rounded-full text-xs font-medium bg-blue-100 text-blue-700">5 días</span>
                                         </div>
                                         <div class="flex items-center gap-2 flex-wrap">
                                             <input type="time" id="bh-simple-wd-open" class="input input-sm input-bordered w-28" value="{{ $wdOpen }}">
@@ -525,7 +525,7 @@
                                 </div>
                             </div>
 
-                            <button type="button" onclick="saveBusinessHours()" class="btn btn-primary w-full gap-2 mt-4">
+                            <button type="button" onclick="saveBusinessHours()" class="inline-flex items-center py-2 px-4 rounded-lg font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 w-full gap-2 mt-4">
                                 <span class="iconify tabler--device-floppy size-4" aria-hidden="true"></span>
                                 Guardar Horario
                             </button>
@@ -537,7 +537,7 @@
             {{-- ═══════════════════════════════════════════════════════════
                  Redes Sociales
             ═══════════════════════════════════════════════════════════ --}}
-            <div class="card bg-base-100 shadow-md border border-base-content/8 card-elevated mb-6">
+            <div class="bg-white rounded-xl shadow-md border border-gray-200 mb-6">
                 @php
                     $rawSocial      = $customization->social_networks ?? [];
                     $socialNetworks = is_array($rawSocial) ? $rawSocial : [];
@@ -555,7 +555,7 @@
                     $plan1Handle    = $plan1Selected ? ($socialNetworks[$plan1Selected] ?? '') : '';
                 @endphp
 
-                <div class="card-header px-6 pt-6 pb-4 flex items-center justify-between gap-2 flex-wrap">
+                <div class="px-6 pt-6 pb-4 flex items-center justify-between gap-2 flex-wrap">
                     <div class="flex items-center gap-3">
                         <div class="size-10 rounded-xl bg-primary/10 flex items-center justify-center">
                             <span class="iconify tabler--social size-5 text-primary" aria-hidden="true"></span>
@@ -563,12 +563,12 @@
                         <h3 class="text-lg font-bold text-base-content">Redes Sociales</h3>
                     </div>
                     @if($plan->id === 1)
-                        <span class="badge badge-soft badge-warning badge-sm">Plan OPORTUNIDAD — 1 red social</span>
+                        <span class="inline-flex items-center py-0.5 px-2 rounded-full text-sm font-medium bg-yellow-100 text-yellow-700">Plan OPORTUNIDAD — 1 red social</span>
                     @else
-                        <span class="badge badge-soft badge-success badge-sm">Plan {{ $plan->name }} — Todas las redes</span>
+                        <span class="inline-flex items-center py-0.5 px-2 rounded-full text-sm font-medium bg-green-100 text-green-700">Plan {{ $plan->name }} — Todas las redes</span>
                     @endif
                 </div>
-                <div class="card-body">
+                <div class="p-5">
                     @if($plan->id === 1)
                     {{-- ── Plan 1: radio select + single handle ── --}}
                     <div class="mb-4">
@@ -578,7 +578,7 @@
                             @php $meta = $allNetworksMeta[$key]; @endphp
                             <label id="social-radio-label-{{ $key }}"
                                    onclick="selectSocialNetwork('{{ $key }}')"
-                                   class="btn btn-sm gap-1.5 {{ $plan1Selected === $key ? 'btn-primary' : 'btn-ghost border border-base-content/20' }} cursor-pointer">
+                                   class="inline-flex items-center text-sm py-1.5 px-3 rounded-lg font-medium transition-colors {{ $plan1Selected === $key ? 'bg-blue-600 text-white hover:bg-blue-700' : 'text-gray-700 hover:bg-gray-100 border border-gray-300' }} cursor-pointer">
                                 <input type="radio" name="social_plan1_choice" value="{{ $key }}"
                                        {{ $plan1Selected === $key ? 'checked' : '' }} class="hidden">
                                 <span class="iconify {{ $meta['icon'] }} size-4" aria-hidden="true"></span>
@@ -621,7 +621,7 @@
                     </div>
                     @endif
 
-                    <button type="button" onclick="saveSocialNetworks()" class="btn btn-primary w-full gap-2">
+                    <button type="button" onclick="saveSocialNetworks()" class="inline-flex items-center py-2 px-4 rounded-lg font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 w-full gap-2">
                         <span class="iconify tabler--device-floppy size-4" aria-hidden="true"></span>
                         Guardar Redes Sociales
                     </button>

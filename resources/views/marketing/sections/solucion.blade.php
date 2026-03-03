@@ -33,11 +33,11 @@
                     </p>
                     {{-- Segment pills --}}
                     <div class="flex flex-wrap gap-1.5 justify-center mt-5">
-                        <span class="badge badge-sm bg-orange-50 text-orange-600 border-orange-200">Restaurante</span>
-                        <span class="badge badge-sm bg-blue-50 text-blue-600 border-blue-200">Mecánico</span>
-                        <span class="badge badge-sm bg-pink-50 text-pink-600 border-pink-200">Salón</span>
-                        <span class="badge badge-sm bg-indigo-50 text-indigo-600 border-indigo-200">Abogado</span>
-                        <span class="badge badge-sm bg-emerald-50 text-emerald-600 border-emerald-200">Tienda</span>
+                        <span class="inline-flex items-center py-0.5 px-2 rounded-full text-sm font-medium bg-orange-50 text-orange-600 border border-orange-200">Restaurante</span>
+                        <span class="inline-flex items-center py-0.5 px-2 rounded-full text-sm font-medium bg-blue-50 text-blue-600 border border-blue-200">Mecánico</span>
+                        <span class="inline-flex items-center py-0.5 px-2 rounded-full text-sm font-medium bg-pink-50 text-pink-600 border border-pink-200">Salón</span>
+                        <span class="inline-flex items-center py-0.5 px-2 rounded-full text-sm font-medium bg-indigo-50 text-indigo-600 border border-indigo-200">Abogado</span>
+                        <span class="inline-flex items-center py-0.5 px-2 rounded-full text-sm font-medium bg-emerald-50 text-emerald-600 border border-emerald-200">Tienda</span>
                     </div>
                 </div>
             </div>
@@ -92,13 +92,13 @@
                     </p>
                     {{-- Features --}}
                     <div class="flex flex-wrap gap-1.5 justify-center mt-5">
-                        <span class="badge badge-sm bg-purple-50 text-purple-600 border-purple-200">
+                        <span class="inline-flex items-center py-0.5 px-2 rounded-full text-sm font-medium bg-purple-50 text-purple-600 border border-purple-200">
                             <span class="iconify tabler--search size-3 mr-0.5"></span> SEO
                         </span>
-                        <span class="badge badge-sm bg-purple-50 text-purple-600 border-purple-200">
+                        <span class="inline-flex items-center py-0.5 px-2 rounded-full text-sm font-medium bg-purple-50 text-purple-600 border border-purple-200">
                             <span class="iconify tabler--qrcode size-3 mr-0.5"></span> QR
                         </span>
-                        <span class="badge badge-sm bg-purple-50 text-purple-600 border-purple-200">
+                        <span class="inline-flex items-center py-0.5 px-2 rounded-full text-sm font-medium bg-purple-50 text-purple-600 border border-purple-200">
                             <span class="iconify tabler--brand-whatsapp size-3 mr-0.5"></span> WhatsApp
                         </span>
                     </div>
@@ -108,7 +108,7 @@
 
         {{-- Bottom CTA --}}
         <div class="text-center mt-14 mkt-fade-in">
-            <a href="{{ route('register') }}" class="btn btn-lg bg-gradient-to-r from-blue-500 to-indigo-500 text-white border-0 shadow-lg shadow-blue-500/20 hover:shadow-blue-500/40 hover:scale-[1.02] transition-all font-bold px-10">
+            <a href="{{ route('register') }}" class="inline-flex items-center py-3 px-10 rounded-lg font-bold transition-all bg-gradient-to-r from-blue-500 to-indigo-500 text-white border-0 shadow-lg shadow-blue-500/20 hover:shadow-blue-500/40 hover:scale-[1.02]">
                 Empezar ahora — es gratis
             </a>
             <p class="text-sm text-slate-400 mt-3">No requiere tarjeta de crédito</p>

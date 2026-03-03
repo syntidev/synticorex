@@ -13,8 +13,8 @@
       <div class="w-16 h-1 bg-primary mx-auto mt-4 rounded-full"></div>
     </div>
     <div class="grid md:grid-cols-2 gap-6">
-      <div class="card card-border shadow-none">
-        <div class="card-body gap-5">
+      <div class="bg-white border border-gray-200 rounded-xl shadow-sm">
+        <div class="flex flex-col p-4 gap-5">
           <div class="flex items-center gap-3">
             <img src="https://cdn.flyonui.com/fy-assets/avatar/avatar-17.png" alt="Cliente" class="size-10 rounded-full object-cover">
             <div>
@@ -28,8 +28,8 @@
           <p class="text-base-content/80">"Excelente servicio, superaron todas mis expectativas. 100% recomendados."</p>
         </div>
       </div>
-      <div class="card card-border shadow-none">
-        <div class="card-body gap-5">
+      <div class="bg-white border border-gray-200 rounded-xl shadow-sm">
+        <div class="flex flex-col p-4 gap-5">
           <div class="flex items-center gap-3">
             <img src="https://cdn.flyonui.com/fy-assets/avatar/avatar-5.png" alt="Cliente" class="size-10 rounded-full object-cover">
             <div>

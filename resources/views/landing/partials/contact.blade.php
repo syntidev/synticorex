@@ -46,8 +46,8 @@
           {{ $tenant->description ?? 'Contactanos y te atendemos a la brevedad.' }}
         </p>
         <div class="grid gap-6 md:grid-cols-2">
-          <div class="card shadow-none">
-            <div class="card-body items-center gap-3">
+          <div class="bg-white border border-gray-200 rounded-xl shadow-sm">
+            <div class="flex flex-col items-center p-4 gap-3">
               <span class="icon-[tabler--clock] text-primary size-10"></span>
               <h4 class="text-base-content text-base font-medium">Horario</h4>
               <div class="text-center text-base-content/80">
@@ -68,8 +68,8 @@
               </div>
             </div>
           </div>
-          <div class="card shadow-none">
-            <div class="card-body items-center gap-3">
+          <div class="bg-white border border-gray-200 rounded-xl shadow-sm">
+            <div class="flex flex-col items-center p-4 gap-3">
               <span class="icon-[tabler--map-pin] text-primary size-10"></span>
               <h4 class="text-base-content text-base font-medium">Direccion</h4>
               <address class="text-base-content/80 text-center not-italic">
@@ -78,8 +78,8 @@
               </address>
             </div>
           </div>
-          <div class="card shadow-none">
-            <div class="card-body items-center gap-3">
+          <div class="bg-white border border-gray-200 rounded-xl shadow-sm">
+            <div class="flex flex-col items-center p-4 gap-3">
               <span class="icon-[tabler--brand-whatsapp] text-primary size-10"></span>
               <h4 class="text-base-content text-base font-medium">WhatsApp</h4>
               @if($phoneClean)
@@ -92,8 +92,8 @@
               @endif
             </div>
           </div>
-          <div class="card shadow-none">
-            <div class="card-body items-center gap-3">
+          <div class="bg-white border border-gray-200 rounded-xl shadow-sm">
+            <div class="flex flex-col items-center p-4 gap-3">
               <span class="icon-[tabler--mail] text-primary size-10"></span>
               <h4 class="text-base-content text-base font-medium">Email</h4>
               <div class="text-center text-base-content/80">

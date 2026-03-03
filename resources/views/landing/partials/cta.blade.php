@@ -32,7 +32,7 @@
 
         @if($ctaBtnText && $ctaBtnLink)
             <a href="{{ $ctaBtnLink }}" target="_blank" rel="noopener noreferrer"
-               class="btn btn-lg bg-white text-primary hover:bg-white/90 gap-2 font-semibold shadow-lg">
+               class="inline-flex items-center py-3 px-6 rounded-lg font-semibold transition-colors text-lg bg-white text-primary hover:bg-white/90 gap-2 shadow-lg">
                 {{ $ctaBtnText }}
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>

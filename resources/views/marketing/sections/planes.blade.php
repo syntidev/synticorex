@@ -59,7 +59,7 @@
                             </div>
 
                             {{-- CTA --}}
-                            <a href="{{ route('register') }}" class="btn w-full mt-6 {{ $isHighlighted ? 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white border-0 shadow-lg shadow-blue-500/20 hover:shadow-blue-500/40' : 'btn-outline border-slate-200 text-slate-700 hover:bg-slate-50' }} hover:scale-[1.02] transition-all font-bold">
+                            <a href="{{ route('register') }}" class="inline-flex items-center justify-center py-2 px-4 rounded-lg font-bold transition-all w-full mt-6 {{ $isHighlighted ? 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white border-0 shadow-lg shadow-blue-500/20 hover:shadow-blue-500/40' : 'border border-slate-200 text-slate-700 hover:bg-slate-50' }} hover:scale-[1.02]">
                                 {{ $plan['cta'] }}
                             </a>
                         </div>

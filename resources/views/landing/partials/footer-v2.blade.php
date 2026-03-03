@@ -93,7 +93,7 @@
         </div>
     </div>
     
-    <div class="divider mx-auto max-w-[1280px]"></div>
+    <div class="border-t border-gray-200 my-4 mx-auto max-w-[1280px]"></div>
     
     <div class="mx-auto max-w-[1280px] px-4 py-8 sm:px-6 lg:px-8">
         <div class="text-base-content text-center text-base">

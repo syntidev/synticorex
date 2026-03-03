@@ -105,7 +105,7 @@
                 {{-- CTA --}}
                 <div class="flex items-center gap-3">
                     <a href="{{ route('login') }}" class="hidden sm:inline-flex nav-link-light text-sm font-medium transition-colors hover:text-blue-400" :class="scrolled ? 'text-slate-600' : 'text-white/80'">Iniciar sesión</a>
-                    <a href="{{ route('register') }}" class="btn btn-sm lg:btn-md bg-gradient-to-r from-blue-500 to-indigo-500 text-white border-0 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:scale-105 transition-all">
+                    <a href="{{ route('register') }}" class="inline-flex items-center text-sm py-1.5 px-3 lg:py-2 lg:px-4 rounded-lg font-medium transition-all bg-gradient-to-r from-blue-500 to-indigo-500 text-white border-0 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:scale-105">
                         Crear gratis
                     </a>
                     {{-- Mobile menu --}}

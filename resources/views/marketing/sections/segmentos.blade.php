@@ -66,11 +66,11 @@
         <div class="text-center mt-10 mkt-fade-in">
             <p class="text-slate-400 text-sm mb-3">Y próximamente más segmentos...</p>
             <div class="flex flex-wrap gap-2 justify-center">
-                <span class="badge badge-sm bg-slate-100 text-slate-500">Gimnasio</span>
-                <span class="badge badge-sm bg-slate-100 text-slate-500">Veterinaria</span>
-                <span class="badge badge-sm bg-slate-100 text-slate-500">Farmacia</span>
-                <span class="badge badge-sm bg-slate-100 text-slate-500">Academia</span>
-                <span class="badge badge-sm bg-slate-100 text-slate-500">+ más</span>
+                <span class="inline-flex items-center py-0.5 px-2 rounded-full text-sm font-medium bg-slate-100 text-slate-500">Gimnasio</span>
+                <span class="inline-flex items-center py-0.5 px-2 rounded-full text-sm font-medium bg-slate-100 text-slate-500">Veterinaria</span>
+                <span class="inline-flex items-center py-0.5 px-2 rounded-full text-sm font-medium bg-slate-100 text-slate-500">Farmacia</span>
+                <span class="inline-flex items-center py-0.5 px-2 rounded-full text-sm font-medium bg-slate-100 text-slate-500">Academia</span>
+                <span class="inline-flex items-center py-0.5 px-2 rounded-full text-sm font-medium bg-slate-100 text-slate-500">+ más</span>
             </div>
         </div>
     </div>

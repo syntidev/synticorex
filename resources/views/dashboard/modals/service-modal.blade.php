@@ -85,7 +85,7 @@
                             <label class="label"><span class="label-text text-sm font-medium">Imagen del Servicio</span></label>
                             <div class="image-preview" id="service-image-preview" style="display: none;">
                                 <img id="service-image-preview-img" src="" alt="Preview">
-                                <button type="button" onclick="cancelServiceImage()" class="btn btn-xs btn-ghost btn-circle absolute top-1 right-1">
+                                <button type="button" onclick="cancelServiceImage()" class="p-1 rounded-full transition-colors text-gray-500 hover:bg-gray-100 absolute top-1 right-1">
                                     <span class="iconify tabler--x size-3.5" aria-hidden="true"></span>
                                 </button>
                             </div>
@@ -122,8 +122,8 @@
                         </div>
 
                         <div class="flex gap-3 pt-5 border-t border-base-content/10 justify-end">
-                            <button type="button" class="btn btn-soft" onclick="closeServiceModal()">Cancelar</button>
-                            <button type="submit" class="btn btn-primary gap-2 shadow-md shadow-primary/20 hover:shadow-lg">
+                            <button type="button" class="py-2 px-4 rounded-lg font-medium transition-colors text-gray-600 hover:bg-gray-100" onclick="closeServiceModal()">Cancelar</button>
+                            <button type="submit" class="inline-flex items-center py-2 px-4 rounded-lg font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 gap-2 shadow-md">
                                 <span class="iconify tabler--device-floppy size-4" aria-hidden="true"></span>
                                 Guardar Servicio
                             </button>

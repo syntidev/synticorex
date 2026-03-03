@@ -80,13 +80,13 @@
                 <div class="flex flex-col sm:flex-row gap-3 pt-2">
                     @if($waRaw)
                     <a href="{{ $waLink }}" target="_blank" rel="noopener noreferrer"
-                       class="btn btn-lg bg-base-100 text-primary hover:bg-base-100/90 w-full sm:w-auto">
+                       class="inline-flex items-center py-3 px-6 rounded-lg font-medium transition-colors text-lg bg-base-100 text-primary hover:bg-base-100/90 w-full sm:w-auto">
                         <iconify-icon icon="tabler:brand-whatsapp" width="20" height="20"></iconify-icon>
                         Contactar por WhatsApp
                     </a>
                     @endif
                     <a href="#servicios"
-                       class="btn btn-lg btn-outline border-base-100/40 text-base-100
+                       class="inline-flex items-center py-3 px-6 rounded-lg font-medium transition-colors text-lg border border-base-100/40 text-base-100
                               hover:bg-base-100/10 w-full sm:w-auto">
                         Ver servicios
                         <iconify-icon icon="tabler:arrow-down" width="20" height="20"></iconify-icon>
