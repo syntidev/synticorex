@@ -23,7 +23,7 @@ class ViewServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        View::composer('landing.partials.header-top', function ($view): void {
+        View::composer(['landing.partials.header-top', 'landing.sections.header-top'], function ($view): void {
             $data = $view->getData();
 
             /** @var Tenant|null $tenant */

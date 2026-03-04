@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Models\ProductImage;
 use App\Models\Service;
 use App\Models\Tenant;
+use App\Models\TenantCustomization;
 use App\Services\ImageUploadService;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -96,7 +97,7 @@ class ImageUploadController extends Controller
             // Update tenant customization
             $customization = $tenant->customization;
             if ($customization) {
-                $customization->update(['hero_main_filename' => $filename]);
+                $customization->update(['hero_filename' => $filename]);
             }
 
             $url = asset('storage/tenants/' . $tenantId . '/' . $filename);
@@ -246,7 +247,7 @@ class ImageUploadController extends Controller
                 ->where('status', 'active')
                 ->firstOrFail();
 
-            if ((int) $tenant->plan_id !== 3) {
+            if (!$tenant->isVision()) {
                 return response()->json([
                     'success' => false,
                     'error' => 'La galería de imágenes solo está disponible en el Plan Visión'
@@ -368,6 +369,45 @@ class ImageUploadController extends Controller
             return response()->json([
                 'success' => false,
                 'error' => $e->getMessage()
+            ], 422);
+        }
+    }
+
+    /**
+     * Upload "Acerca De" image for tenant.
+     *
+     * @param Request $request
+     * @param int $tenantId
+     * @return JsonResponse
+     */
+    public function uploadAbout(Request $request, int $tenantId): JsonResponse
+    {
+        try {
+            $tenant = Tenant::where('id', $tenantId)
+                ->where('status', 'active')
+                ->firstOrFail();
+
+            $request->validate([
+                'image' => 'required|image',
+            ]);
+
+            $file = $request->file('image');
+
+            $filename = $this->imageUploadService->processWithCustomFilename($file, $tenantId, 'about.webp');
+
+            $customization = $tenant->customization ?? new TenantCustomization(['tenant_id' => $tenant->id]);
+            $customization->about_image_filename = $filename;
+            $customization->save();
+
+            return response()->json([
+                'success'  => true,
+                'filename' => $filename,
+                'url'      => asset('storage/tenants/' . $tenantId . '/' . $filename),
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error'   => $e->getMessage()
             ], 422);
         }
     }

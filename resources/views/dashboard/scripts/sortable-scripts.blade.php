@@ -206,7 +206,7 @@
             .then(d => {
                 if (d.success) {
                     window.showToast('✅ Testimonios guardados', 'success');
-                    location.reload();
+                    dashboardReload();
                 } else {
                     window.showToast('✗ Error', 'error');
                 }
@@ -308,7 +308,7 @@
             .then(d => {
                 if (d.success) {
                     window.showToast('✅ FAQ guardado', 'success');
-                    location.reload();
+                    dashboardReload();
                 } else {
                     window.showToast('✗ Error', 'error');
                 }

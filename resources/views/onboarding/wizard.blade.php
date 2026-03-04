@@ -11,7 +11,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         body { font-family: 'Inter', system-ui, sans-serif; }
-        .wiz-gradient-header { background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 40%, #1e3a5f 100%); }
+        .wiz-gradient-header { background: var(--sw-white); border-bottom: 1px solid var(--sw-border); }
         .wiz-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 1rem; box-shadow: 0 4px 24px -4px rgba(0,0,0,0.08); }
         .wiz-input { border-radius: 0.625rem; border: 1px solid #e2e8f0; transition: border-color .2s, box-shadow .2s; }
         .wiz-input:focus { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.12); outline: none; }
@@ -129,17 +129,16 @@
 
     <header class="wiz-gradient-header px-6 py-3.5 flex items-center gap-3 sticky top-0 z-50 shadow-lg">
         <a href="/" class="flex items-center gap-2">
-            <img src="{{ asset('brand/syntiweb-logo-negative.svg') }}" 
-                 alt="SYNTIweb" width="30" height="30">
-            <span class="font-extrabold text-lg tracking-tight">
-                <span style="color:#4A80E4">SYNTI</span><span style="color:#FFFFFF">web</span>
+            <img src="{{ asset('brand/syntiweb-logo-positive.svg') }}" alt="SYNTIweb" width="32" height="32">
+            <span class="font-bold text-lg tracking-tight">
+                <span style="color:#1a1a1a">SYNTI</span><span style="color:#4A80E4">web</span>
             </span>
         </a>
         <div class="flex items-center gap-1.5 ml-3 px-2.5 py-1 rounded-full text-xs font-semibold" style="background:rgba(251,191,36,0.2);color:#fbbf24;border:1px solid rgba(251,191,36,0.3)">
             <span class="iconify tabler--shield-check size-3.5"></span>
             Modo Admin
         </div>
-        <span class="ml-auto text-sm" style="color:rgba(255,255,255,0.5)">Paso <span x-text="step" style="color:#fff;font-weight:600"></span> de <span x-text="totalSteps" style="color:rgba(255,255,255,0.7)"></span></span>
+        <span class="ml-auto text-sm" style="color:var(--sw-text-muted)">Paso <span x-text="step" style="color:var(--sw-text);font-weight:600"></span> de <span x-text="totalSteps" style="color:var(--sw-text-muted)"></span></span>
     </header>
 
     {{-- ── PROGRESS BAR ── --}}

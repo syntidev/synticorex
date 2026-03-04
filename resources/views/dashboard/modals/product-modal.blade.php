@@ -12,13 +12,13 @@
 
                         <div class="image-preview" id="product-image-preview" style="display: none;">
                             <img id="product-image-preview-img" src="" alt="Preview">
-                            <button type="button" onclick="cancelProductImage()" class="p-1 rounded-full transition-colors text-gray-500 hover:bg-gray-100 absolute top-1 right-1">
+                            <button type="button" onclick="cancelProductImage()" class="p-1 rounded-full transition-colors text-foreground hover:bg-muted-hover absolute top-1 right-1">
                                 <span class="iconify tabler--x size-3.5" aria-hidden="true"></span>
                             </button>
                         </div>
 
                         <div class="form-control py-2">
-                            <label class="label"><span class="label-text text-sm font-medium">Imagen Principal del Producto</span></label>
+                            <label class="inline-block text-sm font-medium text-foreground mb-1">Imagen Principal del Producto</label>
                             <div id="product-upload-zone"
                                  class="border-2 border-dashed border-base-content/20 rounded-lg p-5 text-center cursor-pointer hover:border-primary hover:bg-primary/5 transition-all"
                                  onclick="document.getElementById('product-image').click()"
@@ -49,10 +49,10 @@
                             {{-- Upload new gallery images --}}
                             <div id="product-gallery-upload-area" class="flex gap-2.5 flex-wrap mt-2">
                                 <div id="gallery-slot-1" class="gallery-upload-slot hidden">
-                                    <input type="file" id="product-gallery-1" accept="image/*" class="file-input file-input-bordered file-input-sm w-full" onchange="previewGalleryImage(event, 1)">
+                                    <input type="file" id="product-gallery-1" accept="image/*" class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none" onchange="previewGalleryImage(event, 1)">
                                 </div>
                                 <div id="gallery-slot-2" class="gallery-upload-slot hidden">
-                                    <input type="file" id="product-gallery-2" accept="image/*" class="file-input file-input-bordered file-input-sm w-full" onchange="previewGalleryImage(event, 2)">
+                                    <input type="file" id="product-gallery-2" accept="image/*" class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none" onchange="previewGalleryImage(event, 2)">
                                 </div>
                             </div>
 
@@ -66,23 +66,23 @@
                         @endif
 
                         <div class="form-control py-2">
-                            <label for="product-name" class="label"><span class="label-text text-sm font-medium">Nombre *</span></label>
-                            <input type="text" id="product-name" class="input input-bordered w-full" required maxlength="100">
+                            <label for="product-name" class="inline-block text-sm font-medium text-foreground mb-1">Nombre *</label>
+                            <input type="text" id="product-name" class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none" required maxlength="100">
                         </div>
 
                         <div class="form-control py-2">
-                            <label for="product-description" class="label"><span class="label-text text-sm font-medium">Descripción</span></label>
-                            <textarea id="product-description" class="textarea textarea-bordered w-full" rows="3" maxlength="500"></textarea>
+                            <label for="product-description" class="inline-block text-sm font-medium text-foreground mb-1">Descripción</label>
+                            <textarea id="product-description" class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none" rows="3" maxlength="500"></textarea>
                         </div>
 
                         <div class="form-control py-2">
-                            <label for="product-price" class="label"><span class="label-text text-sm font-medium">Precio USD *</span></label>
-                            <input type="number" id="product-price" class="input input-bordered w-full" required step="0.01" min="0">
+                            <label for="product-price" class="inline-block text-sm font-medium text-foreground mb-1">Precio USD *</label>
+                            <input type="number" id="product-price" class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none" required step="0.01" min="0">
                         </div>
 
                         <div class="form-control py-2">
-                            <label for="product-badge" class="label"><span class="label-text text-sm font-medium">Badge</span></label>
-                            <select id="product-badge" class="select select-bordered w-full">
+                            <label for="product-badge" class="inline-block text-sm font-medium text-foreground mb-1">Badge</label>
+                            <select id="product-badge" class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none">
                                 <option value="">Sin badge</option>
                                 <option value="hot">🔥 Hot</option>
                                 <option value="new">✨ New</option>
@@ -91,18 +91,18 @@
                         </div>
 
                         <div class="form-control py-2">
-                            <label class="label"><span class="label-text text-sm font-medium">Producto Activo</span></label>
+                            <label class="inline-block text-sm font-medium text-foreground mb-1">Producto Activo</label>
                             <input type="checkbox" id="product-is-active" class="toggle toggle-success" checked>
                         </div>
 
                         <div class="form-control py-2">
-                            <label class="label"><span class="label-text text-sm font-medium">Producto Destacado ⭐</span></label>
+                            <label class="inline-block text-sm font-medium text-foreground mb-1">Producto Destacado ⭐</label>
                             <input type="checkbox" id="product-is-featured" class="toggle toggle-warning">
                         </div>
 
-                        <div class="flex gap-3 pt-5 border-t border-base-content/10 mt-3">
-                            <button type="button" class="py-2 px-4 rounded-lg font-medium transition-colors text-gray-600 hover:bg-gray-100 flex-1" onclick="closeProductModal()">Cancelar</button>
-                            <button type="submit" class="inline-flex items-center py-2 px-4 rounded-lg font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 flex-1 gap-2 shadow-md">
+                        <div class="flex gap-3 pt-5 border-t border-border mt-3">
+                            <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg bg-layer border border-layer-line text-layer-foreground shadow-2xs hover:bg-layer-hover disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-layer-focus flex-1" onclick="closeProductModal()">Cancelar</button>
+                            <button type="submit" class="py-2 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg bg-primary border border-primary-line text-primary-foreground hover:bg-primary-hover focus:outline-hidden focus:bg-primary-focus disabled:opacity-50 disabled:pointer-events-none flex-1 shadow-sm">
                                 <span class="iconify tabler--device-floppy size-4" aria-hidden="true"></span>
                                 Guardar Producto
                             </button>

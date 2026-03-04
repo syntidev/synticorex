@@ -1,5 +1,10 @@
+{{-- ═══════════════════════════════════════════════════════════════════════════════
+     SYNTIweb — Layout maestro para landing pages
+     Preline 4.1.2 + Tailwind v4
+     NO contiene secciones — solo estructura HTML, head, scripts globales
+═══════════════════════════════════════════════════════════════════════════════ --}}
 <!DOCTYPE html>
-<html data-theme="theme-{{ $themeSlug ?? 'default' }}" lang="es" class="scroll-smooth" style="scroll-padding-top:64px">
+<html data-theme="{{ $customization?->theme_slug === 'custom' ? '' : 'theme-'.($themeSlug ?? 'default') }}" lang="es" class="scroll-smooth" style="scroll-padding-top:64px">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -26,6 +31,22 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('styles')
 
+    @php
+        $customPalette = data_get($tenant->settings, 'engine_settings.visual.custom_palette');
+    @endphp
+    @if($customPalette && $customization?->theme_slug === 'custom')
+    <style>
+        :root {
+            --primary: {{ $customPalette['primary'] ?? '#2563eb' }};
+            --primary-hover: {{ $customPalette['primary'] ?? '#2563eb' }};
+            --primary-500: {{ $customPalette['primary'] ?? '#2563eb' }};
+            --primary-600: {{ $customPalette['primary'] ?? '#2563eb' }};
+            --secondary: {{ $customPalette['secondary'] ?? '#1f2937' }};
+            --border: {{ $customPalette['base'] ?? '#e5e7eb' }};
+        }
+    </style>
+    @endif
+
     {{-- ═══ Schema.org automático según Blueprint ═══ --}}
     @php $schemaType = ($blueprint['schema_type'] ?? null) ?: $tenant->getSchemaType(); @endphp
     @switch($schemaType)
@@ -46,186 +67,13 @@
     @endswitch
 </head>
 
-<body class="min-h-screen bg-base-100 text-base-content antialiased transition-colors duration-500">
+<body class="min-h-screen bg-background text-foreground antialiased transition-colors duration-500">
 
     <div class="fixed inset-0 z-[9999] opacity-[0.02] pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"></div>
 
-    {{-- ══════════════════════════════════════════════
-         SECCIONES FIJAS - SIEMPRE VISIBLES
-    ══════════════════════════════════════════════ --}}
+    @yield('content')
 
-    @if($tenant->isAtLeastCrecimiento())
-        {{-- Barra informativa: horario, teléfono, delivery --}}
-        @include('landing.partials.header-top')
-    @endif
-
-    @include('landing.partials.header')
-
-    @if($tenant->plan_id === 1)
-        @include('landing.sections.hero-split')
-    @elseif($tenant->plan_id === 2)
-        @include('landing.partials.hero-fullscreen-v2')
-    @else
-        @include('landing.sections.hero-gradient')
-    @endif
-
-    {{-- ══════════════════════════════════════════════
-         SECCIONES DINÁMICAS - ORDENABLES
-    ══════════════════════════════════════════════ --}}
-
-    <main>
-        @foreach($customization->getSectionsOrder() as $section)
-            @php
-                $sectionName = $section['name'];
-                $isVisible = $section['visible'] ?? true;
-                $canAccess = $customization->canAccessSection($sectionName, $tenant->plan_id);
-                $shouldRender = $isVisible && $canAccess && $sectionName !== 'hero';
-            @endphp
-
-            @if($shouldRender)
-                @php $sConfig = $customization->getSectionConfig($sectionName); @endphp
-
-                @switch($sectionName)
-
-                    @case('about')
-                        @include('landing.partials.about', ['sConfig' => $sConfig])
-                        @break
-
-                    @case('contact')
-                        @include('landing.partials.contact', ['sConfig' => $sConfig])
-                        @break
-
-                    @case('products')
-                        {{-- Sin wrapper, sin wave — respira solo --}}
-                        @include('landing.partials.products', ['sConfig' => $sConfig])
-                        @break
-
-                    @case('services')
-                        @php
-                            $servicesView = match($sConfig['variant'] ?? 'cards') {
-                                'spotlight' => 'landing.partials.services-spotlight',
-                                default     => 'landing.partials.services',
-                            };
-                        @endphp
-
-                        @include($servicesView, ['sConfig' => $sConfig])
-                        @break
-
-                    @case('testimonials')
-                        @include('landing.partials.testimonials', ['sConfig' => $sConfig])
-                        @break
-
-                    @case('faq')
-                        @include('landing.partials.faq', ['sConfig' => $sConfig])
-                        @break
-
-                    @case('branches')
-                        @include('landing.partials.branches', ['sConfig' => $sConfig])
-                        @break
-
-                    @case('payment_methods')
-                        @include('landing.partials.payment_methods', ['sConfig' => $sConfig])
-                        @break
-
-                    @case('cta')
-                        @include('landing.partials.cta', ['sConfig' => $sConfig])
-                        @break
-
-                @endswitch
-            @endif
-        @endforeach
-
-    </main>
-
-
-
-    {{-- ══════════════════════════════════════════════
-         FOOTER FIJO
-    ══════════════════════════════════════════════ --}}
-
-    @include('landing.partials.footer', ['sConfig' => $customization->getSectionConfig('footer')])
-
-    <script>
-        const CURRENCY_MODE   = @json($savedDisplayMode ?? $displayMode ?? 'reference_only');
-        const CURRENCY_SYMBOL = @json($currencySettings['symbols']['reference'] ?? 'REF');
-        const EXCHANGE_RATE   = @json($dollarRate ?? 36.50);
-        const EURO_RATE       = @json($euroRate ?? 495.00);
-        // currentCurrency: CURRENCY_SYMBOL (REF/$) | 'Bs.' | '€'
-        let currentCurrency = CURRENCY_SYMBOL;
-
-        function formatPrice(usdPrice) {
-            const val = parseFloat(usdPrice);
-            if (currentCurrency === 'Bs.') {
-                // Bs. usa EURO_RATE en modo euro_toggle, EXCHANGE_RATE en los demás
-                const rate = CURRENCY_MODE === 'euro_toggle' ? EURO_RATE : EXCHANGE_RATE;
-                return `<span class="text-xs font-medium opacity-50 mr-1">Bs.</span>${(val * rate).toLocaleString('es-VE', {minimumFractionDigits: 2})}`;
-            }
-            if (currentCurrency === '€') {
-                // € reemplaza $ visualmente — mismo valor numérico que el precio base
-                return `<span class="text-xs font-medium opacity-50 mr-1">€</span>${val.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
-            }
-            // REF / $
-            return `<span class="text-xs font-medium opacity-50 mr-1">${CURRENCY_SYMBOL}</span>${val.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
-        }
-
-        function setCurrency(mode) {
-            if      (mode === 'bs')  currentCurrency = 'Bs.';
-            else if (mode === 'eur') currentCurrency = '€';
-            else                     currentCurrency = CURRENCY_SYMBOL;
-            renderAllPrices();
-            updateToggleButton();
-        }
-
-        function toggleCurrency() {
-            if (CURRENCY_MODE === 'euro_toggle') {
-                currentCurrency = (currentCurrency === 'Bs.') ? '€' : 'Bs.';
-            } else {
-                currentCurrency = (currentCurrency === 'Bs.') ? CURRENCY_SYMBOL : 'Bs.';
-            }
-            renderAllPrices();
-            updateToggleButton();
-        }
-
-        function renderAllPrices() {
-            document.querySelectorAll('[data-price-usd]').forEach(el => {
-                el.innerHTML = formatPrice(el.getAttribute('data-price-usd'));
-            });
-        }
-
-        function updateToggleButton() {
-            const btn = document.getElementById('currency-toggle-btn');
-            if (!btn) return;
-            const active   = 'bg-base-100 shadow-sm text-primary';
-            const inactive = 'text-base-content/40';
-            const btnClass = (isActive) => `px-3 py-1 text-[10px] font-black rounded-lg transition-all ${isActive ? active : inactive}`;
-
-            if (CURRENCY_MODE === 'euro_toggle') {
-                const btnEur = btn.querySelector('[data-currency="eur"]');
-                const btnBs  = btn.querySelector('[data-currency="bs"]');
-                if (btnEur && btnBs) {
-                    btnEur.className = btnClass(currentCurrency === '€');
-                    btnBs.className  = btnClass(currentCurrency === 'Bs.');
-                }
-            } else {
-                const btnRef = btn.querySelector('[data-currency="ref"]');
-                const btnBs  = btn.querySelector('[data-currency="bs"]');
-                if (btnRef && btnBs) {
-                    btnRef.className = btnClass(currentCurrency !== 'Bs.');
-                    btnBs.className  = btnClass(currentCurrency === 'Bs.');
-                }
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            if (CURRENCY_MODE === 'bolivares_only')  currentCurrency = 'Bs.';
-            else if (CURRENCY_MODE === 'euro_toggle') currentCurrency = '€';
-            else                                      currentCurrency = CURRENCY_SYMBOL;
-            renderAllPrices();
-            updateToggleButton();
-        });
-    </script>
-
-    @include('landing.partials.floating-panel')
+    @include('landing.sections.floating-panel')
     <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js" defer></script>
     @stack('scripts')
 </body>

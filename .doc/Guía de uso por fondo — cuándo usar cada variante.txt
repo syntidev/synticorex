@@ -1,0 +1,71 @@
+# SYNTIWEB — IDENTIDAD DE MARCA (DEFINITIVO)
+# NO MODIFICAR SIN INSTRUCCIÓN EXPLÍCITA DEL ARQUITECTO
+# Última actualización: 04 MAR 2026
+
+## Colores oficiales
+AZUL_MARCA   = #4A80E4   ← acento principal, NUNCA cambia
+NAVY_OSCURO  = #1a1a1a
+BLANCO       = #FFFFFF
+
+## Tipografía
+Fuente plataforma:  Geist (--sw-font)
+Wordmark peso:      font-bold
+Wordmark tracking:  tracking-tight
+Tamaño navbar:      text-lg (18px)
+Tamaño hero:        text-xl (20px)
+
+## Regla de contraste (IRROMPIBLE)
+Fondo claro  → bracket #1a1a1a | SYNTI #1a1a1a | web #4A80E4
+Fondo oscuro → bracket #FFFFFF  | SYNTI #4A80E4 | web #FFFFFF
+El azul #4A80E4 es constante en AMBOS contextos — nunca cambia
+
+## Archivos SVG — cuándo usar cada uno
+syntiweb-logo-positive.svg      → fondo claro (navbar blanco, wizard, onboarding)
+syntiweb-logo-negative.svg      → fondo oscuro (sidebar, footer navy, hero oscuro)
+syntiweb-logo-adaptive.svg      → NO USAR en producción (depende del OS, no del fondo)
+syntiweb-logo-flat-positive.svg → favicon, badges pequeños, "Powered by"
+syntiweb-logo-monochrome.svg    → sellos, documentos legales, impresión
+
+## Contextos aplicados (04 MAR 2026)
+Dashboard navbar    → positive.svg  | fondo: --sw-surface (blanco)
+Dashboard sidebar   → negative.svg  | fondo: #0f172a (oscuro)
+Marketing navbar    → positive.svg  | fondo: --sw-white (blanco)
+Marketing footer    → negative.svg  | fondo: --sw-navy (#1a1a1a)
+Onboarding header   → positive.svg  | fondo: --sw-white (blanco)
+Landing tenant      → flat-positive.svg | badge "Powered by" (16x16)
+
+## Código HTML — FONDO CLARO
+<a href="/" class="flex items-center gap-2">
+  <img src="{{ asset('brand/syntiweb-logo-positive.svg') }}" alt="SYNTIweb" width="32" height="32">
+  <span class="font-bold text-lg tracking-tight">
+    <span style="color:#1a1a1a">SYNTI</span><span style="color:#4A80E4">web</span>
+  </span>
+</a>
+
+## Código HTML — FONDO OSCURO
+<a href="/" class="flex items-center gap-2">
+  <img src="{{ asset('brand/syntiweb-logo-negative.svg') }}" alt="SYNTIweb" width="32" height="32">
+  <span class="font-bold text-lg tracking-tight">
+    <span style="color:#4A80E4">SYNTI</span><span style="color:#FFFFFF">web</span>
+  </span>
+</a>
+
+## Variables CSS (resources/css/syntiweb-brand.css)
+--sw-blue:          #4A80E4
+--sw-blue-hover:    #3a6fd3
+--sw-blue-light:    #EBF1FC
+--sw-navy:          #1a1a1a
+--sw-white:         #FFFFFF
+--sw-bg:            #F8FAFF
+--sw-bg-dark:       #1a1a1a
+--sw-surface:       #FFFFFF
+--sw-surface-dark:  #111111
+--sw-border:        #E2E8F4
+--sw-border-dark:   #2a2a2a
+--sw-text:          #1a1a1a
+--sw-text-inverse:  #FFFFFF
+--sw-text-muted:    #64748b
+--sw-hero-dark-bg:  #0f1117
+--sw-hero-dark-text:#F8FAFF
+--sw-accent-glow:   rgba(74,128,228,0.15)
+--sw-font:          'Geist', ui-sans-serif, system-ui, sans-serif

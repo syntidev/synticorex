@@ -1,5 +1,20 @@
     <script>
-        // Tab Navigation — FlyonUI Sidebar
+        // ══ Dashboard State Persistence ═══════════════════════════════════
+        // Saves active tab + scroll position before reload so the user
+        // returns to the exact same spot after page refresh.
+        // ═════════════════════════════════════════════════════════════════
+        window.__dashboardSaveState = function() {
+            var activeBtn = document.querySelector('#layout-sidebar [role="tab"].menu-active');
+            var activeTab = activeBtn ? activeBtn.getAttribute('data-tab') : 'info';
+            sessionStorage.setItem('_dash_tab', activeTab);
+            sessionStorage.setItem('_dash_scrollY', String(window.scrollY));
+        };
+        window.dashboardReload = function() {
+            window.__dashboardSaveState();
+            location.reload();
+        };
+
+        // Tab Navigation — Preline Sidebar
         document.addEventListener('DOMContentLoaded', function() {
             const tabs     = document.querySelectorAll('#layout-sidebar [role="tab"]');
             const contents = document.querySelectorAll('.tab-content');
@@ -68,6 +83,31 @@
                     }
                 });
             });
+
+            // ── Restore tab + scroll position after reload ────────────
+            var savedTab    = sessionStorage.getItem('_dash_tab');
+            var savedScroll = sessionStorage.getItem('_dash_scrollY');
+            var hashMatch   = location.hash ? location.hash.replace('#tab-', '').replace('#', '') : null;
+            var restoreTab  = hashMatch || savedTab;
+
+            if (restoreTab && restoreTab !== 'info') {
+                switchTab(restoreTab);
+            }
+
+            if (savedScroll) {
+                var scrollTarget = parseInt(savedScroll, 10);
+                requestAnimationFrame(function() {
+                    window.scrollTo(0, scrollTarget);
+                });
+            }
+
+            // Clean up — one-time restore only
+            sessionStorage.removeItem('_dash_tab');
+            sessionStorage.removeItem('_dash_scrollY');
+
+            if (location.hash) {
+                history.replaceState(null, '', location.pathname + location.search);
+            }
         });
 
         // Toggle Hours Indicator Fields
@@ -251,6 +291,11 @@
             
             const formData = new FormData(event.target);
             const data = Object.fromEntries(formData.entries());
+            
+            // Agregar campos críticos explícitamente
+            data.phone = document.getElementById('info-phone')?.value?.trim() || '';
+            data.whatsapp_sales = document.getElementById('info-whatsapp')?.value?.trim() || '';
+            data.whatsapp_support = document.getElementById('info-whatsapp-support')?.value?.trim() || '';
 
             try {
                 const response = await fetch('/tenant/{{ $tenant->id }}/update-info', {
@@ -652,7 +697,7 @@
                     
                     alert(`✓ Producto ${isEdit ? 'actualizado' : 'creado'} correctamente`);
                     closeProductModal();
-                    location.reload();
+                    dashboardReload();
                 } else {
                     alert('✗ Error: ' + (result.message || 'Error desconocido'));
                 }
@@ -684,7 +729,7 @@
 
                 if (result.success) {
                     alert('✓ Producto eliminado correctamente');
-                    location.reload();
+                    dashboardReload();
                 } else {
                     alert('✗ Error al eliminar: ' + (result.message || 'Error desconocido'));
                 }

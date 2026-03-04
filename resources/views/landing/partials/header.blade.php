@@ -98,7 +98,7 @@
             
             {{-- Botón WhatsApp con mensaje dinámico según horario --}}
             @php 
-                $wa = $tenant->whatsapp_sales ?? $tenant->whatsapp ?? null;
+                $wa = $tenant->getActiveWhatsapp() ?? null;
                 $waMessage = ($showHoursIndicator && !$isOpen) 
                     ? $closedMessage 
                     : 'Hola, vi tu vitrina';

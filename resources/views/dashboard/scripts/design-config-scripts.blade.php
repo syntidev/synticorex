@@ -21,58 +21,62 @@
 
         // Design Tab: Custom Palette (Plan 3)
         function applyCustomPalette() {
-            const colors = {
-                primary: document.getElementById('custom-primary').value,
-                secondary: document.getElementById('custom-secondary').value,
-                accent: document.getElementById('custom-accent').value,
-                base: document.getElementById('custom-base').value
-            };
-            
+            const color = document.getElementById('custom-primary')?.value;
+            if (!color) return;
+            const csrf = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
             fetch(`/tenant/{{ $tenant->id }}/dashboard/save-custom-palette`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                body: JSON.stringify(colors)
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'X-CSRF-TOKEN': csrf },
+                body: JSON.stringify({ primary: color, secondary: color, accent: color, base: '#ffffff' })
             })
             .then(r => r.json())
             .then(data => {
-                if(data.success) {
-                    showToast('✅ Paleta personalizada guardada');
-                    
-                    // Aplicar HEX directo (FlyonUI acepta hex en vars CSS)
-                    document.documentElement.style.setProperty('--color-primary', colors.primary);
-                    document.documentElement.style.setProperty('--color-secondary', colors.secondary);
-                    document.documentElement.style.setProperty('--color-accent', colors.accent);
-                    document.documentElement.style.setProperty('--color-base-100', colors.base);
-                    
-                    setTimeout(() => location.reload(), 1500);
+                if (data.success) {
+                    document.documentElement.style.setProperty('--primary', color);
+                    document.documentElement.style.setProperty('--primary-hover', color);
+                    document.documentElement.style.setProperty('--primary-500', color);
+                    document.documentElement.style.setProperty('--primary-600', color);
+                    showToast('✅ Color aplicado');
+                    setTimeout(() => dashboardReload(), 1500);
+                } else {
+                    showToast('❌ ' + (data.message || 'Error'), 'error');
                 }
             })
-            .catch(err => showToast('❌ Error al aplicar paleta'));
+            .catch(err => showToast('❌ ' + err.message, 'error'));
         }
 
-        // Design Tab: Theme Update (FlyonUI)
+        // Design Tab: Theme Update (Preline)
         function updateTheme(theme) {
             fetch(`/tenant/{{ $tenant->id }}/update-theme`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'Accept': 'application/json'
                 },
-                body: JSON.stringify({
-                    theme_slug: theme,
-                    clear_custom: true
-                })
+                body: JSON.stringify({ theme_slug: theme })
             })
-            .then(r => r.json())
+            .then(r => {
+                if (!r.ok) {
+                    return r.json().catch(() => ({ success: false, message: 'Error HTTP ' + r.status })).then(errData => {
+                        throw new Error(errData.message || 'Error ' + r.status);
+                    });
+                }
+                return r.json();
+            })
             .then(data => {
-                if(data.success) {
+                if (data.success) {
                     document.documentElement.setAttribute('data-theme', 'theme-' + theme);
                     showToast('✅ Tema ' + theme + ' aplicado');
-                    setTimeout(() => location.reload(), 1000);
+                    setTimeout(() => dashboardReload(), 1000);
+                } else {
+                    showToast('❌ ' + (data.message || 'No se pudo aplicar el tema'), 'error');
+                    console.error('Theme update failed:', data);
                 }
+            })
+            .catch(err => {
+                showToast('❌ ' + err.message, 'error');
+                console.error('Theme update error:', err);
             });
         }
 
@@ -730,7 +734,7 @@
                 if (result.success) {
                     closeBranchModal();
                     alert('✓ ' + result.message);
-                    location.reload();
+                    dashboardReload();
                 } else {
                     alert('✗ ' + (result.message || 'Error desconocido'));
                 }
@@ -756,7 +760,7 @@
 
                 if (result.success) {
                     alert('✓ Sucursal eliminada');
-                    location.reload();
+                    dashboardReload();
                 } else {
                     alert('✗ ' + (result.message || 'Error'));
                 }

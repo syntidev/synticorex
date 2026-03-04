@@ -321,7 +321,7 @@
                     
                     alert(`✓ Servicio ${isEdit ? 'actualizado' : 'creado'} correctamente`);
                     closeServiceModal();
-                    location.reload();
+                    dashboardReload();
                 } else {
                     alert('✗ Error: ' + (result.message || 'Error desconocido'));
                 }
@@ -353,7 +353,7 @@
 
                 if (result.success) {
                     alert('✓ Servicio eliminado correctamente');
-                    location.reload();
+                    dashboardReload();
                 } else {
                     alert('✗ Error al eliminar: ' + (result.message || 'Error desconocido'));
                 }

@@ -25,7 +25,7 @@ class TenantRendererController extends Controller
      */
     /** @var array<string, string> Templates disponibles */
     private const TEMPLATE_MAP = [
-        'synticat' => 'landing.cat',
+        'synticat' => 'landing.templates.catalog',
     ];
 
     public function __construct(
@@ -41,7 +41,7 @@ class TenantRendererController extends Controller
     {
         $templateKey = data_get($tenant->settings, 'engine_settings.template', 'default');
 
-        return self::TEMPLATE_MAP[$templateKey] ?? 'landing.base';
+        return self::TEMPLATE_MAP[$templateKey] ?? 'landing.templates.studio';
     }
 
     /**
@@ -624,6 +624,33 @@ class TenantRendererController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Error al cambiar estado'
+            ], 500);
+        }
+    }
+
+    /**
+     * Toggle active WhatsApp line (sales / support).
+     *
+     * @param Request $request
+     * @param int $tenantId
+     * @return JsonResponse
+     */
+    public function toggleWhatsapp(Request $request, int $tenantId): JsonResponse
+    {
+        try {
+            $tenant = Tenant::findOrFail($tenantId);
+            $tenant->whatsapp_active = $tenant->whatsapp_active === 'sales' ? 'support' : 'sales';
+            $tenant->save();
+
+            return response()->json([
+                'success' => true,
+                'active'  => $tenant->whatsapp_active,
+                'number'  => $tenant->getActiveWhatsapp(),
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al cambiar línea WhatsApp'
             ], 500);
         }
     }

@@ -1,3 +1,5 @@
+// LEGACY v3 config — ignorado por Tailwind v4 (usa @tailwindcss/vite)
+// Mantenido solo como referencia del safelist histórico
 import defaultTheme from 'tailwindcss/defaultTheme';
 import { addIconSelectors } from '@iconify/tailwind';
 
@@ -74,6 +76,22 @@ export default {
 
     theme: {
         extend: {
+            colors: {
+                'layer': 'var(--layer)',
+                'layer-hover': 'var(--layer-hover)',
+                'layer-line': 'var(--layer-line)',
+                'layer-foreground': 'var(--layer-foreground)',
+                'primary-focus': 'var(--primary-focus)',
+                'primary-line': 'var(--primary-line)',
+                'primary-hover': 'var(--primary-hover)',
+                'primary-foreground': 'var(--primary-foreground)',
+                'muted': 'var(--muted)',
+                'muted-foreground-1': 'var(--muted-foreground-1)',
+                'muted-foreground-2': 'var(--muted-foreground-2)',
+                'surface': 'var(--surface)',
+                'foreground': 'var(--foreground)',
+                'success': 'var(--success)',
+            },
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
@@ -82,6 +100,7 @@ export default {
                 'conic-gradient': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
             },
             boxShadow: {
+                '2xs': 'var(--shadow-2xs)',
                 'glow-primary': '0 0 20px rgba(255, 107, 0, 0.15)',
                 'glow-strong': '0 0 50px rgba(255, 107, 0, 0.3)',
             },

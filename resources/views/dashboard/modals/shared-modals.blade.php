@@ -10,18 +10,18 @@
                     <input type="hidden" id="branch-edit-id" value="">
                     <form id="branch-form" onsubmit="saveBranch(event)" class="flex flex-col gap-3">
                         <div class="form-control py-2">
-                            <label for="branch-name" class="label"><span class="label-text text-sm font-medium">Nombre *</span></label>
-                            <input type="text" id="branch-name" class="input input-bordered w-full" required maxlength="150" placeholder="Sede Centro, Sucursal Altamira...">
+                            <label for="branch-name" class="inline-block text-sm font-medium text-foreground mb-1">Nombre *</label>
+                            <input type="text" id="branch-name" class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none" required maxlength="150" placeholder="Sede Centro, Sucursal Altamira...">
                         </div>
 
                         <div class="form-control py-2">
-                            <label for="branch-address" class="label"><span class="label-text text-sm font-medium">Dirección *</span></label>
-                            <textarea id="branch-address" class="textarea textarea-bordered w-full" rows="2" required maxlength="500" placeholder="Av. Libertador, Torre X, Piso 3..."></textarea>
+                            <label for="branch-address" class="inline-block text-sm font-medium text-foreground mb-1">Dirección *</label>
+                            <textarea id="branch-address" class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none" rows="2" required maxlength="500" placeholder="Av. Libertador, Torre X, Piso 3..."></textarea>
                         </div>
 
-                        <div class="flex gap-3 pt-6 border-t border-base-content/10 justify-end">
-                            <button type="button" class="py-2 px-4 rounded-lg font-medium transition-colors text-gray-600 hover:bg-gray-100" onclick="closeBranchModal()">Cancelar</button>
-                            <button type="submit" class="inline-flex items-center py-2 px-4 rounded-lg font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 gap-2 shadow-md">
+                        <div class="flex gap-3 pt-6 border-t border-border justify-end">
+                            <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg bg-layer border border-layer-line text-layer-foreground shadow-2xs hover:bg-layer-hover disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-layer-focus" onclick="closeBranchModal()">Cancelar</button>
+                            <button type="submit" class="py-2 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg bg-primary border border-primary-line text-primary-foreground hover:bg-primary-hover focus:outline-hidden focus:bg-primary-focus disabled:opacity-50 disabled:pointer-events-none shadow-sm">
                                 <span class="iconify tabler--device-floppy size-4" aria-hidden="true"></span>
                                 Guardar
                             </button>
@@ -43,23 +43,23 @@
                     <input type="hidden" id="testimonial-edit-index" value="">
                     <form id="testimonial-form" onsubmit="saveTestimonialItem(event)" class="flex flex-col gap-3">
                         <div class="form-control py-2">
-                            <label for="testimonial-name" class="label"><span class="label-text text-sm font-medium">Nombre *</span></label>
-                            <input type="text" id="testimonial-name" class="input input-bordered w-full" required maxlength="100" placeholder="Juan Pérez...">
+                            <label for="testimonial-name" class="inline-block text-sm font-medium text-foreground mb-1">Nombre *</label>
+                            <input type="text" id="testimonial-name" class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none" required maxlength="100" placeholder="Juan Pérez...">
                         </div>
 
                         <div class="form-control py-2">
-                            <label for="testimonial-title" class="label"><span class="label-text text-sm font-medium">Cargo/Rol</span></label>
-                            <input type="text" id="testimonial-title" class="input input-bordered w-full" maxlength="100" placeholder="CEO de Empresa...">
+                            <label for="testimonial-title" class="inline-block text-sm font-medium text-foreground mb-1">Cargo/Rol</label>
+                            <input type="text" id="testimonial-title" class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none" maxlength="100" placeholder="CEO de Empresa...">
                         </div>
 
                         <div class="form-control py-2">
-                            <label for="testimonial-text" class="label"><span class="label-text text-sm font-medium">Testimonio *</span></label>
-                            <textarea id="testimonial-text" class="textarea textarea-bordered w-full" rows="3" required maxlength="200" placeholder="Excelente servicio..."></textarea>
+                            <label for="testimonial-text" class="inline-block text-sm font-medium text-foreground mb-1">Testimonio *</label>
+                            <textarea id="testimonial-text" class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none" rows="3" required maxlength="200" placeholder="Excelente servicio..."></textarea>
                         </div>
 
                         <div class="form-control py-2">
-                            <label for="testimonial-rating" class="label"><span class="label-text text-sm font-medium">Calificación</span></label>
-                            <select id="testimonial-rating" class="select select-bordered w-full">
+                            <label for="testimonial-rating" class="inline-block text-sm font-medium text-foreground mb-1">Calificación</label>
+                            <select id="testimonial-rating" class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none">
                                 <option value="5" selected>★★★★★ Excelente (5)</option>
                                 <option value="4">★★★★☆ Muy bueno (4)</option>
                                 <option value="3">★★★☆☆ Bueno (3)</option>
@@ -68,9 +68,9 @@
                             </select>
                         </div>
 
-                        <div class="flex gap-3 pt-6 border-t border-base-content/10 justify-end">
-                            <button type="button" class="py-2 px-4 rounded-lg font-medium transition-colors text-gray-600 hover:bg-gray-100" onclick="closeTestimonialModal()">Cancelar</button>
-                            <button type="submit" class="inline-flex items-center py-2 px-4 rounded-lg font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 gap-2 shadow-md">
+                        <div class="flex gap-3 pt-6 border-t border-border justify-end">
+                            <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg bg-layer border border-layer-line text-layer-foreground shadow-2xs hover:bg-layer-hover disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-layer-focus" onclick="closeTestimonialModal()">Cancelar</button>
+                            <button type="submit" class="py-2 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg bg-primary border border-primary-line text-primary-foreground hover:bg-primary-hover focus:outline-hidden focus:bg-primary-focus disabled:opacity-50 disabled:pointer-events-none shadow-sm">
                                 <span class="iconify tabler--device-floppy size-4" aria-hidden="true"></span>
                                 Guardar
                             </button>
@@ -92,18 +92,18 @@
                     <input type="hidden" id="faq-edit-index" value="">
                     <form id="faq-form" onsubmit="saveFaqItem(event)" class="flex flex-col gap-3">
                         <div class="form-control py-2">
-                            <label for="faq-question" class="label"><span class="label-text text-sm font-medium">Pregunta *</span></label>
-                            <input type="text" id="faq-question" class="input input-bordered w-full" required maxlength="150" placeholder="¿Cuáles son tus horarios?...">
+                            <label for="faq-question" class="inline-block text-sm font-medium text-foreground mb-1">Pregunta *</label>
+                            <input type="text" id="faq-question" class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none" required maxlength="150" placeholder="¿Cuáles son tus horarios?...">
                         </div>
 
                         <div class="form-control py-2">
-                            <label for="faq-answer" class="label"><span class="label-text text-sm font-medium">Respuesta *</span></label>
-                            <textarea id="faq-answer" class="textarea textarea-bordered w-full" rows="3" required maxlength="300" placeholder="Abierto de lunes a viernes..."></textarea>
+                            <label for="faq-answer" class="inline-block text-sm font-medium text-foreground mb-1">Respuesta *</label>
+                            <textarea id="faq-answer" class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none" rows="3" required maxlength="300" placeholder="Abierto de lunes a viernes..."></textarea>
                         </div>
 
-                        <div class="flex gap-3 pt-6 border-t border-base-content/10 justify-end">
-                            <button type="button" class="py-2 px-4 rounded-lg font-medium transition-colors text-gray-600 hover:bg-gray-100" onclick="closeFaqModal()">Cancelar</button>
-                            <button type="submit" class="inline-flex items-center py-2 px-4 rounded-lg font-medium transition-colors bg-gray-600 text-white hover:bg-gray-700 gap-2 shadow-md">
+                        <div class="flex gap-3 pt-6 border-t border-border justify-end">
+                            <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg bg-layer border border-layer-line text-layer-foreground shadow-2xs hover:bg-layer-hover disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-layer-focus" onclick="closeFaqModal()">Cancelar</button>
+                            <button type="submit" class="py-2 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg bg-primary border border-primary-line text-primary-foreground hover:bg-primary-hover focus:outline-hidden focus:bg-primary-focus disabled:opacity-50 disabled:pointer-events-none shadow-sm">
                                 <span class="iconify tabler--device-floppy size-4" aria-hidden="true"></span>
                                 Guardar
                             </button>
@@ -124,7 +124,7 @@
                 <div class="crud-dialog-body">
                     <p id="limit-modal-message" class="text-base-content/80 leading-relaxed mb-5"></p>
                     <div id="limit-modal-actions" class="flex gap-3 flex-wrap">
-                        <button onclick="closeLimitModal()" class="py-2 px-4 rounded-lg font-medium transition-colors text-gray-700 hover:bg-gray-100 flex-1">Cerrar</button>
+                        <button onclick="closeLimitModal()" class="py-2 px-4 rounded-lg font-medium transition-colors text-foreground hover:bg-muted-hover flex-1">Cerrar</button>
                         <div id="limit-modal-cta"></div>
                     </div>
                 </div>

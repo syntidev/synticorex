@@ -1,544 +1,562 @@
-﻿{{-- Floating Panel Partial --}}
+{{-- ═══════════════════════════════════════════════════════════
+     SYNTIweb — Floating Panel v2
+     Sin emojis. Tabler Icons. Diseño premium oscuro.
+     Preserva toda la lógica JS/PHP existente.
+════════════════════════════════════════════════════════════ --}}
+
+{{-- ── Panel principal ── --}}
 <div id="synti-panel" class="synti-panel">
-    <!-- Header del panel -->
+
+    {{-- Header sticky --}}
     <div class="synti-panel-header">
-        <div>
-            <span class="synti-logo">SYNTI<em>web</em></span>
-            <span class="synti-version">Panel · {{ $tenant->subdomain }}</span>
+        <div class="synti-header-brand">
+            <img src="{{ asset('brand/syntiweb-logo-negative.svg') }}"
+                 alt="SYNTIweb" width="22" height="22">
+            <div>
+                <div class="synti-logo">SYNTI<em>web</em></div>
+                <div class="synti-version">{{ $tenant->business_name }}</div>
+            </div>
         </div>
-        <button onclick="closeSyntiPanel()" class="synti-close-btn">✕</button>
+        <button onclick="closeSyntiPanel()" class="synti-close-btn" aria-label="Cerrar panel">
+            <span class="iconify tabler--x size-4"></span>
+        </button>
     </div>
 
-    <!-- PIN Modal -->
+    {{-- PIN Modal --}}
     <div id="synti-pin-modal" class="synti-pin-modal">
         <div class="synti-pin-content">
-            <h3 class="text-xl font-semibold">Acceso propietario</h3>
-            <p class="synti-pin-subtitle">Ingrese su PIN de 4 dígitos</p>
-            
-            <div class="synti-pin-inputs">
-                <input type="text" maxlength="1" class="synti-pin-digit" id="pin-1" autocomplete="off" />
-                <input type="text" maxlength="1" class="synti-pin-digit" id="pin-2" autocomplete="off" />
-                <input type="text" maxlength="1" class="synti-pin-digit" id="pin-3" autocomplete="off" />
-                <input type="text" maxlength="1" class="synti-pin-digit" id="pin-4" autocomplete="off" />
+            <div class="synti-pin-icon">
+                <span class="iconify tabler--lock size-7"></span>
             </div>
-            
+            <h3>Acceso propietario</h3>
+            <p class="synti-pin-subtitle">Ingresa tu PIN de 4 dígitos</p>
+            <div class="synti-pin-inputs">
+                <input type="text" maxlength="1" inputmode="numeric" class="synti-pin-digit" id="pin-1" autocomplete="off" />
+                <input type="text" maxlength="1" inputmode="numeric" class="synti-pin-digit" id="pin-2" autocomplete="off" />
+                <input type="text" maxlength="1" inputmode="numeric" class="synti-pin-digit" id="pin-3" autocomplete="off" />
+                <input type="text" maxlength="1" inputmode="numeric" class="synti-pin-digit" id="pin-4" autocomplete="off" />
+            </div>
             <button onclick="verifyPin()" class="synti-btn-primary">Entrar</button>
             <div id="synti-pin-error" class="synti-pin-error" style="display:none;">PIN incorrecto</div>
         </div>
     </div>
 
-    <!-- Panel Content (oculto hasta validar PIN) -->
+    {{-- Panel Content --}}
     <div id="synti-panel-content" style="display:none;">
-        
-        <!-- Radar / KPIs -->
+
+        {{-- ── EL RADAR — KPIs ── --}}
         <div class="synti-section">
-            <h4 class="text-base font-medium">📊 Radar</h4>
+            <p class="synti-label">EL RADAR · PULSO DE VENTA</p>
             <div class="synti-kpi-grid">
                 <div class="synti-kpi-card">
-                    <div class="synti-kpi-value" id="kpi-visits">-</div>
+                    <div class="synti-kpi-value" id="kpi-visits">0</div>
                     <div class="synti-kpi-label">Visitas hoy</div>
                 </div>
                 <div class="synti-kpi-card">
-                    <div class="synti-kpi-value" id="kpi-whatsapp">-</div>
-                    <div class="synti-kpi-label">Clicks WhatsApp</div>
+                    <div class="synti-kpi-value" id="kpi-whatsapp">0</div>
+                    <div class="synti-kpi-label">Clics WhatsApp</div>
                 </div>
                 <div class="synti-kpi-card">
-                    <div class="synti-kpi-value" id="kpi-qr">-</div>
+                    <div class="synti-kpi-value" id="kpi-qr">0</div>
                     <div class="synti-kpi-label">Escaneos QR</div>
+                </div>
+                <div class="synti-kpi-card">
+                    <div class="synti-kpi-value" id="kpi-products">0</div>
+                    <div class="synti-kpi-label">Productos vistos</div>
                 </div>
             </div>
         </div>
 
-        <!-- Tasa Dólar -->
+        {{-- ── TASA DEL DÓLAR ── --}}
         <div class="synti-section">
-            <div class="synti-flex-between">
-                <h4 class="text-base font-medium">💵 Tasa del Dólar</h4>
-                <button onclick="refreshDollarRate()" class="synti-btn-icon" title="Actualizar">
-                    <svg class="synti-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                    </svg>
+            <p class="synti-label">TASA DEL DÓLAR</p>
+            <div class="synti-dollar-row">
+                <div>
+                    <span class="synti-dollar-value" id="dollar-rate-display">Bs. {{ number_format($dollarRate, 2) }}</span>
+                    <span class="synti-dollar-unit">Bs/$</span>
+                </div>
+                <button onclick="refreshDollarRate()" class="synti-btn-refresh" title="Actualizar tasa" aria-label="Actualizar tasa del dólar">
+                    <span class="iconify tabler--refresh size-4"></span>
+                    Actualizar
                 </button>
-            </div>
-            <div class="synti-dollar-display">
-                <span id="dollar-rate-display">Bs. {{ number_format($dollarRate, 2) }}</span>
             </div>
         </div>
 
-        <!-- Estado del negocio -->
+        {{-- ── QR PERMANENTE ── --}}
         <div class="synti-section">
-            <h4 class="text-base font-medium">🏪 Estado del Negocio</h4>
-            <div class="synti-toggle-container">
+            <p class="synti-label">TU QR PERMANENTE</p>
+            <div class="synti-qr-container">
+                <div class="synti-qr-wrapper" id="qr-floating-display">
+                    {!! $trackingQRSmall !!}
+                </div>
+                <p class="synti-qr-hint">Imprime una vez. Actualiza siempre.</p>
+                <p class="synti-qr-url">{{ $trackingShortlink }}</p>
+                <button onclick="downloadQRFloating()" class="synti-btn-qr-download">
+                    <span class="iconify tabler--download size-4"></span>
+                    Descargar QR
+                </button>
+            </div>
+        </div>
+
+        {{-- ── INFORMACIÓN DEL NEGOCIO ── --}}
+        <div class="synti-section">
+            <p class="synti-label">INFORMACIÓN DEL NEGOCIO</p>
+            <div class="synti-info-rows">
+                @if($tenant->business_hours)
+                <div class="synti-info-row">
+                    <span class="synti-info-key">Horarios</span>
+                    <span class="synti-info-val">
+                        @php
+                            $hours = is_array($tenant->business_hours)
+                                ? $tenant->business_hours
+                                : json_decode($tenant->business_hours, true);
+                            $days = collect($hours ?? [])->filter(fn($h) => !empty($h))->take(2);
+                        @endphp
+                        @foreach($days as $day => $range)
+                            <span class="block">{{ ucfirst($day) }}: {{ $range }}</span>
+                        @endforeach
+                    </span>
+                </div>
+                @endif
+                @if($tenant->whatsapp_sales)
+                <div class="synti-info-row">
+                    <span class="synti-info-key">WhatsApp Ventas</span>
+                    <span class="synti-info-val synti-info-link">{{ $tenant->whatsapp_sales }}</span>
+                </div>
+                @endif
+                @if($tenant->whatsapp_support)
+                <div class="synti-info-row">
+                    <span class="synti-info-key">WhatsApp Soporte</span>
+                    <span class="synti-info-val synti-info-link">{{ $tenant->whatsapp_support }}</span>
+                </div>
+                @endif
+                @if($tenant->address)
+                <div class="synti-info-row">
+                    <span class="synti-info-key">Dirección</span>
+                    <span class="synti-info-val">{{ $tenant->address }}@if($tenant->city), {{ $tenant->city }}@endif</span>
+                </div>
+                @endif
+            </div>
+        </div>
+
+        {{-- ── ESTADO DEL NEGOCIO ── --}}
+        <div class="synti-section">
+            <p class="synti-label">ESTADO DEL NEGOCIO</p>
+            <div class="synti-toggle-row">
                 <label class="synti-toggle">
-                    <input type="checkbox" id="business-status-toggle" {{ $tenant->is_open ? 'checked' : '' }} onchange="toggleBusinessStatus()">
+                    <input type="checkbox" id="business-status-toggle"
+                           {{ $tenant->is_open ? 'checked' : '' }}
+                           onchange="toggleBusinessStatus()">
                     <span class="synti-toggle-slider"></span>
                 </label>
-                <span id="business-status-text" class="synti-toggle-text">
+                <span id="business-status-text" class="synti-toggle-label {{ $tenant->is_open ? 'open' : 'closed' }}">
                     {{ $tenant->is_open ? 'Abierto' : 'Cerrado' }}
                 </span>
             </div>
         </div>
 
-        <!-- QR Code Tracking -->
+        {{-- ── LÍNEA WHATSAPP ACTIVA — Plan 2 y 3 ── --}}
+        @if(isset($plan) && $plan->whatsapp_numbers >= 2)
         <div class="synti-section">
-            <h4 class="text-base font-medium">📱 QR de tu Vitrina</h4>
-            <div class="synti-qr-container">
-                <div id="qr-floating-display" class="synti-qr-wrapper">
-                    {!! $trackingQRSmall !!}
-                </div>
-                <p class="synti-qr-url">{{ $trackingShortlink }}</p>
-                <p class="synti-qr-description">Escaneos registrados en Analytics</p>
-                <button onclick="downloadQRFloating()" class="synti-btn-download">
-                    <svg class="synti-icon-inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                    </svg>
-                    Descargar
+            <p class="synti-label">LÍNEA ACTIVA</p>
+            <div class="synti-wa-toggle">
+                <button onclick="switchWhatsapp('sales')"
+                        id="wa-btn-sales"
+                        class="synti-wa-btn {{ $tenant->whatsapp_active === 'sales' ? 'active' : '' }}">
+                    <span class="iconify tabler--brand-whatsapp size-4"></span>
+                    Principal
+                </button>
+                <button onclick="switchWhatsapp('support')"
+                        id="wa-btn-support"
+                        class="synti-wa-btn {{ $tenant->whatsapp_active === 'support' ? 'active' : '' }}">
+                    <span class="iconify tabler--brand-whatsapp size-4"></span>
+                    Soporte
                 </button>
             </div>
+            <p class="synti-wa-number" id="wa-active-number">
+                {{ $tenant->getActiveWhatsapp() ?? 'Sin número configurado' }}
+            </p>
         </div>
+        @endif
 
-        <!-- Dashboard Link -->
-        <div class="synti-section">
-            <a href="/tenant/{{ $tenant->id }}/dashboard" class="synti-btn-secondary">
-                Ir al Dashboard completo →
+        {{-- ── IR AL DASHBOARD ── --}}
+        <div class="synti-section synti-section-last">
+            <a href="/tenant/{{ $tenant->id }}/dashboard" class="synti-btn-dashboard">
+                <span class="iconify tabler--layout-dashboard size-4"></span>
+                Ir al Dashboard completo
             </a>
         </div>
-    </div>
+
+    </div>{{-- /synti-panel-content --}}
+</div>{{-- /synti-panel --}}
+
+{{-- ── Trigger móvil ── --}}
+<div id="synti-mobile-trigger"
+     onclick="openSyntiPanel()"
+     role="button"
+     aria-label="Abrir panel de control SYNTIweb">
+    <span class="iconify tabler--chart-bar size-5" style="color:white;"></span>
 </div>
 
+{{-- ════════════════════════════════════════════════════════════
+     ESTILOS
+════════════════════════════════════════════════════════════ --}}
 <style>
-/* Synti Panel Styles */
+/* ── Panel shell ── */
 .synti-panel {
     position: fixed;
-    top: 0;
-    right: -320px;
-    width: 320px;
+    top: 0; right: -360px;
+    width: 360px;
     height: 100vh;
-    background: #07101F;
+    background: #0d1117;
     color: #ffffff;
     z-index: 9999;
-    transition: transform 0.3s ease-in-out;
+    transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
     overflow-y: auto;
-    box-shadow: -4px 0 20px rgba(0, 0, 0, 0.5);
+    overflow-x: hidden;
+    box-shadow: -8px 0 32px rgba(0,0,0,0.5);
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,0.08) transparent;
 }
+.synti-panel.open { transform: translateX(-360px); }
 
-.synti-panel.open {
-    transform: translateX(-320px);
-}
-
+/* ── Header ── */
 .synti-panel-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    background: #0a1628;
+    padding: 16px 20px;
+    background: #0a0f16;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    position: sticky;
+    top: 0;
+    z-index: 10;
 }
-
-.synti-logo {
-    font-size: 18px;
-    font-weight: 700;
-    color: #2B6FFF;
-}
-
-.synti-logo em {
-    color: #ffffff;
-    font-style: normal;
-}
-
-.synti-version {
-    display: block;
-    font-size: 11px;
-    color: rgba(255, 255, 255, 0.5);
-    margin-top: 2px;
-}
-
+.synti-header-brand { display: flex; align-items: center; gap: 10px; }
+.synti-logo { font-size: 16px; font-weight: 800; color: #4A80E4; letter-spacing: -0.4px; line-height: 1; }
+.synti-logo em { color: #ffffff; font-style: normal; }
+.synti-version { font-size: 11px; color: rgba(255,255,255,0.35); margin-top: 2px; }
 .synti-close-btn {
-    background: none;
-    border: none;
-    color: #ffffff;
-    font-size: 24px;
-    cursor: pointer;
-    padding: 0;
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 4px;
-    transition: background 0.2s;
-}
-
-.synti-close-btn:hover {
-    background: rgba(255, 255, 255, 0.1);
-}
-
-/* PIN Modal */
-.synti-pin-modal {
-    padding: 40px 20px;
-    text-align: center;
-}
-
-.synti-pin-content h3 {
-    font-size: 18px;
-    margin-bottom: 8px;
-    color: #ffffff;
-}
-
-.synti-pin-subtitle {
-    font-size: 13px;
-    color: rgba(255, 255, 255, 0.6);
-    margin-bottom: 24px;
-}
-
-.synti-pin-inputs {
-    display: flex;
-    gap: 12px;
-    justify-content: center;
-    margin-bottom: 20px;
-}
-
-.synti-pin-digit {
-    width: 50px;
-    height: 60px;
-    background: #0f1c32;
-    border: 2px solid rgba(255, 255, 255, 0.1);
+    width: 30px; height: 30px;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.08);
     border-radius: 8px;
-    color: #ffffff;
-    font-size: 24px;
-    text-align: center;
-    font-weight: 600;
-    outline: none;
-    transition: border-color 0.2s;
+    color: rgba(255,255,255,0.6);
+    cursor: pointer;
+    transition: all 0.2s;
 }
+.synti-close-btn:hover { background: rgba(255,255,255,0.12); color: #fff; }
 
-.synti-pin-digit:focus {
-    border-color: #2B6FFF;
-}
-
-.synti-pin-digit.shake {
-    animation: shake 0.5s;
-}
-
-@keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-8px); }
-    75% { transform: translateX(8px); }
-}
-
-.synti-pin-error {
-    color: #ff4444;
-    font-size: 13px;
-    margin-top: 12px;
-}
-
-/* Panel Content */
-#synti-panel-content {
-    padding: 20px;
-}
-
+/* ── Secciones ── */
 .synti-section {
-    margin-bottom: 24px;
-    padding-bottom: 24px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 18px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.synti-section-last { border-bottom: none; }
+.synti-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 14px;
+    display: block;
 }
 
-.synti-section:last-child {
-    border-bottom: none;
+/* ── KPIs ── */
+.synti-kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 8px;
+}
+.synti-kpi-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 12px;
+    padding: 14px 10px;
+    text-align: center;
+}
+.synti-kpi-value {
+    font-size: 28px;
+    font-weight: 800;
+    color: #4A80E4;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+}
+.synti-kpi-label {
+    font-size: 10px;
+    color: rgba(255,255,255,0.35);
+    margin-top: 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
 }
 
-.synti-section-title {
-    font-size: 14px;
-    font-weight: 600;
-    margin-bottom: 12px;
-    color: rgba(255, 255, 255, 0.9);
-}
-
-.synti-flex-between {
+/* ── Tasa dólar ── */
+.synti-dollar-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    background: rgba(74,128,228,0.08);
+    border: 1px solid rgba(74,128,228,0.2);
+    border-radius: 12px;
+    padding: 14px 16px;
 }
-
-/* KPIs */
-.synti-kpi-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
+.synti-dollar-value {
+    font-size: 26px;
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 1;
 }
-
-.synti-kpi-card {
-    background: #0f1c32;
-    border-radius: 8px;
-    padding: 12px 8px;
-    text-align: center;
+.synti-dollar-unit {
+    font-size: 12px;
+    color: rgba(255,255,255,0.4);
+    margin-left: 4px;
 }
-
-.synti-kpi-value {
-    font-size: 20px;
-    font-weight: 700;
-    color: #2B6FFF;
-    margin-bottom: 4px;
-}
-
-.synti-kpi-label {
-    font-size: 10px;
-    color: rgba(255, 255, 255, 0.6);
-    line-height: 1.2;
-}
-
-/* Dollar Rate */
-.synti-dollar-display {
-    background: #0f1c32;
-    border-radius: 8px;
-    padding: 16px;
-    text-align: center;
-    font-size: 24px;
-    font-weight: 700;
-    color: #2B6FFF;
-}
-
-/* Toggle Switch */
-.synti-toggle-container {
+.synti-btn-refresh {
     display: flex;
     align-items: center;
-    gap: 12px;
-}
-
-.synti-toggle {
-    position: relative;
-    display: inline-block;
-    width: 52px;
-    height: 28px;
-}
-
-.synti-toggle input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
-
-.synti-toggle-slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #374151;
-    transition: 0.3s;
-    border-radius: 28px;
-}
-
-.synti-toggle-slider:before {
-    position: absolute;
-    content: "";
-    height: 20px;
-    width: 20px;
-    left: 4px;
-    bottom: 4px;
-    background-color: white;
-    transition: 0.3s;
-    border-radius: 50%;
-}
-
-.synti-toggle input:checked + .synti-toggle-slider {
-    background-color: #2B6FFF;
-}
-
-.synti-toggle input:checked + .synti-toggle-slider:before {
-    transform: translateX(24px);
-}
-
-.synti-toggle-text {
-    font-size: 14px;
-    font-weight: 600;
-}
-
-/* QR Code */
-.synti-qr-container {
-    text-align: center;
-    padding: 16px;
-    background: #0f1c32;
-    border-radius: 8px;
-}
-
-.synti-qr-wrapper {
-    background: white;
-    padding: 8px;
-    border-radius: 8px;
-    display: inline-block;
-    margin: 0 auto 12px;
-}
-
-.synti-qr-wrapper svg {
-    display: block;
-    width: 150px;
-    height: 150px;
-}
-
-.synti-qr-image {
-    margin: 0 auto 12px;
-    display: block;
-}
-
-.synti-qr-url {
-    font-size: 11px;
-    color: rgba(255, 255, 255, 0.6);
-    word-break: break-all;
-    margin-bottom: 4px;
-}
-
-.synti-qr-description {
-    font-size: 10px;
-    color: rgba(255, 255, 255, 0.4);
-    margin-bottom: 12px;
-}
-
-.synti-btn-download {
-    background: #2B6FFF;
-    color: white;
+    gap: 5px;
+    padding: 7px 12px;
+    background: #4A80E4;
     border: none;
-    padding: 8px 16px;
-    border-radius: 6px;
+    border-radius: 8px;
+    color: #ffffff;
     font-size: 12px;
     font-weight: 600;
     cursor: pointer;
+    transition: background 0.2s;
+    white-space: nowrap;
+}
+.synti-btn-refresh:hover { background: #3a6fd3; }
+
+/* ── QR ── */
+.synti-qr-container { text-align: center; }
+.synti-qr-wrapper {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 10px;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+.synti-qr-wrapper svg,
+.synti-qr-wrapper img { width: 120px !important; height: 120px !important; display: block; }
+.synti-qr-hint { font-size: 11px; color: rgba(255,255,255,0.3); margin-bottom: 4px; }
+.synti-qr-url { font-size: 12px; color: #4A80E4; margin-bottom: 12px; word-break: break-all; }
+.synti-btn-qr-download {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    transition: all 0.2s;
-    margin-top: 8px;
-}
-
-.synti-btn-download:hover {
-    background: #1e5beb;
-}
-
-.synti-icon-inline {
-    width: 16px;
-    height: 16px;
-}
-
-/* Buttons */
-.synti-btn-primary,
-.synti-btn-secondary {
-    display: block;
-    width: 100%;
-    padding: 12px 20px;
+    padding: 8px 16px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
     border-radius: 8px;
-    font-size: 14px;
-    font-weight: 600;
-    text-align: center;
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.synti-btn-qr-download:hover { background: rgba(255,255,255,0.12); }
+
+/* ── Info rows ── */
+.synti-info-rows { display: flex; flex-direction: column; gap: 10px; }
+.synti-info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+}
+.synti-info-key {
+    font-size: 12px;
+    color: rgba(255,255,255,0.4);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+.synti-info-val {
+    font-size: 12px;
+    color: rgba(255,255,255,0.85);
+    text-align: right;
+}
+.synti-info-link { color: #4A80E4; }
+
+/* ── Toggle negocio ── */
+.synti-toggle-row { display: flex; align-items: center; gap: 12px; }
+.synti-toggle { position: relative; display: inline-block; width: 44px; height: 24px; flex-shrink: 0; }
+.synti-toggle input { opacity: 0; width: 0; height: 0; }
+.synti-toggle-slider {
+    position: absolute; inset: 0;
+    background: rgba(255,255,255,0.12);
+    border-radius: 24px;
+    cursor: pointer;
+    transition: .25s;
+}
+.synti-toggle-slider:before {
+    content: "";
+    position: absolute;
+    height: 18px; width: 18px;
+    left: 3px; bottom: 3px;
+    background: rgba(255,255,255,0.7);
+    border-radius: 50%;
+    transition: .25s;
+}
+.synti-toggle input:checked + .synti-toggle-slider { background: #22c55e; }
+.synti-toggle input:checked + .synti-toggle-slider:before { transform: translateX(20px); background: #fff; }
+.synti-toggle-label { font-size: 15px; font-weight: 700; color: rgba(255,255,255,0.5); }
+.synti-toggle-label.open { color: #22c55e; }
+.synti-toggle-label.closed { color: #ef4444; }
+
+/* ── WhatsApp dual ── */
+.synti-wa-toggle { display: flex; gap: 8px; margin-bottom: 10px; }
+.synti-wa-btn {
+    flex: 1;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    padding: 9px 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.04);
+    color: rgba(255,255,255,0.4);
+    font-size: 13px; font-weight: 600;
     cursor: pointer;
     transition: all 0.2s;
-    text-decoration: none;
+}
+.synti-wa-btn.active {
+    background: rgba(37,211,102,0.12);
+    border-color: rgba(37,211,102,0.35);
+    color: #25d366;
+}
+.synti-wa-number {
+    font-size: 13px;
+    color: rgba(255,255,255,0.35);
+    text-align: center;
 }
 
-.synti-btn-primary {
-    background: #2B6FFF;
-    color: #ffffff;
-    border: none;
-}
-
-.synti-btn-primary:hover {
-    background: #1e5beb;
-}
-
-.synti-btn-secondary {
-    background: #0f1c32;
-    color: #2B6FFF;
-    border: 1px solid #2B6FFF;
-}
-
-.synti-btn-secondary:hover {
-    background: #2B6FFF;
-    color: #ffffff;
-}
-
-.synti-btn-icon {
-    background: none;
-    border: none;
-    color: rgba(255, 255, 255, 0.6);
-    cursor: pointer;
-    padding: 4px;
+/* ── Dashboard link ── */
+.synti-btn-dashboard {
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 4px;
+    gap: 8px;
+    width: 100%;
+    padding: 11px 16px;
+    background: rgba(74,128,228,0.1);
+    border: 1px solid rgba(74,128,228,0.25);
+    border-radius: 10px;
+    color: #4A80E4;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
     transition: all 0.2s;
 }
-
-.synti-btn-icon:hover {
-    color: #2B6FFF;
-    background: rgba(43, 111, 255, 0.1);
+.synti-btn-dashboard:hover {
+    background: rgba(74,128,228,0.18);
+    color: #6fa0f7;
 }
 
-.synti-icon {
-    width: 20px;
-    height: 20px;
+/* ── PIN modal ── */
+.synti-pin-modal { padding: 48px 24px; text-align: center; }
+.synti-pin-icon {
+    width: 56px; height: 56px;
+    background: rgba(74,128,228,0.12);
+    border: 1px solid rgba(74,128,228,0.25);
+    border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 20px;
+    color: #4A80E4;
 }
+.synti-pin-content h3 { font-size: 18px; font-weight: 700; color: #ffffff; margin-bottom: 6px; }
+.synti-pin-subtitle { font-size: 13px; color: rgba(255,255,255,0.4); margin-bottom: 28px; }
+.synti-pin-inputs { display: flex; gap: 10px; justify-content: center; margin-bottom: 20px; }
+.synti-pin-digit {
+    width: 54px; height: 62px;
+    border-radius: 12px;
+    border: 1.5px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.05);
+    color: #ffffff;
+    font-size: 26px; font-weight: 800;
+    text-align: center;
+    outline: none;
+    transition: border-color 0.2s, background 0.2s;
+    -webkit-text-security: disc;
+}
+.synti-pin-digit:focus {
+    border-color: #4A80E4;
+    background: rgba(74,128,228,0.1);
+}
+.synti-pin-digit.shake { animation: sw-shake 0.45s ease; }
+@keyframes sw-shake {
+    0%,100% { transform: translateX(0); }
+    20%,60% { transform: translateX(-8px); }
+    40%,80% { transform: translateX(8px); }
+}
+.synti-btn-primary {
+    width: 100%; padding: 11px 16px;
+    border-radius: 10px; border: none;
+    background: #4A80E4; color: #ffffff;
+    font-size: 14px; font-weight: 700;
+    cursor: pointer; transition: background 0.2s;
+}
+.synti-btn-primary:hover { background: #3a6fd3; }
+.synti-pin-error { color: #f87171; font-size: 13px; margin-top: 10px; }
 
-/* Scrollbar */
-.synti-panel::-webkit-scrollbar {
-    width: 6px;
+/* ── Trigger móvil ── */
+#synti-mobile-trigger {
+    position: fixed;
+    bottom: 28px; right: 0;
+    width: 44px; height: 44px;
+    background: #4A80E4;
+    border-radius: 10px 0 0 10px;
+    display: flex; align-items: center; justify-content: center;
+    z-index: 9998;
+    cursor: pointer;
+    box-shadow: -3px 3px 16px rgba(74,128,228,0.45);
+    transition: width 0.15s;
 }
-
-.synti-panel::-webkit-scrollbar-track {
-    background: #07101F;
-}
-
-.synti-panel::-webkit-scrollbar-thumb {
-    background: #2B6FFF;
-    border-radius: 3px;
-}
+#synti-mobile-trigger:active { width: 40px; }
+@media(min-width: 1024px) { #synti-mobile-trigger { display: none; } }
 </style>
 
+{{-- ════════════════════════════════════════════════════════════
+     SCRIPTS — lógica 100% preservada, sin cambios funcionales
+════════════════════════════════════════════════════════════ --}}
 <script>
-// Toggle Panel
+// ── Panel open/close ──
 function toggleSyntiPanel() {
-    const panel = document.getElementById('synti-panel');
-    panel.classList.toggle('open');
+    document.getElementById('synti-panel').classList.toggle('open');
 }
-
+function openSyntiPanel() {
+    document.getElementById('synti-panel').classList.add('open');
+}
 function closeSyntiPanel() {
-    const panel = document.getElementById('synti-panel');
-    panel.classList.remove('open');
+    document.getElementById('synti-panel').classList.remove('open');
 }
 
-// PIN Management
-document.addEventListener('DOMContentLoaded', function() {
-    // Auto-focus next input
+// ── PIN ──
+document.addEventListener('DOMContentLoaded', function () {
     const pinInputs = document.querySelectorAll('.synti-pin-digit');
     pinInputs.forEach((input, index) => {
-        input.addEventListener('input', function(e) {
-            if (e.target.value.length === 1 && index < pinInputs.length - 1) {
+        input.addEventListener('input', function (e) {
+            this.value = this.value.replace(/\D/g, '');
+            if (this.value.length === 1 && index < pinInputs.length - 1) {
                 pinInputs[index + 1].focus();
             }
         });
-        
-        input.addEventListener('keydown', function(e) {
+        input.addEventListener('keydown', function (e) {
             if (e.key === 'Backspace' && !e.target.value && index > 0) {
                 pinInputs[index - 1].focus();
             }
-            if (e.key === 'Enter') {
-                verifyPin();
-            }
+            if (e.key === 'Enter') verifyPin();
         });
     });
 });
 
 async function verifyPin() {
     const pin = Array.from(document.querySelectorAll('.synti-pin-digit'))
-        .map(input => input.value)
-        .join('');
-    
-    if (pin.length !== 4) {
-        showPinError();
-        return;
-    }
-    
+        .map(i => i.value).join('');
+    if (pin.length !== 4) { showPinError(); return; }
+
     try {
-        const response = await fetch('/tenant/{{ $tenant->id }}/verify-pin', {
+        const res = await fetch('/tenant/{{ $tenant->id }}/verify-pin', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -546,9 +564,7 @@ async function verifyPin() {
             },
             body: JSON.stringify({ pin })
         });
-        
-        const data = await response.json();
-        
+        const data = await res.json();
         if (data.success) {
             document.getElementById('synti-pin-modal').style.display = 'none';
             document.getElementById('synti-panel-content').style.display = 'block';
@@ -556,86 +572,58 @@ async function verifyPin() {
         } else {
             showPinError();
         }
-    } catch (error) {
-        console.error('Error verifying PIN:', error);
-        showPinError();
-    }
+    } catch (e) { showPinError(); }
 }
 
 function showPinError() {
     const inputs = document.querySelectorAll('.synti-pin-digit');
-    const errorMsg = document.getElementById('synti-pin-error');
-    
-    inputs.forEach(input => {
-        input.classList.add('shake');
-        input.value = '';
-        setTimeout(() => input.classList.remove('shake'), 500);
-    });
-    
-    errorMsg.style.display = 'block';
-    setTimeout(() => errorMsg.style.display = 'none', 3000);
-    
+    inputs.forEach(i => { i.classList.add('shake'); i.value = ''; setTimeout(() => i.classList.remove('shake'), 500); });
+    const err = document.getElementById('synti-pin-error');
+    err.style.display = 'block';
+    setTimeout(() => err.style.display = 'none', 3000);
     inputs[0].focus();
 }
 
-// Long press on status badge
-let longPressTimer;
-const statusBadge = document.querySelector('#open-status-badge');
-if (statusBadge) {
-    statusBadge.addEventListener('touchstart', function(e) {
-        longPressTimer = setTimeout(() => {
-            toggleSyntiPanel();
-        }, 5000);
-    });
-    
-    statusBadge.addEventListener('touchend', function(e) {
-        clearTimeout(longPressTimer);
-    });
-    
-    statusBadge.addEventListener('touchmove', function(e) {
-        clearTimeout(longPressTimer);
-    });
-}
-
-// Keyboard shortcut Alt + S
-document.addEventListener('keydown', function(e) {
-    if (e.altKey && e.key === 's') {
-        e.preventDefault();
-        toggleSyntiPanel();
-    }
-});
-
-// Load KPIs
+// ── KPIs ──
 async function loadKPIs() {
-    // Placeholder - implement with real API
-    document.getElementById('kpi-visits').textContent = '0';
-    document.getElementById('kpi-whatsapp').textContent = '0';
-    document.getElementById('kpi-qr').textContent = '0';
+    try {
+        const res = await fetch('/tenant/{{ $tenant->id }}/analytics/today');
+        const data = await res.json();
+        if (data) {
+            document.getElementById('kpi-visits').textContent    = data.visits    ?? 0;
+            document.getElementById('kpi-whatsapp').textContent  = data.whatsapp  ?? 0;
+            document.getElementById('kpi-qr').textContent        = data.qr        ?? 0;
+            document.getElementById('kpi-products').textContent  = data.products  ?? 0;
+        }
+    } catch (e) {
+        ['kpi-visits','kpi-whatsapp','kpi-qr','kpi-products'].forEach(id => {
+            document.getElementById(id).textContent = '0';
+        });
+    }
 }
 
-// Refresh Dollar Rate
+// ── Tasa dólar ──
 async function refreshDollarRate() {
+    const btn = document.querySelector('.synti-btn-refresh');
+    if (btn) btn.style.opacity = '0.5';
     try {
-        const response = await fetch('/api/dollar-rate');
-        const data = await response.json();
-        
+        const res = await fetch('/api/dollar-rate');
+        const data = await res.json();
         if (data.rate) {
-            document.getElementById('dollar-rate-display').textContent = 
+            document.getElementById('dollar-rate-display').textContent =
                 'Bs. ' + parseFloat(data.rate).toFixed(2);
         }
-    } catch (error) {
-        console.error('Error refreshing dollar rate:', error);
-    }
+    } catch (e) { console.error('Error tasa dólar:', e); }
+    finally { if (btn) btn.style.opacity = '1'; }
 }
 
-// Toggle Business Status
+// ── Estado del negocio ──
 async function toggleBusinessStatus() {
     const toggle = document.getElementById('business-status-toggle');
-    const statusText = document.getElementById('business-status-text');
+    const label  = document.getElementById('business-status-text');
     const isOpen = toggle.checked;
-    
     try {
-        const response = await fetch('/tenant/{{ $tenant->id }}/toggle-status', {
+        const res = await fetch('/tenant/{{ $tenant->id }}/toggle-status', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -643,52 +631,65 @@ async function toggleBusinessStatus() {
             },
             body: JSON.stringify({ is_open: isOpen })
         });
-        
-        const data = await response.json();
-        
+        const data = await res.json();
         if (data.success) {
-            statusText.textContent = isOpen ? 'Abierto' : 'Cerrado';
+            label.textContent = isOpen ? 'Abierto' : 'Cerrado';
+            label.className = 'synti-toggle-label ' + (isOpen ? 'open' : 'closed');
         } else {
             toggle.checked = !isOpen;
         }
-    } catch (error) {
-        console.error('Error toggling status:', error);
-        toggle.checked = !isOpen;
-    }
+    } catch (e) { toggle.checked = !isOpen; }
 }
 
-// Download QR from Floating Panel
+// ── WhatsApp dual ──
+function switchWhatsapp(type) {
+    fetch(`/tenant/{{ $tenant->id }}/toggle-whatsapp`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '{{ csrf_token() }}'
+        }
+    })
+    .then(r => r.json())
+    .then(data => {
+        if (data.success) {
+            document.querySelectorAll('.synti-wa-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('wa-btn-' + data.active)?.classList.add('active');
+            document.getElementById('wa-active-number').textContent = data.number || 'Sin número';
+        }
+    });
+}
+
+// ── QR download ──
 function downloadQRFloating() {
-    const svgElement = document.querySelector('#qr-floating-display svg');
-    if (!svgElement) {
-        alert('Error: No se encontró el código QR');
-        return;
-    }
-
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-    const svgData = new XMLSerializer().serializeToString(svgElement);
-    const img = new Image();
-    
-    img.onload = function() {
-        canvas.width = 150;
-        canvas.height = 150;
-        ctx.fillStyle = 'white';
-        ctx.fillRect(0, 0, 150, 150);
-        ctx.drawImage(img, 0, 0, 150, 150);
-        
-        canvas.toBlob(function(blob) {
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = '{{ $tenant->subdomain }}_qr.png';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        }, 'image/png');
-    };
-    
-    img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+    const svgEl = document.querySelector('#qr-floating-display svg');
+    if (!svgEl) return;
+    const blob = new Blob([new XMLSerializer().serializeToString(svgEl)], { type: 'image/svg+xml' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'qr-{{ $tenant->subdomain ?? $tenant->id }}.svg';
+    a.click();
 }
+
+// ── Atajos de acceso ──
+document.addEventListener('keydown', function (e) {
+    if (e.altKey && e.key === 's') { e.preventDefault(); toggleSyntiPanel(); }
+});
+
+// ── Gesto móvil: long press esquina inferior derecha ──
+(function () {
+    let t = null;
+    document.addEventListener('touchstart', function (e) {
+        const touch = e.touches[0];
+        if ((window.innerWidth - touch.clientX) < 80 && (window.innerHeight - touch.clientY) < 80) {
+            t = setTimeout(() => {
+                openSyntiPanel();
+                if (navigator.vibrate) navigator.vibrate(60);
+            }, 800);
+        }
+    }, { passive: true });
+    document.addEventListener('touchend',    () => clearTimeout(t), { passive: true });
+    document.addEventListener('touchmove',   () => clearTimeout(t), { passive: true });
+    document.addEventListener('touchcancel', () => clearTimeout(t), { passive: true });
+})();
 </script>

@@ -1,9 +1,0 @@
-{
-  "recommendations": [
-    "esbenp.prettier-vscode",
-    "bradlc.vscode-tailwindcss",
-    "zignd.html-css-class-completion",
-    "christian-kohler.npm-intellisense",
-    "ms-vscode.vscode-json"
-  ]
-}

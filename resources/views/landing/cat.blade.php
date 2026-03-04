@@ -12,7 +12,7 @@
     $euroRate         = $euroRate ?? 495.00;
     $hidePrice        = $hidePrice ?? false;
 
-    $wa = $tenant->whatsapp_sales ?? $tenant->whatsapp ?? null;
+    $wa = $tenant->getActiveWhatsapp() ?? null;
     $waClean = $wa ? preg_replace('/[^0-9]/', '', $wa) : '';
 
     $payMethods      = ($customization->payment_methods ?? []);

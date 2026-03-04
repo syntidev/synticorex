@@ -32,8 +32,8 @@
             {{-- Social Links --}}
             <div class="text-base-content flex h-5 gap-4">
                 @php $sn = is_array($customization->social_networks ?? null) ? $customization->social_networks : []; @endphp
-                @if($tenant->whatsapp_sales)
-                <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $tenant->whatsapp_sales) }}" 
+                @if($tenant->getActiveWhatsapp())
+                <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $tenant->getActiveWhatsapp()) }}" 
                    target="_blank" 
                    rel="noopener noreferrer" 
                    aria-label="WhatsApp"

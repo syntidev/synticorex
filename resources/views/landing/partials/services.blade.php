@@ -44,8 +44,8 @@
                         </p>
                         <div class="flex gap-2 mt-4">
                             @php
-                                $ctaLink = $service->cta_link ?? ($tenant->whatsapp_sales
-                                    ? 'https://wa.me/' . preg_replace('/[^0-9]/', '', $tenant->whatsapp_sales) . '?text=' . urlencode('Hola! Me interesa el servicio: ' . $service->name)
+                                $ctaLink = $service->cta_link ?? ($tenant->getActiveWhatsapp()
+                                    ? 'https://wa.me/' . preg_replace('/[^0-9]/', '', $tenant->getActiveWhatsapp()) . '?text=' . urlencode('Hola! Me interesa el servicio: ' . $service->name)
                                     : '#');
                             @endphp
                             <a href="{{ $ctaLink }}" class="inline-flex items-center py-2 px-4 rounded-lg font-medium transition-colors border border-gray-300 text-gray-700 hover:bg-gray-50">
@@ -81,8 +81,8 @@
                                 </p>
                                 <div class="flex gap-2 mt-4">
                                     @php
-                                        $ctaLink = $service->cta_link ?? ($tenant->whatsapp_sales
-                                            ? 'https://wa.me/' . preg_replace('/[^0-9]/', '', $tenant->whatsapp_sales) . '?text=' . urlencode('Hola! Me interesa el servicio: ' . $service->name)
+                                        $ctaLink = $service->cta_link ?? ($tenant->getActiveWhatsapp()
+                                            ? 'https://wa.me/' . preg_replace('/[^0-9]/', '', $tenant->getActiveWhatsapp()) . '?text=' . urlencode('Hola! Me interesa el servicio: ' . $service->name)
                                             : '#');
                                     @endphp
                                     <a href="{{ $ctaLink }}" class="inline-flex items-center py-2 px-4 rounded-lg font-medium transition-colors border border-gray-300 text-gray-700 hover:bg-gray-50">

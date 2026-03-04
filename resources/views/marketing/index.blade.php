@@ -82,48 +82,47 @@
 <body class="bg-white text-slate-800 antialiased" x-data="marketingApp()">
 
     {{-- ═══ NAVBAR ═══════════════════════════════════════════════════════ --}}
-    <nav id="mkt-nav" class="fixed top-0 inset-x-0 z-50 transition-all duration-300"
-         :class="scrolled ? 'nav-scrolled' : 'bg-transparent'">
+    <nav id="mkt-nav" class="fixed top-0 inset-x-0 z-50 transition-all duration-300 bg-[var(--sw-white)] border-b border-[var(--sw-border)]">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16 lg:h-20">
                 {{-- Logo --}}
                 <a href="#hero" class="flex items-center gap-2 group">
-                    <img src="{{ asset('brand/syntiweb-logo-negative.svg') }}" 
-                         alt="SYNTIweb" width="32" height="32" class="transition-opacity group-hover:opacity-80">
+                    <img src="{{ asset('brand/syntiweb-logo-positive.svg') }}" 
+                         alt="SYNTIweb" width="36" height="36" class="sw-logo-breathe">
                     <span class="text-xl font-extrabold tracking-tight">
-                        <span class="nav-logo-light transition-colors" :class="scrolled ? 'text-blue-700' : 'text-white'">SYNTI</span><span class="nav-logo-accent transition-colors" :class="scrolled ? 'text-slate-400' : 'text-blue-300'">web</span>
+                        <span class="text-[#1a1a1a] transition-colors">SYNTI</span><span class="text-[#4A80E4] transition-colors">web</span>
                     </span>
                 </a>
 
                 {{-- Desktop Nav --}}
                 <div class="hidden md:flex items-center gap-8">
-                    <a href="#solucion" class="nav-link-light text-sm font-medium transition-colors hover:text-blue-400" :class="scrolled ? 'text-slate-600' : 'text-white/80'">Cómo funciona</a>
-                    <a href="#segmentos" class="nav-link-light text-sm font-medium transition-colors hover:text-blue-400" :class="scrolled ? 'text-slate-600' : 'text-white/80'">Segmentos</a>
-                    <a href="#planes" class="nav-link-light text-sm font-medium transition-colors hover:text-blue-400" :class="scrolled ? 'text-slate-600' : 'text-white/80'">Planes</a>
+                    <a href="#solucion" class="text-sm font-medium transition-colors text-[var(--sw-text)] hover:text-[#4A80E4]">Cómo funciona</a>
+                    <a href="#segmentos" class="text-sm font-medium transition-colors text-[var(--sw-text)] hover:text-[#4A80E4]">Segmentos</a>
+                    <a href="#planes" class="text-sm font-medium transition-colors text-[var(--sw-text)] hover:text-[#4A80E4]">Planes</a>
                 </div>
 
                 {{-- CTA --}}
                 <div class="flex items-center gap-3">
-                    <a href="{{ route('login') }}" class="hidden sm:inline-flex nav-link-light text-sm font-medium transition-colors hover:text-blue-400" :class="scrolled ? 'text-slate-600' : 'text-white/80'">Iniciar sesión</a>
-                    <a href="{{ route('register') }}" class="inline-flex items-center text-sm py-1.5 px-3 lg:py-2 lg:px-4 rounded-lg font-medium transition-all bg-gradient-to-r from-blue-500 to-indigo-500 text-white border-0 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:scale-105">
+                    <a href="{{ route('login') }}" class="hidden sm:inline-flex text-sm font-medium transition-colors text-[var(--sw-text)] hover:text-[#4A80E4]">Iniciar sesión</a>
+                    <a href="{{ route('register') }}" class="inline-flex items-center text-sm py-1.5 px-3 lg:py-2 lg:px-4 rounded-lg font-medium transition-all bg-[#4A80E4] text-white border-0 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:scale-105">
                         Crear gratis
                     </a>
                     {{-- Mobile menu --}}
-                    <button @click="mobileNav = !mobileNav" class="md:hidden p-2 rounded-lg transition-colors" :class="scrolled ? 'text-slate-600 hover:bg-slate-100' : 'text-white hover:bg-white/10'">
+                    <button @click="mobileNav = !mobileNav" class="md:hidden p-2 rounded-lg transition-colors text-[var(--sw-text)] hover:bg-[var(--sw-bg)]">
                         <span class="iconify tabler--menu-2 size-5"></span>
                     </button>
                 </div>
             </div>
         </div>
         {{-- Mobile Menu --}}
-        <div x-show="mobileNav" x-transition.opacity class="md:hidden bg-white/95 backdrop-blur-xl border-t border-slate-100 shadow-xl">
+        <div x-show="mobileNav" x-transition.opacity class="md:hidden bg-[var(--sw-white)] border-t border-[var(--sw-border)] shadow-xl">
             <div class="px-4 py-4 space-y-2">
-                <a @click="mobileNav=false" href="#solucion" class="block px-4 py-2.5 text-sm font-medium text-slate-700 rounded-lg hover:bg-blue-50">Cómo funciona</a>
-                <a @click="mobileNav=false" href="#segmentos" class="block px-4 py-2.5 text-sm font-medium text-slate-700 rounded-lg hover:bg-blue-50">Segmentos</a>
-                <a @click="mobileNav=false" href="#planes" class="block px-4 py-2.5 text-sm font-medium text-slate-700 rounded-lg hover:bg-blue-50">Planes</a>
-                <hr class="border-slate-100">
-                <a href="{{ route('login') }}" class="block px-4 py-2.5 text-sm font-medium text-slate-500">Iniciar sesión</a>
-                <a href="{{ route('register') }}" class="block px-4 py-2.5 text-sm font-bold text-blue-600">Crear gratis →</a>
+                <a @click="mobileNav=false" href="#solucion" class="block px-4 py-2.5 text-sm font-medium text-[var(--sw-text)] rounded-lg hover:bg-[var(--sw-bg)]">Cómo funciona</a>
+                <a @click="mobileNav=false" href="#segmentos" class="block px-4 py-2.5 text-sm font-medium text-[var(--sw-text)] rounded-lg hover:bg-[var(--sw-bg)]">Segmentos</a>
+                <a @click="mobileNav=false" href="#planes" class="block px-4 py-2.5 text-sm font-medium text-[var(--sw-text)] rounded-lg hover:bg-[var(--sw-bg)]">Planes</a>
+                <hr class="border-[var(--sw-border)]">
+                <a href="{{ route('login') }}" class="block px-4 py-2.5 text-sm font-medium text-[var(--sw-text-muted)]">Iniciar sesión</a>
+                <a href="{{ route('register') }}" class="block px-4 py-2.5 text-sm font-bold text-[#4A80E4]">Crear gratis →</a>
             </div>
         </div>
     </nav>
@@ -142,7 +141,7 @@
     @include('marketing.sections.cta-final')
 
     {{-- ═══ FOOTER ══════════════════════════════════════════════════════ --}}
-    <footer class="bg-slate-900 text-slate-400">
+    <footer class="bg-[var(--sw-navy)] text-[var(--sw-text-muted)]">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
                 {{-- Brand --}}
@@ -150,7 +149,7 @@
                     <div class="flex items-center gap-2 mb-4">
                         <img src="{{ asset('brand/syntiweb-logo-negative.svg') }}" 
                              alt="SYNTIweb" width="32" height="32">
-                        <span class="text-xl font-extrabold text-white">SYNTI<span class="text-blue-400">web</span></span>
+                        <span class="text-xl font-extrabold text-white"><span style="color:#4A80E4">SYNTI</span><span style="color:#FFFFFF">web</span></span>
                     </div>
                     <p class="text-sm leading-relaxed max-w-sm">Tu negocio merece estar en Google. SYNTIweb genera tu presencia digital automáticamente, para que tú te enfoques en lo que mejor haces.</p>
                 </div>
@@ -173,8 +172,8 @@
                     </ul>
                 </div>
             </div>
-            <div class="border-t border-slate-800 mt-12 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-                <p class="text-xs">&copy; {{ date('Y') }} SYNTIweb. Todos los derechos reservados.</p>
+            <div class="border-t border-white/10 mt-12 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <p class="text-xs">&copy; {{ date('Y') }} SYNTIweb — Todos los derechos reservados.</p>
                 <p class="text-xs">Hecho con <span class="text-red-400">&#10084;</span> en Venezuela</p>
             </div>
         </div>

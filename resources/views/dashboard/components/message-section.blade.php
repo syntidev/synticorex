@@ -1,5 +1,6 @@
         <!-- Tab: Tu Mensaje -->
         <div id="tab-mensaje" class="tab-content">
+            <div class="p-6">
 @php
     // ── Header Top data ──
     $headerTop = data_get($tenant->settings, 'engine_settings.header_top', []);
@@ -26,15 +27,15 @@
 {{-- ════════════════════════════════════════════════════════════
      1. ORDEN DE SECCIONES (Drag & Drop)
 ════════════════════════════════════════════════════════════ --}}
-<div class="bg-white rounded-xl shadow-md border border-gray-200 mb-6">
+<div class="bg-surface rounded-xl shadow-sm border border-border mb-6">
     <div class="px-5 pt-5 pb-3">
         <div class="flex items-center gap-3">
             <div class="size-9 rounded-lg bg-primary/10 flex items-center justify-center">
                 <span class="iconify tabler--list-check size-5 text-primary" aria-hidden="true"></span>
             </div>
             <div>
-                <h2 class="text-base font-bold text-base-content">Orden de Secciones</h2>
-                <p class="text-xs text-base-content/50">Arrastra para reordenar. Las secciones apagadas no aparecen en tu landing.</p>
+                <h2 class="text-base font-bold text-foreground">Orden de Secciones</h2>
+                <p class="text-xs text-muted-foreground-1">Arrastra para reordenar. Las secciones apagadas no aparecen en tu landing.</p>
             </div>
         </div>
     </div>
@@ -85,9 +86,9 @@
                      data-section="{{ $key }}"
                      data-plan="{{ $planRequired }}">
                     <div class="flex items-center gap-2 px-2.5 py-2 rounded-lg
-                                bg-base-200 border border-base-content/10
+                                bg-muted border border-border
                                 {{ $hasAccess ? 'cursor-move' : 'cursor-not-allowed' }}
-                                transition-colors hover:border-base-content/20">
+                                transition-colors hover:border-border">
 
                         @if($hasAccess)
                             <span class="drag-handle select-none flex-shrink-0 active:cursor-grabbing"
@@ -104,7 +105,7 @@
                             <iconify-icon icon="{{ $section['icon'] }}" width="18"></iconify-icon>
                         </span>
 
-                        <span class="flex-1 text-sm font-medium text-base-content">
+                        <span class="flex-1 text-sm font-medium text-foreground">
                             {{ $section['label'] }}
                             @if(!$hasAccess)
                                 <span class="inline-flex items-center py-0.5 px-2 rounded-full text-xs font-medium bg-yellow-100 text-yellow-700 ms-1">
@@ -146,15 +147,15 @@
      2. HEADER TOP (Plan 2+)
 ════════════════════════════════════════════════════════════ --}}
 @if($plan->id >= 2)
-<div class="bg-white rounded-xl shadow-md border border-gray-200 mb-6">
+<div class="bg-surface rounded-xl shadow-sm border border-border mb-6">
     <div class="px-5 pt-5 pb-3">
         <div class="flex items-center gap-3">
             <div class="size-9 rounded-lg bg-primary/10 flex items-center justify-center">
                 <span class="iconify tabler--layout-navbar size-5 text-primary" aria-hidden="true"></span>
             </div>
             <div>
-                <h2 class="text-base font-bold text-base-content">Header Top</h2>
-                <p class="text-xs text-base-content/50">Barra superior con mensaje destacado
+                <h2 class="text-base font-bold text-foreground">Header Top</h2>
+                <p class="text-xs text-muted-foreground-1">Barra superior con mensaje destacado
                     <span class="inline-flex items-center py-0.5 px-2 rounded-full text-xs font-medium bg-blue-100 text-blue-700 ms-1">CRECIMIENTO+</span>
                 </p>
             </div>
@@ -162,18 +163,18 @@
     </div>
     <div class="px-5 pb-5 pt-1">
         <div class="flex items-center gap-3 mb-3">
-            <label class="text-xs font-medium text-base-content/70">Visible:</label>
+            <label class="text-xs font-medium text-muted-foreground-1">Visible:</label>
             <input type="checkbox" id="header-top-toggle"
                    class="toggle toggle-primary toggle-sm"
                    {{ $headerTopEnabled ? 'checked' : '' }}>
         </div>
         <div class="flex gap-2">
             <input type="text" id="header-top-text"
-                   class="input input-bordered input-sm flex-1"
+                   class="py-1.5 sm:py-2 px-3 block flex-1 bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none"
                    placeholder="Ej: Envío gratis en pedidos mayores a 50 REF"
                    value="{{ $headerTopText }}"
                    maxlength="120">
-            <button type="button" onclick="saveHeaderTop()" class="inline-flex items-center text-sm py-1.5 px-3 rounded-lg font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 gap-1">
+            <button type="button" onclick="saveHeaderTop()" class="py-2 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg bg-primary border border-primary-line text-primary-foreground hover:bg-primary-hover focus:outline-hidden focus:bg-primary-focus disabled:opacity-50 disabled:pointer-events-none">
                 <span class="iconify tabler--device-floppy size-4"></span>
                 Guardar
             </button>
@@ -186,15 +187,15 @@
      3. ACERCA DE (Plan 2+)
 ════════════════════════════════════════════════════════════ --}}
 @if($plan->id >= 2)
-<div class="bg-white rounded-xl shadow-md border border-gray-200 mb-6">
+<div class="bg-surface rounded-xl shadow-sm border border-border mb-6">
     <div class="px-5 pt-5 pb-3">
         <div class="flex items-center gap-3">
             <div class="size-9 rounded-lg bg-primary/10 flex items-center justify-center">
                 <span class="iconify tabler--info-circle size-5 text-primary" aria-hidden="true"></span>
             </div>
             <div>
-                <h2 class="text-base font-bold text-base-content">Acerca de</h2>
-                <p class="text-xs text-base-content/50">Texto de la sección "Nosotros" de tu landing
+                <h2 class="text-base font-bold text-foreground">Acerca de</h2>
+                <p class="text-xs text-muted-foreground-1">Texto de la sección "Nosotros" de tu landing
                     <span class="inline-flex items-center py-0.5 px-2 rounded-full text-xs font-medium bg-blue-100 text-blue-700 ms-1">CRECIMIENTO+</span>
                 </p>
             </div>
@@ -202,14 +203,14 @@
     </div>
     <div class="px-5 pb-5 pt-1">
         <textarea id="about-text"
-                  class="textarea textarea-bordered w-full text-sm"
+                  class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none text-sm"
                   rows="4"
                   placeholder="Cuenta la historia de tu negocio..."
                   maxlength="1000"
                   oninput="document.getElementById('about-char-count').textContent = this.value.length + '/1000'">{{ $tenant->description ?? '' }}</textarea>
         <div class="flex justify-between items-center mt-2">
-            <span class="text-[10px] text-base-content/40" id="about-char-count">{{ strlen($tenant->description ?? '') }}/1000</span>
-            <button type="button" onclick="saveAboutText()" class="inline-flex items-center text-sm py-1.5 px-3 rounded-lg font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 gap-1">
+            <span class="text-[10px] text-muted-foreground-1" id="about-char-count">{{ strlen($tenant->description ?? '') }}/1000</span>
+            <button type="button" onclick="saveAboutText()" class="py-2 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg bg-primary border border-primary-line text-primary-foreground hover:bg-primary-hover focus:outline-hidden focus:bg-primary-focus disabled:opacity-50 disabled:pointer-events-none">
                 <span class="iconify tabler--device-floppy size-4"></span>
                 Guardar
             </button>
@@ -222,15 +223,15 @@
      4. TESTIMONIOS (Plan 2+)
 ════════════════════════════════════════════════════════════ --}}
 @if($plan->id >= 2)
-<div class="bg-white rounded-xl shadow-md border border-gray-200 mb-6">
+<div class="bg-surface rounded-xl shadow-sm border border-border mb-6">
     <div class="px-5 pt-5 pb-3 flex items-center justify-between gap-3 flex-wrap">
         <div class="flex items-center gap-3">
             <div class="size-9 rounded-lg bg-primary/10 flex items-center justify-center">
                 <span class="iconify tabler--message-star size-5 text-primary" aria-hidden="true"></span>
             </div>
             <div>
-                <h2 class="text-base font-bold text-base-content">Testimonios de Clientes</h2>
-                <p class="text-xs text-base-content/50">{{ count($savedTestimonials) }} testimonios
+                <h2 class="text-base font-bold text-foreground">Testimonios de Clientes</h2>
+                <p class="text-xs text-muted-foreground-1">{{ count($savedTestimonials) }} testimonios
                     <span class="inline-flex items-center py-0.5 px-2 rounded-full text-xs font-medium bg-blue-100 text-blue-700 ms-1">CRECIMIENTO+</span>
                 </p>
             </div>
@@ -240,18 +241,18 @@
         <div id="testimonials-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             @foreach($savedTestimonials as $ti => $testim)
             @php $hasContent = !empty($testim['name']) || !empty($testim['text']); @endphp
-            <div class="rounded-lg border p-3 transition-all {{ $hasContent ? 'border-primary/20 bg-primary/5' : 'border-base-content/10 bg-base-200/30' }}"
+            <div class="rounded-lg border p-3 transition-all {{ $hasContent ? 'border-primary/20 bg-primary/5' : 'border-border bg-muted/30' }}"
                  data-testimonial-index="{{ $ti }}">
                 <div class="flex items-start justify-between mb-2">
-                    <span class="text-[10px] font-bold text-base-content/40 uppercase tracking-wider">#{{ $ti + 1 }}</span>
+                    <span class="text-[10px] font-bold text-muted-foreground-1 uppercase tracking-wider">#{{ $ti + 1 }}</span>
                     <span class="text-sm text-yellow-500">{{ str_repeat('★', $testim['rating'] ?? 5) }}</span>
                 </div>
-                <h4 class="text-sm font-semibold text-base-content line-clamp-1">{{ $testim['name'] ?? '(vacío)' }}</h4>
-                <p class="text-xs text-base-content/50 line-clamp-1">{{ $testim['title'] ?? '(sin cargo)' }}</p>
-                <p class="text-xs text-base-content/60 line-clamp-2 mt-1">{{ $testim['text'] ?? '(vacío)' }}</p>
+                <h4 class="text-sm font-semibold text-foreground line-clamp-1">{{ $testim['name'] ?? '(vacío)' }}</h4>
+                <p class="text-xs text-muted-foreground-1 line-clamp-1">{{ $testim['title'] ?? '(sin cargo)' }}</p>
+                <p class="text-xs text-muted-foreground-1 line-clamp-2 mt-1">{{ $testim['text'] ?? '(vacío)' }}</p>
                 
                 <div class="flex gap-2 mt-3">
-                    <button type="button" class="p-1.5 text-sm bg-blue-600 text-white hover:bg-blue-700 rounded-lg transition-colors"
+                    <button type="button" class="p-1.5 text-sm bg-primary text-primary-foreground hover:bg-primary-hover rounded-lg transition-colors"
                             onclick="editTestimonial({{ $ti }}, '{{ addslashes($testim['name'] ?? '') }}', '{{ addslashes($testim['title'] ?? '') }}', '{{ addslashes($testim['text'] ?? '') }}', {{ $testim['rating'] ?? 5 }})"
                             title="Editar">
                         <span class="iconify tabler--pencil size-4" aria-hidden="true"></span>
@@ -266,11 +267,11 @@
             @endforeach
         </div>
         <div class="flex gap-2 mt-3">
-            <button type="button" onclick="addTestimonial()" class="inline-flex items-center py-2 px-4 rounded-lg font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 flex-1 gap-2">
+            <button type="button" onclick="addTestimonial()" class="inline-flex items-center py-2 px-4 rounded-lg font-medium transition-colors bg-primary text-primary-foreground hover:bg-primary-hover flex-1 gap-2">
                 <span class="iconify tabler--plus size-4"></span>
                 Agregar Testimonio
             </button>
-            <button type="button" onclick="saveTestimonials()" class="inline-flex items-center py-2 px-4 rounded-lg font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 flex-1 gap-2">
+            <button type="button" onclick="saveTestimonials()" class="inline-flex items-center py-2 px-4 rounded-lg font-medium transition-colors bg-primary text-primary-foreground hover:bg-primary-hover flex-1 gap-2">
                 <span class="iconify tabler--device-floppy size-4"></span>
                 Guardar Testimonios
             </button>
@@ -283,15 +284,15 @@
      5. FAQ (Plan 3)
 ════════════════════════════════════════════════════════════ --}}
 @if($plan->id >= 3)
-<div class="bg-white rounded-xl shadow-md border border-gray-200 mb-6">
+<div class="bg-surface rounded-xl shadow-sm border border-border mb-6">
     <div class="px-5 pt-5 pb-3 flex items-center justify-between gap-3 flex-wrap">
         <div class="flex items-center gap-3">
             <div class="size-9 rounded-lg bg-secondary/10 flex items-center justify-center">
                 <span class="iconify tabler--help-circle size-5 text-secondary" aria-hidden="true"></span>
             </div>
             <div>
-                <h2 class="text-base font-bold text-base-content">Preguntas Frecuentes (FAQ)</h2>
-                <p class="text-xs text-base-content/50">{{ count($savedFaq) }} preguntas
+                <h2 class="text-base font-bold text-foreground">Preguntas Frecuentes (FAQ)</h2>
+                <p class="text-xs text-muted-foreground-1">{{ count($savedFaq) }} preguntas
                     <span class="inline-flex items-center py-0.5 px-2 rounded-full text-xs font-medium bg-gray-100 text-gray-700 ms-1">VISIÓN</span>
                 </p>
             </div>
@@ -301,19 +302,19 @@
         <div id="faq-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             @foreach($savedFaq as $fi => $fitem)
             @php $hasFaqContent = !empty($fitem['question']) || !empty($fitem['answer']); @endphp
-            <div class="rounded-lg border p-3 transition-all {{ $hasFaqContent ? 'border-secondary/20 bg-secondary/5' : 'border-base-content/10 bg-base-200/30' }}"
+            <div class="rounded-lg border p-3 transition-all {{ $hasFaqContent ? 'border-secondary/20 bg-secondary/5' : 'border-border bg-muted/30' }}"
                  data-faq-index="{{ $fi }}">
-                <span class="text-[10px] font-bold text-base-content/40 uppercase tracking-wider">#{{ $fi + 1 }}</span>
-                <h4 class="text-sm font-semibold text-base-content mt-1 line-clamp-2">{{ $fitem['question'] ?? '(vacío)' }}</h4>
-                <p class="text-xs text-base-content/50 mt-1 line-clamp-2">{{ $fitem['answer'] ?? '(vacío)' }}</p>
+                <span class="text-[10px] font-bold text-muted-foreground-1 uppercase tracking-wider">#{{ $fi + 1 }}</span>
+                <h4 class="text-sm font-semibold text-foreground mt-1 line-clamp-2">{{ $fitem['question'] ?? '(vacío)' }}</h4>
+                <p class="text-xs text-muted-foreground-1 mt-1 line-clamp-2">{{ $fitem['answer'] ?? '(vacío)' }}</p>
                 
                 <div class="flex gap-2 mt-3">
-                    <button type="button" class="p-1.5 text-sm bg-gray-600 text-white hover:bg-gray-700 rounded-lg transition-colors"
+                    <button type="button" class="p-1.5 text-sm bg-muted text-foreground hover:bg-muted-hover rounded-lg transition-colors"
                             onclick="editFaq({{ $fi }}, '{{ addslashes($fitem['question'] ?? '') }}', '{{ addslashes($fitem['answer'] ?? '') }}')"
                             title="Editar">
                         <span class="iconify tabler--pencil size-4" aria-hidden="true"></span>
                     </button>
-                    <button type="button" class="p-1.5 text-sm bg-red-600 text-white hover:bg-red-700 rounded-lg transition-colors"
+                    <button type="button" class="p-1.5 text-sm bg-red-100 text-red-700 hover:bg-red-200 rounded-lg transition-colors"
                             onclick="deleteFaq({{ $fi }})"
                             title="Eliminar">
                         <span class="iconify tabler--trash size-4" aria-hidden="true"></span>
@@ -323,11 +324,11 @@
             @endforeach
         </div>
         <div class="flex gap-2 mt-3">
-            <button type="button" onclick="addFaq()" class="inline-flex items-center py-2 px-4 rounded-lg font-medium transition-colors bg-gray-600 text-white hover:bg-gray-700 flex-1 gap-2">
+            <button type="button" onclick="addFaq()" class="inline-flex items-center py-2 px-4 rounded-lg font-medium transition-colors bg-muted text-foreground hover:bg-muted-hover flex-1 gap-2">
                 <span class="iconify tabler--plus size-4"></span>
                 Agregar Pregunta
             </button>
-            <button type="button" onclick="saveFaq()" class="inline-flex items-center py-2 px-4 rounded-lg font-medium transition-colors bg-gray-600 text-white hover:bg-gray-700 flex-1 gap-2">
+            <button type="button" onclick="saveFaq()" class="inline-flex items-center py-2 px-4 rounded-lg font-medium transition-colors bg-muted text-foreground hover:bg-muted-hover flex-1 gap-2">
                 <span class="iconify tabler--device-floppy size-4"></span>
                 Guardar FAQ
             </button>
@@ -340,15 +341,15 @@
      6. CTA ESPECIAL (Plan 3)
 ════════════════════════════════════════════════════════════ --}}
 @if($plan->id >= 3)
-<div class="bg-white rounded-xl shadow-md border border-gray-200 mb-6">
+<div class="bg-surface rounded-xl shadow-sm border border-border mb-6">
     <div class="px-5 pt-5 pb-3">
         <div class="flex items-center gap-3">
             <div class="size-9 rounded-lg bg-accent/10 flex items-center justify-center">
                 <span class="iconify tabler--speakerphone size-5 text-accent" aria-hidden="true"></span>
             </div>
             <div>
-                <h2 class="text-base font-bold text-base-content">CTA Especial</h2>
-                <p class="text-xs text-base-content/50">Sección llamativa con botón personalizado
+                <h2 class="text-base font-bold text-foreground">CTA Especial</h2>
+                <p class="text-xs text-muted-foreground-1">Sección llamativa con botón personalizado
                     <span class="inline-flex items-center py-0.5 px-2 rounded-full text-xs font-medium bg-purple-100 text-purple-700 ms-1">VISIÓN</span>
                 </p>
             </div>
@@ -357,38 +358,38 @@
     <div class="px-5 pb-5 pt-1">
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-                <label class="text-xs font-medium text-base-content/70 mb-1 block">Título</label>
+                <label class="text-xs font-medium text-muted-foreground-1 mb-1 block">Título</label>
                 <input type="text" id="cta-title"
-                       class="input input-bordered input-sm w-full"
+                       class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none"
                        placeholder="¡Contacta con nosotros!"
                        value="{{ $ctaTitle }}"
                        maxlength="100">
             </div>
             <div>
-                <label class="text-xs font-medium text-base-content/70 mb-1 block">Subtítulo</label>
+                <label class="text-xs font-medium text-muted-foreground-1 mb-1 block">Subtítulo</label>
                 <input type="text" id="cta-subtitle"
-                       class="input input-bordered input-sm w-full"
+                       class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none"
                        placeholder="Estamos listos para atenderte"
                        value="{{ $ctaSub }}"
                        maxlength="200">
             </div>
             <div>
-                <label class="text-xs font-medium text-base-content/70 mb-1 block">Texto del Botón</label>
+                <label class="text-xs font-medium text-muted-foreground-1 mb-1 block">Texto del Botón</label>
                 <input type="text" id="cta-btn-text"
-                       class="input input-bordered input-sm w-full"
+                       class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none"
                        placeholder="Ej: Pedir ahora"
                        value="{{ $ctaBtnText }}"
                        maxlength="50">
             </div>
             <div>
-                <label class="text-xs font-medium text-base-content/70 mb-1 block">Enlace del Botón</label>
+                <label class="text-xs font-medium text-muted-foreground-1 mb-1 block">Enlace del Botón</label>
                 <input type="url" id="cta-btn-link"
-                       class="input input-bordered input-sm w-full"
+                       class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none"
                        placeholder="https://..."
                        value="{{ $ctaBtnLink }}">
             </div>
         </div>
-        <button type="button" onclick="saveCtaConfig()" class="inline-flex items-center text-sm py-1.5 px-3 rounded-lg font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 gap-1 mt-3">
+        <button type="button" onclick="saveCtaConfig()" class="py-2 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg bg-primary border border-primary-line text-primary-foreground hover:bg-primary-hover focus:outline-hidden focus:bg-primary-focus disabled:opacity-50 disabled:pointer-events-none mt-3">
             <span class="iconify tabler--device-floppy size-4"></span>
             Guardar CTA
         </button>
@@ -400,15 +401,15 @@
      7. SUCURSALES (Plan 3)
 ════════════════════════════════════════════════════════════ --}}
 @if($plan->id >= 3)
-<div class="bg-white rounded-xl shadow-md border border-gray-200 mb-6">
+<div class="bg-surface rounded-xl shadow-sm border border-border mb-6">
     <div class="px-5 pt-5 pb-3 flex items-center justify-between gap-3">
         <div class="flex items-center gap-3">
             <div class="size-9 rounded-lg bg-primary/10 flex items-center justify-center">
                 <span class="iconify tabler--map-pin size-5 text-primary" aria-hidden="true"></span>
             </div>
             <div>
-                <h2 class="text-base font-bold text-base-content">Sucursales</h2>
-                <p class="text-xs text-base-content/50">{{ $currentBranchCount }} de {{ $maxBranches }} sucursales
+                <h2 class="text-base font-bold text-foreground">Sucursales</h2>
+                <p class="text-xs text-muted-foreground-1">{{ $currentBranchCount }} de {{ $maxBranches }} sucursales
                     <span class="inline-flex items-center py-0.5 px-2 rounded-full text-xs font-medium bg-gray-100 text-gray-700 ms-1">VISIÓN</span>
                 </p>
             </div>
@@ -428,14 +429,14 @@
         <div id="branches-content" {{ $branchesEnabled ? '' : 'style="display:none"' }}>
             <div id="branches-list" class="grid {{ $branchGridClass }} gap-3">
                 @foreach($branches as $branch)
-                <div class="rounded-lg border border-base-content/10 bg-base-200/30 p-4 transition-all hover:border-primary/30 branch-card" id="branch-card-{{ $branch->id }}">
+                <div class="rounded-lg border border-border bg-muted/30 p-4 transition-all hover:border-primary/30 branch-card" id="branch-card-{{ $branch->id }}">
                     <div class="flex items-start gap-3 mb-3">
                         <div class="size-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
                             <span class="iconify tabler--map-pin size-5 text-primary" aria-hidden="true"></span>
                         </div>
                         <div class="flex-1 min-w-0">
-                            <h3 class="branch-name text-sm font-semibold text-base-content truncate">{{ $branch->name }}</h3>
-                            <p class="branch-address text-xs text-base-content/50 line-clamp-2 mt-0.5">{{ $branch->address }}</p>
+                            <h3 class="branch-name text-sm font-semibold text-foreground truncate">{{ $branch->name }}</h3>
+                            <p class="branch-address text-xs text-muted-foreground-1 line-clamp-2 mt-0.5">{{ $branch->address }}</p>
                         </div>
                     </div>
                     <div class="flex gap-2">
@@ -455,13 +456,13 @@
                 </div>
                 @endforeach
                 @if($currentBranchCount < $maxBranches)
-                <div class="rounded-lg border border-base-content/10 bg-base-200/30 p-4 flex items-center justify-center transition-all hover:border-primary/30 cursor-pointer" onclick="openBranchModal()">
+                <div class="rounded-lg border border-border bg-muted/30 p-4 flex items-center justify-center transition-all hover:border-primary/30 cursor-pointer" onclick="openBranchModal()">
                     <div class="text-center">
                         <div class="size-10 rounded-lg bg-primary/10 flex items-center justify-center mx-auto mb-2">
                             <span class="iconify tabler--plus size-5 text-primary" aria-hidden="true"></span>
                         </div>
-                        <p class="text-sm font-semibold text-base-content">Agregar Sucursal</p>
-                        <p class="text-xs text-base-content/50">{{ $currentBranchCount }} de {{ $maxBranches }} usadas</p>
+                        <p class="text-sm font-semibold text-foreground">Agregar Sucursal</p>
+                        <p class="text-xs text-muted-foreground-1">{{ $currentBranchCount }} de {{ $maxBranches }} usadas</p>
                     </div>
                 </div>
                 @endif
@@ -485,5 +486,5 @@
        class="inline-flex items-center text-sm py-1.5 px-3 rounded-lg font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 shrink-0">Ver Planes</a>
 </div>
 @endif
-
+            </div>{{-- /p-6 --}}
         </div>

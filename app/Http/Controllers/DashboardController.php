@@ -124,6 +124,9 @@ class DashboardController extends Controller
             // ── Branches (Plan 3) ─────────────────────────────────────────
             $activeBranchList = $tenant->branches()->where('is_active', true)->get();
 
+            // ── Theme Slug ────────────────────────────────────────────────
+            $themeSlug = $tenant->customization?->theme_slug ?? 'default';
+
             return view('dashboard.index', compact(
                 'tenant',
                 'plan',
@@ -153,7 +156,8 @@ class DashboardController extends Controller
                 'blueprint',
                 'maxItems',
                 'itemLabel',
-                'itemSingular'
+                'itemSingular',
+                'themeSlug'
             ));
         } catch (\Exception $e) {
             return response()->view('errors.404', [], 404);
@@ -181,6 +185,7 @@ class DashboardController extends Controller
                 'slogan' => 'nullable|string|max:255',
                 'phone' => 'nullable|string|max:20',
                 'whatsapp_sales' => 'nullable|string|max:20',
+                'whatsapp_support' => 'nullable|string|max:20',
                 'email' => 'nullable|email|max:255',
                 'address' => 'nullable|string|max:255',
                 'city' => 'nullable|string|max:100',
@@ -660,12 +665,21 @@ class DashboardController extends Controller
     public function updateTheme(Request $request, int $tenantId): JsonResponse
     {
         try {
-            // Find tenant and verify status
             $tenant = Tenant::where('id', $tenantId)
                 ->where('status', 'active')
                 ->firstOrFail();
 
-                        // SIEMPRE limpiar custom palette cuando se selecciona tema Preline
+            $planId = $tenant->plan_id ?? 1;
+            $allowedThemes = PrelineThemeService::getThemesByPlan($planId);
+
+            \Illuminate\Support\Facades\Log::info('[Theme] Update attempt', [
+                'tenant_id'       => $tenantId,
+                'plan_id'         => $planId,
+                'requested_theme' => $request->input('theme_slug'),
+                'allowed_themes'  => $allowedThemes,
+            ]);
+
+            // Clear custom palette when selecting a Preline theme
             $settings = $tenant->settings ?? [];
             if (isset($settings['engine_settings']['visual']['custom_palette'])) {
                 unset($settings['engine_settings']['visual']['custom_palette']);
@@ -673,9 +687,9 @@ class DashboardController extends Controller
                 $tenant->save();
             }
 
-            // Validate input using PrelineThemeService (single source of truth)
+            // Validate with Rule::in (more robust than string concatenation)
             $validated = $request->validate([
-                'theme_slug' => 'required|string|' . PrelineThemeService::getValidationRule($tenant->plan_id)
+                'theme_slug' => ['required', 'string', \Illuminate\Validation\Rule::in($allowedThemes)],
             ]);
 
             // Get or create customization record
@@ -685,19 +699,46 @@ class DashboardController extends Controller
                 $customization->tenant_id = $tenant->id;
             }
 
-            // Update theme
+            // Update and persist
             $customization->theme_slug = $validated['theme_slug'];
             $customization->save();
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Tema actualizado correctamente'
+            \Illuminate\Support\Facades\Log::info('[Theme] Saved successfully', [
+                'tenant_id'        => $tenantId,
+                'theme_slug'       => $customization->theme_slug,
+                'customization_id' => $customization->id,
             ]);
-        } catch (\Exception $e) {
+
+            return response()->json([
+                'success'    => true,
+                'message'    => 'Tema actualizado correctamente',
+                'theme_slug' => $customization->theme_slug,
+            ]);
+
+        } catch (\Illuminate\Validation\ValidationException $ve) {
+            \Illuminate\Support\Facades\Log::warning('[Theme] Validation failed', [
+                'tenant_id' => $tenantId,
+                'input'     => $request->input('theme_slug'),
+                'errors'    => $ve->errors(),
+            ]);
+
             return response()->json([
                 'success' => false,
-                'message' => 'Error al actualizar tema: ' . $e->getMessage()
+                'message' => 'Tema no válido para tu plan',
+                'errors'  => $ve->errors(),
             ], 422);
+
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('[Theme] Update error', [
+                'tenant_id' => $tenantId,
+                'error'     => $e->getMessage(),
+                'trace'     => $e->getTraceAsString(),
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al actualizar tema: ' . $e->getMessage(),
+            ], 500);
         }
     }
 
@@ -711,33 +752,18 @@ class DashboardController extends Controller
     public function updatePalette(Request $request, int $tenantId): JsonResponse
     {
         try {
-            // Find tenant and verify status
             $tenant = Tenant::where('id', $tenantId)
                 ->where('status', 'active')
                 ->firstOrFail();
 
-            // Validate input using PrelineThemeService (single source of truth)
+            $planId = $tenant->plan_id ?? 1;
+            $allowedThemes = PrelineThemeService::getThemesByPlan($planId);
+
             $validated = $request->validate([
-                'theme' => 'required|string|' . PrelineThemeService::getValidationRule($tenant->plan_id)
+                'theme' => ['required', 'string', \Illuminate\Validation\Rule::in($allowedThemes)],
             ]);
 
-            // Update settings JSON
-            $settings = $tenant->settings ?? [];
-            if (!isset($settings['engine_settings'])) {
-                $settings['engine_settings'] = [];
-            }
-            if (!isset($settings['engine_settings']['visual'])) {
-                $settings['engine_settings']['visual'] = [];
-            }
-            if (!isset($settings['engine_settings']['visual']['theme'])) {
-                $settings['engine_settings']['visual']['theme'] = [];
-            }
-            
-            $settings['engine_settings']['visual']['theme']['flyonui_theme'] = $validated['theme'];
-            $tenant->settings = $settings;
-            $tenant->save();
-
-            // Also sync to customization->theme_slug for consistency
+            // Save ONLY to customization->theme_slug (single source of truth)
             $customization = $tenant->customization;
             if (!$customization) {
                 $customization = new \App\Models\TenantCustomization();
@@ -746,19 +772,32 @@ class DashboardController extends Controller
             $customization->theme_slug = $validated['theme'];
             $customization->save();
 
-            // Clear compiled views so landing reflects the new theme immediately
-            \Illuminate\Support\Facades\Artisan::call('view:clear');
+            // Clear legacy flyonui_theme from settings JSON if present
+            $settings = $tenant->settings ?? [];
+            if (isset($settings['engine_settings']['visual']['theme']['flyonui_theme'])) {
+                unset($settings['engine_settings']['visual']['theme']['flyonui_theme']);
+                $tenant->settings = $settings;
+                $tenant->save();
+            }
 
             return response()->json([
-                'success' => true,
-                'message' => 'Tema actualizado correctamente',
-                'theme'   => $validated['theme'],
+                'success'    => true,
+                'message'    => 'Tema actualizado correctamente',
+                'theme_slug' => $validated['theme'],
             ]);
+
+        } catch (\Illuminate\Validation\ValidationException $ve) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Tema no válido para tu plan',
+                'errors'  => $ve->errors(),
+            ], 422);
+
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Error al actualizar paleta: ' . $e->getMessage()
-            ], 422);
+                'message' => 'Error al actualizar paleta: ' . $e->getMessage(),
+            ], 500);
         }
     }
 
@@ -1254,31 +1293,35 @@ class DashboardController extends Controller
                 ->where('status', 'active')
                 ->firstOrFail();
 
+            // Log plan info for debugging
+            \Log::info('saveCustomPalette', [
+                'tenant_id' => $tenantId,
+                'plan_id' => $tenant->plan_id,
+                'is_vision' => $tenant->isVision()
+            ]);
+
             if (!$tenant->isVision()) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'La paleta personalizada solo está disponible en el Plan Visión'
+                    'message' => 'La paleta personalizada solo está disponible en el Plan Visión (plan_id=' . $tenant->plan_id . ')'
                 ], 403);
             }
 
             // Guardar custom palette en settings
             $settings = $tenant->settings ?? [];
             $settings['engine_settings']['visual']['custom_palette'] = [
-                'primary'   => $request->primary,
-                'secondary' => $request->secondary,
-                'accent'    => $request->accent,
-                'base'      => $request->base,
+                'primary' => $request->primary,
             ];
             $tenant->settings = $settings;
             $tenant->save();
 
-            // Marcar theme_slug como NULL (custom mode)
+            // Marcar theme_slug como 'custom'
             $customization = $tenant->customization;
             if (!$customization) {
                 $customization = new \App\Models\TenantCustomization();
                 $customization->tenant_id = $tenant->id;
             }
-            $customization->theme_slug = null;
+            $customization->theme_slug = 'custom';
             $customization->save();
 
             return response()->json([

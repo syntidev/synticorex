@@ -75,5 +75,14 @@
             
             
         </div>
+
+        {{-- Powered by SYNTIweb Badge --}}
+        <div class="border-t border-border mt-6 pt-4 text-center">
+            <a href="https://syntiweb.com" target="_blank" rel="noopener noreferrer"
+               class="inline-flex items-center gap-1.5 text-xs text-muted-foreground-1 hover:text-foreground transition-colors">
+                <img src="{{ asset('brand/syntiweb-logo-flat-positive.svg') }}" alt="SYNTIweb" width="16" height="16">
+                Powered by <span style="color:#4A80E4">SYNTIweb</span>
+            </a>
+        </div>
     </div>
 </footer>

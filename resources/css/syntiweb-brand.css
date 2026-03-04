@@ -1,0 +1,44 @@
+/* ═══════════════════════════════════════════════════════
+   SYNTIweb — Identidad Visual Oficial
+   NO MODIFICAR sin instrucción del arquitecto
+   ═══════════════════════════════════════════════════════ */
+
+:root {
+  /* ── Brand core ── */
+  --sw-blue:          #4A80E4;
+  --sw-blue-hover:    #3a6fd3;
+  --sw-blue-light:    #EBF1FC;
+  --sw-navy:          #1a1a1a;
+  --sw-white:         #FFFFFF;
+
+  /* ── Superficies ── */
+  --sw-bg:            #F8FAFF;
+  --sw-bg-dark:       #1a1a1a;
+  --sw-surface:       #FFFFFF;
+  --sw-surface-dark:  #111111;
+  --sw-border:        #E2E8F4;
+  --sw-border-dark:   #2a2a2a;
+
+  /* ── Tipografía ── */
+  --sw-text:          #1a1a1a;
+  --sw-text-inverse:  #FFFFFF;
+  --sw-text-muted:    #64748b;
+  --sw-font:          'Geist', ui-sans-serif, system-ui, sans-serif;
+
+  /* ── Contraste negativo (fondo oscuro + texto claro) ── */
+  --sw-hero-dark-bg:  #0f1117;
+  --sw-hero-dark-text:#F8FAFF;
+  --sw-accent-glow:   rgba(74, 128, 228, 0.15);
+}
+
+/* Logo breathing animation */
+@keyframes sw-breathe {
+  0%, 100% { transform: scale(1);    opacity: 1;    }
+  50%       { transform: scale(1.08); opacity: 0.85; }
+}
+
+.sw-logo-breathe {
+  animation: sw-breathe 3s ease-in-out infinite;
+  transform-origin: center;
+}
+

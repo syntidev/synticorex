@@ -17,12 +17,12 @@
                         @if($plan->id !== 1)
                         <div class="svc-segment w-full mb-6" role="tablist" aria-label="Modo de representación del servicio">
                             <button type="button" id="svc-tab-icon" role="tab"
-                                class="seg-active flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-btn text-sm font-bold transition-all"
+                                class="seg-active flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg text-sm font-bold transition-all"
                                 onclick="setServiceModalMode('icon')">
                                 <span class="iconify tabler--color-picker size-4" aria-hidden="true"></span> Ícono
                             </button>
                             <button type="button" id="svc-tab-image" role="tab"
-                                class="flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-btn text-sm font-bold transition-all"
+                                class="flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg text-sm font-bold transition-all"
                                 onclick="setServiceModalMode('image')">
                                 <span class="iconify tabler--photo-up size-4" aria-hidden="true"></span> Imagen
                             </button>
@@ -31,7 +31,7 @@
 
                         {{-- ICON PICKER (Plan 1: always; Plan 2/3: when icon mode) --}}
                         <div id="svc-section-icon" class="form-control py-2 mb-4">
-                            <label class="label"><span class="label-text text-sm font-semibold">Ícono del Servicio</span></label>
+                            <label class="inline-block text-sm font-medium text-foreground mb-1"><span class="font-semibold">Ícono del Servicio</span></label>
 
                             {{-- Current selection preview --}}
                             <div class="flex flex-col items-center p-7 rounded-2xl mb-6 border" style="background:linear-gradient(135deg,var(--synti-soft) 0%,transparent 60%);border-color:var(--synti-bdr);">
@@ -43,12 +43,12 @@
                             </div>
 
                             {{-- Search --}}
-                            <input type="text" id="icon-search" class="input input-sm w-full mb-4"
+                            <input type="text" id="icon-search" class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none mb-4"
                                 placeholder="Busca: scissors, camera, truck, heart..."
                                 oninput="filterIcons(this.value)" autocomplete="off">
 
                             {{-- Icon Grid --}}
-                            <div id="icon-picker-grid" class="grid grid-cols-6 gap-3 max-h-80 overflow-y-auto p-3 rounded-xl bg-base-200/60 border border-base-content/8"></div>
+                            <div id="icon-picker-grid" class="grid grid-cols-6 gap-3 max-h-80 overflow-y-auto p-3 rounded-lg bg-layer border border-border"></div>
                             <p class="text-xs text-base-content/30 mt-3 text-center">60+ iconos disponibles</p>
                             
                             {{-- Hidden div to force Tailwind to generate icon classes --}}
@@ -82,10 +82,10 @@
                         {{-- IMAGE UPLOAD (Plan 2/3 only; hidden by default) --}}
                         @if($plan->id !== 1)
                         <div id="svc-section-image" class="form-control py-2" style="display: none;">
-                            <label class="label"><span class="label-text text-sm font-medium">Imagen del Servicio</span></label>
+                            <label class="inline-block text-sm font-medium text-foreground mb-1"><span class="font-semibold">Imagen del Servicio</span></label>
                             <div class="image-preview" id="service-image-preview" style="display: none;">
                                 <img id="service-image-preview-img" src="" alt="Preview">
-                                <button type="button" onclick="cancelServiceImage()" class="p-1 rounded-full transition-colors text-gray-500 hover:bg-gray-100 absolute top-1 right-1">
+                                <button type="button" onclick="cancelServiceImage()" class="p-1 rounded-full transition-colors text-foreground hover:bg-muted-hover absolute top-1 right-1">
                                     <span class="iconify tabler--x size-3.5" aria-hidden="true"></span>
                                 </button>
                             </div>
@@ -104,26 +104,26 @@
                         @endif
 
                         <div class="form-control py-2">
-                            <label for="service-name" class="label"><span class="label-text text-sm font-medium">Nombre *</span></label>
-                            <input type="text" id="service-name" class="input input-bordered w-full" required maxlength="100">
+                            <label for="service-name" class="inline-block text-sm font-medium text-foreground mb-1">Nombre *</label>
+                            <input type="text" id="service-name" class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none" required maxlength="100">
                         </div>
 
                         <div class="form-control py-2">
-                            <label for="service-description" class="label"><span class="label-text text-sm font-medium">Descripción</span></label>
-                            <textarea id="service-description" class="textarea textarea-bordered w-full" rows="3" maxlength="500"></textarea>
+                            <label for="service-description" class="inline-block text-sm font-medium text-foreground mb-1">Descripción</label>
+                            <textarea id="service-description" class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none" rows="3" maxlength="500"></textarea>
                         </div>
 
                         <div class="form-control py-2">
-                            <label class="label"><span class="label-text text-sm font-medium">Servicio Activo</span></label>
+                            <label class="inline-block text-sm font-medium text-foreground mb-1">Servicio Activo</label>
                             <label class="flex items-center gap-3 cursor-pointer">
                                 <input type="checkbox" id="service-is-active" class="toggle toggle-success" checked>
                                 <span class="text-sm text-base-content/60">Mostrar en landing page</span>
                             </label>
                         </div>
 
-                        <div class="flex gap-3 pt-5 border-t border-base-content/10 justify-end">
-                            <button type="button" class="py-2 px-4 rounded-lg font-medium transition-colors text-gray-600 hover:bg-gray-100" onclick="closeServiceModal()">Cancelar</button>
-                            <button type="submit" class="inline-flex items-center py-2 px-4 rounded-lg font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 gap-2 shadow-md">
+                        <div class="flex gap-3 pt-5 border-t border-border justify-end">
+                            <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg bg-layer border border-layer-line text-layer-foreground shadow-2xs hover:bg-layer-hover disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-layer-focus" onclick="closeServiceModal()">Cancelar</button>
+                            <button type="submit" class="py-2 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg bg-primary border border-primary-line text-primary-foreground hover:bg-primary-hover focus:outline-hidden focus:bg-primary-focus disabled:opacity-50 disabled:pointer-events-none shadow-sm">
                                 <span class="iconify tabler--device-floppy size-4" aria-hidden="true"></span>
                                 Guardar Servicio
                             </button>

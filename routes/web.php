@@ -37,6 +37,7 @@ Route::middleware('tenant')->get('/{subdomain}', [TenantRendererController::clas
 // ═══ Tenant panel — acciones públicas (protegidas por PIN, no por auth) ═════
 Route::post('/tenant/{tenantId}/verify-pin',    [TenantRendererController::class, 'verifyPin']);
 Route::post('/tenant/{tenantId}/toggle-status', [TenantRendererController::class, 'toggleStatus']);
+Route::patch('/tenant/{tenantId}/toggle-whatsapp', [TenantRendererController::class, 'toggleWhatsapp']);
 
 // ═══ APIs públicas ════════════════════════════════════════════════════════════
 Route::post('/api/analytics/track', [AnalyticsController::class, 'track']);
@@ -74,6 +75,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/hero',                    [ImageUploadController::class, 'uploadHero']);
         Route::post('/product/{productId}',     [ImageUploadController::class, 'uploadProduct']);
         Route::post('/service/{serviceId}',     [ImageUploadController::class, 'uploadService']);
+        Route::post('/about',                    [ImageUploadController::class, 'uploadAbout']);
         // Gallery images (Plan 3 / VISIÓN only)
         Route::post('/product/{productId}/gallery',              [ImageUploadController::class, 'uploadProductGallery']);
         Route::delete('/product/{productId}/gallery/{imageId}',  [ImageUploadController::class, 'deleteProductGalleryImage']);

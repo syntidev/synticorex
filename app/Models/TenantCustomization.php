@@ -28,7 +28,7 @@ class TenantCustomization extends Model
         'hero_secondary_filename',
         'hero_tertiary_filename',
         'hero_layout',
-        'theme_slug',          // FlyonUI official theme (light, dark, cupcake, etc.)
+        'theme_slug',          // Preline official theme (default, harvest, moon, etc.)
         'social_networks',
         'payment_methods',
         'faq_items',
@@ -39,6 +39,7 @@ class TenantCustomization extends Model
         'visual_effects',
         'content_blocks',
         'about_text',
+        'about_image_filename',
     ];
 
     /**

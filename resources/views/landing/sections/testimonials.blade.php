@@ -1,0 +1,48 @@
+{{--
+    Testimonials Section — Preline 4.1.2
+    Hardcoded placeholders until dynamic testimonials system is connected
+--}}
+
+<section id="testimonios" class="py-8 sm:py-16 lg:py-24">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="space-y-4 text-center mb-10">
+      <p class="text-primary text-sm font-medium uppercase">Lo que dicen</p>
+      <h2 class="text-foreground text-2xl font-semibold md:text-3xl lg:text-4xl">
+        Testimonios de <span class="text-primary italic">Clientes</span>
+      </h2>
+      <div class="w-16 h-1 bg-primary mx-auto mt-4 rounded-full"></div>
+    </div>
+    <div class="grid md:grid-cols-2 gap-6">
+      <div class="bg-background border border-border rounded-xl shadow-sm">
+        <div class="flex flex-col p-4 gap-5">
+          <div class="flex items-center gap-3">
+            <img src="https://ui-avatars.com/api/?name=M+G&background=random&size=80" alt="Cliente" class="size-10 rounded-full object-cover">
+            <div>
+              <h4 class="text-base font-medium">María González</h4>
+              <p class="text-sm text-foreground/80">Cliente satisfecha</p>
+            </div>
+          </div>
+          <div class="flex gap-1">
+            @for($i=1;$i<=5;$i++)<span class="icon-[tabler--star-filled] text-warning size-5"></span>@endfor
+          </div>
+          <p class="text-foreground/80">"Excelente servicio, superaron todas mis expectativas. 100% recomendados."</p>
+        </div>
+      </div>
+      <div class="bg-background border border-border rounded-xl shadow-sm">
+        <div class="flex flex-col p-4 gap-5">
+          <div class="flex items-center gap-3">
+            <img src="https://ui-avatars.com/api/?name=C+R&background=random&size=80" alt="Cliente" class="size-10 rounded-full object-cover">
+            <div>
+              <h4 class="text-base font-medium">Carlos Rodríguez</h4>
+              <p class="text-sm text-foreground/80">Emprendedor</p>
+            </div>
+          </div>
+          <div class="flex gap-1">
+            @for($i=1;$i<=5;$i++)<span class="icon-[tabler--star-filled] text-warning size-5"></span>@endfor
+          </div>
+          <p class="text-foreground/80">"La mejor inversión para mi negocio. Profesionales y con resultados reales."</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

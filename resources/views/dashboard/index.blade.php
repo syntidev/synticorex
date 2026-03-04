@@ -21,10 +21,7 @@
         /* ══ SYNTIWEB Dashboard — Premium Design System ══ */
         :root { --synti: #4D8FFF; --synti-glow: rgba(77,143,255,0.14); --synti-bdr: rgba(77,143,255,0.22); --synti-soft: rgba(77,143,255,0.10); }
 
-        /* Sidebar */
-        #layout-sidebar { position:fixed; top:0; bottom:0; left:0; width:16rem; z-index:80; transform:translateX(-100%); transition:transform .3s ease; display:flex !important; }
-        #layout-sidebar.opened, #layout-sidebar.open { transform:translateX(0); }
-        @media(min-width:1024px){ #layout-sidebar { transform:translateX(0); z-index:50; } }
+        /* Sidebar — posicionamiento vía clases Preline nativas */
 
         /* Tabs */
         .tab-content { display:none; } .tab-content.active { display:block; }
@@ -36,7 +33,7 @@
         #live-clock { font-family:'Plus Jakarta Sans',sans-serif; font-size:.8rem; font-weight:700; color:var(--synti); letter-spacing:.5px; }
 
         /* Sidebar dark elegant */
-        #layout-sidebar > .drawer-body { background:linear-gradient(180deg,#0f172a 0%,#1e293b 100%); color:#e2e8f0; }
+        #layout-sidebar { background:linear-gradient(180deg,#0f172a 0%,#1e293b 100%); color:#e2e8f0; }
         #layout-sidebar .sidebar-footer-link { color:#e2e8f0 !important; }
         #layout-sidebar .sidebar-nav li button {
             color:rgba(226,232,240,.65); border-left:3px solid transparent;
@@ -56,11 +53,11 @@
         .dot-online { display:inline-block; width:8px; height:8px; border-radius:50%; background:#22c55e; flex-shrink:0; animation:synti-breathe 2.5s ease-in-out infinite; }
         .dot-offline { display:inline-block; width:8px; height:8px; border-radius:50%; background:#ef4444; flex-shrink:0; animation:synti-breathe-off 2s ease-in-out infinite; }
 
-        /* CRUD Modals — elevated */
-        .crud-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.5); backdrop-filter:blur(8px); z-index:9999; align-items:center; justify-content:center; padding:1rem; }
+        /* CRUD Modals — Preline 4.1.2 tokens */
+        .crud-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.5); backdrop-filter:blur(4px); z-index:9999; align-items:center; justify-content:center; padding:1rem; }
         .crud-overlay.show { display:flex; }
-        .crud-dialog { background:var(--color-base-100); border-radius:1rem; width:100%; max-width:600px; max-height:90vh; overflow-y:auto; z-index:10000; box-shadow:0 25px 60px -12px rgba(0,0,0,.35); border:1px solid color-mix(in oklch,var(--color-base-content) 8%,transparent); }
-        .crud-dialog-header { padding:1.25rem 1.5rem; background:linear-gradient(135deg,#2563eb 0%,#3b82f6 100%); color:#fff; display:flex; justify-content:space-between; align-items:center; border-radius:1rem 1rem 0 0; }
+        .crud-dialog { background:var(--color-card); border-radius:0.75rem; width:100%; max-width:600px; max-height:90vh; overflow-y:auto; z-index:10000; box-shadow:0 20px 25px -5px rgba(0,0,0,.1), 0 10px 10px -5px rgba(0,0,0,.04); border:1px solid var(--color-card-line); }
+        .crud-dialog-header { padding:1.25rem 1.5rem; background:var(--color-primary); color:#fff; display:flex; justify-content:space-between; align-items:center; border-radius:0.75rem 0.75rem 0 0; }
         .crud-dialog-title { color:#fff !important; font-size:1.1rem; }
         .crud-dialog-close { background:rgba(255,255,255,.15); border:none; color:#fff; cursor:pointer; width:32px; height:32px; display:flex; align-items:center; justify-content:center; border-radius:50%; transition:all .2s; backdrop-filter:blur(4px); }
         .crud-dialog-close:hover { background:rgba(255,255,255,.3); transform:scale(1.05); }
@@ -112,7 +109,7 @@
         @media(max-width:639px) { #header-extras { display:none !important; } }
     </style>
 </head>
-<body class="bg-base-200">
+<body class="bg-layer min-h-screen">
 
 {{-- Skip link accesibilidad: visible solo al recibir foco por teclado --}}
 <a href="#main-content"
@@ -123,78 +120,84 @@
 {{-- Región aria-live para anunciar toasts a lectores de pantalla --}}
 <div id="toast-announcer" aria-live="polite" aria-atomic="true" class="sr-only"></div>
 
-<div class="bg-base-200 flex min-h-screen flex-col">
+    <!-- ══ HEADER ══ -->
+    <div class="lg:ps-64 sticky top-0 z-50 bg-surface border-b border-border">
+        <div class="px-4 lg:px-6">
+            <nav class="flex items-center justify-between h-14 gap-4">
 
-    <!-- ══ HEADER ════════════════════════════════════════════════════════ -->
-    <div class="lg:ps-64 sticky top-0 z-50" style="background:linear-gradient(135deg,#1e40af 0%,#2563eb 50%,#3b82f6 100%);">
-        <div class="mx-auto w-full">
-            <nav class="navbar py-3 px-4 lg:px-6">
-                <div class="navbar-start items-center gap-3">
-                    {{-- Hamburger: visible solo en móvil --}}
+                {{-- START: hamburger móvil + nombre negocio --}}
+                <div class="flex items-center gap-3 min-w-0">
+
+                    {{-- Hamburger — solo móvil --}}
                     <button type="button"
-                            class="p-2 rounded-lg border-0 bg-white/10 text-white hover:bg-white/20 lg:hidden transition-colors"
-                            aria-haspopup="dialog"
-                            aria-expanded="false"
-                            aria-controls="layout-sidebar"
-                            data-hs-overlay="#layout-sidebar">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
+                        class="size-8 flex items-center justify-center rounded-lg text-muted-foreground-1 hover:bg-muted hover:text-foreground transition-colors lg:hidden"
+                        aria-haspopup="dialog"
+                        aria-expanded="false"
+                        aria-controls="layout-sidebar"
+                        data-hs-overlay="#layout-sidebar">
+                        <iconify-icon icon="tabler:menu-2" width="20"></iconify-icon>
                     </button>
-                    <a href="/" class="flex items-center gap-1.5 lg:hidden">
-                        <img src="{{ asset('brand/syntiweb-logo-negative.svg') }}" 
-                             alt="SYNTIweb" width="28" height="28">
-                        <span class="font-bold text-base tracking-tight"><span style="color:#4A80E4">SYNTI</span><span style="color:#FFFFFF">web</span></span>
+
+                    {{-- Logo — solo móvil --}}
+                    <a href="/" class="flex items-center gap-2 lg:hidden shrink-0">
+                        <img src="{{ asset('brand/syntiweb-logo-positive.svg') }}"
+                             alt="SYNTIweb" width="26" height="26">
+                        <span class="font-bold text-base tracking-tight">
+                            <span class="text-foreground">SYNTI</span><span style="color:#4A80E4">web</span>
+                        </span>
                     </a>
-                    {{-- Negocio + dot de estado (desktop) --}}
-                    <div class="hidden lg:flex items-center gap-3 min-w-0">
-                        <span class="{{ $tenant->is_open ? 'dot-online' : 'dot-offline' }}"></span>
-                        <span class="text-sm font-semibold text-white truncate max-w-52">{{ $tenant->business_name }}</span>
-                        <span class="inline-flex items-center py-0.5 px-2 rounded-full text-xs font-bold border-0
-                            {{ $plan->id === 1 ? 'bg-amber-400/90 text-amber-900' : ($plan->id === 2 ? 'bg-emerald-400/90 text-emerald-900' : 'bg-sky-300/90 text-sky-900') }}">
+
+                    {{-- Negocio + estado + plan — desktop --}}
+                    <div class="hidden lg:flex items-center gap-2.5 min-w-0">
+                        <span class="{{ $tenant->is_open ? 'dot-online' : 'dot-offline' }}"
+                              aria-label="{{ $tenant->is_open ? 'Abierto' : 'Cerrado' }}"></span>
+                        <span class="text-sm font-semibold text-foreground truncate max-w-48">
+                            {{ $tenant->business_name }}
+                        </span>
+                        <span class="inline-flex items-center py-0.5 px-2.5 rounded-full text-xs font-bold
+                            {{ $plan->id === 1 ? 'bg-amber-100 text-amber-700' : ($plan->id === 2 ? 'bg-emerald-100 text-emerald-700' : 'bg-sky-100 text-sky-700') }}">
                             {{ $plan->name }}
                         </span>
-                        @if($tenant->industry_segment)
-                        <span class="inline-flex items-center py-0.5 px-2 rounded-full text-xs font-medium border-0 bg-white/20 text-white backdrop-blur-sm" title="{{ $tenant->getBlueprintLabel() }}">
-                            {{ $tenant->getItemLabel() }}
-                        </span>
-                        @endif
                     </div>
                 </div>
 
-                {{-- Center: reloj + tasa BCV --}}
-                <div id="header-extras" class="navbar-center hidden md:flex items-center gap-3">
-                    <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border" style="background:rgba(255,255,255,0.18);border-color:rgba(255,255,255,0.25)">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#bfdbfe" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                        <span id="live-clock" class="text-xs font-bold tracking-wide" style="color:#fff" aria-label="Hora actual">--:--</span>
+                {{-- CENTER: reloj + tasa BCV --}}
+                <div id="header-extras" class="hidden md:flex items-center gap-2">
+                    <div class="flex items-center gap-1.5 py-1 px-2.5 rounded-lg bg-muted border border-border text-xs">
+                        <iconify-icon icon="tabler:clock" width="14" class="text-muted-foreground-1"></iconify-icon>
+                        <span id="live-clock" class="font-bold text-foreground tabular-nums" aria-label="Hora actual">--:--</span>
                     </div>
-                    <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border" style="background:rgba(255,255,255,0.18);border-color:rgba(255,255,255,0.25)">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6ee7b7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                        <span class="text-xs font-semibold" style="color:#fff">
+                    <div class="flex items-center gap-1.5 py-1 px-2.5 rounded-lg bg-muted border border-border text-xs">
+                        <iconify-icon icon="tabler:currency-dollar" width="14" class="text-success"></iconify-icon>
+                        <span class="font-semibold text-foreground">
                             Bs. <span id="header-dollar-rate">{{ number_format($dollarRate, 2) }}</span>
                         </span>
                     </div>
                 </div>
 
-                {{-- End: estado + cerrar --}}
-                <div class="navbar-end items-center gap-2">
-                    <span class="{{ $tenant->is_open ? 'dot-online' : 'dot-offline' }} lg:hidden"></span>
+                {{-- END: ver sitio --}}
+                <div class="flex items-center shrink-0">
                     <a href="/{{ $tenant->subdomain }}"
-                       class="inline-flex items-center text-sm py-1.5 px-3 rounded-lg font-medium gap-1.5 border-0 hover:opacity-90 transition-opacity"
-                       style="background:rgba(255,255,255,0.2);color:#fff;border:1px solid rgba(255,255,255,0.3)">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
-                        <span class="hidden sm:inline" style="color:#fff">Ver sitio</span>
+                       target="_blank"
+                       rel="noopener"
+                       class="py-1.5 px-3 inline-flex items-center gap-x-1.5 text-sm font-medium rounded-lg bg-primary border border-primary-line text-primary-foreground hover:bg-primary-hover transition-colors">
+                        <iconify-icon icon="tabler:external-link" width="15"></iconify-icon>
+                        <span class="hidden sm:inline">Ver sitio</span>
                     </a>
                 </div>
+
             </nav>
         </div>
     </div>
 
     <!-- ══ SIDEBAR — 4 Menús Lógicos ════════════════════════════════════ -->
-    <aside id="layout-sidebar"
-           class="hs-overlay"
-           aria-label="Sidebar"
-           tabindex="-1">
-        <div class="drawer-body h-full border-e border-white/5 p-0">
-            <div class="flex h-full max-h-full flex-col">
+    <div id="layout-sidebar"
+         class="hs-overlay [--auto-close:lg] hs-overlay-open:translate-x-0 -translate-x-full transition-all duration-300 transform
+                w-64 hidden fixed inset-y-0 start-0 z-[60] overflow-y-auto
+                border-e border-white/5
+                lg:block lg:translate-x-0 lg:z-50"
+         tabindex="-1" aria-label="Sidebar">
+        <div class="flex h-full max-h-full flex-col">
                 {{-- Close (mobile) --}}
                 <button type="button"
                         class="p-2 rounded-full transition-colors absolute end-3 top-3 lg:hidden text-white/60 hover:text-white hover:bg-white/10"
@@ -203,15 +206,11 @@
                     <span class="iconify tabler--x size-4.5"></span>
                 </button>
 
-                <a href="/" class="flex items-center gap-3">
-                    <img src="{{ asset('brand/syntiweb-logo-negative.svg') }}" 
-                         alt="SYNTIweb" width="36" height="36">
-                    <div>
-                        <span class="sidebar-logo-text">
-                            <span style="color:#4A80E4">SYNTI</span><span style="color:#FFFFFF">web</span>
-                        </span>
-                        <p class="text-slate-400 text-xs mt-0.5">{{ $tenant->business_name }}</p>
-                    </div>
+                <a href="/" class="flex items-center gap-2 px-5 pt-5 pb-3">
+                    <img src="{{ asset('brand/syntiweb-logo-negative.svg') }}" alt="SYNTIweb" width="32" height="32">
+                    <span class="font-bold text-lg tracking-tight">
+                        <span style="color:#4A80E4">SYNTI</span><span style="color:#FFFFFF">web</span>
+                    </span>
                 </a>
 
                 {{-- Navigation — 4 Menús --}}
@@ -270,19 +269,15 @@
                 </div>
 
                 {{-- Footer --}}
-                <div class="border-t border-white/8 p-3 mt-auto">
-                    <a href="/{{ $tenant->subdomain }}" target="_blank" rel="noopener noreferrer"
-                       class="sidebar-footer-link w-full inline-flex items-center justify-center text-sm py-1.5 px-3 rounded-lg gap-2 border-0 bg-white/8 hover:bg-white/15 transition-all">
-                        <span class="iconify tabler--external-link size-4"></span>
-                        Ver mi sitio
-                    </a>
+                <div class="border-t border-[var(--sw-border)] p-3 mt-auto text-[var(--sw-text-muted)]">
+                    <p class="text-xs text-center py-2 px-3">© {{ date('Y') }} SYNTIweb</p>
                 </div>
             </div>
         </div>
-    </aside>
+    </div>{{-- /layout-sidebar --}}
 
-    <!-- ══ LAYOUT CONTENT ════════════════════════════════════════════════ -->
-    <div class="lg:ps-64 flex grow flex-col">
+    <!-- ══ LAYOUT CONTENT ════════════════════════════════════ -->
+    <div class="w-full lg:ps-64">
 
     {{-- ── Plan Expiry Notices ──────────────────────────────────────────── --}}
     @if($isFrozen)
@@ -355,7 +350,6 @@
     @include('dashboard.scripts.design-config-scripts')
     @include('dashboard.scripts.sortable-scripts')
 
-    </div>{{-- /lg:ps-64 content wrapper --}}
-</div>{{-- /flex min-h-screen --}}
+    </div>{{-- /w-full lg:ps-64 content wrapper --}}
 </body>
 </html>

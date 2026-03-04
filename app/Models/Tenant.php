@@ -51,6 +51,7 @@ class Tenant extends Model
         'subscription_ends_at',
         'plan_activated_at',
         'settings',
+        'whatsapp_active',
     ];
 
     /**
@@ -71,6 +72,16 @@ class Tenant extends Model
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
         ];
+    }
+
+    /**
+     * Get the active WhatsApp number based on whatsapp_active setting.
+     */
+    public function getActiveWhatsapp(): ?string
+    {
+        return $this->whatsapp_active === 'support'
+            ? $this->whatsapp_support
+            : $this->whatsapp_sales;
     }
 
     /**

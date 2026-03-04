@@ -1,144 +1,70 @@
-{{--
-    Hero Gradient Animado — SYNTIweb
-    ─────────────────────────────────────────────
-    Sección  : hero
-    Variante : gradient (Plan 3 VISIÓN)
-    Variables: $tenant, $customization, $plan
---}}
-@php
-    $heroSlogan   = $tenant->slogan ?? $tenant->business_name ?? 'Tu negocio profesional';
-    $sloganBefore = Str::contains($heroSlogan, ' ')
-        ? Str::beforeLast($heroSlogan, ' ')
-        : $heroSlogan;
-    $sloganAccent = Str::contains($heroSlogan, ' ')
-        ? Str::afterLast($heroSlogan, ' ')
-        : '';
+{{-- Hero Split 50/50 — Plan 3 VISIÓN (Preline 4.1.2 + Tailwind v4) --}}
+<section id="home" class="min-h-[90vh] grid lg:grid-cols-2">
 
-    $heroSubtitle = $customization->getHeroSubtitle();
-    $heroFallback = 'Estamos aquí para hacer crecer tu negocio. Contáctanos hoy.';
+    {{-- IZQUIERDA: Contenido sobre fondo blanco --}}
+    <div class="bg-background flex items-center px-8 py-16 lg:px-16 lg:py-24">
+        <div class="max-w-xl space-y-6">
+            {{-- Badge ciudad --}}
+            @if($tenant->city ?? $tenant->tagline)
+            <div class="inline-flex items-center gap-2 border border-primary/20 bg-primary/5 rounded-full px-4 py-1.5 text-sm text-primary">
+                <span class="size-2 rounded-full bg-primary"></span>
+                {{ $tenant->city ?? $tenant->tagline }}
+            </div>
+            @endif
 
-    $heroImage = $customization->hero_main_filename
-        ? asset('storage/tenants/' . $tenant->id . '/' . $customization->hero_main_filename)
-        : null;
+            {{-- Título --}}
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight">
+                {!! nl2br(e($tenant->slogan ?? $tenant->business_name)) !!}
+            </h1>
 
-    $waRaw  = $tenant->whatsapp_sales ?? $tenant->whatsapp_support ?? null;
-    $waLink = $waRaw ? 'https://wa.me/' . preg_replace('/\D/', '', $waRaw) : '#contacto';
+            {{-- Descripción --}}
+            <p class="text-lg text-muted-foreground-1 max-w-lg">
+                {{ Str::limit($customization->about_text ?? $tenant->description ?? 'Bienvenido a una experiencia donde la calidad y el servicio se unen.', 200) }}
+            </p>
 
-    $badgeText = $tenant->city ?? 'Presencia profesional';
-@endphp
-
-{{-- Shimmer keyframe (se dispara una sola vez al cargar) --}}
-<style>
-@keyframes shimmer {
-    0%   { background-position: -200% center; }
-    100% { background-position:  200% center; }
-}
-</style>
-
-<section id="home" class="relative min-h-[85vh] lg:min-h-screen overflow-hidden">
-
-    {{-- Gradiente animado --}}
-    <div class="absolute inset-0 bg-gradient-to-br from-primary via-secondary to-accent"
-         style="background-size:400% 400%;animation:gradient-xy 15s ease infinite;"></div>
-
-    {{-- Overlay sutil --}}
-    <div class="absolute inset-0 bg-base-content/10 pointer-events-none"></div>
-
-    <div class="relative container mx-auto px-6 py-20 lg:py-28 min-h-[85vh] lg:min-h-screen flex items-center">
-
-        <div class="grid lg:grid-cols-2 gap-12 items-center w-full">
-
-            {{-- ── COLUMNA IZQUIERDA: CONTENIDO ── --}}
-            <div class="text-base-100 space-y-6">
-
-                {{-- SECCIÓN 1: Badge --}}
-                <div class="inline-flex items-center gap-2 bg-base-100/15 backdrop-blur-sm
-                            border border-base-100/25 rounded-full px-4 py-1.5 text-sm text-base-100
-                            overflow-hidden relative"
-                     style="animation:shimmer 2s ease 1s 1;">
-                    <span class="size-2 rounded-full bg-accent animate-pulse shrink-0"></span>
-                    {{ $badgeText }}
-                </div>
-
-                {{-- SECCIÓN 2: Título --}}
-                <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
-                    {{ $sloganBefore }}@if($sloganAccent)<span class="text-accent"> {{ $sloganAccent }}</span>@endif
-                </h1>
-
-                {{-- SECCIÓN 3: Descripción --}}
-                @if($heroSubtitle)
-                <p class="text-base text-base-100/80 max-w-lg">
-                    {{ Str::limit($heroSubtitle, 150) }}
-                </p>
-                @else
-                <p class="text-base text-base-100/60 max-w-lg italic">
-                    {{ $heroFallback }}
-                </p>
+            {{-- CTAs --}}
+            <div class="flex flex-wrap gap-3 pt-2">
+                @if($tenant->whatsapp)
+                <a href="https://wa.me/{{ preg_replace('/\D/', '', $tenant->whatsapp) }}?text={{ urlencode('Hola ' . $tenant->business_name . ', me gustaría obtener más información') }}"
+                   target="_blank"
+                   class="inline-flex items-center gap-2 py-3 px-6 rounded-lg font-medium bg-primary text-primary-foreground hover:bg-primary-hover transition-colors text-base">
+                    <span class="iconify tabler--brand-whatsapp size-5"></span>
+                    Contactar por WhatsApp
+                </a>
+                @elseif($tenant->phone)
+                <a href="tel:{{ $tenant->phone }}"
+                   class="inline-flex items-center gap-2 py-3 px-6 rounded-lg font-medium bg-primary text-primary-foreground hover:bg-primary-hover transition-colors text-base">
+                    <span class="iconify tabler--phone size-5"></span>
+                    Llamar Ahora
+                </a>
                 @endif
-
-                {{-- SECCIÓN 4: CTAs --}}
-                <div class="flex flex-col sm:flex-row gap-3 pt-2">
-                    @if($waRaw)
-                    <a href="{{ $waLink }}" target="_blank" rel="noopener noreferrer"
-                       class="inline-flex items-center py-3 px-6 rounded-lg font-medium transition-colors text-lg bg-base-100 text-primary hover:bg-base-100/90 w-full sm:w-auto">
-                        <iconify-icon icon="tabler:brand-whatsapp" width="20" height="20"></iconify-icon>
-                        Contactar por WhatsApp
-                    </a>
-                    @endif
-                    <a href="#servicios"
-                       class="inline-flex items-center py-3 px-6 rounded-lg font-medium transition-colors text-lg border border-base-100/40 text-base-100
-                              hover:bg-base-100/10 w-full sm:w-auto">
-                        Ver servicios
-                        <iconify-icon icon="tabler:arrow-down" width="20" height="20"></iconify-icon>
-                    </a>
-                </div>
-
-                {{-- SECCIÓN 6: Stats (solo Plan 3 VISIÓN) --}}
-                @if($tenant->plan_id >= 3)
-                <div class="flex gap-6 pt-2 border-t border-base-100/20">
-                    <div>
-                        <div class="text-xl font-bold text-base-100">17+</div>
-                        <div class="text-xs text-base-100/60">Temas</div>
-                    </div>
-                    <div>
-                        <div class="text-xl font-bold text-base-100">SEO</div>
-                        <div class="text-xs text-base-100/60">Incluido</div>
-                    </div>
-                    <div>
-                        <div class="text-xl font-bold text-base-100">24/7</div>
-                        <div class="text-xs text-base-100/60">En línea</div>
-                    </div>
-                </div>
-                @endif
-
+                <a href="#servicios"
+                   class="inline-flex items-center gap-2 py-3 px-6 rounded-lg font-medium border border-border text-foreground hover:bg-surface transition-colors text-base">
+                    Ver servicios
+                    <span class="iconify tabler--arrow-down size-5"></span>
+                </a>
             </div>
 
-            {{-- ── COLUMNA DERECHA: IMAGEN ── --}}
-            <div class="relative">
-
-                {{-- Glow decorativo --}}
-                <div class="absolute -inset-4 bg-accent/20 rounded-full blur-3xl pointer-events-none"></div>
-
-                @if($heroImage)
-                    <img src="{{ $heroImage }}"
-                         alt="{{ $tenant->business_name }}"
-                         class="relative w-full max-h-48 lg:h-80 object-cover
-                                rounded-2xl lg:rounded-3xl
-                                ring-4 ring-base-100/20 shadow-2xl
-                                [animation:pulse_4s_ease-in-out_infinite]">
-                @else
-                    <div class="relative w-full min-h-48 lg:h-80 bg-base-100/10
-                                rounded-2xl lg:rounded-3xl
-                                ring-4 ring-base-100/20 shadow-2xl
-                                flex items-center justify-center
-                                [animation:pulse_4s_ease-in-out_infinite]">
-                        <iconify-icon icon="tabler:building-store" width="80" height="80"
-                                      class="text-base-100/30"></iconify-icon>
-                    </div>
-                @endif
-
+            {{-- Bloque de confianza --}}
+            <div class="flex items-center gap-3 pt-2">
+                <div class="flex -space-x-2">
+                    <div class="size-8 rounded-full bg-primary/20 border-2 border-background flex items-center justify-center text-xs text-primary font-bold">A</div>
+                    <div class="size-8 rounded-full bg-primary/30 border-2 border-background flex items-center justify-center text-xs text-primary font-bold">B</div>
+                    <div class="size-8 rounded-full bg-primary/40 border-2 border-background flex items-center justify-center text-xs text-primary font-bold">C</div>
+                </div>
+                <span class="text-sm text-muted-foreground-1">Clientes satisfechos en {{ $tenant->city ?? 'Venezuela' }}</span>
             </div>
-
         </div>
+    </div>
+
+    {{-- DERECHA: Imagen a pantalla completa --}}
+    <div class="relative min-h-[50vh] lg:min-h-full">
+        <img src="{{ $customization->hero_main_filename
+            ? asset('storage/tenants/'.$tenant->id.'/'.$customization->hero_main_filename)
+            : 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&q=80' }}"
+             alt="{{ $tenant->business_name }}"
+             class="absolute inset-0 w-full h-full object-cover">
+        {{-- Overlay sutil con acento primario --}}
+        <div class="absolute inset-0 bg-primary/10 pointer-events-none"></div>
     </div>
 </section>

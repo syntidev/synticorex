@@ -19,7 +19,7 @@
                     </button>
                     <button type="button" id="global-mode-image-btn"
                             onclick="setGlobalServiceMode('image')"
-                            class="inline-flex items-center text-sm py-1.5 px-3 font-medium transition-colors text-gray-700 hover:bg-gray-100">
+                            class="inline-flex items-center text-sm py-1.5 px-3 font-medium transition-colors text-foreground hover:bg-muted-hover">
                         <span class="iconify tabler--photo size-4" aria-hidden="true"></span> Imagen
                     </button>
                 </div>
@@ -27,25 +27,27 @@
             @endif
 
             {{-- ── Servicios card ──────────────────────────────────── --}}
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 mb-4">
-                <div class="flex items-center justify-between gap-3 flex-wrap">
+            <div class="p-6">
+            <div class="bg-surface rounded-xl shadow-sm border border-border">
+                <div class="px-6 pt-6 pb-4 flex items-center justify-between gap-3 flex-wrap">
                     <div>
-                        <h2 class="font-semibold text-gray-900 flex items-center gap-2">
+                        <h2 class="font-semibold text-foreground flex items-center gap-2">
                             <span class="iconify tabler--tool size-5 text-secondary" aria-hidden="true"></span>
                             Servicios
                         </h2>
-                        <p class="text-xs text-base-content/50 mt-0.5">{{ $currentServiceCount }} de {{ $maxServices }} servicios</p>
+                        <p class="text-xs text-muted-foreground-1 mt-0.5">{{ $currentServiceCount }} de {{ $maxServices }} servicios</p>
                     </div>
-                    <button class="inline-flex items-center text-sm py-1.5 px-3 rounded-lg font-medium transition-colors bg-gray-600 text-white hover:bg-gray-700 gap-1.5"
+                    <button class="inline-flex items-center text-sm py-1.5 px-3 rounded-lg font-medium transition-colors bg-primary text-white hover:bg-primary-hover gap-1.5"
                             onclick="checkAndOpenServiceModal()"
                             title="Agregar nuevo servicio">
                         <span class="iconify tabler--plus size-4" aria-hidden="true"></span>
                         Agregar Servicio
                     </button>
                 </div>
-
+                <div class="border-t border-border"></div>
+                <div class="px-6 pb-6">
                 @if($currentServiceCount >= $maxServices)
-                <div class="flex p-4 rounded-lg border bg-blue-50 border-blue-200 text-blue-800 mx-4 mb-2 items-center justify-between gap-4 flex-wrap">
+                <div class="flex p-4 rounded-lg border bg-blue-50 border-blue-200 text-blue-800 mb-2 items-center justify-between gap-4 flex-wrap">
                     <div class="flex items-center gap-3">
                         <span class="iconify tabler--info-circle size-5 shrink-0" aria-hidden="true"></span>
                         <div>
@@ -62,10 +64,9 @@
                 @endif
 
                 @if($services->count() > 0)
-                <div class="px-6 pt-2 pb-6">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         @foreach($services as $service)
-                        <div class="rounded-xl border border-base-content/8 bg-base-100 p-4 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 group">
+                        <div class="rounded-xl border border-border bg-surface p-4 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 group">
                             <div class="flex items-start gap-3 mb-2">
                                 {{-- Icon/Image --}}
                                 <div class="size-12 rounded-lg shrink-0 flex items-center justify-center overflow-hidden
@@ -78,13 +79,13 @@
                                     @elseif($service->icon_name)
                                         <span class="iconify tabler--{{ str_replace('_', '-', $service->icon_name) }} text-secondary text-xl"></span>
                                     @else
-                                        <span class="iconify tabler--tool size-6 text-base-content/30" aria-hidden="true"></span>
+                                        <span class="iconify tabler--tool size-6 text-muted-foreground-2" aria-hidden="true"></span>
                                     @endif
                                 </div>
                                 {{-- Name + Status --}}
                                 <div class="flex-1 min-w-0">
-                                    <h4 class="text-sm font-semibold text-base-content truncate">{{ $service->name }}</h4>
-                                    <p class="text-xs text-base-content/50 line-clamp-2 mt-0.5">
+                                    <h4 class="text-sm font-semibold text-foreground truncate">{{ $service->name }}</h4>
+                                    <p class="text-xs text-muted-foreground-1 line-clamp-2 mt-0.5">
                                         {{ $service->description ? Str::limit($service->description, 80) : '—' }}
                                     </p>
                                 </div>
@@ -93,9 +94,9 @@
                                 @endif
                             </div>
                             {{-- Actions --}}
-                            <div class="flex gap-2 mt-3 pt-3 border-t border-base-content/5">
+                            <div class="flex gap-2 mt-3 pt-3 border-t border-border">
                                 <button onclick="editService({{ $service->id }})"
-                                        class="inline-flex items-center text-sm py-1.5 px-3 rounded-lg font-medium transition-colors bg-gray-600 text-white hover:bg-gray-700 flex-1 gap-1.5" title="Editar">
+                                        class="inline-flex items-center text-sm py-1.5 px-3 rounded-lg font-medium transition-colors bg-primary text-white hover:bg-primary-hover flex-1 gap-1.5" title="Editar">
                                     <span class="iconify tabler--pencil size-4" aria-hidden="true"></span> Editar
                                 </button>
                                 <button onclick="deleteService({{ $service->id }})"
@@ -105,21 +106,22 @@
                             </div>
                         </div>
                         @endforeach
-                    </div>
                 </div>
                 @else
                 <div class="flex flex-col items-center justify-center py-16 text-center">
                     <div class="size-16 rounded-2xl bg-secondary/5 flex items-center justify-center mb-4">
                         <span class="iconify tabler--tool size-8 text-secondary/30" aria-hidden="true"></span>
                     </div>
-                    <h3 class="font-bold text-base text-base-content/70 mb-1">No hay servicios aún</h3>
-                    <p class="text-sm text-base-content/40 mb-4">Comienza agregando tu primer servicio</p>
-                    <button onclick="checkAndOpenServiceModal()" class="inline-flex items-center text-sm py-1.5 px-3 rounded-lg font-medium transition-colors bg-gray-600 text-white hover:bg-gray-700 gap-1.5 shadow-md">
+                    <h3 class="font-bold text-base text-muted-foreground-1 mb-1">No hay servicios aún</h3>
+                    <p class="text-sm text-muted-foreground-1 mb-4">Comienza agregando tu primer servicio</p>
+                    <button onclick="checkAndOpenServiceModal()" class="inline-flex items-center text-sm py-1.5 px-3 rounded-lg font-medium transition-colors bg-primary text-white hover:bg-primary-hover gap-1.5 shadow-sm">
                         <span class="iconify tabler--plus size-4"></span> Agregar Servicio
                     </button>
                 </div>
                 @endif
+                </div>{{-- /px-6 pb-6 --}}
             </div>
+            </div>{{-- /p-6 --}}
 
         </div>{{-- /tab-productos --}}
 

@@ -6,9 +6,9 @@
     $ctaBtnLink = $customization->cta_button_link ?? null;
 
     // Fallback: WhatsApp del tenant si no hay botón configurado
-    if (!$ctaBtnText && $tenant->whatsapp_sales) {
+    if (!$ctaBtnText && $tenant->getActiveWhatsapp()) {
         $ctaBtnText = 'Escríbenos por WhatsApp';
-        $ctaBtnLink = 'https://wa.me/' . preg_replace('/\D/', '', $tenant->whatsapp_sales);
+        $ctaBtnLink = 'https://wa.me/' . preg_replace('/\D/', '', $tenant->getActiveWhatsapp());
     }
 @endphp
 
