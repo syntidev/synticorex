@@ -102,23 +102,31 @@ class DashboardController extends Controller
 
             // ── Payment Methods & Currency Metadata ───────────────────────
             $allPayMeta = [
-                'pago_movil'  => ['icon' => 'tabler--phone',         'label' => 'Pago Móvil'],
-                'efectivo'    => ['icon' => 'tabler--cash',           'label' => 'Efectivo'],
-                'punto_venta' => ['icon' => 'tabler--credit-card',    'label' => 'Punto de Venta'],
-                'biopago'     => ['icon' => 'tabler--building-bank',  'label' => 'Biopago'],
-                'cashea'      => ['icon' => 'tabler--wallet',         'label' => 'Cashea'],
-                'krece'       => ['icon' => 'tabler--trending-up',    'label' => 'Krece'],
-                'wepa'        => ['icon' => 'tabler--send',           'label' => 'Wepa'],
-                'listy'       => ['icon' => 'tabler--list',           'label' => 'Lysty'],
-                'chollo'      => ['icon' => 'tabler--gift',           'label' => 'Chollo'],
-                'zelle'       => ['icon' => 'tabler--exchange',       'label' => 'Zelle'],
-                'zinli'       => ['icon' => 'tabler--coin',           'label' => 'Zinli'],
-                'paypal'      => ['icon' => 'tabler--brand-paypal',   'label' => 'PayPal'],
+                // ── Nacionales ──────────────────────
+                'pagoMovil'  => ['icon' => 'tabler--device-mobile',   'label' => 'Pago Móvil',    'group' => 'Nacional'],
+                'cash'       => ['icon' => 'tabler--cash',            'label' => 'Efectivo',       'group' => 'Nacional'],
+                'puntoventa' => ['icon' => 'tabler--credit-card',     'label' => 'Punto de Venta', 'group' => 'Nacional'],
+                'biopago'    => ['icon' => 'tabler--fingerprint',     'label' => 'Biopago',        'group' => 'Nacional'],
+                'cashea'     => ['icon' => 'tabler--wallet',          'label' => 'Cashea',         'group' => 'Nacional'],
+                'krece'      => ['icon' => 'tabler--trending-up',     'label' => 'Krece',          'group' => 'Nacional'],
+                'wepa'       => ['icon' => 'tabler--shopping-cart',   'label' => 'Wepa',           'group' => 'Nacional'],
+                'lysto'      => ['icon' => 'tabler--calendar-dollar', 'label' => 'Lysto',          'group' => 'Nacional'],
+                'chollo'     => ['icon' => 'tabler--discount-2',      'label' => 'Chollo',         'group' => 'Nacional'],
+                'wally'      => ['icon' => 'tabler--send-2',          'label' => 'Wally',          'group' => 'Nacional'],
+                'kontigo'    => ['icon' => 'tabler--file-invoice',    'label' => 'Kontigo',        'group' => 'Nacional'],
+                // ── Internacionales / Divisas ────────
+                'zelle'      => ['icon' => 'tabler--bolt',            'label' => 'Zelle',          'group' => 'Divisa'],
+                'paypal'     => ['icon' => 'tabler--brand-paypal',    'label' => 'PayPal',         'group' => 'Divisa'],
+                'zinli'      => ['icon' => 'tabler--moneybag',          'label' => 'Zinli',          'group' => 'Divisa'],
+                'airtm'      => ['icon' => 'tabler--exchange',        'label' => 'AirTM',          'group' => 'Divisa'],
+                'reserve'    => ['icon' => 'tabler--shield-dollar',   'label' => 'Reserve (RSV)',  'group' => 'Divisa'],
+                'binancepay' => ['icon' => 'tabler--currency-bitcoin','label' => 'Binance Pay',    'group' => 'Divisa'],
+                'usdt'       => ['icon' => 'tabler--coin',            'label' => 'USDT',           'group' => 'Divisa'],
             ];
 
             $allCurrencyMeta = [
-                'usd' => ['symbol' => '$', 'label' => 'Dólares (USD)'],
-                'eur' => ['symbol' => '€', 'label' => 'Euros (€)'],
+                'usd' => ['icon' => 'tabler--currency-dollar', 'label' => 'Dólares (USD)'],
+                'eur' => ['icon' => 'tabler--currency-euro',   'label' => 'Euros (€)'],
             ];
 
             // ── Branches (Plan 3) ─────────────────────────────────────────
@@ -237,11 +245,6 @@ class DashboardController extends Controller
             
             $tenant->settings = $settings;
             $tenant->save();
-
-            // Sync about_text to customization (used by hero partials)
-            if ($request->has('description') && $tenant->customization) {
-                $tenant->customization->update(['about_text' => $validated['description'] ?? '']);
-            }
 
             // Save content_blocks and explicit about_text to customization
             if ($tenant->customization) {
@@ -559,6 +562,7 @@ class DashboardController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Servicio creado',
+                'data'    => $service,
                 'service' => $service
             ]);
         } catch (\Exception $e) {
@@ -597,12 +601,18 @@ class DashboardController extends Controller
                 'is_active' => 'nullable|boolean',
             ]);
 
+            // Cuando se guarda con icon_name, limpiar image_filename (modo ícono anula imagen)
+            if (!empty($validated['icon_name'])) {
+                $validated['image_filename'] = null;
+            }
+
             // Update service
             $service->update($validated);
 
             return response()->json([
                 'success' => true,
                 'message' => 'Servicio actualizado',
+                'data'    => $service,
                 'service' => $service
             ]);
         } catch (\Exception $e) {
@@ -1120,7 +1130,11 @@ class DashboardController extends Controller
                 ], 422);
             }
 
-            $allowedMethods    = ['pagoMovil', 'cash', 'puntoventa', 'biopago', 'cashea', 'krece', 'wepa', 'lysto', 'chollo', 'zelle', 'zinli', 'paypal'];
+            $allowedMethods    = [
+                'pagoMovil', 'cash', 'puntoventa', 'biopago', 'cashea', 'krece',
+                'wepa', 'lysto', 'chollo', 'wally', 'kontigo',
+                'zelle', 'paypal', 'zinli', 'airtm', 'reserve', 'binancepay', 'usdt',
+            ];
             $allowedCurrencies = ['usd', 'eur'];
 
             $validated = $request->validate([

@@ -1,4 +1,4 @@
-{{-- Path: resources/views/landing/partials/branches.blade.php --}}
+{{-- Path: resources/views/landing/sections/branches.blade.php --}}
 {{-- Only renders for Plan 3 (VISIÓN) --}}
 @php
     if (!$tenant->isVision()) return;
@@ -7,73 +7,98 @@
         ? $tenant->branches->where('is_active', true)
         : collect();
 
-    // Per-branch payment method meta (for Plan 3)
     $branchPayMethodsMeta = [
-        'pagoMovil'  => ['label' => 'Pago Móvil',    'icon' => 'device-mobile',  'color' => 'text-blue-400'],
-        'biopago'    => ['label' => 'Biopago',        'icon' => 'fingerprint',    'color' => 'text-green-400'],
-        'puntoventa' => ['label' => 'Punto de Venta', 'icon' => 'credit-card',    'color' => 'text-purple-400'],
-        'zinli'      => ['label' => 'Zinli',          'icon' => 'wallet',         'color' => 'text-violet-400'],
-        'zelle'      => ['label' => 'Zelle',          'icon' => 'bolt',           'color' => 'text-yellow-400'],
-        'paypal'     => ['label' => 'PayPal',         'icon' => 'brand-paypal',   'color' => 'text-sky-400'],
+        'pagoMovil'  => ['label' => 'Pago Móvil',    'icon' => 'device-mobile', 'color' => 'text-blue-500'],
+        'biopago'    => ['label' => 'Biopago',        'icon' => 'fingerprint',   'color' => 'text-green-500'],
+        'puntoventa' => ['label' => 'Punto de Venta', 'icon' => 'credit-card',   'color' => 'text-purple-500'],
+        'zinli'      => ['label' => 'Zinli',          'icon' => 'wallet',        'color' => 'text-violet-500'],
+        'zelle'      => ['label' => 'Zelle',          'icon' => 'bolt',          'color' => 'text-yellow-500'],
+        'paypal'     => ['label' => 'PayPal',         'icon' => 'brand-paypal',  'color' => 'text-sky-500'],
     ];
+
     $branchPayMethodsData = ($customization->payment_methods['branches'] ?? []);
+
+    $colClass = match(true) {
+        $activeBranches->count() === 1 => 'max-w-sm mx-auto',
+        $activeBranches->count() === 2 => 'sm:grid-cols-2 max-w-2xl mx-auto',
+        default                        => 'sm:grid-cols-2 lg:grid-cols-3',
+    };
 @endphp
 
 @if($activeBranches->isNotEmpty())
-<section id="branches" class="py-8 sm:py-16 lg:py-24 bg-background">
-    <div class="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8">
+<section id="branches" class="py-12 sm:py-20 lg:py-28 bg-background">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
 
-        {{-- Header --}}
-        <div class="text-center mb-16">
-            <span class="inline-block text-xs font-bold uppercase tracking-[0.3em] text-primary mb-4">Nuestras sedes</span>
+        {{-- Section header --}}
+        <div class="text-center mb-12">
+            <span class="inline-block text-xs font-bold uppercase tracking-[0.3em] text-primary mb-3">Nuestras sedes</span>
             <h2 class="text-foreground text-2xl font-semibold md:text-3xl lg:text-4xl">
                 Encuéntranos <span class="text-primary italic">Cerca de Ti</span>
             </h2>
-            <div class="w-20 h-1.5 bg-primary mx-auto rounded-full mt-6"></div>
+            <div class="w-16 h-1 bg-primary mx-auto rounded-full mt-5"></div>
         </div>
 
-        {{-- Branch Cards Grid --}}
-        <div class="grid grid-cols-1 {{ $activeBranches->count() === 1 ? 'max-w-md mx-auto' : ($activeBranches->count() === 2 ? 'md:grid-cols-2 max-w-3xl mx-auto' : 'md:grid-cols-3') }} gap-8">
+        {{-- Cards grid --}}
+        <div class="grid grid-cols-1 {{ $colClass }} gap-6">
             @foreach($activeBranches as $branch)
-            <div class="group bg-surface/50 backdrop-blur-sm rounded-3xl p-8 border border-border/50 hover:shadow-xl hover:shadow-primary/5 transition-all duration-500 hover:-translate-y-1">
-                {{-- Map Pin Icon --}}
-                <div class="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors">
-                    <svg class="w-7 h-7 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-                    </svg>
-                </div>
+            @php $branchMethods = $branchPayMethodsData[(string)$branch->id] ?? []; @endphp
 
-                {{-- Branch Name --}}
-                <h3 class="text-xl font-semibold text-foreground mb-3 group-hover:text-primary transition-colors">
-                    {{ $branch->name }}
-                </h3>
+            <div class="bg-card border border-card-line rounded-xl shadow-2xs overflow-hidden flex flex-col">
 
-                {{-- Address --}}
-                <p class="text-foreground/60 text-sm leading-relaxed">
-                    {{ $branch->address }}
-                </p>
-
-                {{-- Per-branch payment methods (Plan 3) --}}
-                @php
-                    $branchMethods = $branchPayMethodsData[(string)$branch->id] ?? [];
-                @endphp
-                @if(!empty($branchMethods))
-                <div class="mt-5 pt-5 border-t border-border/30">
-                    <p class="text-xs font-semibold uppercase tracking-wider text-foreground/40 mb-3">Acepta</p>
-                    <div class="flex flex-wrap gap-2">
-                        @foreach($branchMethods as $bMethod)
-                        @if(isset($branchPayMethodsMeta[$bMethod]))
-                        @php $bm = $branchPayMethodsMeta[$bMethod]; @endphp
-                        <span class="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full bg-surface/50 text-foreground/70">
-                            <iconify-icon icon="tabler:{{ $bm['icon'] }}" class="{{ $bm['color'] }}" width="14" height="14"></iconify-icon>
-                            {{ $bm['label'] }}
-                        </span>
-                        @endif
-                        @endforeach
+                {{-- Accent panel — replaces image, shows location icon --}}
+                <div class="relative w-full bg-primary/10 flex items-center justify-center py-10">
+                    <div class="w-16 h-16 rounded-2xl bg-primary/15 border border-primary/25 flex items-center justify-center">
+                        <iconify-icon icon="tabler:map-pin-filled" class="text-primary" width="32" height="32"></iconify-icon>
                     </div>
                 </div>
-                @endif
+
+                {{-- Card body --}}
+                <div class="p-5 flex flex-col flex-1">
+
+                    <h3 class="text-base font-semibold text-foreground leading-snug">
+                        {{ $branch->name }}
+                    </h3>
+
+                    @if($branch->address)
+                    <p class="mt-2 text-sm text-muted-foreground-1 leading-relaxed flex items-start gap-1.5">
+                        <iconify-icon icon="tabler:map-pin" class="shrink-0 mt-0.5 text-primary/70" width="14" height="14"></iconify-icon>
+                        {{ $branch->address }}
+                    </p>
+                    @endif
+
+                    @if($branch->phone)
+                    <p class="mt-1.5 text-sm text-muted-foreground-1 flex items-center gap-1.5">
+                        <iconify-icon icon="tabler:phone" class="shrink-0 text-primary/70" width="14" height="14"></iconify-icon>
+                        {{ $branch->phone }}
+                    </p>
+                    @endif
+
+                    @if($branch->schedule)
+                    <p class="mt-1.5 text-sm text-muted-foreground-1 flex items-center gap-1.5">
+                        <iconify-icon icon="tabler:clock" class="shrink-0 text-primary/70" width="14" height="14"></iconify-icon>
+                        {{ $branch->schedule }}
+                    </p>
+                    @endif
+
+                    {{-- Payment methods pills --}}
+                    @if(!empty($branchMethods))
+                    <div class="mt-auto pt-4 border-t border-card-line mt-4">
+                        <p class="text-xs font-medium text-muted-foreground-1 uppercase tracking-wider mb-2">Acepta</p>
+                        <div class="flex flex-wrap gap-1.5">
+                            @foreach($branchMethods as $bMethod)
+                            @if(isset($branchPayMethodsMeta[$bMethod]))
+                            @php $bm = $branchPayMethodsMeta[$bMethod]; @endphp
+                            <span class="inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full bg-muted text-foreground">
+                                <iconify-icon icon="tabler:{{ $bm['icon'] }}" class="{{ $bm['color'] }}" width="12" height="12"></iconify-icon>
+                                {{ $bm['label'] }}
+                            </span>
+                            @endif
+                            @endforeach
+                        </div>
+                    </div>
+                    @endif
+
+                </div>
             </div>
             @endforeach
         </div>

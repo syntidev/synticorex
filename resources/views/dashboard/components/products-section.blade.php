@@ -70,10 +70,6 @@
                                             class="inline-flex items-center text-sm py-1.5 px-3 rounded-lg font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 shadow-lg" title="Editar">
                                         <span class="iconify tabler--pencil size-4" aria-hidden="true"></span> Editar
                                     </button>
-                                    <button onclick="shareProduct({{ $product->id }}, '{{ addslashes($product->name) }}', {{ $product->price_usd }})"
-                                            class="inline-flex items-center text-sm py-1.5 px-3 rounded-lg font-medium transition-colors bg-green-600 text-white hover:bg-green-700 shadow-lg" title="Compartir">
-                                        <span class="iconify tabler--share size-4" aria-hidden="true"></span>
-                                    </button>
                                     <button onclick="deleteProduct({{ $product->id }})"
                                             class="inline-flex items-center text-sm py-1.5 px-3 rounded-lg font-medium transition-colors bg-red-600 text-white hover:bg-red-700 shadow-lg" title="Eliminar">
                                         <span class="iconify tabler--trash size-4" aria-hidden="true"></span>

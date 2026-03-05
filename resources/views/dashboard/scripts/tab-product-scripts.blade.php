@@ -739,21 +739,3 @@
             }
         }
 
-        /**
-         * Share product via Web Share API with WhatsApp fallback
-         */
-        function shareProduct(productId, productName, priceUsd) {
-            const tenantName = @json($tenant->business_name);
-            const siteUrl = window.location.origin + '/{{ $tenant->subdomain }}';
-            const text = `${productName} — $${Number(priceUsd).toFixed(2)} en ${tenantName}`;
-            const url = siteUrl;
-
-            if (navigator.share) {
-                navigator.share({ title: productName, text: text, url: url }).catch(() => {});
-            } else {
-                // Fallback: copy to clipboard or open WhatsApp
-                const waText = encodeURIComponent(text + '\n' + url);
-                window.open('https://wa.me/?text=' + waText, '_blank');
-            }
-        }
-

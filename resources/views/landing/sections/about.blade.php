@@ -3,10 +3,12 @@
     $description = $tenant->description ?? null;
     $slogan      = $tenant->slogan ?? null;
 
-    // Imagen de la sección: hero > logo > placeholder
+    // Imagen de la sección: about_image > hero_main > logo > placeholder
     $businessImage = null;
-    if (!empty($customization->hero_filename)) {
-        $businessImage = asset('storage/tenants/' . $tenant->id . '/' . $customization->hero_filename);
+    if (!empty($customization->about_image_filename)) {
+        $businessImage = asset('storage/tenants/' . $tenant->id . '/' . $customization->about_image_filename);
+    } elseif (!empty($customization->hero_main_filename)) {
+        $businessImage = asset('storage/tenants/' . $tenant->id . '/' . $customization->hero_main_filename);
     }
     
     // Verificar si existe logo
@@ -15,18 +17,16 @@
         : null;
 @endphp
 
-<section id="about" class="py-8 sm:py-16 lg:py-24 bg-surface/50">
+<section id="about" class="py-8 sm:py-16 lg:py-24 bg-surface">
     <div class="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col lg:flex-row gap-10 lg:gap-16 items-center">
 
             {{-- Col 8/12 — Descripción principal --}}
             <div class="flex-1 lg:basis-2/3">
-                <span class="text-primary text-xs font-black uppercase tracking-[0.2em] mb-3 block">
-                    Acerca de nosotros
-                </span>
                 <h2 class="text-foreground text-2xl font-semibold md:text-3xl lg:text-4xl mb-4">
-                    {{ $tenant->business_name }}
+                    Acerca de <span class="text-primary italic">nosotros</span>
                 </h2>
+                <p class="text-foreground/70 text-lg font-medium mb-4">{{ $tenant->business_name }}</p>
                 @if($slogan)
                     <p class="text-foreground/50 text-sm italic mb-5">"{{ $slogan }}"</p>
                 @endif
@@ -59,7 +59,7 @@
                             <img src="{{ $businessImage }}"
                                  alt="{{ $tenant->business_name }}"
                                  class="w-full h-full object-cover"
-                                 onerror="this.parentElement.style.display='none'; this.closest('.relative').parentElement.style.display='none';">
+                                 loading="lazy">
                         </div>
                     </div>
                 @elseif($logoImage)

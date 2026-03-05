@@ -13,28 +13,11 @@
             </div>
 
 @php
+    // $allPayMeta y $allCurrencyMeta vienen del Controller (fuente única de verdad)
     $payMethods      = $customization->payment_methods ?? [];
     $globalEnabled   = $payMethods['global'] ?? [];
     $currencyEnabled = $payMethods['currency'] ?? [];
     $branchPayMeta   = $payMethods['branches'] ?? [];
-    $allPayMeta      = [
-        'pagoMovil'  => ['label' => 'Pago Móvil',    'icon' => '📱', 'group' => 'Nacional'],
-        'cash'       => ['label' => 'Efectivo',       'icon' => '💵', 'group' => 'Nacional'],
-        'puntoventa' => ['label' => 'Punto de Venta', 'icon' => '💳', 'group' => 'Nacional'],
-        'biopago'    => ['label' => 'Biopago',        'icon' => '👁️', 'group' => 'Nacional'],
-        'cashea'     => ['label' => 'Cashea',         'icon' => '🛒', 'group' => 'Nacional'],
-        'krece'      => ['label' => 'Krece',          'icon' => '📈', 'group' => 'Nacional'],
-        'wepa'       => ['label' => 'Wepa',           'icon' => '📲', 'group' => 'Nacional'],
-        'lysto'      => ['label' => 'Lysto',          'icon' => '🗓️', 'group' => 'Nacional'],
-        'chollo'     => ['label' => 'Chollo',         'icon' => '🏷️', 'group' => 'Nacional'],
-        'zelle'      => ['label' => 'Zelle',          'icon' => '⚡',  'group' => 'Divisa'],
-        'zinli'      => ['label' => 'Zinli',          'icon' => '🟣', 'group' => 'Divisa'],
-        'paypal'     => ['label' => 'PayPal',         'icon' => '🅿️', 'group' => 'Divisa'],
-    ];
-    $allCurrencyMeta = [
-        'usd' => ['label' => 'Dólares (USD)', 'icon' => '💵'],
-        'eur' => ['label' => 'Euros (€)',     'icon' => '💶'],
-    ];
     $activeBranchList = $branches->where('is_active', true);
     $savedMode = $tenant->settings['engine_settings']['currency']['display']['saved_display_mode'] ?? 'reference_only';
 @endphp
@@ -96,7 +79,7 @@
                                 @foreach(['pagoMovil', 'cash'] as $mkey)
                                 @php $m = $allPayMeta[$mkey]; @endphp
                                 <div class="flex items-center gap-2 p-2.5 rounded-lg bg-success/10 border border-success/20">
-                                    <span class="text-base">{{ $m['icon'] }}</span>
+                                    <span class="iconify {{ $m['icon'] }} size-4 text-success shrink-0" aria-hidden="true"></span>
                                     <span class="text-xs font-semibold text-success flex-1">{{ $m['label'] }}</span>
                                     <span class="iconify tabler--check size-3.5 text-success shrink-0" aria-hidden="true"></span>
                                 </div>
@@ -110,11 +93,12 @@
                             <div class="grid grid-cols-2 sm:grid-cols-3 gap-1.5 mb-4">
                                 @foreach($allPayMeta as $mkey => $m)
                                 @php $checked = in_array($mkey, $globalEnabled); @endphp
-                                <label id="pay-label-{{ $mkey }}" onclick="togglePayMethod('{{ $mkey }}')"
+                                <label id="pay-label-{{ $mkey }}"
                                        class="flex items-center gap-1.5 cursor-pointer px-2.5 py-2 rounded-lg border transition-all select-none
                                               {{ $checked ? 'bg-primary/15 border-primary/40' : 'bg-muted/40 border-border hover:border-border' }}">
-                                    <input type="checkbox" id="pay-check-{{ $mkey }}" value="{{ $mkey }}" {{ $checked ? 'checked' : '' }} class="hidden">
-                                    <span class="text-sm">{{ $m['icon'] }}</span>
+                                    <input type="checkbox" id="pay-check-{{ $mkey }}" value="{{ $mkey }}" {{ $checked ? 'checked' : '' }} class="hidden"
+                                           onchange="togglePayMethod('{{ $mkey }}')">
+                                    <span class="iconify {{ $m['icon'] }} size-4 shrink-0 {{ $checked ? 'text-primary' : 'text-muted-foreground-1' }}" aria-hidden="true"></span>
                                     <span class="text-[11px] font-medium flex-1 truncate {{ $checked ? 'text-primary' : 'text-foreground' }}">{{ $m['label'] }}</span>
                                     <span id="pay-check-icon-{{ $mkey }}"
                                           class="iconify tabler--check size-3 shrink-0 transition-opacity {{ $checked ? 'text-primary opacity-100' : 'opacity-0' }}"
@@ -128,11 +112,12 @@
                             <div class="flex gap-2 mb-4">
                                 @foreach($allCurrencyMeta as $ckey => $c)
                                 @php $checked = in_array($ckey, $currencyEnabled); @endphp
-                                <label id="curr-label-{{ $ckey }}" onclick="toggleCurrency('{{ $ckey }}')"
+                                <label id="curr-label-{{ $ckey }}"
                                        class="flex items-center gap-2 cursor-pointer flex-1 p-2.5 rounded-lg border transition-all select-none
                                               {{ $checked ? 'bg-primary/15 border-primary/40' : 'bg-muted/40 border-border hover:border-border' }}">
-                                    <input type="checkbox" id="curr-check-{{ $ckey }}" value="{{ $ckey }}" {{ $checked ? 'checked' : '' }} class="hidden">
-                                    <span class="text-base">{{ $c['icon'] }}</span>
+                                    <input type="checkbox" id="curr-check-{{ $ckey }}" value="{{ $ckey }}" {{ $checked ? 'checked' : '' }} class="hidden"
+                                           onchange="toggleCurrency('{{ $ckey }}')">
+                                    <span class="iconify {{ $c['icon'] }} size-4.5 shrink-0 {{ $checked ? 'text-primary' : 'text-muted-foreground-1' }}" aria-hidden="true"></span>
                                     <span class="text-xs font-medium flex-1 {{ $checked ? 'text-primary' : 'text-foreground' }}">{{ $c['label'] }}</span>
                                     <span id="curr-check-icon-{{ $ckey }}"
                                           class="iconify tabler--check size-3.5 shrink-0 transition-opacity {{ $checked ? 'text-primary opacity-100' : 'opacity-0' }}"
@@ -165,11 +150,11 @@
                                             @foreach($allPayMeta as $mkey => $m)
                                             @php $bchecked = in_array($mkey, $bEnabled); @endphp
                                             <label id="pay-branch-label-{{ $branch->id }}-{{ $mkey }}"
-                                                   onclick="toggleBranchPayMethod({{ $branch->id }}, '{{ $mkey }}')"
                                                    class="flex items-center gap-1 cursor-pointer px-1.5 py-1 rounded border transition-all select-none text-[11px]
                                                           {{ $bchecked ? 'bg-primary/15 border-primary/40' : 'bg-surface border-border' }}">
-                                                <input type="checkbox" id="pay-branch-check-{{ $branch->id }}-{{ $mkey }}" value="{{ $mkey }}" {{ $bchecked ? 'checked' : '' }} class="hidden">
-                                                <span>{{ $m['icon'] }}</span>
+                                                <input type="checkbox" id="pay-branch-check-{{ $branch->id }}-{{ $mkey }}" value="{{ $mkey }}" {{ $bchecked ? 'checked' : '' }} class="hidden"
+                                                       onchange="toggleBranchPayMethod({{ $branch->id }}, '{{ $mkey }}')">
+                                                <span class="iconify {{ $m['icon'] }} size-3 shrink-0 {{ $bchecked ? 'text-primary' : 'text-muted-foreground-1' }}" aria-hidden="true"></span>
                                                 <span class="flex-1 truncate {{ $bchecked ? 'text-primary' : 'text-foreground' }}">{{ $m['label'] }}</span>
                                                 <span id="pay-branch-check-icon-{{ $branch->id }}-{{ $mkey }}"
                                                       class="iconify tabler--check size-3 shrink-0 transition-opacity {{ $bchecked ? 'text-primary opacity-100' : 'opacity-0' }}"

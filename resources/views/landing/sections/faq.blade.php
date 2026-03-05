@@ -49,39 +49,42 @@
     }
 @endphp
 
-<section id="faq" class="py-8 sm:py-16 lg:py-24 bg-background relative overflow-hidden">
+<section id="faq" class="py-8 sm:py-16 lg:py-24 bg-surface relative overflow-hidden">
 
     <div class="absolute -top-24 -left-24 w-96 h-96 bg-primary/5 blur-[100px] rounded-full pointer-events-none" aria-hidden="true"></div>
 
-    <div class="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8 relative z-10">
+    <div class="mx-auto max-w-[85rem] px-4 sm:px-6 lg:px-8 relative z-10">
 
-        <div class="text-center mb-16">
+        <div class="text-center mb-12 space-y-3">
+            <p class="text-primary text-sm font-medium uppercase tracking-wide">Resolvemos tus dudas</p>
             <h2 class="text-foreground text-2xl font-semibold md:text-3xl lg:text-4xl">
                 Preguntas <span class="text-primary italic">Frecuentes</span>
             </h2>
-            <div class="w-16 h-1 bg-primary mx-auto mt-4 rounded-full"></div>
+            <div class="w-16 h-1 bg-primary mx-auto rounded-full"></div>
         </div>
 
-        <div class="hs-accordion-group space-y-4">
+        {{-- Preline accordion con tokens correctos --}}
+        <div class="hs-accordion-group flex flex-col gap-y-2 max-w-3xl mx-auto">
             @foreach($faqItems as $index => $faq)
-            <div class="hs-accordion bg-background border border-border rounded-[2rem] overflow-hidden shadow-sm hover:border-primary/30 transition-all duration-300"
-                 id="faq-item-{{ $index }}">
+            <div class="hs-accordion hs-accordion-active:border-layer-line bg-layer border border-transparent rounded-xl"
+                 id="faq-heading-{{ $index }}">
 
-                <button class="hs-accordion-toggle inline-flex items-center justify-between text-start text-base font-bold px-6 py-5 w-full text-foreground hover:text-primary transition-colors"
-                        aria-controls="faq-collapse-{{ $index }}"
-                        aria-expanded="false">
-                    <span class="pr-4">{{ $faq['question'] }}</span>
-                    <span class="shrink-0">
-                        <iconify-icon icon="tabler:plus"  class="hs-accordion-active:hidden text-primary" width="20" height="20"></iconify-icon>
-                        <iconify-icon icon="tabler:minus" class="hidden hs-accordion-active:inline-flex text-primary" width="20" height="20"></iconify-icon>
-                    </span>
+                <button class="hs-accordion-toggle hs-accordion-active:text-primary-active inline-flex justify-between items-center gap-x-3 w-full font-semibold text-start text-foreground py-4 px-5 hover:text-muted-foreground-1 focus:outline-hidden focus:text-muted-foreground-1 disabled:opacity-50 disabled:pointer-events-none"
+                        aria-expanded="false"
+                        aria-controls="faq-collapse-{{ $index }}">
+                    <span>{{ $faq['question'] }}</span>
+                    {{-- Plus (cerrado) --}}
+                    <svg class="hs-accordion-active:hidden block shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                    {{-- Minus (abierto) --}}
+                    <svg class="hs-accordion-active:block hidden shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/></svg>
                 </button>
 
                 <div id="faq-collapse-{{ $index }}"
                      class="hs-accordion-content hidden w-full overflow-hidden transition-[height] duration-300"
-                     aria-labelledby="faq-item-{{ $index }}" role="region">
-                    <div class="px-6 pb-5 pt-1 text-foreground/65 text-sm leading-relaxed border-t border-border">
-                        {{ $faq['answer'] }}
+                     role="region"
+                     aria-labelledby="faq-heading-{{ $index }}">
+                    <div class="pb-4 px-5">
+                        <p class="text-foreground/70 text-sm leading-relaxed">{{ $faq['answer'] }}</p>
                     </div>
                 </div>
 

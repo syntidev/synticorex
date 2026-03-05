@@ -95,21 +95,29 @@ class TenantCustomization extends Model
             ];
         }
         
-        // Normalizar formato: convertir strings a arrays si es necesario
+        // Normalizar formato: convertir strings a arrays, y normalizar nombres (guion → guion_bajo)
         return collect($order)->map(function($section) {
             // Si es string, convertir a formato array
+            $name = is_string($section) ? $section : ($section['name'] ?? '');
+            // Normalizar: payment-methods → payment_methods, header-top → header-top (excepción)
+            $name = str_replace('-', '_', $name);
+            // header_top es la excepción conocida que usa guion en el HTML
+            if ($name === 'header_top') {
+                $name = 'header-top';
+            }
+
             if (is_string($section)) {
                 return [
-                    'name' => $section,
+                    'name'    => $name,
                     'visible' => true,
-                    'order' => 0
+                    'order'   => 0,
                 ];
             }
             // Si ya es array, asegurar que tiene todas las keys
             return [
-                'name' => $section['name'] ?? '',
+                'name'    => $name,
                 'visible' => $section['visible'] ?? true,
-                'order' => $section['order'] ?? 0
+                'order'   => $section['order'] ?? 0,
             ];
         })->toArray();
     }

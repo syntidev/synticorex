@@ -110,20 +110,20 @@
                 const stars = '★'.repeat(t.rating || 5);
                 const has = t.name || t.text;
                 return `
-                <div class="rounded-lg border p-3 transition-all ${has ? 'border-primary/20 bg-primary/5' : 'border-base-content/10 bg-base-200/30'}"
+                <div class="rounded-lg border p-3 transition-all ${has ? 'border-primary/20 bg-primary/5' : 'border-border bg-muted/30'}"
                      data-testimonial-index="${i}">
                     <div class="flex items-start justify-between mb-2">
-                        <span class="text-[10px] font-bold text-base-content/40 uppercase tracking-wider">#${i + 1}</span>
+                        <span class="text-[10px] font-bold text-muted-foreground-1 uppercase tracking-wider">#${i + 1}</span>
                         <span class="text-sm text-yellow-500">${stars}</span>
                     </div>
-                    <h4 class="text-sm font-semibold text-base-content line-clamp-1">${escHtml(t.name) || '(vacío)'}</h4>
-                    <p class="text-xs text-base-content/50 line-clamp-1">${escHtml(t.title) || '(sin cargo)'}</p>
-                    <p class="text-xs text-base-content/60 line-clamp-2 mt-1">${escHtml(t.text) || '(vacío)'}</p>
+                    <h4 class="text-sm font-semibold text-foreground line-clamp-1">${escHtml(t.name) || '(vacío)'}</h4>
+                    <p class="text-xs text-muted-foreground-1 line-clamp-1">${escHtml(t.title) || '(sin cargo)'}</p>
+                    <p class="text-xs text-muted-foreground-1 line-clamp-2 mt-1">${escHtml(t.text) || '(vacío)'}</p>
                     <div class="flex gap-2 mt-3">
-                        <button type="button" class="btn btn-primary btn-sm btn-square" onclick="editTestimonial(${i})" title="Editar">
+                        <button type="button" class="p-1.5 rounded-lg bg-primary text-primary-foreground hover:bg-primary-hover transition-colors" onclick="editTestimonial(${i})" title="Editar">
                             <span class="iconify tabler--pencil size-4" aria-hidden="true"></span>
                         </button>
-                        <button type="button" class="btn btn-error btn-sm btn-square" onclick="deleteTestimonial(${i})" title="Eliminar">
+                        <button type="button" class="p-1.5 rounded-lg bg-red-600 text-white hover:bg-red-700 transition-colors" onclick="deleteTestimonial(${i})" title="Eliminar">
                             <span class="iconify tabler--trash size-4" aria-hidden="true"></span>
                         </button>
                     </div>
@@ -227,16 +227,16 @@
             grid.innerHTML = faqData.map((f, i) => {
                 const has = f.question || f.answer;
                 return `
-                <div class="rounded-lg border p-3 transition-all ${has ? 'border-secondary/20 bg-secondary/5' : 'border-base-content/10 bg-base-200/30'}"
+                <div class="rounded-lg border p-3 transition-all ${has ? 'border-secondary/20 bg-secondary/5' : 'border-border bg-muted/30'}"
                      data-faq-index="${i}">
-                    <span class="text-[10px] font-bold text-base-content/40 uppercase tracking-wider">#${i + 1}</span>
-                    <h4 class="text-sm font-semibold text-base-content mt-1 line-clamp-2">${escHtml(f.question) || '(vacío)'}</h4>
-                    <p class="text-xs text-base-content/50 mt-1 line-clamp-2">${escHtml(f.answer) || '(vacío)'}</p>
+                    <span class="text-[10px] font-bold text-muted-foreground-1 uppercase tracking-wider">#${i + 1}</span>
+                    <h4 class="text-sm font-semibold text-foreground mt-1 line-clamp-2">${escHtml(f.question) || '(vacío)'}</h4>
+                    <p class="text-xs text-muted-foreground-1 mt-1 line-clamp-2">${escHtml(f.answer) || '(vacío)'}</p>
                     <div class="flex gap-2 mt-3">
-                        <button type="button" class="btn btn-secondary btn-sm btn-square" onclick="editFaq(${i})" title="Editar">
+                        <button type="button" class="p-1.5 rounded-lg bg-primary text-primary-foreground hover:bg-primary-hover transition-colors" onclick="editFaq(${i})" title="Editar">
                             <span class="iconify tabler--pencil size-4" aria-hidden="true"></span>
                         </button>
-                        <button type="button" class="btn btn-error btn-sm btn-square" onclick="deleteFaq(${i})" title="Eliminar">
+                        <button type="button" class="p-1.5 rounded-lg bg-red-600 text-white hover:bg-red-700 transition-colors" onclick="deleteFaq(${i})" title="Eliminar">
                             <span class="iconify tabler--trash size-4" aria-hidden="true"></span>
                         </button>
                     </div>

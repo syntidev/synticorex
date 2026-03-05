@@ -5,18 +5,18 @@
             <div class="grid gap-12 lg:grid-cols-2 lg:gap-24 items-center">
                 {{-- Contenido --}}
                 <div class="space-y-6 max-lg:text-center">
-                    @if($tenant->tagline)
+                    @if($tenant->city)
                         <div class="bg-background border-border w-fit rounded-full border px-3 py-1 max-lg:mx-auto">
-                            <span class="text-foreground">✨ {{ $tenant->tagline }}</span>
+                            <span class="text-foreground">✨ {{ $tenant->city }}</span>
                         </div>
                     @endif
 
                     <h1 class="text-foreground text-4xl font-bold leading-[1.15] md:text-5xl lg:text-6xl">
-                        {!! nl2br(e($tenant->slogan ?? $tenant->business_name)) !!}
+                        {!! nl2br(e($customization->getHeroTitle() ?? $tenant->business_name)) !!}
                     </h1>
 
                     <p class="text-muted-foreground-1 text-lg max-w-xl max-lg:mx-auto">
-                        {{ Str::limit($customization->about_text ?? $tenant->description, 250) }}
+                        {{ Str::limit($customization->getHeroSubtitle() ?? '', 250) }}
                     </p>
 
                     <div class="flex flex-wrap gap-4 max-lg:justify-center">

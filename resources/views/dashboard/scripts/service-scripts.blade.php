@@ -47,7 +47,7 @@
                 const prevEl    = document.getElementById('icon-preview-el');
                 const prevLabel = document.getElementById('icon-preview-label');
                 if (prevEl) {
-                    prevEl.className = 'iconify tabler--settings text-primary';
+                    prevEl.className = 'iconify tabler--settings size-12 text-primary';
                 }
                 if (prevLabel) prevLabel.textContent = 'Sin ícono seleccionado';
             }
@@ -195,7 +195,7 @@
                         const prevEl    = document.getElementById('icon-preview-el');
                         const prevLabel = document.getElementById('icon-preview-label');
                         if (prevEl) {
-                            prevEl.className = 'iconify tabler--' + service.icon_name + ' text-primary';
+                            prevEl.className = 'iconify tabler--' + service.icon_name + ' size-12 text-primary';
                         }
                         if (prevLabel) prevLabel.textContent = service.icon_name;
                     }
@@ -220,7 +220,7 @@
                 const prevEl    = document.getElementById('icon-preview-el');
                 const prevLabel = document.getElementById('icon-preview-label');
                 if (prevEl) {
-                    prevEl.className = 'iconify tabler--settings text-primary';
+                    prevEl.className = 'iconify tabler--settings size-12 text-primary';
                 }
                 if (prevLabel) prevLabel.textContent = 'Sin ícono seleccionado';
                 const imgPrev = document.getElementById('service-image-preview');
@@ -310,7 +310,7 @@
                         const formData = new FormData();
                         formData.append('image', imageFile);
                         
-                        await fetch(`/tenant/{{ $tenant->id }}/upload/service/${result.data.id}`, {
+                        await fetch(`/tenant/{{ $tenant->id }}/upload/service/${result.service.id}`, {
                             method: 'POST',
                             headers: {
                                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content

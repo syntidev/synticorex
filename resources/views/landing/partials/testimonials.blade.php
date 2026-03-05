@@ -3,7 +3,7 @@
     Hardcoded placeholders until dynamic testimonials system is connected
 --}}
 
-<section id="testimonios" class="py-8 sm:py-16 lg:py-24">
+<section id="testimonials" class="py-8 sm:py-16 lg:py-24">
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
     <div class="space-y-4 text-center mb-10">
       <p class="text-primary text-sm font-medium uppercase">Lo que dicen</p>

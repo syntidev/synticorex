@@ -1,4 +1,5 @@
-{{-- Services Section: Arquitectura de Lujo --}}
+{{-- Services Section — Preline 4.1.2 + Tailwind v4
+     Variante: cards | Ícono OR imagen en cabecera, botón WhatsApp B2H --}}
 @php
     $defaultVisibleServices = 3;
     $servicePlanLimit       = (int) ($plan->services_limit ?? 3);
@@ -7,7 +8,7 @@
     $hiddenServices         = $displayServices->slice($defaultVisibleServices);
     $hasMoreServices        = $servicePlanLimit > $defaultVisibleServices && $hiddenServices->count() > 0;
 @endphp
-<section id="services" class="bg-surface py-8 sm:py-16 lg:py-24">
+<section id="services" class="bg-background py-10 sm:py-14 lg:py-20">
 
     <div class="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8">
 
@@ -21,80 +22,60 @@
         </div>
 
         {{-- Service Grid --}}
-        <div id="service-grid" class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {{-- Primeros 3 — siempre visibles --}}
-            @foreach($visibleServices as $service)
-                <div class="bg-background border border-border rounded-xl shadow-sm hover:border-primary transition-all duration-300">
-                    @if($service->image_filename)
-                        <figure>
-                            <img src="{{ asset('storage/tenants/' . $tenant->id . '/services/' . $service->image_filename) }}"
-                                 alt="{{ $service->name }}"
-                                 onerror="this.style.display='none'; this.parentElement.style.display='none';">
-                        </figure>
-                    @endif
-                    <div class="flex flex-col p-4 gap-3">
-                        @if(!$service->image_filename)
-                            <div class="mb-2">
-                                <span class="icon-[tabler--{{ $service->icon_name ?? 'star' }}] text-primary size-10"></span>
-                            </div>
-                        @endif
-                        <h5 class="text-xl font-semibold text-foreground">{{ $service->name }}</h5>
-                        <p class="text-foreground/80 mb-5 line-clamp-3">
-                            {{ $service->description ?? 'Soluciones personalizadas diseñadas para elevar el estándar de tu negocio.' }}
-                        </p>
-                        <div class="flex gap-2 mt-4">
-                            @php
-                                $ctaLink = $service->cta_link ?? ($tenant->getActiveWhatsapp()
-                                    ? 'https://wa.me/' . preg_replace('/[^0-9]/', '', $tenant->getActiveWhatsapp()) . '?text=' . urlencode('Hola! Me interesa el servicio: ' . $service->name)
-                                    : '#');
-                            @endphp
-                            <a href="{{ $ctaLink }}" class="inline-flex items-center py-2 px-4 rounded-lg font-medium transition-colors border border-border text-foreground/80 hover:bg-surface">
-                                {{ $service->cta_text ?? 'Más información' }}
-                                <span class="icon-[tabler--arrow-right] size-5 rtl:rotate-180"></span>
+        <div id="service-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+            {{-- Todos los servicios: primeros 3 visibles, el resto con .service-extra.hidden --}}
+            @foreach($displayServices as $loopIndex => $service)
+                @php
+                    $isExtra  = $loopIndex >= $defaultVisibleServices;
+                    $waPhone  = $tenant->getActiveWhatsapp() ? preg_replace('/[^0-9]/', '', $tenant->getActiveWhatsapp()) : null;
+                    $waMsg    = '¡Hola! Me gustaría obtener más información sobre el servicio: ' . $service->name . '. ¿Podrían ayudarme?';
+                    $ctaLink  = $service->cta_link
+                        ?? ($waPhone ? 'https://wa.me/' . $waPhone . '?text=' . urlencode($waMsg) : '#');
+                    $ctaText  = $service->cta_text ?? 'Quiero más información';
+                    $iconName = $service->icon_name ?? 'star';
+                @endphp
+
+                <div class="{{ $isExtra ? 'service-extra hidden' : '' }}">
+                    <div class="group flex flex-col h-full bg-card border border-card-line shadow-2xs rounded-xl">
+
+                        {{-- Cabecera: imagen O ícono sobre fondo brand --}}
+                        <div class="h-52 flex flex-col justify-center items-center bg-primary rounded-t-xl overflow-hidden">
+                            @if($service->image_filename)
+                                <img src="{{ asset('storage/tenants/' . $tenant->id . '/' . $service->image_filename) }}"
+                                     alt="{{ $service->name }}"
+                                     class="size-full object-cover"
+                                     onerror="this.style.display='none'; this.parentElement.classList.add('items-center','justify-center');">
+                            @else
+                                <span class="iconify tabler--{{ $iconName }} size-20 text-white/90"></span>
+                            @endif
+                        </div>
+
+                        {{-- Contenido --}}
+                        <div class="p-4 md:p-6">
+                            <span class="block mb-1 text-xs font-semibold uppercase text-primary">Servicio</span>
+                            <h3 class="text-xl font-semibold text-foreground group-hover:text-primary transition-colors">
+                                {{ $service->name }}
+                            </h3>
+                            <p class="mt-3 text-muted-foreground-1 line-clamp-3">
+                                {{ $service->description ?? 'Soluciones personalizadas diseñadas para elevar el estándar de tu negocio.' }}
+                            </p>
+                        </div>
+
+                        {{-- CTA — WhatsApp B2H, anclado al fondo --}}
+                        <div class="mt-auto flex border-t border-line-2">
+                            <a href="{{ $ctaLink }}"
+                               {{ $waPhone ? 'target="_blank" rel="noopener noreferrer"' : '' }}
+                               class="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-b-xl bg-layer text-foreground shadow-2xs hover:bg-muted-hover focus:outline-hidden focus:bg-muted-focus disabled:opacity-50 disabled:pointer-events-none transition-colors">
+                                <span class="iconify tabler--brand-whatsapp size-4 text-success"></span>
+                                {{ $ctaText }}
                             </a>
                         </div>
+
                     </div>
                 </div>
             @endforeach
 
-            {{-- Servicios adicionales (Plan 2: hasta 6, Plan 3: hasta 9) — ocultos por defecto --}}
-            @if($hasMoreServices)
-                @foreach($hiddenServices as $service)
-                    <div class="service-extra hidden">
-                        <div class="bg-background border border-border rounded-xl shadow-sm hover:border-primary transition-all duration-300">
-                            @if($service->image_filename)
-                                <figure>
-                                    <img src="{{ asset('storage/tenants/' . $tenant->id . '/services/' . $service->image_filename) }}"
-                                         alt="{{ $service->name }}"
-                                         onerror="this.style.display='none'; this.parentElement.style.display='none';">
-                                </figure>
-                            @endif
-                            <div class="flex flex-col p-4 gap-3">
-                                @if(!$service->image_filename)
-                                    <div class="mb-2">
-                                        <span class="icon-[tabler--{{ $service->icon_name ?? 'star' }}] text-primary size-10"></span>
-                                    </div>
-                                @endif
-                                <h5 class="text-xl font-semibold text-foreground">{{ $service->name }}</h5>
-                                <p class="text-foreground/80 mb-5 line-clamp-3">
-                                    {{ $service->description ?? 'Soluciones personalizadas diseñadas para elevar el estándar de tu negocio.' }}
-                                </p>
-                                <div class="flex gap-2 mt-4">
-                                    @php
-                                        $ctaLink = $service->cta_link ?? ($tenant->getActiveWhatsapp()
-                                            ? 'https://wa.me/' . preg_replace('/[^0-9]/', '', $tenant->getActiveWhatsapp()) . '?text=' . urlencode('Hola! Me interesa el servicio: ' . $service->name)
-                                            : '#');
-                                    @endphp
-                                    <a href="{{ $ctaLink }}" class="inline-flex items-center py-2 px-4 rounded-lg font-medium transition-colors border border-border text-foreground/80 hover:bg-surface">
-                                        {{ $service->cta_text ?? 'Más información' }}
-                                        <span class="icon-[tabler--arrow-right] size-5 rtl:rotate-180"></span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
-            @endif
         </div>
 
         {{-- Botón "Ver más" servicios — carga 3 en 3 --}}
@@ -103,9 +84,9 @@
             <div id="load-more-services-container" class="mt-12 text-center">
                 <button
                     onclick="loadMoreServices(this)"
-                    class="inline-flex items-center py-2 px-4 rounded-lg font-medium transition-colors bg-primary text-white hover:bg-primary/90">
+                    class="py-2 px-4 inline-flex items-center gap-x-2 text-sm font-medium text-nowrap rounded-xl bg-primary border border-primary-line text-primary-foreground hover:bg-primary-hover focus:outline-hidden focus:bg-primary-focus transition disabled:opacity-50 disabled:pointer-events-none">
                     <span class="btn-label">Ver {{ $firstServiceBatch }} servicio{{ $firstServiceBatch > 1 ? 's' : '' }} más</span>
-                    <span class="icon-[tabler--chevron-down] size-5"></span>
+                    <span class="iconify tabler--chevron-down size-5"></span>
                 </button>
             </div>
 

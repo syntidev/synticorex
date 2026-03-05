@@ -3,13 +3,8 @@
 
             {{-- ══ Sub-tab nav ═══════════════════════════════════════════════ --}}
             <div class="flex gap-1 mb-6 bg-layer p-1 rounded-xl border border-border">
-                <button onclick="switchInfoTab('visual')" id="itab-visual-btn"
-                    class="info-tab-btn active flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-sm font-medium transition-all bg-surface shadow-sm text-primary">
-                    <span class="iconify tabler--photo size-4"></span>
-                    <span class="hidden sm:inline">Visual</span>
-                </button>
                 <button onclick="switchInfoTab('negocio')" id="itab-negocio-btn"
-                    class="info-tab-btn flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-sm font-medium transition-all text-muted-foreground-1 hover:text-foreground">
+                    class="info-tab-btn active flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-sm font-medium transition-all bg-surface shadow-sm text-primary">
                     <span class="iconify tabler--building-store size-4"></span>
                     <span class="hidden sm:inline">Negocio</span>
                 </button>
@@ -25,215 +20,8 @@
                 </button>
             </div>
 
-            {{-- ══ Sub-tab: Visual ════════════════════════════════════════════ --}}
-            <div id="itab-visual" class="info-tab-content">
-            <div class="px-6 pb-6">
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                {{-- Logo Card (200x200) --}}
-                <div class="bg-surface rounded-xl shadow-sm border border-border">
-                    <div class="p-5">
-                        <div class="flex items-center gap-3 mb-3 pb-3 border-b border-border">
-                            <div class="size-9 rounded-lg bg-primary/10 flex items-center justify-center">
-                                <span class="iconify tabler--photo size-5 text-primary"></span>
-                            </div>
-                            <div>
-                                <h3 class="font-semibold text-foreground">Logo</h3>
-                                <p class="text-xs text-muted-foreground-1">Marca o símbolo de tu negocio</p>
-                            </div>
-                        </div>
-                        <div id="logo-dropzone"
-                             class="bg-layer rounded-lg h-40 flex items-center justify-center mb-3 overflow-hidden border-2 border-dashed border-transparent transition-colors cursor-pointer"
-                             onclick="document.getElementById('logo-file').click()"
-                             ondragover="event.preventDefault(); this.classList.add('border-primary','bg-primary/5')"
-                             ondragleave="this.classList.remove('border-primary','bg-primary/5')"
-                             ondrop="event.preventDefault(); this.classList.remove('border-primary','bg-primary/5'); handleDropUpload(event, 'logo')">
-                            @if($customization && $customization->logo_filename)
-                                <img id="logo-preview"
-                                     src="{{ asset('storage/tenants/' . $tenant->id . '/' . $customization->logo_filename) }}"
-                                     alt="Logo" class="max-w-full max-h-full object-contain">
-                            @else
-                                <div id="logo-placeholder" class="text-center">
-                                    {{-- Logo SVG fallback --}}
-                                    <svg xmlns="http://www.w3.org/2000/svg" 
-                                         viewBox="0 0 100 100" 
-                                         width="64" height="64"
-                                         class="mx-auto text-primary/40"
-                                         style="opacity: 0.6;">
-                                      <path d="M 30,22 L 78,22 L 78,70 Q 78,78 70,78 L 62,78 
-                                               L 62,38 L 22,38 L 22,30 Q 22,22 30,22 Z" 
-                                            fill="currentColor"/>
-                                      <circle cx="38" cy="63" r="14" fill="currentColor"/>
-                                    </svg>
-                                    <p class="text-xs text-muted-foreground-1 mt-2">Arrastra o haz clic</p>
-                                </div>
-                            @endif
-                        </div>
-                        <input type="file" id="logo-file" accept="image/*" class="hidden" onchange="uploadLogo(event)">
-                        <button onclick="document.getElementById('logo-file').click()"
-                                class="w-full inline-flex items-center justify-center text-sm py-1.5 px-3 rounded-lg font-medium transition-colors bg-primary text-primary-foreground hover:bg-primary-hover gap-2">
-                            <span class="iconify tabler--upload size-4"></span>
-                            Cambiar Logo
-                        </button>
-                    </div>
-                </div>
-
-                {{-- Hero Card (400x300) --}}
-                <div class="bg-surface rounded-xl shadow-sm border border-border">
-                    <div class="p-5">
-                        <div class="flex items-center gap-3 mb-3 pb-3 border-b border-border">
-                            <div class="size-9 rounded-lg bg-primary/10 flex items-center justify-center">
-                                <span class="iconify tabler--layout-dashboard size-5 text-primary"></span>
-                            </div>
-                            <div>
-                                <h3 class="font-semibold text-foreground">Hero</h3>
-                                <p class="text-xs text-muted-foreground-1">Imagen de portada de tu landing</p>
-                            </div>
-                        </div>
-                        <div id="hero-dropzone"
-                             class="bg-layer rounded-lg h-40 flex items-center justify-center mb-3 overflow-hidden border-2 border-dashed border-transparent transition-colors cursor-pointer"
-                             onclick="document.getElementById('hero-file').click()"
-                             ondragover="event.preventDefault(); this.classList.add('border-primary','bg-primary/5')"
-                             ondragleave="this.classList.remove('border-primary','bg-primary/5')"
-                             ondrop="event.preventDefault(); this.classList.remove('border-primary','bg-primary/5'); handleDropUpload(event, 'hero')">
-                            @if($customization && $customization->hero_main_filename)
-                                <img id="hero-preview"
-                                     src="{{ asset('storage/tenants/' . $tenant->id . '/' . $customization->hero_main_filename) }}"
-                                     alt="Hero" class="w-full h-full object-cover">
-                            @else
-                                <div id="hero-placeholder" class="text-center text-muted-foreground-1">
-                                    <span class="iconify tabler--cloud-upload size-8 mb-1 block mx-auto"></span>
-                                    <p class="text-xs">Arrastra o haz clic</p>
-                                </div>
-                            @endif
-                        </div>
-                        <input type="file" id="hero-file" accept="image/*" class="hidden" onchange="uploadHero(event)">
-                        <button onclick="document.getElementById('hero-file').click()"
-                                class="w-full inline-flex items-center justify-center text-sm py-1.5 px-3 rounded-lg font-medium transition-colors bg-primary text-primary-foreground hover:bg-primary-hover gap-2">
-                            <span class="iconify tabler--upload size-4"></span>
-                            Cambiar Hero
-                        </button>
-                    </div>
-                </div>
-
-                {{-- Acerca De Card --}}
-                <div class="bg-surface rounded-xl shadow-sm border border-border">
-                    <div class="p-5">
-                        <div class="flex items-center gap-3 mb-3 pb-3 border-b border-border">
-                            <div class="size-9 rounded-lg bg-primary/10 flex items-center justify-center">
-                                <span class="iconify tabler--info-circle size-5 text-primary"></span>
-                            </div>
-                            <div>
-                                <h3 class="font-semibold text-foreground">Imagen Acerca De</h3>
-                                <p class="text-xs text-muted-foreground-1">Foto del equipo o del local</p>
-                            </div>
-                        </div>
-                        <div id="about-dropzone"
-                             class="bg-layer rounded-lg h-40 flex items-center justify-center mb-3 overflow-hidden border-2 border-dashed border-transparent transition-colors cursor-pointer"
-                             onclick="document.getElementById('about-file').click()"
-                             ondragover="event.preventDefault(); this.classList.add('border-primary','bg-primary/5')"
-                             ondragleave="this.classList.remove('border-primary','bg-primary/5')"
-                             ondrop="event.preventDefault(); this.classList.remove('border-primary','bg-primary/5'); handleDropUpload(event, 'about')">
-                            @if($customization && $customization->about_image_filename)
-                                <img id="about-preview"
-                                     src="{{ asset('storage/tenants/' . $tenant->id . '/' . $customization->about_image_filename) }}"
-                                     alt="Acerca de" class="w-full h-full object-cover">
-                            @else
-                                <div class="text-center text-muted-foreground-1">
-                                    <span class="iconify tabler--users size-8 mb-1 block mx-auto"></span>
-                                    <p class="text-xs">Tu equipo o tu local</p>
-                                </div>
-                            @endif
-                        </div>
-                        <input type="file" id="about-file" accept="image/*" class="hidden" onchange="uploadAbout(event)">
-                        <button onclick="document.getElementById('about-file').click()"
-                                class="w-full inline-flex items-center justify-center text-sm py-1.5 px-3 rounded-lg font-medium transition-colors bg-primary text-primary-foreground hover:bg-primary-hover gap-2">
-                            <span class="iconify tabler--upload size-4"></span>
-                            Subir imagen
-                        </button>
-                    </div>
-                </div>
-
-                {{-- QR Card --}}
-                <div class="bg-surface rounded-xl shadow-sm border border-border">
-                    <div class="p-5">
-                        <div class="flex items-center gap-3 mb-3 pb-3 border-b border-border">
-                            <div class="size-9 rounded-lg bg-primary/10 flex items-center justify-center">
-                                <span class="iconify tabler--qrcode size-5 text-primary"></span>
-                            </div>
-                            <div>
-                                <h3 class="font-semibold text-foreground">QR Tracking</h3>
-                                <p class="text-xs text-muted-foreground-1">Código para medir clics</p>
-                            </div>
-                        </div>
-                        <div class="flex justify-center mb-2">
-                            <div class="bg-card p-2 rounded-lg border border-card-line" style="width:140px;height:140px;overflow:hidden;">
-                                <div id="qr-display" style="width:136px;height:136px;overflow:hidden;">
-                                    {!! $trackingQR !!}
-                                </div>
-                            </div>
-                        </div>
-                        <p class="text-[10px] text-muted-foreground-1 text-center mb-2 break-all leading-tight select-all">{{ $trackingShortlink }}</p>
-                            <div class="mb-3">
-                            <input type="text" id="qr-slogan"
-                                   placeholder="Ej: Escanéame y ve nuestro menú"
-                                   maxlength="50"
-                                   class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none text-center text-xs"
-                                   value="{{ $tenant->qr_slogan ?? '' }}">
-                            <p class="text-[10px] text-muted-foreground-1 text-center mt-1">Este texto aparece en la tarjeta descargable</p>
-                        </div>
-                        <div class="flex gap-2">
-                            <a href="/tenant/{{ $tenant->id }}/qr/download" class="inline-flex items-center text-sm py-1.5 px-3 rounded-lg font-medium transition-colors bg-primary text-primary-foreground hover:bg-primary-hover gap-1 flex-1" download>
-                                <span class="iconify tabler--download size-3.5"></span>
-                                PNG
-                            </a>
-                            <button type="button" onclick="downloadQRSVG()" class="inline-flex items-center text-sm py-1.5 px-3 rounded-lg font-medium transition-colors text-foreground hover:bg-muted-hover gap-1 flex-1">
-                                <span class="iconify tabler--file-type-svg size-3.5"></span>
-                                SVG
-                            </button>
-                        </div>
-
-                        {{-- QR Sticker Generator --}}
-                        <div class="mt-4 pt-4 border-t border-border">
-                            <div class="flex items-center gap-2 mb-3">
-                                <span class="iconify tabler--sparkles size-4 text-primary"></span>
-                                <span class="text-sm font-semibold text-foreground">Crear Sticker</span>
-                            </div>
-
-                            {{-- Canvas preview --}}
-                            <div class="flex justify-center mb-3">
-                                <canvas id="qr-sticker-canvas" width="400" height="500"
-                                        class="rounded-xl border border-border shadow-sm"
-                                        style="max-width:200px; height:auto;"></canvas>
-                            </div>
-
-                            {{-- Campos editables --}}
-                            <div class="space-y-2 mb-3">
-                                <input type="text" id="sticker-top-text"
-                                       placeholder="Texto superior: Ej: 📍 Escanéame"
-                                       maxlength="40"
-                                       class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none text-center text-xs"
-                                       oninput="renderStickerCanvas()">
-                                <input type="text" id="sticker-bottom-text"
-                                       placeholder="Texto inferior: Ej: Ver nuestro menú"
-                                       maxlength="40"
-                                       class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none text-center text-xs"
-                                       oninput="renderStickerCanvas()">
-                            </div>
-
-                            <button type="button" onclick="downloadSticker()"
-                                    class="w-full inline-flex items-center justify-center text-sm py-1.5 px-3 rounded-lg font-medium transition-colors bg-primary text-primary-foreground hover:bg-primary-hover gap-2">
-                                <span class="iconify tabler--download size-4"></span>
-                                Descargar Sticker
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>{{-- /grid visual --}}
-            </div>{{-- /wrapper px-6 pb-6 --}}
-            </div>{{-- /itab-visual --}}
-
             {{-- ══ Sub-tab: Negocio ═══════════════════════════════════════════ --}}
-            <div id="itab-negocio" class="info-tab-content hidden">
+            <div id="itab-negocio" class="info-tab-content">
 
             {{-- ══ Info Form ══════════════════════════════════════════════════ --}}
             <form id="form-info" onsubmit="saveInfo(event)">
@@ -264,14 +52,14 @@
                             </div>
                             <div class="form-control">
                                 <label class="inline-block text-sm font-medium text-foreground mb-1">
-                                    Eslogan / Tagline
+                                    Eslogan
                                 </label>
-                                <input type="text" name="tagline" class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none"
-                                       value="{{ $tenant->tagline }}" 
+                                <input type="text" name="slogan" class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none"
+                                       value="{{ $tenant->slogan }}" 
                                        placeholder="Ej: La mejor pizza de Maracaibo"
-                                       aria-label="Eslogan o tagline de tu negocio"
+                                       aria-label="Eslogan de tu negocio"
                                        autocomplete="off">
-                                <p class="text-xs text-muted-foreground-1 mt-1">Una frase corta que te define</p>
+                                <p class="text-xs text-muted-foreground-1 mt-1">Título principal del Hero cuando no hay título personalizado</p>
                             </div>
                             <div class="form-control">
                                 <label class="inline-block text-sm font-medium text-foreground mb-1">
@@ -390,22 +178,33 @@
                                         <span class="inline-flex items-center py-0.5 px-2 rounded-full text-xs font-medium bg-green-100 text-green-700">{{ $plan->name }}</span>
                                     </span>
                                 </label>
-                                <input type="url" name="contact_maps_url" class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none"
+                                <input type="url" id="contact-maps-url-input" name="contact_maps_url" class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none"
                                        value="{{ data_get($tenant->settings, 'business_info.contact.maps_url', '') }}"
                                        placeholder="https://www.google.com/maps/embed?pb=...">
+                                <div class="mt-2 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                                  <p class="text-xs text-blue-900 font-semibold mb-2">💡 Cómo obtener el enlace:</p>
+                                  <ol class="text-xs text-blue-800 space-y-1 list-decimal list-inside">
+                                    <li>Abre la ubicación en <strong>Google Maps</strong></li>
+                                    <li>Haz clic en <strong>"Compartir"</strong></li>
+                                    <li>Selecciona la pestaña <strong>"Incorporar un mapa"</strong></li>
+                                    <li>Copia el código <code class="bg-white px-1 rounded">&lt;iframe&gt;...&lt;/iframe&gt;</code> <strong>completo</strong></li>
+                                    <li>Pégalo aquí ↑ <strong>El sistema extraerá automáticamente la URL</strong></li>
+                                  </ol>
+                                </div>
                             </div>
                             @endif
                         </div>
 
                         <div class="form-control mt-3">
                             <label class="inline-block text-sm font-medium text-foreground mb-1" for="info-description">
-                                Descripción del Negocio
+                                Descripción Corta
+                                <span class="text-muted-foreground-1 font-normal text-xs">(Hero + SEO)</span>
                             </label>
                             <textarea id="info-description" class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none min-h-20"
                                       name="description"
-                                      placeholder="Cuéntale a tus clientes qué haces, por qué eres la mejor opción..."
-                                      aria-label="Descripción de tu negocio">{{ $tenant->description }}</textarea>
-                            <p class="text-xs text-muted-foreground-1 mt-1">Cuéntale a tus clientes qué haces y por qué eres la mejor opción</p>
+                                      placeholder="Breve descripción de tu negocio para buscadores..."
+                                      aria-label="Descripción SEO de tu negocio">{{ $tenant->description }}</textarea>
+                            <p class="text-xs text-muted-foreground-1 mt-1">Subtítulo del Hero + meta descripción SEO. Usa una frase concisa y directa.</p>
                         </div>
 
                         {{-- ══ Contenido Hero ════════════════════════════════════════ --}}
@@ -420,7 +219,7 @@
                                    name="content_blocks[hero][title]"
                                    placeholder="Ej: La mejor pizzería de Maracaibo"
                                    value="{{ $customization?->getContentBlock('hero', 'title') ?? '' }}">
-                            <p class="mt-1.5 text-xs text-muted-foreground-2">Si lo dejas vacío, usamos tu eslogan.</p>
+                            <p class="mt-1.5 text-xs text-muted-foreground-2">Si lo dejas vacío, el Hero usa tu <strong>Eslogan</strong> como título.</p>
                         </div>
 
                         <div class="form-control mt-3">
@@ -432,7 +231,7 @@
                                    name="content_blocks[hero][subtitle]"
                                    placeholder="Ej: Masa artesanal, ingredientes frescos, entrega en 30 min"
                                    value="{{ $customization?->getContentBlock('hero', 'subtitle') ?? '' }}">
-                            <p class="mt-1.5 text-xs text-muted-foreground-2">Complementa el título. No repitas el eslogan.</p>
+                            <p class="mt-1.5 text-xs text-muted-foreground-2">Si lo dejas vacío, el Hero usa la <strong>Descripción Corta</strong> como subtítulo.</p>
                         </div>
 
                         <div class="form-control mt-3">
@@ -442,70 +241,7 @@
                             <textarea id="info-about-text" class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none" rows="4"
                                       name="about_text"
                                       placeholder="Cuéntale a tus clientes quiénes son, qué los hace especiales...">{{ $customization?->about_text ?? '' }}</textarea>
-                            <p class="mt-1.5 text-xs text-muted-foreground-2">Aparece en la sección "Acerca de" de tu página.</p>
-                        </div>
-
-                        {{-- ══ Indicador de Horario (Opcional) ═══════════════════════ --}}
-                        <div class="border-t border-border my-4 mt-6 text-xs text-muted-foreground-1">Indicador de Horario en Navbar</div>
-
-                        <div class="flex p-4 rounded-lg border gap-3 bg-info/5 border-info/20 text-info mb-4">
-                            <span class="iconify tabler--info-circle size-5 shrink-0"></span>
-                            <div class="text-sm">
-                                <p class="font-semibold">Indicador de Estado Opcional</p>
-                                <p class="text-xs opacity-80">Muestra un badge "ABIERTO" o "CERRADO" en la navbar según tu horario de atención.</p>
-                            </div>
-                        </div>
-
-                        <div class="form-control">
-                            <label class="label cursor-pointer justify-start gap-3">
-                                <input type="hidden" name="show_hours_indicator" value="0">
-                                <input type="checkbox" name="show_hours_indicator" id="show-hours-toggle"
-                                       class="relative w-[35px] h-[20px] bg-gray-200 checked:bg-green-500 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 appearance-none focus:ring-green-500 focus:ring-2 focus:ring-offset-2 before:inline-block before:size-[16px] before:bg-white before:rounded-full before:transform before:translate-x-0 checked:before:translate-x-full before:transition before:ease-in-out before:duration-200 before:shadow-sm"
-                                       value="1"
-                                       {{ data_get($tenant->settings, 'engine_settings.features.show_hours_indicator', false) ? 'checked' : '' }}
-                                       onchange="toggleHoursIndicatorFields()">
-                                <div class="flex-1">
-                                    <span class="text-sm font-medium text-foreground">¿Mostrar estado de horario en navbar?</span>
-                                    <p class="text-xs text-muted-foreground-1 mt-0.5">Activa para mostrar badge ABIERTO/CERRADO junto al botón WhatsApp</p>
-                                </div>
-                            </label>
-                        </div>
-
-                        <div id="hours-indicator-fields" class="{{ data_get($tenant->settings, 'engine_settings.features.show_hours_indicator', false) ? '' : 'hidden' }} mt-4 p-4 bg-layer rounded-lg space-y-4">
-                            <div class="form-control">
-                                <label class="inline-block text-sm font-medium text-foreground mb-1">
-                                    <span class="flex items-center gap-1 justify-between">
-                                        Mensaje cuando estamos cerrados
-                                        <span class="text-muted-foreground-1 text-xs font-normal" id="char-count">0 / 150</span>
-                                    </span>
-                                </label>
-                                <textarea id="closed-message-input" name="closed_message" class="py-2 px-3 block w-full bg-layer border border-border shadow-2xs rounded-lg text-sm text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus min-h-16"
-                                          placeholder="Estamos cerrados. Te responderemos durante nuestro horario de atención."
-                                          maxlength="150"
-                                          oninput="updateCharCount(); updatePreview()">{{ data_get($tenant->settings, 'business_info.closed_message', 'Estamos cerrados. Te responderemos durante nuestro horario de atención.') }}</textarea>
-                                <p class="mt-1.5 text-xs text-muted-foreground-2">Este mensaje se usará en el botón de WhatsApp cuando tu negocio esté cerrado</p>
-                            </div>
-
-                            <div class="flex p-4 rounded-lg border gap-3 bg-info/5 border-info/20 text-info">
-                                <span class="iconify tabler--eye size-5 shrink-0"></span>
-                                <div class="text-xs">
-                                    <p class="font-semibold mb-2">Así se verá en tu navbar</p>
-                                    <div class="flex items-center gap-2 flex-wrap">
-                                        <span class="inline-flex items-center py-0.5 px-2 rounded-full text-sm font-medium gap-1 bg-green-500 text-white">
-                                            <span class="iconify tabler--circle-filled size-3"></span>
-                                            ABIERTO
-                                        </span>
-                                        <span class="text-muted-foreground-1">o</span>
-                                        <span class="inline-flex items-center py-0.5 px-2 rounded-full text-sm font-medium gap-1 bg-red-500 text-white">
-                                            <span class="iconify tabler--circle-filled size-3"></span>
-                                            CERRADO
-                                        </span>
-                                    </div>
-                                    <p class="mt-3 p-2 bg-card rounded text-xs text-foreground border-l-2 border-info">
-                                        <span class="font-semibold">Mensaje WhatsApp:</span> <span id="preview-message">{{ data_get($tenant->settings, 'business_info.closed_message', 'Estamos cerrados. Te responderemos durante nuestro horario de atención.') }}</span>
-                                    </p>
-                                </div>
-                            </div>
+                            <p class="mt-1.5 text-xs text-muted-foreground-2">Texto largo que aparece en la sección "Acerca de". No se usa en el Hero.</p>
                         </div>
                     </div>{{-- /wrapper px-6 pb-6 --}}
 
@@ -524,6 +260,71 @@
 
             {{-- ══ Sub-tab: Horario ═══════════════════════════════════════════ --}}
             <div id="itab-horario" class="info-tab-content hidden">
+
+                {{-- ══ Indicador de Horario (Opcional) ═══════════════════════ --}}
+                <div class="px-6 pb-4 pt-4">
+                    <div class="border-t border-border my-4 mt-0 text-xs text-muted-foreground-1">Indicador de Horario en Navbar</div>
+
+                    <div class="flex p-4 rounded-lg border gap-3 bg-info/5 border-info/20 text-info mb-4">
+                        <span class="iconify tabler--info-circle size-5 shrink-0"></span>
+                        <div class="text-sm">
+                            <p class="font-semibold">Indicador de Estado Opcional</p>
+                            <p class="text-xs opacity-80">Muestra un badge "ABIERTO" o "CERRADO" en la navbar según tu horario de atención.</p>
+                        </div>
+                    </div>
+
+                    <div class="form-control">
+                        <label class="label cursor-pointer justify-start gap-3">
+                            <input type="hidden" name="show_hours_indicator" value="0">
+                            <input type="checkbox" name="show_hours_indicator" id="show-hours-toggle"
+                                   class="relative w-[35px] h-[20px] bg-gray-200 checked:bg-green-500 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 appearance-none focus:ring-green-500 focus:ring-2 focus:ring-offset-2 before:inline-block before:size-[16px] before:bg-white before:rounded-full before:transform before:translate-x-0 checked:before:translate-x-full before:transition before:ease-in-out before:duration-200 before:shadow-sm"
+                                   value="1"
+                                   {{ data_get($tenant->settings, 'engine_settings.features.show_hours_indicator', false) ? 'checked' : '' }}
+                                   onchange="toggleHoursIndicatorFields()">
+                            <div class="flex-1">
+                                <span class="text-sm font-medium text-foreground">¿Mostrar estado de horario en navbar?</span>
+                                <p class="text-xs text-muted-foreground-1 mt-0.5">Activa para mostrar badge ABIERTO/CERRADO junto al botón WhatsApp</p>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div id="hours-indicator-fields" class="{{ data_get($tenant->settings, 'engine_settings.features.show_hours_indicator', false) ? '' : 'hidden' }} mt-4 p-4 bg-layer rounded-lg space-y-4">
+                        <div class="form-control">
+                            <label class="inline-block text-sm font-medium text-foreground mb-1">
+                                <span class="flex items-center gap-1 justify-between">
+                                    Mensaje cuando estamos cerrados
+                                    <span class="text-muted-foreground-1 text-xs font-normal" id="char-count">0 / 150</span>
+                                </span>
+                            </label>
+                            <textarea id="closed-message-input" name="closed_message" class="py-2 px-3 block w-full bg-layer border border-border shadow-2xs rounded-lg text-sm text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus min-h-16"
+                                      placeholder="Estamos cerrados. Te responderemos durante nuestro horario de atención."
+                                      maxlength="150"
+                                      oninput="updateCharCount(); updatePreview()">{{ data_get($tenant->settings, 'business_info.closed_message', 'Estamos cerrados. Te responderemos durante nuestro horario de atención.') }}</textarea>
+                            <p class="mt-1.5 text-xs text-muted-foreground-2">Este mensaje se usará en el botón de WhatsApp cuando tu negocio esté cerrado</p>
+                        </div>
+
+                        <div class="flex p-4 rounded-lg border gap-3 bg-info/5 border-info/20 text-info">
+                            <span class="iconify tabler--eye size-5 shrink-0"></span>
+                            <div class="text-xs">
+                                <p class="font-semibold mb-2">Así se verá en tu navbar</p>
+                                <div class="flex items-center gap-2 flex-wrap">
+                                    <span class="inline-flex items-center py-0.5 px-2 rounded-full text-sm font-medium gap-1 bg-green-500 text-white">
+                                        <span class="iconify tabler--circle-filled size-3"></span>
+                                        ABIERTO
+                                    </span>
+                                    <span class="text-muted-foreground-1">o</span>
+                                    <span class="inline-flex items-center py-0.5 px-2 rounded-full text-sm font-medium gap-1 bg-red-500 text-white">
+                                        <span class="iconify tabler--circle-filled size-3"></span>
+                                        CERRADO
+                                    </span>
+                                </div>
+                                <p class="mt-3 p-2 bg-card rounded text-xs text-foreground border-l-2 border-info">
+                                    <span class="font-semibold">Mensaje WhatsApp:</span> <span id="preview-message">{{ data_get($tenant->settings, 'business_info.closed_message', 'Estamos cerrados. Te responderemos durante nuestro horario de atención.') }}</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>{{-- /indicador horario --}}
 
             {{-- ═══════════════════════════════════════════════════════════
                  Horario de Atención — Compact collapse / expand
@@ -944,4 +745,50 @@
         document.getElementById('itab-visual-btn')
             ?.addEventListener('click', () => setTimeout(renderStickerCanvas, 100));
         // ── End QR Sticker Generator ──────────────────────────────────
+
+        // ── Google Maps Embed URL Extractor ──────────────────────────
+        // Detecta si el usuario pegó HTML de iframe y extrae automáticamente la URL
+        const mapsUrlInput = document.getElementById('contact-maps-url-input');
+        if (mapsUrlInput) {
+            mapsUrlInput.addEventListener('input', function() {
+                const value = this.value.trim();
+                
+                // Si contiene <iframe, extrae la URL del atributo src
+                if (value.includes('<iframe') && value.includes('src=')) {
+                    const srcMatch = value.match(/src=["']([^"']+)["']/);
+                    if (srcMatch && srcMatch[1]) {
+                        const extractedUrl = srcMatch[1];
+                        this.value = extractedUrl;
+                        
+                        // Feedback visual: borde verde temporalmente
+                        this.classList.add('border-green-500', 'border');
+                        setTimeout(() => {
+                            this.classList.remove('border-green-500', 'border');
+                        }, 2000);
+                    }
+                }
+            });
+            
+            // Evento paste para capturar pega acelerada
+            mapsUrlInput.addEventListener('paste', function(e) {
+                setTimeout(() => {
+                    const value = this.value.trim();
+                    if (value.includes('<iframe') && value.includes('src=')) {
+                        const srcMatch = value.match(/src=["']([^"']+)["']/);
+                        if (srcMatch && srcMatch[1]) {
+                            const extractedUrl = srcMatch[1];
+                            this.value = extractedUrl;
+                            
+                            // Feedback: toast visual
+                            const toast = document.createElement('div');
+                            toast.className = 'fixed bottom-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg text-sm z-50';
+                            toast.textContent = '✓ URL de Google Maps extraída correctamente';
+                            document.body.appendChild(toast);
+                            setTimeout(() => toast.remove(), 3000);
+                        }
+                    }
+                }, 50);
+            });
+        }
+        // ── End Google Maps URL Extractor ──────────────────────────────
         </script>

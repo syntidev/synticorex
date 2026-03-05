@@ -13,12 +13,12 @@
 
             {{-- Título --}}
             <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight">
-                {!! nl2br(e($tenant->slogan ?? $tenant->business_name)) !!}
+                {!! nl2br(e($customization->getHeroTitle() ?? $tenant->business_name)) !!}
             </h1>
 
             {{-- Descripción --}}
             <p class="text-lg text-muted-foreground-1 max-w-lg">
-                {{ Str::limit($customization->about_text ?? $tenant->description ?? 'Bienvenido a una experiencia donde la calidad y el servicio se unen.', 200) }}
+                {{ Str::limit($customization->getHeroSubtitle() ?? 'Bienvenido a una experiencia donde la calidad y el servicio se unen.', 200) }}
             </p>
 
             {{-- CTAs --}}

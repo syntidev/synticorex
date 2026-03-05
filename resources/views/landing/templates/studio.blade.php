@@ -29,7 +29,7 @@
          SECCIONES DINÁMICAS - ORDENABLES
     ══════════════════════════════════════════════ --}}
 
-    <main>
+    <main class="bg-surface">
         @foreach($customization->getSectionsOrder() as $section)
             @php
                 $sectionName = $section['name'];
@@ -174,6 +174,83 @@
         else                                      currentCurrency = CURRENCY_SYMBOL;
         renderAllPrices();
         updateToggleButton();
+
+        // ═══════════════════════════════════════════════════════════════════
+        // SCROLL SPY — Marcar sección actual en navegación
+        // ═══════════════════════════════════════════════════════════════════
+        const navLinks = document.querySelectorAll('[data-nav-link]');
+        const sectionIds = Array.from(navLinks).map(link => link.getAttribute('data-nav-link'));
+        let currentActiveId = 'home';
+
+        function updateActiveLink(targetId) {
+            if (currentActiveId === targetId) return; // No hacer nada si ya está activo
+            
+            // Remover estilos de link anterior
+            const prevLink = document.querySelector(`[data-nav-link="${currentActiveId}"]`);
+            if (prevLink) {
+                prevLink.classList.remove('bg-primary/10', 'text-primary');
+                prevLink.classList.add('text-foreground/70');
+            }
+
+            // Agregar estilos al nuevo link
+            const newLink = document.querySelector(`[data-nav-link="${targetId}"]`);
+            if (newLink) {
+                newLink.classList.add('bg-primary/10', 'text-primary');
+                newLink.classList.remove('text-foreground/70');
+            }
+
+            currentActiveId = targetId;
+        }
+
+        // Observar scroll y detectar qué sección está más visible
+        function detectVisibleSection() {
+            const headerHeight = 64; // altura del header sticky
+            let mostVisibleSection = 'home'; // por defecto Inicio
+            let maxVisibility = 0;
+
+            sectionIds.forEach(id => {
+                const section = document.getElementById(id);
+                if (!section) return;
+
+                const rect = section.getBoundingClientRect();
+                const viewportHeight = window.innerHeight;
+                
+                // Calcular cuánto de la sección está visible
+                const sectionTop = Math.max(rect.top - headerHeight, 0);
+                const sectionBottom = Math.min(rect.bottom, viewportHeight);
+                const visibleHeight = Math.max(0, sectionBottom - sectionTop);
+                const visibility = visibleHeight / viewportHeight;
+
+                // Si esta sección está más visible que la anterior, marcarla
+                if (visibility > maxVisibility && rect.top < viewportHeight && rect.bottom > headerHeight) {
+                    maxVisibility = visibility;
+                    mostVisibleSection = id;
+                }
+            });
+
+            // Si el usuario está muy arriba (antes de cualquier sección), mostrar Inicio
+            const homeSection = document.getElementById('home');
+            if (homeSection && homeSection.getBoundingClientRect().bottom > window.innerHeight * 0.5) {
+                mostVisibleSection = 'home';
+            }
+
+            updateActiveLink(mostVisibleSection);
+        }
+
+        // Ejecutar detección en eventos clave
+        window.addEventListener('scroll', () => {
+            requestAnimationFrame(detectVisibleSection);
+        }, { passive: true });
+
+        window.addEventListener('resize', detectVisibleSection, { passive: true });
+
+        // Marcar Inicio como activo al cargar (esto asegura que aparezca sombreado por defecto)
+        updateActiveLink('home');
+        
+        // Necesario para algunos navegadores que cachean scroll state
+        setTimeout(() => {
+            detectVisibleSection();
+        }, 100);
     });
 </script>
 @endpush

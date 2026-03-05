@@ -472,35 +472,40 @@
         const currAllKeys = @json(array_keys($allCurrencyMeta));
         const allPayMetaData  = @json($allPayMeta);
         const allCurrMetaData = @json($allCurrencyMeta);
-        const divisaKeys  = ['zelle', 'zinli', 'paypal'];
 
+        // Usa onchange en el <input> (no onclick en el <label>).
+        // Cuando onchange dispara, el browser YA toggleó el checkbox.
+        // check.checked refleja el estado NUEVO correcto.
         function togglePayMethod(key) {
             const check = document.getElementById('pay-check-' + key);
             const label = document.getElementById('pay-label-' + key);
-            const icon  = document.getElementById('pay-check-icon-' + key);
+            const checkIcon = document.getElementById('pay-check-icon-' + key);
             if (!check || !label) return;
-            check.checked = !check.checked;
-            const on = check.checked;
-            // Swap all state classes cleanly
-            label.classList.remove('bg-primary/15', 'border-primary/40', 'text-primary', 'font-semibold',
-                                   'bg-primary/20', 'border-primary/50',
-                                   'bg-base-200/40', 'bg-base-200/50', 'border-base-content/10', 'text-base-content');
+            const on = check.checked; // onchange: browser ya toggleó
+            label.classList.remove(
+                'bg-primary/15', 'border-primary/40',
+                'bg-muted/40', 'border-border'
+            );
             if (on) {
-                label.classList.add('bg-primary/15', 'border-primary/40', 'text-primary', 'font-semibold');
+                label.classList.add('bg-primary/15', 'border-primary/40');
             } else {
-                label.classList.add('bg-base-200/40', 'border-base-content/10', 'text-base-content');
+                label.classList.add('bg-muted/40', 'border-border');
             }
-            // Checkmark icon
-            if (icon) {
-                icon.classList.toggle('opacity-100', on);
-                icon.classList.toggle('text-primary', on);
-                icon.classList.toggle('opacity-0', !on);
+            if (checkIcon) {
+                checkIcon.classList.toggle('opacity-100', on);
+                checkIcon.classList.toggle('text-primary', on);
+                checkIcon.classList.toggle('opacity-0', !on);
             }
-            // Inner label text color
+            // Icono del método
+            const methodIcon = label.querySelector('.iconify:not([id])');
+            if (methodIcon) {
+                methodIcon.classList.remove('text-primary', 'text-muted-foreground-1');
+                methodIcon.classList.add(on ? 'text-primary' : 'text-muted-foreground-1');
+            }
             const txtSpan = label.querySelector('.flex-1');
             if (txtSpan) {
-                txtSpan.classList.remove('text-primary', 'text-base-content');
-                txtSpan.classList.add(on ? 'text-primary' : 'text-base-content');
+                txtSpan.classList.remove('text-primary', 'text-foreground');
+                txtSpan.classList.add(on ? 'text-primary' : 'text-foreground');
             }
             updatePaymentPreview();
         }
@@ -508,29 +513,34 @@
         function toggleCurrency(key) {
             const check = document.getElementById('curr-check-' + key);
             const label = document.getElementById('curr-label-' + key);
-            const icon  = document.getElementById('curr-check-icon-' + key);
+            const checkIcon = document.getElementById('curr-check-icon-' + key);
             if (!check || !label) return;
-            check.checked = !check.checked;
-            const on = check.checked;
-            label.classList.remove('bg-primary/20', 'border-primary/50', 'text-primary', 'font-semibold',
-                                   'bg-base-200/50', 'border-base-content/10', 'text-base-content');
+            const on = check.checked; // onchange: browser ya toggleó
+            label.classList.remove(
+                'bg-primary/15', 'border-primary/40',
+                'bg-muted/40', 'border-border'
+            );
             if (on) {
-                label.classList.add('bg-primary/20', 'border-primary/50', 'text-primary', 'font-semibold');
+                label.classList.add('bg-primary/15', 'border-primary/40');
             } else {
-                label.classList.add('bg-base-200/50', 'border-base-content/10', 'text-base-content');
+                label.classList.add('bg-muted/40', 'border-border');
             }
-            if (icon) {
-                icon.classList.toggle('opacity-100', on);
-                icon.classList.toggle('text-primary', on);
-                icon.classList.toggle('opacity-0', !on);
+            if (checkIcon) {
+                checkIcon.classList.toggle('opacity-100', on);
+                checkIcon.classList.toggle('text-primary', on);
+                checkIcon.classList.toggle('opacity-0', !on);
             }
-            // Inner label/desc text color
-            label.querySelectorAll('.flex-1 div').forEach(d => {
-                d.classList.remove('text-primary', 'text-primary/70', 'text-base-content', 'text-base-content/40');
-            });
-            const divs = label.querySelectorAll('.flex-1 div');
-            if (divs[0]) divs[0].classList.add(on ? 'text-primary' : 'text-base-content');
-            if (divs[1]) divs[1].classList.add(on ? 'text-primary/70' : 'text-base-content/40');
+            // Icono de divisa
+            const currIcon = label.querySelector('.iconify:not([id])');
+            if (currIcon) {
+                currIcon.classList.remove('text-primary', 'text-muted-foreground-1');
+                currIcon.classList.add(on ? 'text-primary' : 'text-muted-foreground-1');
+            }
+            const txtSpan = label.querySelector('.flex-1');
+            if (txtSpan) {
+                txtSpan.classList.remove('text-primary', 'text-foreground');
+                txtSpan.classList.add(on ? 'text-primary' : 'text-foreground');
+            }
             updatePaymentPreview();
         }
 
@@ -551,12 +561,12 @@
                 }
             });
             if (selected.length === 0) {
-                preview.innerHTML = '<span class="text-base-content/40 text-xs">Selecciona métodos para ver la previa</span>';
+                preview.innerHTML = '<span class="text-foreground/40 text-xs">Selecciona métodos para ver la previa</span>';
                 return;
             }
-            preview.innerHTML = selected.map(item => 
-                `<span class="badge badge-soft badge-success badge-sm gap-1.5">
-                    <iconify-icon icon="${item.icon}" width="14"></iconify-icon> ${item.label}
+            preview.innerHTML = selected.map(item =>
+                `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20">
+                    <span class="iconify ${item.icon} size-3" aria-hidden="true"></span> ${item.label}
                 </span>`
             ).join('');
         }
@@ -568,27 +578,33 @@
         function toggleBranchPayMethod(branchId, key) {
             const check = document.getElementById('pay-branch-check-' + branchId + '-' + key);
             const label = document.getElementById('pay-branch-label-' + branchId + '-' + key);
-            const icon  = document.getElementById('pay-branch-check-icon-' + branchId + '-' + key);
+            const checkIcon = document.getElementById('pay-branch-check-icon-' + branchId + '-' + key);
             if (!check || !label) return;
-            check.checked = !check.checked;
-            const on = check.checked;
-            label.classList.remove('bg-primary/15', 'border-primary/40', 'text-primary', 'font-semibold',
-                                   'bg-primary/20', 'border-primary/50',
-                                   'bg-base-100', 'border-base-content/10', 'text-base-content');
+            const on = check.checked; // onchange: browser ya toggleó
+            label.classList.remove(
+                'bg-primary/15', 'border-primary/40',
+                'bg-surface', 'border-border'
+            );
             if (on) {
-                label.classList.add('bg-primary/15', 'border-primary/40', 'text-primary', 'font-semibold');
+                label.classList.add('bg-primary/15', 'border-primary/40');
             } else {
-                label.classList.add('bg-base-100', 'border-base-content/10', 'text-base-content');
+                label.classList.add('bg-surface', 'border-border');
             }
-            if (icon) {
-                icon.classList.toggle('opacity-100', on);
-                icon.classList.toggle('text-primary', on);
-                icon.classList.toggle('opacity-0', !on);
+            if (checkIcon) {
+                checkIcon.classList.toggle('opacity-100', on);
+                checkIcon.classList.toggle('text-primary', on);
+                checkIcon.classList.toggle('opacity-0', !on);
+            }
+            // Icono del método
+            const methodIcon = label.querySelector('.iconify:not([id])');
+            if (methodIcon) {
+                methodIcon.classList.remove('text-primary', 'text-muted-foreground-1');
+                methodIcon.classList.add(on ? 'text-primary' : 'text-muted-foreground-1');
             }
             const txtSpan = label.querySelector('.flex-1');
             if (txtSpan) {
-                txtSpan.classList.remove('text-primary', 'text-base-content');
-                txtSpan.classList.add(on ? 'text-primary' : 'text-base-content');
+                txtSpan.classList.remove('text-primary', 'text-foreground');
+                txtSpan.classList.add(on ? 'text-primary' : 'text-foreground');
             }
         }
         @endif

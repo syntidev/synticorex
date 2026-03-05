@@ -3,10 +3,12 @@
     $description = $tenant->description ?? null;
     $slogan      = $tenant->slogan ?? null;
 
-    // Imagen de la sección: hero > logo > placeholder
+    // Imagen de la sección: about_image > hero_main > logo > placeholder
     $businessImage = null;
-    if (!empty($customization->hero_filename)) {
-        $businessImage = asset('storage/tenants/' . $tenant->id . '/' . $customization->hero_filename);
+    if (!empty($customization->about_image_filename)) {
+        $businessImage = asset('storage/tenants/' . $tenant->id . '/' . $customization->about_image_filename);
+    } elseif (!empty($customization->hero_main_filename)) {
+        $businessImage = asset('storage/tenants/' . $tenant->id . '/' . $customization->hero_main_filename);
     }
     
     // Verificar si existe logo
@@ -15,7 +17,7 @@
         : null;
 @endphp
 
-<section id="about" class="py-8 sm:py-16 lg:py-24 bg-base-200/50">
+<section id="about" class="py-8 sm:py-16 lg:py-24 bg-surface/50">
     <div class="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col lg:flex-row gap-10 lg:gap-16 items-center">
 
@@ -24,18 +26,18 @@
                 <span class="text-primary text-xs font-black uppercase tracking-[0.2em] mb-3 block">
                     Acerca de nosotros
                 </span>
-                <h2 class="text-base-content text-2xl font-semibold md:text-3xl lg:text-4xl mb-4">
+                <h2 class="text-foreground text-2xl font-semibold md:text-3xl lg:text-4xl mb-4">
                     {{ $tenant->business_name }}
                 </h2>
                 @if($slogan)
-                    <p class="text-base-content/50 text-sm italic mb-5">"{{ $slogan }}"</p>
+                    <p class="text-foreground/50 text-sm italic mb-5">"{{ $slogan }}"</p>
                 @endif
                 @if($description)
-                    <p class="text-base-content/75 leading-relaxed text-base">
+                    <p class="text-foreground/75 leading-relaxed text-base">
                         {{ $description }}
                     </p>
                 @else
-                    <p class="text-base-content/40 text-sm italic">
+                    <p class="text-foreground/40 text-sm italic">
                         Agrega una descripción de tu empresa en el dashboard → Información.
                     </p>
                 @endif
@@ -55,7 +57,7 @@
                     <div class="relative w-full max-w-xs">
                         <div class="absolute -top-3 -right-3 w-24 h-24 bg-primary/10 rounded-full blur-2xl pointer-events-none"></div>
                         <div class="absolute -bottom-3 -left-3 w-20 h-20 bg-primary/5 rounded-full blur-xl pointer-events-none"></div>
-                        <div class="relative rounded-3xl overflow-hidden shadow-lg border border-base-content/10 aspect-square">
+                        <div class="relative rounded-3xl overflow-hidden shadow-lg border border-border aspect-square">
                             <img src="{{ $businessImage }}"
                                  alt="{{ $tenant->business_name }}"
                                  class="w-full h-full object-cover"
@@ -66,7 +68,7 @@
                     {{-- Solo logo disponible: centrado en panel neutro --}}
                     <div class="relative w-full max-w-xs">
                         <div class="absolute -top-3 -right-3 w-24 h-24 bg-primary/10 rounded-full blur-2xl pointer-events-none"></div>
-                        <div class="relative bg-base-100 border border-base-content/10 rounded-3xl p-10 shadow-sm flex items-center justify-center aspect-square">
+                        <div class="relative bg-background border border-border rounded-3xl p-10 shadow-sm flex items-center justify-center aspect-square">
                             {{-- Logo SVG inline --}}
                             <svg xmlns="http://www.w3.org/2000/svg" 
                                  viewBox="0 0 100 100" 
@@ -81,12 +83,12 @@
                 @else
                     {{-- Sin imagen: placeholder profesional --}}
                     <div class="relative w-full max-w-xs">
-                        <div class="relative bg-base-100 border border-base-content/10 rounded-3xl p-10 shadow-sm flex flex-col items-center justify-center aspect-square gap-4">
+                        <div class="relative bg-background border border-border rounded-3xl p-10 shadow-sm flex flex-col items-center justify-center aspect-square gap-4">
                             <svg class="w-16 h-16 text-primary/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                       d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
                             </svg>
-                            <p class="text-base-content/30 text-xs text-center">
+                            <p class="text-foreground/30 text-xs text-center">
                                 {{ $tenant->business_name }}
                             </p>
                         </div>

@@ -39,10 +39,10 @@
                 }
             }
         @endphp
-        <nav class="hidden space-x-6 lg:flex items-center">
-            <a href="#home" class="text-sm font-semibold text-foreground/70 hover:text-primary transition-colors">Home</a>
+        <nav class="hidden space-x-6 lg:flex items-center" id="desktop-nav">
+            <a href="#home" data-nav-link="home" class="nav-link text-sm font-semibold text-foreground/70 hover:text-primary transition-colors px-2 py-1 rounded-lg">Inicio</a>
             @foreach($visibleNavLinks as $link)
-                <a href="{{ $link['anchor'] }}" class="text-sm font-semibold text-foreground/70 hover:text-primary transition-colors">
+                <a href="{{ $link['anchor'] }}" data-nav-link="{{ str_replace('#', '', $link['anchor']) }}" class="nav-link text-sm font-semibold text-foreground/70 hover:text-primary transition-colors px-2 py-1 rounded-lg">
                     {{ $link['label'] }}
                 </a>
             @endforeach
@@ -111,11 +111,12 @@
     </div>
     {{-- Mobile menu dropdown --}}
     <div id="mobile-menu" class="hidden lg:hidden border-t border-base-200 bg-background px-4 py-3 space-y-2">
-      <a href="#home" class="block rounded-lg px-3 py-2 text-sm font-semibold text-foreground/70 hover:bg-primary/10 hover:text-primary transition-colors">Home</a>
+      <a href="#home" data-nav-link="home" class="nav-link block rounded-lg px-3 py-2 text-sm font-semibold text-foreground/70 hover:bg-primary/10 hover:text-primary transition-colors"
+         onclick="document.getElementById('mobile-menu').classList.add('hidden')">Inicio</a>
       @foreach($visibleNavLinks as $link)
-        <a href="{{ $link['anchor'] }}" 
+        <a href="{{ $link['anchor'] }}" data-nav-link="{{ str_replace('#', '', $link['anchor']) }}"
            onclick="document.getElementById('mobile-menu').classList.add('hidden')"
-           class="block rounded-lg px-3 py-2 text-sm font-semibold text-foreground/70 hover:bg-primary/10 hover:text-primary transition-colors">
+           class="nav-link block rounded-lg px-3 py-2 text-sm font-semibold text-foreground/70 hover:bg-primary/10 hover:text-primary transition-colors">
           {{ $link['label'] }}
         </a>
       @endforeach

@@ -62,6 +62,7 @@ class TenantRendererController extends Controller
                 'customization',
                 'products' => fn($q) => $q
                     ->where('is_active', true)
+                    ->orderByDesc('is_featured')
                     ->orderBy('position')
                     ->orderByDesc('created_at'),
                 'products.galleryImages',
@@ -185,6 +186,7 @@ class TenantRendererController extends Controller
                 'customization',
                 'products' => fn($q) => $q
                     ->where('is_active', true)
+                    ->orderByDesc('is_featured')
                     ->orderBy('position'),
                 'products.galleryImages',
                 'services' => fn($q) => $q
@@ -268,7 +270,7 @@ class TenantRendererController extends Controller
             $tenant = Tenant::with([
                 'plan',
                 'customization',
-                'products' => fn($q) => $q->orderBy('position'),
+                'products' => fn($q) => $q->orderByDesc('is_featured')->orderBy('position'),
                 'products.galleryImages',
                 'services' => fn($q) => $q->orderBy('position'),
                 'branches',

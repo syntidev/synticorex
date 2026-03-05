@@ -1,55 +1,60 @@
         <!-- Modal: Servicio -->
         <div id="service-modal" class="crud-overlay"
              role="dialog" aria-modal="true" aria-labelledby="service-modal-title" aria-hidden="true">
-            <div class="crud-dialog max-w-2xl">
+            <div class="crud-dialog max-w-lg">
                 <div class="crud-dialog-header">
-                    <h3 class="crud-dialog-title" id="service-modal-title">Agregar Servicio</h3>
+                    <h3 class="crud-dialog-title flex items-center gap-2" id="service-modal-title">
+                        <span class="iconify tabler--briefcase size-4 opacity-80" aria-hidden="true"></span>
+                        Agregar Servicio
+                    </h3>
                     <button class="crud-dialog-close" onclick="closeServiceModal()" aria-label="Cerrar modal">
-                        <span class="iconify tabler--x size-5" aria-hidden="true"></span>
+                        <span class="iconify tabler--x size-4" aria-hidden="true"></span>
                     </button>
                 </div>
-                <div class="crud-dialog-body p-7">
-                    <form id="service-form" onsubmit="saveService(event)">
+                <div class="crud-dialog-body">
+                    <form id="service-form" onsubmit="saveService(event)" class="flex flex-col gap-3">
                         <input type="hidden" id="service-id">
                         <input type="hidden" id="service-icon-name">
 
                         {{-- Mode tabs: Plan 2/3 only --}}
                         @if($plan->id !== 1)
-                        <div class="svc-segment w-full mb-6" role="tablist" aria-label="Modo de representación del servicio">
+                        <div class="svc-segment w-full" role="tablist" aria-label="Modo de representación del servicio">
                             <button type="button" id="svc-tab-icon" role="tab"
-                                class="seg-active flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg text-sm font-bold transition-all"
+                                class="seg-active flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg text-sm font-bold transition-all"
                                 onclick="setServiceModalMode('icon')">
                                 <span class="iconify tabler--color-picker size-4" aria-hidden="true"></span> Ícono
                             </button>
                             <button type="button" id="svc-tab-image" role="tab"
-                                class="flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg text-sm font-bold transition-all"
+                                class="flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg text-sm font-bold transition-all"
                                 onclick="setServiceModalMode('image')">
                                 <span class="iconify tabler--photo-up size-4" aria-hidden="true"></span> Imagen
                             </button>
                         </div>
                         @endif
 
-                        {{-- ICON PICKER (Plan 1: always; Plan 2/3: when icon mode) --}}
-                        <div id="svc-section-icon" class="form-control py-2 mb-4">
-                            <label class="inline-block text-sm font-medium text-foreground mb-1"><span class="font-semibold">Ícono del Servicio</span></label>
+                        {{-- ICON PICKER --}}
+                        <div id="svc-section-icon" class="flex flex-col gap-2">
+                            <label class="inline-block text-xs font-semibold text-muted-foreground-1 uppercase tracking-wide">Ícono del Servicio</label>
 
-                            {{-- Current selection preview --}}
-                            <div class="flex flex-col items-center p-7 rounded-2xl mb-6 border" style="background:linear-gradient(135deg,var(--synti-soft) 0%,transparent 60%);border-color:var(--synti-bdr);">
-                                <div class="size-20 rounded-full flex items-center justify-center shrink-0 mb-4 border-2" style="background:var(--synti-soft);border-color:var(--synti-bdr);">
-                                    <span id="icon-preview-el" class="iconify tabler--settings size-12 text-primary"></span>
+                            {{-- Compact selection preview --}}
+                            <div class="flex items-center gap-3 p-3 rounded-xl border" style="background:linear-gradient(135deg,var(--synti-soft) 0%,transparent 60%);border-color:var(--synti-bdr);">
+                                <div class="size-12 rounded-xl flex items-center justify-center shrink-0 border-2" style="background:var(--synti-soft);border-color:var(--synti-bdr);">
+                                    <span id="icon-preview-el" class="iconify tabler--settings size-7 text-primary"></span>
                                 </div>
-                                <p id="icon-preview-label" class="text-sm font-semibold text-base-content text-center mb-0">Sin ícono seleccionado</p>
-                                <p class="text-xs text-base-content/40 text-center mt-1">Busca y selecciona un ícono</p>
+                                <div class="min-w-0">
+                                    <p id="icon-preview-label" class="text-sm font-semibold text-foreground truncate">Sin ícono seleccionado</p>
+                                    <p class="text-xs text-muted-foreground-1">Busca y selecciona un ícono abajo</p>
+                                </div>
                             </div>
 
                             {{-- Search --}}
-                            <input type="text" id="icon-search" class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none mb-4"
-                                placeholder="Busca: scissors, camera, truck, heart..."
+                            <input type="text" id="icon-search" class="py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus"
+                                placeholder="Busca: scissors, camera, truck..."
                                 oninput="filterIcons(this.value)" autocomplete="off">
 
                             {{-- Icon Grid --}}
-                            <div id="icon-picker-grid" class="grid grid-cols-6 gap-3 max-h-80 overflow-y-auto p-3 rounded-lg bg-layer border border-border"></div>
-                            <p class="text-xs text-base-content/30 mt-3 text-center">60+ iconos disponibles</p>
+                            <div id="icon-picker-grid" class="grid grid-cols-7 gap-2 max-h-44 overflow-y-auto p-2.5 rounded-lg bg-layer border border-border"></div>
+                            <p class="text-xs text-muted-foreground-1 text-center">60+ iconos disponibles</p>
                             
                             {{-- Hidden div to force Tailwind to generate icon classes --}}
                             <div class="hidden">
@@ -81,8 +86,8 @@
 
                         {{-- IMAGE UPLOAD (Plan 2/3 only; hidden by default) --}}
                         @if($plan->id !== 1)
-                        <div id="svc-section-image" class="form-control py-2" style="display: none;">
-                            <label class="inline-block text-sm font-medium text-foreground mb-1"><span class="font-semibold">Imagen del Servicio</span></label>
+                        <div id="svc-section-image" class="flex flex-col gap-2" style="display: none;">
+                            <label class="inline-block text-xs font-semibold text-muted-foreground-1 uppercase tracking-wide">Imagen del Servicio</label>
                             <div class="image-preview" id="service-image-preview" style="display: none;">
                                 <img id="service-image-preview-img" src="" alt="Preview">
                                 <button type="button" onclick="cancelServiceImage()" class="p-1 rounded-full transition-colors text-foreground hover:bg-muted-hover absolute top-1 right-1">
@@ -90,40 +95,45 @@
                                 </button>
                             </div>
                             <div id="service-upload-zone"
-                                 class="border-2 border-dashed border-base-content/20 rounded-lg p-5 text-center cursor-pointer hover:border-primary hover:bg-primary/5 transition-all"
+                                 class="border-2 border-dashed border-border rounded-lg p-3.5 text-center cursor-pointer hover:border-primary hover:bg-primary/5 transition-all"
                                  onclick="document.getElementById('service-image').click()"
                                  ondragover="event.preventDefault(); this.classList.add('border-primary','bg-primary/5')"
                                  ondragleave="this.classList.remove('border-primary','bg-primary/5')"
                                  ondrop="event.preventDefault(); this.classList.remove('border-primary','bg-primary/5'); document.getElementById('service-image').files = event.dataTransfer.files; previewServiceImage({target: document.getElementById('service-image')})">
-                                <span class="iconify tabler--cloud-upload size-10 mx-auto text-base-content/30 mb-1.5"></span>
-                                <p class="text-sm font-medium text-base-content/60">Arrastra imagen aquí o <span class="text-primary font-bold">clickea para elegir</span></p>
-                                <p class="text-xs text-base-content/40 mt-1">PNG, JPG, WebP · Máx 2MB · Se redimensiona a 800px</p>
+                                <span class="iconify tabler--cloud-upload size-7 mx-auto text-muted-foreground-1 mb-1"></span>
+                                <p class="text-sm font-medium text-foreground/70">Arrastra o <span class="text-primary font-bold">elige imagen</span></p>
+                                <p class="text-xs text-muted-foreground-1 mt-0.5">PNG, JPG, WebP · Máx 2MB</p>
                             </div>
                             <input type="file" id="service-image" accept="image/*" class="hidden" onchange="previewServiceImage(event)">
                         </div>
                         @endif
 
-                        <div class="form-control py-2">
-                            <label for="service-name" class="inline-block text-sm font-medium text-foreground mb-1">Nombre *</label>
-                            <input type="text" id="service-name" class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none" required maxlength="100">
-                        </div>
-
-                        <div class="form-control py-2">
-                            <label for="service-description" class="inline-block text-sm font-medium text-foreground mb-1">Descripción</label>
-                            <textarea id="service-description" class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none" rows="3" maxlength="500"></textarea>
-                        </div>
-
-                        <div class="form-control py-2">
-                            <label class="inline-block text-sm font-medium text-foreground mb-1">Servicio Activo</label>
-                            <label class="flex items-center gap-3 cursor-pointer">
-                                <input type="checkbox" id="service-is-active" class="toggle toggle-success" checked>
-                                <span class="text-sm text-base-content/60">Mostrar en landing page</span>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="col-span-2 sm:col-span-1">
+                                <label for="service-name" class="inline-block text-xs font-semibold text-muted-foreground-1 uppercase tracking-wide mb-1.5">Nombre *</label>
+                                <input type="text" id="service-name" class="py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50" required maxlength="100" placeholder="Nombre del servicio">
+                            </div>
+                            <label class="col-span-2 sm:col-span-1 flex flex-col gap-1.5 cursor-pointer p-2.5 rounded-lg bg-layer border border-layer-line hover:bg-layer-hover transition-colors justify-center">
+                                <span class="text-xs font-semibold text-muted-foreground-1 uppercase tracking-wide">Activo</span>
+                                <span class="flex items-center gap-2">
+                                    <input type="checkbox" id="service-is-active"
+                                           class="size-4 rounded-sm border-border text-primary focus:ring-primary/20 cursor-pointer" checked>
+                                    <span class="text-xs text-foreground">Mostrar en landing</span>
+                                </span>
                             </label>
                         </div>
 
-                        <div class="flex gap-3 pt-5 border-t border-border justify-end">
-                            <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg bg-layer border border-layer-line text-layer-foreground shadow-2xs hover:bg-layer-hover disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-layer-focus" onclick="closeServiceModal()">Cancelar</button>
-                            <button type="submit" class="py-2 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg bg-primary border border-primary-line text-primary-foreground hover:bg-primary-hover focus:outline-hidden focus:bg-primary-focus disabled:opacity-50 disabled:pointer-events-none shadow-sm">
+                        <div>
+                            <label for="service-description" class="inline-block text-xs font-semibold text-muted-foreground-1 uppercase tracking-wide mb-1.5">Descripción</label>
+                            <textarea id="service-description" class="py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50" rows="2" maxlength="500" placeholder="Qué incluye este servicio..."></textarea>
+                        </div>
+
+                        <div class="flex gap-2.5 pt-3 border-t border-border mt-1">
+                            <button type="button"
+                                    class="py-2 px-3 inline-flex items-center justify-center gap-2 text-sm font-medium rounded-lg bg-layer border border-layer-line text-layer-foreground shadow-2xs hover:bg-layer-hover focus:outline-hidden"
+                                    onclick="closeServiceModal()">Cancelar</button>
+                            <button type="submit"
+                                    class="py-2 px-4 inline-flex items-center justify-center gap-2 text-sm font-medium rounded-lg bg-primary border border-primary-line text-primary-foreground hover:bg-primary-hover focus:outline-hidden disabled:opacity-50 flex-1 shadow-sm">
                                 <span class="iconify tabler--device-floppy size-4" aria-hidden="true"></span>
                                 Guardar Servicio
                             </button>

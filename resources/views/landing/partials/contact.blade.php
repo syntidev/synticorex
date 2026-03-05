@@ -14,7 +14,7 @@
     $schedule     = data_get($tenant->settings, 'business_info.schedule_display', '');
 @endphp
 
-<section id="contacto" class="bg-base-200 py-8 sm:py-16 lg:py-24">
+<section id="contact" class="bg-base-200 py-8 sm:py-16 lg:py-24">
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
     <div class="text-center mb-12">
       <h2 class="text-base-content text-2xl font-semibold md:text-3xl lg:text-4xl">

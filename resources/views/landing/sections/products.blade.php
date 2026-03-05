@@ -8,7 +8,7 @@
     $hasMore         = $planLimit > $defaultVisible && $hidden->count() > 0;
 @endphp
 
-<section id="products" class="bg-background py-8 sm:py-16 lg:py-24">
+<section id="products" class="bg-surface py-8 sm:py-16 lg:py-24">
     <div class="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8">
 
         {{-- Section Header --}}
@@ -21,7 +21,7 @@
         </div>
 
         {{-- Product Grid --}}
-        <div id="product-grid" class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
             {{-- Primeros 6 — siempre visibles --}}
             @foreach($visible as $product)
                 @include('landing.sections.product-card', ['product' => $product, 'tenant' => $tenant, 'plan' => $plan])
@@ -44,9 +44,9 @@
                 <button
                     id="btn-load-more-products"
                     onclick="loadMoreProducts(this)"
-                    class="inline-flex items-center py-2 px-4 rounded-lg font-medium transition-colors bg-primary text-white hover:bg-primary/90">
+                    class="py-2 px-4 inline-flex items-center gap-x-2 text-sm font-medium text-nowrap rounded-xl bg-primary border border-primary-line text-primary-foreground hover:bg-primary-hover focus:outline-hidden focus:bg-primary-focus transition disabled:opacity-50 disabled:pointer-events-none">
                     <span class="btn-label">Ver {{ $firstBatch }} producto{{ $firstBatch > 1 ? 's' : '' }} más</span>
-                    <span class="icon-[tabler--chevron-down] size-5"></span>
+                    <span class="iconify tabler--chevron-down size-5"></span>
                 </button>
             </div>
 

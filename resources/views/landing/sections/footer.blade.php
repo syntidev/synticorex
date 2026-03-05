@@ -1,79 +1,153 @@
-<footer class="bg-background border-t border-border py-8 sm:py-16 lg:py-24">
-    <div class="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8">
-        {{-- Fila Principal --}}
-        <div class="flex flex-col md:flex-row items-center justify-between gap-10 mb-12">
-            
-            {{-- Identidad de Marca (Tenant) --}}
-            <div class="flex items-center gap-4">
-                <div class="w-12 h-12 bg-primary rounded-2xl flex items-center justify-center shadow-lg shadow-primary/20">
-                    <iconify-icon icon="tabler:layers" width="26" height="26" style="color:#fff;"></iconify-icon>
-                </div>
-                <span class="text-2xl font-black text-foreground italic tracking-tighter uppercase leading-none">
-                    {{ $tenant->business_name }}
-                </span>
-            </div>
+{{-- ═══════════════════════════════════════════════════════════════════════════════
+     SYNTIweb — Footer Section
+     Preline 4.1.2 + Tailwind v4 | Nav dinámica + social por plan
+     Compatible: studio.blade.php + catalog.blade.php
+═══════════════════════════════════════════════════════════════════════════════ --}}
+@php
+    // ── Nav dinámica (espeja lógica del header) ───────────────────────────────
+    $footerNavMap = [
+        'products'        => ['label' => 'Productos',   'anchor' => '#products'],
+        'services'        => ['label' => 'Servicios',   'anchor' => '#services'],
+        'about'           => ['label' => 'Nosotros',    'anchor' => '#about'],
+        'contact'         => ['label' => 'Contacto',    'anchor' => '#contact'],
+        'testimonials'    => ['label' => 'Testimonios', 'anchor' => '#testimonials'],
+        'faq'             => ['label' => 'FAQ',         'anchor' => '#faq'],
+        'branches'        => ['label' => 'Sucursales',  'anchor' => '#branches'],
+        'payment_methods' => ['label' => 'Pagos',       'anchor' => '#payment_methods'],
+    ];
+    $footerLinks = [];
+    foreach ($customization->getSectionsOrder() as $sec) {
+        $k = $sec['name'] ?? '';
+        if (($sec['visible'] ?? true)
+            && $customization->canAccessSection($k, $tenant->plan_id)
+            && isset($footerNavMap[$k])) {
+            if (!collect($footerLinks)->contains('anchor', $footerNavMap[$k]['anchor'])) {
+                $footerLinks[] = $footerNavMap[$k];
+            }
+        }
+    }
 
-            {{-- Navegación: Etiquetas con Espaciado (tracking-widest) --}}
-            <nav class="flex flex-wrap justify-center gap-x-12 gap-y-4">
-                <a href="#products" class="text-sm font-bold text-foreground/70 hover:text-primary transition-all uppercase tracking-[0.3em]">Productos | </a>
-                <a href="#services" class="text-sm font-bold text-foreground/70 hover:text-primary transition-all uppercase tracking-[0.3em]">Servicios | </a>
-                <a href="#faq" class="text-sm font-bold text-foreground/70 hover:text-primary transition-all uppercase tracking-[0.2em]">Ayuda </a>
-            </nav>
+    // ── Redes sociales con límite por plan ───────────────────────────────────
+    // OPORTUNIDAD(1)=2 redes, CRECIMIENTO(2)=4 redes, VISIÓN(3)=ilimitadas
+    $snLimit = match((int)($tenant->plan_id ?? 1)) {
+        1 => 2,
+        2 => 4,
+        default => 999,
+    };
+    $rawSn   = $customization->social_networks ?? [];
+    $sn      = is_array($rawSn) ? $rawSn : [];
+    $snOrder = ['instagram', 'facebook', 'tiktok', 'twitter', 'linkedin', 'youtube'];
+    $footerSocials = [];
+    foreach ($snOrder as $network) {
+        if (count($footerSocials) >= $snLimit) break;
+        $handle = trim($sn[$network] ?? '');
+        if (!$handle) continue;
+        $isUrl = str_starts_with($handle, 'http');
+        $h = ltrim($handle, '@');
+        $footerSocials[] = [
+            'network'    => $network,
+            'url'        => match($network) {
+                'instagram' => $isUrl ? $handle : 'https://instagram.com/' . $h,
+                'facebook'  => $isUrl ? $handle : 'https://facebook.com/' . $h,
+                'tiktok'    => $isUrl ? $handle : 'https://tiktok.com/@' . $h,
+                'twitter'   => $isUrl ? $handle : 'https://x.com/' . $h,
+                'linkedin'  => $isUrl ? $handle : 'https://linkedin.com/company/' . $h,
+                'youtube'   => $isUrl ? $handle : 'https://youtube.com/@' . $h,
+                default     => '#',
+            },
+            'icon'       => match($network) {
+                'instagram' => 'tabler--brand-instagram',
+                'facebook'  => 'tabler--brand-facebook',
+                'tiktok'    => 'tabler--brand-tiktok',
+                'twitter'   => 'tabler--brand-x',
+                'linkedin'  => 'tabler--brand-linkedin',
+                'youtube'   => 'tabler--brand-youtube',
+                default     => 'tabler--link',
+            },
+            'hover'      => match($network) {
+                'instagram' => 'hover:text-pink-500',
+                'facebook'  => 'hover:text-blue-500',
+                'youtube'   => 'hover:text-red-500',
+                'linkedin'  => 'hover:text-blue-600',
+                default     => 'hover:text-foreground',
+            },
+        ];
+    }
+@endphp
 
-            {{-- Social: Redes Sociales --}}
-            @php
-                $rawSn = $customization->social_networks ?? [];
-                $sn = is_array($rawSn) ? $rawSn : [];
+<footer id="footer" class="relative overflow-hidden bg-footer border-t border-base-200">
 
-                // Build full URLs from handles/usernames
-                $socialLinks = [];
-                foreach ($sn as $network => $handle) {
-                    $handle = trim($handle);
-                    if (!$handle) continue;
-                    $isUrl = str_starts_with($handle, 'http://') || str_starts_with($handle, 'https://');
-                    $h = ltrim($handle, '@');
-                    $socialLinks[$network] = match($network) {
-                        'instagram' => $isUrl ? $handle : 'https://instagram.com/' . $h,
-                        'facebook'  => $isUrl ? $handle : 'https://facebook.com/' . $h,
-                        'tiktok'    => $isUrl ? $handle : 'https://tiktok.com/@' . $h,
-                        'linkedin'  => $isUrl ? $handle : 'https://linkedin.com/in/' . $h,
-                        'youtube'   => $isUrl ? $handle : 'https://youtube.com/@' . $h,
-                        'x'         => $isUrl ? $handle : 'https://x.com/' . $h,
-                        default     => $isUrl ? $handle : '#',
-                    };
-                }
+    {{-- Líneas decorativas (estilo Preline) --}}
+    <div class="pointer-events-none absolute inset-0" aria-hidden="true">
+        <svg class="absolute inset-0 h-full w-full" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+            <path d="M -50 60  Q 300 10  700 70  T 1400 40" stroke="currentColor" stroke-width="1" fill="none" class="stroke-black/5 dark:stroke-white/5"/>
+            <path d="M -50 100 Q 400 50  800 110 T 1500 80" stroke="currentColor" stroke-width="1" fill="none" class="stroke-black/5 dark:stroke-white/5"/>
+        </svg>
+    </div>
 
-                $socialIconNames = [
-                    'instagram' => 'brand-instagram',
-                    'facebook'  => 'brand-facebook',
-                    'tiktok'    => 'brand-tiktok',
-                    'linkedin'  => 'brand-linkedin',
-                    'youtube'   => 'brand-youtube',
-                    'x'         => 'brand-x',
-                ];
-            @endphp
-            <div class="flex items-center gap-6">
-                @foreach($socialLinks as $network => $url)
-                    <a href="{{ $url }}" target="_blank" rel="noopener noreferrer"
-                       class="text-foreground/30 hover:text-primary transition-transform hover:scale-110"
-                       title="{{ ucfirst($network === 'x' ? 'Twitter/X' : $network) }}">
-                        <iconify-icon icon="tabler:{{ $socialIconNames[$network] ?? 'link' }}" width="24" height="24"></iconify-icon>
+    <div class="relative mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8">
+
+        {{-- ── Fila principal ── --}}
+        <div class="flex flex-col gap-6 py-8 sm:flex-row sm:items-center sm:justify-between">
+
+            {{-- Logo + Nombre del negocio --}}
+            <a href="#home" class="flex items-center gap-3 shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="32" height="32" aria-hidden="true">
+                    <path d="M 30,22 L 78,22 L 78,70 Q 78,78 70,78 L 62,78 L 62,38 L 22,38 L 22,30 Q 22,22 30,22 Z" fill="#1a1a1a"/>
+                    <circle cx="38" cy="63" r="14" fill="#4A80E4"/>
+                </svg>
+                <span class="text-base font-bold tracking-tight text-foreground">{{ $tenant->business_name }}</span>
+            </a>
+
+            {{-- Nav dinámica --}}
+            @if(count($footerLinks) > 0)
+            <nav class="flex flex-wrap items-center gap-x-5 gap-y-2">
+                @foreach($footerLinks as $link)
+                    <a href="{{ $link['anchor'] }}"
+                       class="text-sm font-medium text-muted-foreground-1 hover:text-foreground transition-colors">
+                        {{ $link['label'] }}
                     </a>
                 @endforeach
+            </nav>
+            @endif
+
+            {{-- Redes sociales --}}
+            <div class="flex items-center gap-3">
+                {{-- WhatsApp: siempre visible si configurado (no cuenta para el límite) --}}
+                @if($tenant->getActiveWhatsapp())
+                <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $tenant->getActiveWhatsapp()) }}"
+                   target="_blank" rel="noopener noreferrer"
+                   aria-label="WhatsApp"
+                   class="text-muted-foreground-1 hover:text-success transition-colors">
+                    <span class="iconify tabler--brand-whatsapp size-5"></span>
+                </a>
+                @endif
+
+                @foreach($footerSocials as $sl)
+                <a href="{{ $sl['url'] }}"
+                   target="_blank" rel="noopener noreferrer"
+                   aria-label="{{ ucfirst($sl['network']) }}"
+                   class="text-muted-foreground-1 {{ $sl['hover'] }} transition-colors">
+                    <span class="iconify {{ $sl['icon'] }} size-5"></span>
+                </a>
+                @endforeach
             </div>
+
         </div>
 
-        {{-- Créditos de Ingeniería y Orgullo Nacional --}}
-        <div class="pt-8 border-t border-border/5 flex flex-col items-center gap-4 text-center">
-            <div class="flex flex-wrap items-center justify-center gap-2 text-[11px] font-medium text-foreground/40 italic">
-                
-				<p class="text-[10px] uppercase tracking-[0.5em] text-foreground/30 font-medium">
-                &copy; {{ date('Y') }} — {{ $tenant->business_name }} | Desarrollado con Ingeniería de Última Generación por 
-                <a href="https://syntiweb.com" target="_blank" class="font-black text-foreground/60 hover:text-primary transition-colors tracking-normal">SYNTIweb.com</a>
-				</p>
-            </div>
-            
-            
+        {{-- ── Barra de copyright ── --}}
+        <div class="flex flex-col items-center justify-between gap-2 border-t border-base-200 py-4 sm:flex-row">
+            <p class="text-xs text-muted-foreground-1">
+                &copy; {{ date('Y') }} {{ $tenant->business_name }}. Todos los derechos reservados.
+            </p>
+            <p class="text-xs text-muted-foreground-1">
+                Potenciado por
+                <a href="https://syntiweb.com" target="_blank" rel="noopener noreferrer"
+                   class="font-semibold text-foreground hover:text-primary transition-colors">
+                    SYNTIweb
+                </a>
+            </p>
         </div>
+
     </div>
 </footer>

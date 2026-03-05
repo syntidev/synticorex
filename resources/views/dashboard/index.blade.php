@@ -83,36 +83,63 @@
             animation: synti-breathe-off 2s ease-in-out infinite;
         }
 
-        /* CRUD Modals */
+        /* CRUD Modals — layout: sticky header + scrollable body */
         .crud-overlay {
             display: none; position: fixed; inset: 0;
-            background: rgba(0,0,0,.5); backdrop-filter: blur(4px);
-            z-index: 9999; align-items: center; justify-content: center; padding: 1rem;
+            background: rgba(0,0,0,.55); backdrop-filter: blur(6px);
+            z-index: 9999; align-items: center; justify-content: center;
+            padding: 2rem 1rem;
         }
         .crud-overlay.show { display: flex; }
         .crud-dialog {
-            background: #fff; border-radius: 0.75rem;
-            width: 100%; max-width: 600px; max-height: 90vh; overflow-y: auto;
+            background: var(--color-card, #fff);
+            border: 1px solid var(--color-card-line, #e5e7eb);
+            border-radius: 1rem;
+            width: 100%; max-width: 560px;
+            max-height: calc(100vh - 4rem);
+            display: flex; flex-direction: column;
             z-index: 10000;
-            box-shadow: 0 20px 25px -5px rgba(0,0,0,.1), 0 10px 10px -5px rgba(0,0,0,.04);
-            border: 1px solid #e5e7eb;
+            box-shadow: 0 24px 48px -8px rgba(0,0,0,.28), 0 0 0 1px rgba(255,255,255,.06);
+            animation: modalIn .18s ease-out;
+        }
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(.96) translateY(6px); }
+            to   { opacity: 1; transform: scale(1)  translateY(0); }
         }
         .crud-dialog-header {
-            padding: 1.25rem 1.5rem; background: #4A80E4; color: #fff;
+            padding: .875rem 1.25rem;
+            background: var(--color-primary, #4A80E4); color: #fff;
             display: flex; justify-content: space-between; align-items: center;
-            border-radius: 0.75rem 0.75rem 0 0;
+            border-radius: 1rem 1rem 0 0;
+            flex-shrink: 0;
         }
-        .crud-dialog-title { color: #fff !important; font-size: 1.1rem; }
+        .crud-dialog-title { color: #fff !important; font-size: .9375rem; font-weight: 600; letter-spacing: -.01em; }
         .crud-dialog-close {
-            background: rgba(255,255,255,.15); border: none; color: #fff; cursor: pointer;
-            width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
-            border-radius: 50%; transition: all .2s; backdrop-filter: blur(4px);
+            background: rgba(255,255,255,.18); border: none; color: #fff; cursor: pointer;
+            width: 28px; height: 28px; display: flex; align-items: center; justify-content: center;
+            border-radius: 50%; transition: background .15s, transform .15s; font-size: 1.1rem; line-height: 1;
+            flex-shrink: 0;
         }
-        .crud-dialog-close:hover { background: rgba(255,255,255,.3); transform: scale(1.05); }
-        .crud-dialog-body { padding: 1.5rem; }
+        .crud-dialog-close:hover { background: rgba(255,255,255,.32); transform: scale(1.08); }
+        .crud-dialog-body { padding: 1.25rem 1.25rem 1.5rem; overflow-y: auto; flex: 1; }
+        .crud-dialog-body::-webkit-scrollbar { width: 4px; }
+        .crud-dialog-body::-webkit-scrollbar-track { background: transparent; }
+        .crud-dialog-body::-webkit-scrollbar-thumb { background: var(--color-border, #d1d5db); border-radius: 4px; }
+        /* Compact form controls inside modals */
+        .crud-dialog-body .form-control,
+        .crud-dialog-body > form > div { margin-bottom: 0; }
+        /* Mobile: bottom-sheet */
         @media (max-width: 639px) {
-            .crud-dialog { max-width: 100%; max-height: 100vh; border-radius: 0; height: 100%; }
-            .crud-dialog-header { border-radius: 0; }
+            .crud-overlay { padding: 0; align-items: flex-end; }
+            .crud-dialog {
+                max-width: 100%; max-height: 92dvh; border-radius: 1.25rem 1.25rem 0 0;
+                animation: sheetIn .22s ease-out;
+            }
+            .crud-dialog-header { border-radius: 1.25rem 1.25rem 0 0; }
+            @keyframes sheetIn {
+                from { transform: translateY(24px); opacity: 0; }
+                to   { transform: translateY(0);    opacity: 1; }
+            }
         }
 
         /* Image previews */
@@ -390,6 +417,14 @@
                         </li>
                         <li>
                             <button class="sidebar-tab-btn" role="tab"
+                                    aria-selected="false" aria-controls="tab-visual"
+                                    data-tab="visual" tabindex="-1">
+                                <span class="iconify tabler--photo size-4 shrink-0"></span>
+                                Visual
+                            </button>
+                        </li>
+                        <li>
+                            <button class="sidebar-tab-btn" role="tab"
                                     aria-selected="false" aria-controls="tab-config"
                                     data-tab="config" tabindex="-1">
                                 <span class="iconify tabler--settings size-4 shrink-0"></span>
@@ -495,6 +530,9 @@
 
                 {{-- ═══ TAB 5: PULSO DEL NEGOCIO ═══ --}}
                 @include('dashboard.components.sales-section')
+
+                {{-- ═══ TAB: VISUAL ═══ --}}
+                @include('dashboard.components.visual-section')
 
                 {{-- ═══ TAB 6: CONFIGURACIÓN ═══ --}}
                 @include('dashboard.components.config-section')
