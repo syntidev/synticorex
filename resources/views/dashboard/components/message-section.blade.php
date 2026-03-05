@@ -116,7 +116,7 @@
 
                         @if($hasAccess)
                             <input type="checkbox"
-                                   class="toggle toggle-primary toggle-sm section-toggle"
+                                   class="relative w-[35px] h-[20px] bg-gray-200 checked:bg-primary border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 appearance-none focus:ring-primary-focus focus:ring-2 focus:ring-offset-2 before:inline-block before:size-[16px] before:bg-white before:rounded-full before:transform before:translate-x-0 checked:before:translate-x-full before:transition before:ease-in-out before:duration-200 before:shadow-sm section-toggle"
                                    id="section-{{ $key }}"
                                    @checked($isVisible)
                                    onchange="toggleSection('{{ $key }}', this.checked)">
@@ -165,7 +165,7 @@
         <div class="flex items-center gap-3 mb-3">
             <label class="text-xs font-medium text-muted-foreground-1">Visible:</label>
             <input type="checkbox" id="header-top-toggle"
-                   class="toggle toggle-primary toggle-sm"
+                   class="relative w-[35px] h-[20px] bg-gray-200 checked:bg-primary border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 appearance-none focus:ring-primary-focus focus:ring-2 focus:ring-offset-2 before:inline-block before:size-[16px] before:bg-white before:rounded-full before:transform before:translate-x-0 checked:before:translate-x-full before:transition before:ease-in-out before:duration-200 before:shadow-sm"
                    {{ $headerTopEnabled ? 'checked' : '' }}>
         </div>
         <div class="flex gap-2">
@@ -415,7 +415,7 @@
             </div>
         </div>
         <input type="checkbox" id="branches-toggle"
-               class="toggle toggle-success toggle-sm"
+               class="relative w-[35px] h-[20px] bg-gray-200 checked:bg-green-500 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 appearance-none focus:ring-green-500 focus:ring-2 focus:ring-offset-2 before:inline-block before:size-[16px] before:bg-white before:rounded-full before:transform before:translate-x-0 checked:before:translate-x-full before:transition before:ease-in-out before:duration-200 before:shadow-sm"
                {{ $branchesEnabled ? 'checked' : '' }}
                onchange="toggleBranchesSection()">
     </div>

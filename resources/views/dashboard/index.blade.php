@@ -7,349 +7,511 @@
     <meta name="description" content="Panel de administración de {{ $tenant->business_name }} — gestiona tu información, productos, servicios y diseño de tu sitio web.">
     <meta name="robots" content="noindex, nofollow">
     <title>Dashboard — {{ $tenant->business_name }} | SYNTIweb</title>
-    
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
+
     {{-- Chart.js para Analytics --}}
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-    
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-    
-    <style>
-        /* ══ SYNTIWEB Dashboard — Premium Design System ══ */
-        :root { --synti: #4D8FFF; --synti-glow: rgba(77,143,255,0.14); --synti-bdr: rgba(77,143,255,0.22); --synti-soft: rgba(77,143,255,0.10); }
 
-        /* Sidebar — posicionamiento vía clases Preline nativas */
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    <style>
+        /* ══ SYNTIWEB Dashboard — Preline CMS Sidebar ══ */
+        :root {
+            --synti: #4A80E4;
+            --synti-glow: rgba(74,128,228,0.14);
+            --synti-bdr: rgba(74,128,228,0.22);
+            --synti-soft: rgba(74,128,228,0.10);
+        }
 
         /* Tabs */
-        .tab-content { display:none; } .tab-content.active { display:block; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
 
         /* Brand fonts */
-        .card-title, .table-title, .crud-dialog-title { font-family:'Plus Jakarta Sans',sans-serif !important; letter-spacing:-0.3px; }
-        .sidebar-logo-text { font-family:'Plus Jakarta Sans',sans-serif; font-size:1.2rem; font-weight:800; letter-spacing:-0.5px; line-height:1; }
-        .sidebar-logo-synti { color:#fff; } .sidebar-logo-web { color:rgba(255,255,255,.7); }
-        #live-clock { font-family:'Plus Jakarta Sans',sans-serif; font-size:.8rem; font-weight:700; color:var(--synti); letter-spacing:.5px; }
-
-        /* Sidebar dark elegant */
-        #layout-sidebar { background:linear-gradient(180deg,#0f172a 0%,#1e293b 100%); color:#e2e8f0; }
-        #layout-sidebar .sidebar-footer-link { color:#e2e8f0 !important; }
-        #layout-sidebar .sidebar-nav li button {
-            color:rgba(226,232,240,.65); border-left:3px solid transparent;
-            padding:.65rem 1rem; border-radius:0 .5rem .5rem 0; margin-bottom:2px;
-            transition:all .2s ease;
+        .card-title, .table-title, .crud-dialog-title {
+            font-family: 'Plus Jakarta Sans', sans-serif !important;
+            letter-spacing: -0.3px;
         }
-        #layout-sidebar .sidebar-nav li button:hover { background:rgba(77,143,255,.12); color:#93c5fd; border-left-color:rgba(77,143,255,.5); }
-        #layout-sidebar .sidebar-nav li button.menu-active,
-        #layout-sidebar .sidebar-nav li button[aria-selected="true"] {
-            background:linear-gradient(90deg,rgba(77,143,255,.22) 0%,rgba(77,143,255,.06) 100%);
-            color:#60a5fa; border-left:3px solid #60a5fa; font-weight:600;
+        #live-clock {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: .8rem;
+            font-weight: 700;
+            color: var(--synti);
+            letter-spacing: .5px;
         }
 
-        /* Breathing dots */
-        @keyframes synti-breathe { 0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(34,197,94,.5)} 50%{opacity:.7;box-shadow:0 0 0 4px rgba(34,197,94,0)} }
-        @keyframes synti-breathe-off { 0%,100%{opacity:1} 50%{opacity:.5} }
-        .dot-online { display:inline-block; width:8px; height:8px; border-radius:50%; background:#22c55e; flex-shrink:0; animation:synti-breathe 2.5s ease-in-out infinite; }
-        .dot-offline { display:inline-block; width:8px; height:8px; border-radius:50%; background:#ef4444; flex-shrink:0; animation:synti-breathe-off 2s ease-in-out infinite; }
+        /* Sidebar tab navigation */
+        .sidebar-tab-btn {
+            display: flex; align-items: center; gap: .5rem; width: 100%;
+            padding: .5rem .625rem; border-radius: .5rem;
+            font-size: .8125rem; font-weight: 500;
+            color: var(--sidebar-2-nav-foreground, #6b7280);
+            background: transparent;
+            border: none; cursor: pointer;
+            transition: all .15s ease; text-align: start;
+        }
+        .sidebar-tab-btn:hover {
+            background: var(--sidebar-2-nav-hover, rgba(74,128,228,.08));
+        }
+        .sidebar-tab-btn.menu-active,
+        .sidebar-tab-btn[aria-selected="true"] {
+            background: var(--sidebar-2-nav-active, rgba(74,128,228,.12));
+            color: var(--synti);
+            font-weight: 600;
+        }
 
-        /* CRUD Modals — Preline 4.1.2 tokens */
-        .crud-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.5); backdrop-filter:blur(4px); z-index:9999; align-items:center; justify-content:center; padding:1rem; }
-        .crud-overlay.show { display:flex; }
-        .crud-dialog { background:var(--color-card); border-radius:0.75rem; width:100%; max-width:600px; max-height:90vh; overflow-y:auto; z-index:10000; box-shadow:0 20px 25px -5px rgba(0,0,0,.1), 0 10px 10px -5px rgba(0,0,0,.04); border:1px solid var(--color-card-line); }
-        .crud-dialog-header { padding:1.25rem 1.5rem; background:var(--color-primary); color:#fff; display:flex; justify-content:space-between; align-items:center; border-radius:0.75rem 0.75rem 0 0; }
-        .crud-dialog-title { color:#fff !important; font-size:1.1rem; }
-        .crud-dialog-close { background:rgba(255,255,255,.15); border:none; color:#fff; cursor:pointer; width:32px; height:32px; display:flex; align-items:center; justify-content:center; border-radius:50%; transition:all .2s; backdrop-filter:blur(4px); }
-        .crud-dialog-close:hover { background:rgba(255,255,255,.3); transform:scale(1.05); }
-        .crud-dialog-body { padding:1.5rem; }
-        @media(max-width:639px) { .crud-dialog { max-width:100%; max-height:100vh; border-radius:0; height:100%; } .crud-dialog-header { border-radius:0; } }
+        /* Breathing status dots */
+        @keyframes synti-breathe {
+            0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(34,197,94,.5); }
+            50% { opacity: .7; box-shadow: 0 0 0 4px rgba(34,197,94,0); }
+        }
+        @keyframes synti-breathe-off {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .5; }
+        }
+        .dot-online {
+            display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+            background: #22c55e; flex-shrink: 0;
+            animation: synti-breathe 2.5s ease-in-out infinite;
+        }
+        .dot-offline {
+            display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+            background: #ef4444; flex-shrink: 0;
+            animation: synti-breathe-off 2s ease-in-out infinite;
+        }
 
-        /* Form focus ring (FlyonUI native inputs) */
-        .input:focus, .textarea:focus, .select:focus, .file-input:focus { box-shadow:0 0 0 3px var(--synti-glow); border-color:var(--synti); }
+        /* CRUD Modals */
+        .crud-overlay {
+            display: none; position: fixed; inset: 0;
+            background: rgba(0,0,0,.5); backdrop-filter: blur(4px);
+            z-index: 9999; align-items: center; justify-content: center; padding: 1rem;
+        }
+        .crud-overlay.show { display: flex; }
+        .crud-dialog {
+            background: #fff; border-radius: 0.75rem;
+            width: 100%; max-width: 600px; max-height: 90vh; overflow-y: auto;
+            z-index: 10000;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,.1), 0 10px 10px -5px rgba(0,0,0,.04);
+            border: 1px solid #e5e7eb;
+        }
+        .crud-dialog-header {
+            padding: 1.25rem 1.5rem; background: #4A80E4; color: #fff;
+            display: flex; justify-content: space-between; align-items: center;
+            border-radius: 0.75rem 0.75rem 0 0;
+        }
+        .crud-dialog-title { color: #fff !important; font-size: 1.1rem; }
+        .crud-dialog-close {
+            background: rgba(255,255,255,.15); border: none; color: #fff; cursor: pointer;
+            width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
+            border-radius: 50%; transition: all .2s; backdrop-filter: blur(4px);
+        }
+        .crud-dialog-close:hover { background: rgba(255,255,255,.3); transform: scale(1.05); }
+        .crud-dialog-body { padding: 1.5rem; }
+        @media (max-width: 639px) {
+            .crud-dialog { max-width: 100%; max-height: 100vh; border-radius: 0; height: 100%; }
+            .crud-dialog-header { border-radius: 0; }
+        }
 
         /* Image previews */
-        .image-preview { margin-bottom:1rem; text-align:center; position:relative; }
-        .image-preview img { max-width:200px; max-height:200px; border-radius:.75rem; object-fit:cover; border:2px solid var(--synti-bdr); }
-        .gallery-thumb { position:relative; display:inline-block; }
-        .gallery-thumb img { width:80px; height:80px; border-radius:8px; object-fit:cover; border:2px solid color-mix(in oklch,var(--color-base-content) 15%,transparent); }
-        .gallery-thumb-delete { position:absolute; top:-6px; right:-6px; width:20px; height:20px; border-radius:50%; background:var(--color-error); color:#fff; border:none; font-size:12px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
-        .gallery-preview-thumb img { width:80px; height:80px; border-radius:8px; object-fit:cover; border:2px dashed var(--synti-bdr); }
+        .image-preview { margin-bottom: 1rem; text-align: center; position: relative; }
+        .image-preview img {
+            max-width: 200px; max-height: 200px; border-radius: .75rem;
+            object-fit: cover; border: 2px solid var(--synti-bdr);
+        }
+        .gallery-thumb { position: relative; display: inline-block; }
+        .gallery-thumb img {
+            width: 80px; height: 80px; border-radius: 8px;
+            object-fit: cover; border: 2px solid #d1d5db;
+        }
+        .gallery-thumb-delete {
+            position: absolute; top: -6px; right: -6px;
+            width: 20px; height: 20px; border-radius: 50%;
+            background: #ef4444; color: #fff; border: none;
+            font-size: 12px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .gallery-preview-thumb img {
+            width: 80px; height: 80px; border-radius: 8px;
+            object-fit: cover; border: 2px dashed var(--synti-bdr);
+        }
 
         /* Icon picker */
-        #icon-picker-grid { scrollbar-width:thin; scrollbar-color:var(--synti-bdr) transparent; }
-        .icon-pick-item { transition:all .18s; border:1px solid color-mix(in oklch,var(--color-base-content) 10%,transparent) !important; background:var(--color-base-200) !important; color:var(--color-base-content) !important; border-radius:.5rem; }
-        .icon-pick-item:hover { background:var(--synti-soft) !important; border-color:var(--synti-bdr) !important; color:var(--synti) !important; transform:translateY(-2px); }
-        .icon-pick-item.selected { background:var(--synti) !important; border-color:var(--synti) !important; color:#fff !important; }
+        #icon-picker-grid { scrollbar-width: thin; scrollbar-color: var(--synti-bdr) transparent; }
+        .icon-pick-item {
+            transition: all .18s;
+            border: 1px solid #d1d5db !important;
+            background: #f3f4f6 !important;
+            color: #1f2937 !important;
+            border-radius: .5rem;
+        }
+        .icon-pick-item:hover {
+            background: var(--synti-soft) !important;
+            border-color: var(--synti-bdr) !important;
+            color: var(--synti) !important;
+            transform: translateY(-2px);
+        }
+        .icon-pick-item.selected {
+            background: var(--synti) !important;
+            border-color: var(--synti) !important;
+            color: #fff !important;
+        }
 
         /* Segmented / mode bar */
-        .svc-segment { display:inline-flex; align-items:center; background:var(--color-base-200); border-radius:var(--radius-box); padding:3px; gap:2px; }
-        .svc-segment button { display:flex; align-items:center; gap:6px; padding:.45rem 1rem; border-radius:calc(var(--radius-box) - 3px); font-size:.8125rem; font-weight:600; border:none; cursor:pointer; transition:all .2s; color:color-mix(in oklch,var(--color-base-content) 55%,transparent); background:transparent; }
-        .svc-segment button.seg-active { background:var(--color-base-100); color:var(--synti); box-shadow:0 1px 6px rgba(0,0,0,.1); }
+        .svc-segment {
+            display: inline-flex; align-items: center;
+            background: #f3f4f6; border-radius: .5rem; padding: 3px; gap: 2px;
+        }
+        .svc-segment button {
+            display: flex; align-items: center; gap: 6px;
+            padding: .45rem 1rem; border-radius: .375rem;
+            font-size: .8125rem; font-weight: 600; border: none; cursor: pointer;
+            transition: all .2s; color: #6b7280; background: transparent;
+        }
+        .svc-segment button.seg-active {
+            background: #fff; color: var(--synti);
+            box-shadow: 0 1px 6px rgba(0,0,0,.1);
+        }
 
-        /* Card elevation system */
-        .card { transition:all .3s ease; }
-        .card-elevated { border-radius:1rem !important; }
-        .card-elevated:hover { box-shadow:0 10px 25px -5px rgba(0,0,0,.08), 0 4px 6px -2px rgba(0,0,0,.04); transform:translateY(-1px); }
+        /* Card elevation */
+        .card { transition: all .3s ease; }
+        .card-elevated { border-radius: 1rem !important; }
+        .card-elevated:hover {
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,.08), 0 4px 6px -2px rgba(0,0,0,.04);
+            transform: translateY(-1px);
+        }
 
         /* Focus WCAG */
-        :focus-visible { outline:2px solid var(--synti) !important; outline-offset:2px !important; }
+        :focus-visible { outline: 2px solid var(--synti) !important; outline-offset: 2px !important; }
 
         /* Scrollable sections */
-        .section-scroll { max-height:400px; overflow-y:auto; scrollbar-width:thin; }
+        .section-scroll { max-height: 400px; overflow-y: auto; scrollbar-width: thin; }
 
-        /* QR display — force SVG to fill container exactly */
-        #qr-display svg { width:100% !important; height:100% !important; display:block; }
+        /* QR display */
+        #qr-display svg { width: 100% !important; height: 100% !important; display: block; }
 
         /* Drag handles */
         .drag-handle { cursor: grab !important; color: rgba(148,163,184,0.55); transition: color .18s; }
-        .drag-handle:hover { color: #4D8FFF !important; }
+        .drag-handle:hover { color: #4A80E4 !important; }
         .drag-handle:active { cursor: grabbing !important; }
 
         /* Responsive */
-        @media(max-width:639px) { #header-extras { display:none !important; } }
+        @media (max-width: 639px) { #header-extras { display: none !important; } }
     </style>
 </head>
-<body class="bg-layer min-h-screen">
 
-{{-- Skip link accesibilidad: visible solo al recibir foco por teclado --}}
+<body class="hs-overlay-body-open overflow-hidden bg-gray-100 dark:bg-neutral-900">
+
+{{-- Skip link accesibilidad --}}
 <a href="#main-content"
    class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:start-2 focus:z-[9999] focus:inline-flex focus:py-2 focus:px-4 focus:rounded-lg focus:font-medium focus:bg-blue-600 focus:text-white focus:text-sm">
     Saltar al contenido principal
 </a>
 
-{{-- Región aria-live para anunciar toasts a lectores de pantalla --}}
+{{-- Región aria-live para anunciar toasts --}}
 <div id="toast-announcer" aria-live="polite" aria-atomic="true" class="sr-only"></div>
 
-    <!-- ══ HEADER ══ -->
-    <div class="lg:ps-64 sticky top-0 z-50 bg-surface border-b border-border">
-        <div class="px-4 lg:px-6">
-            <nav class="flex items-center justify-between h-14 gap-4">
+<!-- ══════════════════════════════════════════════════════════════════
+     HEADER — Fixed top navbar (Preline CMS pattern)
+     ══════════════════════════════════════════════════════════════════ -->
+<header class="fixed top-0 inset-x-0 flex flex-wrap md:justify-start md:flex-nowrap z-48 lg:z-61 w-full bg-white dark:bg-neutral-800 border-b border-gray-200 dark:border-neutral-700 text-sm py-2.5">
+    <nav class="px-4 sm:px-5.5 flex basis-full items-center w-full mx-auto">
+        <div class="w-full flex items-center gap-x-1.5">
 
-                {{-- START: hamburger móvil + nombre negocio --}}
-                <div class="flex items-center gap-3 min-w-0">
-
-                    {{-- Hamburger — solo móvil --}}
-                    <button type="button"
-                        class="size-8 flex items-center justify-center rounded-lg text-muted-foreground-1 hover:bg-muted hover:text-foreground transition-colors lg:hidden"
-                        aria-haspopup="dialog"
-                        aria-expanded="false"
-                        aria-controls="layout-sidebar"
-                        data-hs-overlay="#layout-sidebar">
-                        <iconify-icon icon="tabler:menu-2" width="20"></iconify-icon>
-                    </button>
-
-                    {{-- Logo — solo móvil --}}
-                    <a href="/" class="flex items-center gap-2 lg:hidden shrink-0">
-                        <img src="{{ asset('brand/syntiweb-logo-positive.svg') }}"
-                             alt="SYNTIweb" width="26" height="26">
-                        <span class="font-bold text-base tracking-tight">
-                            <span class="text-foreground">SYNTI</span><span style="color:#4A80E4">web</span>
-                        </span>
+            {{-- LEFT: Sidebar toggle + Logo --}}
+            <ul class="flex items-center gap-1.5">
+                <li class="inline-flex items-center gap-1 relative pe-1.5 last:pe-0 last:after:hidden after:absolute after:top-1/2 after:end-0 after:inline-block after:w-px after:h-3.5 after:bg-gray-300 dark:after:bg-neutral-600 after:rounded-full after:-translate-y-1/2 after:rotate-12">
+                    {{-- Logo --}}
+                    <a href="/" class="shrink-0 inline-flex justify-center items-center size-8 rounded-md focus:outline-hidden focus:opacity-80" aria-label="SYNTIweb">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="28" height="28" aria-hidden="true">
+                            <path d="M 30,22 L 78,22 L 78,70 Q 78,78 70,78 L 62,78 L 62,38 L 22,38 L 22,30 Q 22,22 30,22 Z" fill="#1a1a1a"/>
+                            <circle cx="38" cy="63" r="14" fill="#4A80E4"/>
+                        </svg>
                     </a>
 
-                    {{-- Negocio + estado + plan — desktop --}}
-                    <div class="hidden lg:flex items-center gap-2.5 min-w-0">
+                    {{-- Sidebar Toggle --}}
+                    <button type="button"
+                            class="p-1.5 size-7.5 inline-flex items-center gap-x-1 text-xs rounded-md border border-transparent text-gray-600 dark:text-neutral-400 hover:bg-gray-100 dark:hover:bg-neutral-700 focus:outline-hidden focus:bg-gray-100 dark:focus:bg-neutral-700"
+                            aria-haspopup="dialog" aria-expanded="false"
+                            aria-controls="hs-application-sidebar"
+                            data-hs-overlay="#hs-application-sidebar">
+                        <svg class="shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="18" height="18" x="3" y="3" rx="2"/>
+                            <path d="M15 3v18"/>
+                            <path d="m10 15-3-3 3-3"/>
+                        </svg>
+                        <span class="sr-only">Toggle sidebar</span>
+                    </button>
+                </li>
+
+                <li class="inline-flex items-center relative pe-1.5">
+                    {{-- Business name + status + plan --}}
+                    <div class="hidden sm:flex items-center gap-2 py-1 px-2 min-h-8">
                         <span class="{{ $tenant->is_open ? 'dot-online' : 'dot-offline' }}"
                               aria-label="{{ $tenant->is_open ? 'Abierto' : 'Cerrado' }}"></span>
-                        <span class="text-sm font-semibold text-foreground truncate max-w-48">
+                        <span class="text-sm font-semibold text-gray-800 dark:text-neutral-200 truncate max-w-48">
                             {{ $tenant->business_name }}
                         </span>
-                        <span class="inline-flex items-center py-0.5 px-2.5 rounded-full text-xs font-bold
+                        <span class="inline-flex items-center py-0.5 px-2 rounded-full text-[11px] font-bold
                             {{ $plan->id === 1 ? 'bg-amber-100 text-amber-700' : ($plan->id === 2 ? 'bg-emerald-100 text-emerald-700' : 'bg-sky-100 text-sky-700') }}">
                             {{ $plan->name }}
                         </span>
                     </div>
-                </div>
+                </li>
+            </ul>
 
-                {{-- CENTER: reloj + tasa BCV --}}
-                <div id="header-extras" class="hidden md:flex items-center gap-2">
-                    <div class="flex items-center gap-1.5 py-1 px-2.5 rounded-lg bg-muted border border-border text-xs">
-                        <iconify-icon icon="tabler:clock" width="14" class="text-muted-foreground-1"></iconify-icon>
-                        <span id="live-clock" class="font-bold text-foreground tabular-nums" aria-label="Hora actual">--:--</span>
+            {{-- RIGHT: Clock + Dollar + View Site --}}
+            <ul class="flex flex-row items-center gap-x-3 ms-auto">
+                <li id="header-extras" class="hidden lg:inline-flex items-center gap-1.5 relative pe-3 last:pe-0 last:after:hidden after:absolute after:top-1/2 after:end-0 after:inline-block after:w-px after:h-3.5 after:bg-gray-300 dark:after:bg-neutral-600 after:rounded-full after:-translate-y-1/2 after:rotate-12">
+                    <div class="flex items-center gap-1.5 py-1 px-2.5 rounded-lg bg-gray-100 dark:bg-neutral-700 border border-gray-200 dark:border-neutral-600 text-xs">
+                        <span class="iconify tabler--clock size-3.5 text-gray-400 dark:text-neutral-500"></span>
+                        <span id="live-clock" class="font-bold text-gray-800 dark:text-neutral-200 tabular-nums" aria-label="Hora actual">--:--</span>
                     </div>
-                    <div class="flex items-center gap-1.5 py-1 px-2.5 rounded-lg bg-muted border border-border text-xs">
-                        <iconify-icon icon="tabler:currency-dollar" width="14" class="text-success"></iconify-icon>
-                        <span class="font-semibold text-foreground">
+                    <div class="flex items-center gap-1.5 py-1 px-2.5 rounded-lg bg-gray-100 dark:bg-neutral-700 border border-gray-200 dark:border-neutral-600 text-xs">
+                        <span class="iconify tabler--currency-dollar size-3.5 text-emerald-500"></span>
+                        <span class="font-semibold text-gray-800 dark:text-neutral-200">
                             Bs. <span id="header-dollar-rate">{{ number_format($dollarRate, 2) }}</span>
                         </span>
                     </div>
-                </div>
+                </li>
 
-                {{-- END: ver sitio --}}
-                <div class="flex items-center shrink-0">
+                <li class="inline-flex items-center">
                     <a href="/{{ $tenant->subdomain }}"
-                       target="_blank"
-                       rel="noopener"
-                       class="py-1.5 px-3 inline-flex items-center gap-x-1.5 text-sm font-medium rounded-lg bg-primary border border-primary-line text-primary-foreground hover:bg-primary-hover transition-colors">
-                        <iconify-icon icon="tabler:external-link" width="15"></iconify-icon>
+                       target="_blank" rel="noopener"
+                       class="py-1.5 px-3 inline-flex items-center gap-x-1.5 text-sm font-medium rounded-lg bg-[#4A80E4] text-white hover:bg-[#3D6EC8] transition-colors"
+                       title="Ver tu landing pública">
+                        <span class="iconify tabler--external-link size-4"></span>
                         <span class="hidden sm:inline">Ver sitio</span>
                     </a>
+                </li>
+            </ul>
+
+        </div>
+    </nav>
+</header>
+<!-- ══ END HEADER ══ -->
+
+
+<!-- ══════════════════════════════════════════════════════════════════
+     MAIN — Preline CMS layout-open offset
+     ══════════════════════════════════════════════════════════════════ -->
+<main class="lg:hs-overlay-layout-open:ps-60 transition-all duration-300 lg:fixed lg:inset-0 pt-13.5 px-3 pb-3">
+
+    <!-- ══ SIDEBAR — Preline hs-overlay (CMS pattern) ══════════════ -->
+    <div id="hs-application-sidebar"
+         class="hs-overlay
+                [--body-scroll:true]
+                lg:[--overlay-backdrop:false]
+                [--is-layout-affect:true]
+                [--opened:lg]
+                [--auto-close:lg]
+                hs-overlay-open:translate-x-0
+                lg:hs-overlay-layout-open:translate-x-0
+                -translate-x-full
+                transition-all duration-300 transform
+                w-60
+                hidden
+                fixed inset-y-0 z-60 start-0
+                bg-white dark:bg-neutral-800
+                border-e border-gray-200 dark:border-neutral-700
+                lg:block lg:-translate-x-full lg:end-auto lg:bottom-0"
+         role="dialog" tabindex="-1" aria-label="Sidebar">
+
+        <div class="lg:pt-13 relative flex flex-col h-full max-h-full">
+
+            {{-- Sidebar body --}}
+            <nav class="p-3 size-full flex flex-col overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-none [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-600">
+
+                {{-- Mobile: business info + close --}}
+                <div class="lg:hidden mb-2 flex items-center justify-between">
+                    <div class="flex items-center gap-2 min-w-0">
+                        <span class="{{ $tenant->is_open ? 'dot-online' : 'dot-offline' }}" aria-hidden="true"></span>
+                        <span class="text-sm font-semibold text-gray-800 dark:text-neutral-200 truncate">{{ $tenant->business_name }}</span>
+                    </div>
+                    {{-- Close sidebar on mobile --}}
+                    <button type="button"
+                            class="p-1.5 size-7.5 inline-flex items-center gap-x-1 text-xs rounded-md text-gray-500 dark:text-neutral-400 focus:outline-hidden"
+                            aria-controls="hs-application-sidebar"
+                            data-hs-overlay="#hs-application-sidebar">
+                        <svg class="shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+                        </svg>
+                        <span class="sr-only">Cerrar sidebar</span>
+                    </button>
                 </div>
 
-            </nav>
-        </div>
-    </div>
-
-    <!-- ══ SIDEBAR — 4 Menús Lógicos ════════════════════════════════════ -->
-    <div id="layout-sidebar"
-         class="hs-overlay [--auto-close:lg] hs-overlay-open:translate-x-0 -translate-x-full transition-all duration-300 transform
-                w-64 hidden fixed inset-y-0 start-0 z-[60] overflow-y-auto
-                border-e border-white/5
-                lg:block lg:translate-x-0 lg:z-50"
-         tabindex="-1" aria-label="Sidebar">
-        <div class="flex h-full max-h-full flex-col">
-                {{-- Close (mobile) --}}
-                <button type="button"
-                        class="p-2 rounded-full transition-colors absolute end-3 top-3 lg:hidden text-white/60 hover:text-white hover:bg-white/10"
-                        aria-label="Close"
-                        data-hs-overlay="#layout-sidebar">
-                    <span class="iconify tabler--x size-4.5"></span>
-                </button>
-
-                <a href="/" class="flex items-center gap-2 px-5 pt-5 pb-3">
-                    <img src="{{ asset('brand/syntiweb-logo-negative.svg') }}" alt="SYNTIweb" width="32" height="32">
-                    <span class="font-bold text-lg tracking-tight">
-                        <span style="color:#4A80E4">SYNTI</span><span style="color:#FFFFFF">web</span>
+                {{-- Tab navigation section --}}
+                <div class="flex flex-col" role="tablist" aria-label="Dashboard navigation">
+                    <span class="block ps-2.5 mb-2 font-medium text-xs uppercase text-gray-500 dark:text-neutral-500">
+                        Panel
                     </span>
-                </a>
-
-                {{-- Navigation — 4 Menús --}}
-                <div class="h-full overflow-y-auto py-2">
-                    <p class="px-5 py-2 text-[10px] font-bold uppercase tracking-widest text-slate-500">Menú</p>
-                    <ul class="sidebar-nav flex flex-col gap-0.5 px-3" role="tablist">
-                        <li role="presentation">
-                            <button class="menu-active w-full text-start" role="tab"
+                    <ul class="flex flex-col gap-y-0.5">
+                        <li>
+                            <button class="sidebar-tab-btn menu-active" role="tab"
                                     aria-selected="true" aria-controls="tab-info"
-                                    id="tab-info-btn" data-tab="info" tabindex="0">
-                                <span class="iconify tabler--info-circle size-4.5"></span>
-                                <span class="grow">Tu Información</span>
+                                    data-tab="info" tabindex="0">
+                                <span class="iconify tabler--info-circle size-4 shrink-0"></span>
+                                Tu Información
                             </button>
                         </li>
-                        <li role="presentation">
-                            <button class="w-full text-start" role="tab"
+                        <li>
+                            <button class="sidebar-tab-btn" role="tab"
                                     aria-selected="false" aria-controls="tab-productos"
-                                    id="tab-productos-btn" data-tab="productos" tabindex="-1">
-                                <span class="iconify tabler--package size-4.5"></span>
-                                <span class="grow">Qué Vendes</span>
+                                    data-tab="productos" tabindex="-1">
+                                <span class="iconify tabler--package size-4 shrink-0"></span>
+                                Qué Vendes
                             </button>
                         </li>
-                        <li role="presentation">
-                            <button class="w-full text-start" role="tab"
+                        <li>
+                            <button class="sidebar-tab-btn" role="tab"
                                     aria-selected="false" aria-controls="tab-diseno"
-                                    id="tab-diseno-btn" data-tab="diseno" tabindex="-1">
-                                <span class="iconify tabler--palette size-4.5"></span>
-                                <span class="grow">Cómo Se Ve</span>
+                                    data-tab="diseno" tabindex="-1">
+                                <span class="iconify tabler--palette size-4 shrink-0"></span>
+                                Cómo Se Ve
                             </button>
                         </li>
-                        <li role="presentation">
-                            <button class="w-full text-start" role="tab"
+                        <li>
+                            <button class="sidebar-tab-btn" role="tab"
                                     aria-selected="false" aria-controls="tab-mensaje"
-                                    id="tab-mensaje-btn" data-tab="mensaje" tabindex="-1">
-                                <span class="iconify tabler--writing size-4.5"></span>
-                                <span class="grow">Tu Mensaje</span>
+                                    data-tab="mensaje" tabindex="-1">
+                                <span class="iconify tabler--writing size-4 shrink-0"></span>
+                                Tu Mensaje
                             </button>
                         </li>
-                        <li role="presentation">
-                            <button class="w-full text-start" role="tab"
+                        <li>
+                            <button class="sidebar-tab-btn" role="tab"
                                     aria-selected="false" aria-controls="tab-ventas"
-                                    id="tab-ventas-btn" data-tab="ventas" tabindex="-1">
-                                <span class="iconify tabler--chart-bar size-4.5"></span>
-                                <span class="grow">Pulso del Negocio</span>
+                                    data-tab="ventas" tabindex="-1">
+                                <span class="iconify tabler--chart-bar size-4 shrink-0"></span>
+                                Pulso del Negocio
                             </button>
                         </li>
-                        <li role="presentation">
-                            <button class="w-full text-start" role="tab"
+                        <li>
+                            <button class="sidebar-tab-btn" role="tab"
                                     aria-selected="false" aria-controls="tab-config"
-                                    id="tab-config-btn" data-tab="config" tabindex="-1">
-                                <span class="iconify tabler--settings size-4.5"></span>
-                                <span class="grow">Configuración</span>
+                                    data-tab="config" tabindex="-1">
+                                <span class="iconify tabler--settings size-4 shrink-0"></span>
+                                Configuración
                             </button>
                         </li>
                     </ul>
                 </div>
 
-                {{-- Footer --}}
-                <div class="border-t border-[var(--sw-border)] p-3 mt-auto text-[var(--sw-text-muted)]">
-                    <p class="text-xs text-center py-2 px-3">© {{ date('Y') }} SYNTIweb</p>
+            </nav>
+
+            {{-- Sidebar footer --}}
+            <footer class="mt-auto p-3 flex flex-col border-t border-gray-200 dark:border-neutral-700">
+                <ul class="flex flex-col gap-y-0.5">
+                    <li>
+                        <a href="/{{ $tenant->subdomain }}" target="_blank" rel="noopener"
+                           class="w-full flex items-center gap-x-2 py-2 px-2.5 text-sm text-gray-600 dark:text-neutral-400 rounded-lg hover:bg-gray-100 dark:hover:bg-neutral-700 focus:outline-hidden focus:bg-gray-100 dark:focus:bg-neutral-700">
+                            <span class="iconify tabler--external-link size-4 shrink-0"></span>
+                            Ver mi landing
+                        </a>
+                    </li>
+                    <li>
+                        <a href="mailto:soporte@synticorex.com"
+                           class="w-full flex items-center gap-x-2 py-2 px-2.5 text-sm text-gray-600 dark:text-neutral-400 rounded-lg hover:bg-gray-100 dark:hover:bg-neutral-700 focus:outline-hidden focus:bg-gray-100 dark:focus:bg-neutral-700">
+                            <span class="iconify tabler--help size-4 shrink-0"></span>
+                            Soporte
+                        </a>
+                    </li>
+                </ul>
+                {{-- Branding --}}
+                <div class="mt-3 pt-3 border-t border-gray-200 dark:border-neutral-700 px-2.5">
+                    <span class="text-xs font-bold tracking-tight">
+                        <span class="text-gray-800 dark:text-neutral-200">SYNTI</span><span style="color:#4A80E4">web</span>
+                    </span>
+                    <p class="text-[10px] text-gray-400 dark:text-neutral-500 mt-0.5">&copy; {{ date('Y') }} Synticorex</p>
                 </div>
+            </footer>
+
+        </div>
+    </div>
+    <!-- ══ END SIDEBAR ══ -->
+
+
+    <!-- ══ CONTENT AREA — Preline CMS rounded card ══════════════════ -->
+    <div class="h-[calc(100dvh-62px)] lg:h-full overflow-hidden flex flex-col bg-white dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700 shadow-xs rounded-lg">
+
+        {{-- Content header — Plan expiry notices --}}
+        @if($isFrozen)
+        <div class="flex p-4 gap-3 bg-red-50 dark:bg-red-900/20 border-b border-red-200 dark:border-red-800 text-red-800 dark:text-red-300 items-center flex-wrap">
+            <span class="iconify tabler--circle-x size-6 shrink-0" aria-hidden="true"></span>
+            <div class="flex-1 min-w-0">
+                <p class="font-bold text-sm">Tu plan venció — tu landing pública está pausada</p>
+                <p class="text-sm opacity-80">
+                    @if($graceRemainingDays !== null && $graceRemainingDays > 0)
+                        Tienes <strong>{{ $graceRemainingDays }} día{{ $graceRemainingDays === 1 ? '' : 's' }}</strong> de gracia antes de que tu cuenta se archive. Ningún dato se borra.
+                    @else
+                        El período de gracia ha vencido. Contacta a soporte para renovar y restaurar tu sitio.
+                    @endif
+                </p>
+            </div>
+            <a href="mailto:soporte@synticorex.com"
+               class="text-sm py-1.5 px-3 rounded-lg font-medium transition-colors bg-red-600 text-white hover:bg-red-700 shrink-0">
+                Renovar plan
+            </a>
+        </div>
+        @elseif($isExpiringSoon && $daysUntilExpiry !== null)
+        <div class="flex p-4 gap-3 bg-yellow-50 dark:bg-yellow-900/20 border-b border-yellow-200 dark:border-yellow-800 text-yellow-800 dark:text-yellow-300 items-center flex-wrap">
+            <span class="iconify tabler--alert-triangle size-6 shrink-0" aria-hidden="true"></span>
+            <div class="flex-1 min-w-0">
+                <p class="font-bold text-sm">Tu plan vence en {{ $daysUntilExpiry }} día{{ $daysUntilExpiry === 1 ? '' : 's' }}</p>
+                <p class="text-sm opacity-80">
+                    Renueva antes del <strong>{{ $tenant->subscription_ends_at->format('d/m/Y') }}</strong> para mantener tu landing pública activa sin interrupciones.
+                </p>
+            </div>
+            <a href="mailto:soporte@synticorex.com"
+               class="text-sm py-1.5 px-3 rounded-lg font-medium transition-colors bg-yellow-500 text-white hover:bg-yellow-600 shrink-0">
+                Renovar ahora
+            </a>
+        </div>
+        @endif
+
+        {{-- Scrollable content body --}}
+        <div class="flex-1 overflow-hidden overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-none [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-600">
+            <div id="main-content" class="mx-auto w-full max-w-[1200px] p-5 lg:p-8" tabindex="-1">
+
+                {{-- ═══ TAB 1: TU INFORMACIÓN ═══ --}}
+                @include('dashboard.components.info-section')
+
+                {{-- ═══ TAB 2: QUÉ VENDES (Productos + Servicios) ═══ --}}
+                @include('dashboard.components.products-section')
+                @include('dashboard.modals.product-modal')
+                @include('dashboard.components.services-section')
+                @include('dashboard.modals.service-modal')
+
+                {{-- ═══ Modales compartidos ═══ --}}
+                @include('dashboard.modals.shared-modals')
+
+                {{-- ═══ TAB 3: CÓMO SE VE ═══ --}}
+                @include('dashboard.components.design-section')
+
+                {{-- ═══ TAB 4: TU MENSAJE ═══ --}}
+                @include('dashboard.components.message-section')
+
+                {{-- ═══ TAB 5: PULSO DEL NEGOCIO ═══ --}}
+                @include('dashboard.components.sales-section')
+
+                {{-- ═══ TAB 6: CONFIGURACIÓN ═══ --}}
+                @include('dashboard.components.config-section')
+
             </div>
         </div>
-    </div>{{-- /layout-sidebar --}}
 
-    <!-- ══ LAYOUT CONTENT ════════════════════════════════════ -->
-    <div class="w-full lg:ps-64">
-
-    {{-- ── Plan Expiry Notices ──────────────────────────────────────────── --}}
-    @if($isFrozen)
-    {{-- FROZEN: subscription expired --}}
-    <div class="flex p-4 rounded-lg border gap-3 bg-red-50 border-red-200 text-red-800 rounded-none border-x-0 border-t-0 items-center flex-wrap px-6">
-        <span class="iconify tabler--circle-x size-6 shrink-0" aria-hidden="true"></span>
-        <div class="flex-1 min-w-0">
-            <p class="font-bold text-sm">Tu plan venció — tu landing pública está pausada</p>
-            <p class="text-sm opacity-80">
-                @if($graceRemainingDays !== null && $graceRemainingDays > 0)
-                    Tienes <strong>{{ $graceRemainingDays }} día{{ $graceRemainingDays === 1 ? '' : 's' }}</strong> de gracia antes de que tu cuenta se archive. Ningún dato se borra.
-                @else
-                    El período de gracia ha vencido. Contacta a soporte para renovar y restaurar tu sitio.
-                @endif
-            </p>
-        </div>
-            <a href="mailto:soporte@synticorex.com" class="text-sm py-1.5 px-3 rounded-lg font-medium transition-colors bg-red-600 text-white hover:bg-red-700 border-error-content/30 text-error-content shrink-0">
-            Renovar plan
-        </a>
     </div>
-    @elseif($isExpiringSoon && $daysUntilExpiry !== null)
-    {{-- EXPIRING SOON: 30 days or fewer remaining --}}
-    <div class="flex p-4 rounded-lg border gap-3 bg-yellow-50 border-yellow-200 text-yellow-800 rounded-none border-x-0 border-t-0 items-center flex-wrap px-6">
-        <span class="iconify tabler--alert-triangle size-6 shrink-0" aria-hidden="true"></span>
-        <div class="flex-1 min-w-0">
-            <p class="font-bold text-sm">Tu plan vence en {{ $daysUntilExpiry }} día{{ $daysUntilExpiry === 1 ? '' : 's' }}</p>
-            <p class="text-sm opacity-80">
-                Renueva antes del <strong>{{ $tenant->subscription_ends_at->format('d/m/Y') }}</strong> para mantener tu landing pública activa sin interrupciones.
-            </p>
-        </div>
-            <a href="mailto:soporte@synticorex.com" class="text-sm py-1.5 px-3 rounded-lg font-medium transition-colors bg-yellow-500 text-white hover:bg-yellow-600 border-warning-content/30 text-warning-content shrink-0">
-            Renovar ahora
-        </a>
-    </div>
-    @endif
-    {{-- ── End Plan Expiry Notices ─────────────────────────────────────── --}}
+    <!-- ══ END CONTENT AREA ══ -->
 
-    <!-- Content -->
-    <main id="main-content" class="mx-auto w-full max-w-[1200px] flex-1 grow p-5 lg:p-8" tabindex="-1">
-        
-    {{-- ═══ TAB 1: TU INFORMACIÓN ═══ --}}
-    @include('dashboard.components.info-section')
+</main>
 
-    {{-- ═══ TAB 2: QUÉ VENDES (Productos + Servicios) ═══ --}}
-    @include('dashboard.components.products-section')
-    @include('dashboard.modals.product-modal')
-    @include('dashboard.components.services-section')
-    @include('dashboard.modals.service-modal')
+{{-- ═══ SCRIPTS ═══ --}}
+@include('dashboard.scripts.tab-product-scripts')
+@include('dashboard.scripts.service-scripts')
+@include('dashboard.scripts.design-config-scripts')
+@include('dashboard.scripts.sortable-scripts')
 
-    {{-- ═══ Modales compartidos ═══ --}}
-    @include('dashboard.modals.shared-modals')
-
-    {{-- ═══ TAB 3: CÓMO SE VE ═══ --}}
-    @include('dashboard.components.design-section')
-
-    {{-- ═══ TAB 4: TU MENSAJE ═══ --}}
-    @include('dashboard.components.message-section')
-
-    {{-- ═══ TAB 5: PULSO DEL NEGOCIO ═══ --}}
-    @include('dashboard.components.sales-section')
-
-    {{-- ═══ TAB 6: CONFIGURACIÓN ═══ --}}
-    @include('dashboard.components.config-section')
-
-    </main>
-
-    {{-- ═══ SCRIPTS ═══ --}}
-    @include('dashboard.scripts.tab-product-scripts')
-    @include('dashboard.scripts.service-scripts')
-    @include('dashboard.scripts.design-config-scripts')
-    @include('dashboard.scripts.sortable-scripts')
-
-    </div>{{-- /w-full lg:ps-64 content wrapper --}}
 </body>
 </html>

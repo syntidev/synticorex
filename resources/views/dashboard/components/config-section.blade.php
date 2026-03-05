@@ -40,8 +40,8 @@
 @endphp
 
             {{-- ══ ROW 1: Tasas BCV (compact bar) ═══════════════ --}}
-            <div class="flex items-center justify-between p-3 rounded-xl bg-surface border border-border shadow-sm mb-5">
-                <div class="flex items-center gap-4">
+            <div class="flex items-center justify-between flex-wrap gap-3 p-3 rounded-xl bg-surface border border-border shadow-sm mb-5">
+                <div class="flex items-center gap-4 flex-wrap min-w-0">
                     <div class="flex items-center gap-3">
                         <div class="size-8 rounded-lg bg-success/10 flex items-center justify-center">
                             <span class="iconify tabler--currency-dollar size-4.5 text-success" aria-hidden="true"></span>
@@ -212,7 +212,7 @@
                                 <span class="text-xs font-medium text-foreground">Símbolo</span>
                                 <div class="flex items-center gap-2">
                                     <span id="symbol-ref-label" class="text-xs font-bold text-primary">REF</span>
-                                    <input type="checkbox" id="currency-symbol-switch" class="switch switch-primary switch-xs">
+                                    <input type="checkbox" id="currency-symbol-switch" class="relative w-[35px] h-[20px] bg-gray-200 checked:bg-primary border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 appearance-none focus:ring-primary-focus focus:ring-2 focus:ring-offset-2 before:inline-block before:size-[16px] before:bg-white before:rounded-full before:transform before:translate-x-0 checked:before:translate-x-full before:transition before:ease-in-out before:duration-200 before:shadow-sm">
                                     <span id="symbol-dollar-label" class="text-xs font-bold text-muted-foreground-1">$</span>
                                 </div>
                             </div>
@@ -231,7 +231,7 @@
                                               {{ $savedMode === $val ? 'bg-primary/10 border-primary/30' : 'border-border hover:border-border' }}">
                                     <input type="radio" name="display_mode" value="{{ $val }}"
                                            {{ $savedMode === $val ? 'checked' : '' }}
-                                           class="radio radio-primary radio-xs">
+                                           class="size-3.5 rounded-full border border-gray-300 text-primary checked:bg-primary checked:border-primary focus:ring-primary-focus">
                                     <span class="iconify {{ $icon }} size-3.5 {{ $savedMode === $val ? 'text-primary' : 'text-muted-foreground-1' }}" aria-hidden="true"></span>
                                     <span class="text-xs text-foreground flex-1">{{ $label }}</span>
                                 </label>

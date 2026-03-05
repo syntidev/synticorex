@@ -1,0 +1,755 @@
+ESTRUCTURA DEL PROYECTO 
+================================================ 
+Fecha: miÃ© 04/03/2026 21:29:17,34 
+Ruta: C:\laragon\www\synticorex\reference 
+================================================ 
+ 
+[ARBOL DE DIRECTORIOS] 
+ 
+Listado de rutas de carpetas para el volumen OS
+El número de serie del volumen es 92E8-531C
+C:.
+|   estructura_proyecto.txt
+|   generar_txt_simple.bat
+|   
+\---preline-main
+    |   .gitignore
+    |   dts-config.js
+    |   global.d.ts
+    |   index.d.ts
+    |   index.js
+    |   LICENSE
+    |   package-lock.json
+    |   package.json
+    |   preline.d.ts
+    |   preline.js
+    |   prettier.config.js
+    |   README.md
+    |   tsconfig.dts.json
+    |   tsconfig.json
+    |   tsconfig.mjs.json
+    |   variants.css
+    |   webpack.config.js
+    |   webpack.config.mjs.js
+    |   
+    +---.github
+    |   \---ISSUE_TEMPLATE
+    |           bug_report.yml
+    |           config.yml
+    |           feature_request.yml
+    |           
+    +---css
+    |   \---themes
+    |           autumn.css
+    |           bubblegum.css
+    |           cashmere.css
+    |           harvest.css
+    |           moon.css
+    |           ocean.css
+    |           olive.css
+    |           retro.css
+    |           theme.css
+    |           
+    +---dist
+    |       accessibility-manager.d.ts
+    |       accordion.d.ts
+    |       accordion.js
+    |       accordion.mjs
+    |       carousel.d.ts
+    |       carousel.js
+    |       carousel.mjs
+    |       collapse.d.ts
+    |       collapse.js
+    |       collapse.mjs
+    |       combobox.d.ts
+    |       combobox.js
+    |       combobox.mjs
+    |       copy-markup.d.ts
+    |       copy-markup.js
+    |       copy-markup.mjs
+    |       datatable.d.ts
+    |       datatable.js
+    |       datatable.mjs
+    |       datepicker.d.ts
+    |       datepicker.js
+    |       datepicker.mjs
+    |       dropdown.d.ts
+    |       dropdown.js
+    |       dropdown.mjs
+    |       file-upload.d.ts
+    |       file-upload.js
+    |       file-upload.mjs
+    |       helper-apexcharts.d.ts
+    |       helper-apexcharts.js
+    |       helper-apexcharts.mjs
+    |       helper-clipboard.d.ts
+    |       helper-clipboard.js
+    |       helper-clipboard.mjs
+    |       helper-shared.d.ts
+    |       helper-shared.js
+    |       helper-shared.mjs
+    |       index.d.ts
+    |       index.js
+    |       index.mjs
+    |       input-number.d.ts
+    |       input-number.js
+    |       input-number.mjs
+    |       layout-splitter.d.ts
+    |       layout-splitter.js
+    |       layout-splitter.mjs
+    |       non-auto.d.ts
+    |       non-auto.js
+    |       non-auto.mjs
+    |       overlay.d.ts
+    |       overlay.js
+    |       overlay.mjs
+    |       pin-input.d.ts
+    |       pin-input.js
+    |       pin-input.mjs
+    |       preline.d.ts
+    |       preline.js
+    |       range-slider.d.ts
+    |       range-slider.js
+    |       range-slider.mjs
+    |       remove-element.d.ts
+    |       remove-element.js
+    |       remove-element.mjs
+    |       scroll-nav.d.ts
+    |       scroll-nav.js
+    |       scroll-nav.mjs
+    |       scrollspy.d.ts
+    |       scrollspy.js
+    |       scrollspy.mjs
+    |       select.d.ts
+    |       select.js
+    |       select.mjs
+    |       stepper.d.ts
+    |       stepper.js
+    |       stepper.mjs
+    |       strong-password.d.ts
+    |       strong-password.js
+    |       strong-password.mjs
+    |       tabs.d.ts
+    |       tabs.js
+    |       tabs.mjs
+    |       textarea-auto-height.d.ts
+    |       textarea-auto-height.js
+    |       textarea-auto-height.mjs
+    |       theme-switch.d.ts
+    |       theme-switch.js
+    |       theme-switch.mjs
+    |       toggle-count.d.ts
+    |       toggle-count.js
+    |       toggle-count.mjs
+    |       toggle-password.d.ts
+    |       toggle-password.js
+    |       toggle-password.mjs
+    |       tooltip.d.ts
+    |       tooltip.js
+    |       tooltip.mjs
+    |       tree-view.d.ts
+    |       tree-view.js
+    |       tree-view.mjs
+    |       utils.d.ts
+    |       utils.js
+    |       utils.mjs
+    |       
+    +---scripts
+    |       flatten-dts.js
+    |       
+    +---skills
+    |   \---theme-generator
+    |       |   examples.md
+    |       |   output_template.md
+    |       |   qa.md
+    |       |   SKILL.md
+    |       |   
+    |       +---docs
+    |       |       palette-guidance.md
+    |       |       step-1.md
+    |       |       step-2.md
+    |       |       step-3.md
+    |       |       step-4.md
+    |       |       step-5.md
+    |       |       step-6.md
+    |       |       step-7.md
+    |       |       token-reference.md
+    |       |       validation-checklist.md
+    |       |       
+    |       \---scripts
+    |               example-config.json
+    |               example-config.yaml
+    |               generate-theme.js
+    |               
+    +---src
+    |   |   constants.ts
+    |   |   globals.ts
+    |   |   index.ts
+    |   |   interfaces.ts
+    |   |   
+    |   +---auto
+    |   |       index.ts
+    |   |       static-methods.ts
+    |   |       types.ts
+    |   |       
+    |   +---helpers
+    |   |   |   types.ts
+    |   |   |   
+    |   |   +---apexcharts
+    |   |   |       index.ts
+    |   |   |       interfaces.ts
+    |   |   |       
+    |   |   +---clipboard
+    |   |   |       index.ts
+    |   |   |       
+    |   |   \---shared
+    |   |           index.ts
+    |   |           
+    |   +---plugins
+    |   |   +---accessibility-manager
+    |   |   |       index.ts
+    |   |   |       interfaces.ts
+    |   |   |       
+    |   |   +---accordion
+    |   |   |       auto.ts
+    |   |   |       core.ts
+    |   |   |       interfaces.ts
+    |   |   |       variants.css
+    |   |   |       
+    |   |   +---base-plugin
+    |   |   |       index.ts
+    |   |   |       interfaces.ts
+    |   |   |       
+    |   |   +---carousel
+    |   |   |       auto.ts
+    |   |   |       core.ts
+    |   |   |       interfaces.ts
+    |   |   |       types.ts
+    |   |   |       variants.css
+    |   |   |       
+    |   |   +---collapse
+    |   |   |       auto.ts
+    |   |   |       core.ts
+    |   |   |       interfaces.ts
+    |   |   |       variants.css
+    |   |   |       
+    |   |   +---combobox
+    |   |   |       auto.ts
+    |   |   |       core.ts
+    |   |   |       interfaces.ts
+    |   |   |       variants.css
+    |   |   |       
+    |   |   +---copy-markup
+    |   |   |       auto.ts
+    |   |   |       core.ts
+    |   |   |       interfaces.ts
+    |   |   |       
+    |   |   +---datatable
+    |   |   |       auto.ts
+    |   |   |       core.ts
+    |   |   |       interfaces.ts
+    |   |   |       variants.css
+    |   |   |       
+    |   |   +---datepicker
+    |   |   |       auto.ts
+    |   |   |       core.ts
+    |   |   |       interfaces.ts
+    |   |   |       locale.ts
+    |   |   |       styles-utility.css
+    |   |   |       styles.css
+    |   |   |       templates-utility.ts
+    |   |   |       templates.ts
+    |   |   |       types.ts
+    |   |   |       vanilla-calendar-pro.d.ts
+    |   |   |       vanilla-datepicker-pro.ts
+    |   |   |       variants.css
+    |   |   |       
+    |   |   +---dropdown
+    |   |   |       auto.ts
+    |   |   |       core.ts
+    |   |   |       interfaces.ts
+    |   |   |       variants.css
+    |   |   |       
+    |   |   +---file-upload
+    |   |   |       auto.ts
+    |   |   |       core.ts
+    |   |   |       interfaces.ts
+    |   |   |       variants.css
+    |   |   |       
+    |   |   +---input-number
+    |   |   |       auto.ts
+    |   |   |       core.ts
+    |   |   |       interfaces.ts
+    |   |   |       variants.css
+    |   |   |       
+    |   |   +---layout-splitter
+    |   |   |       auto.ts
+    |   |   |       core.ts
+    |   |   |       interfaces.ts
+    |   |   |       variants.css
+    |   |   |       
+    |   |   +---overlay
+    |   |   |       auto.ts
+    |   |   |       core.ts
+    |   |   |       interfaces.ts
+    |   |   |       types.ts
+    |   |   |       variants.css
+    |   |   |       
+    |   |   +---pin-input
+    |   |   |       auto.ts
+    |   |   |       core.ts
+    |   |   |       interfaces.ts
+    |   |   |       variants.css
+    |   |   |       
+    |   |   +---range-slider
+    |   |   |       auto.ts
+    |   |   |       core.ts
+    |   |   |       interfaces.ts
+    |   |   |       types.ts
+    |   |   |       variants.css
+    |   |   |       
+    |   |   +---remove-element
+    |   |   |       auto.ts
+    |   |   |       core.ts
+    |   |   |       interfaces.ts
+    |   |   |       variants.css
+    |   |   |       
+    |   |   +---scroll-nav
+    |   |   |       auto.ts
+    |   |   |       core.ts
+    |   |   |       interfaces.ts
+    |   |   |       variants.css
+    |   |   |       
+    |   |   +---scrollspy
+    |   |   |       auto.ts
+    |   |   |       core.ts
+    |   |   |       interfaces.ts
+    |   |   |       variants.css
+    |   |   |       
+    |   |   +---select
+    |   |   |       auto.ts
+    |   |   |       core.ts
+    |   |   |       interfaces.ts
+    |   |   |       variants.css
+    |   |   |       
+    |   |   +---stepper
+    |   |   |       auto.ts
+    |   |   |       core.ts
+    |   |   |       interfaces.ts
+    |   |   |       variants.css
+    |   |   |       
+    |   |   +---strong-password
+    |   |   |       auto.ts
+    |   |   |       core.ts
+    |   |   |       interfaces.ts
+    |   |   |       variants.css
+    |   |   |       
+    |   |   +---tabs
+    |   |   |       auto.ts
+    |   |   |       core.ts
+    |   |   |       interfaces.ts
+    |   |   |       variants.css
+    |   |   |       
+    |   |   +---textarea-auto-height
+    |   |   |       auto.ts
+    |   |   |       core.ts
+    |   |   |       interfaces.ts
+    |   |   |       
+    |   |   +---theme-switch
+    |   |   |       auto.ts
+    |   |   |       core.ts
+    |   |   |       interfaces.ts
+    |   |   |       variants.css
+    |   |   |       
+    |   |   +---toggle-count
+    |   |   |       auto.ts
+    |   |   |       core.ts
+    |   |   |       interfaces.ts
+    |   |   |       
+    |   |   +---toggle-password
+    |   |   |       auto.ts
+    |   |   |       core.ts
+    |   |   |       interfaces.ts
+    |   |   |       
+    |   |   +---tooltip
+    |   |   |       auto.ts
+    |   |   |       core.ts
+    |   |   |       interfaces.ts
+    |   |   |       types.ts
+    |   |   |       variants.css
+    |   |   |       
+    |   |   \---tree-view
+    |   |           auto.ts
+    |   |           core.ts
+    |   |           interfaces.ts
+    |   |           variants.css
+    |   |           
+    |   \---utils
+    |           index.ts
+    |           interfaces.ts
+    |           
+    \---templates
+        +---agency
+        |       index.html
+        |       
+        +---ai-chat
+        |       index.html
+        |       
+        +---cms
+        |       index.html
+        |       
+        +---coffee-shop
+        |       index.html
+        |       
+        \---personal
+                index.html
+                
+ 
+================================================ 
+[LISTA COMPLETA DE RUTAS] 
+================================================ 
+C:\laragon\www\synticorex\reference\estructura_proyecto.txt
+C:\laragon\www\synticorex\reference\generar_txt_simple.bat
+C:\laragon\www\synticorex\reference\preline-main
+C:\laragon\www\synticorex\reference\preline-main\.github
+C:\laragon\www\synticorex\reference\preline-main\.gitignore
+C:\laragon\www\synticorex\reference\preline-main\css
+C:\laragon\www\synticorex\reference\preline-main\dist
+C:\laragon\www\synticorex\reference\preline-main\dts-config.js
+C:\laragon\www\synticorex\reference\preline-main\global.d.ts
+C:\laragon\www\synticorex\reference\preline-main\index.d.ts
+C:\laragon\www\synticorex\reference\preline-main\index.js
+C:\laragon\www\synticorex\reference\preline-main\LICENSE
+C:\laragon\www\synticorex\reference\preline-main\package-lock.json
+C:\laragon\www\synticorex\reference\preline-main\package.json
+C:\laragon\www\synticorex\reference\preline-main\preline.d.ts
+C:\laragon\www\synticorex\reference\preline-main\preline.js
+C:\laragon\www\synticorex\reference\preline-main\prettier.config.js
+C:\laragon\www\synticorex\reference\preline-main\README.md
+C:\laragon\www\synticorex\reference\preline-main\scripts
+C:\laragon\www\synticorex\reference\preline-main\skills
+C:\laragon\www\synticorex\reference\preline-main\src
+C:\laragon\www\synticorex\reference\preline-main\templates
+C:\laragon\www\synticorex\reference\preline-main\tsconfig.dts.json
+C:\laragon\www\synticorex\reference\preline-main\tsconfig.json
+C:\laragon\www\synticorex\reference\preline-main\tsconfig.mjs.json
+C:\laragon\www\synticorex\reference\preline-main\variants.css
+C:\laragon\www\synticorex\reference\preline-main\webpack.config.js
+C:\laragon\www\synticorex\reference\preline-main\webpack.config.mjs.js
+C:\laragon\www\synticorex\reference\preline-main\.github\ISSUE_TEMPLATE
+C:\laragon\www\synticorex\reference\preline-main\.github\ISSUE_TEMPLATE\bug_report.yml
+C:\laragon\www\synticorex\reference\preline-main\.github\ISSUE_TEMPLATE\config.yml
+C:\laragon\www\synticorex\reference\preline-main\.github\ISSUE_TEMPLATE\feature_request.yml
+C:\laragon\www\synticorex\reference\preline-main\css\themes
+C:\laragon\www\synticorex\reference\preline-main\css\themes\autumn.css
+C:\laragon\www\synticorex\reference\preline-main\css\themes\bubblegum.css
+C:\laragon\www\synticorex\reference\preline-main\css\themes\cashmere.css
+C:\laragon\www\synticorex\reference\preline-main\css\themes\harvest.css
+C:\laragon\www\synticorex\reference\preline-main\css\themes\moon.css
+C:\laragon\www\synticorex\reference\preline-main\css\themes\ocean.css
+C:\laragon\www\synticorex\reference\preline-main\css\themes\olive.css
+C:\laragon\www\synticorex\reference\preline-main\css\themes\retro.css
+C:\laragon\www\synticorex\reference\preline-main\css\themes\theme.css
+C:\laragon\www\synticorex\reference\preline-main\dist\accessibility-manager.d.ts
+C:\laragon\www\synticorex\reference\preline-main\dist\accordion.d.ts
+C:\laragon\www\synticorex\reference\preline-main\dist\accordion.js
+C:\laragon\www\synticorex\reference\preline-main\dist\accordion.mjs
+C:\laragon\www\synticorex\reference\preline-main\dist\carousel.d.ts
+C:\laragon\www\synticorex\reference\preline-main\dist\carousel.js
+C:\laragon\www\synticorex\reference\preline-main\dist\carousel.mjs
+C:\laragon\www\synticorex\reference\preline-main\dist\collapse.d.ts
+C:\laragon\www\synticorex\reference\preline-main\dist\collapse.js
+C:\laragon\www\synticorex\reference\preline-main\dist\collapse.mjs
+C:\laragon\www\synticorex\reference\preline-main\dist\combobox.d.ts
+C:\laragon\www\synticorex\reference\preline-main\dist\combobox.js
+C:\laragon\www\synticorex\reference\preline-main\dist\combobox.mjs
+C:\laragon\www\synticorex\reference\preline-main\dist\copy-markup.d.ts
+C:\laragon\www\synticorex\reference\preline-main\dist\copy-markup.js
+C:\laragon\www\synticorex\reference\preline-main\dist\copy-markup.mjs
+C:\laragon\www\synticorex\reference\preline-main\dist\datatable.d.ts
+C:\laragon\www\synticorex\reference\preline-main\dist\datatable.js
+C:\laragon\www\synticorex\reference\preline-main\dist\datatable.mjs
+C:\laragon\www\synticorex\reference\preline-main\dist\datepicker.d.ts
+C:\laragon\www\synticorex\reference\preline-main\dist\datepicker.js
+C:\laragon\www\synticorex\reference\preline-main\dist\datepicker.mjs
+C:\laragon\www\synticorex\reference\preline-main\dist\dropdown.d.ts
+C:\laragon\www\synticorex\reference\preline-main\dist\dropdown.js
+C:\laragon\www\synticorex\reference\preline-main\dist\dropdown.mjs
+C:\laragon\www\synticorex\reference\preline-main\dist\file-upload.d.ts
+C:\laragon\www\synticorex\reference\preline-main\dist\file-upload.js
+C:\laragon\www\synticorex\reference\preline-main\dist\file-upload.mjs
+C:\laragon\www\synticorex\reference\preline-main\dist\helper-apexcharts.d.ts
+C:\laragon\www\synticorex\reference\preline-main\dist\helper-apexcharts.js
+C:\laragon\www\synticorex\reference\preline-main\dist\helper-apexcharts.mjs
+C:\laragon\www\synticorex\reference\preline-main\dist\helper-clipboard.d.ts
+C:\laragon\www\synticorex\reference\preline-main\dist\helper-clipboard.js
+C:\laragon\www\synticorex\reference\preline-main\dist\helper-clipboard.mjs
+C:\laragon\www\synticorex\reference\preline-main\dist\helper-shared.d.ts
+C:\laragon\www\synticorex\reference\preline-main\dist\helper-shared.js
+C:\laragon\www\synticorex\reference\preline-main\dist\helper-shared.mjs
+C:\laragon\www\synticorex\reference\preline-main\dist\index.d.ts
+C:\laragon\www\synticorex\reference\preline-main\dist\index.js
+C:\laragon\www\synticorex\reference\preline-main\dist\index.mjs
+C:\laragon\www\synticorex\reference\preline-main\dist\input-number.d.ts
+C:\laragon\www\synticorex\reference\preline-main\dist\input-number.js
+C:\laragon\www\synticorex\reference\preline-main\dist\input-number.mjs
+C:\laragon\www\synticorex\reference\preline-main\dist\layout-splitter.d.ts
+C:\laragon\www\synticorex\reference\preline-main\dist\layout-splitter.js
+C:\laragon\www\synticorex\reference\preline-main\dist\layout-splitter.mjs
+C:\laragon\www\synticorex\reference\preline-main\dist\non-auto.d.ts
+C:\laragon\www\synticorex\reference\preline-main\dist\non-auto.js
+C:\laragon\www\synticorex\reference\preline-main\dist\non-auto.mjs
+C:\laragon\www\synticorex\reference\preline-main\dist\overlay.d.ts
+C:\laragon\www\synticorex\reference\preline-main\dist\overlay.js
+C:\laragon\www\synticorex\reference\preline-main\dist\overlay.mjs
+C:\laragon\www\synticorex\reference\preline-main\dist\pin-input.d.ts
+C:\laragon\www\synticorex\reference\preline-main\dist\pin-input.js
+C:\laragon\www\synticorex\reference\preline-main\dist\pin-input.mjs
+C:\laragon\www\synticorex\reference\preline-main\dist\preline.d.ts
+C:\laragon\www\synticorex\reference\preline-main\dist\preline.js
+C:\laragon\www\synticorex\reference\preline-main\dist\range-slider.d.ts
+C:\laragon\www\synticorex\reference\preline-main\dist\range-slider.js
+C:\laragon\www\synticorex\reference\preline-main\dist\range-slider.mjs
+C:\laragon\www\synticorex\reference\preline-main\dist\remove-element.d.ts
+C:\laragon\www\synticorex\reference\preline-main\dist\remove-element.js
+C:\laragon\www\synticorex\reference\preline-main\dist\remove-element.mjs
+C:\laragon\www\synticorex\reference\preline-main\dist\scroll-nav.d.ts
+C:\laragon\www\synticorex\reference\preline-main\dist\scroll-nav.js
+C:\laragon\www\synticorex\reference\preline-main\dist\scroll-nav.mjs
+C:\laragon\www\synticorex\reference\preline-main\dist\scrollspy.d.ts
+C:\laragon\www\synticorex\reference\preline-main\dist\scrollspy.js
+C:\laragon\www\synticorex\reference\preline-main\dist\scrollspy.mjs
+C:\laragon\www\synticorex\reference\preline-main\dist\select.d.ts
+C:\laragon\www\synticorex\reference\preline-main\dist\select.js
+C:\laragon\www\synticorex\reference\preline-main\dist\select.mjs
+C:\laragon\www\synticorex\reference\preline-main\dist\stepper.d.ts
+C:\laragon\www\synticorex\reference\preline-main\dist\stepper.js
+C:\laragon\www\synticorex\reference\preline-main\dist\stepper.mjs
+C:\laragon\www\synticorex\reference\preline-main\dist\strong-password.d.ts
+C:\laragon\www\synticorex\reference\preline-main\dist\strong-password.js
+C:\laragon\www\synticorex\reference\preline-main\dist\strong-password.mjs
+C:\laragon\www\synticorex\reference\preline-main\dist\tabs.d.ts
+C:\laragon\www\synticorex\reference\preline-main\dist\tabs.js
+C:\laragon\www\synticorex\reference\preline-main\dist\tabs.mjs
+C:\laragon\www\synticorex\reference\preline-main\dist\textarea-auto-height.d.ts
+C:\laragon\www\synticorex\reference\preline-main\dist\textarea-auto-height.js
+C:\laragon\www\synticorex\reference\preline-main\dist\textarea-auto-height.mjs
+C:\laragon\www\synticorex\reference\preline-main\dist\theme-switch.d.ts
+C:\laragon\www\synticorex\reference\preline-main\dist\theme-switch.js
+C:\laragon\www\synticorex\reference\preline-main\dist\theme-switch.mjs
+C:\laragon\www\synticorex\reference\preline-main\dist\toggle-count.d.ts
+C:\laragon\www\synticorex\reference\preline-main\dist\toggle-count.js
+C:\laragon\www\synticorex\reference\preline-main\dist\toggle-count.mjs
+C:\laragon\www\synticorex\reference\preline-main\dist\toggle-password.d.ts
+C:\laragon\www\synticorex\reference\preline-main\dist\toggle-password.js
+C:\laragon\www\synticorex\reference\preline-main\dist\toggle-password.mjs
+C:\laragon\www\synticorex\reference\preline-main\dist\tooltip.d.ts
+C:\laragon\www\synticorex\reference\preline-main\dist\tooltip.js
+C:\laragon\www\synticorex\reference\preline-main\dist\tooltip.mjs
+C:\laragon\www\synticorex\reference\preline-main\dist\tree-view.d.ts
+C:\laragon\www\synticorex\reference\preline-main\dist\tree-view.js
+C:\laragon\www\synticorex\reference\preline-main\dist\tree-view.mjs
+C:\laragon\www\synticorex\reference\preline-main\dist\utils.d.ts
+C:\laragon\www\synticorex\reference\preline-main\dist\utils.js
+C:\laragon\www\synticorex\reference\preline-main\dist\utils.mjs
+C:\laragon\www\synticorex\reference\preline-main\scripts\flatten-dts.js
+C:\laragon\www\synticorex\reference\preline-main\skills\theme-generator
+C:\laragon\www\synticorex\reference\preline-main\skills\theme-generator\docs
+C:\laragon\www\synticorex\reference\preline-main\skills\theme-generator\examples.md
+C:\laragon\www\synticorex\reference\preline-main\skills\theme-generator\output_template.md
+C:\laragon\www\synticorex\reference\preline-main\skills\theme-generator\qa.md
+C:\laragon\www\synticorex\reference\preline-main\skills\theme-generator\scripts
+C:\laragon\www\synticorex\reference\preline-main\skills\theme-generator\SKILL.md
+C:\laragon\www\synticorex\reference\preline-main\skills\theme-generator\docs\palette-guidance.md
+C:\laragon\www\synticorex\reference\preline-main\skills\theme-generator\docs\step-1.md
+C:\laragon\www\synticorex\reference\preline-main\skills\theme-generator\docs\step-2.md
+C:\laragon\www\synticorex\reference\preline-main\skills\theme-generator\docs\step-3.md
+C:\laragon\www\synticorex\reference\preline-main\skills\theme-generator\docs\step-4.md
+C:\laragon\www\synticorex\reference\preline-main\skills\theme-generator\docs\step-5.md
+C:\laragon\www\synticorex\reference\preline-main\skills\theme-generator\docs\step-6.md
+C:\laragon\www\synticorex\reference\preline-main\skills\theme-generator\docs\step-7.md
+C:\laragon\www\synticorex\reference\preline-main\skills\theme-generator\docs\token-reference.md
+C:\laragon\www\synticorex\reference\preline-main\skills\theme-generator\docs\validation-checklist.md
+C:\laragon\www\synticorex\reference\preline-main\skills\theme-generator\scripts\example-config.json
+C:\laragon\www\synticorex\reference\preline-main\skills\theme-generator\scripts\example-config.yaml
+C:\laragon\www\synticorex\reference\preline-main\skills\theme-generator\scripts\generate-theme.js
+C:\laragon\www\synticorex\reference\preline-main\src\auto
+C:\laragon\www\synticorex\reference\preline-main\src\constants.ts
+C:\laragon\www\synticorex\reference\preline-main\src\globals.ts
+C:\laragon\www\synticorex\reference\preline-main\src\helpers
+C:\laragon\www\synticorex\reference\preline-main\src\index.ts
+C:\laragon\www\synticorex\reference\preline-main\src\interfaces.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins
+C:\laragon\www\synticorex\reference\preline-main\src\utils
+C:\laragon\www\synticorex\reference\preline-main\src\auto\index.ts
+C:\laragon\www\synticorex\reference\preline-main\src\auto\static-methods.ts
+C:\laragon\www\synticorex\reference\preline-main\src\auto\types.ts
+C:\laragon\www\synticorex\reference\preline-main\src\helpers\apexcharts
+C:\laragon\www\synticorex\reference\preline-main\src\helpers\clipboard
+C:\laragon\www\synticorex\reference\preline-main\src\helpers\shared
+C:\laragon\www\synticorex\reference\preline-main\src\helpers\types.ts
+C:\laragon\www\synticorex\reference\preline-main\src\helpers\apexcharts\index.ts
+C:\laragon\www\synticorex\reference\preline-main\src\helpers\apexcharts\interfaces.ts
+C:\laragon\www\synticorex\reference\preline-main\src\helpers\clipboard\index.ts
+C:\laragon\www\synticorex\reference\preline-main\src\helpers\shared\index.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\accessibility-manager
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\accordion
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\base-plugin
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\carousel
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\collapse
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\combobox
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\copy-markup
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\datatable
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\datepicker
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\dropdown
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\file-upload
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\input-number
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\layout-splitter
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\overlay
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\pin-input
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\range-slider
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\remove-element
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\scroll-nav
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\scrollspy
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\select
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\stepper
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\strong-password
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\tabs
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\textarea-auto-height
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\theme-switch
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\toggle-count
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\toggle-password
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\tooltip
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\tree-view
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\accessibility-manager\index.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\accessibility-manager\interfaces.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\accordion\auto.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\accordion\core.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\accordion\interfaces.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\accordion\variants.css
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\base-plugin\index.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\base-plugin\interfaces.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\carousel\auto.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\carousel\core.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\carousel\interfaces.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\carousel\types.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\carousel\variants.css
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\collapse\auto.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\collapse\core.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\collapse\interfaces.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\collapse\variants.css
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\combobox\auto.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\combobox\core.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\combobox\interfaces.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\combobox\variants.css
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\copy-markup\auto.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\copy-markup\core.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\copy-markup\interfaces.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\datatable\auto.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\datatable\core.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\datatable\interfaces.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\datatable\variants.css
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\datepicker\auto.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\datepicker\core.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\datepicker\interfaces.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\datepicker\locale.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\datepicker\styles-utility.css
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\datepicker\styles.css
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\datepicker\templates-utility.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\datepicker\templates.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\datepicker\types.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\datepicker\vanilla-calendar-pro.d.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\datepicker\vanilla-datepicker-pro.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\datepicker\variants.css
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\dropdown\auto.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\dropdown\core.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\dropdown\interfaces.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\dropdown\variants.css
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\file-upload\auto.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\file-upload\core.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\file-upload\interfaces.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\file-upload\variants.css
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\input-number\auto.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\input-number\core.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\input-number\interfaces.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\input-number\variants.css
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\layout-splitter\auto.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\layout-splitter\core.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\layout-splitter\interfaces.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\layout-splitter\variants.css
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\overlay\auto.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\overlay\core.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\overlay\interfaces.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\overlay\types.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\overlay\variants.css
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\pin-input\auto.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\pin-input\core.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\pin-input\interfaces.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\pin-input\variants.css
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\range-slider\auto.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\range-slider\core.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\range-slider\interfaces.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\range-slider\types.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\range-slider\variants.css
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\remove-element\auto.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\remove-element\core.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\remove-element\interfaces.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\remove-element\variants.css
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\scroll-nav\auto.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\scroll-nav\core.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\scroll-nav\interfaces.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\scroll-nav\variants.css
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\scrollspy\auto.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\scrollspy\core.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\scrollspy\interfaces.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\scrollspy\variants.css
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\select\auto.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\select\core.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\select\interfaces.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\select\variants.css
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\stepper\auto.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\stepper\core.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\stepper\interfaces.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\stepper\variants.css
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\strong-password\auto.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\strong-password\core.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\strong-password\interfaces.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\strong-password\variants.css
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\tabs\auto.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\tabs\core.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\tabs\interfaces.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\tabs\variants.css
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\textarea-auto-height\auto.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\textarea-auto-height\core.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\textarea-auto-height\interfaces.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\theme-switch\auto.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\theme-switch\core.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\theme-switch\interfaces.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\theme-switch\variants.css
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\toggle-count\auto.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\toggle-count\core.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\toggle-count\interfaces.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\toggle-password\auto.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\toggle-password\core.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\toggle-password\interfaces.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\tooltip\auto.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\tooltip\core.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\tooltip\interfaces.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\tooltip\types.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\tooltip\variants.css
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\tree-view\auto.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\tree-view\core.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\tree-view\interfaces.ts
+C:\laragon\www\synticorex\reference\preline-main\src\plugins\tree-view\variants.css
+C:\laragon\www\synticorex\reference\preline-main\src\utils\index.ts
+C:\laragon\www\synticorex\reference\preline-main\src\utils\interfaces.ts
+C:\laragon\www\synticorex\reference\preline-main\templates\agency
+C:\laragon\www\synticorex\reference\preline-main\templates\ai-chat
+C:\laragon\www\synticorex\reference\preline-main\templates\cms
+C:\laragon\www\synticorex\reference\preline-main\templates\coffee-shop
+C:\laragon\www\synticorex\reference\preline-main\templates\personal
+C:\laragon\www\synticorex\reference\preline-main\templates\agency\index.html
+C:\laragon\www\synticorex\reference\preline-main\templates\ai-chat\index.html
+C:\laragon\www\synticorex\reference\preline-main\templates\cms\index.html
+C:\laragon\www\synticorex\reference\preline-main\templates\coffee-shop\index.html
+C:\laragon\www\synticorex\reference\preline-main\templates\personal\index.html

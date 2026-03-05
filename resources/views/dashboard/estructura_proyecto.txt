@@ -1,0 +1,80 @@
+ESTRUCTURA DEL PROYECTO 
+================================================ 
+Fecha: miÃ© 04/03/2026 20:15:57,22 
+Ruta: C:\laragon\www\synticorex\resources\views\dashboard 
+================================================ 
+ 
+[ARBOL DE DIRECTORIOS] 
+ 
+Listado de rutas de carpetas para el volumen OS
+El número de serie del volumen es 92E8-531C
+C:.
+|   estructura_proyecto.txt
+|   generar_txt_simple.bat
+|   index.blade.php
+|   
++---components
+|       config-section.blade.php
+|       design-section.blade.php
+|       info-section.blade.php
+|       message-section.blade.php
+|       products-section.blade.php
+|       sales-section.blade.php
+|       services-section.blade.php
+|       
++---modals
+|       product-modal.blade.php
+|       service-modal.blade.php
+|       shared-modals.blade.php
+|       
++---scripts
+|       design-config-scripts.blade.php
+|       service-scripts.blade.php
+|       sortable-scripts.blade.php
+|       tab-product-scripts.blade.php
+|       
+\---_archive
+        analytics-section.blade.php
+        branches-section.blade.php
+        config-section.blade.php
+        design-section.blade.php
+        index.blade.php.bak
+        index.blade.php.bak2
+        info-section.blade.php
+        products-section.blade.php
+        services-section.blade.php
+        
+ 
+================================================ 
+[LISTA COMPLETA DE RUTAS] 
+================================================ 
+C:\laragon\www\synticorex\resources\views\dashboard\components
+C:\laragon\www\synticorex\resources\views\dashboard\estructura_proyecto.txt
+C:\laragon\www\synticorex\resources\views\dashboard\generar_txt_simple.bat
+C:\laragon\www\synticorex\resources\views\dashboard\index.blade.php
+C:\laragon\www\synticorex\resources\views\dashboard\modals
+C:\laragon\www\synticorex\resources\views\dashboard\scripts
+C:\laragon\www\synticorex\resources\views\dashboard\_archive
+C:\laragon\www\synticorex\resources\views\dashboard\components\config-section.blade.php
+C:\laragon\www\synticorex\resources\views\dashboard\components\design-section.blade.php
+C:\laragon\www\synticorex\resources\views\dashboard\components\info-section.blade.php
+C:\laragon\www\synticorex\resources\views\dashboard\components\message-section.blade.php
+C:\laragon\www\synticorex\resources\views\dashboard\components\products-section.blade.php
+C:\laragon\www\synticorex\resources\views\dashboard\components\sales-section.blade.php
+C:\laragon\www\synticorex\resources\views\dashboard\components\services-section.blade.php
+C:\laragon\www\synticorex\resources\views\dashboard\modals\product-modal.blade.php
+C:\laragon\www\synticorex\resources\views\dashboard\modals\service-modal.blade.php
+C:\laragon\www\synticorex\resources\views\dashboard\modals\shared-modals.blade.php
+C:\laragon\www\synticorex\resources\views\dashboard\scripts\design-config-scripts.blade.php
+C:\laragon\www\synticorex\resources\views\dashboard\scripts\service-scripts.blade.php
+C:\laragon\www\synticorex\resources\views\dashboard\scripts\sortable-scripts.blade.php
+C:\laragon\www\synticorex\resources\views\dashboard\scripts\tab-product-scripts.blade.php
+C:\laragon\www\synticorex\resources\views\dashboard\_archive\analytics-section.blade.php
+C:\laragon\www\synticorex\resources\views\dashboard\_archive\branches-section.blade.php
+C:\laragon\www\synticorex\resources\views\dashboard\_archive\config-section.blade.php
+C:\laragon\www\synticorex\resources\views\dashboard\_archive\design-section.blade.php
+C:\laragon\www\synticorex\resources\views\dashboard\_archive\index.blade.php.bak
+C:\laragon\www\synticorex\resources\views\dashboard\_archive\index.blade.php.bak2
+C:\laragon\www\synticorex\resources\views\dashboard\_archive\info-section.blade.php
+C:\laragon\www\synticorex\resources\views\dashboard\_archive\products-section.blade.php
+C:\laragon\www\synticorex\resources\views\dashboard\_archive\services-section.blade.php

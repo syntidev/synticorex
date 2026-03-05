@@ -50,12 +50,12 @@
 
             {{-- ── Gráfico + Distribución side-by-side ──────────────────── --}}
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-6">
-                <div class="lg:col-span-2 bg-surface rounded-xl shadow-sm border border-border">
+                <div class="lg:col-span-2 bg-surface rounded-xl shadow-sm border border-border overflow-hidden min-w-0">
                     <div class="flex items-center justify-between">
                         <h4 class="font-semibold text-foreground text-base">Visitantes — últimos 7 días</h4>
                     </div>
-                    <div class="pt-2">
-                        <canvas id="analytics-chart" class="max-h-[250px]"></canvas>
+                    <div class="pt-2 overflow-hidden">
+                        <canvas id="analytics-chart" class="max-h-[250px] w-full"></canvas>
                     </div>
                 </div>
 

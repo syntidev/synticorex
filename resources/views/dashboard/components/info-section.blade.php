@@ -460,7 +460,7 @@
                             <label class="label cursor-pointer justify-start gap-3">
                                 <input type="hidden" name="show_hours_indicator" value="0">
                                 <input type="checkbox" name="show_hours_indicator" id="show-hours-toggle"
-                                       class="switch switch-success"
+                                       class="relative w-[35px] h-[20px] bg-gray-200 checked:bg-green-500 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 appearance-none focus:ring-green-500 focus:ring-2 focus:ring-offset-2 before:inline-block before:size-[16px] before:bg-white before:rounded-full before:transform before:translate-x-0 checked:before:translate-x-full before:transition before:ease-in-out before:duration-200 before:shadow-sm"
                                        value="1"
                                        {{ data_get($tenant->settings, 'engine_settings.features.show_hours_indicator', false) ? 'checked' : '' }}
                                        onchange="toggleHoursIndicatorFields()">
@@ -479,7 +479,7 @@
                                         <span class="text-muted-foreground-1 text-xs font-normal" id="char-count">0 / 150</span>
                                     </span>
                                 </label>
-                                <textarea id="closed-message-input" name="closed_message" class="textarea textarea-bordered w-full min-h-16"
+                                <textarea id="closed-message-input" name="closed_message" class="py-2 px-3 block w-full bg-layer border border-border shadow-2xs rounded-lg text-sm text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus min-h-16"
                                           placeholder="Estamos cerrados. Te responderemos durante nuestro horario de atención."
                                           maxlength="150"
                                           oninput="updateCharCount(); updatePreview()">{{ data_get($tenant->settings, 'business_info.closed_message', 'Estamos cerrados. Te responderemos durante nuestro horario de atención.') }}</textarea>
@@ -633,9 +633,9 @@
                                             <span class="inline-flex items-center py-0.5 px-2 rounded-full text-xs font-medium bg-info/10 text-info">5 días</span>
                                         </div>
                                         <div class="flex items-center gap-2 flex-wrap">
-                                            <input type="time" id="bh-simple-wd-open" class="input input-sm input-bordered w-28" value="{{ $wdOpen }}">
+                                            <input type="time" id="bh-simple-wd-open" class="py-1.5 px-2.5 block bg-layer border border-border shadow-2xs rounded-lg text-sm text-foreground focus:border-primary-focus focus:ring-primary-focus w-28" value="{{ $wdOpen }}">
                                             <span class="text-xs text-muted-foreground-1 font-medium">a</span>
-                                            <input type="time" id="bh-simple-wd-close" class="input input-sm input-bordered w-28" value="{{ $wdClose }}">
+                                            <input type="time" id="bh-simple-wd-close" class="py-1.5 px-2.5 block bg-layer border border-border shadow-2xs rounded-lg text-sm text-foreground focus:border-primary-focus focus:ring-primary-focus w-28" value="{{ $wdClose }}">
                                         </div>
                                     </div>
 
@@ -645,15 +645,15 @@
                                             <span class="text-sm font-semibold text-foreground">Sábado</span>
                                             <label class="flex items-center gap-2 cursor-pointer">
                                                 <span class="text-xs text-muted-foreground-1">Cerrado</span>
-                                                <input type="checkbox" id="bh-simple-sat-closed" class="toggle toggle-error toggle-sm"
+                                                <input type="checkbox" id="bh-simple-sat-closed" class="relative w-[35px] h-[20px] bg-gray-200 checked:bg-red-500 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 appearance-none focus:ring-red-500 focus:ring-2 focus:ring-offset-2 before:inline-block before:size-[16px] before:bg-white before:rounded-full before:transform before:translate-x-0 checked:before:translate-x-full before:transition before:ease-in-out before:duration-200 before:shadow-sm"
                                                        {{ $satClosed ? 'checked' : '' }}
                                                        onchange="document.getElementById('bh-simple-sat-times').classList.toggle('hidden', this.checked)">
                                             </label>
                                         </div>
                                         <div id="bh-simple-sat-times" class="flex items-center gap-2 flex-wrap {{ $satClosed ? 'hidden' : '' }}">
-                                            <input type="time" id="bh-simple-sat-open" class="input input-sm input-bordered w-28" value="{{ $satData['open'] ?? '09:00' }}">
+                                            <input type="time" id="bh-simple-sat-open" class="py-1.5 px-2.5 block bg-layer border border-border shadow-2xs rounded-lg text-sm text-foreground focus:border-primary-focus focus:ring-primary-focus w-28" value="{{ $satData['open'] ?? '09:00' }}">
                                             <span class="text-xs text-muted-foreground-1 font-medium">a</span>
-                                            <input type="time" id="bh-simple-sat-close" class="input input-sm input-bordered w-28" value="{{ $satData['close'] ?? '17:00' }}">
+                                            <input type="time" id="bh-simple-sat-close" class="py-1.5 px-2.5 block bg-layer border border-border shadow-2xs rounded-lg text-sm text-foreground focus:border-primary-focus focus:ring-primary-focus w-28" value="{{ $satData['close'] ?? '17:00' }}">
                                         </div>
                                     </div>
 
@@ -663,15 +663,15 @@
                                             <span class="text-sm font-semibold text-foreground">Domingo</span>
                                             <label class="flex items-center gap-2 cursor-pointer">
                                                 <span class="text-xs text-muted-foreground-1">Cerrado</span>
-                                                <input type="checkbox" id="bh-simple-sun-closed" class="toggle toggle-error toggle-sm"
+                                                <input type="checkbox" id="bh-simple-sun-closed" class="relative w-[35px] h-[20px] bg-gray-200 checked:bg-red-500 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 appearance-none focus:ring-red-500 focus:ring-2 focus:ring-offset-2 before:inline-block before:size-[16px] before:bg-white before:rounded-full before:transform before:translate-x-0 checked:before:translate-x-full before:transition before:ease-in-out before:duration-200 before:shadow-sm"
                                                        {{ $sunClosed ? 'checked' : '' }}
                                                        onchange="document.getElementById('bh-simple-sun-times').classList.toggle('hidden', this.checked)">
                                             </label>
                                         </div>
                                         <div id="bh-simple-sun-times" class="flex items-center gap-2 flex-wrap {{ $sunClosed ? 'hidden' : '' }}">
-                                            <input type="time" id="bh-simple-sun-open" class="input input-sm input-bordered w-28" value="{{ $sunData['open'] ?? '09:00' }}">
+                                            <input type="time" id="bh-simple-sun-open" class="py-1.5 px-2.5 block bg-layer border border-border shadow-2xs rounded-lg text-sm text-foreground focus:border-primary-focus focus:ring-primary-focus w-28" value="{{ $sunData['open'] ?? '09:00' }}">
                                             <span class="text-xs text-muted-foreground-1 font-medium">a</span>
-                                            <input type="time" id="bh-simple-sun-close" class="input input-sm input-bordered w-28" value="{{ $sunData['close'] ?? '14:00' }}">
+                                            <input type="time" id="bh-simple-sun-close" class="py-1.5 px-2.5 block bg-layer border border-border shadow-2xs rounded-lg text-sm text-foreground focus:border-primary-focus focus:ring-primary-focus w-28" value="{{ $sunData['close'] ?? '14:00' }}">
                                         </div>
                                     </div>
                                 </div>
@@ -687,23 +687,23 @@
                                         $openTime = $dayData['open'] ?? '08:00';
                                         $closeTime = $dayData['close'] ?? '18:00';
                                     @endphp
-                                    <div class="flex items-center gap-3 p-3 rounded-lg bg-layer border border-border">
+                                    <div class="flex items-center gap-3 p-3 rounded-lg bg-layer border border-border flex-wrap">
                                         <span class="text-sm font-semibold text-foreground w-24 shrink-0">{{ $dayLabel }}</span>
-                                        <div class="flex items-center gap-2 flex-1 flex-wrap">
+                                        <div class="flex items-center gap-2 flex-1 flex-wrap min-w-0">
                                             <input type="time" id="bh-{{ $dayKey }}-open"
-                                                   class="input input-sm input-bordered w-28"
+                                                   class="py-1.5 px-2.5 block bg-layer border border-border shadow-2xs rounded-lg text-sm text-foreground focus:border-primary-focus focus:ring-primary-focus w-28"
                                                    value="{{ $openTime }}"
                                                    {{ $isClosed ? 'disabled' : '' }}>
                                             <span class="text-xs text-muted-foreground-1">a</span>
                                             <input type="time" id="bh-{{ $dayKey }}-close"
-                                                   class="input input-sm input-bordered w-28"
+                                                   class="py-1.5 px-2.5 block bg-layer border border-border shadow-2xs rounded-lg text-sm text-foreground focus:border-primary-focus focus:ring-primary-focus w-28"
                                                    value="{{ $closeTime }}"
                                                    {{ $isClosed ? 'disabled' : '' }}>
                                         </div>
-                                        <label class="label cursor-pointer gap-2 shrink-0">
+                                        <label class="flex items-center cursor-pointer gap-2 shrink-0">
                                             <span class="text-xs text-muted-foreground-1">Cerrado</span>
                                             <input type="checkbox" id="bh-{{ $dayKey }}-closed"
-                                                   class="toggle toggle-error toggle-sm"
+                                                   class="relative w-[35px] h-[20px] bg-gray-200 checked:bg-red-500 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 appearance-none focus:ring-red-500 focus:ring-2 focus:ring-offset-2 before:inline-block before:size-[16px] before:bg-white before:rounded-full before:transform before:translate-x-0 checked:before:translate-x-full before:transition before:ease-in-out before:duration-200 before:shadow-sm"
                                                    {{ $isClosed ? 'checked' : '' }}
                                                    onchange="toggleDayClosed('{{ $dayKey }}', this.checked)">
                                         </label>

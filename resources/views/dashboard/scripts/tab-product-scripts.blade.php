@@ -4,7 +4,7 @@
         // returns to the exact same spot after page refresh.
         // ═════════════════════════════════════════════════════════════════
         window.__dashboardSaveState = function() {
-            var activeBtn = document.querySelector('#layout-sidebar [role="tab"].menu-active');
+            var activeBtn = document.querySelector('#hs-application-sidebar [role="tab"].menu-active');
             var activeTab = activeBtn ? activeBtn.getAttribute('data-tab') : 'info';
             sessionStorage.setItem('_dash_tab', activeTab);
             sessionStorage.setItem('_dash_scrollY', String(window.scrollY));
@@ -16,7 +16,7 @@
 
         // Tab Navigation — Preline Sidebar
         document.addEventListener('DOMContentLoaded', function() {
-            const tabs     = document.querySelectorAll('#layout-sidebar [role="tab"]');
+            const tabs     = document.querySelectorAll('#hs-application-sidebar [role="tab"]');
             const contents = document.querySelectorAll('.tab-content');
 
             function switchTab(tabId) {
@@ -30,7 +30,7 @@
                 contents.forEach(c => c.classList.remove('active'));
 
                 // Activate selected button + panel
-                const activeBtn     = document.querySelector(`#layout-sidebar [data-tab="${tabId}"]`);
+                const activeBtn     = document.querySelector(`#hs-application-sidebar [data-tab="${tabId}"]`);
                 const activeContent = document.getElementById('tab-' + tabId);
 
                 activeBtn?.classList.add('menu-active');
@@ -42,9 +42,9 @@
                 // Auto-close mobile sidebar drawer after navigation (via FlyonUI API)
                 if (window.innerWidth < 1024) {
                     if (window.HSOverlay) {
-                        window.HSOverlay.close('#layout-sidebar');
+                        window.HSOverlay.close('#hs-application-sidebar');
                     } else {
-                        const sb = document.getElementById('layout-sidebar');
+                        const sb = document.getElementById('hs-application-sidebar');
                         if (sb) { sb.classList.remove('open', 'opened'); }
                     }
                 }

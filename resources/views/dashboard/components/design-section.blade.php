@@ -1,4 +1,4 @@
-        <!-- Tab: CÃ³mo Se Ve -->
+        <!-- Tab: Cómo Se Ve -->
         <div id="tab-diseno" class="tab-content">
 @php
 // activeTheme ya viene desde el controller
