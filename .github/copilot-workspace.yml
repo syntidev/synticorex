@@ -21,6 +21,7 @@ agent:
 
     SKILL: preline-designer
     - Stack UI: Preline 4.1.2 + Tailwind 4.2 + Alpine.js 3.4.2
+    - NUNCA crear o referenciar landing/partials/ — usa landing/sections/ siempre
     - NUNCA usar clases DaisyUI: btn, card, modal, badge, drawer, collapse, dropdown, join, stat, toast, divider, menu, alert
     - Usar Tailwind utilitario puro para estilos
     - Componentes interactivos SOLO con atributos hs-* de Preline

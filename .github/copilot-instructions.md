@@ -73,3 +73,6 @@ Laravel 12.51, PHP 8.3, MySQL, Preline 4.1.2, Tailwind 4.2, Alpine.js 3.4.2, Vit
 - {!! !!} salvo Schema.org generado internamente
 - eval() o new Function() en JS
 - Cualquier clase DaisyUI/FlyonUI en HTML
+- NUNCA usar landing/partials/ — carpeta eliminada permanentemente
+- SIEMPRE usar landing/sections/ para todo blade de landing
+- @include siempre como @include('landing.sections.NOMBRE')

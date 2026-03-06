@@ -22,7 +22,7 @@ C:\laragon\www\synticorex\
 ├── resources\views\
 │   ├── landing\
 │   │   ├── base.blade.php               ← layout + CURRENCY_MODE
-│   │   └── partials\                    ← 11 componentes
+│   │   └── sections\                    ← componentes activos (única carpeta válida)
 │   └── dashboard\
 │       └── index.blade.php              ← dashboard ~2000 líneas
 ├── routes\web.php                        ← todas las rutas
