@@ -14,7 +14,7 @@ class ImageUploadService
     private const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB in bytes
     private const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
     private const MAX_WIDTH = 800;
-    private const WEBP_QUALITY = 80;
+    private const WEBP_QUALITY = 82;
 
     /**
      * Process and save uploaded image.

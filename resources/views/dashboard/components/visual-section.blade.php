@@ -1,5 +1,5 @@
         <!-- Tab: Visual — Imágenes, Logo, QR -->
-        <div id="tab-visual" class="tab-content">
+        <div id="tab-visual" class="tab-content" x-data="{ imgPreview: '' }">
             <div class="px-6 pb-6 pt-2">
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 {{-- Logo Card (200x200) --}}
@@ -15,7 +15,7 @@
                             </div>
                         </div>
                         <div id="logo-dropzone"
-                             class="bg-layer rounded-lg h-40 flex items-center justify-center mb-3 overflow-hidden border-2 border-dashed border-transparent transition-colors cursor-pointer"
+                             class="relative bg-layer rounded-lg h-40 flex items-center justify-center mb-3 overflow-hidden border-2 border-dashed border-transparent transition-colors cursor-pointer"
                              onclick="document.getElementById('logo-file').click()"
                              ondragover="event.preventDefault(); this.classList.add('border-primary','bg-primary/5')"
                              ondragleave="this.classList.remove('border-primary','bg-primary/5')"
@@ -24,6 +24,11 @@
                                 <img id="logo-preview"
                                      src="{{ asset('storage/tenants/' . $tenant->id . '/' . $customization->logo_filename) }}"
                                      alt="Logo" class="max-w-full max-h-full object-contain">
+                                <button type="button"
+                                        x-on:click.stop="imgPreview='{{ asset('storage/tenants/' . $tenant->id . '/' . $customization->logo_filename) }}'"
+                                        class="absolute inset-0 flex items-center justify-center bg-black/0 hover:bg-black/25 transition-colors group">
+                                    <span class="iconify tabler--eye size-6 text-white opacity-0 group-hover:opacity-100 transition-opacity drop-shadow-lg"></span>
+                                </button>
                             @else
                                 <div id="logo-placeholder" class="text-center">
                                     <svg xmlns="http://www.w3.org/2000/svg"
@@ -62,7 +67,7 @@
                             </div>
                         </div>
                         <div id="hero-dropzone"
-                             class="bg-layer rounded-lg h-40 flex items-center justify-center mb-3 overflow-hidden border-2 border-dashed border-transparent transition-colors cursor-pointer"
+                             class="relative bg-layer rounded-lg h-40 flex items-center justify-center mb-3 overflow-hidden border-2 border-dashed border-transparent transition-colors cursor-pointer"
                              onclick="document.getElementById('hero-file').click()"
                              ondragover="event.preventDefault(); this.classList.add('border-primary','bg-primary/5')"
                              ondragleave="this.classList.remove('border-primary','bg-primary/5')"
@@ -71,6 +76,11 @@
                                 <img id="hero-preview"
                                      src="{{ asset('storage/tenants/' . $tenant->id . '/' . $customization->hero_main_filename) }}"
                                      alt="Hero" class="w-full h-full object-cover">
+                                <button type="button"
+                                        x-on:click.stop="imgPreview='{{ asset('storage/tenants/' . $tenant->id . '/' . $customization->hero_main_filename) }}'"
+                                        class="absolute inset-0 flex items-center justify-center bg-black/0 hover:bg-black/25 transition-colors group">
+                                    <span class="iconify tabler--eye size-6 text-white opacity-0 group-hover:opacity-100 transition-opacity drop-shadow-lg"></span>
+                                </button>
                             @else
                                 <div id="hero-placeholder" class="text-center text-muted-foreground-1">
                                     <span class="iconify tabler--cloud-upload size-8 mb-1 block mx-auto"></span>
@@ -100,7 +110,7 @@
                             </div>
                         </div>
                         <div id="about-dropzone"
-                             class="bg-layer rounded-lg h-40 flex items-center justify-center mb-3 overflow-hidden border-2 border-dashed border-transparent transition-colors cursor-pointer"
+                             class="relative bg-layer rounded-lg h-40 flex items-center justify-center mb-3 overflow-hidden border-2 border-dashed border-transparent transition-colors cursor-pointer"
                              onclick="document.getElementById('about-file').click()"
                              ondragover="event.preventDefault(); this.classList.add('border-primary','bg-primary/5')"
                              ondragleave="this.classList.remove('border-primary','bg-primary/5')"
@@ -109,6 +119,11 @@
                                 <img id="about-preview"
                                      src="{{ asset('storage/tenants/' . $tenant->id . '/' . $customization->about_image_filename) }}"
                                      alt="Acerca de" class="w-full h-full object-cover">
+                                <button type="button"
+                                        x-on:click.stop="imgPreview='{{ asset('storage/tenants/' . $tenant->id . '/' . $customization->about_image_filename) }}'"
+                                        class="absolute inset-0 flex items-center justify-center bg-black/0 hover:bg-black/25 transition-colors group">
+                                    <span class="iconify tabler--eye size-6 text-white opacity-0 group-hover:opacity-100 transition-opacity drop-shadow-lg"></span>
+                                </button>
                             @else
                                 <div class="text-center text-muted-foreground-1">
                                     <span class="iconify tabler--users size-8 mb-1 block mx-auto"></span>
@@ -197,6 +212,28 @@
                 </div>
             </div>{{-- /grid visual --}}
             </div>{{-- /wrapper --}}
+
+        {{-- Fullscreen image preview modal --}}
+        <div x-show="imgPreview"
+             x-transition:enter="transition ease-out duration-200"
+             x-transition:enter-start="opacity-0"
+             x-transition:enter-end="opacity-100"
+             x-transition:leave="transition ease-in duration-150"
+             x-transition:leave-start="opacity-100"
+             x-transition:leave-end="opacity-0"
+             x-on:click="imgPreview=''"
+             x-on:keydown.escape.window="imgPreview=''"
+             class="fixed inset-0 z-[99999] flex items-center justify-center bg-black/85 backdrop-blur-sm p-4"
+             style="display:none">
+            <img :src="imgPreview" alt="Vista previa"
+                 class="max-w-full max-h-full object-contain rounded-xl shadow-2xl"
+                 x-on:click.stop>
+            <button type="button"
+                    x-on:click="imgPreview=''"
+                    class="absolute top-4 right-4 size-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors">
+                <span class="iconify tabler--x size-5"></span>
+            </button>
+        </div>
 
         {{-- ── QR Brand Colorization ── --}}
         <script>
