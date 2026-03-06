@@ -18,7 +18,7 @@
     $phoneClean = preg_replace('/[^0-9]/', '', $phone);
 @endphp
 
-<div id="header-top" class="sticky top-0 z-40 h-10 bg-surface border-b border-border flex items-center">
+<div id="header-top" class="relative z-[120] h-10 bg-surface border-b border-border flex items-center">
     <div class="container mx-auto px-4 md:px-6 flex items-center justify-between gap-4 text-xs font-medium">
 
         {{-- ── Izquierda: Mensaje promocional ──────────────── --}}
