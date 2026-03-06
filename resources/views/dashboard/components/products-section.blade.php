@@ -57,8 +57,9 @@
                                 @if($product->image_filename)
                                     <img src="{{ asset('storage/tenants/' . $tenant->id . '/' . $product->image_filename) }}"
                                          alt="{{ $product->name }}"
-                                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                                         loading="lazy" decoding="async">
+                                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 cursor-zoom-in"
+                                         loading="lazy" decoding="async"
+                                         onclick="openImgPreview('{{ asset('storage/tenants/' . $tenant->id . '/' . $product->image_filename) }}')">
                                 @else
                                     <div class="w-full h-full flex items-center justify-center">
                                         <span class="iconify tabler--package size-12 text-foreground/15" aria-hidden="true"></span>
