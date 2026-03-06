@@ -40,6 +40,7 @@ class TenantCustomization extends Model
         'content_blocks',
         'about_text',
         'about_image_filename',
+        'header_message',
     ];
 
     /**

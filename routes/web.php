@@ -125,6 +125,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/tenant/{tenantId}/update-testimonials',         [DashboardController::class, 'updateTestimonials']);
     Route::post('/tenant/{tenantId}/update-faq',                  [DashboardController::class, 'updateFaq']);
     Route::post('/tenant/{tenantId}/update-header-top',           [DashboardController::class, 'updateHeaderTop']);
+    Route::post('/tenant/{tenantId}/update-header-message',        [DashboardController::class, 'updateHeaderMessage']);
     Route::post('/tenant/{tenantId}/update-cta',                  [DashboardController::class, 'updateCta']);
     Route::post('/tenant/{tenantId}/update-business-hours',       [DashboardController::class, 'updateBusinessHours']);
 

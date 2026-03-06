@@ -353,6 +353,38 @@ class DashboardController extends Controller
     }
 
     /**
+     * Update promotional header message stored in tenant_customization.
+     */
+    public function updateHeaderMessage(Request $request, int $tenantId): JsonResponse
+    {
+        try {
+            $tenant = Tenant::where('id', $tenantId)
+                ->where('status', 'active')
+                ->with('customization')
+                ->firstOrFail();
+
+            if (!$tenant->isAtLeastCrecimiento()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Header Top requiere Plan CRECIMIENTO o superior'
+                ], 403);
+            }
+
+            $validated = $request->validate([
+                'header_message' => 'nullable|string|max:255',
+            ]);
+
+            $tenant->customization->update([
+                'header_message' => $validated['header_message'] ?: null,
+            ]);
+
+            return response()->json(['success' => true, 'message' => 'Mensaje actualizado']);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 422);
+        }
+    }
+
+    /**
      * Update CTA special section (Plan 3).
      *
      * @param Request $request

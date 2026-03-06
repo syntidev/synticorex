@@ -189,6 +189,24 @@
             }
         });
 
+        // Config Tab: Guardar mensaje promocional header top
+        async function saveHeaderMessage() {
+            const input = document.getElementById('header-message-input');
+            if (!input) return;
+            try {
+                const csrf = document.querySelector('meta[name="csrf-token"]').content;
+                const res = await fetch('/tenant/{{ $tenant->id }}/update-header-message', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrf },
+                    body: JSON.stringify({ header_message: input.value.trim() }),
+                });
+                const data = await res.json();
+                showToast(data.success ? 'success' : 'error', data.message);
+            } catch (e) {
+                showToast('error', 'Error al guardar el mensaje');
+            }
+        }
+
         // Config Tab: Update Dollar Rate (USD + EUR)
         async function updateDollarRate() {
             try {
