@@ -1,5 +1,5 @@
         <!-- Tab: Visual — Imágenes, Logo, QR -->
-        <div id="tab-visual" class="tab-content" x-data="{ imgPreview: '' }">
+        <div id="tab-visual" class="tab-content">
             <div class="px-6 pb-6 pt-2">
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 {{-- Logo Card (200x200) --}}
@@ -25,7 +25,7 @@
                                      src="{{ asset('storage/tenants/' . $tenant->id . '/' . $customization->logo_filename) }}"
                                      alt="Logo" class="max-w-full max-h-full object-contain">
                                 <button type="button"
-                                        x-on:click.stop="imgPreview='{{ asset('storage/tenants/' . $tenant->id . '/' . $customization->logo_filename) }}'"
+                                        onclick="event.stopPropagation(); openImgPreview('{{ asset('storage/tenants/' . $tenant->id . '/' . $customization->logo_filename) }}')"
                                         class="absolute inset-0 flex items-center justify-center bg-black/0 hover:bg-black/25 transition-colors group">
                                     <span class="iconify tabler--eye size-6 text-white opacity-0 group-hover:opacity-100 transition-opacity drop-shadow-lg"></span>
                                 </button>
@@ -77,7 +77,7 @@
                                      src="{{ asset('storage/tenants/' . $tenant->id . '/' . $customization->hero_main_filename) }}"
                                      alt="Hero" class="w-full h-full object-cover">
                                 <button type="button"
-                                        x-on:click.stop="imgPreview='{{ asset('storage/tenants/' . $tenant->id . '/' . $customization->hero_main_filename) }}'"
+                                        onclick="event.stopPropagation(); openImgPreview('{{ asset('storage/tenants/' . $tenant->id . '/' . $customization->hero_main_filename) }}')"
                                         class="absolute inset-0 flex items-center justify-center bg-black/0 hover:bg-black/25 transition-colors group">
                                     <span class="iconify tabler--eye size-6 text-white opacity-0 group-hover:opacity-100 transition-opacity drop-shadow-lg"></span>
                                 </button>
@@ -120,7 +120,7 @@
                                      src="{{ asset('storage/tenants/' . $tenant->id . '/' . $customization->about_image_filename) }}"
                                      alt="Acerca de" class="w-full h-full object-cover">
                                 <button type="button"
-                                        x-on:click.stop="imgPreview='{{ asset('storage/tenants/' . $tenant->id . '/' . $customization->about_image_filename) }}'"
+                                        onclick="event.stopPropagation(); openImgPreview('{{ asset('storage/tenants/' . $tenant->id . '/' . $customization->about_image_filename) }}')"
                                         class="absolute inset-0 flex items-center justify-center bg-black/0 hover:bg-black/25 transition-colors group">
                                     <span class="iconify tabler--eye size-6 text-white opacity-0 group-hover:opacity-100 transition-opacity drop-shadow-lg"></span>
                                 </button>
@@ -214,29 +214,34 @@
             </div>{{-- /wrapper --}}
 
         {{-- Fullscreen image preview modal --}}
-        <div x-show="imgPreview"
-             x-transition:enter="transition ease-out duration-200"
-             x-transition:enter-start="opacity-0"
-             x-transition:enter-end="opacity-100"
-             x-transition:leave="transition ease-in duration-150"
-             x-transition:leave-start="opacity-100"
-             x-transition:leave-end="opacity-0"
-             x-on:click="imgPreview=''"
-             x-on:keydown.escape.window="imgPreview=''"
+        <div id="img-preview-modal"
+             onclick="closeImgPreview()"
              class="fixed inset-0 z-[99999] flex items-center justify-center bg-black/85 backdrop-blur-sm p-4"
              style="display:none">
-            <img :src="imgPreview" alt="Vista previa"
+            <img id="img-preview-src" src="" alt="Vista previa"
                  class="max-w-full max-h-full object-contain rounded-xl shadow-2xl"
-                 x-on:click.stop>
+                 onclick="event.stopPropagation()">
             <button type="button"
-                    x-on:click="imgPreview=''"
+                    onclick="event.stopPropagation(); closeImgPreview()"
                     class="absolute top-4 right-4 size-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors">
                 <span class="iconify tabler--x size-5"></span>
             </button>
         </div>
 
-        {{-- ── QR Brand Colorization ── --}}
+        {{-- ── Image Preview + QR Brand Colorization ── --}}
         <script>
+        window.openImgPreview = function(url) {
+            document.getElementById('img-preview-src').src = url;
+            document.getElementById('img-preview-modal').style.display = 'flex';
+        };
+        window.closeImgPreview = function() {
+            document.getElementById('img-preview-modal').style.display = 'none';
+            document.getElementById('img-preview-src').src = '';
+        };
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') { window.closeImgPreview && closeImgPreview(); }
+        });
+
         (function () {
             function applyQRColor(sel) {
                 var p = getComputedStyle(document.documentElement).getPropertyValue('--color-primary').trim() || '#1a1a1a';

@@ -13,8 +13,13 @@ class ImageUploadService
 {
     private const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB in bytes
     private const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
-    private const MAX_WIDTH = 800;
-    private const WEBP_QUALITY = 82;
+    private const MAX_WIDTHS = [
+        'logo'    => 400,
+        'hero'    => 1600,
+        'product' => 1000,
+        'service' => 1000,
+    ];
+    private const WEBP_QUALITY = 85;
 
     /**
      * Process and save uploaded image.
@@ -48,9 +53,10 @@ class ImageUploadService
         // Load image
         $image = $manager->read($file->getRealPath());
 
-        // Resize if width exceeds maximum
-        if ($image->width() > self::MAX_WIDTH) {
-            $image->scale(width: self::MAX_WIDTH);
+        // Resize if width exceeds per-type maximum
+        $maxWidth = self::MAX_WIDTHS[$type] ?? 1000;
+        if ($image->width() > $maxWidth) {
+            $image->scale(width: $maxWidth);
         }
 
         // Generate filename based on type
@@ -123,7 +129,8 @@ class ImageUploadService
     public function processWithCustomFilename(
         \Illuminate\Http\UploadedFile $file,
         int $tenantId,
-        string $customFilename
+        string $customFilename,
+        int $maxWidth = 1000
     ): string {
         // Validate file size
         if ($file->getSize() > self::MAX_FILE_SIZE) {
@@ -142,8 +149,8 @@ class ImageUploadService
         $image = $manager->read($file->getRealPath());
 
         // Resize if width exceeds maximum
-        if ($image->width() > self::MAX_WIDTH) {
-            $image->scale(width: self::MAX_WIDTH);
+        if ($image->width() > $maxWidth) {
+            $image->scale(width: $maxWidth);
         }
 
         // Destination path

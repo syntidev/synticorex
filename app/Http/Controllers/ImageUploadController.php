@@ -393,7 +393,7 @@ class ImageUploadController extends Controller
 
             $file = $request->file('image');
 
-            $filename = $this->imageUploadService->processWithCustomFilename($file, $tenantId, 'about.webp');
+            $filename = $this->imageUploadService->processWithCustomFilename($file, $tenantId, 'about.webp', 1200);
 
             $customization = $tenant->customization ?? new TenantCustomization(['tenant_id' => $tenant->id]);
             $customization->about_image_filename = $filename;
