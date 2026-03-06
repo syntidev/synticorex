@@ -1,6 +1,6 @@
 ESTRUCTURA DEL PROYECTO 
 ================================================ 
-Fecha: mar 03/03/2026 16:51:07,10 
+Fecha: vie 06/03/2026 16:37:35,20 
 Ruta: C:\laragon\www\synticorex\resources\views 
 ================================================ 
  
@@ -45,6 +45,8 @@ C:.
 |           modal.blade.php
 |           
 +---dashboard
+|   |   estructura_proyecto.txt
+|   |   generar_txt_simple.bat
 |   |   index.blade.php
 |   |   
 |   +---components
@@ -55,6 +57,7 @@ C:.
 |   |       products-section.blade.php
 |   |       sales-section.blade.php
 |   |       services-section.blade.php
+|   |       visual-section.blade.php
 |   |       
 |   +---modals
 |   |       product-modal.blade.php
@@ -79,6 +82,8 @@ C:.
 |           services-section.blade.php
 |           
 +---errors
+|       404.blade.php
+|       500.blade.php
 |       tenant-not-found.blade.php
 |       
 +---landing
@@ -113,9 +118,32 @@ C:.
 |   |       restaurant.blade.php
 |   |       store.blade.php
 |   |       
-|   \---sections
-|           hero-gradient.blade.php
-|           hero-split.blade.php
+|   +---sections
+|   |       about.blade.php
+|   |       branches.blade.php
+|   |       contact.blade.php
+|   |       cta.blade.php
+|   |       delivery-info.blade.php
+|   |       faq.blade.php
+|   |       floating-panel.blade.php
+|   |       footer-v2.blade.php
+|   |       footer.blade.php
+|   |       header-top.blade.php
+|   |       header.blade.php
+|   |       hero-fullscreen-v2.blade.php
+|   |       hero-gradient.blade.php
+|   |       hero-split.blade.php
+|   |       navbar-v2.blade.php
+|   |       payment_methods.blade.php
+|   |       product-card.blade.php
+|   |       products.blade.php
+|   |       services-spotlight.blade.php
+|   |       services.blade.php
+|   |       testimonials.blade.php
+|   |       
+|   \---templates
+|           catalog.blade.php
+|           studio.blade.php
 |           
 +---layouts
 |       admin.blade.php
@@ -199,6 +227,8 @@ C:\laragon\www\synticorex\resources\views\components\ui\decorative-background.bl
 C:\laragon\www\synticorex\resources\views\components\ui\dropdown.blade.php
 C:\laragon\www\synticorex\resources\views\components\ui\modal.blade.php
 C:\laragon\www\synticorex\resources\views\dashboard\components
+C:\laragon\www\synticorex\resources\views\dashboard\estructura_proyecto.txt
+C:\laragon\www\synticorex\resources\views\dashboard\generar_txt_simple.bat
 C:\laragon\www\synticorex\resources\views\dashboard\index.blade.php
 C:\laragon\www\synticorex\resources\views\dashboard\modals
 C:\laragon\www\synticorex\resources\views\dashboard\scripts
@@ -210,6 +240,7 @@ C:\laragon\www\synticorex\resources\views\dashboard\components\message-section.b
 C:\laragon\www\synticorex\resources\views\dashboard\components\products-section.blade.php
 C:\laragon\www\synticorex\resources\views\dashboard\components\sales-section.blade.php
 C:\laragon\www\synticorex\resources\views\dashboard\components\services-section.blade.php
+C:\laragon\www\synticorex\resources\views\dashboard\components\visual-section.blade.php
 C:\laragon\www\synticorex\resources\views\dashboard\modals\product-modal.blade.php
 C:\laragon\www\synticorex\resources\views\dashboard\modals\service-modal.blade.php
 C:\laragon\www\synticorex\resources\views\dashboard\modals\shared-modals.blade.php
@@ -226,12 +257,15 @@ C:\laragon\www\synticorex\resources\views\dashboard\_archive\index.blade.php.bak
 C:\laragon\www\synticorex\resources\views\dashboard\_archive\info-section.blade.php
 C:\laragon\www\synticorex\resources\views\dashboard\_archive\products-section.blade.php
 C:\laragon\www\synticorex\resources\views\dashboard\_archive\services-section.blade.php
+C:\laragon\www\synticorex\resources\views\errors\404.blade.php
+C:\laragon\www\synticorex\resources\views\errors\500.blade.php
 C:\laragon\www\synticorex\resources\views\errors\tenant-not-found.blade.php
 C:\laragon\www\synticorex\resources\views\landing\base.blade.php
 C:\laragon\www\synticorex\resources\views\landing\cat.blade.php
 C:\laragon\www\synticorex\resources\views\landing\partials
 C:\laragon\www\synticorex\resources\views\landing\schemas
 C:\laragon\www\synticorex\resources\views\landing\sections
+C:\laragon\www\synticorex\resources\views\landing\templates
 C:\laragon\www\synticorex\resources\views\landing\partials\about.blade.php
 C:\laragon\www\synticorex\resources\views\landing\partials\branches.blade.php
 C:\laragon\www\synticorex\resources\views\landing\partials\contact.blade.php
@@ -256,8 +290,29 @@ C:\laragon\www\synticorex\resources\views\landing\schemas\local-business.blade.p
 C:\laragon\www\synticorex\resources\views\landing\schemas\professional.blade.php
 C:\laragon\www\synticorex\resources\views\landing\schemas\restaurant.blade.php
 C:\laragon\www\synticorex\resources\views\landing\schemas\store.blade.php
+C:\laragon\www\synticorex\resources\views\landing\sections\about.blade.php
+C:\laragon\www\synticorex\resources\views\landing\sections\branches.blade.php
+C:\laragon\www\synticorex\resources\views\landing\sections\contact.blade.php
+C:\laragon\www\synticorex\resources\views\landing\sections\cta.blade.php
+C:\laragon\www\synticorex\resources\views\landing\sections\delivery-info.blade.php
+C:\laragon\www\synticorex\resources\views\landing\sections\faq.blade.php
+C:\laragon\www\synticorex\resources\views\landing\sections\floating-panel.blade.php
+C:\laragon\www\synticorex\resources\views\landing\sections\footer-v2.blade.php
+C:\laragon\www\synticorex\resources\views\landing\sections\footer.blade.php
+C:\laragon\www\synticorex\resources\views\landing\sections\header-top.blade.php
+C:\laragon\www\synticorex\resources\views\landing\sections\header.blade.php
+C:\laragon\www\synticorex\resources\views\landing\sections\hero-fullscreen-v2.blade.php
 C:\laragon\www\synticorex\resources\views\landing\sections\hero-gradient.blade.php
 C:\laragon\www\synticorex\resources\views\landing\sections\hero-split.blade.php
+C:\laragon\www\synticorex\resources\views\landing\sections\navbar-v2.blade.php
+C:\laragon\www\synticorex\resources\views\landing\sections\payment_methods.blade.php
+C:\laragon\www\synticorex\resources\views\landing\sections\product-card.blade.php
+C:\laragon\www\synticorex\resources\views\landing\sections\products.blade.php
+C:\laragon\www\synticorex\resources\views\landing\sections\services-spotlight.blade.php
+C:\laragon\www\synticorex\resources\views\landing\sections\services.blade.php
+C:\laragon\www\synticorex\resources\views\landing\sections\testimonials.blade.php
+C:\laragon\www\synticorex\resources\views\landing\templates\catalog.blade.php
+C:\laragon\www\synticorex\resources\views\landing\templates\studio.blade.php
 C:\laragon\www\synticorex\resources\views\layouts\admin.blade.php
 C:\laragon\www\synticorex\resources\views\layouts\app.blade.php
 C:\laragon\www\synticorex\resources\views\layouts\guest.blade.php
