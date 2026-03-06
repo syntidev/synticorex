@@ -97,7 +97,7 @@ class ImageUploadController extends Controller
             // Update tenant customization
             $customization = $tenant->customization;
             if ($customization) {
-                $customization->update(['hero_filename' => $filename]);
+                $customization->update(['hero_main_filename' => $filename]);
             }
 
             $url = asset('storage/tenants/' . $tenantId . '/' . $filename);
