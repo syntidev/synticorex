@@ -51,36 +51,6 @@
                 </button>
             </div>
 
-            {{-- ══ ROW 1b: Mensaje Promocional (Plan 2+) ════════ --}}
-            @if($plan->show_header_top)
-            <div class="bg-surface rounded-xl shadow-sm border border-border mb-5">
-                <div class="px-5 pt-5 pb-3 flex items-center gap-3">
-                    <div class="size-9 rounded-lg bg-warning/10 flex items-center justify-center">
-                        <span class="iconify tabler--speakerphone size-5 text-warning" aria-hidden="true"></span>
-                    </div>
-                    <div>
-                        <h3 class="text-base font-bold text-foreground">Banner Promocional</h3>
-                        <p class="text-xs text-muted-foreground-1">Banda inferior con mensaje destacado</p>
-                    </div>
-                </div>
-                <div class="px-5 pb-5">
-                    <input type="text" id="header-message-input"
-                           maxlength="255"
-                           value="{{ $customization->header_message ?? '' }}"
-                           placeholder="Ej: ¡Envíos gratis hoy! · Descuento del 20% en todo"
-                           class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none mb-3">
-                    <div class="flex items-center justify-between gap-3">
-                        <span class="text-xs text-muted-foreground-1">Máx. 255 caracteres. Deja vacío para ocultar la barra.</span>
-                        <button type="button" onclick="saveHeaderMessage()"
-                                class="inline-flex items-center text-sm py-1.5 px-3 rounded-lg font-medium transition-colors bg-primary text-primary-foreground hover:bg-primary-hover gap-1.5 shrink-0">
-                            <span class="iconify tabler--device-floppy size-4" aria-hidden="true"></span>
-                            Guardar
-                        </button>
-                    </div>
-                </div>
-            </div>
-            @endif
-
             {{-- ══ ROW 2: Métodos de Pago (8/12) + Moneda (4/12) ═══ --}}
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 mb-5">
 
