@@ -39,7 +39,7 @@
 
                 activeContent?.classList.add('active');
 
-                // Auto-close mobile sidebar drawer after navigation (via FlyonUI API)
+                // Auto-close mobile sidebar drawer after navigation (via Preline HSOverlay API)
                 if (window.innerWidth < 1024) {
                     if (window.HSOverlay) {
                         window.HSOverlay.close('#hs-application-sidebar');
@@ -387,7 +387,7 @@
                     `Actualiza al Plan <strong class="text-success">${next.name}</strong> y gestiona hasta ` +
                     `<strong class="text-base-content">${nextQty} ${noun}</strong> en tu landing.`;
                 cta.innerHTML =
-                    `<a href="https://syntiweb.com/planes" target="_blank" rel="noopener noreferrer" class="btn btn-success btn-sm gap-2">` +
+                    `<a href="https://syntiweb.com/planes" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-sm py-1.5 px-3 rounded-lg font-medium transition-colors bg-emerald-600 text-white hover:bg-emerald-700 gap-2">` +
                     `🚀 Quiero el Plan ${next.name}</a>`;
             } else {
                 // Plan 3 — last plan → contact support
@@ -397,7 +397,7 @@
                     `personalizada para tu negocio. Contáctanos directamente.`;
                 cta.innerHTML =
                     `<a href="${SUPPORT_WA}?text=${encodeURIComponent('Hola, soy cliente del Plan VISIÓN y necesito soporte personalizado.')}" ` +
-                    `target="_blank" class="btn btn-success btn-sm gap-2">` +
+                    `target="_blank" class="inline-flex items-center text-sm py-1.5 px-3 rounded-lg font-medium transition-colors bg-emerald-600 text-white hover:bg-emerald-700 gap-2">` +
                     `💬 Contactar Soporte</a>`;
             }
 

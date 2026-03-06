@@ -394,13 +394,13 @@
             // Update selected state
             selectedSocialNetwork = key;
 
-            // Update radio labels visually using FlyonUI classes
+            // Update radio labels visually
             @foreach($plan1NetworksList as $k)
             const el_{{ $k }} = document.getElementById('social-radio-label-{{ $k }}');
             if (key === '{{ $k }}') {
-                el_{{ $k }}.className = 'btn btn-sm gap-1.5 btn-primary cursor-pointer';
+                el_{{ $k }}.className = 'inline-flex items-center text-sm py-1.5 px-3 rounded-lg font-medium transition-colors bg-primary text-primary-foreground cursor-pointer gap-1.5';
             } else {
-                el_{{ $k }}.className = 'btn btn-sm gap-1.5 btn-ghost border border-base-content/20 cursor-pointer';
+                el_{{ $k }}.className = 'inline-flex items-center text-sm py-1.5 px-3 rounded-lg font-medium transition-colors border border-border text-foreground hover:bg-muted cursor-pointer gap-1.5';
             }
             @endforeach
 
