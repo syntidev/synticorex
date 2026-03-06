@@ -130,11 +130,11 @@
                     <div class="p-5">
                         <div class="flex items-center gap-3 mb-3 pb-3 border-b border-border">
                             <div class="size-9 rounded-lg bg-primary/10 flex items-center justify-center">
-                                <span class="iconify tabler--qrcode size-5 text-primary"></span>
+                                <span class="iconify tabler--scan size-5 text-primary"></span>
                             </div>
                             <div>
-                                <h3 class="font-semibold text-foreground">QR Tracking</h3>
-                                <p class="text-xs text-muted-foreground-1">Código para medir clics</p>
+                                <h3 class="font-semibold text-foreground">Tu Código Digital</h3>
+                                <p class="text-xs text-muted-foreground-1">Imprime una vez, mide siempre</p>
                             </div>
                         </div>
                         <div class="flex justify-center mb-2">
@@ -147,7 +147,7 @@
                         <p class="text-[10px] text-muted-foreground-1 text-center mb-2 break-all leading-tight select-all">{{ $trackingShortlink }}</p>
                         <div class="mb-3">
                             <input type="text" id="qr-slogan"
-                                   placeholder="Ej: Escanéame y ve nuestro menú"
+                                   placeholder="Ej: Apunta tu cámara y descubre más"
                                    maxlength="50"
                                    class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none text-center text-xs"
                                    value="{{ $tenant->qr_slogan ?? '' }}">
@@ -177,12 +177,12 @@
                             </div>
                             <div class="space-y-2 mb-3">
                                 <input type="text" id="sticker-top-text"
-                                       placeholder="Texto superior: Ej: 📍 Escanéame"
+                                       placeholder="Ej: Usa tu cámara"
                                        maxlength="40"
                                        class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none text-center text-xs"
                                        oninput="renderStickerCanvas()">
                                 <input type="text" id="sticker-bottom-text"
-                                       placeholder="Texto inferior: Ej: Ver nuestro menú"
+                                       placeholder="Ej: Información"
                                        maxlength="40"
                                        class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none text-center text-xs"
                                        oninput="renderStickerCanvas()">
@@ -197,4 +197,28 @@
                 </div>
             </div>{{-- /grid visual --}}
             </div>{{-- /wrapper --}}
+
+        {{-- ── QR Brand Colorization ── --}}
+        <script>
+        (function () {
+            function applyQRColor(sel) {
+                var p = getComputedStyle(document.documentElement).getPropertyValue('--color-primary').trim() || '#1a1a1a';
+                var svg = document.querySelector(sel + ' svg');
+                if (!svg) return;
+                svg.querySelectorAll('[fill]').forEach(function (el) {
+                    var f = el.getAttribute('fill');
+                    if (f && (f === '#000000' || f.toLowerCase() === '#000' || f.toLowerCase() === 'black')) {
+                        el.setAttribute('fill', p);
+                    }
+                });
+            }
+            document.addEventListener('DOMContentLoaded', function () {
+                setTimeout(function () { applyQRColor('#qr-display'); }, 200);
+            });
+            var vBtn = document.getElementById('itab-visual-btn');
+            if (vBtn) vBtn.addEventListener('click', function () {
+                setTimeout(function () { applyQRColor('#qr-display'); }, 200);
+            });
+        })();
+        </script>
         </div>{{-- /tab-visual --}}

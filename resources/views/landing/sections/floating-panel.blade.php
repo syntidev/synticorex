@@ -82,17 +82,18 @@
             </div>
         </div>
 
-        {{-- ── QR PERMANENTE ── --}}
+        {{-- ── CÓDIGO DIGITAL ── --}}
         <div class="synti-section">
-            <p class="synti-label">TU QR PERMANENTE</p>
+            <p class="synti-label">CÓDIGO DIGITAL &middot; PERMANENTE</p>
             <div class="synti-qr-container">
+                <p class="synti-qr-cta">Apunta tu cámara aquí</p>
                 <div class="synti-qr-wrapper" id="qr-floating-display">
                     {!! $trackingQRSmall !!}
                 </div>
-                <p class="synti-qr-hint">Imprime una vez. Actualiza siempre.</p>
+                <p class="synti-qr-hint">Un código. Toda tu presencia digital.</p>
                 <button onclick="downloadQRFloating()" class="synti-btn-qr-download">
                     <iconify-icon icon="tabler:download" width="16"></iconify-icon>
-                    Descargar QR
+                    Descargar código
                 </button>
             </div>
         </div>
@@ -338,6 +339,14 @@
 
 /* ── QR ── */
 .synti-qr-container { text-align: center; }
+.synti-qr-cta {
+    font-size: 11px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.55);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
 .synti-qr-wrapper {
     background: #ffffff;
     border-radius: 12px;
@@ -575,6 +584,21 @@ async function verifyPin() {
             document.getElementById('synti-pin-modal').style.display = 'none';
             document.getElementById('synti-panel-content').style.display = 'block';
             loadKPIs();
+            // Colorize QR modules with brand primary color
+            setTimeout(function () {
+                var primary = getComputedStyle(document.documentElement).getPropertyValue('--color-primary').trim() || '#1a1a1a';
+                var svg = document.querySelector('#qr-floating-display svg');
+                if (svg) {
+                    svg.querySelectorAll('[fill]').forEach(function (el) {
+                        var f = el.getAttribute('fill');
+                        if (f && (f === '#000000' || f.toLowerCase() === '#000' || f.toLowerCase() === 'black')) {
+                            el.setAttribute('fill', primary);
+                        }
+                    });
+                    var wrapper = document.querySelector('.synti-qr-wrapper');
+                    if (wrapper) wrapper.style.boxShadow = '0 0 0 3px ' + primary + ', 0 4px 14px rgba(0,0,0,0.3)';
+                }
+            }, 120);
         } else {
             showPinError();
         }

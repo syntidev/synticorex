@@ -836,16 +836,35 @@
             return URL.createObjectURL(svgBlob);
         }
 
+        // ── Scan corners (marco profesional tipo visor) ──────────────
+        function drawScanCorners(ctx, x, y, size, cLen, lw, color) {
+            ctx.save();
+            ctx.strokeStyle = color;
+            ctx.lineWidth   = lw;
+            ctx.lineCap     = 'square';
+            ctx.lineJoin    = 'miter';
+            const c = cLen;
+            // TL
+            ctx.beginPath(); ctx.moveTo(x + c, y);        ctx.lineTo(x, y);        ctx.lineTo(x, y + c);        ctx.stroke();
+            // TR
+            ctx.beginPath(); ctx.moveTo(x + size - c, y); ctx.lineTo(x + size, y); ctx.lineTo(x + size, y + c); ctx.stroke();
+            // BR
+            ctx.beginPath(); ctx.moveTo(x + size, y + size - c); ctx.lineTo(x + size, y + size); ctx.lineTo(x + size - c, y + size); ctx.stroke();
+            // BL
+            ctx.beginPath(); ctx.moveTo(x + c, y + size);  ctx.lineTo(x, y + size);  ctx.lineTo(x, y + size - c);  ctx.stroke();
+            ctx.restore();
+        }
+
         function renderStickerCanvas() {
             const canvas  = document.getElementById('qr-sticker-canvas');
             if (!canvas) return;
             const ctx     = canvas.getContext('2d');
             const W = 400, H = 500;
-            const topText    = document.getElementById('sticker-top-text')?.value    || '📍 Escanéame';
-            const bottomText = document.getElementById('sticker-bottom-text')?.value || STICKER_BIZ_NAME;
+            const topText    = document.getElementById('sticker-top-text')?.value    || 'Usa tu cámara';
+            const bottomText = document.getElementById('sticker-bottom-text')?.value || 'Información';
 
-            // Background
-            ctx.fillStyle = '#ffffff';
+            // Background (off-white premium)
+            ctx.fillStyle = '#f8fafc';
             ctx.beginPath();
             ctx.roundRect(0, 0, W, H, 24);
             ctx.fill();
@@ -853,37 +872,43 @@
             // Primary color bar top
             ctx.fillStyle = STICKER_PRIMARY;
             ctx.beginPath();
-            ctx.roundRect(0, 0, W, 70, [24, 24, 0, 0]);
+            ctx.roundRect(0, 0, W, 74, [24, 24, 0, 0]);
             ctx.fill();
 
-            // Top text
+            // Top text — call to action (ALL CAPS, clean)
             ctx.fillStyle = '#ffffff';
-            ctx.font = 'bold 22px Inter, sans-serif';
-            ctx.textAlign = 'center';
-            ctx.fillText(topText, W / 2, 44);
-
-            // Business name below bar
-            ctx.fillStyle = '#1a1a1a';
             ctx.font = 'bold 20px Inter, sans-serif';
-            ctx.fillText(STICKER_BIZ_NAME, W / 2, 110);
+            ctx.textAlign = 'center';
+            ctx.fillText(topText.toUpperCase(), W / 2, 46);
+
+            // Business name
+            ctx.fillStyle = '#0f172a';
+            ctx.font = 'bold 21px Inter, sans-serif';
+            ctx.fillText(STICKER_BIZ_NAME, W / 2, 114);
+
+            // Scan corners (before QR — drawn again after for visibility)
+            drawScanCorners(ctx, 48, 124, 304, 30, 5, STICKER_PRIMARY);
 
             // QR code
             const qrUrl = getStickerQRDataURL();
             if (qrUrl) {
                 const qrImg = new Image();
                 qrImg.onload = () => {
-                    ctx.drawImage(qrImg, 60, 130, 280, 280);
+                    ctx.drawImage(qrImg, 58, 134, 284, 284);
                     URL.revokeObjectURL(qrUrl);
 
-                    // Bottom text
-                    ctx.fillStyle = STICKER_PRIMARY;
-                    ctx.font = 'bold 18px Inter, sans-serif';
-                    ctx.fillText(bottomText, W / 2, 450);
+                    // Redraw corners on top for crisp look
+                    drawScanCorners(ctx, 48, 124, 304, 30, 5, STICKER_PRIMARY);
 
-                    // SYNTIweb badge
+                    // Bottom tag — brand color
+                    ctx.fillStyle = STICKER_PRIMARY;
+                    ctx.font      = 'bold 17px Inter, sans-serif';
+                    ctx.fillText(bottomText, W / 2, 452);
+
+                    // SYNTIweb wordmark
                     ctx.fillStyle = '#94a3b8';
-                    ctx.font = '12px Inter, sans-serif';
-                    ctx.fillText('syntiweb.com', W / 2, 480);
+                    ctx.font      = '12px Inter, sans-serif';
+                    ctx.fillText('syntiweb.com', W / 2, 482);
                 };
                 qrImg.src = qrUrl;
             }
