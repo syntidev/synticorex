@@ -53,7 +53,8 @@
         @else
             @if($product->image_filename)
                 <img src="{{ asset('storage/tenants/' . ($tenant->id ?? '') . '/' . $product->image_filename) }}"
-                     class="size-full object-cover rounded-2xl"
+                     class="size-full object-cover rounded-2xl cursor-zoom-in"
+                     onclick="openZoom(this.src)"
                      alt="{{ $product->name }}"
                      onerror="this.style.display='none'; this.parentElement.style.display='none';">
             @elseif($product->image_url)
@@ -184,8 +185,22 @@
 
 </div>{{-- /group flex flex-col --}}
 
+<div id="zoom-overlay" class="hidden fixed inset-0 z-[200] bg-black/80 flex items-center justify-center p-4" onclick="closeZoom()">
+    <button onclick="closeZoom()" class="absolute top-4 right-4 text-white/80 hover:text-white">
+        <span class="iconify tabler--x size-8"></span>
+    </button>
+    <img id="zoom-img" src="" class="max-w-full max-h-[90vh] rounded-2xl shadow-2xl object-contain" onclick="event.stopPropagation()">
+</div>
+
 @once
 <script>
+function openZoom(src) {
+    document.getElementById('zoom-overlay').classList.remove('hidden');
+    document.getElementById('zoom-img').src = src;
+}
+function closeZoom() {
+    document.getElementById('zoom-overlay').classList.add('hidden');
+}
 function shareProductCard(name, price) {
     const url = window.location.href;
     const business = {{ Js::from($tenant->business_name ?? '') }};

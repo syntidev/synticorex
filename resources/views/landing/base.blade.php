@@ -71,6 +71,10 @@
 
     <div class="fixed inset-0 z-[9999] opacity-[0.02] pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"></div>
 
+    @if(isset($plan) && $plan->id >= 2 && isset($customization) && $customization->header_message)
+        @include('landing.sections.header-top')
+    @endif
+
     @yield('content')
 
     @include('landing.sections.floating-panel')
