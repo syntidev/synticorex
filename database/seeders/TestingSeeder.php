@@ -141,7 +141,27 @@ class TestingSeeder extends Seeder
             // Create services for this tenant
             $this->createServices($tenant);
 
-            // Create customization for this tenant
+            // Create customization for this tenant with plan-based sections
+            $sectionsOrder = [
+                ['name' => 'products', 'visible' => true, 'order' => 0],
+                ['name' => 'services', 'visible' => true, 'order' => 1],
+                ['name' => 'contact', 'visible' => true, 'order' => 2],
+                ['name' => 'payment_methods', 'visible' => true, 'order' => 3],
+                ['name' => 'cta', 'visible' => true, 'order' => 4],
+            ];
+
+            // Add Plan 2+ sections
+            if ($plan->id >= 2) {
+                $sectionsOrder[] = ['name' => 'about', 'visible' => true, 'order' => 5];
+                $sectionsOrder[] = ['name' => 'testimonials', 'visible' => true, 'order' => 6];
+            }
+
+            // Add Plan 3 sections
+            if ($plan->id >= 3) {
+                $sectionsOrder[] = ['name' => 'faq', 'visible' => true, 'order' => 7];
+                $sectionsOrder[] = ['name' => 'branches', 'visible' => true, 'order' => 8];
+            }
+
             TenantCustomization::create([
                 'tenant_id' => $tenant->id,
                 'theme_slug' => 'light',
@@ -149,13 +169,7 @@ class TestingSeeder extends Seeder
                 'payment_methods' => ['credit_card', 'bank_transfer'],
                 'faq_items' => [],
                 'visual_effects' => [
-                    'sections_order' => [
-                        ['name' => 'products', 'visible' => true, 'order' => 0],
-                        ['name' => 'services', 'visible' => true, 'order' => 1],
-                        ['name' => 'contact', 'visible' => true, 'order' => 2],
-                        ['name' => 'payment_methods', 'visible' => true, 'order' => 3],
-                        ['name' => 'cta', 'visible' => true, 'order' => 4],
-                    ],
+                    'sections_order' => $sectionsOrder,
                     'sections_config' => [],
                 ],
             ]);
