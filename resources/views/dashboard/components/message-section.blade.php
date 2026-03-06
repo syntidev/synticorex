@@ -2,11 +2,6 @@
         <div id="tab-mensaje" class="tab-content">
             <div class="p-6">
 @php
-    // ── Header Top data ──
-    $headerTop = data_get($tenant->settings, 'engine_settings.header_top', []);
-    $headerTopEnabled = $headerTop['enabled'] ?? false;
-    $headerTopText = $headerTop['text'] ?? '';
-
     // ── CTA data ──
     $ctaTitle   = $customization->cta_title ?? '';
     $ctaSub     = $customization->cta_subtitle ?? '';
@@ -144,47 +139,7 @@
 </div>
 
 {{-- ════════════════════════════════════════════════════════════
-     2. HEADER TOP (Plan 2+)
-════════════════════════════════════════════════════════════ --}}
-@if($plan->id >= 2)
-<div class="bg-surface rounded-xl shadow-sm border border-border mb-6">
-    <div class="px-5 pt-5 pb-3">
-        <div class="flex items-center gap-3">
-            <div class="size-9 rounded-lg bg-primary/10 flex items-center justify-center">
-                <span class="iconify tabler--layout-navbar size-5 text-primary" aria-hidden="true"></span>
-            </div>
-            <div>
-                <h2 class="text-base font-bold text-foreground">Header Top</h2>
-                <p class="text-xs text-muted-foreground-1">Barra superior con mensaje destacado
-                    <span class="inline-flex items-center py-0.5 px-2 rounded-full text-xs font-medium bg-blue-100 text-blue-700 ms-1">CRECIMIENTO+</span>
-                </p>
-            </div>
-        </div>
-    </div>
-    <div class="px-5 pb-5 pt-1">
-        <div class="flex items-center gap-3 mb-3">
-            <label class="text-xs font-medium text-muted-foreground-1">Visible:</label>
-            <input type="checkbox" id="header-top-toggle"
-                   class="relative w-[35px] h-[20px] bg-gray-200 checked:bg-primary border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 appearance-none focus:ring-primary-focus focus:ring-2 focus:ring-offset-2 before:inline-block before:size-[16px] before:bg-white before:rounded-full before:transform before:translate-x-0 checked:before:translate-x-full before:transition before:ease-in-out before:duration-200 before:shadow-sm"
-                   {{ $headerTopEnabled ? 'checked' : '' }}>
-        </div>
-        <div class="flex gap-2">
-            <input type="text" id="header-top-text"
-                   class="py-1.5 sm:py-2 px-3 block flex-1 bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none"
-                   placeholder="Ej: Envío gratis en pedidos mayores a 50 REF"
-                   value="{{ $headerTopText }}"
-                   maxlength="120">
-            <button type="button" onclick="saveHeaderTop()" class="py-2 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg bg-primary border border-primary-line text-primary-foreground hover:bg-primary-hover focus:outline-hidden focus:bg-primary-focus disabled:opacity-50 disabled:pointer-events-none">
-                <span class="iconify tabler--device-floppy size-4"></span>
-                Guardar
-            </button>
-        </div>
-    </div>
-</div>
-@endif
-
-{{-- ════════════════════════════════════════════════════════════
-     3. TESTIMONIOS (Plan 2+)
+     2. TESTIMONIOS (Plan 2+)
 ════════════════════════════════════════════════════════════ --}}
 @if($plan->id >= 2)
 <div class="bg-surface rounded-xl shadow-sm border border-border mb-6">
@@ -443,7 +398,7 @@
         <span class="iconify tabler--sparkles size-5 shrink-0" aria-hidden="true"></span>
         <div>
             <p class="font-semibold text-sm">Desbloquea más personalización</p>
-            <p class="text-xs opacity-70">Header Top, Acerca de, Testimonios y más desde el Plan CRECIMIENTO</p>
+            <p class="text-xs opacity-70">Acerca de, Testimonios y más desde el Plan CRECIMIENTO</p>
         </div>
     </div>
     <a href="https://syntiweb.com/planes" target="_blank" rel="noopener noreferrer"

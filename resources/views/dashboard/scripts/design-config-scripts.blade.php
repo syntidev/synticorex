@@ -788,28 +788,6 @@
         @endif
         // ── End Branches ────────────────────────────────────────────
 
-        // ── Header Top (Plan 2+) ────────────────────────────────────
-        async function saveHeaderTop() {
-            const enabled = document.getElementById('header-top-toggle')?.checked ?? false;
-            const text = document.getElementById('header-top-text')?.value?.trim() ?? '';
-            try {
-                const res = await fetch(`/tenant/{{ $tenant->id }}/update-header-top`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
-                    body: JSON.stringify({ enabled, text })
-                });
-                const result = await res.json();
-                if (result.success) {
-                    showToast('✓ Header Top actualizado', 'success');
-                } else {
-                    showToast('✗ ' + (result.message || 'Error'), 'error');
-                }
-            } catch (err) {
-                console.error('Error:', err);
-                showToast('✗ Error al guardar Header Top', 'error');
-            }
-        }
-
         // ── CTA Especial (Plan 3) ──────────────────────────────────
         async function saveCtaConfig() {
             const data = {
