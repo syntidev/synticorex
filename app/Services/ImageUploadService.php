@@ -19,7 +19,7 @@ class ImageUploadService
         'product' => 1000,
         'service' => 1000,
     ];
-    private const WEBP_QUALITY = 85;
+    private const WEBP_QUALITY = 90;
 
     /**
      * Process and save uploaded image.
