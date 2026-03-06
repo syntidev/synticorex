@@ -14,10 +14,14 @@
         {{-- Section Header --}}
         <div class="mb-12 text-center sm:mb-16 lg:mb-24">
             <h2 class="text-foreground text-2xl font-semibold md:text-3xl lg:text-4xl">
-                Nuestros <span class="text-primary italic">Productos</span>
+                {!! $customization->getSectionTitle('products', 'Nuestros <span class="text-primary italic">Productos</span>') !!}
             </h2>
             <div class="w-16 h-1 bg-primary mx-auto mt-4 rounded-full"></div>
-            <p class="text-foreground/80 text-xl mt-4">Descubrí lo mejor que tenemos para ofrecerte, seleccionado con calidad y dedicación.</p>
+            @if($customization->getSectionSubtitle('products'))
+            <p class="text-foreground/80 text-xl mt-4">{{ $customization->getSectionSubtitle('products') }}</p>
+            @else
+            <p class="text-foreground/80 text-xl mt-4">Descubre lo mejor que tenemos para ofrecerte, seleccionado con calidad y dedicación.</p>
+            @endif
         </div>
 
         {{-- Product Grid --}}

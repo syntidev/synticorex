@@ -17,7 +17,7 @@
                 Nuestros <span class="text-primary italic">Productos</span>
             </h2>
             <div class="w-16 h-1 bg-primary mx-auto mt-4 rounded-full"></div>
-            <p class="text-base-content/80 text-xl mt-4">Descubrí lo mejor que tenemos para ofrecerte, seleccionado con calidad y dedicación.</p>
+            <p class="text-base-content/80 text-xl mt-4">Descubre lo mejor que tenemos para ofrecerte, seleccionado con calidad y dedicación.</p>
         </div>
 
         {{-- Product Grid --}}

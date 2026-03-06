@@ -56,9 +56,11 @@
     <div class="mx-auto max-w-[85rem] px-4 sm:px-6 lg:px-8 relative z-10">
 
         <div class="text-center mb-12 space-y-3">
-            <p class="text-primary text-sm font-medium uppercase tracking-wide">Resolvemos tus dudas</p>
+            <p class="text-primary text-sm font-medium uppercase tracking-wide">
+                {{ $customization->getContentBlock('faq', 'eyebrow') ?: 'Resolvemos tus dudas' }}
+            </p>
             <h2 class="text-foreground text-2xl font-semibold md:text-3xl lg:text-4xl">
-                Preguntas <span class="text-primary italic">Frecuentes</span>
+                {!! $customization->getSectionTitle('faq', 'Preguntas <span class="text-primary italic">Frecuentes</span>') !!}
             </h2>
             <div class="w-16 h-1 bg-primary mx-auto rounded-full"></div>
         </div>

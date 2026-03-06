@@ -285,12 +285,31 @@
             if (el) el.textContent = parts.join('  •  ') || 'Sin horario configurado';
         }
 
+        // Convierte bracket-notation de FormData en objeto anidado real
+        // e.g. "content_blocks[products][title]" → {content_blocks:{products:{title:...}}}
+        function formDataToNested(formData) {
+            const result = {};
+            for (const [key, value] of formData.entries()) {
+                const parts = [];
+                key.replace(/([^\[\]]+)|\[([^\[\]]*)\]/g, (_, a, b) => parts.push(a ?? b));
+                let cur = result;
+                for (let i = 0; i < parts.length - 1; i++) {
+                    if (cur[parts[i]] === undefined || typeof cur[parts[i]] !== 'object') {
+                        cur[parts[i]] = {};
+                    }
+                    cur = cur[parts[i]];
+                }
+                cur[parts[parts.length - 1]] = value;
+            }
+            return result;
+        }
+
         // Save Info Form
         async function saveInfo(event) {
             event.preventDefault();
             
             const formData = new FormData(event.target);
-            const data = Object.fromEntries(formData.entries());
+            const data = formDataToNested(formData);
             
             // Agregar campos críticos explícitamente
             data.phone = document.getElementById('info-phone')?.value?.trim() || '';

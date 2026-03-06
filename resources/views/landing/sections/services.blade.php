@@ -15,10 +15,14 @@
         {{-- Section Header --}}
         <div class="mb-12 text-center sm:mb-16 lg:mb-24">
             <h2 class="text-foreground text-2xl font-semibold md:text-3xl lg:text-4xl">
-                Nuestros <span class="text-primary italic">Servicios</span>
+                {!! $customization->getSectionTitle('services', 'Nuestros <span class="text-primary italic">Servicios</span>') !!}
             </h2>
             <div class="w-16 h-1 bg-primary mx-auto mt-4 rounded-full"></div>
+            @if($customization->getSectionSubtitle('services'))
+            <p class="text-foreground/80 text-xl mt-4">{{ $customization->getSectionSubtitle('services') }}</p>
+            @else
             <p class="text-foreground/80 text-xl mt-4">Soluciones diseñadas para hacer tu experiencia única, con calidad y dedicación.</p>
+            @endif
         </div>
 
         {{-- Service Grid --}}

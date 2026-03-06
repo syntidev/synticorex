@@ -24,9 +24,12 @@
         {{-- Section Header --}}
         <div class="mb-12 text-center sm:mb-16">
             <h2 class="text-2xl font-semibold text-foreground md:text-3xl lg:text-4xl">
-                Nuestros <span class="italic text-primary">Servicios</span>
+                {!! $customization->getSectionTitle('services', 'Nuestros <span class="italic text-primary">Servicios</span>') !!}
             </h2>
             <div class="mx-auto mt-4 h-1 w-16 rounded-full bg-primary"></div>
+            @if($customization->getSectionSubtitle('services'))
+            <p class="text-foreground/80 text-lg mt-3">{{ $customization->getSectionSubtitle('services') }}</p>
+            @endif
         </div>
 
         {{-- Grid de servicios --}}

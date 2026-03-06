@@ -37,7 +37,7 @@
                     Llamar Ahora
                 </a>
                 @endif
-                <a href="#productos"
+                <a href="#products"
                    class="inline-flex items-center gap-2 py-3 px-6 rounded-lg font-medium border border-border text-foreground hover:bg-surface transition-colors text-base">
                     Ver servicios
                     <span class="iconify tabler--arrow-down size-5"></span>

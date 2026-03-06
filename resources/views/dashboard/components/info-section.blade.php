@@ -137,40 +137,26 @@
                                        autocomplete="address-level2">
                                 <p class="text-xs text-muted-foreground-1 mt-1">Tu ubicación principal</p>
                             </div>
-                            @if($tenant->isAtLeastCrecimiento())
+                            {{-- Título y Subtítulo Contacto: disponibles para TODOS los planes --}}
                             <div class="form-control">
-                                <label class="inline-block text-sm font-medium text-foreground mb-1">
-                                    <span class="flex items-center gap-1">
-                                        Título Contacto
-                                        <span class="inline-flex items-center py-0.5 px-2 rounded-full text-xs font-medium bg-green-100 text-green-700">{{ $plan->name }}</span>
-                                    </span>
+                                <label class="inline-block text-sm font-medium text-foreground mb-1" for="info-contact-title">
+                                    Título Sección Contacto
                                 </label>
-                                <input type="text" name="contact_title" class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none"
+                                <input id="info-contact-title" type="text" name="contact_title" class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none"
                                        value="{{ data_get($tenant->settings, 'business_info.contact.title', '') }}"
-                                       placeholder="Contáctanos">
+                                       placeholder="Estamos para ayudarte">
+                                <p class="text-xs text-muted-foreground-1 mt-1">Encabezado de la sección Contáctanos. Si está vacío, usa el Eslogan.</p>
                             </div>
                             <div class="form-control">
-                                <label class="inline-block text-sm font-medium text-foreground mb-1">
-                                    <span class="flex items-center gap-1">
-                                        Subtítulo Contacto
-                                        <span class="inline-flex items-center py-0.5 px-2 rounded-full text-xs font-medium bg-green-100 text-green-700">{{ $plan->name }}</span>
-                                    </span>
+                                <label class="inline-block text-sm font-medium text-foreground mb-1" for="info-contact-subtitle">
+                                    Texto Sección Contacto
                                 </label>
-                                <input type="text" name="contact_subtitle" class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none"
+                                <input id="info-contact-subtitle" type="text" name="contact_subtitle" class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none"
                                        value="{{ data_get($tenant->settings, 'business_info.contact.subtitle', '') }}"
-                                       placeholder="Estamos aquí para atenderte">
+                                       placeholder="Contáctanos y te atendemos a la brevedad.">
+                                <p class="text-xs text-muted-foreground-1 mt-1">Párrafo descriptivo debajo del título de la sección Contáctanos. Variable independiente.</p>
                             </div>
-                            <div class="form-control">
-                                <label class="inline-block text-sm font-medium text-foreground mb-1">
-                                    <span class="flex items-center gap-1">
-                                        Teléfono Secundario
-                                        <span class="inline-flex items-center py-0.5 px-2 rounded-full text-xs font-medium bg-green-100 text-green-700">{{ $plan->name }}</span>
-                                    </span>
-                                </label>
-                                <input type="tel" name="phone_secondary" class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none"
-                                       value="{{ data_get($tenant->settings, 'contact_info.phone_secondary', '') }}"
-                                       placeholder="+58 XXX XXXXXXX">
-                            </div>
+                            @if($tenant->isAtLeastCrecimiento())
                             <div class="form-control sm:col-span-2 lg:col-span-3">
                                 <label class="inline-block text-sm font-medium text-foreground mb-1">
                                     <span class="flex items-center gap-1">
@@ -195,16 +181,44 @@
                             @endif
                         </div>
 
+                        {{-- ══ SEO / Metadatos ══════════════════════════════════════ --}}
+                        <div class="border-t border-border my-4 mt-6 text-xs text-muted-foreground-1">SEO y Metadatos</div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
+                            <div class="form-control">
+                                <label class="inline-block text-sm font-medium text-foreground mb-1" for="info-meta-title">
+                                    Título SEO (meta title)
+                                </label>
+                                <input id="info-meta-title" type="text"
+                                       class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none"
+                                       name="meta_title"
+                                       placeholder="Ej: Pizzería Don Marco — La mejor de Maracaibo"
+                                       value="{{ $tenant->meta_title ?? '' }}">
+                                <p class="text-xs text-muted-foreground-1 mt-1">Aparece en la pestaña del navegador y en Google. Vacío = nombre del negocio.</p>
+                            </div>
+                            <div class="form-control">
+                                <label class="inline-block text-sm font-medium text-foreground mb-1" for="info-meta-keywords">
+                                    Palabras clave SEO
+                                </label>
+                                <input id="info-meta-keywords" type="text"
+                                       class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none"
+                                       name="meta_keywords"
+                                       placeholder="pizza, delivery, maracaibo, artesanal"
+                                       value="{{ $tenant->meta_keywords ?? '' }}">
+                                <p class="text-xs text-muted-foreground-1 mt-1">Separadas por coma. Ayudan al posicionamiento en buscadores.</p>
+                            </div>
+                        </div>
+
                         <div class="form-control mt-3">
-                            <label class="inline-block text-sm font-medium text-foreground mb-1" for="info-description">
-                                Descripción Corta
-                                <span class="text-muted-foreground-1 font-normal text-xs">(Hero + SEO)</span>
+                            <label class="inline-block text-sm font-medium text-foreground mb-1" for="info-meta-description">
+                                Descripción SEO (meta description)
                             </label>
-                            <textarea id="info-description" class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none min-h-20"
-                                      name="description"
+                            <textarea id="info-meta-description" class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none min-h-20"
+                                      name="meta_description"
+                                      maxlength="255"
                                       placeholder="Breve descripción de tu negocio para buscadores..."
-                                      aria-label="Descripción SEO de tu negocio">{{ $tenant->description }}</textarea>
-                            <p class="text-xs text-muted-foreground-1 mt-1">Subtítulo del Hero + meta descripción SEO. Usa una frase concisa y directa.</p>
+                                      aria-label="Descripción SEO de tu negocio">{{ $tenant->meta_description ?? '' }}</textarea>
+                            <p class="text-xs text-muted-foreground-1 mt-1">Usada como <strong>meta descripción en Google</strong>, OpenGraph y Schema.org. Vacío = usa la descripción del negocio como fallback.</p>
                         </div>
 
                         {{-- ══ Contenido Hero ════════════════════════════════════════ --}}
@@ -231,19 +245,168 @@
                                    name="content_blocks[hero][subtitle]"
                                    placeholder="Ej: Masa artesanal, ingredientes frescos, entrega en 30 min"
                                    value="{{ $customization?->getContentBlock('hero', 'subtitle') ?? '' }}">
-                            <p class="mt-1.5 text-xs text-muted-foreground-2">Si lo dejas vacío, el Hero usa la <strong>Descripción Corta</strong> como subtítulo.</p>
+                            <p class="mt-1.5 text-xs text-muted-foreground-2">Texto secundario del Hero. Si está vacío, no se muestra subtítulo.</p>
                         </div>
 
                         <div class="form-control mt-3">
                             <label class="inline-block text-sm font-medium text-foreground mb-1" for="info-about-text">
-                                Texto Acerca De
+                                Texto Sección Acerca De
                             </label>
                             <textarea id="info-about-text" class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none" rows="4"
                                       name="about_text"
                                       placeholder="Cuéntale a tus clientes quiénes son, qué los hace especiales...">{{ $customization?->about_text ?? '' }}</textarea>
-                            <p class="mt-1.5 text-xs text-muted-foreground-2">Texto largo que aparece en la sección "Acerca de". No se usa en el Hero.</p>
+                            <p class="mt-1.5 text-xs text-muted-foreground-2">Texto de la sección &ldquo;Acerca de nosotros&rdquo;. <strong>Variable independiente</strong>, no comparte contenido con Hero ni Contacto.</p>
                         </div>
-                    </div>{{-- /wrapper px-6 pb-6 --}}
+                        {{-- ══ Títulos de Secciones (editables por sección) ══════════ --}}
+                        <div class="border-t border-border my-4 mt-6 text-xs text-muted-foreground-1">Títulos de Secciones</div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
+
+                            <div class="form-control">
+                                <label class="inline-block text-sm font-medium text-foreground mb-1" for="info-products-title">
+                                    Título Sección Productos
+                                </label>
+                                <input id="info-products-title" type="text"
+                                       class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none"
+                                       name="content_blocks[products][title]"
+                                       placeholder="Nuestros Productos"
+                                       value="{{ $customization?->getContentBlock('products', 'title') ?? '' }}">
+                                <p class="text-xs text-muted-foreground-1 mt-1">Vacío = "Nuestros Productos"</p>
+                            </div>
+
+                            <div class="form-control">
+                                <label class="inline-block text-sm font-medium text-foreground mb-1" for="info-products-subtitle">
+                                    Subtítulo Sección Productos
+                                </label>
+                                <input id="info-products-subtitle" type="text"
+                                       class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none"
+                                       name="content_blocks[products][subtitle]"
+                                       placeholder="Descubre lo mejor que tenemos para ofrecerte…"
+                                       value="{{ $customization?->getContentBlock('products', 'subtitle') ?? '' }}">
+                            </div>
+
+                            <div class="form-control">
+                                <label class="inline-block text-sm font-medium text-foreground mb-1" for="info-services-title">
+                                    Título Sección Servicios
+                                </label>
+                                <input id="info-services-title" type="text"
+                                       class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none"
+                                       name="content_blocks[services][title]"
+                                       placeholder="Nuestros Servicios"
+                                       value="{{ $customization?->getContentBlock('services', 'title') ?? '' }}">
+                                <p class="text-xs text-muted-foreground-1 mt-1">Vacío = "Nuestros Servicios"</p>
+                            </div>
+
+                            <div class="form-control">
+                                <label class="inline-block text-sm font-medium text-foreground mb-1" for="info-services-subtitle">
+                                    Subtítulo Sección Servicios
+                                </label>
+                                <input id="info-services-subtitle" type="text"
+                                       class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none"
+                                       name="content_blocks[services][subtitle]"
+                                       placeholder="Soluciones diseñadas para hacer tu experiencia única…"
+                                       value="{{ $customization?->getContentBlock('services', 'subtitle') ?? '' }}">
+                            </div>
+
+                            <div class="form-control">
+                                <label class="inline-block text-sm font-medium text-foreground mb-1" for="info-about-title">
+                                    Título Sección Acerca De
+                                </label>
+                                <input id="info-about-title" type="text"
+                                       class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none"
+                                       name="content_blocks[about][title]"
+                                       placeholder="Acerca de nosotros"
+                                       value="{{ $customization?->getContentBlock('about', 'title') ?? '' }}">
+                                <p class="text-xs text-muted-foreground-1 mt-1">Vacío = "Acerca de nosotros"</p>
+                            </div>
+
+                            @if($tenant->isAtLeastCrecimiento())
+                            <div class="form-control">
+                                <label class="inline-block text-sm font-medium text-foreground mb-1" for="info-testimonials-title">
+                                    <span class="flex items-center gap-1">
+                                        Título Sección Testimonios
+                                        <span class="inline-flex items-center py-0.5 px-2 rounded-full text-xs font-medium bg-green-100 text-green-700">{{ $plan->name }}</span>
+                                    </span>
+                                </label>
+                                <input id="info-testimonials-title" type="text"
+                                       class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none"
+                                       name="content_blocks[testimonials][title]"
+                                       placeholder="Testimonios de Clientes"
+                                       value="{{ $customization?->getContentBlock('testimonials', 'title') ?? '' }}">
+                            </div>
+                            @endif
+
+                            <div class="form-control">
+                                <label class="inline-block text-sm font-medium text-foreground mb-1" for="info-contact-h2">
+                                    Título Sección Contacto (h2)
+                                </label>
+                                <input id="info-contact-h2" type="text"
+                                       class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none"
+                                       name="content_blocks[contact][title]"
+                                       placeholder="Contáctanos"
+                                       value="{{ $customization?->getContentBlock('contact', 'title') ?? '' }}">
+                                <p class="text-xs text-muted-foreground-1 mt-1">Vacío = "Contáctanos"</p>
+                            </div>
+
+                            <div class="form-control">
+                                <label class="inline-block text-sm font-medium text-foreground mb-1" for="info-payment-title">
+                                    Título Sección Medios de Pago
+                                </label>
+                                <input id="info-payment-title" type="text"
+                                       class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none"
+                                       name="content_blocks[payment_methods][title]"
+                                       placeholder="Medios de Pago"
+                                       value="{{ $customization?->getContentBlock('payment_methods', 'title') ?? '' }}">
+                                <p class="text-xs text-muted-foreground-1 mt-1">Vacío = "Medios de Pago"</p>
+                            </div>
+
+                            @if($tenant->isAtLeastCrecimiento())
+                            <div class="form-control">
+                                <label class="inline-block text-sm font-medium text-foreground mb-1" for="info-testimonials-title">
+                                    <span class="flex items-center gap-1">
+                                        Título Sección Testimonios
+                                        <span class="inline-flex items-center py-0.5 px-2 rounded-full text-xs font-medium bg-green-100 text-green-700">{{ $plan->name }}</span>
+                                    </span>
+                                </label>
+                                <input id="info-testimonials-title" type="text"
+                                       class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none"
+                                       name="content_blocks[testimonials][title]"
+                                       placeholder="Testimonios de Clientes"
+                                       value="{{ $customization?->getContentBlock('testimonials', 'title') ?? '' }}">
+                            </div>
+                            @endif
+
+                            @if($tenant->plan_id >= 3)
+                            <div class="form-control">
+                                <label class="inline-block text-sm font-medium text-foreground mb-1" for="info-faq-title">
+                                    <span class="flex items-center gap-1">
+                                        Título Sección FAQ
+                                        <span class="inline-flex items-center py-0.5 px-2 rounded-full text-xs font-medium bg-purple-100 text-purple-700">VISIÓN</span>
+                                    </span>
+                                </label>
+                                <input id="info-faq-title" type="text"
+                                       class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none"
+                                       name="content_blocks[faq][title]"
+                                       placeholder="Preguntas Frecuentes"
+                                       value="{{ $customization?->getContentBlock('faq', 'title') ?? '' }}">
+                            </div>
+
+                            <div class="form-control">
+                                <label class="inline-block text-sm font-medium text-foreground mb-1" for="info-branches-title">
+                                    <span class="flex items-center gap-1">
+                                        Título Sección Sucursales
+                                        <span class="inline-flex items-center py-0.5 px-2 rounded-full text-xs font-medium bg-purple-100 text-purple-700">VISIÓN</span>
+                                    </span>
+                                </label>
+                                <input id="info-branches-title" type="text"
+                                       class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none"
+                                       name="content_blocks[branches][title]"
+                                       placeholder="Encuéntranos Cerca de Ti"
+                                       value="{{ $customization?->getContentBlock('branches', 'title') ?? '' }}">
+                            </div>
+                            @endif
+
+                        </div>
 
                         <div class="flex items-center gap-3 justify-end pt-4 border-t border-border mt-4">
                             <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg bg-layer border border-layer-line text-layer-foreground shadow-2xs hover:bg-layer-hover disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-layer-focus" onclick="resetForm('form-info')">Cancelar</button>

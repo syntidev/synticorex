@@ -274,19 +274,9 @@ class TenantCustomization extends Model
      */
     public function getHeroSubtitle(): ?string
     {
-        $slogan   = $this->tenant->slogan ?? '';
         $subtitle = $this->getContentBlock('hero', 'subtitle');
-        $desc     = $this->tenant->description ?? '';
 
-        if ($subtitle && $subtitle !== $slogan) {
-            return $subtitle;
-        }
-
-        if ($desc && $desc !== $slogan) {
-            return $desc;
-        }
-
-        return null;
+        return ($subtitle !== null && $subtitle !== '') ? $subtitle : null;
     }
 
     /**
@@ -297,5 +287,23 @@ class TenantCustomization extends Model
         return $this->about_text
             ?? $this->getContentBlock('about', 'text')
             ?? null;
+    }
+
+    /**
+     * Section heading title. Falls back to the default label.
+     * e.g. getSectionTitle('products', 'Nuestros Productos')
+     */
+    public function getSectionTitle(string $section, string $default): string
+    {
+        return $this->getContentBlock($section, 'title') ?: $default;
+    }
+
+    /**
+     * Section subtitle/description. Returns null if empty.
+     */
+    public function getSectionSubtitle(string $section): ?string
+    {
+        $v = $this->getContentBlock($section, 'subtitle');
+        return ($v !== null && $v !== '') ? $v : null;
     }
 }

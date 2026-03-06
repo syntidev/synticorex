@@ -19,13 +19,19 @@
     // Email
     $email = $tenant->email ?? '';
     $phone = $tenant->phone ?? '';
+
+    // Título y subtítulo de la sección Contacto (variables propias, independientes de description)
+    $contactTitle    = data_get($tenant->settings, 'business_info.contact.title')
+                        ?: ($tenant->slogan ?: 'Estamos para ayudarte');
+    $contactSubtitle = data_get($tenant->settings, 'business_info.contact.subtitle')
+                        ?: '';
 @endphp
 
 <section id="contact" class="bg-surface py-10 sm:py-16 lg:py-20">
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
     <div class="text-center mb-12 space-y-3">
       <h2 class="text-foreground text-2xl font-semibold md:text-3xl lg:text-4xl">
-        Contáctanos
+        {!! $customization->getSectionTitle('contact', 'Contáctanos') !!}
       </h2>
       <div class="w-16 h-1 bg-primary mx-auto rounded-full"></div>
     </div>
@@ -55,14 +61,16 @@
 
       {{-- Columna 2: Cards de contacto --}}
       <div class="flex flex-col space-y-4">
-        {{-- Encabezado opcional --}}
+        {{-- Encabezado de la sección Contacto --}}
         <div>
           <h3 class="text-foreground text-lg font-semibold mb-2">
-            {{ $tenant->tagline ?? 'Estamos para ayudarte' }}
+            {{ $contactTitle }}
           </h3>
+          @if($contactSubtitle)
           <p class="text-foreground/70 text-sm">
-            {{ $tenant->description ?? 'Contáctanos y te atendemos a la brevedad.' }}
+            {{ $contactSubtitle }}
           </p>
+          @endif
         </div>
 
         {{-- Grid 2x2 de cards — se expande para llenar altura --}}

@@ -117,16 +117,7 @@ class TenantRendererController extends Controller
                 'services_count' => $services->count(),
             ]);
 
-            $meta = [
-                'title' => $tenant->meta_title ?? $tenant->business_name,
-                'description' => $tenant->meta_description ?? $tenant->description,
-                'keywords' => $tenant->meta_keywords ?? '',
-                'canonical' => url('/' . $tenant->subdomain),
-                'og_title' => $tenant->meta_title ?? $tenant->business_name,
-                'og_description' => $tenant->meta_description ?? $tenant->description,
-                'og_image' => $tenant->logo_url ?? asset('images/default-og.jpg'),
-                'og_url' => url('/' . $tenant->subdomain),
-            ];
+            $meta = $this->buildMetaTags($tenant);
 
             // Extract currency display settings — lee siempre desde saved_display_mode
             $savedDisplayMode = data_get($tenant->settings, 'engine_settings.currency.display.saved_display_mode', 'reference_only');
@@ -341,7 +332,7 @@ class TenantRendererController extends Controller
             '@context'    => 'https://schema.org',
             '@type'       => $schemaType,
             'name'        => $tenant->business_name,
-            'description' => $tenant->description ?? '',
+            'description' => $tenant->meta_description ?? $tenant->description ?? '',
             'address'     => [
                 '@type'           => 'PostalAddress',
                 'streetAddress'   => $tenant->address ?? '',
@@ -472,8 +463,8 @@ class TenantRendererController extends Controller
             'description' => $tenant->meta_description ?? $tenant->description ?? "Bienvenido a {$businessName}",
             'keywords' => $tenant->meta_keywords ?? $tenant->business_segment ?? '',
             'og_title' => $tenant->meta_title ?? $businessName,
-            'og_description' => $tenant->meta_description ?? $tenant->slogan ?? '',
-            'og_image' => $tenant->customization?->hero_main_filename ?? null,
+            'og_description' => $tenant->meta_description ?? $tenant->description ?? $tenant->slogan ?? '',
+            'og_image' => $tenant->customization?->logo_filename ?? $tenant->customization?->hero_main_filename ?? null,
             'canonical' => $this->buildCanonicalUrl($tenant),
         ];
     }

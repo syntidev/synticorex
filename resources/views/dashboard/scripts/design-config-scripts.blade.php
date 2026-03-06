@@ -810,27 +810,6 @@
             }
         }
 
-        // ── Acerca de (description) ────────────────────────────────
-        async function saveAboutText() {
-            const description = document.getElementById('about-text')?.value?.trim() ?? '';
-            try {
-                const res = await fetch(`/tenant/{{ $tenant->id }}/update-info`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
-                    body: JSON.stringify({ description })
-                });
-                const result = await res.json();
-                if (result.success) {
-                    showToast('✓ Descripción actualizada', 'success');
-                } else {
-                    showToast('✗ ' + (result.message || 'Error'), 'error');
-                }
-            } catch (err) {
-                console.error('Error:', err);
-                showToast('✗ Error al guardar descripción', 'error');
-            }
-        }
-
         // ── CTA Especial (Plan 3) ──────────────────────────────────
         async function saveCtaConfig() {
             const data = {

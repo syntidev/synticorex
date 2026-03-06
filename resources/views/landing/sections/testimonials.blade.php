@@ -14,9 +14,11 @@
 
     {{-- Encabezado --}}
     <div class="text-center mb-12 space-y-3">
-      <p class="text-primary text-sm font-medium uppercase tracking-wide">Lo que dicen</p>
+      <p class="text-primary text-sm font-medium uppercase tracking-wide">
+        {{ $customization->getContentBlock('testimonials', 'eyebrow') ?: 'Lo que dicen' }}
+      </p>
       <h2 class="text-foreground text-2xl font-semibold md:text-3xl lg:text-4xl">
-        Testimonios de <span class="text-primary italic">Clientes</span>
+        {!! $customization->getSectionTitle('testimonials', 'Testimonios de <span class="text-primary italic">Clientes</span>') !!}
       </h2>
       <div class="w-16 h-1 bg-primary mx-auto rounded-full"></div>
     </div>

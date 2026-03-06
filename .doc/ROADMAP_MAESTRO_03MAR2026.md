@@ -1,9 +1,10 @@
 # ROADMAP MAESTRO — SYNTIweb / Synticorex
-**Fecha de creación:** 03 MAR 2026  
-**Reemplaza:** `01_ROADMAP_MVP__checklist_.md` + `NEXT_SESSION.md` + `PROGRESS.md`  
-**Repositorio:** `c:\laragon\www\synticorex`  
-**Stack definitivo (sin cambios):** Laravel 12 + Preline 4.1.2 + Tailwind v4 + MySQL multi-tenant  
-**Herramientas:** VS Code + Copilot Pro+ | Suite Anthropic como primaria  
+**Fecha de creación:** 03 MAR 2026
+**Última actualización:** 05 MAR 2026 — Revisión de productos, precios y límites
+**Reemplaza:** `ROADMAP_MAESTRO_03MAR2026.md`
+**Repositorio:** `c:\laragon\www\synticorex`
+**Stack definitivo (sin cambios):** Laravel 12 + Preline 4.1.2 + Tailwind v4 + MySQL multi-tenant
+**Herramientas:** VS Code + Copilot Pro+ | Suite Anthropic como primaria
 
 ---
 
@@ -66,26 +67,120 @@ SYNTIweb es un ecosistema SaaS multi-tenant que da presencia digital profesional
 - `syntiweb.com` — Plataforma y frente comercial
 - `synti.dev` — Cara empresarial / corporativa
 
-**Los 3 productos (misma arquitectura base, segmentación por blueprint):**
-- **SYNTIstudio** — Landing profesional para marcas, freelancers, consultores, proyectos
-- **SYNTIfood** — Menú digital para negocios de comida (restaurantes, areperas, postres, etc.)
-- **SYNTIcat** — Catálogo visual con botón directo a WhatsApp para comercios y tiendas
+---
 
-**Planes por producto:**
-| Plan | Precio | Productos | Servicios | Imágenes | Temas |
-|------|--------|-----------|-----------|----------|-------|
-| OPORTUNIDAD | $99/año | 6 | 3 | 10 paletas | — |
-| CRECIMIENTO | $149/año | 12 | 6 | 17 paletas | — |
-| VISIÓN | $199/año | 18 | 9 | 17 paletas + custom infinito | — |
+## LOS 3 PRODUCTOS — DEFINICIÓN DEFINITIVA
+
+> **Regla de oro:** Mismo motor. Diferente blueprint. Diferente buyer. No se canibalizan.
+
+### 🌐 SYNTIstudio
+**Qué es:** Presencia digital completa. Web profesional con marca, productos, servicios, SEO.
+**Para quién:** Freelancer, consultora, barbería, clínica, marca personal, negocio con identidad.
+**Compite con:** Wix ($192/año), Squarespace, agencias venezolanas ($150–$300+).
+**Gana por:** Precio + localización Venezuela + BCV automático.
+**Blueprint:** `studio`
+
+| Plan | Precio anual | Precio mensual | Productos | Servicios | Temas |
+|------|-------------|----------------|-----------|-----------|-------|
+| Oportunidad | **$99/año** | ~$13/mes | **20** | 3 | 10 paletas |
+| Crecimiento | **$149/año** | ~$19/mes | **50** | 6 | 17 paletas |
+| Visión | **$199/año** | ~$25/mes | **Ilimitado** | 9 | 17 + custom ∞ |
+
+> ⚠️ Límites actualizados: 6→20 / 12→50 / 18→ilimitado (tarea D.13 ejecutada como decisión de arquitectura)
 
 **Secciones por plan:**
-- Plan 1: hero, products, services, contact, payment_methods, cta, footer
-- Plan 2: + about, testimonials
-- Plan 3: + faq, branches
+- Oportunidad: hero, products, services, contact, payment_methods, cta, footer
+- Crecimiento: + about, testimonials, horarios, analytics tiempo real
+- Visión: + faq, branches (hasta 3 sucursales), SEO profundo, schema.org
+
+**Sobre paletas de color (decisión arquitectónica):**
+Las 25–30 paletas se mantienen y se AGRUPAN por industria en el wizard. No se reducen.
+Ejemplos: Salud (azules/blancos), Energía/Gym (naranjas), Gastronomía (rojos/cálidos), Moda (neutros/dorados), Tecnología (índigos), Legal (azules oscuros), Belleza (rosas/lilas). El cliente ve su industria y elige — no es confusión, es guía.
 
 ---
 
-## ESTADO REAL HOY — 03 MAR 2026
+### 🍔 SYNTIfood
+**Qué es:** Menú digital híbrido. 1 foto por categoría + lista de platos con precio. Pedido rápido a WhatsApp.
+**Para quién:** Restaurante, arepera, pastelería, food truck, negocio de comida a domicilio.
+**Compite con:** Levery, Nedify, carta física impresa.
+**Gana por:** Lista larga, carga rápida, 1 foto por categoría (no por plato), Pedido→WhatsApp sin carrito complejo.
+**Blueprint:** `food`
+**Diferenciador técnico vs competencia:** No requiere foto por ítem. 1 foto de categoría + lista tipo restaurante físico. Venezolano ya sabe leerlo.
+
+| Plan | Precio | Fotos | Ítems en lista | Features clave |
+|------|--------|-------|----------------|----------------|
+| Básico | **$9/mes** | 6 fotos categoría | 50 ítems | Sin categorías, sin pedido rápido |
+| Semestral | **$39** (DECOY) | 12 fotos | 100 ítems | Con categorías + BCV + horarios |
+| Anual ⭐ | **$69/año** | 18 fotos | 150 ítems | Todo + **Pedido Rápido → WhatsApp** |
+
+**Pedido Rápido (no es carrito):**
+El cliente toca [+] en cada ítem → se acumula en bloc de notas → botón "Enviar pedido" construye string WhatsApp estructurado. El restaurante confirma disponibilidad por WhatsApp. Sin checkout, sin dirección, sin Mini Order.
+
+**Estructura híbrida de menú (congelada):**
+```
+┌─────────────────────────────────────┐
+│ 🐟 PESCADOS        [1 foto]         │
+├──────────────────────────┬──────────┤
+│ Al ajillo            [+] │  $8.00  │
+│ A la primavera       [+] │  $9.00  │
+│ Frito                [+] │  $7.00  │
+└──────────────────────────┴──────────┘
+       [Ver pedido (3 items) →]
+```
+
+---
+
+### 🛍️ SYNTIcat
+**Qué es:** Catálogo visual con carrito y checkout directo a WhatsApp. Mini Order con ID rastreable.
+**Para quién:** Tienda de ropa, proveedor, comercio con muchos productos, retail venezolano.
+**Compite con:** Cattaly ($97/año sin carrito).
+**Gana por:** Precio menor + carrito WhatsApp que Cattaly no tiene.
+**Blueprint:** `cat`
+
+| Plan | Precio | Productos | Imágenes | Variantes | Carrito |
+|------|--------|-----------|----------|-----------|---------|
+| Básico | **$9/mes** | 20 | 1 | Solo simple | ✗ Solo botón WA |
+| Semestral | **$39** (DECOY) | 100 | 3 | size + size_color | ✅ Carrito básico |
+| Anual ⭐ | **$69/año** | Ilimitado | 6 | Todas + options | ✅ Carrito + Mini Order SC-XXXX |
+
+**Mini Order (solo plan Anual):**
+Genera ID `SC-XXXX` → guarda pedido en JSON → construye string WhatsApp → pantalla de confirmación.
+Sin pasarela, sin inventario, sin checkout complejo.
+
+**Variantes por plan:**
+- Básico: `none` (producto simple)
+- Semestral: `size`, `size_color`
+- Anual: Todo + `options` (lista libre: extras, personalización, mensaje)
+
+---
+
+## COMPARATIVA RÁPIDA DE LOS 3 PRODUCTOS
+
+| | SYNTIstudio | SYNTIfood | SYNTIcat |
+|---|---|---|---|
+| Precio entrada anual | $99 | $69 | $69 |
+| Precio top | $199/año | $69/año | $69/año |
+| Killer feature | Web completa 🌐 | Menú + Pedido 🍔 | Carrito + SC-XXXX 🛒 |
+| Compite con | Wix $192 | Levery sin pedido | Cattaly $97 sin carrito |
+| Les gana por | Precio + VE | Pedido→WA | Carrito incluido |
+| Blueprint | `studio` | `food` | `cat` |
+
+---
+
+## SISTEMA DE MONEDA — DECISIÓN DEFINITIVA
+
+| Modo | Símbolo | Uso |
+|------|---------|-----|
+| Bolívares | REF | Por defecto (no Bs. por tema político — listo para cambiar) |
+| Dólar | $ | Referencial BCV |
+| Ambos | REF + $ | Toggle automático |
+| Euro | € | Opcional, 4ta opción — poco común en VE pero disponible |
+
+> El sistema ya está implementado y funcional. Solo activar Euro como opción en config.
+
+---
+
+## ESTADO REAL — 05 MAR 2026
 
 ### ✅ COMPLETADO Y FUNCIONAL
 - Migraciones, seeders, modelos, relaciones (multi-tenant base)
@@ -98,137 +193,150 @@ SYNTIweb es un ecosistema SaaS multi-tenant que da presencia digital profesional
 - QR dinámico + toggle estado negocio (abierto/cerrado)
 - Analytics básico + Shortlink tracking
 - Horario de negocio con indicador visual
-- Sistema de paletas de color (25 esquemas categorizados)
-- Navbar condicional por plan (documentado)
-- Hero layouts múltiples (documentado)
-- Migración Flyonui → Preline 4.1.2: **90% completada**
+- Sistema de paletas de color (25+ esquemas categorizados por industria)
+- Navbar condicional por plan
+- Hero layouts múltiples
+- Migración Flyonui → Preline 4.1.2: **100% completada**
+- Identidad visual SYNTIweb definida (syntiweb-brand.css)
+- Logo navbar + breathing animation
+- Normalización estilos dashboard (tokens Preline)
+- UX formularios info-section (placeholders, iconos, subtítulos)
 
 ### 🔶 EN PROGRESO
-- Migración Flyonui → Preline: falta 10% (detalle de tema/empaque DB)
 - Landing comercial: estructura existe, copy técnico sin traducir a B2H
-- Logo SYNTIweb: archivo local listo, falta integrar en navbar + hero
+- Info-section sub-tabs (A.10)
 
 ### ❌ PENDIENTE / NO EXISTE AÚN
-- Identidad visual SYNTIweb definida y aplicada a toda la plataforma
+- Límites de productos en DB actualizados (20/50/ilimitado para Studio)
+- Paletas agrupadas por industria en wizard (UX pendiente)
 - Página de planes dinámica (desde DB, no hardcodeada)
 - Página de marketing completa (blog, nosotros, comparativa)
 - Autenticación real (Google OAuth via Laravel Socialite)
 - Seguridad aplicada a rutas tenant (hardening middleware)
 - Tablero admin multi-configurador
-- Gestión de clientes, vendedores, soporte
-- SEO automatizado (meta tags dinámicos por blueprint)
-- Analytics avanzado (tracking JS → analytics_events)
+- Blueprint `food` (SYNTIfood)
+- Blueprint `cat` (SYNTIcat)
+- SEO automatizado
+- Analytics avanzado
 - Producción: servidor + DNS + SSL + cron
-- Los 3 productos segmentados con su propio landing específico
 - Bot / agente de soporte (fase futura)
 
 ---
 
 ## FASES DE EJECUCIÓN
 
-### FASE A — CERRAR LO ABIERTO
-**Fechas:** 03 MAR → 07 MAR 2026  
-**Objetivo:** Todo lo que está al 90% llega al 100%. Cero deuda visual abierta.
+### FASE A — CERRAR LO ABIERTO ✅ 90% COMPLETA
+**Fechas:** 03 MAR → 07 MAR 2026
+**Objetivo:** Todo lo que está al 90% llega al 100%.
 
-**Tareas:**
+| # | Tarea | Archivo(s) | Estado |
+|---|-------|-----------|--------|
+| A.1 | Finalizar migración Preline | `config/`, `resources/views/` | ✅ HECHO |
+| A.2 | Identidad visual SYNTIweb | `syntiweb-brand.css` | ✅ HECHO |
+| A.3 | Aplicar identidad: Landing + Dashboard + Wizard | Global | ✅ HECHO |
+| A.4 | Logo navbar + hero breathing animation | `navbar.blade.php`, `hero.blade.php` | ✅ HECHO |
+| A.5 | Copy B2H landing | `landing/sections/*` | ⏸ SUSPENDIDO hasta producto completo |
+| A.6 | Responsividad completa (375/768/1440px) | Global | ❌ PENDIENTE |
+| A.7 | Lighthouse 90+ | Build + assets | ❌ PENDIENTE |
+| A.8 | Normalizar estilos dashboard Preline | `resources/views/dashboard/` | ✅ HECHO |
+| A.9 | UX formularios dashboard | `dashboard/components/` | ✅ HECHO |
+| A.10 | Info-section sub-tabs | `dashboard/components/` | 🔶 EN PROGRESO |
+| A.11 | QR sticker generador | — | ❌ PENDIENTE |
+| A.12 | Imagen Acerca De | — | ❌ PENDIENTE |
+| A.13 | Panel flotante Preline + gesto móvil | — | ❌ PENDIENTE |
+| A.14 | Botón tel: | — | ❌ PENDIENTE |
 
-| # | Tarea | Archivo(s) | Prioridad |
-|---|-------|-----------|-----------|
-| A.1 | Finalizar migración Preline: resolver detalle tema/empaque DB | `config/`, `resources/views/` | 🔴 CRÍTICO |
-| A.2 | Definir identidad visual SYNTIweb (token de colores, tipografía, espaciado) | `tailwind.config.js`, `resources/css/` | 🔴 CRÍTICO |
-| A.3 | Aplicar identidad visual a: Landing + Dashboard + Wizard + Landing comercial | Global | 🔴 CRÍTICO |
-| A.4 | Integrar logo en navbar (fijo) + hero (grande, breathing animation) | `landing/partials/navbar.blade.php`, `landing/sections/hero.blade.php` | 🔴 CRÍTICO |
-| A.5 | Traducir todo el copy de la landing a B2H (sin jerga técnica) | `landing/sections/*` | 🟠 ALTO |
-| A.6 | Validar responsividad completa (mobile 375px / tablet 768px / desktop 1440px) | Global | 🟠 ALTO |
-| A.7 | Lighthouse 90+ en todas las categorías | Build + assets | 🟡 MEDIO |
-| A.8 | Normalizar estilos dashboard: aplicar tokens Preline 4.1.2 a todas las secciones (cards, iconos, formularios, badges, inputs). Eliminar clases legacy FlyonUI/Tailwind hardcodeadas. | `resources/views/dashboard/` | 🔴 CRÍTICO |
-| A.9 | UX formularios dashboard: placeholders descriptivos, iconos por sección, subtítulos guía, accesibilidad (aria-label, tab-order). Prioridad: info-section.blade.php | `resources/views/dashboard/components/` | 🟠 ALTO |
-
+---
 
 ### FASE B — FRENTE COMERCIAL
-**Fechas:** 08 MAR → 14 MAR 2026  
-**Objetivo:** syntiweb.com es una vitrina que vende sola. Sin diseño hermoso no hay cierre.
-
-**Tareas:**
+**Fechas:** 08 MAR → 14 MAR 2026
+**Objetivo:** syntiweb.com vende sola.
 
 | # | Tarea | Archivo(s) | Prioridad |
 |---|-------|-----------|-----------|
-| B.1 | Página `/planes` dinámica desde DB (tabla `plans`) con cards expandibles + feature matrix + CTA por plan | `marketing/planes.blade.php` | 🔴 CRÍTICO |
-| B.2 | Hero principal landing comercial: "¿Tu negocio está en Google?" — CTA "Crea gratis" | `marketing/hero.blade.php` | 🔴 CRÍTICO |
-| B.3 | Sección productos: showcase de SYNTIstudio + SYNTIfood + SYNTIcat con mockups reales | `marketing/productos.blade.php` | 🔴 CRÍTICO |
-| B.4 | Página `/nosotros`: equipo, misión, historia, confianza | `marketing/nosotros.blade.php` | 🟠 ALTO |
-| B.5 | Sección comparativa vs competencia (Wix, Squarespace, agencias) con savings calculator | `marketing/comparativa.blade.php` | 🟠 ALTO |
-| B.6 | Blog base: estructura `/blog` con listado + single post + meta SEO | `marketing/blog/` | 🟠 ALTO |
+| B.1 | Página `/planes` dinámica desde DB — los 3 productos con toggle | `marketing/planes.blade.php` | 🔴 CRÍTICO |
+| B.2 | Hero principal: "¿Tu negocio está en Google?" — CTA "Crea gratis" | `marketing/hero.blade.php` | 🔴 CRÍTICO |
+| B.3 | Sección 3 productos: showcase Studio + Food + Cat con mockups | `marketing/productos.blade.php` | 🔴 CRÍTICO |
+| B.4 | Página `/nosotros`: misión, historia, confianza | `marketing/nosotros.blade.php` | 🟠 ALTO |
+| B.5 | Comparativa vs competencia (Wix, Cattaly, agencias) + savings calculator | `marketing/comparativa.blade.php` | 🟠 ALTO |
+| B.6 | Blog base: `/blog` listado + single + meta SEO | `marketing/blog/` | 🟠 ALTO |
 | B.7 | Footer completo: links, legal, redes, contacto | `marketing/partials/footer.blade.php` | 🟡 MEDIO |
-| B.8 | Formulario de contacto funcional (Formspree o similar) | `marketing/contacto.blade.php` | 🟡 MEDIO |
+| B.8 | Formulario de contacto funcional | `marketing/contacto.blade.php` | 🟡 MEDIO |
 
-**Nota B.1:** La tabla `plans` ya existe en DB. La página lee de ahí. Si cambias precio en DB → página se actualiza sola. Nunca hardcodear precios en Blade.
+**Nota B.1:** La tabla `plans` ya existe en DB. Nunca hardcodear precios en Blade. La página de planes debe mostrar los 3 productos con switch/tabs: Studio / Food / Cat.
 
 ---
 
 ### FASE C — AUTENTICACIÓN Y ACCESO
-**Fechas:** 15 MAR → 21 MAR 2026  
-**Objetivo:** Usuarios reales pueden registrarse, entrar y gestionar su tenant. Esto abre monetización.
-
-**Tareas:**
+**Fechas:** 15 MAR → 21 MAR 2026
+**Objetivo:** Usuarios reales pueden registrarse, entrar y gestionar su tenant.
 
 | # | Tarea | Archivo(s) | Prioridad |
 |---|-------|-----------|-----------|
-| C.1 | Login + Registro básico (Laravel Breeze o equivalente) | `auth/` | 🔴 CRÍTICO |
+| C.1 | Login + Registro básico (Laravel Breeze) | `auth/` | 🔴 CRÍTICO |
 | C.2 | Google OAuth via Laravel Socialite | `config/services.php`, `SocialiteController` | 🔴 CRÍTICO |
-| C.3 | Hardening middleware en rutas tenant (auth + ownership check) | `app/Http/Middleware/` | 🔴 CRÍTICO |
-| C.4 | Wizard de onboarding post-registro: seleccionar producto + plan + crear tenant | `onboarding/` | 🔴 CRÍTICO |
-| C.5 | Flujo de pago / activación de plan (manual o integración básica) | `payments/` | 🟠 ALTO |
+| C.3 | Hardening middleware rutas tenant | `app/Http/Middleware/` | 🔴 CRÍTICO |
+| C.4 | Wizard onboarding: seleccionar producto (Studio/Food/Cat) + plan + crear tenant | `onboarding/` | 🔴 CRÍTICO |
+| C.5 | Flujo pago / activación de plan (manual o integración básica) | `payments/` | 🟠 ALTO |
 | C.6 | Email de bienvenida post-registro | `Mail/WelcomeMail.php` | 🟡 MEDIO |
 | C.7 | Recuperación de contraseña | `auth/forgot-password` | 🟡 MEDIO |
 
-**Nota C.2:** Google OAuth con Socialite es ~4-6h de trabajo. Es la forma más fácil para el usuario venezolano. Si hay bloqueador técnico, se implementa solo email/password y Google va a v1.1.
+**Nota C.4:** El wizard pregunta primero: ¿Qué necesitas? → [Web completa] [Menú digital] [Catálogo tienda]. Eso define el blueprint y los planes disponibles.
 
 ---
 
-### FASE D — TABLERO ADMIN + PRODUCTOS SEGMENTADOS
-**Fechas:** 22 MAR → 04 ABR 2026  
-**Objetivo:** Operación real del negocio. Gestión, soporte, métricas. Los 3 productos activos.
-
-**Tareas:**
+### FASE D — TABLERO ADMIN + LOS 3 PRODUCTOS
+**Fechas:** 22 MAR → 04 ABR 2026
+**Objetivo:** Los 3 blueprints activos. Operación real del negocio.
 
 | # | Tarea | Prioridad |
 |---|-------|-----------|
-| D.1 | Tablero admin: gestión de tenants (ver, editar, suspender, eliminar) | 🔴 CRÍTICO |
-| D.2 | Tablero admin: gestión de planes y precios (CRUD desde UI, no solo DB) | 🔴 CRÍTICO |
-| D.3 | Tablero admin: gestión de usuarios / clientes | 🔴 CRÍTICO |
+| D.1 | Tablero admin: gestión tenants (ver, editar, suspender, eliminar) | 🔴 CRÍTICO |
+| D.2 | Tablero admin: gestión planes y precios (CRUD desde UI) | 🔴 CRÍTICO |
+| D.3 | Tablero admin: gestión de usuarios/clientes | 🔴 CRÍTICO |
 | D.4 | Tablero admin: métricas globales (tenants activos, MRR, conversión) | 🟠 ALTO |
-| D.5 | Rol vendedor: acceso a panel de clientes asignados, comisiones | 🟠 ALTO |
-| D.6 | Rol soporte: acceso a tickets, visualización de tenant sin editar | 🟠 ALTO |
-| D.7 | SYNTIstudio: landing específica + blueprint aplicado | 🟠 ALTO |
-| D.8 | SYNTIfood: landing específica + blueprint menú digital | 🟠 ALTO |
-| D.9 | SYNTIcat: landing específica + blueprint catálogo WhatsApp | 🟠 ALTO |
-| D.10 | SEO automatizado: meta tags dinámicos por blueprint + schema.org | 🟡 MEDIO |
-| D.11 | Analytics avanzado: tracking JS → `analytics_events` + dashboard visual | 🟡 MEDIO |
-| D.12 | SYNTIcat: normalizar product-card con mini-carrito (cantidad + total) para Plan 2 y 3. Plan 1 solo botón WhatsApp. Hereda conversión de moneda existente. Sin pasarela por ahora. | 🟠 ALTO |
-| D.13 | Revisar y aumentar límites de productos por plan en tabla `plans` DB: OPORTUNIDAD 6→20, CRECIMIENTO 12→50, VISIÓN 18→ilimitado. Validar competencia venezolana antes de ejecutar. | 🟡 MEDIO |
+| D.5 | Rol vendedor: panel de clientes asignados + comisiones | 🟠 ALTO |
+| D.6 | Rol soporte: acceso a tickets + visualización tenant sin editar | 🟠 ALTO |
+| D.7 | **SYNTIstudio:** landing específica + blueprint `studio` aplicado | 🟠 ALTO |
+| D.8 | **SYNTIstudio:** Actualizar límites en DB: 20 / 50 / ilimitado | 🔴 CRÍTICO |
+| D.9 | **SYNTIstudio:** Agrupar paletas por industria en wizard (UX) | 🟠 ALTO |
+| D.10 | **SYNTIfood:** landing específica con copy food | 🟠 ALTO |
+> 📄 **Referencia de implementación:**
+> Ver `.doc/SYNTIcat_SYNTIfood_Plan_05MAR2026.docx`
+> para fases detalladas, tareas, entregables y specs técnicos.
+| D.11 | **SYNTIfood:** Blueprint `food` — estructura híbrida (1 foto categoría + lista) | 🔴 CRÍTICO |
+| D.12 | **SYNTIfood:** Pedido Rápido → WhatsApp (acumulador de ítems, no carrito completo) | 🔴 CRÍTICO |
+| D.13 | **SYNTIfood:** Activar variante `options` (extras) desde plan Semestral | 🟠 ALTO |
+| D.14 | **SYNTIcat:** landing específica con copy retail | 🟠 ALTO |
+| D.15 | **SYNTIcat:** Blueprint `cat` — catálogo + product card + badges | 🔴 CRÍTICO |
+| D.16 | **SYNTIcat:** Cart engine (localStorage) + Cart Drawer lateral | 🔴 CRÍTICO |
+| D.17 | **SYNTIcat:** Mini Order Engine → genera SC-XXXX → JSON por tenant | 🔴 CRÍTICO |
+| D.18 | **SYNTIcat:** WhatsApp Checkout → string estructurado + URL wa.me | 🔴 CRÍTICO |
+| D.19 | **SYNTIcat:** Carrito solo en plan Semestral y Anual (plan Básico = solo botón WA) | 🟠 ALTO |
+| D.20 | SEO automatizado: meta tags dinámicos por blueprint + schema.org | 🟡 MEDIO |
+| D.21 | Analytics avanzado: tracking JS → `analytics_events` + dashboard visual | 🟡 MEDIO |
+
+---
 
 ### FASE E — PRODUCCIÓN Y ESCALA
-**Fechas:** 05 ABR → 15 ABR 2026  
-**Objetivo:** Plataforma en vivo, estable, con primeros clientes pagando.
-
-**Tareas:**
+**Fechas:** 05 ABR → 15 ABR 2026
+**Objetivo:** Plataforma en vivo. Primeros clientes pagando.
 
 | # | Tarea | Prioridad |
 |---|-------|-----------|
 | E.1 | Servidor Hostinger configurado (PHP + Laravel + MySQL) | 🔴 CRÍTICO |
-| E.2 | DNS, SSL, dominios (syntiweb.com + subdominio wildcard) | 🔴 CRÍTICO |
+| E.2 | DNS, SSL, dominios (syntiweb.com + subdominio wildcard *.syntiweb.com) | 🔴 CRÍTICO |
 | E.3 | Cron jobs: tasa BCV, analytics cleanup | 🔴 CRÍTICO |
 | E.4 | Variables de entorno producción | 🔴 CRÍTICO |
 | E.5 | Pipeline deploy (GitHub Actions o manual) | 🟠 ALTO |
 | E.6 | Monitoring básico (errores, uptime) | 🟠 ALTO |
 | E.7 | Backup automático DB | 🟠 ALTO |
-| E.8 | Onboarding de 5 clientes beta | 🔴 CRÍTICO |
+| E.8 | Onboarding 5 clientes beta (1 por cada tipo: Studio×2, Food×2, Cat×1) | 🔴 CRÍTICO |
 
 ---
 
 ### FASE F — CRECIMIENTO (POST-LANZAMIENTO)
-**Fechas:** Mayo 2026 en adelante  
+**Fechas:** Mayo 2026 en adelante
 **Objetivo:** Escalar, retener, monetizar mejor.
 
 | # | Tarea | Prioridad |
@@ -239,22 +347,11 @@ SYNTIweb es un ecosistema SaaS multi-tenant que da presencia digital profesional
 | F.4 | App móvil PWA (dashboard mobile-first) | 🟠 ALTO |
 | F.5 | Email marketing sequences | 🟡 MEDIO |
 | F.6 | A/B testing landing | 🟡 MEDIO |
-| F.7 | Afiliados / referidos | 🟡 MEDIO |
+| F.7 | Afiliados / referidos (1 mes gratis por referido que pague, máx 6 meses) | 🟡 MEDIO |
 | F.8 | API pública para integraciones | 🟡 MEDIO |
-| F.9 | Carrito completo SYNTIcat con pasarela | 🟠 ALTO |
-
----
-
-## REGLAS DE EJECUCIÓN (NO NEGOCIABLES)
-
-1. **Stack es definitivo.** Laravel 12 + Preline 4.1.2 + Tailwind v4. Sin cambios de framework sin aprobación explícita del arquitecto (Carlos).
-2. **Logo SYNTIweb:** Color círculo `#4A80E4` NUNCA cambia. Ver `CURSOR_RULES_UNIFIED.md`.
-3. **Cada tarea completada = actualizar este documento.** Sin excepción.
-4. **Cada commit referencia la tarea:** `feat: A.4 — logo integrado navbar + hero animation`
-5. **Sin features fuera de este roadmap.** Si surge algo nuevo → se agrega aquí antes de ejecutar.
-6. **Seguridad es lo último intencionalmente** para no bloquear desarrollo con login en cada cambio. Se activa en Fase C.
-7. **Los 3 productos reutilizan la arquitectura base.** No se crea código nuevo desde cero. Se segmenta por blueprint.
-8. **Planes dinámicos desde DB siempre.** Nunca hardcodear precios, features o límites en Blade o JS.
+| F.9 | SYNTIcat: carrito completo con pasarela Fase F.3 | 🟠 ALTO |
+| F.10 | SYNTIfood: dominio propio por tenant | 🟠 ALTO |
+| F.11 | SYNTIcat: dominio propio por tenant (plan Anual) | 🟠 ALTO |
 
 ---
 
@@ -270,20 +367,55 @@ SYNTIweb es un ecosistema SaaS multi-tenant que da presencia digital profesional
 - Por dominio custom: `www.tunegocio.com`
 - Sin tenant válido → 404
 
+**Blueprints disponibles:**
+- `studio` → landing web completa
+- `food` → menú digital híbrido
+- `cat` → catálogo con carrito WhatsApp
+
 **Storage por tenant:**
 - Path: `storage/tenants/{tenant_id}/`
 - Imágenes: WebP, máx 800px, máx 2MB
-- Slots nombrados: `logo.webp`, `hero.webp`, `product_01.webp`...
+- Slots nombrados: `logo.webp`, `hero.webp`, `product_01.webp`
+- SYNTIcat orders: `storage/tenants/{tenant_id}/orders/2026/03/SC-XXXX.json`
 
 **Tablas principales:**
 `users` → `tenants` → `plans` → `products` / `services` / `tenant_customization` / `analytics_events` / `invoices`
 
+**Tabla `plans` — valores definitivos:**
+
+| slug | nombre | precio_anual | precio_mensual | blueprint | productos | servicios |
+|------|--------|-------------|----------------|-----------|-----------|-----------|
+| studio-oportunidad | Oportunidad | 99 | 13 | studio | 20 | 3 |
+| studio-crecimiento | Crecimiento | 149 | 19 | studio | 50 | 6 |
+| studio-vision | Visión | 199 | 25 | studio | null | 9 |
+| food-basico | Básico | null | 9 | food | 50_items | — |
+| food-semestral | Semestral | 39 | null | food | 100_items | — |
+| food-anual | Anual | 69 | null | food | 150_items | — |
+| cat-basico | Básico | null | 9 | cat | 20 | — |
+| cat-semestral | Semestral | 39 | null | cat | 100 | — |
+| cat-anual | Anual | 69 | null | cat | null | — |
+
 **Checklist antes de tocar código:**
 - ¿Afecta multi-tenant? → verificar `tenant_id` en toda query
-- ¿Afecta planes? → validar contra `02_MATRIZ_FEATURES_DEFINITIVA.md`
+- ¿Afecta planes? → validar contra este roadmap sección Tabla plans
 - ¿Afecta schema? → validar contra `03_SCHEMA_DATABASE.md`
 - ¿Agrega endpoint? → middleware + validación obligatoria
 - ¿Toca imágenes? → WebP + 800px + naming convention
+- ¿Afecta blueprint? → validar que no rompe los otros 2
+
+---
+
+## REGLAS DE EJECUCIÓN (NO NEGOCIABLES)
+
+1. **Stack es definitivo.** Laravel 12 + Preline 4.1.2 + Tailwind v4. Sin cambios sin aprobación del arquitecto (Carlos).
+2. **Logo SYNTIweb:** Color círculo `#4A80E4` NUNCA cambia.
+3. **Cada tarea completada = actualizar este documento.** Sin excepción.
+4. **Cada commit referencia la tarea:** `feat: D.11 — blueprint food estructura híbrida`
+5. **Sin features fuera de este roadmap.** Si surge algo nuevo → se agrega aquí antes de ejecutar.
+6. **Seguridad intencionalmente al final** para no bloquear desarrollo. Se activa en Fase C.
+7. **Los 3 productos reutilizan arquitectura base.** No se crea código desde cero. Se segmenta por blueprint.
+8. **Planes dinámicos desde DB siempre.** Nunca hardcodear precios, features o límites en Blade o JS.
+9. **Blueprints son aditivos.** `food` y `cat` heredan lo funcional de `studio`. No se duplica lógica.
 
 ---
 
@@ -292,29 +424,30 @@ SYNTIweb es un ecosistema SaaS multi-tenant que da presencia digital profesional
 **Regla:** Actualizar esta sección cada noche antes de cerrar VS Code.
 
 ### 03 MAR 2026
-- [x] Reconfiguración instrucciones Claude Project (ejecutor, no arquitecto)
+- [x] Reconfiguración instrucciones Claude Project
 - [x] Actualización memoria del proyecto
 - [x] Creación ROADMAP_MAESTRO_03MAR2026.md
-- [ ] A.1 — Finalizar migración Preline (en progreso)
 
 ### 04 MAR 2026
- - [x] A.1 — Migración Preline completada (temas, custom palette, hero layouts)
- - [x] A.2 — Identidad visual SYNTIweb definida (syntiweb-brand.css)
- - [x] A.3 — Identidad aplicada: Dashboard + Marketing + Wizard + Landing tenant
- - [x] A.4 — Logo navbar + breathing animation
- - [x] A.8 — Normalizar estilos dashboard (tokens Preline en todos los archivos)
- - [x] A.9 — UX formularios info-section (placeholders, iconos, subtítulos)
- - [ ] A.5 — Copy B2H SUSPENDIDO hasta producto completo
- - [ ] A.6 — Responsividad (pendiente)
- - [ ] A.7 — Lighthouse (pendiente)
- - [ ] A.10 — Info-section sub-tabs (en ejecución)
- - [ ] A.11 — QR sticker generador (pendiente)
- - [ ] A.12 — Imagen Acerca De (pendiente)
- - [ ] A.13 — Panel flotante Preline + gesto móvil (pendiente)
- - [ ] A.14 — Botón tel: (pendiente)
-**Última actualización:** 04 MAR 2026
+- [x] A.1 — Migración Preline completada
+- [x] A.2 — Identidad visual SYNTIweb (syntiweb-brand.css)
+- [x] A.3 — Identidad aplicada a todos los módulos
+- [x] A.4 — Logo navbar + breathing animation
+- [x] A.8 — Normalización estilos dashboard Preline
+- [x] A.9 — UX formularios info-section
+
 ### 05 MAR 2026
-_(actualizar aquí)_
+- [x] Revisión arquitectónica completa de los 3 productos
+- [x] Definición definitiva de precios (Studio / Food / Cat)
+- [x] Actualización límites Studio: 6→20 / 12→50 / 18→ilimitado (pendiente ejecutar en DB)
+- [x] SYNTIfood: estructura híbrida y Pedido Rápido definidos
+- [x] SYNTIcat: Mini Order SC-XXXX y carrito por plan definidos
+- [x] Roadmap maestro actualizado con los 3 productos
+- [ ] A.10 — Info-section sub-tabs (en progreso)
+- [ ] A.11 — QR sticker generador
+- [ ] A.12 — Imagen Acerca De
+- [ ] A.13 — Panel flotante Preline + gesto móvil
+- [ ] A.14 — Botón tel:
 
 ### 06 MAR 2026
 _(actualizar aquí)_
@@ -324,17 +457,6 @@ _(actualizar aquí)_
 
 ---
 
-## DOCUMENTOS QUE REEMPLAZA ESTE ARCHIVO
-
-| Documento viejo | Estado |
-|----------------|--------|
-| `01_ROADMAP_MVP__checklist_.md` | OBSOLETO — reemplazado por este |
-| `NEXT_SESSION.md` | OBSOLETO — reemplazado por este |
-| `PROGRESS.md` | OBSOLETO — reemplazado por este |
-| `TASKS_STATUS.md` | OBSOLETO — integrado en este |
-
----
-
-**Autor:** Carlos Bolívar (Arquitecto) + Claude (Asesor)  
-**Última actualización:** 03 MAR 2026  
-**Próxima revisión:** Al completar Fase A (07 MAR 2026)
+**Autor:** Carlos Bolívar (Arquitecto) + Claude (Co-arquitecto y ejecutor)
+**Última actualización:** 05 MAR 2026
+**Próxima revisión:** Al completar Fase A completa (07 MAR 2026)

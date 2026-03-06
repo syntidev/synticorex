@@ -184,43 +184,7 @@
 @endif
 
 {{-- ════════════════════════════════════════════════════════════
-     3. ACERCA DE (Plan 2+)
-════════════════════════════════════════════════════════════ --}}
-@if($plan->id >= 2)
-<div class="bg-surface rounded-xl shadow-sm border border-border mb-6">
-    <div class="px-5 pt-5 pb-3">
-        <div class="flex items-center gap-3">
-            <div class="size-9 rounded-lg bg-primary/10 flex items-center justify-center">
-                <span class="iconify tabler--info-circle size-5 text-primary" aria-hidden="true"></span>
-            </div>
-            <div>
-                <h2 class="text-base font-bold text-foreground">Acerca de</h2>
-                <p class="text-xs text-muted-foreground-1">Texto de la sección "Nosotros" de tu landing
-                    <span class="inline-flex items-center py-0.5 px-2 rounded-full text-xs font-medium bg-blue-100 text-blue-700 ms-1">CRECIMIENTO+</span>
-                </p>
-            </div>
-        </div>
-    </div>
-    <div class="px-5 pb-5 pt-1">
-        <textarea id="about-text"
-                  class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none text-sm"
-                  rows="4"
-                  placeholder="Cuenta la historia de tu negocio..."
-                  maxlength="1000"
-                  oninput="document.getElementById('about-char-count').textContent = this.value.length + '/1000'">{{ $tenant->description ?? '' }}</textarea>
-        <div class="flex justify-between items-center mt-2">
-            <span class="text-[10px] text-muted-foreground-1" id="about-char-count">{{ strlen($tenant->description ?? '') }}/1000</span>
-            <button type="button" onclick="saveAboutText()" class="py-2 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg bg-primary border border-primary-line text-primary-foreground hover:bg-primary-hover focus:outline-hidden focus:bg-primary-focus disabled:opacity-50 disabled:pointer-events-none">
-                <span class="iconify tabler--device-floppy size-4"></span>
-                Guardar
-            </button>
-        </div>
-    </div>
-</div>
-@endif
-
-{{-- ════════════════════════════════════════════════════════════
-     4. TESTIMONIOS (Plan 2+)
+     3. TESTIMONIOS (Plan 2+)
 ════════════════════════════════════════════════════════════ --}}
 @if($plan->id >= 2)
 <div class="bg-surface rounded-xl shadow-sm border border-border mb-6">
@@ -281,7 +245,7 @@
 @endif
 
 {{-- ════════════════════════════════════════════════════════════
-     5. FAQ (Plan 3)
+     4. FAQ (Plan 3)
 ════════════════════════════════════════════════════════════ --}}
 @if($plan->id >= 3)
 <div class="bg-surface rounded-xl shadow-sm border border-border mb-6">
@@ -338,7 +302,7 @@
 @endif
 
 {{-- ════════════════════════════════════════════════════════════
-     6. CTA ESPECIAL (Plan 3)
+     5. CTA ESPECIAL (Plan 3)
 ════════════════════════════════════════════════════════════ --}}
 @if($plan->id >= 3)
 <div class="bg-surface rounded-xl shadow-sm border border-border mb-6">
@@ -398,7 +362,7 @@
 @endif
 
 {{-- ════════════════════════════════════════════════════════════
-     7. SUCURSALES (Plan 3)
+     6. SUCURSALES (Plan 3)
 ════════════════════════════════════════════════════════════ --}}
 @if($plan->id >= 3)
 <div class="bg-surface rounded-xl shadow-sm border border-border mb-6">

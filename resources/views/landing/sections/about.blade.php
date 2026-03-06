@@ -1,6 +1,7 @@
 {{-- About Section — Plan 2+ --}}
 @php
-    $description = $tenant->description ?? null;
+    // about_text: variable independiente de esta sección (no comparte con SEO, Hero ni Contacto)
+    $description = $customization->getAboutText() ?? null;
     $slogan      = $tenant->slogan ?? null;
 
     // Imagen de la sección: about_image > hero_main > logo > placeholder
@@ -24,7 +25,7 @@
             {{-- Col 8/12 — Descripción principal --}}
             <div class="flex-1 lg:basis-2/3">
                 <h2 class="text-foreground text-2xl font-semibold md:text-3xl lg:text-4xl mb-4">
-                    Acerca de <span class="text-primary italic">nosotros</span>
+                    {!! $customization->getSectionTitle('about', 'Acerca de <span class="text-primary italic">nosotros</span>') !!}
                 </h2>
                 <p class="text-foreground/70 text-lg font-medium mb-4">{{ $tenant->business_name }}</p>
                 @if($slogan)

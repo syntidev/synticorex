@@ -31,9 +31,9 @@
 
         {{-- Section header --}}
         <div class="text-center mb-12">
-            <span class="inline-block text-xs font-bold uppercase tracking-[0.3em] text-primary mb-3">Nuestras sedes</span>
+            <span class="inline-block text-xs font-bold uppercase tracking-[0.3em] text-primary mb-3">{{ $customization->getContentBlock('branches', 'eyebrow') ?: 'Nuestras sedes' }}</span>
             <h2 class="text-foreground text-2xl font-semibold md:text-3xl lg:text-4xl">
-                Encuéntranos <span class="text-primary italic">Cerca de Ti</span>
+                {!! $customization->getSectionTitle('branches', 'Encuéntranos <span class="text-primary italic">Cerca de Ti</span>') !!}
             </h2>
             <div class="w-16 h-1 bg-primary mx-auto rounded-full mt-5"></div>
         </div>

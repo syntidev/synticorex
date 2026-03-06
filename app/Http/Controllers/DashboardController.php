@@ -14,6 +14,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
 
 class DashboardController extends Controller
 {
@@ -168,7 +169,11 @@ class DashboardController extends Controller
                 'themeSlug'
             ));
         } catch (\Exception $e) {
-            return response()->view('errors.404', [], 404);
+            Log::error('Dashboard index error for tenant ' . $tenantId, [
+                'exception' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            return response()->view('errors.500', ['exception' => $e], 500);
         }
     }
 
@@ -198,23 +203,47 @@ class DashboardController extends Controller
                 'address' => 'nullable|string|max:255',
                 'city' => 'nullable|string|max:100',
                 'description' => 'nullable|string|max:1000',
+                'meta_title' => 'nullable|string|max:120',
+                'meta_description' => 'nullable|string|max:255',
+                'meta_keywords' => 'nullable|string|max:255',
                 'is_open' => 'nullable|boolean',
                 'contact_maps_url' => 'nullable|string|max:1000',
                 'contact_title' => 'nullable|string|max:120',
                 'contact_subtitle' => 'nullable|string|max:255',
-                'phone_secondary' => 'nullable|string|max:20',
                 'show_hours_indicator' => 'nullable|boolean',
                 'closed_message' => 'nullable|string|max:255',
-                'content_blocks'                   => 'nullable|array',
-                'content_blocks.hero'              => 'nullable|array',
-                'content_blocks.hero.title'        => 'nullable|string|max:100',
-                'content_blocks.hero.subtitle'     => 'nullable|string|max:200',
-                'about_text'                       => 'nullable|string|max:1000',
+                'content_blocks'                        => 'nullable|array',
+                'content_blocks.hero'               => 'nullable|array',
+                'content_blocks.hero.title'         => 'nullable|string|max:100',
+                'content_blocks.hero.subtitle'      => 'nullable|string|max:200',
+                'content_blocks.products'           => 'nullable|array',
+                'content_blocks.products.title'     => 'nullable|string|max:80',
+                'content_blocks.products.subtitle'  => 'nullable|string|max:200',
+                'content_blocks.services'           => 'nullable|array',
+                'content_blocks.services.title'     => 'nullable|string|max:80',
+                'content_blocks.services.subtitle'  => 'nullable|string|max:200',
+                'content_blocks.about'              => 'nullable|array',
+                'content_blocks.about.title'        => 'nullable|string|max:80',
+                'content_blocks.testimonials'       => 'nullable|array',
+                'content_blocks.testimonials.title' => 'nullable|string|max:80',
+                'content_blocks.testimonials.eyebrow' => 'nullable|string|max:60',
+                'content_blocks.faq'                => 'nullable|array',
+                'content_blocks.faq.title'          => 'nullable|string|max:80',
+                'content_blocks.faq.eyebrow'        => 'nullable|string|max:60',
+                'content_blocks.contact'            => 'nullable|array',
+                'content_blocks.contact.title'      => 'nullable|string|max:80',
+                'content_blocks.payment_methods'    => 'nullable|array',
+                'content_blocks.payment_methods.title' => 'nullable|string|max:80',
+                'content_blocks.branches'           => 'nullable|array',
+                'content_blocks.branches.title'     => 'nullable|string|max:80',
+                'content_blocks.branches.eyebrow'   => 'nullable|string|max:60',
+                'about_text'                        => 'nullable|string|max:1000',
             ]);
 
             // Update tenant fields (excluding settings-only fields)
-            $settingsOnlyKeys = ['contact_maps_url', 'contact_title', 'contact_subtitle', 'phone_secondary', 'show_hours_indicator', 'closed_message'];
-            $tenant->update(collect($validated)->except($settingsOnlyKeys)->toArray());
+            $settingsOnlyKeys = ['contact_maps_url', 'contact_title', 'contact_subtitle', 'show_hours_indicator', 'closed_message'];
+            $customizationOnlyKeys = ['content_blocks', 'about_text'];
+            $tenant->update(collect($validated)->except(array_merge($settingsOnlyKeys, $customizationOnlyKeys))->toArray());
 
             // Save settings in settings JSON
             $settings = $tenant->settings ?? [];
@@ -227,19 +256,18 @@ class DashboardController extends Controller
                 data_set($settings, 'business_info.closed_message', $validated['closed_message'] ?? 'Estamos cerrados. Te responderemos durante nuestro horario de atención.');
             }
             
-            // Contact settings (Plan 2+)
+            // contact_title y contact_subtitle: disponibles para todos los planes
+            if ($request->has('contact_title')) {
+                data_set($settings, 'business_info.contact.title', $validated['contact_title'] ?? '');
+            }
+            if ($request->has('contact_subtitle')) {
+                data_set($settings, 'business_info.contact.subtitle', $validated['contact_subtitle'] ?? '');
+            }
+
+            // Contact settings extras (Plan 2+: maps)
             if ($tenant->isAtLeastCrecimiento()) {
                 if ($request->has('contact_maps_url')) {
                     data_set($settings, 'business_info.contact.maps_url', $validated['contact_maps_url'] ?? '');
-                }
-                if ($request->has('contact_title')) {
-                    data_set($settings, 'business_info.contact.title', $validated['contact_title'] ?? '');
-                }
-                if ($request->has('contact_subtitle')) {
-                    data_set($settings, 'business_info.contact.subtitle', $validated['contact_subtitle'] ?? '');
-                }
-                if ($request->has('phone_secondary')) {
-                    data_set($settings, 'contact_info.phone_secondary', $validated['phone_secondary'] ?? '');
                 }
             }
             
@@ -251,7 +279,10 @@ class DashboardController extends Controller
                 $customizationData = [];
 
                 if ($request->has('content_blocks')) {
-                    $customizationData['content_blocks'] = $validated['content_blocks'] ?? null;
+                    // Deep-merge so plan-restricted keys (testimonials, faq) aren't wiped
+                    $existing = $tenant->customization->content_blocks ?? [];
+                    $incoming = $validated['content_blocks'] ?? [];
+                    $customizationData['content_blocks'] = array_replace_recursive($existing, $incoming);
                 }
 
                 if ($request->has('about_text')) {
