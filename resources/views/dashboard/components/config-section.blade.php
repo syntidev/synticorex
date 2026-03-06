@@ -59,8 +59,8 @@
                         <span class="iconify tabler--speakerphone size-5 text-warning" aria-hidden="true"></span>
                     </div>
                     <div>
-                        <h3 class="text-base font-bold text-foreground">Mensaje Promocional</h3>
-                        <p class="text-xs text-muted-foreground-1">Se muestra en la barra superior de tu landing</p>
+                        <h3 class="text-base font-bold text-foreground">Banner Promocional</h3>
+                        <p class="text-xs text-muted-foreground-1">Banda inferior con mensaje destacado</p>
                     </div>
                 </div>
                 <div class="px-5 pb-5">

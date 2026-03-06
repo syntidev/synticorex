@@ -71,11 +71,11 @@
 
     <div class="fixed inset-0 z-[9999] opacity-[0.02] pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"></div>
 
+    @yield('content')
+
     @if(isset($plan) && $plan->id >= 2 && isset($customization) && $customization->header_message)
         @include('landing.sections.header-top')
     @endif
-
-    @yield('content')
 
     @include('landing.sections.floating-panel')
     <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js" defer></script>

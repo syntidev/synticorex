@@ -1,5 +1,5 @@
 <header id="main-nav" 
-        class="sticky z-50 {{ (isset($plan) && $plan->id >= 2 && isset($customization) && $customization->header_message) ? 'top-10' : 'top-0' }} w-full border-b border-base-200 bg-background">
+        class="sticky top-0 z-50 w-full border-b border-base-200 bg-background">
     <div class="container mx-auto flex items-center justify-between px-6 py-3">
         {{-- Logo Dinámico --}}
         <div class="flex items-center gap-3">
