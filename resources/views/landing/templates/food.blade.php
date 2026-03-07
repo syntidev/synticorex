@@ -260,7 +260,7 @@
 @endif
 
 {{-- MODAL Datos Cliente --}}
-@if($isPlanAnual && $needsName)
+@if($isPlanAnual)
 <div id="sf-data-modal" class="sf-modal-overlay">
     <div class="sf-modal p-6 space-y-5">
         <div class="flex items-start gap-3">
@@ -272,7 +272,7 @@
             </div>
             <div class="flex-1">
                 <p class="text-lg font-black">Antes de enviar</p>
-                <p class="text-sm text-foreground/60">Déjanos tu nombre para personalizar tu pedido.</p>
+                <p class="text-sm text-foreground/60">Déjanos tus datos para personalizar tu pedido.</p>
             </div>
             <button onclick="closeDataModal()" class="p-2 rounded-full text-sm text-foreground/80 hover:bg-surface transition-colors">
                 <svg aria-hidden="true" focusable="false" class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -281,9 +281,30 @@
             </button>
         </div>
 
+        @if($needsName)
         <div class="sf-field">
             <input type="text" id="sf-customer-name" placeholder=" " autocomplete="given-name" inputmode="text">
             <label for="sf-customer-name">¿Cómo te llamas?</label>
+        </div>
+        @endif
+
+        {{-- Modalidad --}}
+        <div class="space-y-2">
+            <p class="text-xs font-bold text-foreground/50 uppercase tracking-widest">Modalidad</p>
+            <div class="grid grid-cols-3 gap-2">
+                <label class="flex items-center gap-2 cursor-pointer rounded-xl border border-foreground/10 px-3 py-2.5 has-[:checked]:border-primary has-[:checked]:bg-primary/5 transition-colors">
+                    <input type="radio" name="sf-modalidad" value="sitio" checked class="accent-[var(--primary)]">
+                    <span class="text-xs font-bold text-foreground">🍽 En sitio</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer rounded-xl border border-foreground/10 px-3 py-2.5 has-[:checked]:border-primary has-[:checked]:bg-primary/5 transition-colors">
+                    <input type="radio" name="sf-modalidad" value="llevar" class="accent-[var(--primary)]">
+                    <span class="text-xs font-bold text-foreground">🥡 Llevar</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer rounded-xl border border-foreground/10 px-3 py-2.5 has-[:checked]:border-primary has-[:checked]:bg-primary/5 transition-colors">
+                    <input type="radio" name="sf-modalidad" value="delivery" class="accent-[var(--primary)]">
+                    <span class="text-xs font-bold text-foreground">🏠 Delivery</span>
+                </label>
+            </div>
         </div>
 
         <div class="flex gap-3">
@@ -466,10 +487,45 @@
         if (modal) modal.style.display = 'flex';
     }
 
-    function buildAndSend(name) {
+    function getModalidad() {
+        var checked = document.querySelector('input[name="sf-modalidad"]:checked');
+        return checked ? checked.value : 'sitio';
+    }
+
+    async function buildAndSend(name) {
+        var subdomain = @json($tenant->subdomain);
+        var modalidad = getModalidad();
+        var cartItems = Object.values(cart).map(function(i) {
+            return { nombre: i.name, qty: i.qty, precio: i.price };
+        });
+
+        try {
+            var res = await fetch('/' + subdomain + '/food-checkout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                },
+                body: JSON.stringify({ customer_name: name || '', modalidad: modalidad, items: cartItems })
+            });
+            var data = await res.json();
+            if (data.success && data.whatsapp_url) {
+                window.open(data.whatsapp_url, '_blank');
+                cart = {};
+                updateBadge();
+                renderDrawer();
+                closeDataModal();
+                return;
+            }
+        } catch(e) {
+            console.error('Food checkout error:', e);
+        }
+
+        // Fallback: direct WhatsApp without SF-XXXX
         var waNumber = @json($waClean);
         if (!waNumber) return;
         var businessName = @json($tenant->business_name);
+        var modalidadLabels = { sitio: 'Comer en sitio', llevar: 'Para llevar', delivery: 'Delivery' };
         var greeting = name
             ? '🍽 ¡Hola! Soy *' + name + '* y vengo de la web de *' + businessName + '*'
             : '🍽 ¡Hola! Les escribo desde la web de *' + businessName + '*';
@@ -477,6 +533,7 @@
         var msg = greeting + '\n\n*Mi pedido:*\n';
         msg += Object.values(cart).map(function(i) { return '• ' + i.name + ' ×' + i.qty + ' (' + formatPrice(i.price * i.qty, true) + ')'; }).join('\n');
         msg += '\n\n*Total: ' + formatPrice(totalUsd, true) + '*';
+        msg += '\nModalidad: ' + (modalidadLabels[modalidad] || modalidad);
         window.open('https://wa.me/' + waNumber + '?text=' + encodeURIComponent(msg), '_blank');
         cart = {};
         updateBadge();
@@ -485,21 +542,7 @@
     }
 
     window.sendWhatsApp = function() {
-        @if(!$needsName)
-            buildAndSend('');
-            return;
-        @endif
-
-        var nameEl = document.getElementById('sf-customer-name');
-        var name   = nameEl ? nameEl.value.trim() : '';
-
-        if (nameEl && !name) {
-            openDataModal();
-            return;
-        }
-
-        if (name) localStorage.setItem('sf_customer_name', name);
-        buildAndSend(name);
+        openDataModal();
     };
 
     window.confirmDataAndSend = function() {

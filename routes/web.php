@@ -150,6 +150,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/tenant/{tenantId}/orders', [OrdersController::class, 'index'])->name('tenant.orders');
 });
 
+// ═══ SYNTIfood Comanda Engine ═════════════════════════════════════════════════
+Route::post('/{subdomain}/food-checkout', [\App\Http\Controllers\Food\ComandaController::class, 'store'])
+    ->middleware(['web'])
+    ->where('subdomain', '[a-z0-9-]+')
+    ->name('food.checkout');
+
 // ═══ SYNTIfood Menu Engine ═══════════════════════════════════════════════════
 Route::middleware(['auth'])->prefix('tenant/{tenantId}/food')->group(function () {
     Route::apiResource('categories', Food\CategoriesController::class)->except(['show']);
