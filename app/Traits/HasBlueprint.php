@@ -15,11 +15,8 @@ trait HasBlueprint
      */
     public function getBlueprint(): ?array
     {
-        if (! $this->industry_segment) {
-            return null;
-        }
-
-        return Config::get("blueprints.{$this->industry_segment}");
+        $slug = $this->getBlueprintSlug();
+        return Config::get("blueprints.{$slug}");
     }
 
     /**
@@ -109,7 +106,16 @@ trait HasBlueprint
      */
     public function getSchemaType(): string
     {
-        return $this->blueprintConfig('schema_type') ?? 'LocalBusiness';
+        return match($this->getBlueprintSlug()) {
+            'food'         => 'Restaurant',
+            'retail'       => 'Store',
+            'health'       => 'HealthAndBeautyBusiness',
+            'professional' => 'ProfessionalService',
+            'ondemand'     => 'LocalBusiness',
+            'education'    => 'EducationalOrganization',
+            'transport'    => 'DeliveryChargeSpecification',
+            default        => 'LocalBusiness',
+        };
     }
 
     /**

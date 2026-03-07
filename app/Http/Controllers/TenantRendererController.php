@@ -357,6 +357,8 @@ class TenantRendererController extends Controller
         match ($schemaType) {
             'Restaurant' => $this->applyRestaurantSchema($schema, $tenant),
             'HealthAndBeautyBusiness' => $this->applyHealthSchema($schema, $tenant),
+            'EducationalOrganization'      => $this->applyEducationSchema($schema, $tenant),
+            'DeliveryChargeSpecification'  => $this->applyTransportSchema($schema, $tenant),
             default => $this->applyDefaultSchema($schema, $tenant),
         };
 
@@ -383,6 +385,40 @@ class TenantRendererController extends Controller
      */
     private function applyHealthSchema(array &$schema, Tenant $tenant): void
     {
+        if ($tenant->whatsapp_sales) {
+            $schema['potentialAction'] = [
+                '@type'  => 'ReserveAction',
+                'target' => 'https://wa.me/' . preg_replace('/[^0-9]/', '', $tenant->whatsapp_sales),
+            ];
+        }
+    }
+
+    /**
+     * Apply EducationalOrganization-specific schema fields.
+     */
+    private function applyEducationSchema(array &$schema, Tenant $tenant): void
+    {
+        $schema['hasOfferCatalog'] = [
+            '@type' => 'OfferCatalog',
+            'name'  => 'Cursos y Programas',
+        ];
+        if ($tenant->whatsapp_sales) {
+            $schema['potentialAction'] = [
+                '@type'  => 'RegisterAction',
+                'target' => 'https://wa.me/' . preg_replace('/[^0-9]/', '', $tenant->whatsapp_sales),
+            ];
+        }
+    }
+
+    /**
+     * Apply DeliveryChargeSpecification-specific schema fields.
+     */
+    private function applyTransportSchema(array &$schema, Tenant $tenant): void
+    {
+        $schema['areaServed'] = [
+            '@type' => 'AdministrativeArea',
+            'name'  => $tenant->city ?? 'Venezuela',
+        ];
         if ($tenant->whatsapp_sales) {
             $schema['potentialAction'] = [
                 '@type'  => 'ReserveAction',

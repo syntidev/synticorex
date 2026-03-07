@@ -17,14 +17,15 @@ use Illuminate\View\View;
 
 class OnboardingController extends Controller
 {
-    /** @var array<int,string> */
+    /** @var array<string,string> */
     private const SEGMENTS = [
         'restaurante'        => '🍕 Restaurante / Comida',
-        'barberia'           => '✂️ Barbería / Belleza',
-        'retail'             => '🛍️ Tienda / Retail',
-        'servicios_tecnicos' => '🔧 Servicios Técnicos',
-        'salud_fitness'      => '💊 Salud / Fitness',
-        'otros'              => '💼 Otros',
+        'retail'             => '🛍️ Tienda / Comercio',
+        'salud'              => '💆 Salud & Belleza',
+        'profesional'        => '💼 Servicios Profesionales',
+        'tecnico'            => '🔧 Servicios Técnicos',
+        'educacion'          => '🎓 Educación / Academia',
+        'transporte'         => '🚚 Transporte / Delivery',
     ];
 
     /**

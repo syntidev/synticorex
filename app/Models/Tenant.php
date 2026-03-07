@@ -46,7 +46,6 @@ class Tenant extends Model
         'meta_description',
         'meta_keywords',
         'status',
-        'industry_segment',
         'trial_ends_at',
         'subscription_ends_at',
         'plan_activated_at',
@@ -288,5 +287,29 @@ class Tenant extends Model
     public function isVision(): bool
     {
         return (int) $this->plan_id === Plan::VISION;
+    }
+
+    public function getBlueprintSlug(): string
+    {
+        return match(true) {
+            in_array($this->business_segment, ['restaurante', 'Restaurante', 'comida', 'Comida', 'Food', 'food', 'Alimentos', 'pizzeria', 'cafetería', 'café']) => 'food',
+            in_array($this->business_segment, ['comercio', 'Comercio', 'tienda', 'Tienda', 'retail', 'Retail', 'ropa', 'electrónica']) => 'retail',
+            in_array($this->business_segment, ['salud', 'Salud', 'belleza', 'Belleza', 'peluquería', 'spa', 'gimnasio', 'Gimnasio', 'wellness']) => 'health',
+            in_array($this->business_segment, ['tecnología', 'Tecnología', 'consultoría', 'Consultoría', 'legal', 'Legal', 'contabilidad', 'profesional', 'Profesional', 'IT']) => 'professional',
+            in_array($this->business_segment, ['técnico', 'Técnico', 'mecánico', 'plomero', 'electricista', 'carpintero', 'on-demand', 'freelance']) => 'ondemand',
+            in_array($this->business_segment, ['educación', 'Educación', 'academia', 'Academia', 'clases', 'cursos', 'preescolar']) => 'education',
+            in_array($this->business_segment, ['transporte', 'Transporte', 'delivery', 'Delivery', 'encomienda', 'mudanza', 'taxi']) => 'transport',
+            default => 'professional',
+        };
+    }
+
+    public function getSeoLevel(): string
+    {
+        return $this->plan->seo_level ?? 'basic';
+    }
+
+    public function getAnalyticsLevel(): string
+    {
+        return $this->plan->analytics_level ?? 'basic';
     }
 }

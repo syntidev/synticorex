@@ -226,15 +226,27 @@
                                 <span class="label-text font-semibold text-base">¿A qué te dedicas?</span>
                             </label>
                             <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                                @foreach($segments as $key => $label)
+                                @php
+                                    $segmentIcons = [
+                                        'restaurante' => ['icon' => 'tabler--tools-kitchen-2', 'label' => 'Restaurante / Comida'],
+                                        'retail'      => ['icon' => 'tabler--shopping-bag',     'label' => 'Tienda / Comercio'],
+                                        'salud'       => ['icon' => 'tabler--heart-rate-monitor',      'label' => 'Salud & Belleza'],
+                                        'profesional' => ['icon' => 'tabler--briefcase',        'label' => 'Servicios Profesionales'],
+                                        'tecnico'     => ['icon' => 'tabler--tool',             'label' => 'Servicios Técnicos'],
+                                        'educacion'   => ['icon' => 'tabler--school',           'label' => 'Educación / Academia'],
+                                        'transporte'  => ['icon' => 'tabler--truck-delivery',   'label' => 'Transporte / Delivery'],
+                                    ];
+                                @endphp
+                                @foreach($segmentIcons as $key => $seg)
                                 <label class="cursor-pointer">
                                     <input type="radio" name="business_segment"
                                            value="{{ $key }}"
                                            x-model="business_segment"
                                            class="sr-only peer">
-                                    <div class="wiz-segment-card border-2 border-slate-200 rounded-xl p-3 text-center text-sm font-medium transition-all select-none"
+                                    <div class="wiz-segment-card border-2 border-slate-200 rounded-xl p-3 text-center text-sm font-medium transition-all select-none flex flex-col items-center gap-1.5"
                                      :class="business_segment === '{{ $key }}' ? 'selected' : ''">
-                                        {{ $label }}
+                                        <span class="iconify {{ $seg['icon'] }} size-6 text-slate-500" :class="business_segment === '{{ $key }}' ? 'text-blue-600' : ''"></span>
+                                        <span>{{ $seg['label'] }}</span>
                                     </div>
                                 </label>
                                 @endforeach
