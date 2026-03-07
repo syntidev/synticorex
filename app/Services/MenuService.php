@@ -130,10 +130,14 @@ class MenuService
     {
         $menu = $this->getMenu($tenantId);
         $item = [
-            'id'     => $this->generateId('item'),
-            'nombre' => $data['nombre'],
-            'precio' => (float) ($data['precio'] ?? 0),
-            'activo' => true,
+            'id'          => $this->generateId('item'),
+            'nombre'      => $data['nombre'],
+            'precio'      => (float) ($data['precio'] ?? 0),
+            'descripcion' => $data['descripcion'] ?? null,
+            'image_path'  => $data['image_path'] ?? null,
+            'badge'       => $data['badge'] ?? null,
+            'is_featured' => (bool) ($data['is_featured'] ?? false),
+            'activo'      => true,
         ];
 
         foreach ($menu['categories'] as &$cat) {
@@ -167,6 +171,18 @@ class MenuService
                 }
                 if (isset($data['precio'])) {
                     $item['precio'] = (float) $data['precio'];
+                }
+                if (array_key_exists('descripcion', $data)) {
+                    $item['descripcion'] = $data['descripcion'];
+                }
+                if (array_key_exists('image_path', $data)) {
+                    $item['image_path'] = $data['image_path'];
+                }
+                if (array_key_exists('badge', $data)) {
+                    $item['badge'] = $data['badge'];
+                }
+                if (array_key_exists('is_featured', $data)) {
+                    $item['is_featured'] = (bool) $data['is_featured'];
                 }
                 if (isset($data['activo'])) {
                     $item['activo'] = (bool) $data['activo'];

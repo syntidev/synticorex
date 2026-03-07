@@ -8,6 +8,7 @@ use App\Models\ColorPalette;
 use App\Models\Tenant;
 use App\Models\TenantBranch;
 use App\Services\DollarRateService;
+use App\Services\MenuService;
 use App\Services\PrelineThemeService;
 use App\Services\QRService;
 use Illuminate\Contracts\View\View;
@@ -78,7 +79,7 @@ class DashboardController extends Controller
                 ->get();
 
             // ── Blueprint system ─────────────────────────────────────────
-            $blueprint  = $tenant->getBlueprint();
+            $blueprint  = $tenant->getBlueprintSlug();
             $maxItems   = $tenant->getMaxItems();
             $itemLabel  = $tenant->getItemLabel();
             $itemSingular = $tenant->getItemSingular();
@@ -140,6 +141,11 @@ class DashboardController extends Controller
             $isPlanAnual = $plan && $plan->slug === 'cat-anual';
             $orders = [];
 
+            // ── Menu (SYNTIfood) ──────────────────────────────────────────
+            $menu = $blueprint === 'food'
+                ? (new MenuService())->getCategories($tenant->id)
+                : [];
+
             return view('dashboard.index', compact(
                 'tenant',
                 'plan',
@@ -172,7 +178,8 @@ class DashboardController extends Controller
                 'itemSingular',
                 'themeSlug',
                 'orders',
-                'isPlanAnual'
+                'isPlanAnual',
+                'menu'
             ));
         } catch (\Exception $e) {
             Log::error('Dashboard index error for tenant ' . $tenantId, [

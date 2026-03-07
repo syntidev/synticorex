@@ -514,10 +514,14 @@
                 @include('dashboard.components.info-section')
 
                 {{-- ═══ TAB 2: QUÉ VENDES (Productos + Servicios) ═══ --}}
-                @include('dashboard.components.products-section')
-                @include('dashboard.modals.product-modal')
-                @include('dashboard.components.services-section')
-                @include('dashboard.modals.service-modal')
+                @if($blueprint === 'food')
+                    @include('dashboard.components.menu-section')
+                @else
+                    @include('dashboard.components.products-section')
+                    @include('dashboard.modals.product-modal')
+                    @include('dashboard.components.services-section')
+                    @include('dashboard.modals.service-modal')
+                @endif
 
                 {{-- ═══ Modales compartidos ═══ --}}
                 @include('dashboard.modals.shared-modals')

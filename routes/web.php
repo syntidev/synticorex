@@ -158,8 +158,8 @@ Route::post('/{subdomain}/food-checkout', [\App\Http\Controllers\Food\ComandaCon
 
 // ═══ SYNTIfood Menu Engine ═══════════════════════════════════════════════════
 Route::middleware(['auth'])->prefix('tenant/{tenantId}/food')->group(function () {
-    Route::apiResource('categories', Food\CategoriesController::class)->except(['show']);
-    Route::apiResource('categories.items', Food\ItemsController::class)->except(['show']);
+    Route::apiResource('categories', \App\Http\Controllers\Food\CategoriesController::class)->except(['show']);
+    Route::apiResource('categories.items', \App\Http\Controllers\Food\ItemsController::class)->except(['show']);
 });
 Route::get('/menu/{subdomain}', [Food\MenuController::class, 'show'])
     ->where('subdomain', '[a-z0-9-]+')
