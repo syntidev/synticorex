@@ -150,6 +150,15 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/tenant/{tenantId}/orders', [OrdersController::class, 'index'])->name('tenant.orders');
 });
 
+// ═══ SYNTIfood Menu Engine ═══════════════════════════════════════════════════
+Route::middleware(['auth'])->prefix('tenant/{tenantId}/food')->group(function () {
+    Route::apiResource('categories', Food\CategoriesController::class)->except(['show']);
+    Route::apiResource('categories.items', Food\ItemsController::class)->except(['show']);
+});
+Route::get('/menu/{subdomain}', [Food\MenuController::class, 'show'])
+    ->where('subdomain', '[a-z0-9-]+')
+    ->name('food.menu.public');
+
 // ═══ Onboarding Wizard ═══════════════════════════════════════════════════════
 Route::middleware(['web'])->group(function () {
     Route::get('/onboarding/nuevo', [OnboardingController::class, 'index'])

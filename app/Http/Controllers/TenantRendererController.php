@@ -26,6 +26,7 @@ class TenantRendererController extends Controller
     /** @var array<string, string> Templates disponibles */
     private const TEMPLATE_MAP = [
         'synticat' => 'landing.templates.catalog',
+		'food'     => 'landing.templates.food',
     ];
 
     public function __construct(
@@ -148,8 +149,16 @@ class TenantRendererController extends Controller
             $blueprint = $tenant->getBlueprint();
 
             $schema = $this->buildSchema($tenant);
+			
+			$menu = [];
+				if (data_get($tenant->settings, 'engine_settings.template') === 'food') {
+				$menuPath = 'tenants/' . $tenant->id . '/menu/menu.json';
+				if (\Storage::exists($menuPath)) {
+				$menu = json_decode(\Storage::get($menuPath), true) ?? [];
+				}
+			}
 
-            return view($this->resolveTemplate($tenant), compact('tenant', 'plan', 'products', 'services', 'dollarRate', 'euroRate', 'themeSlug', 'meta', 'customization', 'currencySettings', 'displayMode', 'savedDisplayMode', 'showReference', 'showBolivares', 'showEuro', 'hidePrice', 'trackingQRSmall', 'trackingShortlink', 'showHoursIndicator', 'isOpen', 'closedMessage', 'blueprint', 'schema'));
+            return view($this->resolveTemplate($tenant), compact('tenant', 'plan', 'products', 'services', 'dollarRate', 'euroRate', 'themeSlug', 'meta', 'customization', 'currencySettings', 'displayMode', 'savedDisplayMode', 'showReference', 'showBolivares', 'showEuro', 'hidePrice', 'trackingQRSmall', 'trackingShortlink', 'showHoursIndicator', 'isOpen', 'closedMessage', 'blueprint', 'schema', 'menu'));
         } catch (Throwable $e) {
             Log::error('TenantRendererController: Error rendering landing page', [
                 'subdomain' => $subdomain,
