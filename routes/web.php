@@ -8,6 +8,7 @@ use App\Http\Controllers\TenantRendererController;
 use App\Http\Controllers\ImageUploadController;
 use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\QRTrackingController;
 use App\Http\Controllers\OnboardingController;
 use App\Services\DollarRateService;
@@ -143,6 +144,11 @@ Route::post('/{subdomain}/checkout', [CheckoutController::class, 'store'])
     ->middleware(['web'])
     ->where('subdomain', '[a-z0-9-]+')
     ->name('tenant.checkout');
+
+// Orders dashboard (auth required)
+Route::middleware(['auth'])->group(function () {
+    Route::get('/tenant/{tenantId}/orders', [OrdersController::class, 'index'])->name('tenant.orders');
+});
 
 // ═══ Onboarding Wizard ═══════════════════════════════════════════════════════
 Route::middleware(['web'])->group(function () {

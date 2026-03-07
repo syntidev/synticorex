@@ -136,6 +136,10 @@ class DashboardController extends Controller
             // ── Theme Slug ────────────────────────────────────────────────
             $themeSlug = $tenant->customization?->theme_slug ?? 'default';
 
+            // ── Orders (Mini Order Engine — cat-anual) ────────────────────
+            $isPlanAnual = $plan && $plan->slug === 'cat-anual';
+            $orders = [];
+
             return view('dashboard.index', compact(
                 'tenant',
                 'plan',
@@ -166,7 +170,9 @@ class DashboardController extends Controller
                 'maxItems',
                 'itemLabel',
                 'itemSingular',
-                'themeSlug'
+                'themeSlug',
+                'orders',
+                'isPlanAnual'
             ));
         } catch (\Exception $e) {
             Log::error('Dashboard index error for tenant ' . $tenantId, [
