@@ -17,8 +17,6 @@
         /* ── product cards ── */
         .sel-card { background: #fff; border: 1.5px solid #e2e8f0; border-radius: 1rem; box-shadow: 0 4px 16px -4px rgba(0,0,0,0.06); transition: transform .2s, box-shadow .2s; }
         .sel-card:hover { transform: translateY(-2px); box-shadow: 0 12px 32px -6px rgba(0,0,0,0.12); }
-        .sel-card--featured { border: 2.5px solid #f97316; box-shadow: 0 8px 32px -6px rgba(249,115,22,0.18); }
-        .sel-card--featured:hover { box-shadow: 0 16px 40px -6px rgba(249,115,22,0.24); }
 
         /* ── CTA buttons per product ── */
         .sel-btn-studio { display:block; background: #4A80E4; color: #fff; border-radius: 0.625rem; font-weight: 700; transition: all .2s; box-shadow: 0 4px 14px -4px rgba(74,128,228,0.4); text-align:center; padding: 0.625rem 1rem; font-size:.875rem; text-decoration:none; }
@@ -81,24 +79,14 @@
                 </p>
             </div>
 
-            <div class="mt-auto">
-                <p class="text-xs text-slate-400 mb-3">Desde <span class="text-slate-700 font-bold text-base">$99/año</span></p>
-                <a href="{{ route('onboarding.studio') }}" class="sel-btn-studio">
-                    Crear mi página web →
-                </a>
-            </div>
+            <a href="{{ route('onboarding.studio') }}" class="sel-btn-studio mt-auto">
+                Crear mi página web →
+            </a>
         </div>
 
-        {{-- ── TARJETA 2: SYNTIfood ⭐ DESTACADA ── --}}
-        <div class="sel-card sel-card--featured flex flex-col p-6 relative">
-            {{-- Badge popular --}}
-            <div class="absolute -top-3.5 left-1/2 -translate-x-1/2">
-                <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-orange-500 text-white shadow-sm whitespace-nowrap">
-                    🍔 Más popular en Venezuela
-                </span>
-            </div>
-
-            <div class="mb-4 mt-2">
+        {{-- ── TARJETA 2: SYNTIfood ── --}}
+        <div class="sel-card flex flex-col p-6">
+            <div class="mb-4">
                 <span class="iconify tabler--tools-kitchen-2" style="font-size:2.5rem; color:#f97316;"></span>
             </div>
             <h2 class="text-lg font-black text-slate-900 mb-0.5">SYNTIfood</h2>
@@ -116,12 +104,9 @@
                 </p>
             </div>
 
-            <div class="mt-auto">
-                <p class="text-xs text-slate-400 mb-3">Desde <span class="text-slate-700 font-bold text-base">$9/mes</span></p>
-                <a href="{{ route('onboarding.food') }}" class="sel-btn-food">
-                    Crear mi menú digital →
-                </a>
-            </div>
+            <a href="{{ route('onboarding.food') }}" class="sel-btn-food mt-auto">
+                Crear mi menú digital →
+            </a>
         </div>
 
         {{-- ── TARJETA 3: SYNTIcat ── --}}
@@ -144,12 +129,9 @@
                 </p>
             </div>
 
-            <div class="mt-auto">
-                <p class="text-xs text-slate-400 mb-3">Desde <span class="text-slate-700 font-bold text-base">$9/mes</span></p>
-                <a href="{{ route('onboarding.cat') }}" class="sel-btn-cat">
-                    Crear mi catálogo →
-                </a>
-            </div>
+            <a href="{{ route('onboarding.cat') }}" class="sel-btn-cat mt-auto">
+                Crear mi catálogo →
+            </a>
         </div>
 
     </div>{{-- /grid --}}
