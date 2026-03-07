@@ -7,6 +7,7 @@ use App\Http\Controllers\MarketingController;
 use App\Http\Controllers\TenantRendererController;
 use App\Http\Controllers\ImageUploadController;
 use App\Http\Controllers\AnalyticsController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\QRTrackingController;
 use App\Http\Controllers\OnboardingController;
 use App\Services\DollarRateService;
@@ -136,6 +137,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/tenant/{tenantId}/qr/download',                  [QRTrackingController::class, 'downloadQR']);
 
 }); // end middleware(['auth'])
+
+// ═══ Mini Order Engine — SYNTIcat ════════════════════════════════════════════
+Route::post('/{subdomain}/checkout', [CheckoutController::class, 'store'])
+    ->middleware(['web'])
+    ->where('subdomain', '[a-z0-9-]+')
+    ->name('tenant.checkout');
 
 // ═══ Onboarding Wizard ═══════════════════════════════════════════════════════
 Route::middleware(['web'])->group(function () {

@@ -575,23 +575,51 @@
         if (modal) modal.style.display = 'none';
     }
 
-    function buildAndSend(name, loc) {
-        let waNumber = @json($waClean);
+    async function buildAndSend(name, loc) {
+        const subdomain = @json($tenant->subdomain);
+        const isPlanAnual = @json($tenant->plan->slug ?? '');
+        const cartItems = Object.values(cart).map(i => ({
+            title: i.name,
+            qty: i.qty,
+            price: i.price,
+            variant: i.variant ?? null
+        }));
+
+        if (isPlanAnual === 'cat-anual') {
+            try {
+                const res = await fetch(`/${subdomain}/checkout`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    },
+                    body: JSON.stringify({ name, location: loc, items: cartItems })
+                });
+                const data = await res.json();
+                if (data.success && data.whatsapp_url) {
+                    window.open(data.whatsapp_url, '_blank');
+                    cart = {};
+                    renderDrawer();
+                    closeDataModal();
+                    return;
+                }
+            } catch(e) {
+                console.error('Checkout error:', e);
+            }
+        }
+
+        // Fallback planes Básico y Semestral — mensaje sin SC-XXXX
+        const waNumber = @json($waClean);
         if (!waNumber) return;
         let businessName = @json($tenant->business_name);
-
         let greeting = name
             ? `¡Hola! Soy *${name}* y vengo de la web de *${businessName}* 🛍️`
             : `¡Hola! Les escribo desde la web de *${businessName}* 🛍️`;
-
         let totalUsd = Object.values(cart).reduce((a,b) => a + (b.price * b.qty), 0);
-        let msg = greeting + '\n\n';
-        msg += '*Mi pedido:*\n';
+        let msg = greeting + '\n\n*Mi pedido:*\n';
         msg += Object.values(cart).map(i => `• ${i.name} ×${i.qty} (${formatPrice(i.price * i.qty, true)})`).join('\n');
         msg += '\n\n*Total: ' + formatPrice(totalUsd, true) + '*';
         if (loc) msg += `\n\n📍 *Mi referencia:* ${loc}`;
-        msg += '\n\n#PedidoWeb';
-
         window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(msg)}`, '_blank');
     }
 
