@@ -88,48 +88,37 @@
         let analyticsChart = null;
 
         async function loadAnalytics() {
-            const kpiIds = ['visitors-today','visitors-week','whatsapp-clicks','qr-scans','call-clicks','currency-toggles','avg-time'];
+    const kpiIds = ['visitors-today','visitors-week','whatsapp-clicks','qr-scans','call-clicks','currency-toggles','avg-time'];
+    const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val ?? 0; };
 
-            // Loading state — Resiliencia Visual
-            kpiIds.forEach(id => {
-                const el = document.getElementById(id);
-                if (el) { el.innerHTML = '<span class="loading loading-dots loading-xs"></span>'; }
-            });
+    // Loading state
+    kpiIds.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.innerHTML = '<span class="animate-pulse">…</span>';
+    });
 
-            try {
-                const response = await fetch('/tenant/{{ $tenant->id }}/analytics');
-                if (!response.ok) throw new Error('HTTP ' + response.status);
-                const result = await response.json();
-
-                if (result.success) {
-                    const data = result.data;
-
-                    document.getElementById('visitors-today').textContent = data.visitors_today || 0;
-                    document.getElementById('visitors-week').textContent = data.visitors_week || 0;
-                    document.getElementById('whatsapp-clicks').textContent = data.whatsapp_clicks || 0;
-                    document.getElementById('qr-scans').textContent = data.qr_scans || 0;
-                    document.getElementById('call-clicks').textContent = data.call_clicks || 0;
-                    document.getElementById('currency-toggles').textContent = data.currency_toggles || 0;
-                    document.getElementById('avg-time').textContent = data.avg_time_on_page || 0;
-
-                    renderAnalyticsChart(data.last_7_days);
-                } else {
-                    // Error state
-                    kpiIds.forEach(id => {
-                        const el = document.getElementById(id);
-                        if (el) el.textContent = '—';
-                    });
-                }
-            } catch (error) {
-                console.error('Error loading analytics:', error);
-                // Error state — Resiliencia Visual
-                kpiIds.forEach(id => {
-                    const el = document.getElementById(id);
-                    if (el) el.textContent = '—';
-                });
-                showToast('❌ Error al cargar analytics', 'error');
-            }
+    try {
+        const response = await fetch('/tenant/{{ $tenant->id }}/analytics');
+        if (!response.ok) throw new Error('HTTP ' + response.status);
+        const result = await response.json();
+        if (result.success) {
+            const data = result.data;
+            set('visitors-today',   data.visitors_today   || 0);
+            set('visitors-week',    data.visitors_week    || 0);
+            set('whatsapp-clicks',  data.whatsapp_clicks  || 0);
+            set('qr-scans',         data.qr_scans         || 0);
+            set('call-clicks',      data.call_clicks      || 0);
+            set('currency-toggles', data.currency_toggles || 0);
+            set('avg-time',         data.avg_time_on_page || 0);
+            renderAnalyticsChart(data.last_7_days);
+        } else {
+            kpiIds.forEach(id => { const el = document.getElementById(id); if (el) el.textContent = '—'; });
         }
+    } catch (error) {
+        console.error('Error loading analytics:', error);
+        kpiIds.forEach(id => { const el = document.getElementById(id); if (el) el.textContent = '—'; });
+    }
+}
 
         function renderAnalyticsChart(last7Days) {
             const ctx = document.getElementById('analytics-chart');
@@ -181,7 +170,7 @@
 
         // Cargar analytics cuando se abre el tab
         document.addEventListener('DOMContentLoaded', function() {
-            const analyticsTab = document.getElementById('tab-analytics-btn');
+            const analyticsTab = document.querySelector('[data-tab="ventas"]');
             if (analyticsTab) {
                 analyticsTab.addEventListener('click', function() {
                     setTimeout(() => loadAnalytics(), 100);
