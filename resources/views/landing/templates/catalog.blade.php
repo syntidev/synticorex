@@ -109,7 +109,7 @@
                      onerror="this.style.display='none';">
             @else
                 <div class="size-10 bg-primary rounded-xl flex items-center justify-center shadow-lg shadow-primary/20 shrink-0">
-                    <span class="icon-[tabler--bag] size-6 text-primary-foreground"></span>
+                    <span class="iconify tabler--bag size-6 text-primary-foreground"></span>
                 </div>
             @endif
             <span class="text-xl font-black tracking-tighter truncate">{{ $tenant->business_name }}</span>
@@ -234,7 +234,7 @@
                              loading="lazy" onerror="this.style.display='none';">
                     @else
                         <div class="w-full h-full flex flex-col items-center justify-center gap-2 text-foreground/20">
-                            <span class="icon-[tabler--photo-off] size-10"></span>
+                            <span class="iconify tabler--photo-off size-10"></span>
                         </div>
                     @endif
 
@@ -281,14 +281,14 @@
             <p class="text-[10px] text-foreground/30 font-black uppercase tracking-[.25em] mt-0.5">Shopping Bag</p>
         </div>
         <button onclick="toggleDrawer()" class="p-2 rounded-full text-sm transition-colors text-foreground/80 hover:bg-surface bg-surface/80">
-            <span class="icon-[tabler--x] size-5"></span>
+            <span class="iconify tabler--x size-5"></span>
         </button>
     </div>
 
     {{-- Empty state --}}
     <div id="sc-empty" class="flex-1 flex flex-col items-center justify-center text-center py-14 px-7">
         <div class="size-20 rounded-3xl bg-surface flex items-center justify-center mb-4">
-            <span class="icon-[tabler--shopping-bag] size-10 text-foreground/20"></span>
+            <span class="iconify tabler--shopping-bag size-10 text-foreground/20"></span>
         </div>
         <p class="font-bold text-foreground/30">Tu carrito está vacío</p>
         <p class="text-xs text-foreground/20 mt-1">Explora y agrega productos</p>
@@ -305,27 +305,27 @@
             @foreach($visiblePay as $key => $pm)
                 @php
                 $pmIcon = match($key) {
-                    'pagoMovil'  => 'icon-[tabler--device-mobile]',
-                    'cash'       => 'icon-[tabler--cash]',
-                    'puntoventa' => 'icon-[tabler--credit-card]',
-                    'biopago'    => 'icon-[tabler--fingerprint]',
-                    'cashea'     => 'icon-[tabler--wallet]',
-                    'krece'      => 'icon-[tabler--trending-up]',
-                    'wepa'       => 'icon-[tabler--shopping-cart]',
-                    'lysto'      => 'icon-[tabler--calendar-dollar]',
-                    'chollo'     => 'icon-[tabler--discount-2]',
-                    'wally'      => 'icon-[tabler--send-2]',
-                    'kontigo'    => 'icon-[tabler--file-invoice]',
-                    'zelle'      => 'icon-[tabler--bolt]',
-                    'paypal'     => 'icon-[tabler--brand-paypal]',
-                    'zinli'      => 'icon-[tabler--moneybag]',
-                    'airtm'      => 'icon-[tabler--exchange]',
-                    'reserve'    => 'icon-[tabler--shield-dollar]',
-                    'binancepay' => 'icon-[tabler--currency-bitcoin]',
-                    'usdt'       => 'icon-[tabler--coin]',
-                    'usd'        => 'icon-[tabler--currency-dollar]',
-                    'eur'        => 'icon-[tabler--currency-euro]',
-                    default      => 'icon-[tabler--cash]',
+                    'pagoMovil'  => 'iconify tabler--device-mobile',
+                    'cash'       => 'iconify tabler--cash',
+                    'puntoventa' => 'iconify tabler--credit-card',
+                    'biopago'    => 'iconify tabler--fingerprint',
+                    'cashea'     => 'iconify tabler--wallet',
+                    'krece'      => 'iconify tabler--trending-up',
+                    'wepa'       => 'iconify tabler--shopping-cart',
+                    'lysto'      => 'iconify tabler--calendar-dollar',
+                    'chollo'     => 'iconify tabler--discount-2',
+                    'wally'      => 'iconify tabler--send-2',
+                    'kontigo'    => 'iconify tabler--file-invoice',
+                    'zelle'      => 'iconify tabler--bolt',
+                    'paypal'     => 'iconify tabler--brand-paypal',
+                    'zinli'      => 'iconify tabler--moneybag',
+                    'airtm'      => 'iconify tabler--exchange',
+                    'reserve'    => 'iconify tabler--shield-dollar',
+                    'binancepay' => 'iconify tabler--currency-bitcoin',
+                    'usdt'       => 'iconify tabler--coin',
+                    'usd'        => 'iconify tabler--currency-dollar',
+                    'eur'        => 'iconify tabler--currency-euro',
+                    default      => 'iconify tabler--cash',
                 };
                 @endphp
                 <span class="inline-flex items-center gap-1.5 text-[11px] font-bold text-foreground/50 bg-surface rounded-xl px-2.5 py-1.5">
@@ -347,7 +347,7 @@
         @if($waClean)
         <button onclick="sendWhatsApp()" class="flex items-center justify-center w-full h-14 rounded-[1.5rem] border-none font-black text-base gap-2.5 shadow-xl text-white transition-colors"
                 style="background:#25D366;">
-            <span class="icon-[tabler--brand-whatsapp] size-6"></span>
+            <span class="iconify tabler--brand-whatsapp size-6"></span>
             Finalizar por WhatsApp
         </button>
         @else
@@ -411,7 +411,7 @@
                  onerror="this.style.display='none';">
         @else
             <div class="size-14 bg-background rounded-2xl mx-auto mb-5 flex items-center justify-center border border-foreground/5 shadow-sm">
-                <span class="icon-[tabler--layout-grid] size-7 text-primary"></span>
+                <span class="iconify tabler--layout-grid size-7 text-primary"></span>
             </div>
         @endif
 
@@ -424,7 +424,7 @@
         <a href="https://wa.me/{{ $waClean }}" target="_blank"
            class="inline-flex items-center gap-2 text-sm py-1.5 px-3 rounded-2xl font-medium transition-colors mt-6 border-none font-bold text-white"
            style="background:#25D366;">
-            <span class="icon-[tabler--brand-whatsapp] size-4"></span>
+            <span class="iconify tabler--brand-whatsapp size-4"></span>
             Escribir por WhatsApp
         </a>
         @endif
