@@ -31,9 +31,9 @@
         </div>
 
         {{-- Preline accordion con tokens correctos --}}
-        <div class="hs-accordion-group flex flex-col gap-y-2 max-w-3xl mx-auto">
+        <div class="hs-accordion-group flex flex-col gap-y-2 max-w-3xl mx-auto shadow-sm rounded-xl overflow-hidden">
             @foreach($faqItems as $index => $faq)
-            <div class="hs-accordion hs-accordion-active:border-layer-line bg-layer border border-transparent rounded-xl"
+            <div class="hs-accordion hs-accordion-active:border-layer-line hs-accordion-active:border-l-[3px] hs-accordion-active:border-l-primary hs-accordion-active:bg-primary/5 bg-layer border border-transparent rounded-xl transition-all duration-200"
                  id="faq-heading-{{ $index }}">
 
                 <button class="hs-accordion-toggle hs-accordion-active:text-primary-active inline-flex justify-between items-center gap-x-3 w-full font-semibold text-start text-foreground py-4 px-5 hover:text-muted-foreground-1 focus:outline-hidden focus:text-muted-foreground-1 disabled:opacity-50 disabled:pointer-events-none"

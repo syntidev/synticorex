@@ -41,7 +41,7 @@
                 @endphp
 
                 <div class="{{ $isExtra ? 'service-extra hidden' : '' }}">
-                    <div class="group flex flex-col h-full bg-card border border-card-line shadow-2xs rounded-xl">
+                    <div class="group flex flex-col h-full bg-card border border-card-line shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 rounded-xl">
 
                         {{-- Cabecera: imagen O ícono sobre fondo brand --}}
                         <div class="h-52 flex flex-col justify-center items-center bg-primary rounded-t-xl overflow-hidden">

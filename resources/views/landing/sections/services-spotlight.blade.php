@@ -44,7 +44,7 @@
                     $iconName = $service->icon_name ?? 'cog';
                 @endphp
 
-                <div class="group flex flex-col h-full bg-card border border-card-line shadow-2xs rounded-xl p-6 transition-all duration-300 hover:border-primary hover:-translate-y-0.5">
+                <div class="group flex flex-col h-full bg-card border border-card-line shadow-sm hover:shadow-md rounded-xl p-6 transition-all duration-300 hover:border-primary hover:-translate-y-0.5">
 
                     {{-- Icono O imagen (pequeño, spotlight) --}}
                     @if($service->image_filename)

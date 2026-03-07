@@ -4,18 +4,19 @@
     {{-- IZQUIERDA: Contenido sobre fondo blanco --}}
     <div class="bg-background flex items-center px-8 py-16 lg:px-16 lg:py-24">
         <div class="max-w-xl space-y-6">
-            {{-- Badge ciudad --}}
-            @if($tenant->city ?? $tenant->tagline)
-            <div class="inline-flex items-center gap-2 border border-primary/20 bg-primary/5 rounded-full px-4 py-1.5 text-sm text-primary">
-                <span class="size-2 rounded-full bg-primary"></span>
-                {{ $tenant->city ?? $tenant->tagline }}
-            </div>
-            @endif
+			
+			{{-- Patrón decorativo SVG de fondo --}}
+			<div class="pointer-events-none absolute inset-0 flex items-end justify-start opacity-80 aria-hidden="true">
+			<img src="{{ asset('admin_assets/hyperdrive.svg') }}" 
+             class="w-full object-cover object-bottom" 
+             alt="">
+			</div>
 
             {{-- Título --}}
-            <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight">
-                {!! nl2br(e($customization->getHeroTitle() ?? $tenant->business_name)) !!}
-            </h1>
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight"
+			style="text-shadow: 0 4px 24px color-mix(in oklch, var(--color-foreground) 15%, transparent), 0 1px 4px color-mix(in oklch, var(--color-foreground) 8%, transparent);">
+			{!! nl2br(e($customization->getHeroTitle() ?? $tenant->business_name)) !!}
+			</h1>
 
             {{-- Descripción --}}
             <p class="text-lg text-muted-foreground-1 max-w-lg">
@@ -24,8 +25,8 @@
 
             {{-- CTAs --}}
             <div class="flex flex-wrap gap-3 pt-2">
-                @if($tenant->whatsapp)
-                <a href="https://wa.me/{{ preg_replace('/\D/', '', $tenant->whatsapp) }}?text={{ urlencode('Hola ' . $tenant->business_name . ', me gustaría obtener más información') }}"
+                @if($tenant->getActiveWhatsapp())
+                <a href="https://wa.me/{{ preg_replace('/\D/', '', $tenant->getActiveWhatsapp()) }}?text={{ urlencode('Hola ' . $tenant->business_name . ', me gustaría obtener más información') }}"
                    target="_blank"
                    class="inline-flex items-center gap-2 py-3 px-6 rounded-lg font-medium bg-primary text-primary-foreground hover:bg-primary-hover transition-colors text-base">
                     <span class="iconify tabler--brand-whatsapp size-5"></span>
@@ -45,15 +46,6 @@
                 </a>
             </div>
 
-            {{-- Bloque de confianza --}}
-            <div class="flex items-center gap-3 pt-2">
-                <div class="flex -space-x-2">
-                    <div class="size-8 rounded-full bg-primary/20 border-2 border-background flex items-center justify-center text-xs text-primary font-bold">A</div>
-                    <div class="size-8 rounded-full bg-primary/30 border-2 border-background flex items-center justify-center text-xs text-primary font-bold">B</div>
-                    <div class="size-8 rounded-full bg-primary/40 border-2 border-background flex items-center justify-center text-xs text-primary font-bold">C</div>
-                </div>
-                <span class="text-sm text-muted-foreground-1">Clientes satisfechos en {{ $tenant->city ?? 'Venezuela' }}</span>
-            </div>
         </div>
     </div>
 

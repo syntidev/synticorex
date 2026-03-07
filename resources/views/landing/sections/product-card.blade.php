@@ -1,5 +1,5 @@
 {{-- Product Card — Preline 4.1.2 + Tailwind v4 --}}
-<div class="group flex flex-col">
+<div class="group flex flex-col bg-card border border-card-line rounded-2xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 overflow-hidden">
 
     {{-- IMAGEN / SLIDER --}}
     <div class="relative">
@@ -68,7 +68,7 @@
                      alt="{{ $product->name }}"
                      loading="lazy">
             @else
-                <div class="size-full bg-gradient-to-br from-base-300 to-base-200 flex items-center justify-center rounded-2xl">
+                <div class="size-full bg-muted flex items-center justify-center rounded-2xl">
                     <svg class="w-16 h-16 text-foreground/20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                     </svg>
@@ -86,7 +86,7 @@
         @endif
 
         {{-- Título + Precio (bajo la imagen, dentro del relative) --}}
-        <div class="pt-4">
+        <div class="px-4 pt-4">
 
             {{-- Badge con iconos y colores distintivos --}}
             @if($product->badge)
@@ -132,13 +132,13 @@
     </div>{{-- /relative --}}
 
     {{-- Botón anclado al fondo del card (mt-auto) --}}
-    <div class="mt-auto pt-4">
+    <div class="mt-auto px-4 pt-4 pb-4">
         @if($hidePrice ?? false)
             {{-- Precio oculto → "Más info" + compartir --}}
             <div class="flex gap-2">
-                <a href="#"
-                   class="py-2 px-3 flex-1 inline-flex justify-center items-center gap-x-2 text-sm font-medium text-nowrap rounded-xl bg-primary border border-primary-line text-primary-foreground hover:bg-primary-hover focus:outline-hidden focus:bg-primary-focus transition disabled:opacity-50 disabled:pointer-events-none"
-                   onclick="return false;">
+                <a href="{{ $waBase }}?text={{ urlencode($waProductMsg) }}"
+                   target="_blank" rel="noopener noreferrer"
+                   class="py-2 px-3 flex-1 inline-flex justify-center items-center gap-x-2 text-sm font-medium text-nowrap rounded-xl bg-primary border border-primary-line text-primary-foreground hover:bg-primary-hover focus:outline-hidden focus:bg-primary-focus transition disabled:opacity-50 disabled:pointer-events-none">
                     Más info
                 </a>
                 <button type="button"

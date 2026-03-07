@@ -469,13 +469,16 @@ Sin pasarela, sin inventario, sin checkout complejo.
 - [ ] A.15 — Rediseño sección Acerca De
 - [ ] A.16 — Banner promocional inferior
 - [ ] A.17 — Secciones vacías no renderizan
-- [ ] A.18 — Estado vacío elegante dashboard
+- [x] A.18 — Estado vacío elegante dashboard
 - [ ] A.19 — Auditoría visual premium
 
 Commit: docs: roadmap actualizado 06 MAR 2026
 
 ### 07 MAR 2026
-_(actualizar aquí)_
+- [x] A.15 — Rediseño sección Acerca De
+- [x] A.17 — Secciones vacías no renderizan en landing
+- [x] A.18 — Estado vacío elegante dashboard
+- [x] fix: WhatsApp target=_blank (contact, header, product-card)
 
 ---
 

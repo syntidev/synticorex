@@ -1,46 +1,83 @@
-{{-- Hero Split Layout â€” Preline 4.1.2 + Tailwind v4 --}}
+{{-- Hero Split Layout — Preline 4.1.2 + Tailwind v4 --}}
 <section id="home">
-    <div class="bg-background py-8 sm:py-16 lg:py-24">
-        <div class="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8">
+    <div class="relative bg-background overflow-hidden py-8 sm:py-16 lg:py-24">
+
+        {{-- Fondo decorativo --}}
+        <div class="pointer-events-none absolute inset-0" aria-hidden="true">
+            <div class="absolute -top-40 -right-40 size-[600px] rounded-full bg-primary opacity-[0.04] blur-3xl"></div>
+            <div class="absolute -bottom-20 -left-20 size-96 rounded-full bg-primary opacity-[0.06] blur-2xl"></div>
+        </div>
+
+        <div class="relative mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8">
             <div class="grid gap-12 lg:grid-cols-2 lg:gap-24 items-center">
+
                 {{-- Contenido --}}
                 <div class="space-y-6 max-lg:text-center">
-                    @if($tenant->city)
-                        <div class="bg-background border-border w-fit rounded-full border px-3 py-1 max-lg:mx-auto">
-                            <span class="text-foreground">âœ¨ {{ $tenant->city }}</span>
+
+                    {{-- Badge ciudad — SOLO si plan 2/3 y ciudad configurada --}}
+                    @if($tenant->city && $tenant->isAtLeastCrecimiento())
+                        <div class="inline-flex items-center gap-2 bg-primary/8 border border-primary/20 w-fit rounded-full px-4 py-1.5 max-lg:mx-auto">
+                            <span class="size-2 rounded-full bg-primary animate-pulse"></span>
+                            <span class="text-primary text-sm font-medium">{{ $tenant->city }}</span>
                         </div>
                     @endif
 
-                    <h1 class="text-foreground text-4xl font-bold leading-[1.15] md:text-5xl lg:text-6xl">
+                    {{-- Título con sombra de texto sutil --}}
+                    <h1 class="text-foreground text-4xl font-bold leading-[1.1] md:text-5xl lg:text-6xl tracking-tight"
+                        style="text-shadow: 0 2px 20px rgba(0,0,0,0.06);">
                         {!! nl2br(e($customization->getHeroTitle() ?? $tenant->business_name)) !!}
                     </h1>
 
-                    <p class="text-muted-foreground-1 text-lg max-w-xl max-lg:mx-auto">
+                    <p class="text-muted-foreground-1 text-lg max-w-xl max-lg:mx-auto leading-relaxed">
                         {{ Str::limit($customization->getHeroSubtitle() ?? '', 250) }}
                     </p>
 
+                    {{-- CTAs --}}
+                    @php
+                        $heroWa = $tenant->getActiveWhatsapp()
+                            ? preg_replace('/\D/', '', $tenant->getActiveWhatsapp()) : null;
+                        $heroWaMsg = 'Hola, vi tu página y me gustaría obtener más información.';
+                    @endphp
                     <div class="flex flex-wrap gap-4 max-lg:justify-center">
-                        @if($tenant->whatsapp)
-                            <a href="https://wa.me/{{ $tenant->whatsapp }}" class="inline-flex items-center gap-2 py-3 px-6 rounded-lg font-medium bg-primary text-primary-foreground hover:bg-primary-hover transition-colors">
+                        @if($heroWa)
+                            <a href="https://wa.me/{{ $heroWa }}?text={{ urlencode($heroWaMsg) }}"
+                               target="_blank" rel="noopener noreferrer"
+                               class="inline-flex items-center gap-2 py-3 px-6 rounded-xl font-semibold shadow-md bg-primary text-primary-foreground hover:bg-primary-hover hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200">
                                 <span class="iconify tabler--brand-whatsapp size-5"></span>
-                                ContÃ¡ctanos
+                                Llamar Ahora
                             </a>
                         @endif
-                        <a href="#products" class="inline-flex items-center gap-2 py-3 px-6 rounded-lg font-medium border border-border text-foreground hover:bg-surface transition-colors">
-                            Ver Productos
-                            <span class="iconify tabler--arrow-down size-5"></span>
+                        <a href="#services"
+                           class="inline-flex items-center gap-2 py-3 px-6 rounded-xl font-semibold border border-border text-foreground hover:bg-muted hover:border-primary/30 hover:-translate-y-0.5 transition-all duration-200">
+                            Ver servicios
+                            <span class="iconify tabler--chevron-down size-5"></span>
                         </a>
                     </div>
+
+                    {{-- Social proof --}}
+                    @if($tenant->city)
+                    <div class="flex items-center gap-3 max-lg:justify-center pt-2">
+                        <div class="flex -space-x-2">
+                            @foreach(['A','B','C'] as $l)
+                            <div class="size-8 rounded-full bg-primary/10 border-2 border-background flex items-center justify-center text-xs font-bold text-primary">{{ $l }}</div>
+                            @endforeach
+                        </div>
+                        <p class="text-sm text-muted-foreground-1">Clientes satisfechos en <span class="font-semibold text-foreground">{{ $tenant->city }}</span></p>
+                    </div>
+                    @endif
                 </div>
 
                 {{-- Imagen --}}
                 <div class="relative max-lg:order-first">
+                    {{-- Sombra decorativa detrás --}}
+                    <div class="absolute inset-4 bg-primary/10 rounded-3xl blur-2xl -z-10"></div>
                     <img src="{{ $customization->hero_main_filename
                         ? asset('storage/tenants/'.$tenant->id.'/'.$customization->hero_main_filename)
                         : 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200' }}"
                          alt="{{ $tenant->business_name }}"
-                         class="w-full h-[400px] lg:h-[500px] object-cover rounded-3xl shadow-2xl">
+                         class="relative w-full h-[400px] lg:h-[500px] object-cover rounded-3xl shadow-2xl ring-1 ring-border">
                 </div>
+
             </div>
         </div>
     </div>

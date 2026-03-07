@@ -37,27 +37,26 @@
                 $nameParts = array_slice(explode(' ', trim($testim['name'])), 0, 2);
                 $initials  = implode('+', array_map(fn($w) => mb_strtoupper(mb_substr($w, 0, 1)), $nameParts));
             @endphp
-            <div class="flex flex-col w-72 sm:w-80 lg:w-96 shrink-0 bg-card rounded-2xl border border-card-line shadow-sm p-6 gap-4">
+            <div class="flex flex-col w-72 sm:w-80 lg:w-96 shrink-0 bg-card rounded-2xl border border-card-line shadow-sm hover:shadow-md transition-all duration-200 p-6 gap-4">
 
               {{-- Comillas + texto --}}
               <div class="relative">
-                <span class="iconify tabler--quote size-8 text-primary/30 absolute -top-1 -left-1" aria-hidden="true"></span>
+                <span class="text-primary/20 text-6xl font-serif leading-none absolute -top-1 -left-1 select-none" aria-hidden="true">“</span>
                 <p class="text-foreground/80 text-sm leading-relaxed pt-5 line-clamp-4">{{ $testim['text'] }}</p>
               </div>
 
               {{-- Estrellas --}}
               <div class="flex gap-0.5">
                 @for($s = 1; $s <= 5; $s++)
-                  <span class="iconify {{ $s <= $rating ? 'tabler--star-filled text-amber-400' : 'tabler--star text-gray-300' }} size-4" aria-hidden="true"></span>
+                  <span class="iconify {{ $s <= $rating ? 'tabler--star-filled text-yellow-400' : 'tabler--star text-gray-300' }} size-4" aria-hidden="true"></span>
                 @endfor
               </div>
 
               {{-- Avatar + datos --}}
               <div class="flex items-center gap-3 mt-auto pt-3 border-t border-card-line">
-                <img src="https://ui-avatars.com/api/?name={{ urlencode($initials) }}&background=random&size=80&bold=true"
-                     alt="{{ e($testim['name']) }}"
-                     class="size-10 rounded-full object-cover shrink-0"
-                     loading="lazy">
+                <div class="size-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0" aria-hidden="true">
+                    <span class="text-primary font-semibold text-sm">{{ str_replace('+', '', $initials) }}</span>
+                </div>
                 <div>
                   <p class="text-sm font-semibold text-foreground leading-tight">{{ $testim['name'] }}</p>
                   @if(!empty($testim['title']))

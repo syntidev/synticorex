@@ -2,13 +2,14 @@
 @php
     $ctaTitle   = $customization->cta_title      ?? ('¡Contacta a ' . $tenant->business_name . '!');
     $ctaSub     = $customization->cta_subtitle   ?? ($tenant->slogan ?? 'Estamos listos para atenderte. ¿Hablamos?');
-    $ctaBtnText = $customization->cta_button_text ?? null;
-    $ctaBtnLink = $customization->cta_button_link ?? null;
+    $ctaBtnText = !empty($customization->cta_button_text) ? $customization->cta_button_text : null;
+    $ctaBtnLink = !empty($customization->cta_button_link) ? $customization->cta_button_link : null;
 
-    // Fallback: WhatsApp del tenant si no hay botón configurado
+    // Fallback siempre: WhatsApp activo del tenant
     if (!$ctaBtnText && $tenant->getActiveWhatsapp()) {
+        $waNum      = preg_replace('/\D/', '', $tenant->getActiveWhatsapp());
         $ctaBtnText = 'Escríbenos por WhatsApp';
-        $ctaBtnLink = 'https://wa.me/' . preg_replace('/\D/', '', $tenant->getActiveWhatsapp());
+        $ctaBtnLink = 'https://wa.me/' . $waNum;
     }
 @endphp
 
@@ -34,9 +35,7 @@
             <a href="{{ $ctaBtnLink }}" target="_blank" rel="noopener noreferrer"
                class="inline-flex items-center py-3 px-6 rounded-lg font-semibold transition-colors text-lg bg-background text-primary hover:bg-background/90 gap-2 shadow-lg">
                 {{ $ctaBtnText }}
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-                </svg>
+                <span class="iconify tabler--brand-whatsapp size-5" aria-hidden="true"></span>
             </a>
         @endif
 

@@ -43,12 +43,12 @@
             @foreach($activeBranches as $branch)
             @php $branchMethods = $branchPayMethodsData[(string)$branch->id] ?? []; @endphp
 
-            <div class="bg-card border border-card-line rounded-xl shadow-2xs overflow-hidden flex flex-col">
+            <div class="bg-card border border-card-line rounded-xl shadow-2xs overflow-hidden flex flex-col hover:-translate-y-1 hover:shadow-md transition-all duration-300">
 
                 {{-- Accent panel — replaces image, shows location icon --}}
                 <div class="relative w-full bg-primary/10 flex items-center justify-center py-10">
                     <div class="w-16 h-16 rounded-2xl bg-primary/15 border border-primary/25 flex items-center justify-center">
-                        <iconify-icon icon="tabler:map-pin-filled" class="text-primary" width="32" height="32"></iconify-icon>
+                        <span class="iconify tabler--map-pin-filled text-primary size-6" aria-hidden="true"></span>
                     </div>
                 </div>
 
@@ -61,21 +61,21 @@
 
                     @if($branch->address)
                     <p class="mt-2 text-sm text-muted-foreground-1 leading-relaxed flex items-start gap-1.5">
-                        <iconify-icon icon="tabler:map-pin" class="shrink-0 mt-0.5 text-primary/70" width="14" height="14"></iconify-icon>
+                        <span class="iconify tabler--map-pin shrink-0 mt-0.5 text-primary/70 size-3.5" aria-hidden="true"></span>
                         {{ $branch->address }}
                     </p>
                     @endif
 
                     @if($branch->phone)
                     <p class="mt-1.5 text-sm text-muted-foreground-1 flex items-center gap-1.5">
-                        <iconify-icon icon="tabler:phone" class="shrink-0 text-primary/70" width="14" height="14"></iconify-icon>
+                        <span class="iconify tabler--phone shrink-0 text-primary/70 size-3.5" aria-hidden="true"></span>
                         {{ $branch->phone }}
                     </p>
                     @endif
 
                     @if($branch->schedule)
                     <p class="mt-1.5 text-sm text-muted-foreground-1 flex items-center gap-1.5">
-                        <iconify-icon icon="tabler:clock" class="shrink-0 text-primary/70" width="14" height="14"></iconify-icon>
+                        <span class="iconify tabler--clock shrink-0 text-primary/70 size-3.5" aria-hidden="true"></span>
                         {{ $branch->schedule }}
                     </p>
                     @endif
@@ -89,7 +89,7 @@
                             @if(isset($branchPayMethodsMeta[$bMethod]))
                             @php $bm = $branchPayMethodsMeta[$bMethod]; @endphp
                             <span class="inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full bg-muted text-foreground">
-                                <iconify-icon icon="tabler:{{ $bm['icon'] }}" class="{{ $bm['color'] }}" width="12" height="12"></iconify-icon>
+                                <span class="iconify tabler--{{ $bm['icon'] }} {{ $bm['color'] }} size-3" aria-hidden="true"></span>
                                 {{ $bm['label'] }}
                             </span>
                             @endif
