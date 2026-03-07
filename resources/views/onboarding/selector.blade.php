@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
-        body { font-family: 'Inter', system-ui, sans-serif; }
+        body { font-family: 'Geist', ui-sans-serif, system-ui, sans-serif; }
         .wiz-gradient-header { background: #fff; border-bottom: 1px solid #e2e8f0; }
         .wiz-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 1rem; box-shadow: 0 4px 24px -4px rgba(0,0,0,0.08); }
 
@@ -33,7 +33,12 @@
 <header class="wiz-gradient-header sticky top-0 z-50">
     <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
         <div class="flex items-center gap-3">
-            <span class="text-xl font-black tracking-tight text-slate-900">SYNTI<span class="text-blue-500">web</span></span>
+            <a href="/" class="flex items-center gap-2">
+                <img src="{{ asset('brand/syntiweb-logo-positive.svg') }}" alt="SYNTIweb" width="32" height="32">
+                <span class="font-bold text-lg tracking-tight">
+                    <span style="color:#1a1a1a">SYNTI</span><span style="color:#4A80E4">web</span>
+                </span>
+            </a>
             <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-600 border border-blue-100">
                 <span class="iconify tabler--sparkles size-3"></span>
                 Nuevo negocio
