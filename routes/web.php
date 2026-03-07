@@ -131,7 +131,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Analytics (datos del tenant — privado)
     Route::get('/tenant/{tenantId}/analytics',                    [AnalyticsController::class, 'getData']);
-
+	Route::get('/tenant/{tenantId}/analytics/today',              [AnalyticsController::class, 'getToday']);
     // QR download
     Route::get('/tenant/{tenantId}/qr/download',                  [QRTrackingController::class, 'downloadQR']);
 

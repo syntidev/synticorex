@@ -277,4 +277,24 @@
         }, 100);
     });
 </script>
+{{-- SyntiTrack --}}
+<script>
+(function() {
+    const TENANT_ID = {{ $tenant->id }};
+    const CSRF = document.querySelector('meta[name="csrf-token"]')?.content ?? '';
+    function track(eventType) {
+        fetch('/api/analytics/track', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': CSRF },
+            body: JSON.stringify({ tenant_id: TENANT_ID, event_type: eventType })
+        }).catch(() => {});
+    }
+    track('pageview');
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('a[href*="wa.me"]')) track('click_whatsapp');
+        if (e.target.closest('a[href^="tel:"]')) track('click_call');
+    });
+    setInterval(() => track('time_on_page'), 30000);
+})();
+</script>
 @endpush

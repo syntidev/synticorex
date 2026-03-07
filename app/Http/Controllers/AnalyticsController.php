@@ -187,4 +187,38 @@ class AnalyticsController extends Controller
             ], 500);
         }
     }
+	public function getToday(int $tenantId): JsonResponse
+{
+    try {
+        $today = now()->toDateString();
+
+        $visitors = AnalyticsEvent::where('tenant_id', $tenantId)
+            ->where('event_date', $today)
+            ->where('event_type', 'pageview')
+            ->distinct('user_ip')->count('user_ip');
+
+        $whatsapp = AnalyticsEvent::where('tenant_id', $tenantId)
+            ->where('event_date', $today)
+            ->where('event_type', 'click_whatsapp')->count();
+
+        $qr = AnalyticsEvent::where('tenant_id', $tenantId)
+            ->where('event_date', $today)
+            ->where('event_type', 'qr_scan')->count();
+
+        $products = AnalyticsEvent::where('tenant_id', $tenantId)
+            ->where('event_date', $today)
+            ->where('event_type', 'product_click')->count();
+
+        return response()->json([
+            'success'         => true,
+            'visitors_today'  => $visitors,
+            'whatsapp_clicks' => $whatsapp,
+            'qr_scans'        => $qr,
+            'products_viewed' => $products,
+        ]);
+
+    } catch (\Exception $e) {
+        return response()->json(['success' => false], 500);
+    }
+}
 }

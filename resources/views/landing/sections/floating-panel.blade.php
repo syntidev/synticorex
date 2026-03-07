@@ -540,6 +540,7 @@ function toggleSyntiPanel() {
     document.getElementById('synti-panel').classList.toggle('open');
 }
 function openSyntiPanel() {
+    loadKPIs();
     document.getElementById('synti-panel').classList.add('open');
 }
 function closeSyntiPanel() {
@@ -620,10 +621,10 @@ async function loadKPIs() {
         const res = await fetch('/tenant/{{ $tenant->id }}/analytics/today');
         const data = await res.json();
         if (data) {
-            document.getElementById('kpi-visits').textContent    = data.visits    ?? 0;
-            document.getElementById('kpi-whatsapp').textContent  = data.whatsapp  ?? 0;
-            document.getElementById('kpi-qr').textContent        = data.qr        ?? 0;
-            document.getElementById('kpi-products').textContent  = data.products  ?? 0;
+            document.getElementById('kpi-visits').textContent   = data.visitors_today  ?? 0;
+			document.getElementById('kpi-whatsapp').textContent = data.whatsapp_clicks  ?? 0;
+			document.getElementById('kpi-qr').textContent       = data.qr_scans         ?? 0;
+			document.getElementById('kpi-products').textContent = data.products_viewed  ?? 0;
         }
     } catch (e) {
         ['kpi-visits','kpi-whatsapp','kpi-qr','kpi-products'].forEach(id => {
