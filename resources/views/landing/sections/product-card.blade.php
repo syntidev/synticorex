@@ -9,6 +9,11 @@
             $galleryImages = $product->relationLoaded('galleryImages') ? $product->galleryImages : collect();
             $hasGallery = $isPlan3 && $galleryImages->isNotEmpty();
             $allImages = collect();
+            $waNumber = preg_replace('/\D/', '', $tenant->getActiveWhatsapp() ?? '');
+            $waBase   = $waNumber ? 'https://wa.me/' . $waNumber : '#';
+            $waProductMsg = 'Hola, vi tu vitrina y me interesa: ' . $product->name
+                          . ($product->price_usd ? ' — REF ' . number_format($product->price_usd, 2) : '')
+                          . '. ¿Está disponible?';
 
             if ($hasGallery && isset($tenant)) {
                 if ($product->image_filename) {
@@ -146,9 +151,9 @@
         @elseif($product->price_usd)
             {{-- Con precio → WhatsApp + compartir --}}
             <div class="flex gap-2">
-                <a href="#"
-                   class="py-2 px-3 flex-1 inline-flex justify-center items-center gap-x-2 text-sm font-medium text-nowrap rounded-xl bg-primary border border-primary-line text-primary-foreground hover:bg-primary-hover focus:outline-hidden focus:bg-primary-focus transition disabled:opacity-50 disabled:pointer-events-none"
-                   onclick="return false;">
+                <a href="{{ $waBase . '?text=' . urlencode($waProductMsg) }}"
+                   target="_blank" rel="noopener noreferrer"
+                   class="py-2 px-3 flex-1 inline-flex justify-center items-center gap-x-2 text-sm font-medium text-nowrap rounded-xl bg-primary border border-primary-line text-primary-foreground hover:bg-primary-hover focus:outline-hidden focus:bg-primary-focus transition disabled:opacity-50 disabled:pointer-events-none">
                     <span class="iconify tabler--brand-whatsapp size-4"></span>
                     Pedir por WhatsApp
                 </a>
@@ -162,15 +167,15 @@
         @else
             {{-- Sin precio → WhatsApp + Más info + compartir --}}
             <div class="flex gap-2">
-                <a href="#"
-                   class="py-2 px-3 flex-1 inline-flex justify-center items-center gap-x-2 text-sm font-medium text-nowrap rounded-xl bg-primary border border-primary-line text-primary-foreground hover:bg-primary-hover focus:outline-hidden focus:bg-primary-focus transition disabled:opacity-50 disabled:pointer-events-none"
-                   onclick="return false;">
+                <a href="{{ $waBase . '?text=' . urlencode($waProductMsg) }}"
+                   target="_blank" rel="noopener noreferrer"
+                   class="py-2 px-3 flex-1 inline-flex justify-center items-center gap-x-2 text-sm font-medium text-nowrap rounded-xl bg-primary border border-primary-line text-primary-foreground hover:bg-primary-hover focus:outline-hidden focus:bg-primary-focus transition disabled:opacity-50 disabled:pointer-events-none">
                     <span class="iconify tabler--brand-whatsapp size-4"></span>
                     WhatsApp
                 </a>
-                <a href="#"
-                   class="py-2 px-3 flex-1 inline-flex justify-center items-center gap-x-2 text-sm font-medium text-nowrap rounded-xl border border-line-2 text-foreground hover:bg-surface focus:outline-hidden transition disabled:opacity-50 disabled:pointer-events-none"
-                   onclick="return false;">
+                <a href="{{ $waBase . '?text=' . urlencode($waProductMsg) }}"
+                   target="_blank" rel="noopener noreferrer"
+                   class="py-2 px-3 flex-1 inline-flex justify-center items-center gap-x-2 text-sm font-medium text-nowrap rounded-xl border border-line-2 text-foreground hover:bg-surface focus:outline-hidden transition disabled:opacity-50 disabled:pointer-events-none">
                     Más info
                 </a>
                 <button type="button"

@@ -108,16 +108,10 @@
                         @endforeach
                 </div>
                 @else
-                <div class="flex flex-col items-center justify-center py-16 text-center">
-                    <div class="size-16 rounded-2xl bg-secondary/5 flex items-center justify-center mb-4">
-                        <span class="iconify tabler--tool size-8 text-secondary/30" aria-hidden="true"></span>
-                    </div>
-                    <h3 class="font-bold text-base text-muted-foreground-1 mb-1">No hay servicios aún</h3>
-                    <p class="text-sm text-muted-foreground-1 mb-4">Comienza agregando tu primer servicio</p>
-                    <button onclick="checkAndOpenServiceModal()" class="inline-flex items-center text-sm py-1.5 px-3 rounded-lg font-medium transition-colors bg-primary text-white hover:bg-primary-hover gap-1.5 shadow-sm">
-                        <span class="iconify tabler--plus size-4"></span> Agregar Servicio
-                    </button>
-                </div>
+                <x-dashboard.empty-state
+                    icon="tools"
+                    title="Sin servicios aún"
+                    message="Agrega un servicio para mostrarlo a tus clientes." />
                 @endif
                 </div>{{-- /px-6 pb-6 --}}
             </div>

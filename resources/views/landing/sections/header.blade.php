@@ -109,7 +109,7 @@
                     : 'Hola, vi tu vitrina';
             @endphp
             @if($wa)
-                <a href="https://wa.me/{{ $wa }}?text={{ urlencode($waMessage) }}" target="_blank" rel="noopener noreferrer"
+                <a href="https://wa.me/{{ preg_replace('/\D/', '', $wa) }}?text={{ urlencode($waMessage) }}" target="_blank" rel="noopener noreferrer"
                    class="py-1.5 px-3 rounded-lg font-medium transition-colors text-sm bg-green-600 text-white hover:bg-green-700 hidden sm:flex font-bold shadow-lg">WhatsApp</a>
             @endif
         </div>

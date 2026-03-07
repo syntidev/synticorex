@@ -267,11 +267,19 @@ class Tenant extends Model
     }
 
     /**
-     * Si el tenant tiene Plan CRECIMIENTO o superior (plan_id >= 2).
+     * Si el tenant tiene Plan CRECIMIENTO o superior (por slug).
      */
     public function isAtLeastCrecimiento(): bool
     {
-        return (int) $this->plan_id >= Plan::CRECIMIENTO;
+        if (!$this->plan) return false;
+        return in_array($this->plan->slug, [
+            'crecimiento',
+            'vision',
+            'food-semestral',
+            'food-anual',
+            'cat-semestral',
+            'cat-anual',
+        ]);
     }
 
     /**

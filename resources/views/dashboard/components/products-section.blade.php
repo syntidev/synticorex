@@ -108,16 +108,10 @@
                         @endforeach
                 </div>
                 @else
-                <div class="flex flex-col items-center justify-center py-16 text-center">
-                    <div class="size-16 rounded-2xl bg-primary/5 flex items-center justify-center mb-4">
-                        <span class="iconify tabler--package size-8 text-primary/30" aria-hidden="true"></span>
-                    </div>
-                    <h3 class="font-bold text-base text-muted-foreground-1 mb-1">No hay {{ strtolower($dynLabel) }} aún</h3>
-                    <p class="text-sm text-muted-foreground-1 mb-4">Comienza agregando tu primer {{ strtolower($dynSingular) }}</p>
-                    <button onclick="checkAndOpenProductModal()" class="inline-flex items-center text-sm py-1.5 px-3 rounded-lg font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 gap-1.5 shadow-sm">
-                        <span class="iconify tabler--plus size-4"></span> Agregar {{ $dynSingular }}
-                    </button>
-                </div>
+                <x-dashboard.empty-state
+                    icon="package"
+                    title="Sin productos aún"
+                    message="Agrega tu primer producto para que aparezca en tu vitrina." />
                 @endif
                 </div>{{-- /px-6 pb-6 --}}
             </div>

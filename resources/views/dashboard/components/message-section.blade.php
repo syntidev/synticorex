@@ -5,9 +5,6 @@
     // ── CTA data ──
     $ctaTitle   = $customization->cta_title ?? '';
     $ctaSub     = $customization->cta_subtitle ?? '';
-    $ctaBtnText = $customization->cta_button_text ?? '';
-    $ctaBtnLink = $customization->cta_button_link ?? '';
-
     // ── Branches data ──
     $branchesEnabled    = data_get($tenant->settings, 'engine_settings.branches.enabled', false);
     $maxBranches        = 3;
@@ -157,6 +154,7 @@
         </div>
     </div>
     <div class="px-5 pb-5 pt-1">
+        @if(count($savedTestimonials) > 0)
         <div id="testimonials-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             @foreach($savedTestimonials as $ti => $testim)
             @php $hasContent = !empty($testim['name']) || !empty($testim['text']); @endphp
@@ -185,6 +183,12 @@
             </div>
             @endforeach
         </div>
+        @else
+        <x-dashboard.empty-state
+            icon="quote"
+            title="Sin testimonios"
+            message="Los testimonios generan confianza. Agrega el primero." />
+        @endif
         <div class="flex gap-2 mt-3">
             <button type="button" onclick="addTestimonial()" class="inline-flex items-center py-2 px-4 rounded-lg font-medium transition-colors bg-primary text-primary-foreground hover:bg-primary-hover flex-1 gap-2">
                 <span class="iconify tabler--plus size-4"></span>
@@ -218,6 +222,7 @@
         </div>
     </div>
     <div class="px-5 pb-5 pt-1">
+        @if(count($savedFaq) > 0)
         <div id="faq-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             @foreach($savedFaq as $fi => $fitem)
             @php $hasFaqContent = !empty($fitem['question']) || !empty($fitem['answer']); @endphp
@@ -242,6 +247,12 @@
             </div>
             @endforeach
         </div>
+        @else
+        <x-dashboard.empty-state
+            icon="help-circle"
+            title="Sin preguntas frecuentes"
+            message="Las FAQs reducen consultas repetidas. Agrega la primera." />
+        @endif
         <div class="flex gap-2 mt-3">
             <button type="button" onclick="addFaq()" class="inline-flex items-center py-2 px-4 rounded-lg font-medium transition-colors bg-muted text-foreground hover:bg-muted-hover flex-1 gap-2">
                 <span class="iconify tabler--plus size-4"></span>
@@ -291,21 +302,6 @@
                        placeholder="Estamos listos para atenderte"
                        value="{{ $ctaSub }}"
                        maxlength="200">
-            </div>
-            <div>
-                <label class="text-xs font-medium text-muted-foreground-1 mb-1 block">Texto del Botón</label>
-                <input type="text" id="cta-btn-text"
-                       class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none"
-                       placeholder="Ej: Pedir ahora"
-                       value="{{ $ctaBtnText }}"
-                       maxlength="50">
-            </div>
-            <div>
-                <label class="text-xs font-medium text-muted-foreground-1 mb-1 block">Enlace del Botón</label>
-                <input type="url" id="cta-btn-link"
-                       class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none"
-                       placeholder="https://..."
-                       value="{{ $ctaBtnLink }}">
             </div>
         </div>
         <button type="button" onclick="saveCtaConfig()" class="py-2 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg bg-primary border border-primary-line text-primary-foreground hover:bg-primary-hover focus:outline-hidden focus:bg-primary-focus disabled:opacity-50 disabled:pointer-events-none mt-3">

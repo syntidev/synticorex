@@ -29,64 +29,88 @@
          SECCIONES DINÁMICAS - ORDENABLES
     ══════════════════════════════════════════════ --}}
 
+    @php
+        $planId = $plan->id ?? 1;
+        $sectionsOrder = $customization->getSectionsOrder();
+
+        $hasContent = [
+            'products'        => $products->count() > 0,
+            'services'        => $services->count() > 0,
+            'faq'             => collect(data_get($tenant->settings, 'business_info.faq', []))
+                                   ->filter(fn($f) => !empty($f['question']) && !empty($f['answer']))
+                                   ->count() > 0,
+            'testimonials'    => collect(data_get($tenant->settings, 'business_info.testimonials', []))
+                                   ->filter(fn($t) => !empty($t['text']))
+                                   ->count() > 0,
+            'branches'        => true,
+            'about'           => !empty($customization->about_text) || !empty($customization->about_image_filename),
+            'payment_methods' => true,
+            'contact'         => true,
+            'cta'             => true,
+        ];
+    @endphp
+
     <main class="bg-surface">
-        @foreach($customization->getSectionsOrder() as $section)
+        @foreach($sectionsOrder as $section)
             @php
                 $sectionName = $section['name'];
                 $isVisible = $section['visible'] ?? true;
-                $canAccess = $customization->canAccessSection($sectionName, $tenant->plan_id);
+                $canAccess = $customization->canAccessSection($sectionName, $planId);
                 $shouldRender = $isVisible && $canAccess && $sectionName !== 'hero';
+                $sConfig = $shouldRender ? $customization->getSectionConfig($sectionName) : [];
+                $sectionHasContent = $hasContent[$sectionName] ?? true;
             @endphp
 
             @if($shouldRender)
-                @php $sConfig = $customization->getSectionConfig($sectionName); @endphp
+                @if($sectionHasContent)
+                    @switch($sectionName)
 
-                @switch($sectionName)
+                        @case('about')
+                            @include('landing.sections.about', ['sConfig' => $sConfig])
+                            @break
 
-                    @case('about')
-                        @include('landing.sections.about', ['sConfig' => $sConfig])
-                        @break
+                        @case('contact')
+                            @include('landing.sections.contact', ['sConfig' => $sConfig])
+                            @break
 
-                    @case('contact')
-                        @include('landing.sections.contact', ['sConfig' => $sConfig])
-                        @break
+                        @case('products')
+                            @include('landing.sections.products', ['sConfig' => $sConfig])
+                            @break
 
-                    @case('products')
-                        @include('landing.sections.products', ['sConfig' => $sConfig])
-                        @break
+                        @case('services')
+                            @php
+                                $servicesView = match($sConfig['variant'] ?? 'cards') {
+                                    'spotlight' => 'landing.sections.services-spotlight',
+                                    default     => 'landing.sections.services',
+                                };
+                            @endphp
+                            @include($servicesView, ['sConfig' => $sConfig])
+                            @break
 
-                    @case('services')
-                        @php
-                            $servicesView = match($sConfig['variant'] ?? 'cards') {
-                                'spotlight' => 'landing.sections.services-spotlight',
-                                default     => 'landing.sections.services',
-                            };
-                        @endphp
+                        @case('testimonials')
+                            @include('landing.sections.testimonials', ['sConfig' => $sConfig])
+                            @break
 
-                        @include($servicesView, ['sConfig' => $sConfig])
-                        @break
+                        @case('faq')
+                            @include('landing.sections.faq', ['sConfig' => $sConfig])
+                            @break
 
-                    @case('testimonials')
-                        @include('landing.sections.testimonials', ['sConfig' => $sConfig])
-                        @break
+                        @case('branches')
+                            @include('landing.sections.branches', ['sConfig' => $sConfig])
+                            @break
 
-                    @case('faq')
-                        @include('landing.sections.faq', ['sConfig' => $sConfig])
-                        @break
+                        @case('payment_methods')
+                            @include('landing.sections.payment_methods', ['sConfig' => $sConfig])
+                            @break
 
-                    @case('branches')
-                        @include('landing.sections.branches', ['sConfig' => $sConfig])
-                        @break
+                        @case('cta')
+                            @include('landing.sections.cta', ['sConfig' => $sConfig])
+                            @break
 
-                    @case('payment_methods')
-                        @include('landing.sections.payment_methods', ['sConfig' => $sConfig])
-                        @break
-
-                    @case('cta')
-                        @include('landing.sections.cta', ['sConfig' => $sConfig])
-                        @break
-
-                @endswitch
+                    @endswitch
+                @else
+                    @include('landing.sections._empty-guide', ['section' => $sectionName])
+                @endif
             @endif
         @endforeach
 

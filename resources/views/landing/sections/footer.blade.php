@@ -92,10 +92,16 @@
 
             {{-- Logo + Nombre del negocio --}}
             <a href="#home" class="flex items-center gap-3 shrink-0">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="32" height="32" aria-hidden="true">
-                    <path d="M 30,22 L 78,22 L 78,70 Q 78,78 70,78 L 62,78 L 62,38 L 22,38 L 22,30 Q 22,22 30,22 Z" fill="#1a1a1a"/>
-                    <circle cx="38" cy="63" r="14" fill="#4A80E4"/>
-                </svg>
+                @if($customization && $customization->logo_filename)
+                    <img src="{{ asset('storage/tenants/' . $tenant->id . '/' . $customization->logo_filename) }}"
+                         alt="{{ $tenant->business_name }}"
+                         class="h-8 w-auto object-contain">
+                @else
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="32" height="32" aria-hidden="true">
+                        <path d="M 30,22 L 78,22 L 78,70 Q 78,78 70,78 L 62,78 L 62,38 L 22,38 L 22,30 Q 22,22 30,22 Z" fill="#1a1a1a"/>
+                        <circle cx="38" cy="63" r="14" fill="#4A80E4"/>
+                    </svg>
+                @endif
                 <span class="text-base font-bold tracking-tight text-foreground">{{ $tenant->business_name }}</span>
             </a>
 

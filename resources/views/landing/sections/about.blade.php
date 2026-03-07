@@ -1,100 +1,139 @@
 {{-- About Section — Plan 2+ --}}
 @php
-    // about_text: variable independiente de esta sección (no comparte con SEO, Hero ni Contacto)
     $description = $customization->getAboutText() ?? null;
     $slogan      = $tenant->slogan ?? null;
 
-    // Imagen de la sección: about_image > hero_main > logo > placeholder
     $businessImage = null;
     if (!empty($customization->about_image_filename)) {
         $businessImage = asset('storage/tenants/' . $tenant->id . '/' . $customization->about_image_filename);
     } elseif (!empty($customization->hero_main_filename)) {
         $businessImage = asset('storage/tenants/' . $tenant->id . '/' . $customization->hero_main_filename);
     }
-    
-    // Verificar si existe logo
-    $logoImage = !empty($customization->logo_filename) 
+
+    $logoImage = !empty($customization->logo_filename)
         ? asset('storage/tenants/' . $tenant->id . '/' . $customization->logo_filename)
         : null;
 @endphp
 
-<section id="about" class="py-8 sm:py-16 lg:py-24 bg-surface">
-    <div class="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8">
-        <div class="flex flex-col lg:flex-row gap-10 lg:gap-16 items-center">
+<section id="about" class="relative py-10 sm:py-16 lg:py-24 bg-surface overflow-hidden">
 
-            {{-- Col 8/12 — Descripción principal --}}
-            <div class="flex-1 lg:basis-2/3">
-                <h2 class="text-foreground text-2xl font-semibold md:text-3xl lg:text-4xl mb-4">
-                    {!! $customization->getSectionTitle('about', 'Acerca de <span class="text-primary italic">nosotros</span>') !!}
-                </h2>
-                <p class="text-foreground/70 text-lg font-medium mb-4">{{ $tenant->business_name }}</p>
-                @if($slogan)
-                    <p class="text-foreground/50 text-sm italic mb-5">"{{ $slogan }}"</p>
-                @endif
-                @if($description)
-                    <p class="text-foreground/75 leading-relaxed text-base">
-                        {{ $description }}
-                    </p>
+    {{-- ░░ ADORNOS GEOMÉTRICOS ░░ --}}
+    {{-- Círculo grande top-right --}}
+    <div class="pointer-events-none absolute -top-24 -right-24 w-96 h-96 rounded-full"
+         style="background: radial-gradient(circle, var(--color-primary, #4A80E4) 0%, transparent 70%); opacity: 0.07;"></div>
+
+    {{-- Círculo pequeño bottom-left --}}
+    <div class="pointer-events-none absolute -bottom-16 -left-16 w-64 h-64 rounded-full"
+         style="background: radial-gradient(circle, var(--color-primary, #4A80E4) 0%, transparent 70%); opacity: 0.05;"></div>
+
+    {{-- Dot grid top — lado derecho (columna texto) --}}
+
+    {{-- Dot grid bottom — lado derecho (columna texto) --}}
+
+
+    <div class="relative mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8">
+        <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+
+            {{-- ░░ COLUMNA IZQUIERDA: imagen ░░ --}}
+            <div class="relative about-col-img">
+
+                @if($businessImage)
+                    {{-- Sombra offset detrás --}}
+                    <div class="absolute inset-0 translate-x-3 translate-y-3 bg-primary/10 rounded-2xl -z-10"></div>
+                    {{-- Marcos de esquina decorativos --}}
+                    <div class="absolute -top-3 -left-3 w-10 h-10 border-t-2 border-l-2 border-primary/50 rounded-tl-xl pointer-events-none"></div>
+                    <div class="absolute -bottom-3 -right-3 w-10 h-10 border-b-2 border-r-2 border-primary/50 rounded-br-xl pointer-events-none"></div>
+
+                    <img src="{{ $businessImage }}"
+                         alt="{{ $tenant->business_name }}"
+                         class="w-full h-auto rounded-2xl shadow-lg ring-1 ring-black/8 relative z-10"
+                         loading="lazy">
+
+                @elseif($logoImage)
+                    <div class="absolute inset-0 translate-x-3 translate-y-3 bg-primary/10 rounded-2xl -z-10"></div>
+                    <div class="absolute -top-3 -left-3 w-10 h-10 border-t-2 border-l-2 border-primary/50 rounded-tl-xl pointer-events-none"></div>
+                    <div class="absolute -bottom-3 -right-3 w-10 h-10 border-b-2 border-r-2 border-primary/50 rounded-br-xl pointer-events-none"></div>
+                    <div class="relative z-10 bg-muted border border-border rounded-2xl flex items-center justify-center py-20 shadow-sm">
+                        <img src="{{ $logoImage }}" alt="{{ $tenant->business_name }}"
+                             class="max-h-40 w-auto object-contain opacity-90">
+                    </div>
+
                 @else
-                    <p class="text-foreground/40 text-sm italic">
-                        Agrega una descripción de tu empresa en el dashboard → Información.
-                    </p>
-                @endif
-
-                @if($tenant->city)
-                    <div class="mt-6 inline-flex items-center gap-2 bg-primary/10 text-primary text-xs font-bold px-3 py-1.5 rounded-full">
-                        <span class="w-1.5 h-1.5 bg-primary rounded-full animate-pulse"></span>
-                        {{ $tenant->city }}
+                    <div class="bg-muted border border-border rounded-2xl flex items-center justify-center py-24 shadow-sm">
+                        <span class="iconify tabler--building size-16 text-primary/20"></span>
                     </div>
                 @endif
+
             </div>
 
-            {{-- Col 4/12 — Imagen del negocio (hero o logo) --}}
-            <div class="lg:basis-1/3 flex items-center justify-center w-full">
-                @if($businessImage)
-                    {{-- Hero image disponible: mostrar como foto del negocio --}}
-                    <div class="relative w-full max-w-xs">
-                        <div class="absolute -top-3 -right-3 w-24 h-24 bg-primary/10 rounded-full blur-2xl pointer-events-none"></div>
-                        <div class="absolute -bottom-3 -left-3 w-20 h-20 bg-primary/5 rounded-full blur-xl pointer-events-none"></div>
-                        <div class="relative rounded-3xl overflow-hidden shadow-lg border border-border aspect-square">
-                            <img src="{{ $businessImage }}"
-                                 alt="{{ $tenant->business_name }}"
-                                 class="w-full h-full object-cover"
-                                 loading="lazy">
-                        </div>
-                    </div>
-                @elseif($logoImage)
-                    {{-- Solo logo disponible: centrado en panel neutro --}}
-                    <div class="relative w-full max-w-xs">
-                        <div class="absolute -top-3 -right-3 w-24 h-24 bg-primary/10 rounded-full blur-2xl pointer-events-none"></div>
-                        <div class="relative bg-background border border-border rounded-3xl p-10 shadow-sm flex items-center justify-center aspect-square">
-                            {{-- Logo SVG inline --}}
-                            <svg xmlns="http://www.w3.org/2000/svg" 
-                                 viewBox="0 0 100 100" 
-                                 width="80" height="80">
-                              <path d="M 30,22 L 78,22 L 78,70 Q 78,78 70,78 L 62,78 
-                                       L 62,38 L 22,38 L 22,30 Q 22,22 30,22 Z" 
-                                    fill="#1a1a1a"/>
-                              <circle cx="38" cy="63" r="14" fill="#4A80E4"/>
-                            </svg>
-                        </div>
-                    </div>
-                @else
-                    {{-- Sin imagen: placeholder profesional --}}
-                    <div class="relative w-full max-w-xs">
-                        <div class="relative bg-background border border-border rounded-3xl p-10 shadow-sm flex flex-col items-center justify-center aspect-square gap-4">
-                            <svg class="w-16 h-16 text-primary/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                      d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-                            </svg>
-                            <p class="text-foreground/30 text-xs text-center">
-                                {{ $tenant->business_name }}
-                            </p>
-                        </div>
-                    </div>
+            {{-- ░░ COLUMNA DERECHA: contenido ░░ --}}
+            <div class="relative flex flex-col justify-center about-col-text" style="isolation: isolate;">
+
+                {{-- Dot grid top-right dentro de la columna de texto --}}
+                <div class="pointer-events-none absolute -top-2 -right-2 -z-10 opacity-[0.20]"
+                     style="width:100px; height:100px;
+                            background-image: radial-gradient(circle, var(--color-primary, #4A80E4) 1.5px, transparent 1.5px);
+                            background-size: 14px 14px;">
+                </div>
+                {{-- Dot grid bottom-right --}}
+                <div class="pointer-events-none absolute -bottom-2 -right-2 -z-10 opacity-[0.12]"
+                     style="width:70px; height:70px;
+                            background-image: radial-gradient(circle, var(--color-primary, #4A80E4) 1.5px, transparent 1.5px);
+                            background-size: 14px 14px;">
+                </div>
+
+                @if($tenant->city)
+                    <p class="inline-flex items-center gap-1.5 text-primary text-xs font-semibold uppercase tracking-widest mb-4">
+                        <span class="iconify tabler--map-pin size-4"></span>
+                        {{ $tenant->city }}
+                    </p>
                 @endif
+
+                <h2 class="text-foreground text-3xl lg:text-4xl font-bold leading-tight mb-2">
+                    {!! $customization->getSectionTitle('about', 'Acerca de <span class="text-primary italic">nosotros</span>') !!}
+                </h2>
+
+                <p class="text-foreground/60 text-base font-medium mb-5">{{ $tenant->business_name }}</p>
+
+                @if($slogan)
+                    <p class="border-l-2 border-primary/40 pl-4 text-foreground/60 text-sm italic mb-6">
+                        "{{ $slogan }}"
+                    </p>
+                @endif
+
+                @if($description)
+                    <p class="text-muted-foreground-1 text-base leading-relaxed mb-6">
+                        {{ $description }}
+                    </p>
+                @endif
+
+                {{-- Separador decorativo --}}
+                <div class="flex items-center gap-3 mt-2">
+                    <div class="h-px flex-1 bg-border"></div>
+                    <span class="iconify tabler--sparkles size-4 text-primary/40"></span>
+                    <div class="h-px flex-1 bg-border"></div>
+                </div>
+
             </div>
 
         </div>
     </div>
+
 </section>
+
+@once
+<style>
+.about-col-img {
+    animation: aboutFadeUp 0.55s ease both;
+}
+.about-col-text {
+    animation: aboutFadeUp 0.55s 0.15s ease both;
+    opacity: 0;
+    animation-fill-mode: forwards;
+}
+@keyframes aboutFadeUp {
+    from { opacity: 0; transform: translateY(22px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+</style>
+@endonce

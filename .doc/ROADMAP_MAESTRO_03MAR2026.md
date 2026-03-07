@@ -236,15 +236,20 @@ Sin pasarela, sin inventario, sin checkout complejo.
 | A.3 | Aplicar identidad: Landing + Dashboard + Wizard | Global | ✅ HECHO |
 | A.4 | Logo navbar + hero breathing animation | `navbar.blade.php`, `hero.blade.php` | ✅ HECHO |
 | A.5 | Copy B2H landing | `landing/sections/*` | ⏸ SUSPENDIDO hasta producto completo |
-| A.6 | Responsividad completa (375/768/1440px) | Global | ❌ PENDIENTE |
+| A.6 | Responsividad completa (375/768/1440px) | Global | ✅ HECHO |
 | A.7 | Lighthouse 90+ | Build + assets | ❌ PENDIENTE |
 | A.8 | Normalizar estilos dashboard Preline | `resources/views/dashboard/` | ✅ HECHO |
 | A.9 | UX formularios dashboard | `dashboard/components/` | ✅ HECHO |
-| A.10 | Info-section sub-tabs | `dashboard/components/` | 🔶 EN PROGRESO |
-| A.11 | QR sticker generador | — | ❌ PENDIENTE |
-| A.12 | Imagen Acerca De | — | ❌ PENDIENTE |
-| A.13 | Panel flotante Preline + gesto móvil | — | ❌ PENDIENTE |
-| A.14 | Botón tel: | — | ❌ PENDIENTE |
+| A.10 | Info-section sub-tabs | `dashboard/components/` | ✅ HECHO |
+| A.11 | QR sticker generador | — | ✅ HECHO |
+| A.12 | Imagen Acerca De | — | ✅ HECHO |
+| A.13 | Panel flotante Preline + gesto móvil | — | ✅ HECHO (desktop) ⚠️ móvil pendiente validación |
+| A.14 | Botón tel: | — | ✅ HECHO |
+| A.15 | Rediseño sección "Acerca de" en landing | `landing/sections/about.blade.php` | ❌ PENDIENTE |
+| A.16 | Banner promocional inferior con marquee | `landing/sections/`, `base.blade.php` | ❌ PENDIENTE |
+| A.17 | Secciones vacías no renderizan en landing ni navbar | Global | ❌ PENDIENTE |
+| A.18 | Estado vacío elegante en dashboard por sección sin contenido | `dashboard/components/` | ❌ PENDIENTE |
+| A.19 | Auditoría visual premium — Chrome extension | Global | ❌ PENDIENTE |
 
 ---
 
@@ -450,7 +455,24 @@ Sin pasarela, sin inventario, sin checkout complejo.
 - [ ] A.14 — Botón tel:
 
 ### 06 MAR 2026
-_(actualizar aquí)_
+- [x] A.6 — Responsividad dashboard completa (FlyonUI legacy eliminado)
+- [x] A.10 — Info-section sub-tabs resuelto
+- [x] A.11 — QR sticker generador funcional
+- [x] A.12 — Imagen Acerca De integrada
+- [x] A.13 — Panel flotante desktop funcional (móvil pendiente validación real)
+- [x] A.14 — Botón tel: implementado
+- [x] landing/partials/ eliminada permanentemente — sections es el único estándar
+- [x] Reglas permanentes en copilot-instructions.md + copilot-workspace.yml + SYNTIWEB-CONTEXT.md
+- [x] Bug zoom imagen producto en landing — resuelto
+- [x] WebP calidad subida a 90 en ImageUploadService
+- [x] header_message — campo creado en DB, dashboard y landing (banner no resuelto visualmente — removido)
+- [ ] A.15 — Rediseño sección Acerca De
+- [ ] A.16 — Banner promocional inferior
+- [ ] A.17 — Secciones vacías no renderizan
+- [ ] A.18 — Estado vacío elegante dashboard
+- [ ] A.19 — Auditoría visual premium
+
+Commit: docs: roadmap actualizado 06 MAR 2026
 
 ### 07 MAR 2026
 _(actualizar aquí)_

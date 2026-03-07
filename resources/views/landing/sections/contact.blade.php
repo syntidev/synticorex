@@ -105,6 +105,7 @@
               <h4 class="text-foreground font-semibold text-sm">WhatsApp</h4>
               @if($whatsappMainClean)
                 <a href="https://wa.me/{{ $whatsappMainClean }}"
+                   target="_blank" rel="noopener noreferrer"
                    class="text-primary font-semibold text-xs hover:underline">
                   +{{ $whatsappMainClean }}
                 </a>
@@ -126,7 +127,7 @@
                 {{-- Mostrar soporte si Plan 2/3 y existe --}}
                 @if($whatsappSupportClean && $tenant->plan && in_array($tenant->plan->slug, ['crecimiento', 'vision']))
                   <p class="text-primary font-semibold">
-                    <a href="https://wa.me/{{ $whatsappSupportClean }}" class="hover:underline">
+                    <a href="https://wa.me/{{ $whatsappSupportClean }}" target="_blank" rel="noopener noreferrer" class="hover:underline">
                       Soporte: +{{ $whatsappSupportClean }}
                     </a>
                   </p>
@@ -201,6 +202,7 @@
               <h4 class="text-foreground font-semibold text-sm">WhatsApp</h4>
               @if($whatsappMainClean)
                 <a href="https://wa.me/{{ $whatsappMainClean }}"
+                   target="_blank" rel="noopener noreferrer"
                    class="text-primary font-semibold text-xs hover:underline">
                   +{{ $whatsappMainClean }}
                 </a>
