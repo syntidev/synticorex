@@ -142,6 +142,64 @@ class OnboardingController extends Controller
     }
 
     /**
+     * Onboarding product selector.
+     */
+    public function selector(): View
+    {
+        return view('onboarding.selector');
+    }
+
+    /**
+     * Show the SYNTIfood onboarding wizard.
+     */
+    public function food(): View|RedirectResponse
+    {
+        $mode = env('ONBOARDING_MODE', 'admin');
+
+        if ($mode !== 'admin') {
+            return redirect('/register');
+        }
+
+        $plans = Plan::where('blueprint', 'food')->orderBy('id')->get();
+
+        return view('onboarding.wizard-food', compact('plans', 'mode'));
+    }
+
+    /**
+     * Show the SYNTIcat onboarding wizard.
+     */
+    public function cat(): View|RedirectResponse
+    {
+        $mode = env('ONBOARDING_MODE', 'admin');
+
+        if ($mode !== 'admin') {
+            return redirect('/register');
+        }
+
+        $plans = Plan::where('blueprint', 'cat')->orderBy('id')->get();
+
+        return view('onboarding.wizard-cat', compact('plans', 'mode'));
+    }
+
+    /**
+     * Store a new food tenant — TODO: implementar en F5.
+     */
+    public function storeFood(Request $request): RedirectResponse
+    {
+        // TODO: implementar en F5
+        return redirect()->route('onboarding.selector');
+    }
+
+    /**
+     * Store a new cat tenant — TODO: implementar en fase Cat.
+     */
+    public function storeCat(Request $request): RedirectResponse
+    {
+        // TODO: implementar en fase Cat
+        return redirect()->route('onboarding.selector');
+    }
+
+    /**
      * Show a preview of the newly created tenant landing.
      */
     public function preview(Tenant $tenant): View

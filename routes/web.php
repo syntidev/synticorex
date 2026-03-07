@@ -31,6 +31,38 @@ Route::domain('app.synticorex.test')->group(function () {
     });
 });
 
+// ═══ Landings de producto ════════════════════════════════════════════════════
+Route::get('/studio', [MarketingController::class, 'studio'])->name('marketing.studio');
+Route::get('/food',   [MarketingController::class, 'food'])->name('marketing.food');
+Route::get('/cat',    [MarketingController::class, 'cat'])->name('marketing.cat');
+
+// ═══ Onboarding selector ═════════════════════════════════════════════════════
+Route::get('/onboarding', [OnboardingController::class, 'selector'])->name('onboarding.selector');
+
+// ═══ Onboarding Wizard ═══════════════════════════════════════════════════════
+Route::middleware(['web'])->group(function () {
+    Route::get('/onboarding/nuevo', [OnboardingController::class, 'index'])
+         ->name('onboarding.index');
+    Route::post('/onboarding/guardar', [OnboardingController::class, 'store'])
+         ->name('onboarding.store');
+    Route::get('/onboarding/subdomain-check', [OnboardingController::class, 'checkSubdomain'])
+         ->name('onboarding.subdomain-check');
+    Route::get('/onboarding/{tenant}/preview', [OnboardingController::class, 'preview'])
+         ->name('onboarding.preview');
+    Route::post('/onboarding/{tenant}/publicar', [OnboardingController::class, 'publish'])
+         ->name('onboarding.publish');
+
+    // ═══ Wizards por producto ═════════════════════════════════════════════════
+    Route::get('/onboarding/studio',  [OnboardingController::class, 'index'])->name('onboarding.studio');
+    Route::get('/onboarding/food',    [OnboardingController::class, 'food'])->name('onboarding.food');
+    Route::get('/onboarding/cat',     [OnboardingController::class, 'cat'])->name('onboarding.cat');
+
+    // ═══ Stores por producto ══════════════════════════════════════════════════
+    Route::post('/onboarding/studio/guardar', [OnboardingController::class, 'store'])->name('onboarding.store.studio');
+    Route::post('/onboarding/food/guardar',   [OnboardingController::class, 'storeFood'])->name('onboarding.store.food');
+    Route::post('/onboarding/cat/guardar',    [OnboardingController::class, 'storeCat'])->name('onboarding.store.cat');
+});
+
 // Landing page pública por subdomain
 Route::middleware('tenant')->get('/{subdomain}', [TenantRendererController::class, 'show'])
     ->where('subdomain', '[a-z0-9-]+')
@@ -161,20 +193,7 @@ Route::middleware(['auth'])->prefix('tenant/{tenantId}/food')->group(function ()
     Route::apiResource('categories', \App\Http\Controllers\Food\CategoriesController::class)->except(['show']);
     Route::apiResource('categories.items', \App\Http\Controllers\Food\ItemsController::class)->except(['show']);
 });
-Route::get('/menu/{subdomain}', [Food\MenuController::class, 'show'])
+Route::get('/menu/{subdomain}', [\App\Http\Controllers\Food\MenuController::class, 'show'])
     ->where('subdomain', '[a-z0-9-]+')
     ->name('food.menu.public');
 
-// ═══ Onboarding Wizard ═══════════════════════════════════════════════════════
-Route::middleware(['web'])->group(function () {
-    Route::get('/onboarding/nuevo', [OnboardingController::class, 'index'])
-         ->name('onboarding.index');
-    Route::post('/onboarding/guardar', [OnboardingController::class, 'store'])
-         ->name('onboarding.store');
-    Route::get('/onboarding/subdomain-check', [OnboardingController::class, 'checkSubdomain'])
-         ->name('onboarding.subdomain-check');
-    Route::get('/onboarding/{tenant}/preview', [OnboardingController::class, 'preview'])
-         ->name('onboarding.preview');
-    Route::post('/onboarding/{tenant}/publicar', [OnboardingController::class, 'publish'])
-         ->name('onboarding.publish');
-});

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Models\Plan;
 use Illuminate\Contracts\View\View;
 
 class MarketingController extends Controller
@@ -141,5 +142,26 @@ class MarketingController extends Controller
         ];
 
         return view('marketing.index', compact('plans', 'segments', 'stats'));
+    }
+
+    public function studio(): View
+    {
+        $plans = Plan::where('blueprint', 'studio')->orderBy('id')->get();
+
+        return view('marketing.studio', compact('plans'));
+    }
+
+    public function food(): View
+    {
+        $plans = Plan::where('blueprint', 'food')->orderBy('id')->get();
+
+        return view('marketing.food', compact('plans'));
+    }
+
+    public function cat(): View
+    {
+        $plans = Plan::where('blueprint', 'cat')->orderBy('id')->get();
+
+        return view('marketing.cat', compact('plans'));
     }
 }

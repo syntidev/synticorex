@@ -206,11 +206,11 @@
                     <div class="wiz-card p-6 mb-4">
                         <div class="form-control">
                             <label class="label pb-1" for="s1-business-name">
-                                <span class="label-text font-semibold text-base">¿Cómo se llama tu negocio?</span>
+                                <span class="text-sm font-semibold text-slate-800">¿Cómo se llama tu negocio?</span>
                             </label>
                             <input id="s1-business-name"
                                    type="text"
-                                   class="input input-bordered w-full text-lg"
+                                   class="py-2 px-3 block w-full border border-slate-200 rounded-lg text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none disabled:opacity-50 disabled:pointer-events-none bg-white text-lg"
                                    placeholder="Ej: Pizzería Don Pepe"
                                    name="business_name"
                                    x-model="business_name"
@@ -223,7 +223,7 @@
                     <div class="wiz-card p-6 mb-4">
                         <div class="form-control">
                             <label class="label pb-2" for="s1-segment">
-                                <span class="label-text font-semibold text-base">¿A qué te dedicas?</span>
+                                <span class="text-sm font-semibold text-slate-800">¿A qué te dedicas?</span>
                             </label>
                             <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
                                 @php
@@ -258,12 +258,12 @@
                     <div class="wiz-card p-6 mb-4">
                         <div class="form-control">
                             <label class="label pb-1" for="s1-city">
-                                <span class="label-text font-semibold text-base">¿Dónde estás ubicado?</span>
-                                <span class="label-text-alt text-base-content/40">Opcional</span>
+                                <span class="text-sm font-semibold text-slate-800">¿Dónde estás ubicado?</span>
+                                <span class="text-xs text-slate-400">Opcional</span>
                             </label>
                             <input id="s1-city"
                                    type="text"
-                                   class="input input-bordered w-full"
+                                   class="py-2 px-3 block w-full border border-slate-200 rounded-lg text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none disabled:opacity-50 disabled:pointer-events-none bg-white"
                                    placeholder="Ej: Maracaibo"
                                    name="city"
                                    x-model="city"
@@ -288,18 +288,18 @@
                     <div class="wiz-card p-6 mb-4">
                         <div class="form-control">
                             <label class="label pb-1" for="s2-slogan">
-                                <span class="label-text font-semibold text-base">Si un cliente te pregunta qué haces, ¿qué le respondes en una frase?</span>
+                                <span class="text-sm font-semibold text-slate-800">Si un cliente te pregunta qué haces, ¿qué le respondes en una frase?</span>
                             </label>
-                            <p class="text-xs text-base-content/50 italic mb-3">Aparece grande en tu página. <em>"La mejor pizza de Maracaibo"</em></p>
+                            <p class="text-xs text-slate-400 italic mb-3">Aparece grande en tu página. <em>"La mejor pizza de Maracaibo"</em></p>
                             <input id="s2-slogan"
                                    type="text"
-                                   class="input input-bordered w-full text-lg"
+                                   class="py-2 px-3 block w-full border border-slate-200 rounded-lg text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none disabled:opacity-50 disabled:pointer-events-none bg-white text-lg"
                                    placeholder="Ej: La mejor barber shop del centro"
                                    name="slogan"
                                    x-model="slogan"
                                    maxlength="80">
                             <div class="flex justify-end mt-1">
-                                <span class="text-xs text-base-content/40" x-text="slogan.length + '/80'"></span>
+                                <span class="text-xs text-slate-400" x-text="slogan.length + '/80'"></span>
                             </div>
                         </div>
                     </div>
@@ -308,19 +308,19 @@
                     <div class="wiz-card p-6 mb-4">
                         <div class="form-control">
                             <label class="label pb-1" for="s2-subtitle">
-                                <span class="label-text font-semibold text-base">¿Qué te hace diferente o especial?</span>
-                                <span class="label-text-alt text-base-content/40">Opcional</span>
+                                <span class="text-sm font-semibold text-slate-800">¿Qué te hace diferente o especial?</span>
+                                <span class="text-xs text-slate-400">Opcional</span>
                             </label>
-                            <p class="text-xs text-base-content/50 italic mb-3">Complementa la frase anterior. No la repitas.</p>
+                            <p class="text-xs text-slate-400 italic mb-3">Complementa la frase anterior. No la repitas.</p>
                             <input id="s2-subtitle"
                                    type="text"
-                                   class="input input-bordered w-full"
+                                   class="py-2 px-3 block w-full border border-slate-200 rounded-lg text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none disabled:opacity-50 disabled:pointer-events-none bg-white"
                                    placeholder="Ej: Cortes modernos, cero espera, precios justos"
                                    name="content_blocks[hero][subtitle]"
                                    x-model="hero_subtitle"
                                    maxlength="150">
                             <div class="flex justify-end mt-1">
-                                <span class="text-xs text-base-content/40" x-text="hero_subtitle.length + '/150'"></span>
+                                <span class="text-xs text-slate-400" x-text="hero_subtitle.length + '/150'"></span>
                             </div>
                         </div>
                     </div>
@@ -329,12 +329,12 @@
                     <div class="wiz-card p-6 mb-4">
                         <div class="form-control">
                             <label class="label pb-1" for="s2-about">
-                                <span class="label-text font-semibold text-base">¿Cómo describirías tu negocio a alguien que no te conoce?</span>
-                                <span class="label-text-alt text-base-content/40">Opcional</span>
+                                <span class="text-sm font-semibold text-slate-800">¿Cómo describirías tu negocio a alguien que no te conoce?</span>
+                                <span class="text-xs text-slate-400">Opcional</span>
                             </label>
-                            <p class="text-xs text-base-content/50 italic mb-3">Aparece en la sección "Acerca de" de tu página.</p>
+                            <p class="text-xs text-slate-400 italic mb-3">Aparece en la sección "Acerca de" de tu página.</p>
                             <textarea id="s2-about"
-                                      class="textarea textarea-bordered w-full"
+                                      class="py-2 px-3 block w-full border border-slate-200 rounded-lg text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none resize-none bg-white"
                                       rows="3"
                                       placeholder="Ej: Somos una barbería familiar con más de 8 años en el mercado. Ofrecemos cortes modernos y clásicos en un ambiente cómodo y acogedor..."
                                       name="about_text"
@@ -359,11 +359,11 @@
                     <div class="wiz-card p-6 space-y-5">
                         <div class="form-control">
                             <label class="label pb-1" for="s3-vp1">
-                                <span class="label-text font-semibold">Razón 1 <span class="text-error">*</span></span>
+                                <span class="text-sm font-semibold text-slate-800">Razón 1 <span class="text-red-500">*</span></span>
                             </label>
                             <input id="s3-vp1"
                                    type="text"
-                                   class="input input-bordered w-full"
+                                   class="py-2 px-3 block w-full border border-slate-200 rounded-lg text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none disabled:opacity-50 disabled:pointer-events-none bg-white"
                                    placeholder="Ej: «Atención personalizada, te tratamos como familia»"
                                    name="value_prop_1"
                                    x-model="value_prop_1"
@@ -372,12 +372,12 @@
 
                         <div class="form-control">
                             <label class="label pb-1" for="s3-vp2">
-                                <span class="label-text font-semibold">Razón 2</span>
-                                <span class="label-text-alt text-base-content/40">Opcional</span>
+                                <span class="text-sm font-semibold text-slate-800">Razón 2</span>
+                                <span class="text-xs text-slate-400">Opcional</span>
                             </label>
                             <input id="s3-vp2"
                                    type="text"
-                                   class="input input-bordered w-full"
+                                   class="py-2 px-3 block w-full border border-slate-200 rounded-lg text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none disabled:opacity-50 disabled:pointer-events-none bg-white"
                                    placeholder="Ej: «Llevamos 8 años en el mercado»"
                                    name="value_prop_2"
                                    x-model="value_prop_2"
@@ -386,12 +386,12 @@
 
                         <div class="form-control">
                             <label class="label pb-1" for="s3-vp3">
-                                <span class="label-text font-semibold">Razón 3</span>
-                                <span class="label-text-alt text-base-content/40">Opcional</span>
+                                <span class="text-sm font-semibold text-slate-800">Razón 3</span>
+                                <span class="text-xs text-slate-400">Opcional</span>
                             </label>
                             <input id="s3-vp3"
                                    type="text"
-                                   class="input input-bordered w-full"
+                                   class="py-2 px-3 block w-full border border-slate-200 rounded-lg text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none disabled:opacity-50 disabled:pointer-events-none bg-white"
                                    placeholder="Ej: «Precio justo, calidad garantizada»"
                                    name="value_prop_3"
                                    x-model="value_prop_3"
@@ -421,14 +421,14 @@
 
                         <div class="form-control">
                             <label class="label pb-1" for="s4-wa">
-                                <span class="label-text font-medium">WhatsApp</span>
-                                <span class="label-text-alt text-base-content/40">Opcional</span>
+                                <span class="text-sm font-medium text-slate-700">WhatsApp</span>
+                                <span class="text-xs text-slate-400">Opcional</span>
                             </label>
                             <div class="flex">
-                                <span class="input input-bordered rounded-r-none border-r-0 px-3 text-sm text-base-content/60 flex items-center bg-base-200">+58</span>
+                                <span class="flex items-center px-3 text-sm text-slate-500 bg-slate-50 border border-r-0 border-slate-200 rounded-l-lg">+58</span>
                                 <input id="s4-wa"
                                        type="tel"
-                                       class="input input-bordered rounded-l-none w-full"
+                                       class="py-2 px-3 block w-full border border-l-0 border-slate-200 rounded-r-lg text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none disabled:opacity-50 disabled:pointer-events-none bg-white"
                                        placeholder="4141234567"
                                        name="whatsapp_sales"
                                        x-model="whatsapp_sales"
@@ -438,12 +438,12 @@
 
                         <div class="form-control">
                             <label class="label pb-1" for="s4-phone">
-                                <span class="label-text font-medium">Teléfono adicional</span>
-                                <span class="label-text-alt text-base-content/40">Opcional</span>
+                                <span class="text-sm font-medium text-slate-700">Teléfono adicional</span>
+                                <span class="text-xs text-slate-400">Opcional</span>
                             </label>
                             <input id="s4-phone"
                                    type="tel"
-                                   class="input input-bordered w-full"
+                                   class="py-2 px-3 block w-full border border-slate-200 rounded-lg text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none disabled:opacity-50 disabled:pointer-events-none bg-white"
                                    placeholder="02616001234"
                                    name="phone"
                                    x-model="phone"
@@ -452,12 +452,12 @@
 
                         <div class="form-control">
                             <label class="label pb-1" for="s4-email">
-                                <span class="label-text font-medium">Correo electrónico</span>
-                                <span class="label-text-alt text-base-content/40">Opcional</span>
+                                <span class="text-sm font-medium text-slate-700">Correo electrónico</span>
+                                <span class="text-xs text-slate-400">Opcional</span>
                             </label>
                             <input id="s4-email"
                                    type="email"
-                                   class="input input-bordered w-full"
+                                   class="py-2 px-3 block w-full border border-slate-200 rounded-lg text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none disabled:opacity-50 disabled:pointer-events-none bg-white"
                                    placeholder="negocio@correo.com"
                                    name="email"
                                    x-model="email">
@@ -468,41 +468,38 @@
                     <div class="wiz-card mb-4 p-6">
                         <div class="form-control">
                             <label class="label pb-1" for="s4-subdomain">
-                                <span class="label-text font-semibold text-base">¿Qué subdominio quieres? <span class="text-error">*</span></span>
+                                <span class="text-sm font-semibold text-slate-800">¿Qué subdominio quieres? <span class="text-red-500">*</span></span>
                             </label>
-                            <p class="text-xs text-base-content/50 italic mb-3">Tu página será: <strong x-text="subdomain ? subdomain + '.syntiweb.com' : 'tudominio.syntiweb.com'"></strong></p>
+                            <p class="text-xs text-slate-400 italic mb-3">Tu página será: <strong x-text="subdomain ? subdomain + '.syntiweb.com' : 'tudominio.syntiweb.com'"></strong></p>
 
                             <div class="flex">
                                 <input id="s4-subdomain"
                                        type="text"
-                                       class="input input-bordered rounded-r-none w-full"
-                                       :class="{
-                                           'input-success': subdomainAvailable === true,
-                                           'input-error': subdomainAvailable === false
-                                       }"
+                                       class="py-2 px-3 block w-full border border-slate-200 rounded-l-lg text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none bg-white"
+                                       :class="{'border-emerald-500 ring-1 ring-emerald-500': subdomainAvailable === true, 'border-red-500 ring-1 ring-red-500': subdomainAvailable === false}"
                                        placeholder="mipizzeria"
                                        x-model="subdomainRaw"
                                        @input="onSubdomainInput()"
                                        maxlength="63">
-                                <span class="input input-bordered rounded-l-none px-3 flex items-center text-sm text-base-content/50 bg-base-200 border-l-0 whitespace-nowrap">.syntiweb.com</span>
+                                <span class="flex items-center px-3 text-sm text-slate-400 bg-slate-50 border border-l-0 border-slate-200 rounded-r-lg whitespace-nowrap">.syntiweb.com</span>
                             </div>
                             <input type="hidden" name="subdomain" :value="subdomain">
 
                             <div class="mt-2 h-5 flex items-center gap-1.5 text-xs">
                                 <template x-if="subdomainChecking">
-                                    <span class="text-base-content/50 flex items-center gap-1">
-                                        <span class="loading loading-spinner loading-xs"></span>
+                                    <span class="text-slate-400 flex items-center gap-1">
+                                        <span class="inline-block w-3.5 h-3.5 border-2 border-slate-300 border-t-slate-600 rounded-full animate-spin"></span>
                                         Verificando...
                                     </span>
                                 </template>
                                 <template x-if="!subdomainChecking && subdomainAvailable === true">
-                                    <span class="text-success flex items-center gap-1">
+                                    <span class="text-emerald-600 flex items-center gap-1">
                                         <span class="iconify tabler--circle-check size-3.5"></span>
                                         ¡Disponible!
                                     </span>
                                 </template>
                                 <template x-if="!subdomainChecking && subdomainAvailable === false">
-                                    <span class="text-error flex items-center gap-1">
+                                    <span class="text-red-600 flex items-center gap-1">
                                         <span class="iconify tabler--circle-x size-3.5"></span>
                                         Ya está en uso, prueba otro
                                     </span>
@@ -515,7 +512,7 @@
                     <div class="wiz-card mb-4 p-6">
                         <h3 class="font-semibold text-slate-800 mb-4 flex items-center gap-2">
                             <span class="iconify tabler--diamond size-4.5 text-blue-500"></span>
-                            ¿Qué plan activas? <span class="text-error">*</span>
+                            ¿Qué plan activas? <span class="text-red-500">*</span>
                         </h3>
 
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -527,10 +524,10 @@
                                            class="sr-only peer">
                                     <div class="wiz-plan-card border-2 border-slate-200 p-4 rounded-xl transition-all select-none h-full cursor-pointer"
                                          :class="plan_id == plan.id ? 'selected' : ''">
-                                        <div class="text-xs font-black uppercase tracking-widest text-primary mb-2" x-text="plan.name"></div>
-                                        <div class="text-2xl font-bold text-base-content mb-1">$<span x-text="plan.price_usd"></span></div>
-                                        <div class="text-xs text-base-content/50 mb-3">por año</div>
-                                        <div class="space-y-1.5 text-xs text-base-content/70">
+                                        <div class="text-xs font-black uppercase tracking-widest text-blue-600 mb-2" x-text="plan.name"></div>
+                                        <div class="text-2xl font-bold text-slate-900 mb-1">$<span x-text="plan.price_usd"></span></div>
+                                        <div class="text-xs text-slate-400 mb-3">por año</div>
+                                        <div class="space-y-1.5 text-xs text-slate-600">
                                             <div class="flex items-center gap-1.5">
                                                 <span class="iconify tabler--package size-3 text-blue-500 shrink-0"></span>
                                                 <span>hasta <span x-text="plan.products_limit"></span> productos</span>
@@ -569,9 +566,9 @@
                         {{-- Negocio --}}
                         <div class="flex justify-between items-start border-b border-slate-100 pb-3">
                             <div>
-                                <p class="text-xs font-bold uppercase tracking-widest text-primary mb-0.5">Negocio</p>
-                                <p class="font-semibold text-base-content" x-text="business_name || '—'"></p>
-                                <p class="text-sm text-base-content/60" x-text="segmentLabel + (city ? ' · ' + city : '')"></p>
+                                <p class="text-xs font-bold uppercase tracking-widest text-blue-600 mb-0.5">Negocio</p>
+                                <p class="font-semibold text-slate-900" x-text="business_name || '—'"></p>
+                                <p class="text-sm text-slate-500" x-text="segmentLabel + (city ? ' · ' + city : '')"></p>
                             </div>
                             <button type="button" @click="step = 1" class="p-1.5 rounded-lg text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-colors">
                                 <span class="iconify tabler--edit size-4"></span>
@@ -581,9 +578,9 @@
                         {{-- Mensaje --}}
                         <div class="flex justify-between items-start border-b border-slate-100 pb-3">
                             <div>
-                                <p class="text-xs font-bold uppercase tracking-widest text-primary mb-0.5">Primera impresión</p>
-                                <p class="font-semibold text-base-content italic" x-text="slogan ? '«' + slogan + '»' : '—'"></p>
-                                <p class="text-sm text-base-content/60 mt-1" x-text="hero_subtitle || ''"></p>
+                                <p class="text-xs font-bold uppercase tracking-widest text-blue-600 mb-0.5">Primera impresión</p>
+                                <p class="font-semibold text-slate-900 italic" x-text="slogan ? '«' + slogan + '»' : '—'"></p>
+                                <p class="text-sm text-slate-500 mt-1" x-text="hero_subtitle || ''"></p>
                             </div>
                             <button type="button" @click="step = 2" class="p-1.5 rounded-lg text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-colors">
                                 <span class="iconify tabler--edit size-4"></span>
@@ -593,8 +590,8 @@
                         {{-- Diferenciadores --}}
                         <div class="flex justify-between items-start border-b border-slate-100 pb-3">
                             <div>
-                                <p class="text-xs font-bold uppercase tracking-widest text-primary mb-0.5">Por qué te eligen</p>
-                                <ul class="text-sm text-base-content/70 space-y-0.5 mt-1">
+                                <p class="text-xs font-bold uppercase tracking-widest text-blue-600 mb-0.5">Por qué te eligen</p>
+                                <ul class="text-sm text-slate-600 space-y-0.5 mt-1">
                                     <li x-text="'✓ ' + (value_prop_1 || '—')"></li>
                                     <li x-show="value_prop_2" x-text="'✓ ' + value_prop_2"></li>
                                     <li x-show="value_prop_3" x-text="'✓ ' + value_prop_3"></li>
@@ -608,12 +605,12 @@
                         {{-- Contacto y plan --}}
                         <div class="flex justify-between items-start">
                             <div class="w-full">
-                                <p class="text-xs font-bold uppercase tracking-widest text-primary mb-1">Datos clave</p>
-                                <div class="grid grid-cols-2 gap-x-6 gap-y-1 text-sm text-base-content/70">
-                                    <span><span class="text-base-content/40">Subdominio:</span> <span x-text="subdomain + '.syntiweb.com'"></span></span>
-                                    <span x-show="whatsapp_sales"><span class="text-base-content/40">WhatsApp:</span> <span x-text="'+58 ' + whatsapp_sales"></span></span>
-                                    <span x-show="email"><span class="text-base-content/40">Email:</span> <span x-text="email"></span></span>
-                                    <span x-show="selectedPlan"><span class="text-base-content/40">Plan:</span> <strong x-text="selectedPlan?.name"></strong> — $<span x-text="selectedPlan?.price_usd"></span>/año</span>
+                                <p class="text-xs font-bold uppercase tracking-widest text-blue-600 mb-1">Datos clave</p>
+                                <div class="grid grid-cols-2 gap-x-6 gap-y-1 text-sm text-slate-600">
+                                    <span><span class="text-slate-400">Subdominio:</span> <span x-text="subdomain + '.syntiweb.com'"></span></span>
+                                    <span x-show="whatsapp_sales"><span class="text-slate-400">WhatsApp:</span> <span x-text="'+58 ' + whatsapp_sales"></span></span>
+                                    <span x-show="email"><span class="text-slate-400">Email:</span> <span x-text="email"></span></span>
+                                    <span x-show="selectedPlan"><span class="text-slate-400">Plan:</span> <strong x-text="selectedPlan?.name"></strong> — $<span x-text="selectedPlan?.price_usd"></span>/año</span>
                                 </div>
                             </div>
                             <button type="button" @click="step = 4" class="p-1.5 rounded-lg text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-colors ml-2 shrink-0">
@@ -699,7 +696,7 @@
                             Crear mi página web
                         </span>
                         <span x-show="submitting" class="flex items-center gap-2">
-                            <span class="loading loading-spinner loading-sm"></span>
+                            <span class="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
                             Generando tu presencia digital...
                         </span>
                     </button>
