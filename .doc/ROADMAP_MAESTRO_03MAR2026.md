@@ -248,8 +248,68 @@ Sin pasarela, sin inventario, sin checkout complejo.
 | A.15 | Rediseño sección "Acerca de" en landing | `landing/sections/about.blade.php` | ❌ PENDIENTE |
 | A.16 | Banner promocional inferior con marquee | `landing/sections/`, `base.blade.php` | ❌ PENDIENTE |
 | A.17 | Secciones vacías no renderizan en landing ni navbar | Global | ❌ PENDIENTE |
-| A.18 | Estado vacío elegante en dashboard por sección sin contenido | `dashboard/components/` | ❌ PENDIENTE |
+| A.18 | Estado vacío elegante en dashboard por sección sin contenido | `dashboard/components/` | ✅ HECHO |
 | A.19 | Auditoría visual premium — Chrome extension | Global | ❌ PENDIENTE |
+| A.20 | Refactorizar wizard.blade.php Studio a Preline puro | `onboarding/wizard.blade.php` | ✅ HECHO `b574b67` |
+| A.21 | Design System Premium — estética Vercel | `app.css`, `syntiweb-brand.css`, global | ⏸ PENDIENTE — ejecutar post wizard-cat |
+
+---
+
+### TAREA A.21 — Design System Premium (estética Vercel)
+**Estado:** ⏸ Pendiente — ejecutar después de wizard-food y wizard-cat
+**Objetivo:** Elevar estética de toda la plataforma sin tocar lógica.
+Un pase único sobre app.css + syntiweb-brand.css. Los componentes heredan automáticamente.
+
+**Tokens nuevos a agregar en app.css:**
+```css
+/* ESPACIADO */
+--space-xs: 0.5rem;
+--space-sm: 0.75rem;
+--space-md: 1.25rem;
+--space-lg: 2rem;
+--space-xl: 3.5rem;
+
+/* TIPOGRAFÍA */
+--text-display: clamp(2.5rem, 5vw, 3.5rem);
+--text-heading: 1.75rem;
+--text-body: 1rem;
+--text-caption: 0.8125rem;
+
+/* BORDES */
+--radius-sm: 8px;
+--radius-md: 12px;
+--radius-lg: 16px;
+--radius-xl: 24px;
+
+/* SOMBRAS — minimalistas */
+--shadow-card: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+--shadow-hover: 0 4px 16px rgba(0,0,0,0.08);
+--shadow-focus: 0 0 0 3px rgba(74,128,228,0.20);
+
+/* SUPERFICIES */
+--surface-page: #ffffff;
+--surface-card: #ffffff;
+--surface-subtle: #fafafa;
+--surface-muted: #f5f5f5;
+```
+
+**Componentes afectados:**
+- Cards → --shadow-card + --radius-md + borde 1px #e5e7eb
+- Inputs → --radius-sm + focus --shadow-focus
+- Botones primarios → color plano #4A80E4 (sin gradientes)
+- Botones secundarios → --surface-muted + borde 1px
+- Headers/navbars → border-bottom 1px sin sombra
+- Body → --surface-page + fuente Geist
+
+**Lo que NO cambia:**
+- Colores marca (#4A80E4, #1a1a1a) — irrompibles
+- Lógica Alpine, Preline, componentes interactivos
+- Estructura HTML
+
+**Repaso post-tokens (prompt Opus):**
+- grep + reemplazo de rounded-lg → var(--radius-md)
+- gradientes en botones → color plano #4A80E4
+- sombras genéricas → --shadow-card / --shadow-hover
 
 ---
 
@@ -475,13 +535,17 @@ Sin pasarela, sin inventario, sin checkout complejo.
 Commit: docs: roadmap actualizado 06 MAR 2026
 
 ### 07 MAR 2026
-- [x] A.15 — Rediseño sección Acerca De
-- [x] A.17 — Secciones vacías no renderizan en landing
-- [x] A.18 — Estado vacío elegante dashboard
-- [x] fix: WhatsApp target=_blank (contact, header, product-card)
+- [x] A.20 — wizard.blade.php Studio refactorizado a Preline puro (0 DaisyUI legacy)
+- [x] Arquitectura multi-producto: rutas /studio /food /cat + onboarding selector
+- [x] DB: columna blueprint en plans + 9 planes (studio/food/cat) con migraciones
+- [x] Fix: FQCN MenuController + reordenamiento rutas (catch-all después de específicas)
+- [x] Onboarding selector /onboarding derivación de 3 productos — branding oficial
+- [ ] A.21 — Design System Premium (pendiente post wizard-food/cat)
+- [ ] wizard-food.blade.php
+- [ ] wizard-cat.blade.php
 
 ---
 
 **Autor:** Carlos Bolívar (Arquitecto) + Claude (Co-arquitecto y ejecutor)
-**Última actualización:** 05 MAR 2026
+**Última actualización:** 07 MAR 2026
 **Próxima revisión:** Al completar Fase A completa (07 MAR 2026)
