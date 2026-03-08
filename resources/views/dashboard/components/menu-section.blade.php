@@ -261,6 +261,41 @@
                             <option value="destacado">⭐ Destacado</option>
                         </select>
                     </div>
+
+                    {{-- EXTRAS / OPTIONS SECTION --}}
+                    @php 
+                        $plan = $tenant->plan ?? null;
+                        $canUseExtras = $plan && \Illuminate\Support\Str::contains(['food-semestral', 'food-anual'], $plan->slug ?? '');
+                    @endphp
+
+                    @if($canUseExtras)
+                    <div class="border-t border-border pt-4">
+                        <button type="button" onclick="MenuAdmin.toggleExtrasSection()"
+                                class="w-full flex items-center justify-between text-sm font-medium text-foreground mb-3 p-2 rounded-lg hover:bg-layer transition-colors">
+                            <span class="flex items-center gap-2">
+                                <span class="iconify tabler--plus-circle size-4"></span>
+                                Extras / Opciones
+                            </span>
+                            <span id="menu-item-extras-toggle" class="iconify tabler--chevron-down size-4 transition-transform" style="transform: rotate(0deg);"></span>
+                        </button>
+                        <div id="menu-item-extras-container" class="hidden space-y-2 p-3 rounded-lg bg-layer/30 border border-layer-line">
+                            <div id="menu-item-extras-list" class="space-y-2"></div>
+                            <button type="button" id="menu-item-add-extra-btn" onclick="MenuAdmin.addExtraRow()"
+                                    class="w-full text-sm py-2 px-3 rounded-lg border border-dashed border-primary text-primary font-medium hover:bg-primary/5 transition-colors">
+                                + Agregar extra
+                            </button>
+                        </div>
+                    </div>
+                    @else
+                    <div class="rounded-lg border border-amber-200 bg-amber-50 p-3">
+                        <p class="text-xs font-medium text-amber-700 flex items-center gap-1.5">
+                            <span class="iconify tabler--lock size-3.5"></span>
+                            Extras disponibles desde plan Semestral
+                            <a href="https://syntiweb.com/food" target="_blank" class="underline ml-1 hover:no-underline">Mejorar →</a>
+                        </p>
+                    </div>
+                    @endif
+
                     <div>
                         <label class="flex items-center gap-2 cursor-pointer p-2.5 rounded-lg bg-layer border border-border hover:bg-layer/80 transition-colors">
                             <input type="checkbox" id="menu-item-featured"
@@ -417,6 +452,8 @@
             previewImg.src = '';
             previewWrap.classList.add('hidden');
         }
+        // Initialize extras
+        MenuAdmin.initExtras(d.options || []);
         document.getElementById('menu-item-modal').classList.remove('hidden');
         setTimeout(function() { document.getElementById('menu-item-nombre').focus(); }, 100);
     }
@@ -442,6 +479,14 @@
         fd.append('descripcion', document.getElementById('menu-item-descripcion').value.trim());
         fd.append('badge', document.getElementById('menu-item-badge').value);
         fd.append('is_featured', document.getElementById('menu-item-featured').checked ? '1' : '0');
+        
+        // Add options if extras section exists
+        var extrasContainer = document.getElementById('menu-item-extras-container');
+        if (extrasContainer && !extrasContainer.classList.contains('hidden')) {
+            fd.append('options', JSON.stringify(MenuAdmin.getExtras()));
+        } else if (window.MenuAdmin && window.MenuAdmin.menuItemOptions) {
+            fd.append('options', JSON.stringify(window.MenuAdmin.menuItemOptions));
+        }
 
         if (isEdit) {
             fd.append('activo', document.getElementById('menu-item-activo').checked ? '1' : '0');
@@ -523,6 +568,87 @@
         document.getElementById('menu-item-remove-image').value = '1';
     }
 
+    // ── EXTRAS SYSTEM ────────────────────────────────────────────
+
+    var menuItemOptions = [];
+
+    function initExtras(options) {
+        menuItemOptions = Array.isArray(options) ? JSON.parse(JSON.stringify(options)) : [];
+        renderExtrasRows();
+    }
+
+    function getExtras() {
+        return menuItemOptions;
+    }
+
+    function toggleExtrasSection() {
+        var container = document.getElementById('menu-item-extras-container');
+        var toggle = document.getElementById('menu-item-extras-toggle');
+        if (container.classList.contains('hidden')) {
+            container.classList.remove('hidden');
+            toggle.style.transform = 'rotate(180deg)';
+        } else {
+            container.classList.add('hidden');
+            toggle.style.transform = 'rotate(0deg)';
+        }
+    }
+
+    function renderExtrasRows() {
+        var list = document.getElementById('menu-item-extras-list');
+        list.innerHTML = '';
+
+        menuItemOptions.forEach(function(opt, idx) {
+            var row = document.createElement('div');
+            row.className = 'flex gap-2 items-end';
+            row.innerHTML = 
+                '<input type="text" maxlength="80" value="' + (opt.label || '').replace(/"/g, '&quot;') + '" ' +
+                '       placeholder="Ej: Extra queso" class="flex-1 text-xs rounded-lg border border-border bg-surface px-2 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" ' +
+                '       onchange="MenuAdmin.updateExtraLabel(' + idx + ', this.value)">' +
+                '<input type="number" min="0" max="50" step="0.01" value="' + (opt.price_add || 0) + '" ' +
+                '       placeholder="0.00" class="w-20 text-xs rounded-lg border border-border bg-surface px-2 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" ' +
+                '       onchange="MenuAdmin.updateExtraPrice(' + idx + ', this.value)">' +
+                '<button type="button" onclick="MenuAdmin.removeExtraRow(' + idx + ')" ' +
+                '        class="size-8 rounded-lg border border-red-300 text-red-600 flex items-center justify-center hover:bg-red-50 transition-colors">' +
+                '  <span class="iconify tabler--trash size-4"></span>' +
+                '</button>';
+            list.appendChild(row);
+        });
+
+        // Update button disabled state if at max
+        var addBtn = document.getElementById('menu-item-add-extra-btn');
+        if (addBtn) {
+            addBtn.disabled = menuItemOptions.length >= 8;
+            addBtn.style.opacity = menuItemOptions.length >= 8 ? '0.5' : '1';
+            addBtn.title = menuItemOptions.length >= 8 ? 'Máximo 8 extras' : '';
+        }
+    }
+
+    function addExtraRow() {
+        if (menuItemOptions.length >= 8) {
+            toast('Máximo 8 extras por plato', 'error');
+            return;
+        }
+        menuItemOptions.push({ label: '', price_add: 0 });
+        renderExtrasRows();
+    }
+
+    function updateExtraLabel(idx, label) {
+        if (menuItemOptions[idx]) {
+            menuItemOptions[idx].label = label.trim();
+        }
+    }
+
+    function updateExtraPrice(idx, price) {
+        if (menuItemOptions[idx]) {
+            menuItemOptions[idx].price_add = parseFloat(price) || 0;
+        }
+    }
+
+    function removeExtraRow(idx) {
+        menuItemOptions.splice(idx, 1);
+        renderExtrasRows();
+    }
+
     window.MenuAdmin = {
         openCategoryModal: openCategoryModal,
         closeCatModal:     closeCatModal,
@@ -533,7 +659,15 @@
         saveItem:          saveItem,
         deleteItem:        deleteItem,
         previewItemPhoto:  previewItemPhoto,
-        removeItemPhoto:   removeItemPhoto
+        removeItemPhoto:   removeItemPhoto,
+        initExtras:        initExtras,
+        getExtras:         getExtras,
+        toggleExtrasSection: toggleExtrasSection,
+        addExtraRow:       addExtraRow,
+        updateExtraLabel:  updateExtraLabel,
+        updateExtraPrice:  updateExtraPrice,
+        removeExtraRow:    removeExtraRow,
+        menuItemOptions:   menuItemOptions
     };
 
 })();

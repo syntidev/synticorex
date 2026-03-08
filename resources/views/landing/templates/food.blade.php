@@ -152,33 +152,74 @@
                 <div class="border-t border-foreground/5 divide-y divide-foreground/5">
                     @foreach($cat['items'] ?? [] as $item)
                         @if(!empty($item['activo']))
-                        @php $itemId = $item['id'] ?? ''; @endphp
-                        <div class="flex items-center gap-3 px-4 py-3">
-                            <div class="flex-1 min-w-0">
-                                <p class="text-sm font-bold text-foreground truncate">{{ $item['nombre'] }}</p>
-                                @if(!empty($item['descripcion']))
-                                    <p class="text-xs text-foreground/40 line-clamp-1">{{ $item['descripcion'] }}</p>
+                        @php 
+                            $itemId = $item['id'] ?? ''; 
+                            $itemOptions = $item['options'] ?? [];
+                            $canUseExtras = $isPlanAnual && !empty($itemOptions) && count($itemOptions) > 0;
+                        @endphp
+                        <div class="px-4 py-3" x-data="{ optionsOpen: false, selectedOptions: [] }">
+                            <div class="flex items-center gap-3">
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm font-bold text-foreground truncate">{{ $item['nombre'] }}</p>
+                                    @if(!empty($item['descripcion']))
+                                        <p class="text-xs text-foreground/40 line-clamp-1">{{ $item['descripcion'] }}</p>
+                                    @endif
+                                </div>
+
+                                @if(!$hidePrice)
+                                <p class="text-sm font-black tracking-tight text-foreground whitespace-nowrap" data-price-usd="{{ $item['precio'] ?? 0 }}">
+                                    {{ $currencySymbol }} 0.00
+                                </p>
+                                @endif
+
+                                @if($isPlanAnual)
+                                {{-- Add button OR Customize button if has options --}}
+                                @if($canUseExtras)
+                                <button type="button" 
+                                        @click="optionsOpen = !optionsOpen"
+                                        class="size-9 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0 hover:bg-primary hover:text-primary-foreground transition-colors"
+                                        title="Personalizar">
+                                    <span class="iconify tabler--adjustments-horizontal size-4"></span>
+                                </button>
+                                @else
+                                <button id="sf-add-{{ $itemId }}"
+                                        onclick="addToCart('{{ addslashes($itemId) }}', '{{ addslashes($item['nombre'] ?? '') }}', {{ $item['precio'] ?? 0 }})"
+                                        class="size-9 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0 hover:bg-primary hover:text-primary-foreground transition-colors">
+                                    <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+                                </button>
+                                @endif
+                                {{-- Qty controls (hidden until added) --}}
+                                <div id="qty-row-{{ $itemId }}" class="flex items-center gap-1 bg-surface rounded-full px-2 py-1" style="display:none!important">
+                                    <button class="size-6 rounded-full bg-background flex items-center justify-center text-xs font-bold" onclick="changeQty('{{ addslashes($itemId) }}', -1)">−</button>
+                                    <span class="text-xs font-black min-w-[14px] text-center" id="qty-val-{{ $itemId }}">1</span>
+                                    <button class="size-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xs font-bold" onclick="changeQty('{{ addslashes($itemId) }}', 1)">+</button>
+                                </div>
                                 @endif
                             </div>
 
-                            @if(!$hidePrice)
-                            <p class="text-sm font-black tracking-tight text-foreground whitespace-nowrap" data-price-usd="{{ $item['precio'] ?? 0 }}">
-                                {{ $currencySymbol }} 0.00
-                            </p>
-                            @endif
-
-                            @if($isPlanAnual)
-                            {{-- Add button --}}
-                            <button id="sf-add-{{ $itemId }}"
-                                    onclick="addToCart('{{ addslashes($itemId) }}', '{{ addslashes($item['nombre'] ?? '') }}', {{ $item['precio'] ?? 0 }})"
-                                    class="size-9 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0 hover:bg-primary hover:text-primary-foreground transition-colors">
-                                <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
-                            </button>
-                            {{-- Qty controls (hidden until added) --}}
-                            <div id="qty-row-{{ $itemId }}" class="flex items-center gap-1 bg-surface rounded-full px-2 py-1" style="display:none!important">
-                                <button class="size-6 rounded-full bg-background flex items-center justify-center text-xs font-bold" onclick="changeQty('{{ addslashes($itemId) }}', -1)">−</button>
-                                <span class="text-xs font-black min-w-[14px] text-center" id="qty-val-{{ $itemId }}">1</span>
-                                <button class="size-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xs font-bold" onclick="changeQty('{{ addslashes($itemId) }}', 1)">+</button>
+                            {{-- Inline Options Panel --}}
+                            @if($canUseExtras)
+                            <div x-show="optionsOpen" x-collapse class="mt-3 p-3 bg-layer/30 border border-layer-line rounded-lg space-y-2">
+                                <p class="text-xs font-bold text-foreground/70 uppercase tracking-widest">Elige tus extras</p>
+                                @foreach($itemOptions as $opt)
+                                <label class="flex items-center gap-2 cursor-pointer p-2 rounded-lg hover:bg-layer/50 transition-colors">
+                                    <input type="checkbox" 
+                                           value="{{ json_encode(['label' => $opt['label'], 'price_add' => $opt['price_add']]) }}"
+                                           @change="selectedOptions = Array.from(document.querySelectorAll('#sf-opts-{{ $itemId }} input:checked')).map(el => JSON.parse(el.value))"
+                                           id="sf-opts-{{ $itemId }}"
+                                           class="size-4 rounded border-border text-blue-600 focus:ring-blue-500">
+                                    <span class="flex-1 text-sm text-foreground">{{ $opt['label'] }}</span>
+                                    @if($opt['price_add'] > 0)
+                                    <span class="text-xs font-bold text-foreground/60">+{{ number_format($opt['price_add'], 2) }}</span>
+                                    @endif
+                                </label>
+                                @endforeach
+                                <button type="button"
+                                        @click="addToCartWithOptions('{{ addslashes($itemId) }}', '{{ addslashes($item['nombre'] ?? '') }}', {{ $item['precio'] ?? 0 }}, selectedOptions); optionsOpen = false"
+                                        class="w-full mt-3 py-2 px-3 rounded-lg bg-primary text-primary-foreground font-medium text-sm hover:bg-primary/90 transition-colors flex items-center justify-center gap-1.5">
+                                    <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+                                    Agregar al carrito
+                                </button>
                             </div>
                             @endif
                         </div>
@@ -384,7 +425,7 @@
 
     window.addToCart = function(id, name, price) {
         var isNew = !cart[id];
-        if (cart[id]) { cart[id].qty++; } else { cart[id] = { name: name, price: parseFloat(price) || 0, qty: 1 }; }
+        if (cart[id]) { cart[id].qty++; } else { cart[id] = { name: name, price: parseFloat(price) || 0, qty: 1, options: [] }; }
         updateBadge();
         renderDrawer();
         var addBtn = document.getElementById('sf-add-' + id);
@@ -393,6 +434,36 @@
         if (qr) qr.style.cssText = 'display:flex!important';
         var qv = document.getElementById('qty-val-' + id);
         if (qv) qv.textContent = cart[id].qty;
+        if (isNew && Object.keys(cart).length === 1) toggleDrawer();
+    };
+
+    window.addToCartWithOptions = function(id, name, price, selectedOptions) {
+        selectedOptions = selectedOptions || [];
+        var totalPrice = parseFloat(price) || 0;
+        var optionLabels = [];
+        selectedOptions.forEach(function(opt) {
+            totalPrice += parseFloat(opt.price_add) || 0;
+            optionLabels.push(opt.label);
+        });
+        
+        var cartKey = id + '|' + optionLabels.join('|');
+        var isNew = !cart[cartKey];
+        
+        if (cart[cartKey]) {
+            cart[cartKey].qty++;
+        } else {
+            cart[cartKey] = {
+                name: name,
+                price: parseFloat(price) || 0,
+                qty: 1,
+                options: selectedOptions,
+                totalPrice: totalPrice
+            };
+        }
+        
+        updateBadge();
+        renderDrawer();
+        
         if (isNew && Object.keys(cart).length === 1) toggleDrawer();
     };
 
@@ -459,12 +530,32 @@
         var totalUsd = 0;
         keys.forEach(function(id) {
             var item = cart[id];
-            totalUsd += item.price * item.qty;
+            var itemBasePrice = item.price;
+            var itemTotalPrice = itemBasePrice;
+            
+            if (item.options && item.options.length > 0) {
+                item.options.forEach(function(opt) {
+                    itemTotalPrice += parseFloat(opt.price_add) || 0;
+                });
+            }
+            
+            totalUsd += itemTotalPrice * item.qty;
             var div = document.createElement('div');
             div.className = 'flex items-center gap-3 py-4 border-b border-foreground/5 last:border-0';
+            
+            var optionsHtml = '';
+            if (item.options && item.options.length > 0) {
+                optionsHtml = '<p style="font-size:.65rem;color:rgba(0,0,0,.45);margin-top:4px">';
+                item.options.forEach(function(opt) {
+                    optionsHtml += '• ' + opt.label + '<br>';
+                });
+                optionsHtml += '</p>';
+            }
+            
             div.innerHTML = '<div style="flex:1;min-width:0">'
                 + '<p style="font-weight:800;font-size:.875rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-bottom:2px">' + item.name + '</p>'
-                + '<p style="font-size:.75rem;font-weight:700;opacity:.45">' + item.qty + ' × ' + formatPrice(item.price, true) + '</p>'
+                + '<p style="font-size:.75rem;font-weight:700;opacity:.45">' + item.qty + ' × ' + formatPrice(itemTotalPrice, true) + '</p>'
+                + optionsHtml
                 + '</div>'
                 + '<div style="display:flex;align-items:center;gap:6px">'
                 + '<button onclick="changeQty(\'' + id + '\', -1)" style="width:28px;height:28px;border-radius:50%;border:none;cursor:pointer;background:var(--surface,#f3f4f6);font-weight:900;font-size:.8rem;line-height:1">−</button>'
@@ -496,7 +587,15 @@
         var subdomain = @json($tenant->subdomain);
         var modalidad = getModalidad();
         var cartItems = Object.values(cart).map(function(i) {
-            return { nombre: i.name, qty: i.qty, precio: i.price };
+            var item = {
+                nombre: i.name,
+                qty: i.qty,
+                precio: i.price
+            };
+            if (i.options && i.options.length > 0) {
+                item.opciones = i.options;
+            }
+            return item;
         });
 
         try {

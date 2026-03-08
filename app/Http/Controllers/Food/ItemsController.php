@@ -44,7 +44,28 @@ class ItemsController extends Controller
             'badge'       => ['nullable', 'string', 'max:50'],
             'is_featured' => ['nullable', 'boolean'],
             'imagen'      => ['nullable', 'file', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+            'options'     => ['nullable', 'json'],
         ]);
+
+        // Validate options if provided
+        $options = [];
+        if (!empty($validated['options'])) {
+            $optionsData = json_decode($validated['options'], true) ?? [];
+            if (is_array($optionsData) && count($optionsData) <= 8) {
+                foreach ($optionsData as $opt) {
+                    if (!is_array($opt)) continue;
+                    $label = trim($opt['label'] ?? '');
+                    $priceAdd = (float) ($opt['price_add'] ?? 0);
+                    if (!empty($label) && strlen($label) <= 80 && $priceAdd >= 0 && $priceAdd <= 50) {
+                        $options[] = [
+                            'id' => $opt['id'] ?? uniqid('opt_'),
+                            'label' => $label,
+                            'price_add' => $priceAdd,
+                        ];
+                    }
+                }
+            }
+        }
 
         $planId = (int) ($tenant->plan_id ?? 1);
         $limits = MenuService::limits($planId);
@@ -64,6 +85,7 @@ class ItemsController extends Controller
             'descripcion' => $validated['descripcion'] ?? null,
             'badge'       => $validated['badge'] ?? null,
             'is_featured' => (bool) ($validated['is_featured'] ?? false),
+            'options'     => !empty($options) ? $options : null,
         ];
 
         $item = $this->menuService->createItem($tenant->id, $category, $itemData);
@@ -94,7 +116,31 @@ class ItemsController extends Controller
             'activo'       => ['sometimes', 'boolean'],
             'imagen'       => ['nullable', 'file', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
             'remove_image' => ['nullable', 'boolean'],
+            'options'      => ['nullable', 'json'],
         ]);
+
+        // Validate and process options if provided
+        if (array_key_exists('options', $validated)) {
+            $options = [];
+            if (!empty($validated['options'])) {
+                $optionsData = json_decode($validated['options'], true) ?? [];
+                if (is_array($optionsData) && count($optionsData) <= 8) {
+                    foreach ($optionsData as $opt) {
+                        if (!is_array($opt)) continue;
+                        $label = trim($opt['label'] ?? '');
+                        $priceAdd = (float) ($opt['price_add'] ?? 0);
+                        if (!empty($label) && strlen($label) <= 80 && $priceAdd >= 0 && $priceAdd <= 50) {
+                            $options[] = [
+                                'id' => $opt['id'] ?? uniqid('opt_'),
+                                'label' => $label,
+                                'price_add' => $priceAdd,
+                            ];
+                        }
+                    }
+                }
+            }
+            $validated['options'] = !empty($options) ? $options : null;
+        }
 
         if ($request->boolean('remove_image')) {
             $this->removeItemImage($tenant->id, $item);
