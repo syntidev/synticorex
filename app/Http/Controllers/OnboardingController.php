@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Models\Plan;
 use App\Models\Tenant;
 use App\Models\TenantCustomization;
+use App\Services\PrelineThemeService;
 use App\Services\TenantBootstrapCat;
 use App\Services\TenantBootstrapFood;
 use Carbon\Carbon;
@@ -135,6 +136,7 @@ class OnboardingController extends Controller
                 'content_blocks' => $contentBlocks,
                 'about_text'     => $validated['about_text'] ?? null,
                 'hero_layout'    => 'gradient',
+                'theme_slug'     => PrelineThemeService::getThemeForSegment($validated['business_segment']),
             ]);
 
             return $tenant;

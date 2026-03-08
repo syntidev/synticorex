@@ -67,4 +67,26 @@ class PrelineThemeService
     {
         return 'default';
     }
+
+    /**
+     * Return the most appropriate theme_slug for a given business segment.
+     * Uses the 7 canonical segment keys from the onboarding wizard.
+     *
+     * @param string $segment
+     * @return string
+     */
+    public static function getThemeForSegment(string $segment): string
+    {
+        $map = [
+            'restaurante'  => 'sabor-tradicional',
+            'retail'       => 'default',
+            'salud'        => 'azul-confianza',
+            'profesional'  => 'azul-profesional',
+            'tecnico'      => 'industrial-pro',
+            'educacion'    => 'azul-academico',
+            'transporte'   => 'default',
+        ];
+
+        return $map[$segment] ?? 'default';
+    }
 }
