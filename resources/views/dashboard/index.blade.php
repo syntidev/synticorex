@@ -305,6 +305,10 @@
                 </li>
 
                 <li class="inline-flex items-center">
+                    @include('dashboard.partials.synti-header-btn')
+                </li>
+
+                <li class="inline-flex items-center">
                     <a href="/{{ $tenant->subdomain }}"
                        target="_blank" rel="noopener"
                        class="py-1.5 px-3 inline-flex items-center gap-x-1.5 text-sm font-medium rounded-lg bg-[#4A80E4] text-white hover:bg-[#3D6EC8] transition-colors"
@@ -554,6 +558,8 @@
 @include('dashboard.scripts.service-scripts')
 @include('dashboard.scripts.design-config-scripts')
 @include('dashboard.scripts.sortable-scripts')
+
+@include('dashboard.partials.synti-assistant')
 
 </body>
 </html>
