@@ -109,5 +109,8 @@
       "github": "https://github.com/syntidev/synticorex"
     }
   },
-  "favicon": "/images/favicon.ico"
+  "favicon": "/images/favicon.ico",
+  "background": {
+    "decoration": "gradient"
+  }
 }
