@@ -5,8 +5,9 @@
     "primary": "#4A80E4"
   },
   "logo": {
-    "light": "/logo/syntiweb-light.svg",
-    "dark": "/logo/syntiweb-dark.svg"
+    "light": "/docs/logo/syntiweb-light.svg",
+    "dark": "/docs/logo/syntiweb-dark.svg",
+    "href": "https://synti.dev"
   },
   "navigation": {
     "tabs": [
@@ -20,56 +21,8 @@
               "shared/quickstart",
               "shared/cuenta-y-planes"
             ]
-          },
-          {
-            "group": "SYNTIstudio",
-            "pages": [
-              "studio/que-es-studio",
-              "studio/wizard-onboarding",
-              "studio/dashboard",
-              "studio/hero-y-banner",
-              "studio/productos-y-servicios",
-              "studio/paletas-de-color",
-              "studio/qr-sticker",
-              "studio/seo-automatico"
-            ]
-          },
-          {
-            "group": "SYNTIfood",
-            "pages": [
-              "food/que-es-food",
-              "food/wizard-food",
-              "food/categorias-menu",
-              "food/items-lista",
-              "food/pedido-rapido-whatsapp",
-              "food/extras-opciones",
-              "food/horarios-atencion"
-            ]
-          },
-          {
-            "group": "SYNTIcat",
-            "pages": [
-              "cat/que-es-cat",
-              "cat/wizard-cat",
-              "cat/catalogo-productos",
-              "cat/carrito-whatsapp",
-              "cat/mini-order-sc",
-              "cat/badges-productos",
-              "cat/variantes"
-            ]
-          },
-          {
-            "group": "General",
-            "pages": [
-              "shared/moneda-y-precios",
-              "shared/dominio-y-subdominio",
-              "shared/whatsapp",
-              "shared/imagenes",
-              "shared/faq",
-              "shared/glosario",
-              "shared/troubleshooting"
-            ]
           }
+          /* ... resto de tus grupos ... */
         ]
       }
     ]
