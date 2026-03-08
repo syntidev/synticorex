@@ -68,6 +68,30 @@
             return '/año';
         },
 
+        /* ── placeholder dinámico categoría ── */
+        get categoryPlaceholder() {
+            const map = {
+                restaurant: 'Ej: Sopas, Carnes, Ensaladas',
+                arepera:    'Ej: Arepas, Jugos, Combos',
+                sweets:     'Ej: Tortas, Helados, Postres',
+                delivery:   'Ej: Combos, Bebidas, Extras',
+                other:      'Ej: Mi primera categoría',
+            };
+            return map[this.business_type] || 'Ej: Primera categoría';
+        },
+
+        /* ── placeholder dinámico ítem ── */
+        get itemPlaceholder() {
+            const map = {
+                restaurant: 'Ej: Sopa de pollo',
+                arepera:    'Ej: Arepa pelúa',
+                sweets:     'Ej: Torta de chocolate',
+                delivery:   'Ej: Combo familiar',
+                other:      'Ej: Mi producto',
+            };
+            return map[this.business_type] || 'Ej: Producto';
+        },
+
         /* ── progreso ── */
         get progress() {
             return Math.round(((this.step - 1) / (this.totalSteps - 1)) * 100);
@@ -361,7 +385,7 @@
                         <input id="s4-category"
                                type="text"
                                class="py-2 px-3 block w-full border border-slate-200 rounded-lg text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#4A80E4] focus:ring-1 focus:ring-[#4A80E4] focus:outline-none bg-white"
-                               placeholder="Ej: Sopas, Entrantes, Bebidas"
+                               :placeholder="categoryPlaceholder"
                                x-model="first_category"
                                maxlength="100">
                     </div>
@@ -378,7 +402,7 @@
                                 <div class="flex gap-2">
                                     <input type="text"
                                            class="py-2 px-3 block flex-1 border border-slate-200 rounded-lg text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#4A80E4] focus:ring-1 focus:ring-[#4A80E4] focus:outline-none bg-white"
-                                           :placeholder="index === 0 ? 'Ej: Sopa de pollo' : 'Nombre del plato'"
+                                           :placeholder="itemPlaceholder"
                                            x-model="item.name">
                                     <input type="number"
                                            class="py-2 px-3 block w-24 border border-slate-200 rounded-lg text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#4A80E4] focus:ring-1 focus:ring-[#4A80E4] focus:outline-none bg-white text-right"
