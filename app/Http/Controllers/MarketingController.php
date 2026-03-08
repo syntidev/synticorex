@@ -155,9 +155,7 @@ class MarketingController extends Controller
 
     public function studio(): View
     {
-        $plans = Plan::where('blueprint', 'studio')->orderBy('id')->get();
-
-        return view('marketing.studio', compact('plans'));
+        return view('marketing.studio');
     }
 
     public function food(): View
