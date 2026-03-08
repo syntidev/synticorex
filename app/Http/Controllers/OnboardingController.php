@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Models\Plan;
 use App\Models\Tenant;
 use App\Models\TenantCustomization;
+use App\Services\TenantBootstrapCat;
 use App\Services\TenantBootstrapFood;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
@@ -243,12 +244,67 @@ class OnboardingController extends Controller
     }
 
     /**
-     * Store a new cat tenant — TODO: implementar en fase Cat.
+     * Store a new cat tenant.
      */
     public function storeCat(Request $request): RedirectResponse
     {
-        // TODO: implementar en fase Cat
-        return redirect()->route('onboarding.selector');
+        $validated = $request->validate([
+            'business_name'             => 'required|string|max:255',
+            'store_type'                => 'required|string',
+            'plan_id'                   => 'required|exists:plans,id',
+            'subdomain'                 => 'required|alpha_dash|unique:tenants,subdomain',
+            'whatsapp_sales'            => 'nullable|string|max:20',
+            'first_product_name'        => 'required|string|max:255',
+            'first_product_price'       => 'required|numeric|min:0',
+            'first_product_description' => 'nullable|string|max:500',
+        ]);
+
+        $tenant = DB::transaction(function () use ($validated): Tenant {
+
+            $adminUserId = \App\Models\User::first()->id;
+
+            // 1. Crear tenant
+            $tenant = Tenant::create([
+                'user_id'          => $adminUserId,
+                'plan_id'          => $validated['plan_id'],
+                'subdomain'        => Str::slug($validated['subdomain'], '-'),
+                'base_domain'      => 'syntiweb.com',
+                'business_name'    => $validated['business_name'],
+                'business_segment' => $validated['store_type'],
+                'whatsapp_sales'   => $validated['whatsapp_sales'] ?? null,
+                'status'           => 'active',
+                'plan_activated_at'    => Carbon::now(),
+                'subscription_ends_at' => Carbon::now()->addYear(),
+                'edit_pin'             => bcrypt('1234'),
+            ]);
+
+            // 2. Crear customization
+            TenantCustomization::create([
+                'tenant_id'      => $tenant->id,
+                'content_blocks' => [
+                    'hero' => [
+                        'title'    => $validated['business_name'],
+                        'cta_text' => 'Ver catálogo',
+                    ],
+                ],
+                'hero_layout' => 'gradient',
+            ]);
+
+            // 3. Bootstrap directorio + catalog.json
+            TenantBootstrapCat::bootstrap($tenant);
+
+            // 4. Agregar primer producto
+            TenantBootstrapCat::addInitialProduct(
+                $tenant,
+                $validated['first_product_name'],
+                (float) $validated['first_product_price'],
+                $validated['first_product_description'] ?? ''
+            );
+
+            return $tenant;
+        });
+
+        return redirect()->route('onboarding.preview', $tenant->id);
     }
 
     /**
