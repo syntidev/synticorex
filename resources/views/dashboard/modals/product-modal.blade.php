@@ -34,7 +34,7 @@
                                 <p class="text-sm font-medium text-foreground/70">Arrastra o <span class="text-primary font-bold">elige imagen</span></p>
                                 <p class="text-xs text-muted-foreground-1 mt-0.5">PNG, JPG, WebP · Máx 2MB</p>
                             </div>
-                            <input type="file" id="product-image" accept="image/*" class="hidden" onchange="previewProductImage(event)">
+                            <input type="file" id="product-image" accept="image/*" capture="environment" class="hidden" onchange="previewProductImage(event)">
                         </div>
 
                         {{-- Gallery Section — Plan 3 (VISIÓN) only --}}
@@ -50,10 +50,10 @@
                             </div>
                             <div id="product-gallery-upload-area" class="flex gap-2 flex-wrap mt-1">
                                 <div id="gallery-slot-1" class="gallery-upload-slot hidden">
-                                    <input type="file" id="product-gallery-1" accept="image/*" class="py-1.5 px-3 block w-full bg-layer border-layer-line shadow-2xs text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus" onchange="previewGalleryImage(event, 1)">
+                                    <input type="file" id="product-gallery-1" accept="image/*" capture="environment" class="py-1.5 px-3 block w-full bg-layer border-layer-line shadow-2xs text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus" onchange="previewGalleryImage(event, 1)">
                                 </div>
                                 <div id="gallery-slot-2" class="gallery-upload-slot hidden">
-                                    <input type="file" id="product-gallery-2" accept="image/*" class="py-1.5 px-3 block w-full bg-layer border-layer-line shadow-2xs text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus" onchange="previewGalleryImage(event, 2)">
+                                    <input type="file" id="product-gallery-2" accept="image/*" capture="environment" class="py-1.5 px-3 block w-full bg-layer border-layer-line shadow-2xs text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus" onchange="previewGalleryImage(event, 2)">
                                 </div>
                             </div>
                             <div id="product-gallery-previews" class="flex gap-2 mt-1.5 flex-wrap"></div>
