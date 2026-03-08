@@ -12,6 +12,7 @@
   "dark": "logo/syntiweb-dark.svg",
   "href": "https://docs.syntiweb.com/"
 },
+"favicon": "favicon.svg",
   "navbar": {
     "primary": {
       "type": "github",
