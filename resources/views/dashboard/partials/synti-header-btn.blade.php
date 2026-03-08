@@ -6,7 +6,7 @@
     ============================================================
 --}}
 <button
-    @click="window.dispatchEvent(new CustomEvent('synti-open'))"
+    onclick="window.dispatchEvent(new CustomEvent('synti-open'))"
     class="group relative flex items-center gap-1.5
            px-3 py-1.5 rounded-lg
            text-gray-500 hover:text-[#4A80E4]
