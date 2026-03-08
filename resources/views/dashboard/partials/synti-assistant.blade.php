@@ -292,15 +292,35 @@ function syntiAssistant() {
         loading:  false,
         messages: [],
         suggestions: [
+            '¿Cómo abro el panel de administración?',
             '¿Cómo agrego un producto?',
             '¿Cómo descargo el QR?',
             '¿Cómo cambio los colores?',
             '¿Qué incluye mi plan?',
+            '¿Cómo configuro mi WhatsApp?',
+            '¿Cómo subo una foto?',
+            '¿Cómo activo la tasa BCV?',
+            '¿Qué es REF?',
+            '¿Cómo cambio mi PIN?',
+            '¿Cómo comparto mi página?',
+            '¿Cómo descargo el QR para imprimir?',
+            '¿Cómo desactivo un producto?',
+            '¿Cómo agrego mis redes sociales?',
+            '¿Cómo pongo mi horario de atención?',
+            '¿Qué diferencia hay entre Studio, Food y Cat?',
+            '¿Cómo conecto mi dominio propio?',
+            '¿Cómo agrego una categoría al menú?',
+            '¿Cómo funciona el carrito de compras?',
+            '¿Cómo veo las visitas de mi página?',
         ],
 
         init() {
             // Pre-calentar: detectar el producto activo del tenant
             this.product = '{{ $tenant->plan->blueprint ?? "studio" }}';
+            // Shuffle y tomar 4 aleatorias
+            this.suggestions = this.suggestions
+                .sort(() => Math.random() - 0.5)
+                .slice(0, 4);
         },
 
         toggle() { this.open ? this.close() : this.openModal(); },
