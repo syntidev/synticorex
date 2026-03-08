@@ -1,22 +1,11 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "name": "SYNTIweb",
-  "theme": "almond",
+  "name": "SYNTIweb - Docs",
+  "theme": "mint",
   "colors": {
     "primary": "#4A80E4",
     "light": "#f97316",
     "dark": "#10b981"
-  },
-  "navbar": {
-    "primary": {
-      "type": "github",
-      "href": "https://github.com/syntidev/synticorex"
-    }
-  },
-  "footer": {
-    "socials": {
-      "github": "https://github.com/syntidev/synticorex"
-    }
   },
   "navigation": {
     "tabs": [
@@ -86,5 +75,37 @@
   },
   "seo": {
     "indexing": "all"
-  }
+  },
+  "interaction": {
+    "drilldown": true
+  },
+  "errors": {
+    "404": {
+      "title": "\"¡Ups! Callejón sin salida\"",
+      "description": "\"Ni Sherlock Holmes encuentra lo que buscas aquí.\""
+    }
+  },
+  "logo": {
+    "light": "/images/syntiweb-light.svg",
+    "dark": "/images/syntiweb-dark.svg"
+  },
+  "navbar": {
+    "links": [
+      {
+        "label": "SYNTIweb DOCS",
+        "href": "https://docs.syntiweb.com/"
+      }
+    ],
+    "primary": {
+      "type": "github",
+      "href": "https://github.com/syntidev/synticorex"
+    }
+  },
+  "description": "Guía para el usuario final",
+  "footer": {
+    "socials": {
+      "github": "https://github.com/syntidev/synticorex"
+    }
+  },
+  "favicon": "/images/favicon.ico"
 }
