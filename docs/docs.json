@@ -11,6 +11,7 @@
     "tabs": [
       {
         "tab": "Documentación",
+        "icon": "book",
         "groups": [
           {
             "group": "Primeros pasos",
