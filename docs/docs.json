@@ -3,5 +3,16 @@
   "theme": "mint",
   "colors": {
     "primary": "#4A80E4"
+  },
+  "navigation": {
+    "groups": [
+      {
+        "group": "Primeros pasos",
+        "pages": [
+          "shared/introduccion",
+          "shared/quickstart"
+        ]
+      }
+    ]
   }
 }
