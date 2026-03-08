@@ -10,10 +10,7 @@
   "colors": {
     "primary": "#4A80E4",
     "light": "#6B9EFF",
-    "dark": "#2D5FC4",
-    "background": {
-      "dark": "#0f1117"
-    }
+    "dark": "#2D5FC4"
   },
   "topbarLinks": [
     {
@@ -25,20 +22,6 @@
     "name": "Empieza gratis",
     "url": "https://syntiweb.com/registro"
   },
-  "tabs": [
-    {
-      "name": "SYNTIstudio",
-      "url": "studio"
-    },
-    {
-      "name": "SYNTIfood",
-      "url": "food"
-    },
-    {
-      "name": "SYNTIcat",
-      "url": "cat"
-    }
-  ],
   "navigation": [
     {
       "group": "Primeros pasos",
@@ -100,12 +83,5 @@
   ],
   "footerSocials": {
     "instagram": "https://instagram.com/syntiweb"
-  },
-  "feedback": {
-    "thumbsRating": true,
-    "suggestEdit": true
-  },
-  "search": {
-    "prompt": "¿Cómo puedo ayudarte?"
   }
 }
