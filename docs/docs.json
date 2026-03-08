@@ -5,8 +5,8 @@
     "primary": "#4A80E4"
   },
   "logo": {
-    "light": "https://docs.syntiweb.com/logo/syntiweb-light.svg",
-    "dark": "https://docs.syntiweb.com/logo/syntiweb-dark.svg",
+    "light": "/logo/syntiweb-light.svg",
+    "dark": "/logo/syntiweb-dark.svg",
     "href": "https://syntiweb.com"
   },
   "navigation": {
