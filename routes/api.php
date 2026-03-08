@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TenantController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\SyntiHelpController;
 
 // Public endpoint (no auth required)
 Route::get('/public/{subdomain}', [TenantController::class, 'showBySubdomain']);
@@ -41,4 +42,10 @@ Route::prefix('tenants')->group(function () {
         Route::delete('/{id}', [ServiceController::class, 'destroy']);
         Route::patch('/{id}/toggle-active', [ServiceController::class, 'toggleActive']);
     });
+});
+
+// SYNTI — Asistente de ayuda
+Route::prefix('synti')->middleware(['throttle:30,1'])->group(function () {
+    Route::post('/ask',      [SyntiHelpController::class, 'ask']);
+    Route::post('/feedback', [SyntiHelpController::class, 'feedback']);
 });
