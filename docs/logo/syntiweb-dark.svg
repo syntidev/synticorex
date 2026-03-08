@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="500" height="500">
+  <!--
+    SYNTIweb — NEGATIVE (fondo oscuro)
+    Bracket: #FFFFFF | Círculo: #4A80E4
+    Efecto flotante: glow blanco suave en bracket, sombra azul oscura en círculo
+  -->
+  <defs>
+    <!-- Bracket: glow blanco difuso — simula elevación sobre fondo oscuro -->
+    <filter id="sh-bracket-dark" x="-20%" y="-20%" width="150%" height="150%">
+      <feDropShadow dx="0" dy="0" stdDeviation="3" flood-color="#FFFFFF" flood-opacity="0.15"/>
+    </filter>
+    <!-- Círculo: sombra azul oscura — se ve sobre fondo negro -->
+    <filter id="sh-circle-dark" x="-25%" y="-25%" width="155%" height="155%">
+      <feDropShadow dx="1.5" dy="2.5" stdDeviation="3" flood-color="#1a3a6e" flood-opacity="0.6"/>
+    </filter>
+  </defs>
+
+  <rect width="100" height="100" fill="#1a1a1a"/>
+
+  <path
+    d="M 30,22 L 78,22 L 78,70 Q 78,78 70,78 L 62,78 L 62,38 L 22,38 L 22,30 Q 22,22 30,22 Z"
+    fill="#FFFFFF"
+    filter="url(#sh-bracket-dark)"
+  />
+  <circle cx="38" cy="63" r="14" fill="#4A80E4" filter="url(#sh-circle-dark)"/>
+</svg>
