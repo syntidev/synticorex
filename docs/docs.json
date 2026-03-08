@@ -88,7 +88,8 @@
   },
   "logo": {
     "light": "/images/syntiweb-light.svg",
-    "dark": "/images/syntiweb-dark.svg"
+    "dark": "/images/syntiweb-dark.svg",
+    "href": "https://docs.syntiweb.com/"
   },
   "navbar": {
     "links": [
