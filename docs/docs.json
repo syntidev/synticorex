@@ -87,8 +87,8 @@
     }
   },
   "logo": {
-    "light": "/docs/logo/syntiweb-light.svg",
-    "dark": "/docs/logo/syntiweb-dark.svg",
+    "light": "docs/logo/syntiweb-light.svg",
+    "dark": "https://raw.githubusercontent.com/syntidev/synticorex/045e5e85e1fb8399c91a3bb856174c5c32bc37ff/docs/logo/syntiweb-dark.svg?token=B57GPDG6LJTKCJPJ6GP4JNDJVYARG",
     "href": "https://docs.syntiweb.com/"
   },
   "navbar": {
