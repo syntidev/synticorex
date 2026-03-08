@@ -66,7 +66,7 @@
                             : 'bg-surface border border-border text-foreground/60 hover:text-foreground'"
                         :style="tab === 'studio' ? 'background:var(--sw-studio)' : ''"
                         class="px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200">
-                    🌐 SYNTIstudio
+                    <span class="iconify tabler--world size-4"></span> SYNTIstudio
                 </button>
                 <button @click="tab = 'food'"
                         :class="tab === 'food'
@@ -74,7 +74,7 @@
                             : 'bg-surface border border-border text-foreground/60 hover:text-foreground'"
                         :style="tab === 'food' ? 'background:var(--sw-food)' : ''"
                         class="px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200">
-                    🍔 SYNTIfood
+                    <span class="iconify tabler--tools-kitchen-2 size-4"></span> SYNTIfood
                 </button>
                 <button @click="tab = 'cat'"
                         :class="tab === 'cat'
@@ -82,7 +82,7 @@
                             : 'bg-surface border border-border text-foreground/60 hover:text-foreground'"
                         :style="tab === 'cat' ? 'background:var(--sw-cat)' : ''"
                         class="px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200">
-                    🛍️ SYNTIcat
+                    <span class="iconify tabler--shopping-bag size-4"></span> SYNTIcat
                 </button>
             </div>
 
