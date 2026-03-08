@@ -160,9 +160,7 @@ class MarketingController extends Controller
 
     public function food(): View
     {
-        $plans = Plan::where('blueprint', 'food')->orderBy('id')->get();
-
-        return view('marketing.food', compact('plans'));
+        return view('marketing.food');
     }
 
     public function cat(): View
