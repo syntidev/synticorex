@@ -4,11 +4,11 @@
   "colors": {
     "primary": "#4A80E4"
   },
-  "logo": {
-    "light": "/docs/logo/syntiweb-light.svg",
-    "dark": "/docs/logo/syntiweb-dark.svg",
-    "href": "https://synti.dev"
-  },
+ "logo": {
+  "light": "https://docs.syntiweb.com/logo/syntiweb-light.svg",
+  "dark": "https://docs.syntiweb.com/logo/syntiweb-dark.svg",
+  "href": "https://syntiweb.com"
+},
   "navigation": {
     "tabs": [
       {
