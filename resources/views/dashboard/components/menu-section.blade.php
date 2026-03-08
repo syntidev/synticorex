@@ -245,7 +245,7 @@
                                 <span class="iconify tabler--x size-3" aria-hidden="true"></span>
                             </button>
                         </div>
-                        <input type="file" id="menu-item-imagen" accept="image/jpeg,image/png,image/webp"
+                        <input type="file" id="menu-item-imagen" accept="image/jpeg,image/png,image/webp" capture="environment"
                                class="block w-full text-sm text-foreground file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-600 hover:file:bg-blue-100 file:cursor-pointer"
                                onchange="MenuAdmin.previewItemPhoto(this)">
                         <input type="hidden" id="menu-item-remove-image" value="0">
