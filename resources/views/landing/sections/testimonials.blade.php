@@ -9,7 +9,12 @@
 @endphp
 
 @if($testimonials->isNotEmpty())
-<section id="testimonials" class="py-10 sm:py-16 lg:py-24 bg-background">
+<section id="testimonials" class="relative py-10 sm:py-16 lg:py-24 bg-background overflow-hidden">
+  {{-- Decorativo --}}
+  <div class="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+    <div class="absolute -bottom-32 -left-32 size-96 rounded-full opacity-[0.04] blur-3xl"
+         style="background:var(--color-primary)"></div>
+  </div>
   <div class="max-w-[85rem] px-4 sm:px-6 lg:px-8 mx-auto">
 
     {{-- Encabezado --}}
@@ -17,10 +22,12 @@
       <p class="text-primary text-sm font-medium uppercase tracking-wide">
         {{ $customization->getContentBlock('testimonials', 'eyebrow') ?: 'Lo que dicen' }}
       </p>
-      <h2 class="text-foreground text-2xl font-semibold md:text-3xl lg:text-4xl">
+      <h2 class="text-foreground text-2xl font-semibold md:text-3xl lg:text-4xl"
+          style="text-shadow: 0 4px 24px color-mix(in oklch, var(--color-foreground) 15%, transparent), 0 1px 4px color-mix(in oklch, var(--color-foreground) 8%, transparent);">
         {!! $customization->getSectionTitle('testimonials', 'Testimonios de <span class="text-primary italic">Clientes</span>') !!}
       </h2>
-      <div class="w-16 h-1 bg-primary mx-auto rounded-full"></div>
+      <div class="w-16 h-0.5 mx-auto mt-4 rounded-full"
+           style="background:var(--color-primary);box-shadow:0 0 12px 2px color-mix(in oklch,var(--color-primary) 60%,transparent)"></div>
     </div>
 
     {{-- Slider container --}}
