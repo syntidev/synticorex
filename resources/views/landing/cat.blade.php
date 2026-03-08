@@ -611,6 +611,8 @@
         if (modal) modal.style.display = 'none';
     }
 
+    @if(!$hasMiniOrder)
+    {{-- Plan cat-semestral: buildAndSend() directo sin backend --}}
     function buildAndSend(name, loc) {
         let waNumber = @json($waClean);
         if (!waNumber) return;
@@ -671,6 +673,85 @@
         closeDataModal();
         buildAndSend(name, loc);
     };
+    @else
+    {{-- Plan cat-anual: POST al endpoint /checkout, recibe SC-XXXX, redirige a wa.me --}}
+    function _showToast(msg) {
+        if (typeof showToast === 'function') { showToast(msg); } else { alert(msg); }
+    }
+
+    function _collectCustomerData() {
+        const nameEl = document.getElementById('sc-customer-name');
+        const locEl  = document.getElementById('sc-customer-location');
+        return {
+            name: nameEl ? nameEl.value.trim() : '',
+            loc:  locEl  ? locEl.value.trim()  : '',
+            nameEl, locEl
+        };
+    }
+
+    async function _doCheckout(name, loc) {
+        const items = Object.values(cart).map(i => ({
+            title:   i.name,
+            qty:     i.qty,
+            price:   i.price,
+            variant: null
+        }));
+
+        const payload = { name, location: loc, items };
+
+        const response = await fetch('/{{ $tenant->subdomain }}/checkout', {
+            method:  'POST',
+            headers: {
+                'Content-Type':     'application/json',
+                'X-CSRF-TOKEN':     document.querySelector('meta[name="csrf-token"]')?.content || '',
+                'Accept':           'application/json'
+            },
+            body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            if (name) localStorage.setItem('sc_customer_name', name);
+            window.open(data.whatsapp_url, '_blank');
+        } else if (data.error === 'plan_requerido') {
+            _showToast('Mejora tu plan para continuar');
+        } else {
+            _showToast(data.message || 'Ocurrió un error. Inténtalo de nuevo.');
+        }
+    }
+
+    window.sendWhatsApp = async function() {
+        @if(!$needsName && !$needsLocation)
+            await _doCheckout('', '');
+            return;
+        @endif
+
+        const { name, loc, nameEl, locEl } = _collectCustomerData();
+
+        if ((nameEl && !name) || (locEl && !loc)) {
+            openDataModal();
+            return;
+        }
+
+        await _doCheckout(name, loc);
+    };
+
+    window.confirmDataAndSend = async function() {
+        const { name, loc, nameEl } = _collectCustomerData();
+
+        @if($needsName)
+        if (nameEl && !name) {
+            nameEl.classList.add('sc-field-error');
+            nameEl.focus();
+            return;
+        }
+        @endif
+
+        closeDataModal();
+        await _doCheckout(name, loc);
+    };
+    @endif
     @endif
 
     document.addEventListener('DOMContentLoaded', () => {
