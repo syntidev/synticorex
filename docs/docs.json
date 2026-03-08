@@ -87,14 +87,14 @@
     }
   },
   "logo": {
-    "light": "/images/syntiweb-light.svg",
-    "dark": "/images/syntiweb-dark.svg",
+    "light": "/docs/logo/syntiweb-light.svg",
+    "dark": "/docs/logo/syntiweb-dark.svg",
     "href": "https://docs.syntiweb.com/"
   },
   "navbar": {
     "links": [
       {
-        "label": "SYNTIweb DOCS",
+        "label": "SYNTIweb",
         "href": "https://docs.syntiweb.com/"
       }
     ],
@@ -114,6 +114,7 @@
     "decoration": "gradient"
   },
   "appearance": {
-    "default": "light"
-  }
+    "default": "light",
+    "strict": false
+  }  
 }
