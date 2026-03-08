@@ -1,5 +1,6 @@
 {
   "name": "SYNTIweb Docs",
+  "theme": "mint",
   "logo": {
     "light": "/logo/syntiweb-light.svg",
     "dark": "/logo/syntiweb-dark.svg",
