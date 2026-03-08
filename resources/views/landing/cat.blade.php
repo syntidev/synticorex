@@ -1,11 +1,8 @@
 {{-- ═══════════════════════════════════════════════════════════════════════════════
      SYNTIcat — Catálogo eCommerce + Carrito WhatsApp (REDISEÑO APP MODERNA)
-     FlyonUI 2.4.1 + Tailwind v4 classes
+     Preline 4.1.2 + Tailwind v4
 ═══════════════════════════════════════════════════════════════════════════════ --}}
 @php
-    $customPalette = $tenant->settings['engine_settings']['visual']['custom_palette'] ?? null;
-    $effectiveTheme = $customPalette ? 'custom' : ($themeSlug ?? 'light');
-
     $savedDisplayMode = $savedDisplayMode ?? $displayMode ?? 'reference_only';
     $currencySymbol   = $currencySettings['symbols']['reference'] ?? 'REF';
     $dollarRate       = $dollarRate ?? 36.50;
@@ -14,6 +11,10 @@
 
     $wa = $tenant->getActiveWhatsapp() ?? null;
     $waClean = $wa ? preg_replace('/[^0-9]/', '', $wa) : '';
+
+    $planSlug  = $tenant->plan->slug ?? 'cat-basico';
+    $hasCart    = in_array($planSlug, ['cat-semestral', 'cat-anual']);
+    $hasMiniOrder = $planSlug === 'cat-anual';
 
     $payMethods      = ($customization->payment_methods ?? []);
     $globalEnabled   = $payMethods['global'] ?? [];
@@ -73,22 +74,7 @@
     $needsLocation = in_array('location', (array) $customerFields);
 @endphp
 <!DOCTYPE html>
-<html data-theme="{{ $effectiveTheme }}" lang="es" class="scroll-smooth">
-@if($customPalette)
-<style>
-[data-theme="custom"]{
-    --color-primary:{{ $customPalette['primary'] ?? '#570DF8' }};
-    --p:{{ $customPalette['primary'] ?? '#570DF8' }};
-    --color-secondary:{{ $customPalette['secondary'] ?? '#F000B9' }};
-    --s:{{ $customPalette['secondary'] ?? '#F000B9' }};
-    --color-accent:{{ $customPalette['accent'] ?? '#1DCDBC' }};
-    --a:{{ $customPalette['accent'] ?? '#1DCDBC' }};
-    --color-base-100:{{ $customPalette['base'] ?? '#FFFFFF' }};
-    --b1:{{ $customPalette['base'] ?? '#FFFFFF' }};
-    --bc:#1f2937;
-}
-</style>
-@endif
+<html lang="es" class="scroll-smooth">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -116,21 +102,21 @@
     @media (hover:none){.sc-add-btn{opacity:.92;transform:none;}}
     /* ── Modal simple para datos cliente ── */
     .sc-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);z-index:300;display:none;align-items:center;justify-content:center;padding:16px;}
-    .sc-modal{max-width:420px;width:100%;background:var(--color-base-100,#fff);border-radius:24px;box-shadow:0 30px 80px rgba(0,0,0,.25);border:1px solid rgba(0,0,0,.05);}
+    .sc-modal{max-width:420px;width:100%;background:var(--background, #ffffff);border-radius:24px;box-shadow:0 30px 80px rgba(0,0,0,.25);border:1px solid rgba(0,0,0,.05);}
     /* ── Customer form: floating label inputs ── */
     .sc-field{position:relative}
-    .sc-field input{width:100%;padding:1.35rem 1rem .55rem;border-radius:1rem;border:1.5px solid rgba(0,0,0,.08);background:var(--color-base-200,#f3f4f6);font-weight:700;font-size:.875rem;outline:none;transition:border-color .2s,background .2s,box-shadow .2s;color:inherit}
-    .sc-field input:focus{border-color:var(--color-primary,#570DF8);background:var(--color-base-100,#fff);box-shadow:0 0 0 3px color-mix(in oklch,var(--color-primary,#570DF8) 15%,transparent)}
+    .sc-field input{width:100%;padding:1.35rem 1rem .55rem;border-radius:1rem;border:1.5px solid rgba(0,0,0,.08);background:var(--surface, #f3f4f6);font-weight:700;font-size:.875rem;outline:none;transition:border-color .2s,background .2s,box-shadow .2s;color:inherit}
+    .sc-field input:focus{border-color:#4A80E4;background:var(--background, #ffffff);box-shadow:0 0 0 3px color-mix(in oklch,#4A80E4 15%,transparent)}
     .sc-field label{position:absolute;left:1rem;top:50%;transform:translateY(-50%);font-size:.825rem;font-weight:700;color:rgba(0,0,0,.35);pointer-events:none;transition:all .18s cubic-bezier(.4,0,.2,1)}
-    .sc-field input:focus+label,.sc-field input:not(:placeholder-shown)+label{top:.6rem;transform:none;font-size:.65rem;letter-spacing:.05em;color:var(--color-primary,#570DF8)}
+    .sc-field input:focus+label,.sc-field input:not(:placeholder-shown)+label{top:.6rem;transform:none;font-size:.65rem;letter-spacing:.05em;color:#4A80E4}
     .sc-field-error{border-color:#ef4444!important;background:#fff5f5!important}
     .sc-field-error:focus{box-shadow:0 0 0 3px rgba(239,68,68,.15)!important}
 </style>
 </head>
-<body class="min-h-screen bg-base-100 text-base-content antialiased flex flex-col font-sans">
+<body class="min-h-screen bg-white dark:bg-neutral-900 text-gray-900 dark:text-neutral-100 antialiased flex flex-col font-sans">
 
 {{-- 1. NAVBAR APP STYLE --}}
-<header class="sticky top-0 z-[100] w-full bg-base-100/90 backdrop-blur-2xl" style="border-bottom:1px solid rgba(0,0,0,.07);">
+<header class="sticky top-0 z-[100] w-full bg-white/90 dark:bg-neutral-900/90 backdrop-blur-2xl" style="border-bottom:1px solid rgba(0,0,0,.07);">
     <div class="mx-auto max-w-[1280px] px-5 sm:px-8 flex items-center justify-between h-16">
         <a href="#" class="flex items-center gap-3 min-w-0">
             @if(!empty($customization->logo_filename))
@@ -139,8 +125,8 @@
                      class="size-10 rounded-xl object-cover shrink-0"
                      onerror="this.style.display='none';">
             @else
-                <div class="size-10 bg-primary rounded-xl flex items-center justify-center shadow-lg shadow-primary/20 shrink-0">
-                    <span class="icon-[tabler--bag] size-6 text-primary-content"></span>
+                <div class="size-10 bg-[#4A80E4] rounded-xl flex items-center justify-center shadow-lg shadow-[#4A80E4]/20 shrink-0">
+                    <span class="iconify tabler--bag size-6 text-white"></span>
                 </div>
             @endif
             <span class="text-xl font-black tracking-tighter truncate">{{ $tenant->business_name }}</span>
@@ -148,7 +134,7 @@
 
         <div class="flex items-center gap-3">
             @if(str_contains($savedDisplayMode, 'toggle'))
-            <div class="hidden md:flex bg-base-200/50 p-1 rounded-xl border border-base-content/5 backdrop-blur-md">
+            <div class="hidden md:flex bg-gray-100/50 dark:bg-neutral-800/50 p-1 rounded-xl border border-gray-100 dark:border-neutral-800 backdrop-blur-md">
                 <button class="sc-curr-btn px-4 py-1.5 text-xs font-bold rounded-lg transition-all" data-currency="ref" onclick="setCurrency('ref')">{{ $currencySymbol }}</button>
                 <button class="sc-curr-btn px-4 py-1.5 text-xs font-bold rounded-lg transition-all" data-currency="bs" onclick="setCurrency('bs')">Bs</button>
             </div>
@@ -166,29 +152,31 @@
             </a>
             @endif
 
-            <button onclick="toggleDrawer()" id="sc-cart-trigger" class="relative group p-2 rounded-full transition-colors bg-blue-600 text-white hover:bg-blue-700 shadow-xl shadow-primary/20">
+            @if($hasCart)
+            <button onclick="toggleDrawer()" id="sc-cart-trigger" class="relative group p-2 rounded-full transition-colors bg-[#4A80E4] text-white hover:bg-[#4A80E4]/90 shadow-xl shadow-[#4A80E4]/20">
                 <svg aria-hidden="true" focusable="false" class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="9" cy="21" r="1"></circle>
                     <circle cx="19" cy="21" r="1"></circle>
                     <path d="M5 4H7L9 17H19L21 8H8"></path>
                 </svg>
-                <span id="sc-cart-count" class="absolute -top-1 -right-1 size-5 bg-error text-white text-[10px] font-black rounded-full flex items-center justify-center border-2 border-base-100" style="display:none">0</span>
+                <span id="sc-cart-count" class="absolute -top-1 -right-1 size-5 bg-red-500 text-white text-[10px] font-black rounded-full flex items-center justify-center border-2 border-white dark:border-neutral-900" style="display:none">0</span>
             </button>
+            @endif
         </div>
     </div>
 </header>
 
 {{-- 2. HERO BENTO GRID --}}
 @if($showcase->count() >= 1)
-<section class="py-8 lg:py-12 bg-base-100">
+<section class="py-8 lg:py-12 bg-white dark:bg-neutral-900">
     <div class="mx-auto max-w-[1280px] px-5 sm:px-8">
         <div class="mb-10 max-w-2xl">
             @if($tenant->slogan)
-                <p class="text-primary text-xs font-black uppercase tracking-[.2em] mb-2">{{ $tenant->slogan }}</p>
+                <p class="text-[#4A80E4] text-xs font-black uppercase tracking-[.2em] mb-2">{{ $tenant->slogan }}</p>
             @endif
             <h1 class="text-4xl lg:text-6xl font-black tracking-tight leading-[1]">{{ $tenant->business_name }}</h1>
             @if($tenant->description)
-                <p class="mt-3 text-base-content/50 text-base font-medium">{{ Str::limit($tenant->description, 120) }}</p>
+                <p class="mt-3 text-gray-500 dark:text-neutral-400 text-base font-medium">{{ Str::limit($tenant->description, 120) }}</p>
             @endif
         </div>
 
@@ -196,8 +184,8 @@
             @if($showcase->count() >= 3)
                 @php $s0 = $showcase->get(0); $s0img = $productImg($s0); @endphp
                 {{-- Principal --}}
-                <div class="md:col-span-7 relative group overflow-hidden rounded-[2.5rem] bg-base-200 bento-item cursor-pointer"
-                     onclick="addToCart({{ $s0->id }}, '{{ addslashes($s0->name) }}', {{ $s0->price_usd ?? 0 }}, '{{ $s0img }}')">
+                <div class="md:col-span-7 relative group overflow-hidden rounded-[2.5rem] bg-gray-100 dark:bg-neutral-800 bento-item cursor-pointer"
+                     @if($hasCart) onclick="addToCart({{ $s0->id }}, '{{ addslashes($s0->name) }}', {{ $s0->price_usd ?? 0 }}, '{{ $s0img }}')" @elseif($waClean) onclick="window.open('https://wa.me/{{ $waClean }}?text={{ urlencode('Hola! Me interesa: ' . $s0->name) }}','_blank')" @endif>
                     @if($s0img)
                         <img src="{{ $s0img }}" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
                              alt="{{ $s0->name }}" onerror="this.style.display='none';">
@@ -214,8 +202,8 @@
                 <div class="md:col-span-5 grid grid-rows-2 gap-4">
                     @foreach($showcase->slice(1) as $item)
                     @php $simg = $productImg($item); @endphp
-                    <div class="relative group overflow-hidden rounded-[2rem] bg-base-200 bento-item cursor-pointer"
-                         onclick="addToCart({{ $item->id }}, '{{ addslashes($item->name) }}', {{ $item->price_usd ?? 0 }}, '{{ $simg }}')">
+                    <div class="relative group overflow-hidden rounded-[2rem] bg-gray-100 dark:bg-neutral-800 bento-item cursor-pointer"
+                         @if($hasCart) onclick="addToCart({{ $item->id }}, '{{ addslashes($item->name) }}', {{ $item->price_usd ?? 0 }}, '{{ $simg }}')" @elseif($waClean) onclick="window.open('https://wa.me/{{ $waClean }}?text={{ urlencode('Hola! Me interesa: ') }}{{ urlencode($item->name) }}','_blank')" @endif>
                         @if($simg)
                             <img src="{{ $simg }}" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
                                  alt="{{ $item->name }}" onerror="this.style.display='none';">
@@ -238,13 +226,13 @@
 {{-- 3. CATEGORY PILLS (STICKY) --}}
 <nav class="mt-10 mb-10">
     <div class="mx-auto max-w-[1280px] px-5 sm:px-8">
-        <div class="bg-base-100/95 backdrop-blur-xl shadow-sm border border-base-content/10 rounded-full py-2.5 px-3 flex items-center gap-3 overflow-x-auto no-scrollbar">
+        <div class="bg-white/95 dark:bg-neutral-900/95 backdrop-blur-xl shadow-sm border border-gray-200 dark:border-neutral-700 rounded-full py-2.5 px-3 flex items-center gap-3 overflow-x-auto no-scrollbar">
         <button onclick="filterCategory('all')" data-cat="all"
                 class="sc-cat-pill text-sm py-1.5 px-6 rounded-2xl font-medium transition-colors bg-blue-600 text-white hover:bg-blue-700 shrink-0">Todos</button>
         @if(isset($categories))
             @foreach($categories as $cat)
                 <button onclick="filterCategory('{{ $cat->id }}')" data-cat="{{ $cat->id }}"
-                        class="sc-cat-pill text-sm py-1.5 px-6 rounded-2xl font-medium transition-colors text-gray-700 hover:bg-gray-100 border border-base-content/10 whitespace-nowrap shrink-0">{{ $cat->name }}</button>
+                        class="sc-cat-pill text-sm py-1.5 px-6 rounded-2xl font-medium transition-colors text-gray-700 hover:bg-gray-100 border border-gray-200 dark:border-neutral-700 whitespace-nowrap shrink-0">{{ $cat->name }}</button>
             @endforeach
         @endif
         </div>
@@ -257,25 +245,35 @@
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
             @foreach($products as $product)
             @php $img = $productImg($product); @endphp
-            <div class="sc-product-card group flex flex-col bg-base-100 rounded-[1.5rem] shadow-sm border border-base-content/5 overflow-hidden" data-category="{{ $product->category_id ?? 'all' }}">
-                <div class="relative aspect-[4/5] rounded-[1.35rem] overflow-hidden bg-base-200 m-3 transition-all duration-300 group-hover:shadow-2xl group-hover:-translate-y-1">
+            <div class="sc-product-card group flex flex-col bg-white dark:bg-neutral-900 rounded-[1.5rem] shadow-sm border border-gray-100 dark:border-neutral-800 overflow-hidden" data-category="{{ $product->category_id ?? 'all' }}">
+                <div class="relative aspect-[4/5] rounded-[1.35rem] overflow-hidden bg-gray-100 dark:bg-neutral-800 m-3 transition-all duration-300 group-hover:shadow-2xl group-hover:-translate-y-1">
                     @if($img)
                         <img src="{{ $img }}" alt="{{ $product->name }}"
                              class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                              loading="lazy" onerror="this.style.display='none';">
                     @else
-                        <div class="w-full h-full flex flex-col items-center justify-center gap-2 text-base-content/20">
-                            <span class="icon-[tabler--photo-off] size-10"></span>
+                        <div class="w-full h-full flex flex-col items-center justify-center gap-2 text-gray-300 dark:text-neutral-600">
+                            <span class="iconify tabler--photo-off size-10"></span>
                         </div>
                     @endif
 
                     {{-- Floating + button --}}
+                    @if($hasCart)
                     <button onclick="addToCart({{ $product->id }}, '{{ addslashes($product->name) }}', {{ $product->price_usd ?? 0 }}, '{{ $img }}')"
-                            class="sc-add-btn bg-primary text-primary-content">
+                            class="sc-add-btn bg-[#4A80E4] text-white">
                         <svg aria-hidden="true" focusable="false" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M12 5v14M5 12h14" />
                         </svg>
                     </button>
+                    @elseif($waClean)
+                    <a href="https://wa.me/{{ $waClean }}?text={{ urlencode('Hola! Me interesa: ' . $product->name) }}" target="_blank"
+                       class="sc-add-btn bg-[#25D366] text-white">
+                        <svg aria-hidden="true" focusable="false" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16.7 14.3c-.3-.2-1.7-.8-1.9-.9-.3-.1-.5-.2-.7.2s-.8.9-1 .9-.5 0-.9-.4c-.5-.4-1-1-1.2-1.3-.1-.3 0-.5.1-.6.2-.2.3-.3.5-.5.2-.2.2-.3.3-.5.1-.3 0-.5 0-.6s-.7-1.8-1-2.4c-.3-.6-.5-.6-.7-.6h-.6c-.2 0-.6.1-.9.4-.3.3-1.1 1-1.1 2.4s1.1 2.7 1.3 2.9c.2.2 2.1 3.2 5.1 4.3.7.3 1.2.4 1.6.5.7.1 1.4.1 1.9.1.6 0 1.7-.7 1.9-1.3.2-.6.2-1.2.2-1.3 0-.1-.3-.2-.6-.4z"></path>
+                            <path d="M12 3a9 9 0 0 0-9 9 8.9 8.9 0 0 0 1.2 4.5L3 21l4.7-1.2A9 9 0 1 0 12 3Z"></path>
+                        </svg>
+                    </a>
+                    @endif
 
                     @if($product->badge)
                         <span class="absolute top-3 left-3 inline-flex items-center py-0.5 px-3 rounded-full text-xs font-medium bg-white/20 backdrop-blur-md text-white border-none uppercase text-[10px] font-black">{{ $product->badge }}</span>
@@ -283,16 +281,18 @@
                 </div>
 
                 <div class="px-1">
-                    <h3 class="font-bold text-sm leading-tight mb-1 group-hover:text-primary transition-colors line-clamp-2">{{ $product->name }}</h3>
+                    <h3 class="font-bold text-sm leading-tight mb-1 group-hover:text-[#4A80E4] transition-colors line-clamp-2">{{ $product->name }}</h3>
                     @if(!$hidePrice)
                     <div class="flex items-center justify-between mt-1">
                         <p class="text-lg font-black tracking-tight" data-price-usd="{{ $product->price_usd ?? 0 }}">{{ $currencySymbol }} 0.00</p>
                         {{-- Qty Control (shown when item is in cart) --}}
-                        <div id="qty-row-{{ $product->id }}" class="flex items-center gap-1 bg-base-200 rounded-full px-2 py-1" style="display:none!important">
-                            <button class="size-6 rounded-full bg-base-100 flex items-center justify-center text-xs font-bold" onclick="changeQty({{ $product->id }}, -1)">−</button>
+                        @if($hasCart)
+                        <div id="qty-row-{{ $product->id }}" class="flex items-center gap-1 bg-gray-100 dark:bg-neutral-800 rounded-full px-2 py-1" style="display:none!important">
+                            <button class="size-6 rounded-full bg-white dark:bg-neutral-900 flex items-center justify-center text-xs font-bold" onclick="changeQty({{ $product->id }}, -1)">−</button>
                             <span class="text-xs font-black min-w-[14px] text-center" id="qty-val-{{ $product->id }}">1</span>
-                            <button class="size-6 rounded-full bg-primary text-primary-content flex items-center justify-center text-xs font-bold" onclick="changeQty({{ $product->id }}, 1)">+</button>
+                            <button class="size-6 rounded-full bg-[#4A80E4] text-white flex items-center justify-center text-xs font-bold" onclick="changeQty({{ $product->id }}, 1)">+</button>
                         </div>
+                        @endif
                     </div>
                     @endif
                 </div>
@@ -302,34 +302,35 @@
     </div>
 </section>
 
-{{-- 5. DRAWER CARRITO (Lógica intacta, Diseño Pro) --}}
+{{-- 5. DRAWER CARRITO (solo planes con carrito) --}}
+@if($hasCart)
 <div class="sc-drawer-overlay" id="sc-overlay" onclick="toggleDrawer()"></div>
-<aside class="sc-drawer bg-base-100" id="sc-drawer">
+<aside class="sc-drawer bg-white dark:bg-neutral-900" id="sc-drawer">
     {{-- Header --}}
-    <div class="px-7 pt-7 pb-5 flex items-center justify-between border-b border-base-content/5">
+    <div class="px-7 pt-7 pb-5 flex items-center justify-between border-b border-gray-100 dark:border-neutral-800">
         <div>
             <h3 class="text-2xl font-black tracking-tighter">Mi Pedido</h3>
-            <p class="text-[10px] text-base-content/30 font-black uppercase tracking-[.25em] mt-0.5">Shopping Bag</p>
+            <p class="text-[10px] text-gray-400 dark:text-neutral-500 font-black uppercase tracking-[.25em] mt-0.5">Shopping Bag</p>
         </div>
-        <button onclick="toggleDrawer()" class="p-2 rounded-full text-sm transition-colors text-gray-700 hover:bg-gray-100 bg-base-200/80">
-            <span class="icon-[tabler--x] size-5"></span>
+        <button onclick="toggleDrawer()" class="p-2 rounded-full text-sm transition-colors text-gray-700 hover:bg-gray-100 bg-gray-100/80 dark:bg-neutral-800/80">
+            <span class="iconify tabler--x size-5"></span>
         </button>
     </div>
 
     {{-- Empty state — FUERA de sc-drawer-body para que innerHTML='' no lo destruya --}}
     <div id="sc-empty" class="flex-1 flex flex-col items-center justify-center text-center py-14 px-7">
-        <div class="size-20 rounded-3xl bg-base-200 flex items-center justify-center mb-4">
-            <span class="icon-[tabler--shopping-bag] size-10 text-base-content/20"></span>
+        <div class="size-20 rounded-3xl bg-gray-100 dark:bg-neutral-800 flex items-center justify-center mb-4">
+            <span class="iconify tabler--shopping-bag size-10 text-gray-300 dark:text-neutral-600"></span>
         </div>
-        <p class="font-bold text-base-content/30">Tu carrito está vacío</p>
-        <p class="text-xs text-base-content/20 mt-1">Explora y agrega productos</p>
+        <p class="font-bold text-gray-400 dark:text-neutral-500">Tu carrito está vacío</p>
+        <p class="text-xs text-gray-300 dark:text-neutral-600 mt-1">Explora y agrega productos</p>
     </div>
 
     {{-- Lista de items — innerHTML se limpia de forma segura --}}
     <div class="flex-1 overflow-y-auto px-7 no-scrollbar" id="sc-drawer-body" style="display:none"></div>
 
     {{-- Footer --}}
-    <div class="p-7 space-y-4 border-t border-base-content/5" id="sc-drawer-footer" style="display:none">
+    <div class="p-7 space-y-4 border-t border-gray-100 dark:border-neutral-800" id="sc-drawer-footer" style="display:none">
 
         @if(count($visiblePay) > 0)
         <div class="flex items-center gap-2 flex-wrap">
@@ -337,30 +338,30 @@
                 {{-- Clase de icono escrita estáticamente para que Tailwind JIT la escanee --}}
                 @php
                 $pmIcon = match($key) {
-                    'pagoMovil'  => 'icon-[tabler--device-mobile]',
-                    'cash'       => 'icon-[tabler--cash]',
-                    'puntoventa' => 'icon-[tabler--credit-card]',
-                    'biopago'    => 'icon-[tabler--fingerprint]',
-                    'cashea'     => 'icon-[tabler--wallet]',
-                    'krece'      => 'icon-[tabler--trending-up]',
-                    'wepa'       => 'icon-[tabler--shopping-cart]',
-                    'lysto'      => 'icon-[tabler--calendar-dollar]',
-                    'chollo'     => 'icon-[tabler--discount-2]',
-                    'wally'      => 'icon-[tabler--send-2]',
-                    'kontigo'    => 'icon-[tabler--file-invoice]',
-                    'zelle'      => 'icon-[tabler--bolt]',
-                    'paypal'     => 'icon-[tabler--brand-paypal]',
-                    'zinli'      => 'icon-[tabler--moneybag]',
-                    'airtm'      => 'icon-[tabler--exchange]',
-                    'reserve'    => 'icon-[tabler--shield-dollar]',
-                    'binancepay' => 'icon-[tabler--currency-bitcoin]',
-                    'usdt'       => 'icon-[tabler--coin]',
-                    'usd'        => 'icon-[tabler--currency-dollar]',
-                    'eur'        => 'icon-[tabler--currency-euro]',
-                    default      => 'icon-[tabler--cash]',
+                    'pagoMovil'  => 'iconify tabler--device-mobile',
+                    'cash'       => 'iconify tabler--cash',
+                    'puntoventa' => 'iconify tabler--credit-card',
+                    'biopago'    => 'iconify tabler--fingerprint',
+                    'cashea'     => 'iconify tabler--wallet',
+                    'krece'      => 'iconify tabler--trending-up',
+                    'wepa'       => 'iconify tabler--shopping-cart',
+                    'lysto'      => 'iconify tabler--calendar-dollar',
+                    'chollo'     => 'iconify tabler--discount-2',
+                    'wally'      => 'iconify tabler--send-2',
+                    'kontigo'    => 'iconify tabler--file-invoice',
+                    'zelle'      => 'iconify tabler--bolt',
+                    'paypal'     => 'iconify tabler--brand-paypal',
+                    'zinli'      => 'iconify tabler--moneybag',
+                    'airtm'      => 'iconify tabler--exchange',
+                    'reserve'    => 'iconify tabler--shield-dollar',
+                    'binancepay' => 'iconify tabler--currency-bitcoin',
+                    'usdt'       => 'iconify tabler--coin',
+                    'usd'        => 'iconify tabler--currency-dollar',
+                    'eur'        => 'iconify tabler--currency-euro',
+                    default      => 'iconify tabler--cash',
                 };
                 @endphp
-                <span class="inline-flex items-center gap-1.5 text-[11px] font-bold text-foreground/50 bg-muted rounded-xl px-2.5 py-1.5">
+                <span class="inline-flex items-center gap-1.5 text-[11px] font-bold text-gray-500 dark:text-neutral-400 bg-gray-100 dark:bg-neutral-800 rounded-xl px-2.5 py-1.5">
                     <span class="{{ $pmIcon }} size-3.5 shrink-0"></span>
                     {{ $pm['label'] }}
                 </span>
@@ -368,8 +369,8 @@
         </div>
         @endif
 
-        <div class="bg-base-200/60 p-5 rounded-[1.5rem] border border-base-content/5">
-            <div class="flex justify-between items-center text-base-content/40 text-xs font-black uppercase tracking-widest mb-1">
+        <div class="bg-gray-100/60 dark:bg-neutral-800/60 p-5 rounded-[1.5rem] border border-gray-100 dark:border-neutral-800">
+            <div class="flex justify-between items-center text-gray-400 dark:text-neutral-500 text-xs font-black uppercase tracking-widest mb-1">
                 <span>Subtotal</span>
                 <span id="sc-total-label">{{ $currencySymbol }}</span>
             </div>
@@ -379,7 +380,7 @@
         @if($waClean)
         <button onclick="sendWhatsApp()" class="flex items-center justify-center w-full h-14 rounded-[1.5rem] border-none font-black text-base gap-2.5 shadow-xl text-white transition-colors"
                 style="background:#25D366;">
-            <span class="icon-[tabler--brand-whatsapp] size-6"></span>
+            <span class="iconify tabler--brand-whatsapp size-6"></span>
             Finalizar por WhatsApp
         </button>
         @else
@@ -389,13 +390,14 @@
         @endif
     </div>
 </aside>
+@endif
 
 {{-- MODAL Datos Cliente --}}
 @if($needsName || $needsLocation)
 <div id="sc-data-modal" class="sc-modal-overlay">
     <div class="sc-modal p-6 space-y-5">
         <div class="flex items-start gap-3">
-            <div class="size-10 rounded-2xl bg-primary/10 flex items-center justify-center text-primary shrink-0">
+            <div class="size-10 rounded-2xl bg-[#4A80E4]/10 flex items-center justify-center text-[#4A80E4] shrink-0">
                 <svg aria-hidden="true" focusable="false" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="12" cy="7" r="4"></circle>
                     <path d="M5.5 21a6.5 6.5 0 0 1 13 0"></path>
@@ -403,7 +405,7 @@
             </div>
             <div class="flex-1">
                 <p class="text-lg font-black">Antes de enviar</p>
-                <p class="text-sm text-base-content/60">Déjanos tus datos para personalizar tu pedido.</p>
+                <p class="text-sm text-gray-500 dark:text-neutral-400">Déjanos tus datos para personalizar tu pedido.</p>
             </div>
             <button onclick="closeDataModal()" class="p-2 rounded-full text-sm text-gray-700 hover:bg-gray-100 transition-colors">
                 <svg aria-hidden="true" focusable="false" class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -434,37 +436,37 @@
 @endif
 
 {{-- 6. FOOTER --}}
-<footer class="bg-base-200/50 border-t border-base-content/5 py-14">
+<footer class="bg-gray-100/50 dark:bg-neutral-800/50 border-t border-gray-100 dark:border-neutral-800 py-14">
     <div class="mx-auto max-w-[1280px] px-5 sm:px-8 text-center">
         {{-- Logo / Icon --}}
         @if(!empty($customization->logo_filename))
             <img src="{{ asset('storage/tenants/' . $tenant->id . '/' . $customization->logo_filename) }}"
                  alt="{{ $tenant->business_name }}"
-                 class="size-14 rounded-2xl object-cover mx-auto mb-5 border border-base-content/5 shadow-sm"
+                 class="size-14 rounded-2xl object-cover mx-auto mb-5 border border-gray-100 dark:border-neutral-800 shadow-sm"
                  onerror="this.style.display='none';">
         @else
-            <div class="size-14 bg-base-100 rounded-2xl mx-auto mb-5 flex items-center justify-center border border-base-content/5 shadow-sm">
-                <span class="icon-[tabler--layout-grid] size-7 text-primary"></span>
+            <div class="size-14 bg-white dark:bg-neutral-900 rounded-2xl mx-auto mb-5 flex items-center justify-center border border-gray-100 dark:border-neutral-800 shadow-sm">
+                <span class="iconify tabler--layout-grid size-7 text-[#4A80E4]"></span>
             </div>
         @endif
 
         <h2 class="text-2xl font-black tracking-tighter mb-1">{{ $tenant->business_name }}</h2>
         @if($tenant->description)
-            <p class="text-base-content/40 text-sm max-w-md mx-auto">{{ Str::limit($tenant->description, 160) }}</p>
+            <p class="text-gray-400 dark:text-neutral-500 text-sm max-w-md mx-auto">{{ Str::limit($tenant->description, 160) }}</p>
         @endif
 
         @if($waClean)
         <a href="https://wa.me/{{ $waClean }}" target="_blank"
            class="inline-flex items-center gap-2 text-sm py-1.5 px-3 rounded-2xl font-medium transition-colors mt-6 border-none font-bold text-white"
            style="background:#25D366;">
-            <span class="icon-[tabler--brand-whatsapp] size-4"></span>
+            <span class="iconify tabler--brand-whatsapp size-4"></span>
             Escribir por WhatsApp
         </a>
         @endif
 
-        <div class="mt-10 pt-8 border-t border-base-content/5 flex flex-col md:flex-row justify-between items-center gap-4">
-            <p class="text-xs font-bold text-base-content/20 uppercase tracking-[0.25em]">© {{ date('Y') }} {{ $tenant->business_name }}</p>
-            <p class="text-xs text-base-content/20">Sitio creado con <span class="text-primary font-bold">SYNTIweb</span></p>
+        <div class="mt-10 pt-8 border-t border-gray-100 dark:border-neutral-800 flex flex-col md:flex-row justify-between items-center gap-4">
+            <p class="text-xs font-bold text-gray-300 dark:text-neutral-600 uppercase tracking-[0.25em]">© {{ date('Y') }} {{ $tenant->business_name }}</p>
+            <p class="text-xs text-gray-300 dark:text-neutral-600">Sitio creado con <span class="text-[#4A80E4] font-bold">SYNTIweb</span></p>
         </div>
     </div>
 </footer>
@@ -492,18 +494,18 @@
         document.querySelectorAll('[data-price-usd]').forEach(el => el.innerHTML = formatPrice(el.getAttribute('data-price-usd')));
         document.querySelectorAll('.sc-curr-btn').forEach(btn => {
             let active = (btn.dataset.currency === 'ref' && currentCurrency === CURRENCY_SYMBOL) || (btn.dataset.currency === 'bs' && currentCurrency === 'Bs.');
-            btn.className = `sc-curr-btn px-4 py-1.5 text-xs font-bold rounded-lg transition-all ${active ? 'bg-base-100 shadow-lg text-primary' : 'text-base-content/40'}`;
+            btn.className = `sc-curr-btn px-4 py-1.5 text-xs font-bold rounded-lg transition-all ${active ? 'bg-white dark:bg-neutral-900 shadow-lg text-[#4A80E4]' : 'text-gray-400 dark:text-neutral-500'}`;
         });
-        renderDrawer();
+        @if($hasCart) renderDrawer(); @endif
     };
 
     window.filterCategory = function(catId) {
         document.querySelectorAll('.sc-cat-pill').forEach(btn => {
             const active = String(btn.dataset.cat) === String(catId);
             if (active) {
-                btn.className = 'sc-cat-pill btn btn-sm rounded-2xl btn-primary px-6 shrink-0';
+                btn.className = 'sc-cat-pill text-sm py-1.5 px-6 rounded-2xl font-medium bg-[#4A80E4] text-white hover:bg-[#4A80E4]/90 shrink-0';
             } else {
-                btn.className = 'sc-cat-pill btn btn-sm rounded-2xl btn-ghost border border-base-content/10 whitespace-nowrap px-6 shrink-0';
+                btn.className = 'sc-cat-pill text-sm py-1.5 px-6 rounded-2xl font-medium text-gray-700 hover:bg-gray-100 border border-gray-200 dark:border-neutral-700 whitespace-nowrap shrink-0';
             }
         });
         document.querySelectorAll('.sc-product-card').forEach(card => {
@@ -512,6 +514,7 @@
         });
     };
 
+    @if($hasCart)
     window.addToCart = function(id, name, price, img) {
         const isNew = !cart[id];
         if (cart[id]) cart[id].qty++; else cart[id] = { name, price: parseFloat(price) || 0, qty: 1, img };
@@ -579,10 +582,10 @@
             const item = cart[id];
             totalUsd += item.price * item.qty;
             const div = document.createElement('div');
-            div.className = 'flex items-center gap-4 py-4 border-b border-base-content/5 last:border-0';
+            div.className = 'flex items-center gap-4 py-4 border-b border-gray-100 dark:border-neutral-800 last:border-0';
             // Botón eliminar: ×  (sin clase de icono dinámica en JS)
             div.innerHTML = `
-                <div style="width:56px;height:56px;border-radius:14px;overflow:hidden;background:var(--color-base-200,#e5e7eb);flex-shrink:0">
+                <div style="width:56px;height:56px;border-radius:14px;overflow:hidden;background:var(--surface, #f3f4f6);flex-shrink:0">
                     <img style="width:100%;height:100%;object-fit:cover" src="${item.img || ''}">
                 </div>
                 <div style="flex:1;min-width:0">
@@ -668,6 +671,7 @@
         closeDataModal();
         buildAndSend(name, loc);
     };
+    @endif
 
     document.addEventListener('DOMContentLoaded', () => {
         setCurrency('ref');
