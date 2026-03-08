@@ -6,7 +6,7 @@
     ============================================================
 --}}
 <button
-    @click="$dispatch('synti:open')"
+    @click="$dispatch('synti-open')"
     class="group relative flex items-center gap-1.5
            px-3 py-1.5 rounded-lg
            text-gray-500 hover:text-[#4A80E4]

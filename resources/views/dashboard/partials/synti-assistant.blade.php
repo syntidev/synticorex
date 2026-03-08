@@ -11,7 +11,7 @@
     x-data="syntiAssistant()"
     x-init="init()"
     @keydown.alt.h.window="toggle()"
-    @synti:open.window="openModal()"
+    @synti-open.window="openModal()"
     @keydown.escape.window="close()"
 >
 
