@@ -5,10 +5,16 @@
 ════════════════════════════════════════════════════════════ --}}
 
 @php
-$planSlug = optional($tenant->plan)->slug ?? optional($plan ?? null)->slug ?? '';
-$canSeeWhatsappKpi = in_array($planSlug, ['studio-crecimiento', 'studio-vision']);
-$canSeeQrKpi       = in_array($planSlug, ['studio-crecimiento', 'studio-vision']);
-$canSeeProductsKpi = $planSlug === 'studio-vision';
+$planSlug = $tenant->relationLoaded('plan') && $tenant->plan
+    ? $tenant->plan->slug
+    : (isset($plan) && $plan ? $plan->slug : '');
+
+$canSeeWhatsappKpi = in_array($planSlug, [
+    'studio-crecimiento', 'studio-vision',
+    'crecimiento', 'vision',
+]);
+$canSeeQrKpi       = $canSeeWhatsappKpi;
+$canSeeProductsKpi = in_array($planSlug, ['studio-vision', 'vision']);
 @endphp
 
 {{-- ── Panel principal ── --}}
