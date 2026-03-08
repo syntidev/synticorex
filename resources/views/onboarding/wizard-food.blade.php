@@ -257,7 +257,7 @@
                         <div class="grid grid-cols-2 gap-3">
                             @php
                                 $businessTypes = [
-                                    'restaurant' => ['icon' => 'tabler--building-restaurant', 'label' => 'Restaurante'],
+                                    'restaurant' => ['icon' => 'tabler--tools-kitchen-2', 'label' => 'Restaurante'],
                                     'arepera'    => ['icon' => 'tabler--bread',               'label' => 'Arepera / Comida rápida'],
                                     'sweets'     => ['icon' => 'tabler--cake',                'label' => 'Postres y dulces'],
                                     'delivery'   => ['icon' => 'tabler--motorbike',           'label' => 'Comida a domicilio'],
@@ -461,7 +461,7 @@
                         </h3>
 
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                            <template x-for="plan in plans" :key="plan.id">
+                            <template x-for="plan in [...plans].sort((a, b) => parseFloat(a.price_usd) - parseFloat(b.price_usd))" :key="plan.id">
                                 <label class="cursor-pointer">
                                     <input type="radio" :value="plan.id" x-model="plan_id" class="sr-only peer">
                                     <div class="wiz-plan-card border-2 border-slate-200 p-4 rounded-xl transition-all select-none h-full cursor-pointer relative"
