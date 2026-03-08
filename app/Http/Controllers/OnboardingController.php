@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Models\Plan;
 use App\Models\Tenant;
 use App\Models\TenantCustomization;
+use App\Services\TenantBootstrapFood;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -182,12 +183,63 @@ class OnboardingController extends Controller
     }
 
     /**
-     * Store a new food tenant — TODO: implementar en F5.
+     * Store a new food tenant.
      */
     public function storeFood(Request $request): RedirectResponse
     {
-        // TODO: implementar en F5
-        return redirect()->route('onboarding.selector');
+        $validated = $request->validate([
+            'business_name'  => 'required|string|max:255',
+            'business_type'  => 'required|string',
+            'plan_id'        => 'required|exists:plans,id',
+            'subdomain'      => 'required|alpha_dash|unique:tenants,subdomain',
+            'whatsapp_sales' => 'nullable|string|max:20',
+            'first_category' => 'required|string|max:100',
+            'items'          => 'required|string',
+        ]);
+
+        $items = json_decode($validated['items'], true) ?? [];
+
+        $tenant = DB::transaction(function () use ($validated, $items): Tenant {
+
+            $adminUserId = \App\Models\User::first()->id;
+
+            // 1. Crear tenant
+            $tenant = Tenant::create([
+                'user_id'          => $adminUserId,
+                'plan_id'          => $validated['plan_id'],
+                'subdomain'        => Str::slug($validated['subdomain'], '-'),
+                'base_domain'      => 'syntiweb.com',
+                'business_name'    => $validated['business_name'],
+                'business_segment' => $validated['business_type'],
+                'whatsapp_sales'   => $validated['whatsapp_sales'] ?? null,
+                'status'           => 'active',
+                'plan_activated_at'    => Carbon::now(),
+                'subscription_ends_at' => Carbon::now()->addYear(),
+                'edit_pin'             => bcrypt('1234'),
+            ]);
+
+            // 2. Crear customization
+            TenantCustomization::create([
+                'tenant_id'      => $tenant->id,
+                'content_blocks' => [
+                    'hero' => [
+                        'title'    => $validated['business_name'],
+                        'cta_text' => 'Ver menú',
+                    ],
+                ],
+                'hero_layout' => 'gradient',
+            ]);
+
+            // 3. Bootstrap directorio + menu.json
+            TenantBootstrapFood::bootstrap($tenant);
+
+            // 4. Agregar primera categoría e ítems
+            TenantBootstrapFood::addInitialCategory($tenant, $validated['first_category'], $items);
+
+            return $tenant;
+        });
+
+        return redirect()->route('onboarding.preview', $tenant->id);
     }
 
     /**
