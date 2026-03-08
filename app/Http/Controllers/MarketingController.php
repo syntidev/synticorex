@@ -165,8 +165,6 @@ class MarketingController extends Controller
 
     public function cat(): View
     {
-        $plans = Plan::where('blueprint', 'cat')->orderBy('id')->get();
-
-        return view('marketing.cat', compact('plans'));
+        return view('marketing.cat');
     }
 }
