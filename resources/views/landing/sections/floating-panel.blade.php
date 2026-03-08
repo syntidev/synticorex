@@ -5,10 +5,10 @@
 ════════════════════════════════════════════════════════════ --}}
 
 @php
-$planSlug = $plan->slug ?? 'studio-oportunidad';
-$canSeeWhatsappKpi  = in_array($planSlug, ['studio-crecimiento', 'studio-vision']);
-$canSeeQrKpi        = in_array($planSlug, ['studio-crecimiento', 'studio-vision']);
-$canSeeProductsKpi  = $planSlug === 'studio-vision';
+$planSlug = optional($tenant->plan)->slug ?? optional($plan ?? null)->slug ?? '';
+$canSeeWhatsappKpi = in_array($planSlug, ['studio-crecimiento', 'studio-vision']);
+$canSeeQrKpi       = in_array($planSlug, ['studio-crecimiento', 'studio-vision']);
+$canSeeProductsKpi = $planSlug === 'studio-vision';
 @endphp
 
 {{-- ── Panel principal ── --}}
@@ -67,14 +67,6 @@ $canSeeProductsKpi  = $planSlug === 'studio-vision';
                         <div class="synti-kpi-value" id="kpi-whatsapp">0</div>
                         <div class="synti-kpi-label">Clics WhatsApp</div>
                     </div>
-                @else
-                    <div class="synti-kpi-card synti-kpi-locked">
-                        <div class="synti-kpi-value">
-                            <iconify-icon icon="tabler:lock" width="16"></iconify-icon>
-                        </div>
-                        <div class="synti-kpi-label">Clics WhatsApp</div>
-                        <div class="synti-kpi-upgrade">Plan Crecimiento</div>
-                    </div>
                 @endif
 
                 {{-- Escaneos QR — solo crecimiento + vision --}}
@@ -83,14 +75,6 @@ $canSeeProductsKpi  = $planSlug === 'studio-vision';
                         <div class="synti-kpi-value" id="kpi-qr">0</div>
                         <div class="synti-kpi-label">Escaneos QR</div>
                     </div>
-                @else
-                    <div class="synti-kpi-card synti-kpi-locked">
-                        <div class="synti-kpi-value">
-                            <iconify-icon icon="tabler:lock" width="16"></iconify-icon>
-                        </div>
-                        <div class="synti-kpi-label">Escaneos QR</div>
-                        <div class="synti-kpi-upgrade">Plan Crecimiento</div>
-                    </div>
                 @endif
 
                 {{-- Productos vistos — solo vision --}}
@@ -98,14 +82,6 @@ $canSeeProductsKpi  = $planSlug === 'studio-vision';
                     <div class="synti-kpi-card">
                         <div class="synti-kpi-value" id="kpi-products">0</div>
                         <div class="synti-kpi-label">Productos vistos</div>
-                    </div>
-                @else
-                    <div class="synti-kpi-card synti-kpi-locked">
-                        <div class="synti-kpi-value">
-                            <iconify-icon icon="tabler:lock" width="16"></iconify-icon>
-                        </div>
-                        <div class="synti-kpi-label">Productos vistos</div>
-                        <div class="synti-kpi-upgrade">Plan Visión</div>
                     </div>
                 @endif
             </div>
@@ -341,19 +317,6 @@ $canSeeProductsKpi  = $planSlug === 'studio-vision';
     margin-top: 5px;
     text-transform: uppercase;
     letter-spacing: 0.3px;
-}
-.synti-kpi-locked {
-    opacity: 0.45;
-    cursor: default;
-    position: relative;
-}
-.synti-kpi-upgrade {
-    font-size: 9px;
-    color: #4A80E4;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-top: 2px;
 }
 
 /* ── Tasa dólar ── */
