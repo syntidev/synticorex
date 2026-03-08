@@ -60,35 +60,60 @@ $canSeeProductsKpi = in_array($planSlug, ['studio-vision', 'vision']);
         {{-- ── EL RADAR — KPIs ── --}}
         <div class="synti-section">
             <p class="synti-label">EL RADAR · PULSO DE VENTA</p>
-            <div class="synti-kpi-grid">
-                {{-- Visitas hoy — siempre visible --}}
+
+            @php
+            $kpiCount = 1
+                + ($canSeeWhatsappKpi ? 1 : 0)
+                + ($canSeeQrKpi ? 1 : 0)
+                + ($canSeeProductsKpi ? 1 : 0);
+            @endphp
+
+            <div class="synti-kpi-grid synti-kpi-count-{{ $kpiCount }}">
                 <div class="synti-kpi-card">
                     <div class="synti-kpi-value" id="kpi-visits">0</div>
                     <div class="synti-kpi-label">Visitas hoy</div>
                 </div>
-
-                {{-- Clics WhatsApp — solo crecimiento + vision --}}
                 @if($canSeeWhatsappKpi)
-                    <div class="synti-kpi-card">
-                        <div class="synti-kpi-value" id="kpi-whatsapp">0</div>
-                        <div class="synti-kpi-label">Clics WhatsApp</div>
-                    </div>
+                <div class="synti-kpi-card">
+                    <div class="synti-kpi-value" id="kpi-whatsapp">0</div>
+                    <div class="synti-kpi-label">Clics WhatsApp</div>
+                </div>
                 @endif
-
-                {{-- Escaneos QR — solo crecimiento + vision --}}
                 @if($canSeeQrKpi)
-                    <div class="synti-kpi-card">
-                        <div class="synti-kpi-value" id="kpi-qr">0</div>
-                        <div class="synti-kpi-label">Escaneos QR</div>
-                    </div>
+                <div class="synti-kpi-card">
+                    <div class="synti-kpi-value" id="kpi-qr">0</div>
+                    <div class="synti-kpi-label">Escaneos QR</div>
+                </div>
                 @endif
-
-                {{-- Productos vistos — solo vision --}}
                 @if($canSeeProductsKpi)
-                    <div class="synti-kpi-card">
-                        <div class="synti-kpi-value" id="kpi-products">0</div>
-                        <div class="synti-kpi-label">Productos vistos</div>
-                    </div>
+                <div class="synti-kpi-card">
+                    <div class="synti-kpi-value" id="kpi-products">0</div>
+                    <div class="synti-kpi-label">Productos vistos</div>
+                </div>
+                @endif
+            </div>
+
+            @php
+            $planDisplayName = match($planSlug) {
+                'oportunidad', 'studio-oportunidad' => 'Plan Oportunidad',
+                'crecimiento', 'studio-crecimiento' => 'Plan Crecimiento',
+                'vision', 'studio-vision'           => 'Plan Visión',
+                'food-basico'                        => 'Food Básico',
+                'food-semestral'                     => 'Food Semestral',
+                'food-anual'                         => 'Food Anual',
+                'cat-basico'                         => 'Cat Básico',
+                'cat-semestral'                      => 'Cat Semestral',
+                'cat-anual'                          => 'Cat Anual',
+                default                              => 'Plan Activo',
+            };
+            $isTopPlan = in_array($planSlug, ['studio-vision', 'vision', 'food-anual', 'cat-anual']);
+            @endphp
+
+            <div class="synti-plan-pill">
+                <iconify-icon icon="tabler:rosette-discount-check" width="13"></iconify-icon>
+                <span>{{ $planDisplayName }}</span>
+                @if(!$isTopPlan)
+                    <a href="/planes" target="_blank" class="synti-plan-upgrade">Ver planes →</a>
                 @endif
             </div>
         </div>
@@ -300,8 +325,14 @@ $canSeeProductsKpi = in_array($planSlug, ['studio-vision', 'vision']);
 /* ── KPIs ── */
 .synti-kpi-grid {
     display: grid;
-    grid-template-columns: repeat(2,1fr);
     gap: 8px;
+    grid-template-columns: 1fr 1fr;
+}
+.synti-kpi-count-1 {
+    grid-template-columns: 1fr;
+}
+.synti-kpi-count-3 .synti-kpi-card:first-child {
+    grid-column: span 2;
 }
 .synti-kpi-card {
     background: rgba(255,255,255,0.04);
@@ -323,6 +354,26 @@ $canSeeProductsKpi = in_array($planSlug, ['studio-vision', 'vision']);
     margin-top: 5px;
     text-transform: uppercase;
     letter-spacing: 0.3px;
+}
+.synti-plan-pill {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 8px;
+    font-size: 11px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.35);
+}
+.synti-plan-upgrade {
+    margin-left: auto;
+    color: #4A80E4;
+    font-size: 10px;
+    font-weight: 700;
+    text-decoration: none;
+    letter-spacing: 0.02em;
+}
+.synti-plan-upgrade:hover {
+    color: #7aa8ff;
 }
 
 /* ── Tasa dólar ── */
