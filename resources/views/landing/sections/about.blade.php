@@ -34,6 +34,10 @@
     <div class="relative mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8">
         <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 
+            {{-- Separador vertical decorativo (desktop) --}}
+            <div class="pointer-events-none absolute left-1/2 top-[15%] bottom-[15%] w-px hidden lg:block"
+                 style="background:linear-gradient(to bottom, transparent, color-mix(in oklch, var(--color-primary) 20%, transparent) 30%, color-mix(in oklch, var(--color-primary) 20%, transparent) 70%, transparent)"></div>
+
             {{-- ░░ COLUMNA IZQUIERDA: imagen ░░ --}}
             <div class="relative about-col-img">
 
@@ -46,7 +50,7 @@
 
                     <img src="{{ $businessImage }}"
                          alt="{{ $tenant->business_name }}"
-                         class="w-full h-auto rounded-2xl shadow-lg ring-1 ring-black/8 relative z-10"
+                         class="w-full h-auto rounded-2xl shadow-[0_20px_60px_-10px_rgba(0,0,0,0.15)] ring-1 ring-primary/10 relative z-10"
                          loading="lazy">
 
                 @elseif($logoImage)
@@ -89,7 +93,8 @@
                     </p>
                 @endif
 
-                <h2 class="text-foreground text-3xl lg:text-4xl font-bold leading-tight mb-2">
+                <h2 class="text-foreground text-3xl lg:text-4xl font-bold leading-tight mb-2"
+                    style="text-shadow: 0 4px 24px color-mix(in oklch, var(--color-foreground) 15%, transparent), 0 1px 4px color-mix(in oklch, var(--color-foreground) 8%, transparent);">
                     {!! $customization->getSectionTitle('about', 'Acerca de <span class="text-primary italic">nosotros</span>') !!}
                 </h2>
 

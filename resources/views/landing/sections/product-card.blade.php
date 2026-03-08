@@ -1,5 +1,5 @@
 {{-- Product Card — Preline 4.1.2 + Tailwind v4 --}}
-<div class="group flex flex-col bg-card border border-card-line rounded-2xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 overflow-hidden">
+<div class="group flex flex-col bg-card border border-card-line rounded-2xl shadow-sm hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] hover:-translate-y-1 hover:ring-2 hover:ring-primary/15 transition-all duration-300 overflow-hidden">
 
     {{-- IMAGEN / SLIDER --}}
     <div class="relative">
@@ -58,7 +58,7 @@
         @else
             @if($product->image_filename)
                 <img src="{{ asset('storage/tenants/' . ($tenant->id ?? '') . '/' . $product->image_filename) }}"
-                     class="size-full object-cover rounded-2xl cursor-zoom-in"
+                     class="size-full object-cover rounded-2xl cursor-zoom-in transition-transform duration-500 group-hover:scale-[1.03]"
                      onclick="openZoom(this.src)"
                      alt="{{ $product->name }}"
                      onerror="this.style.display='none'; this.parentElement.style.display='none';">
@@ -122,9 +122,9 @@
 
             {{-- Precio: respeta currency toggle + hidePrice --}}
             @if($product->price_usd && !($hidePrice ?? false))
-                <p class="mt-2 font-semibold text-foreground"
+                <p class="mt-2 text-lg font-semibold text-foreground"
                    data-price-usd="{{ $product->price_usd }}">
-                    <span class="text-xs font-medium opacity-50 mr-0.5">REF</span>{{ number_format($product->price_usd, 2) }}
+                    <span class="text-[11px] font-medium opacity-40 mr-0.5">REF</span>{{ number_format($product->price_usd, 2) }}
                 </p>
             @endif
 
@@ -138,7 +138,7 @@
             <div class="flex gap-2">
                 <a href="{{ $waBase }}?text={{ urlencode($waProductMsg) }}"
                    target="_blank" rel="noopener noreferrer"
-                   class="py-2 px-3 flex-1 inline-flex justify-center items-center gap-x-2 text-sm font-medium text-nowrap rounded-xl bg-primary border border-primary-line text-primary-foreground hover:bg-primary-hover focus:outline-hidden focus:bg-primary-focus transition disabled:opacity-50 disabled:pointer-events-none">
+                   class="py-2 px-3 flex-1 inline-flex justify-center items-center gap-x-2 text-sm font-medium text-nowrap rounded-xl bg-primary border border-primary-line text-primary-foreground hover:bg-primary-hover shadow-sm hover:shadow-[0_4px_12px_color-mix(in_oklch,var(--color-primary)_35%,transparent)] focus:outline-hidden focus:bg-primary-focus transition disabled:opacity-50 disabled:pointer-events-none">
                     Más info
                 </a>
                 <button type="button"
@@ -153,7 +153,7 @@
             <div class="flex gap-2">
                 <a href="{{ $waBase . '?text=' . urlencode($waProductMsg) }}"
                    target="_blank" rel="noopener noreferrer"
-                   class="py-2 px-3 flex-1 inline-flex justify-center items-center gap-x-2 text-sm font-medium text-nowrap rounded-xl bg-primary border border-primary-line text-primary-foreground hover:bg-primary-hover focus:outline-hidden focus:bg-primary-focus transition disabled:opacity-50 disabled:pointer-events-none">
+                   class="py-2 px-3 flex-1 inline-flex justify-center items-center gap-x-2 text-sm font-medium text-nowrap rounded-xl bg-primary border border-primary-line text-primary-foreground hover:bg-primary-hover shadow-sm hover:shadow-[0_4px_12px_color-mix(in_oklch,var(--color-primary)_35%,transparent)] focus:outline-hidden focus:bg-primary-focus transition disabled:opacity-50 disabled:pointer-events-none">
                     <span class="iconify tabler--brand-whatsapp size-4"></span>
                     Pedir por WhatsApp
                 </a>
@@ -169,7 +169,7 @@
             <div class="flex gap-2">
                 <a href="{{ $waBase . '?text=' . urlencode($waProductMsg) }}"
                    target="_blank" rel="noopener noreferrer"
-                   class="py-2 px-3 flex-1 inline-flex justify-center items-center gap-x-2 text-sm font-medium text-nowrap rounded-xl bg-primary border border-primary-line text-primary-foreground hover:bg-primary-hover focus:outline-hidden focus:bg-primary-focus transition disabled:opacity-50 disabled:pointer-events-none">
+                   class="py-2 px-3 flex-1 inline-flex justify-center items-center gap-x-2 text-sm font-medium text-nowrap rounded-xl bg-primary border border-primary-line text-primary-foreground hover:bg-primary-hover shadow-sm hover:shadow-[0_4px_12px_color-mix(in_oklch,var(--color-primary)_35%,transparent)] focus:outline-hidden focus:bg-primary-focus transition disabled:opacity-50 disabled:pointer-events-none">
                     <span class="iconify tabler--brand-whatsapp size-4"></span>
                     WhatsApp
                 </a>
