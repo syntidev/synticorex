@@ -97,6 +97,8 @@
                     style="text-shadow: 0 4px 24px color-mix(in oklch, var(--color-foreground) 15%, transparent), 0 1px 4px color-mix(in oklch, var(--color-foreground) 8%, transparent);">
                     {!! $customization->getSectionTitle('about', 'Acerca de <span class="text-primary italic">nosotros</span>') !!}
                 </h2>
+				<div class="w-16 h-0.5 mt-4 mb-5 rounded-full"
+                 style="background:var(--color-primary);box-shadow:0 0 12px 2px color-mix(in oklch,var(--color-primary) 60%,transparent)"></div>
 
                 <p class="text-foreground/60 text-base font-medium mb-5">{{ $tenant->business_name }}</p>
 
