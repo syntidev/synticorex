@@ -144,6 +144,15 @@ class MarketingController extends Controller
         return view('marketing.index', compact('plans', 'segments', 'stats'));
     }
 
+    public function planes(): View
+    {
+        $studioPlans = Plan::where('blueprint', 'studio')->orderBy('price_usd')->get();
+        $foodPlans   = Plan::where('blueprint', 'food')->orderBy('price_usd')->get();
+        $catPlans    = Plan::where('blueprint', 'cat')->orderBy('price_usd')->get();
+
+        return view('marketing.planes', compact('studioPlans', 'foodPlans', 'catPlans'));
+    }
+
     public function studio(): View
     {
         $plans = Plan::where('blueprint', 'studio')->orderBy('id')->get();

@@ -32,6 +32,7 @@ Route::domain('app.synticorex.test')->group(function () {
 });
 
 // ═══ Landings de producto ════════════════════════════════════════════════════
+Route::get('/planes', [MarketingController::class, 'planes'])->name('marketing.planes');
 Route::get('/studio', [MarketingController::class, 'studio'])->name('marketing.studio');
 Route::get('/food',   [MarketingController::class, 'food'])->name('marketing.food');
 Route::get('/cat',    [MarketingController::class, 'cat'])->name('marketing.cat');
