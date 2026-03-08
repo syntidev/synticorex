@@ -26,16 +26,24 @@
 @endphp
 
 @if($activeBranches->isNotEmpty())
-<section id="branches" class="py-12 sm:py-20 lg:py-28 bg-background">
+<section id="branches" class="relative overflow-hidden py-12 sm:py-20 lg:py-28 bg-background">
+
+    <div class="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+        <div class="absolute -top-20 -right-20 size-80 rounded-full opacity-[0.05] blur-3xl"
+             style="background:var(--color-primary)"></div>
+    </div>
+
     <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
 
         {{-- Section header --}}
         <div class="text-center mb-12">
             <span class="inline-block text-xs font-bold uppercase tracking-[0.3em] text-primary mb-3">{{ $customization->getContentBlock('branches', 'eyebrow') ?: 'Nuestras sedes' }}</span>
-            <h2 class="text-foreground text-2xl font-semibold md:text-3xl lg:text-4xl">
+            <h2 class="text-foreground text-2xl font-semibold md:text-3xl lg:text-4xl"
+                style="text-shadow: 0 4px 24px color-mix(in oklch, var(--color-foreground) 15%, transparent), 0 1px 4px color-mix(in oklch, var(--color-foreground) 8%, transparent);">
                 {!! $customization->getSectionTitle('branches', 'Encuéntranos <span class="text-primary italic">Cerca de Ti</span>') !!}
             </h2>
-            <div class="w-16 h-1 bg-primary mx-auto rounded-full mt-5"></div>
+            <div class="w-16 h-0.5 mx-auto rounded-full mt-5"
+                 style="background:var(--color-primary);box-shadow:0 0 12px 2px color-mix(in oklch,var(--color-primary) 60%,transparent)"></div>
         </div>
 
         {{-- Cards grid --}}

@@ -25,7 +25,8 @@
                 style="text-shadow: 0 4px 24px color-mix(in oklch, var(--color-foreground) 15%, transparent), 0 1px 4px color-mix(in oklch, var(--color-foreground) 8%, transparent);">
                 {!! $customization->getSectionTitle('services', 'Nuestros <span class="text-primary italic">Servicios</span>') !!}
             </h2>
-            <div class="w-16 h-1 bg-primary mx-auto mt-4 rounded-full"></div>
+            <div class="w-16 h-0.5 mx-auto mt-4 rounded-full"
+                 style="background:var(--color-primary);box-shadow:0 0 12px 2px color-mix(in oklch,var(--color-primary) 60%,transparent)"></div>
             @if($customization->getSectionSubtitle('services'))
             <p class="text-foreground/80 text-xl mt-4">{{ $customization->getSectionSubtitle('services') }}</p>
             @else

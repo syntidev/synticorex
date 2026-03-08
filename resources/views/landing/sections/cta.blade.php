@@ -13,34 +13,34 @@
     }
 @endphp
 
-<section id="cta" class="py-8 sm:py-16 lg:py-24 relative overflow-hidden bg-primary">
+<section id="cta" class="py-8 sm:py-16 lg:py-24 relative overflow-hidden bg-surface">
 
     {{-- Background pattern --}}
-    <div class="absolute inset-0 opacity-10 pointer-events-none"
-         style="background-image:url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
+    <div class="absolute inset-0 opacity-[0.04] pointer-events-none"
+         style="background-image:url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%234A80E4\' fill-opacity=\'1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
 
     {{-- Blobs de profundidad --}}
-    <div class="absolute -top-20 -left-20 size-72 rounded-full opacity-20 blur-3xl pointer-events-none"
-         style="background:rgba(255,255,255,0.3)"></div>
-    <div class="absolute -bottom-20 -right-20 size-72 rounded-full opacity-10 blur-3xl pointer-events-none"
-         style="background:rgba(255,255,255,0.2)"></div>
+    <div class="absolute -top-20 -left-20 size-72 rounded-full opacity-[0.06] blur-3xl pointer-events-none"
+         style="background:var(--color-primary)"></div>
+    <div class="absolute -bottom-20 -right-20 size-72 rounded-full opacity-[0.04] blur-3xl pointer-events-none"
+         style="background:var(--color-primary)"></div>
 
     <div class="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8 relative z-10 text-center">
 
-        <h2 class="text-2xl font-semibold md:text-3xl lg:text-4xl text-white mb-4"
-            style="text-shadow: 0 4px 24px rgba(255,255,255,0.15), 0 1px 4px rgba(255,255,255,0.08);">
+        <h2 class="text-2xl font-semibold md:text-3xl lg:text-4xl text-foreground mb-4"
+            style="text-shadow: 0 4px 24px color-mix(in oklch, var(--color-foreground) 15%, transparent), 0 1px 4px color-mix(in oklch, var(--color-foreground) 8%, transparent);">
             {{ $ctaTitle }}
         </h2>
 
         @if($ctaSub)
-            <p class="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
+            <p class="text-xl text-muted-foreground-1 mb-8 max-w-2xl mx-auto">
                 {{ $ctaSub }}
             </p>
         @endif
 
         @if($ctaBtnText && $ctaBtnLink)
             <a href="{{ $ctaBtnLink }}" target="_blank" rel="noopener noreferrer"
-               class="inline-flex items-center py-3 px-6 rounded-lg font-semibold transition-colors text-lg bg-background text-primary hover:bg-background/90 gap-2 shadow-lg">
+               class="inline-flex items-center py-3 px-6 rounded-lg font-semibold transition-all duration-200 text-lg bg-background text-primary hover:bg-background/90 gap-2 shadow-lg shadow-[0_4px_14px_0_color-mix(in_oklch,var(--color-primary)_40%,transparent)] hover:shadow-[0_6px_20px_0_color-mix(in_oklch,var(--color-primary)_50%,transparent)] hover:-translate-y-0.5">
                 {{ $ctaBtnText }}
                 <span class="iconify tabler--brand-whatsapp size-5" aria-hidden="true"></span>
             </a>
