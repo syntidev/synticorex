@@ -247,9 +247,15 @@ class PlansSeeder extends Seeder
             );
         }
 
-        // Eliminar cualquier plan obsoleto que no forme parte del catálogo canónico.
-        // No se trunca: se preserva la integridad referencial de tenants activos
-        // cuyos plan_id no correspondan a slugs obsoletos.
-        Plan::whereNotIn('slug', $canonicalSlugs)->delete();
+        // Eliminar cualquier plan obsoleto que no forme parte del catálogo canónico,
+        // PERO solo si no tiene tenants activos (evita violación de FK).
+        // Los planes obsoletos con tenants se preservan para integridad referencial.
+        Plan::whereNotIn('slug', $canonicalSlugs)
+            ->whereNotExists(function ($query) {
+                $query->select(\Illuminate\Support\Facades\DB::raw(1))
+                    ->from('tenants')
+                    ->whereColumn('tenants.plan_id', 'plans.id');
+            })
+            ->delete();
     }
 }
