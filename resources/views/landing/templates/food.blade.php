@@ -42,6 +42,15 @@
     .sf-item-name{font-weight:800;font-size:.875rem;color:var(--foreground);line-clamp:2}
     .sf-item-desc{font-size:.75rem;opacity:.45;line-clamp:2;md:line-clamp:1}
     .sf-item-footer{display:flex;gap:2;align-items:center;justify-content:space-between;mt:2}
+    /* ── Category Nav (Sticky) ── */
+    .sf-cat-nav{position:sticky;top:64px;z-index:50;background:var(--background);border-bottom:1px solid var(--foreground/.05);display:flex;align-items:center;gap:3;padding:1rem;overflow-x:auto;overflow-y:hidden;scroll-behavior:smooth}
+    .sf-cat-nav.no-scrollbar::-webkit-scrollbar{display:none}
+    .sf-cat-nav{-ms-overflow-style:none;scrollbar-width:none}
+    .sf-cat-search{min-width:160px;shrink:0;display:flex;align-items:center;gap:2;bg:var(--surface,.05);border:1px solid var(--foreground/.05);border-radius:99px;px:3;py:2}
+    .sf-cat-search input{background:transparent;border:none;outline:none;width:100%;font-size:.75rem;color:var(--foreground)}
+    .sf-cat-pill{display:inline-flex;align-items:center;gap:2;padding:.5rem 1rem;background:transparent;border:1px solid var(--foreground/.1);border-radius:99px;font-size:.875rem;font-weight:600;color:var(--foreground);cursor:pointer;white-space:nowrap;shrink:0;transition:all .2s;text-decoration:none}
+    .sf-cat-pill:hover{bg:var(--surface,.3);border-color:var(--foreground/.2)}
+    .sf-cat-pill.active{bg:var(--primary);color:var(--primary-foreground);border-color:var(--primary)}
     .sf-drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);z-index:200;opacity:0;pointer-events:none;transition:opacity .3s ease}
     .sf-drawer-overlay.open{opacity:1;pointer-events:auto}
     .sf-drawer{position:fixed;right:0;top:0;bottom:0;width:min(420px,95vw);z-index:201;transform:translateX(105%);transition:transform .4s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;box-shadow:-20px 0 60px rgba(0,0,0,.12);border-top-left-radius:2rem;border-bottom-left-radius:2rem}
@@ -171,7 +180,22 @@
 </section>
 @endif
 
-{{-- 4. CATEGORIES + ITEMS --}}
+{{-- 4. CATEGORY NAV (STICKY) --}}
+<nav class="sf-cat-nav no-scrollbar">
+    <div class="sf-cat-search">
+        <span class="iconify tabler--search size-4 text-foreground/40"></span>
+        <input type="text" id="sf-search" placeholder="Buscar..." onkeyup="filterItems()">
+    </div>
+    @foreach($categories as $idx => $cat)
+        @if(!empty($cat['activo']))
+        <button class="sf-cat-pill {{ $idx === 0 ? 'active' : '' }}" onclick="scrollToCategory({{ $idx }})">
+            {{ $cat['nombre'] }}
+        </button>
+        @endif
+    @endforeach
+</nav>
+
+{{-- 5. CATEGORIES + ITEMS --}}
 <main class="mx-auto max-w-3xl px-4 py-6 space-y-4 pb-32">
     @forelse($categories as $catIdx => $cat)
         @if(!empty($cat['activo']))
@@ -307,7 +331,7 @@
     @endforelse
 </main>
 
-{{-- 5. DRAWER PEDIDO --}}
+{{-- 6. DRAWER PEDIDO --}}
 @if($isPlanAnual)
 <div class="sf-drawer-overlay" id="sf-overlay" onclick="toggleDrawer()"></div>
 <aside class="sf-drawer bg-background" id="sf-drawer">
@@ -367,7 +391,7 @@
 </div>
 @endif
 
-{{-- 6. MODAL Datos Cliente --}}
+{{-- 7. MODAL Datos Cliente --}}
 @if($isPlanAnual)
 <div id="sf-data-modal" class="sf-modal-overlay">
     <div class="sf-modal p-6 space-y-5">
@@ -423,7 +447,7 @@
 </div>
 @endif
 
-{{-- 7. FOOTER --}}
+{{-- 8. FOOTER --}}
 <footer class="bg-surface/50 border-t border-foreground/5 py-14">
     <div class="mx-auto max-w-3xl px-4 text-center">
         @if(!empty($customization->logo_filename))
@@ -462,6 +486,23 @@
 
 @push('scripts')
 <script>
+// ── Category Nav ──
+window.filterItems = function() {
+    var searchTerm = document.getElementById('sf-search').value.toLowerCase();
+    var items = document.querySelectorAll('.sf-item-name');
+    items.forEach(function(item) {
+        var text = item.textContent.toLowerCase();
+        item.closest('.px-4').style.display = text.includes(searchTerm) ? '' : 'none';
+    });
+};
+
+window.scrollToCategory = function(idx) {
+    document.querySelectorAll('.sf-cat-pill').forEach(function(pill) { pill.classList.remove('active'); });
+    document.querySelectorAll('.sf-cat-pill')[idx].classList.add('active');
+    var catSection = document.querySelectorAll('main > div')[idx];
+    if (catSection) catSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+};
+
 // ── Hero Slider ──
 (function() {
     var currentSlide = 0;
