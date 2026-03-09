@@ -42,192 +42,306 @@
     .sf-field input:focus+label,.sf-field input:not(:placeholder-shown)+label{top:.6rem;transform:none;font-size:.65rem;letter-spacing:.05em;color:var(--primary,#570DF8)}
     .sf-field-error{border-color:#ef4444!important;background:#fff5f5!important}
     .sf-field-error:focus{box-shadow:0 0 0 3px rgba(239,68,68,.15)!important}
+    #sf-detail-view{position:fixed;inset:0;z-index:150;overflow-y:auto;background:var(--background,#fff);-webkit-overflow-scrolling:touch}
+    #sf-detail-view{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+    #sf-detail-view::-webkit-scrollbar{width:4px}
+    #sf-detail-view::-webkit-scrollbar-track{background:transparent}
+    #sf-detail-view::-webkit-scrollbar-thumb{background:var(--primary);border-radius:99px}
+    #sf-also-like-grid{scrollbar-width:thin;scrollbar-color:var(--primary) transparent}
+    #sf-also-like-grid::-webkit-scrollbar{height:3px}
+    #sf-also-like-grid::-webkit-scrollbar-track{background:transparent}
+    #sf-also-like-grid::-webkit-scrollbar-thumb{background:var(--primary);border-radius:99px}
 </style>
 @endpush
 
 @section('content')
 
-{{-- 1. HEADER --}}
-<header class="sticky top-0 z-[100] w-full bg-background/90 backdrop-blur-2xl" style="border-bottom:1px solid rgba(0,0,0,.07);">
-    <div class="mx-auto max-w-3xl px-4 flex items-center justify-between h-16">
-        <a href="#" class="flex items-center gap-2.5 min-w-0">
+{{-- 1. HERO SLIDER --}}
+@php
+    $heroImages = array_values(array_filter([
+        $customization->hero_image ?? null,
+        $customization->hero_image_2 ?? null,
+        $customization->hero_image_3 ?? null,
+    ]));
+@endphp
+@if(count($heroImages) > 0)
+<div id="sf-hero-slider" class="relative w-full overflow-hidden bg-surface" style="height:220px">
+    @foreach($heroImages as $hIdx => $hImg)
+    <div class="sf-slide absolute inset-0 transition-opacity duration-700" style="opacity:{{ $hIdx === 0 ? '1' : '0' }}">
+        <img src="{{ asset('storage/' . $hImg) }}" alt="Hero" class="w-full h-full object-cover">
+    </div>
+    @endforeach
+    @if(count($heroImages) > 1)
+    <div class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
+        @foreach($heroImages as $hIdx => $hImg)
+        <button class="sf-dot size-2 rounded-full transition-all {{ $hIdx === 0 ? 'bg-white' : 'bg-white/40' }}" data-slide="{{ $hIdx }}"></button>
+        @endforeach
+    </div>
+    @endif
+</div>
+@endif
+
+{{-- 2. BUSINESS INFO --}}
+<div class="mx-auto max-w-5xl px-4 py-5">
+    <div class="flex items-start gap-4">
+        @if(!empty($customization->logo_filename))
+            <img src="{{ asset('storage/tenants/' . $tenant->id . '/' . $customization->logo_filename) }}"
+                 alt="{{ $tenant->business_name }}"
+                 class="size-20 rounded-2xl object-cover shrink-0 shadow-lg border-4 border-background -mt-12 relative z-10 bg-background">
+        @else
+            <div class="size-20 bg-primary rounded-2xl flex items-center justify-center shrink-0 shadow-lg border-4 border-background -mt-12 relative z-10">
+                <span class="text-primary-foreground font-black text-2xl">{{ mb_substr($tenant->business_name, 0, 1) }}</span>
+            </div>
+        @endif
+        <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2 flex-wrap">
+                <h1 class="text-xl font-black tracking-tight text-foreground">{{ $tenant->business_name }}</h1>
+                @if($tenant->is_open ?? false)
+                    <span class="inline-flex items-center gap-1.5 text-xs font-bold text-green-600"><span class="size-1.5 rounded-full bg-green-500"></span>Abierto</span>
+                @else
+                    <span class="inline-flex items-center gap-1.5 text-xs font-bold text-red-500"><span class="size-1.5 rounded-full bg-red-500"></span>Cerrado</span>
+                @endif
+            </div>
+            @if(!empty($tenant->address))
+            <p class="text-sm text-foreground/50 mt-1 flex items-center gap-1">
+                <span class="iconify tabler--map-pin size-3.5 shrink-0 text-foreground/30"></span>
+                {{ $tenant->address }}@if(!empty($tenant->city)), {{ $tenant->city }}@endif
+            </p>
+            @endif
+        </div>
+        <div class="hidden sm:flex items-center gap-2 shrink-0 pt-1">
+            @if($waClean)
+            <a href="https://wa.me/{{ $waClean }}" target="_blank" rel="noopener noreferrer"
+               class="size-10 rounded-full flex items-center justify-center border-none transition-opacity hover:opacity-80"
+               style="background:#25D366">
+                <span class="iconify tabler--brand-whatsapp size-5 text-white"></span>
+            </a>
+            @endif
+            @if(!empty($tenant->instagram))
+            <a href="https://instagram.com/{{ $tenant->instagram }}" target="_blank" rel="noopener noreferrer"
+               class="size-10 rounded-full flex items-center justify-center border-none transition-opacity hover:opacity-80"
+               style="background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)">
+                <span class="iconify tabler--brand-instagram size-5 text-white"></span>
+            </a>
+            @endif
+            @if(!empty($tenant->facebook))
+            <a href="https://facebook.com/{{ $tenant->facebook }}" target="_blank" rel="noopener noreferrer"
+               class="size-10 rounded-full flex items-center justify-center border-none transition-opacity hover:opacity-80"
+               style="background:#1877F2">
+                <span class="iconify tabler--brand-facebook size-5 text-white"></span>
+            </a>
+            @endif
+            <button onclick="document.getElementById('sf-info-modal').style.display='flex'"
+                    class="flex items-center gap-1.5 text-sm font-medium text-foreground/60 hover:text-foreground border border-foreground/15 px-3 py-2 rounded-full transition-colors">
+                <span class="iconify tabler--info-circle size-4"></span>
+                Información
+            </button>
+        </div>
+    </div>
+</div>
+
+{{-- 3. STICKY BAR --}}
+<div id="sf-sticky-bar" class="sticky top-0 z-[100] bg-background/95 backdrop-blur-2xl" style="border-bottom:1px solid rgba(0,0,0,.06)">
+    <div class="mx-auto max-w-5xl px-4 flex items-center justify-between h-14">
+        <div class="flex items-center gap-2 min-w-0">
             @if(!empty($customization->logo_filename))
                 <img src="{{ asset('storage/tenants/' . $tenant->id . '/' . $customization->logo_filename) }}"
                      alt="{{ $tenant->business_name }}"
-                     class="size-10 rounded-xl object-cover shrink-0"
-                     onerror="this.style.display='none';">
+                     class="size-8 rounded-full object-cover shrink-0">
             @else
-                <div class="size-10 bg-primary rounded-xl flex items-center justify-center shadow-lg shadow-primary/20 shrink-0">
-                    <span class="text-primary-foreground font-black text-lg">{{ mb_substr($tenant->business_name, 0, 1) }}</span>
+                <div class="size-8 bg-primary rounded-full flex items-center justify-center shrink-0">
+                    <span class="text-primary-foreground font-black text-sm">{{ mb_substr($tenant->business_name, 0, 1) }}</span>
                 </div>
             @endif
-            <div class="min-w-0">
-                <span class="text-base font-black tracking-tighter truncate block">{{ $tenant->business_name }}</span>
-                @if($tenant->is_open ?? false)
-                    <span class="inline-flex items-center gap-1 text-[10px] font-bold text-green-600">
-                        <span class="size-1.5 rounded-full bg-green-500"></span> Abierto
-                    </span>
-                @else
-                    <span class="inline-flex items-center gap-1 text-[10px] font-bold text-red-500">
-                        <span class="size-1.5 rounded-full bg-red-500"></span> Cerrado
-                    </span>
-                @endif
-            </div>
-        </a>
-
-        <div class="flex items-center gap-2.5">
+            <span class="text-sm font-bold tracking-tight truncate">{{ $tenant->business_name }}</span>
+            <span class="text-[10px] font-bold {{ ($tenant->is_open ?? false) ? 'text-green-500' : 'text-red-500' }} flex items-center gap-1">
+                <span class="size-1.5 rounded-full {{ ($tenant->is_open ?? false) ? 'bg-green-500' : 'bg-red-500' }}"></span>
+                {{ ($tenant->is_open ?? false) ? 'Abierto' : 'Cerrado' }}
+            </span>
+        </div>
+        <div class="flex items-center gap-1.5">
+            <button onclick="document.getElementById('sf-info-modal').style.display='flex'"
+                    class="p-2 rounded-full text-foreground/40 hover:text-foreground hover:bg-surface/50 transition-colors">
+                <span class="iconify tabler--info-circle size-5"></span>
+            </button>
             @if(str_contains($savedDisplayMode, 'toggle'))
-            <div class="flex bg-surface/50 p-1 rounded-xl border border-foreground/5 backdrop-blur-md">
-                <button class="sf-curr-btn px-3 py-1.5 text-xs font-bold rounded-lg transition-all" data-currency="ref" onclick="setCurrency('ref')">{{ $currencySymbol }}</button>
-                <button class="sf-curr-btn px-3 py-1.5 text-xs font-bold rounded-lg transition-all" data-currency="bs" onclick="setCurrency('bs')">Bs</button>
+            <div class="flex bg-surface/50 p-0.5 rounded-lg border border-foreground/5">
+                <button class="sf-curr-btn px-2 py-1 text-[11px] font-bold rounded-md transition-all" data-currency="ref" onclick="setCurrency('ref')">{{ $currencySymbol }}</button>
+                <button class="sf-curr-btn px-2 py-1 text-[11px] font-bold rounded-md transition-all" data-currency="bs" onclick="setCurrency('bs')">Bs</button>
             </div>
             @endif
-
-            @if($waClean)
-            <a href="https://wa.me/{{ $waClean }}" target="_blank"
-               class="hidden sm:flex text-sm py-1.5 px-3 rounded-2xl font-bold text-white transition-colors gap-1.5 border-none"
-               style="background:#25D366;">
-                <span class="iconify tabler--brand-whatsapp size-4"></span>
-                Contactar
-            </a>
-            @endif
-
             @if($isPlanAnual)
-            <button onclick="toggleDrawer()" class="relative group p-2 rounded-full transition-colors bg-primary text-primary-foreground hover:bg-primary/90 shadow-xl shadow-primary/20">
-                <span class="iconify tabler--shopping-bag size-6"></span>
-                <span id="sf-cart-count" class="absolute -top-1 -right-1 size-5 bg-error text-white text-[10px] font-black rounded-full flex items-center justify-center border-2 border-background" style="display:none">0</span>
+            <button onclick="toggleDrawer()" class="relative p-2 rounded-full bg-primary text-primary-foreground shadow-md shadow-primary/20 hover:opacity-90 transition-opacity">
+                <span class="iconify tabler--shopping-bag size-5"></span>
+                <span id="sf-cart-count" class="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-0.5 bg-red-500 text-white text-[9px] font-black rounded-full flex items-center justify-center border-2 border-background leading-none" style="display:none">0</span>
             </button>
             @endif
         </div>
     </div>
-</header>
+    @php $activeCats = array_filter($categories, fn($c) => !empty($c['activo'])); @endphp
+    @if(count($activeCats) >= 2)
+    <nav id="sf-cat-nav" class="border-t border-foreground/5">
+        <div class="mx-auto max-w-5xl px-4">
+            <div id="sf-cat-tabs" class="flex gap-0 overflow-x-auto no-scrollbar">
+                @foreach($activeCats as $catIdx => $cat)
+                <button
+                    data-cat-nav="{{ $catIdx }}"
+                    onclick="sfScrollToCategory({{ $catIdx }})"
+                    class="sf-cat-tab relative px-4 py-3 text-sm font-semibold whitespace-nowrap transition-colors text-foreground/40 hover:text-foreground border-b-[3px] border-transparent">
+                    {{ $cat['nombre'] }}
+                </button>
+                @endforeach
+            </div>
+        </div>
+    </nav>
+    @endif
+</div>
 
-{{-- 2. HERO MINIMAL --}}
-@if($tenant->slogan || $dollarRate)
-<section class="bg-background border-b border-foreground/5">
-    <div class="mx-auto max-w-3xl px-4 py-6">
-        @if($tenant->slogan)
-            <p class="text-lg font-bold text-foreground leading-snug">{{ $tenant->slogan }}</p>
+{{-- MODAL INFORMACIÓN --}}
+<div id="sf-info-modal" class="sf-modal-overlay" onclick="if(event.target===this)this.style.display='none'">
+    <div class="sf-modal p-6 space-y-4 max-h-[85vh] overflow-y-auto">
+        <div class="flex items-start justify-between gap-3">
+            <div class="flex items-center gap-3">
+                @if(!empty($customization->logo_filename))
+                    <img src="{{ asset('storage/tenants/' . $tenant->id . '/' . $customization->logo_filename) }}"
+                         alt="{{ $tenant->business_name }}"
+                         class="size-12 rounded-full object-cover ring-2 ring-primary/20">
+                @else
+                    <div class="size-12 bg-primary rounded-full flex items-center justify-center shrink-0">
+                        <span class="text-primary-foreground font-black text-xl">{{ mb_substr($tenant->business_name, 0, 1) }}</span>
+                    </div>
+                @endif
+                <div>
+                    <p class="font-black text-base text-foreground">{{ $tenant->business_name }}</p>
+                    @if($tenant->is_open ?? false)
+                        <span class="inline-flex items-center gap-1 text-xs font-bold text-green-600"><span class="size-1.5 rounded-full bg-green-500"></span>Abierto ahora</span>
+                    @else
+                        <span class="inline-flex items-center gap-1 text-xs font-bold text-red-500"><span class="size-1.5 rounded-full bg-red-500"></span>Cerrado</span>
+                    @endif
+                </div>
+            </div>
+            <button onclick="document.getElementById('sf-info-modal').style.display='none'" class="p-1.5 rounded-full hover:bg-surface transition-colors text-foreground/40">
+                <span class="iconify tabler--x size-4"></span>
+            </button>
+        </div>
+
+        @if(!empty($customization->about_text ?? $tenant->description))
+        <p class="text-sm text-foreground/60 leading-relaxed">{{ $customization->about_text ?? $tenant->description }}</p>
         @endif
-        @if($dollarRate)
-            <p class="text-xs text-foreground/40 font-medium mt-1">
-                Tasa BCV: Bs. {{ number_format((float) $dollarRate, 2, ',', '.') }}
+
+        @if($waClean || !empty($tenant->instagram) || !empty($tenant->facebook))
+        <div>
+            <p class="text-[10px] font-black uppercase tracking-widest text-foreground/30 mb-2">Contáctanos</p>
+            <div class="flex gap-2">
+                @if($waClean)
+                <a href="https://wa.me/{{ $waClean }}" target="_blank" class="size-9 rounded-full flex items-center justify-center border-none" style="background:#25D366">
+                    <span class="iconify tabler--brand-whatsapp size-5 text-white"></span>
+                </a>
+                @endif
+                @if(!empty($tenant->instagram))
+                <a href="https://instagram.com/{{ $tenant->instagram }}" target="_blank" class="size-9 rounded-full flex items-center justify-center border-none" style="background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)">
+                    <span class="iconify tabler--brand-instagram size-5 text-white"></span>
+                </a>
+                @endif
+                @if(!empty($tenant->facebook))
+                <a href="https://facebook.com/{{ $tenant->facebook }}" target="_blank" class="size-9 rounded-full flex items-center justify-center border-none" style="background:#1877F2">
+                    <span class="iconify tabler--brand-facebook size-5 text-white"></span>
+                </a>
+                @endif
+            </div>
+        </div>
+        @endif
+
+        @if(!empty($tenant->address))
+        <div>
+            <p class="text-[10px] font-black uppercase tracking-widest text-foreground/30 mb-1">Dirección</p>
+            <p class="text-sm text-primary font-medium flex items-center gap-1.5">
+                <span class="iconify tabler--map-pin size-4 shrink-0"></span>
+                {{ $tenant->address }}@if(!empty($tenant->city)), {{ $tenant->city }}@endif
             </p>
+        </div>
+        @endif
+
+        @if($waClean)
+        <div>
+            <p class="text-[10px] font-black uppercase tracking-widest text-foreground/30 mb-1">Teléfono</p>
+            <a href="https://wa.me/{{ $waClean }}" class="text-sm text-primary font-medium flex items-center gap-1.5">
+                <span class="iconify tabler--phone size-4 shrink-0"></span>
+                +{{ $waClean }}
+            </a>
+        </div>
         @endif
     </div>
-</section>
+</div>
+
+{{-- Banner cerrado --}}
+@if(!($tenant->is_open ?? true))
+<div class="mx-auto max-w-5xl px-4 pt-4">
+    <div class="rounded-xl bg-red-50 border border-red-100 px-6 py-4 text-center">
+        <p class="text-sm font-bold text-red-600">Restaurante cerrado</p>
+        <p class="text-xs text-red-400 mt-0.5">No estamos recibiendo pedidos en este momento. ¡Vuelve pronto!</p>
+    </div>
+</div>
 @endif
 
-{{-- 3. CATEGORIES + ITEMS --}}
-<main class="mx-auto max-w-3xl px-4 py-6 space-y-4 pb-32">
+{{-- 3. MENU VIEW --}}
+<div id="sf-menu-view">
+<main class="mx-auto max-w-5xl px-4 py-6 space-y-8 pb-32">
     @forelse($categories as $catIdx => $cat)
         @if(!empty($cat['activo']))
-        <div x-data="{ open: {{ $catIdx === 0 ? 'true' : 'false' }} }" class="rounded-2xl border border-foreground/5 bg-surface/30 overflow-hidden">
-            {{-- Category header --}}
-            <button @click="open = !open" class="w-full flex items-center gap-3 p-4 text-left hover:bg-surface/60 transition-colors">
-                @if(!empty($cat['foto']))
-                    <img src="{{ asset('storage/tenants/' . $tenant->id . '/menu/' . $cat['foto']) }}"
-                         alt="{{ $cat['nombre'] }}"
-                         class="size-14 rounded-xl object-cover shrink-0"
-                         loading="lazy"
-                         onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
-                    <div class="size-14 rounded-xl bg-surface items-center justify-center shrink-0 hidden">
-                        <span class="iconify tabler--bowl-chopsticks size-6 text-foreground/20"></span>
-                    </div>
-                @else
-                    <div class="size-14 rounded-xl bg-surface flex items-center justify-center shrink-0">
-                        <span class="iconify tabler--bowl-chopsticks size-6 text-foreground/20"></span>
-                    </div>
-                @endif
-                <div class="flex-1 min-w-0">
-                    <h3 class="text-base font-black tracking-tight text-foreground truncate">{{ $cat['nombre'] }}</h3>
-                    <p class="text-xs text-foreground/40 font-medium mt-0.5">{{ count($cat['items'] ?? []) }} platos</p>
-                </div>
-                <span class="iconify size-5 text-foreground/30 transition-transform duration-200 shrink-0"
-                      :class="open ? 'tabler--chevron-up' : 'tabler--chevron-down'"></span>
-            </button>
-
-            {{-- Items --}}
-            <div x-show="open" x-collapse>
-                <div class="border-t border-foreground/5 divide-y divide-foreground/5">
-                    @foreach($cat['items'] ?? [] as $item)
-                        @if(!empty($item['activo']))
-                        @php 
-                            $itemId = $item['id'] ?? ''; 
-                            $itemOptions = $item['options'] ?? [];
-                            $canUseExtras = $isPlanAnual && !empty($itemOptions) && count($itemOptions) > 0;
-                        @endphp
-                        <div class="px-4 py-3" x-data="{ optionsOpen: false, selectedOptions: [] }">
-                            <div class="flex items-center gap-3">
-                                <div class="flex-1 min-w-0">
-                                    <p class="text-sm font-bold text-foreground truncate">{{ $item['nombre'] }}</p>
-                                    @if(!empty($item['descripcion']))
-                                        <p class="text-xs text-foreground/40 line-clamp-1">{{ $item['descripcion'] }}</p>
-                                    @endif
-                                </div>
-
-                                @if(!$hidePrice)
-                                <p class="text-sm font-black tracking-tight text-foreground whitespace-nowrap" data-price-usd="{{ $item['precio'] ?? 0 }}">
-                                    {{ $currencySymbol }} 0.00
-                                </p>
-                                @endif
-
-                                @if($isPlanAnual)
-                                {{-- Add button OR Customize button if has options --}}
-                                @if($canUseExtras)
-                                <button type="button" 
-                                        @click="optionsOpen = !optionsOpen"
-                                        class="size-9 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0 hover:bg-primary hover:text-primary-foreground transition-colors"
-                                        title="Personalizar">
-                                    <span class="iconify tabler--adjustments-horizontal size-4"></span>
-                                </button>
-                                @else
-                                <button id="sf-add-{{ $itemId }}"
-                                        onclick="addToCart('{{ addslashes($itemId) }}', '{{ addslashes($item['nombre'] ?? '') }}', {{ $item['precio'] ?? 0 }})"
-                                        class="size-9 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0 hover:bg-primary hover:text-primary-foreground transition-colors">
-                                    <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
-                                </button>
-                                @endif
-                                {{-- Qty controls (hidden until added) --}}
-                                <div id="qty-row-{{ $itemId }}" class="flex items-center gap-1 bg-surface rounded-full px-2 py-1" style="display:none!important">
-                                    <button class="size-6 rounded-full bg-background flex items-center justify-center text-xs font-bold" onclick="changeQty('{{ addslashes($itemId) }}', -1)">−</button>
-                                    <span class="text-xs font-black min-w-[14px] text-center" id="qty-val-{{ $itemId }}">1</span>
-                                    <button class="size-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xs font-bold" onclick="changeQty('{{ addslashes($itemId) }}', 1)">+</button>
-                                </div>
-                                @endif
-                            </div>
-
-                            {{-- Inline Options Panel --}}
-                            @if($canUseExtras)
-                            <div x-show="optionsOpen" x-collapse class="mt-3 p-3 bg-layer/30 border border-layer-line rounded-lg space-y-2">
-                                <p class="text-xs font-bold text-foreground/70 uppercase tracking-widest">Elige tus extras</p>
-                                @foreach($itemOptions as $opt)
-                                <label class="flex items-center gap-2 cursor-pointer p-2 rounded-lg hover:bg-layer/50 transition-colors">
-                                    <input type="checkbox" 
-                                           value="{{ json_encode(['label' => $opt['label'], 'price_add' => $opt['price_add']]) }}"
-                                           @change="selectedOptions = Array.from(document.querySelectorAll('#sf-opts-{{ $itemId }} input:checked')).map(el => JSON.parse(el.value))"
-                                           id="sf-opts-{{ $itemId }}"
-                                           class="size-4 rounded border-border text-blue-600 focus:ring-blue-500">
-                                    <span class="flex-1 text-sm text-foreground">{{ $opt['label'] }}</span>
-                                    @if($opt['price_add'] > 0)
-                                    <span class="text-xs font-bold text-foreground/60">+{{ number_format($opt['price_add'], 2) }}</span>
-                                    @endif
-                                </label>
-                                @endforeach
-                                <button type="button"
-                                        @click="addToCartWithOptions('{{ addslashes($itemId) }}', '{{ addslashes($item['nombre'] ?? '') }}', {{ $item['precio'] ?? 0 }}, selectedOptions); optionsOpen = false"
-                                        class="w-full mt-3 py-2 px-3 rounded-lg bg-primary text-primary-foreground font-medium text-sm hover:bg-primary/90 transition-colors flex items-center justify-center gap-1.5">
-                                    <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
-                                    Agregar al carrito
-                                </button>
-                            </div>
-                            @endif
+        @php
+            $activeItems = array_values(array_filter($cat['items'] ?? [], fn($i) => !empty($i['activo'])));
+            $catColors = ['#f97316','#8b5cf6','#06b6d4','#10b981','#f59e0b','#ef4444','#6366f1','#ec4899'];
+            $catColor  = $catColors[$catIdx % count($catColors)];
+        @endphp
+        @if(count($activeItems) > 0)
+        <div id="sf-cat-{{ $catIdx }}">
+            <div class="flex items-center gap-2 mb-3">
+                <h2 class="text-base font-black tracking-tight text-foreground">{{ $cat['nombre'] }}</h2>
+                <span class="text-xs font-bold text-foreground/30">({{ count($activeItems) }})</span>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+                @foreach($activeItems as $item)
+                @php
+                    $itemId   = $item['id'] ?? '';
+                    $siblings = array_values(array_filter($activeItems, fn($i) => ($i['id'] ?? '') !== $itemId));
+                    $siblingsJson = json_encode($siblings);
+                @endphp
+                <div class="flex flex-row items-center gap-3 px-4 py-3 rounded-xl border border-foreground/5 bg-background cursor-pointer hover:bg-surface/40 transition-colors"
+                     onclick="sfOpenDetail({{ json_encode($item) }}, {{ $siblingsJson }})">
+                    @if(!empty($item['image_path']))
+                        <img src="{{ asset('storage/' . $item['image_path']) }}"
+                             alt="{{ $item['nombre'] }}"
+                             class="size-20 rounded-xl object-cover shrink-0 order-2"
+                             loading="lazy">
+                    @else
+                        <div class="size-20 rounded-xl shrink-0 flex items-center justify-center order-2" style="background:{{ $catColor }}12">
+                            <span class="iconify tabler--bowl-chopsticks size-7" style="color:{{ $catColor }}60"></span>
                         </div>
+                    @endif
+                    <div class="flex flex-col gap-0.5 flex-1 order-1 min-w-0">
+                        @if(!empty($item['badge']))
+                            @if($item['badge'] === 'popular')
+                                <span class="self-start text-[9px] font-black px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-700">⭐ Popular</span>
+                            @elseif($item['badge'] === 'nuevo')
+                                <span class="self-start text-[9px] font-black px-1.5 py-0.5 rounded-full bg-green-100 text-green-700">✨ Nuevo</span>
+                            @endif
                         @endif
-                    @endforeach
+                        <p class="text-sm font-black text-foreground leading-tight line-clamp-2">{{ $item['nombre'] }}</p>
+                        @if(!empty($item['descripcion']))
+                            <p class="text-[11px] text-foreground/45 leading-snug line-clamp-2">{{ $item['descripcion'] }}</p>
+                        @endif
+                        @if(!$hidePrice)
+                            <p class="text-sm font-black text-primary mt-auto pt-1" data-price-usd="{{ $item['precio'] ?? 0 }}">
+                                {{ $currencySymbol }} {{ number_format((float)($item['precio'] ?? 0), 2, ',', '.') }}
+                            </p>
+                        @endif
+                    </div>
                 </div>
+                @endforeach
             </div>
         </div>
+        @endif
         @endif
     @empty
         <div class="text-center py-16">
@@ -239,8 +353,74 @@
         </div>
     @endforelse
 </main>
+</div>
 
-{{-- 4. DRAWER PEDIDO --}}
+{{-- 4. DETAIL VIEW --}}
+<div id="sf-detail-view" style="display:none">
+    {{-- Sub-header detail --}}
+    <div class="sticky top-0 z-[99] bg-background/95 backdrop-blur-xl border-b border-foreground/5">
+        <div class="mx-auto max-w-5xl px-4 h-12 flex items-center gap-3">
+            <button onclick="sfCloseDetail()" class="flex items-center gap-1.5 text-sm font-bold text-foreground/60 hover:text-foreground transition-colors">
+                <span class="iconify tabler--arrow-left size-4"></span>
+                Volver al menú
+            </button>
+        </div>
+    </div>
+
+    <div class="mx-auto max-w-5xl pb-32">
+        {{-- Foto grande --}}
+        <div id="sf-detail-img-wrap" class="w-full bg-surface aspect-video flex items-center justify-center overflow-hidden">
+            <img id="sf-detail-img" src="" alt="" class="w-full h-full object-cover hidden">
+            <div id="sf-detail-placeholder" class="w-full h-full flex items-center justify-center bg-surface">
+                <span class="iconify tabler--bowl-chopsticks size-20 text-foreground/15"></span>
+            </div>
+        </div>
+
+        {{-- Info principal --}}
+        <div class="px-4 pt-5 pb-4 border-b border-foreground/5">
+            <div class="flex items-start justify-between gap-3">
+                <h1 id="sf-detail-name" class="text-2xl font-black tracking-tight text-foreground leading-tight"></h1>
+                <span id="sf-detail-badge" class="text-[10px] font-black px-2.5 py-1 rounded-full shrink-0 hidden mt-1"></span>
+            </div>
+            <p id="sf-detail-desc" class="text-sm text-foreground/50 leading-relaxed mt-2 hidden"></p>
+            <p id="sf-detail-price" class="text-3xl font-black text-primary mt-3"></p>
+        </div>
+
+        {{-- Notas especiales --}}
+        <div class="px-4 py-4 border-b border-foreground/5">
+            <p class="text-sm font-black text-foreground mb-2">Notas especiales <span class="text-foreground/30 font-medium">(opcional)</span></p>
+            <textarea id="sf-detail-notes" rows="3" placeholder="Ej: Sin cebolla, extra salsa, etc."
+                      class="w-full text-sm px-4 py-3 rounded-xl border border-foreground/10 bg-surface/50 resize-none outline-none focus:border-primary/40 transition-colors text-foreground placeholder:text-foreground/30"></textarea>
+        </div>
+
+        {{-- Cantidad + Agregar --}}
+        @if($isPlanAnual)
+        <div class="px-4 py-4 border-b border-foreground/5 flex items-center justify-between">
+            <p class="text-sm font-black text-foreground">Cantidad</p>
+            <div class="flex items-center gap-4">
+                <button onclick="sfDetailQty(-1)" class="size-10 rounded-full border border-foreground/15 flex items-center justify-center text-xl font-black text-foreground hover:bg-surface transition-colors">−</button>
+                <span id="sf-detail-qty" class="text-lg font-black min-w-[20px] text-center">1</span>
+                <button onclick="sfDetailQty(1)" class="size-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xl font-black hover:opacity-90 transition-opacity">+</button>
+            </div>
+        </div>
+        <div class="px-4 pt-4">
+            <button onclick="sfDetailAdd()" id="sf-detail-add-btn"
+                    class="w-full h-14 rounded-2xl font-black text-base text-primary-foreground border-none shadow-lg shadow-primary/25 hover:opacity-90 transition-opacity"
+                    style="background:var(--primary)">
+                Agregar al pedido
+            </button>
+        </div>
+        @endif
+
+        {{-- También te puede gustar --}}
+        <div id="sf-also-like-wrap" class="px-4 pt-8 hidden">
+            <p class="text-base font-black text-foreground mb-4">También te puede gustar</p>
+            <div id="sf-also-like-grid" class="flex gap-3 overflow-x-auto pb-2 no-scrollbar" style="scroll-snap-type:x mandatory"></div>
+        </div>
+    </div>
+</div>
+
+{{-- 5. DRAWER PEDIDO --}}
 @if($isPlanAnual)
 <div class="sf-drawer-overlay" id="sf-overlay" onclick="toggleDrawer()"></div>
 <aside class="sf-drawer bg-background" id="sf-drawer">
@@ -358,7 +538,7 @@
 
 {{-- 5. FOOTER --}}
 <footer class="bg-surface/50 border-t border-foreground/5 py-14">
-    <div class="mx-auto max-w-3xl px-4 text-center">
+    <div class="mx-auto max-w-5xl px-4 text-center">
         @if(!empty($customization->logo_filename))
             <img src="{{ asset('storage/tenants/' . $tenant->id . '/' . $customization->logo_filename) }}"
                  alt="{{ $tenant->business_name }}"
@@ -568,6 +748,103 @@
         document.getElementById('sf-total-label').textContent = currentCurrency;
     }
 
+    // ── Detail View ──────────────────────────────────────────────
+    var sfDetail = { id: '', name: '', price: 0, qty: 1 };
+    var sfCurrSymbol = @json($currencySymbol);
+
+    function sfFmt(price) {
+        return sfCurrSymbol + ' ' + parseFloat(price).toFixed(2).replace('.', ',');
+    }
+
+    window.sfOpenDetail = function(item, siblings) {
+        sfDetail = { id: item.id || '', name: item.nombre || '', price: parseFloat(item.precio || 0), qty: 1 };
+
+        // Foto
+        var img = document.getElementById('sf-detail-img');
+        var ph  = document.getElementById('sf-detail-placeholder');
+        if (item.image_path) {
+            img.src = '/storage/' + item.image_path;
+            img.classList.remove('hidden');
+            ph.classList.add('hidden');
+        } else {
+            img.classList.add('hidden');
+            ph.classList.remove('hidden');
+        }
+
+        // Datos
+        document.getElementById('sf-detail-name').textContent = item.nombre || '';
+        var descEl = document.getElementById('sf-detail-desc');
+        if (item.descripcion) { descEl.textContent = item.descripcion; descEl.classList.remove('hidden'); }
+        else { descEl.classList.add('hidden'); }
+
+        document.getElementById('sf-detail-price').textContent = sfFmt(item.precio || 0);
+        document.getElementById('sf-detail-qty').textContent = '1';
+        document.getElementById('sf-detail-notes').value = '';
+
+        // Badge
+        var badgeEl = document.getElementById('sf-detail-badge');
+        if (item.badge === 'popular') {
+            badgeEl.textContent = '⭐ Popular';
+            badgeEl.className = 'text-[10px] font-black px-2.5 py-1 rounded-full shrink-0 bg-amber-100 text-amber-700';
+            badgeEl.classList.remove('hidden');
+        } else if (item.badge === 'nuevo') {
+            badgeEl.textContent = '✨ Nuevo';
+            badgeEl.className = 'text-[10px] font-black px-2.5 py-1 rounded-full shrink-0 bg-green-100 text-green-700';
+            badgeEl.classList.remove('hidden');
+        } else {
+            badgeEl.classList.add('hidden');
+        }
+
+        // También te puede gustar
+        var wrap = document.getElementById('sf-also-like-wrap');
+        var grid = document.getElementById('sf-also-like-grid');
+        grid.innerHTML = '';
+        if (siblings && siblings.length > 0) {
+            siblings.forEach(function(s) {
+                var card = document.createElement('div');
+                card.className = 'rounded-2xl border border-foreground/5 bg-surface/40 overflow-hidden flex-col cursor-pointer hover:shadow-md transition-shadow shrink-0 flex';
+                card.style.width = '160px';
+                card.style.scrollSnapAlign = 'start';
+                card.onclick = function() { sfOpenDetail(s, siblings.filter(function(x){ return x.id !== s.id; })); };
+                var imgHtml = s.image_path
+                    ? '<img src="/storage/' + s.image_path + '" class="w-full h-32 object-cover" loading="lazy">'
+                    : '<div class="w-full h-32 flex items-center justify-center bg-surface/60"><span class="iconify tabler--bowl-chopsticks size-8 text-foreground/15"></span></div>';
+                var badgeHtml = s.badge === 'popular' ? '<span class="self-start text-[9px] font-black px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-700 mb-0.5">⭐ Popular</span>' :
+                                s.badge === 'nuevo'   ? '<span class="self-start text-[9px] font-black px-1.5 py-0.5 rounded-full bg-green-100 text-green-700 mb-0.5">✨ Nuevo</span>' : '';
+                card.innerHTML = imgHtml + '<div class="p-3 flex flex-col gap-1">' + badgeHtml +
+                    '<p class="text-sm font-black text-foreground leading-tight line-clamp-2">' + s.nombre + '</p>' +
+                    '<p class="text-sm font-black text-primary mt-1">' + sfFmt(s.precio || 0) + '</p></div>';
+                grid.appendChild(card);
+            });
+            wrap.classList.remove('hidden');
+        } else {
+            wrap.classList.add('hidden');
+        }
+
+        // Mostrar vista detalle (fixed overlay — no need to hide menu)
+        document.getElementById('sf-detail-view').style.display = 'block';
+        document.getElementById('sf-detail-view').scrollTop = 0;
+        document.body.style.overflow = 'hidden';
+    };
+
+    window.sfCloseDetail = function() {
+        document.getElementById('sf-detail-view').style.display = 'none';
+        document.body.style.overflow = '';
+    };
+
+    window.sfDetailQty = function(delta) {
+        sfDetail.qty = Math.max(1, sfDetail.qty + delta);
+        document.getElementById('sf-detail-qty').textContent = sfDetail.qty;
+    };
+
+    window.sfDetailAdd = function() {
+        if (!sfDetail.id) return;
+        for (var i = 0; i < sfDetail.qty; i++) {
+            addToCart(sfDetail.id, sfDetail.name, sfDetail.price);
+        }
+        sfCloseDetail();
+    };
+
     window.closeDataModal = function() {
         var modal = document.getElementById('sf-data-modal');
         if (modal) modal.style.display = 'none';
@@ -676,6 +953,75 @@
 })();
 </script>
 
+
+<script>
+// Navbar categorías — scroll + Intersection Observer
+(function() {
+    function sfScrollToCategory(idx) {
+        var el = document.getElementById('sf-cat-' + idx);
+        if (!el) return;
+        var stickyBar = document.getElementById('sf-sticky-bar');
+        var headerH = stickyBar ? stickyBar.offsetHeight : 100;
+        var top = el.getBoundingClientRect().top + window.scrollY - headerH - 8;
+        window.scrollTo({ top: top, behavior: 'smooth' });
+    }
+    window.sfScrollToCategory = sfScrollToCategory;
+
+    function sfSetActiveTab(idx) {
+        document.querySelectorAll('.sf-cat-tab').forEach(function(btn) {
+            var active = parseInt(btn.dataset.catNav) === idx;
+            btn.classList.toggle('text-primary', active);
+            btn.classList.toggle('font-bold', active);
+            btn.classList.toggle('border-primary', active);
+            btn.classList.toggle('text-foreground/40', !active);
+            btn.classList.toggle('border-transparent', !active);
+        });
+        var activeBtn = document.querySelector('[data-cat-nav="' + idx + '"]');
+        if (activeBtn) activeBtn.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
+    }
+
+    // ── Scroll-spy categorías ───────────────────────────────────
+    (function() {
+        var catSections = document.querySelectorAll('[id^="sf-cat-"]');
+        var tabBar = document.getElementById('sf-cat-tabs');
+        if (!catSections.length || !tabBar) return;
+        var btns = tabBar.querySelectorAll('[data-cat-nav]');
+        var observer = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (!entry.isIntersecting) return;
+                var idx = entry.target.id.replace('sf-cat-', '');
+                btns.forEach(function(btn, i) {
+                    var active = String(i) === String(idx);
+                    btn.classList.toggle('text-primary', active);
+                    btn.classList.toggle('font-bold', active);
+                    btn.classList.toggle('border-primary', active);
+                    btn.classList.toggle('text-foreground/40', !active);
+                    btn.classList.toggle('border-transparent', !active);
+                    if (active) btn.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
+                });
+            });
+        }, { rootMargin: '-20% 0px -70% 0px', threshold: 0 });
+        catSections.forEach(function(sec) { observer.observe(sec); });
+    })();
+
+    // ── Hero Slider ─────────────────────────────────────────────
+    (function() {
+        var slides = document.querySelectorAll('.sf-slide');
+        var dots   = document.querySelectorAll('.sf-dot');
+        if (slides.length <= 1) return;
+        var cur = 0;
+        function goTo(n) {
+            slides[cur].style.opacity = '0';
+            if (dots[cur]) { dots[cur].style.background = 'rgba(255,255,255,0.4)'; dots[cur].style.width = '8px'; }
+            cur = n % slides.length;
+            slides[cur].style.opacity = '1';
+            if (dots[cur]) { dots[cur].style.background = '#fff'; dots[cur].style.width = '16px'; }
+        }
+        if (dots.length) dots.forEach(function(d) { d.addEventListener('click', function() { goTo(+this.dataset.slide); }); });
+        setInterval(function() { goTo(cur + 1); }, 4000);
+    })();
+})();
+</script>
 
 {{-- SyntiTrack --}}
 <script>
