@@ -1,0 +1,116 @@
+---
+title: "Glosario"
+description: "Todos los términos técnicos de SYNTIweb explicados para dueños de negocio"
+---
+
+## Términos generales
+
+### SYNTIweb
+La plataforma completa. Incluye los 3 productos (Studio, Food, Cat), el panel de administración y la documentación. Vive en `syntiweb.com`.
+
+### Landing / Landing page
+Tu página web pública — lo que ven tus clientes cuando visitan `tunegocio.syntiweb.com`. No es el dashboard.
+
+### Dashboard / Panel de administración
+La interfaz flotante donde editas tu negocio. Se activa con **Alt+S** (escritorio) o manteniendo presionado el logo 3 segundos (móvil). Protegido por PIN de 4 dígitos.
+
+### Blueprint
+El tipo de producto que elegiste: `studio` (web completa), `food` (menú digital) o `cat` (catálogo con carrito). Define qué secciones y funcionalidades tiene tu página.
+
+### Tenant
+Tu negocio dentro de la plataforma. Cada negocio registrado es un "tenant" — tiene su propio espacio, datos, imágenes y subdominio. Aislado de los demás negocios.
+
+### Subdominio
+Tu dirección web dentro de SYNTIweb. Ejemplo: `tunegocio.syntiweb.com`. Se elige una vez al crear el negocio y no se puede cambiar.
+
+---
+
+## Términos de precios y moneda
+
+### REF
+"Referencia" — el símbolo que se usa para mostrar precios en dólares. Ejemplo: REF 15.00. Se usa REF en lugar de $ por decisión de diseño. Es intercambiable con el símbolo $.
+
+### BCV
+Banco Central de Venezuela. SYNTIweb usa la tasa oficial del BCV para convertir precios de REF a bolívares automáticamente.
+
+### Modo de moneda
+Cómo se muestran los precios en tu landing. Hay 5 opciones:
+- **Solo referencia** (`reference_only`): Solo muestra REF/$
+- **Solo bolívares** (`bolivares_only`): Solo muestra Bs.
+- **Ambos con toggle** (`both_toggle`): REF y Bs. con botón para alternar (por defecto)
+- **Euro con toggle** (`euro_toggle`): € y Bs. con toggle
+- **Ocultar** (`hidden`): No muestra precios, solo "Más Info"
+
+---
+
+## Términos del dashboard
+
+### Tab
+Cada pestaña del menú lateral del dashboard. Hay 7 tabs:
+1. **Tu Información** — Datos del negocio, horario, redes
+2. **Qué Vendes** — Productos y servicios
+3. **Cómo Se Ve** — Paleta de colores y tema
+4. **Tu Mensaje** — Orden de secciones, testimonios, FAQ, sucursales, CTA
+5. **Pulso del Negocio** — Analítica
+6. **Visual** — Variantes de secciones y efectos
+7. **Configuración** — Medios de pago, moneda, PIN, plan
+
+### PIN
+Código de 4 dígitos numéricos que protege el acceso al dashboard. Se establece al crear el negocio y se puede cambiar desde **Configuración → PIN de Acceso**.
+
+### Badge
+Etiqueta visual que se muestra sobre un producto: ⭐ Destacado, 🔥 Hot, ✨ New, 🎉 Promo (Studio) o 🆕 Nuevo, 🔥 Hot, 💰 Promo (Cat).
+
+### Paleta de color / Tema
+Esquema de colores que define la apariencia de todo tu sitio. Hay 30+ paletas prediseñadas organizadas por tipo de negocio. Se elige en **Cómo Se Ve**.
+
+### CTA (Call to Action)
+"Llamado a Acción" — la sección de tu landing con un mensaje y botón que invita al cliente a contactarte. Se configura en **Tu Mensaje → CTA**.
+
+---
+
+## Términos de productos
+
+### Variante
+Opción de producto como talla o color. Solo disponible en SYNTIcat (plan Semestral+).
+- `size`: Solo talla (S, M, L, XL)
+- `size_color`: Talla + color
+- `options`: Opciones libres (extras, personalización)
+
+### Categoría (SYNTIfood)
+Agrupación de platos en el menú digital. Ejemplo: "Arepas", "Carnes", "Bebidas". Cada categoría tiene 1 foto representativa.
+
+### Ítem (SYNTIfood)
+Un plato individual dentro de una categoría. Tiene nombre y precio.
+
+---
+
+## Términos de pedidos
+
+### Pedido Rápido (SYNTIfood)
+Función que permite al cliente acumular platos con botones [+] y enviar todo como mensaje de WhatsApp. No es carrito — es un acumulador simple. Solo plan Anual.
+
+### Mini Order / SC-XXXX (SYNTIcat)
+Código de seguimiento que se genera al finalizar un pedido en SYNTIcat (plan Anual). Formato: SC-0001, SC-0002, etc. Se envía por WhatsApp y se guarda como JSON.
+
+### Cart Drawer (SYNTIcat)
+Panel lateral que se desliza desde la derecha mostrando el contenido del carrito. Solo planes Semestral y Anual.
+
+---
+
+## Términos técnicos
+
+### WebP
+Formato de imagen usado por SYNTIweb. Todas las fotos se convierten automáticamente a WebP para cargar más rápido. Máximo 800px de ancho, máximo 2MB.
+
+### Schema.org (SEO)
+Código estructurado que ayuda a Google a entender tu negocio. Se genera automáticamente en el plan Visión de SYNTIstudio.
+
+### QR
+Código de barras cuadrado que, al escanearlo con el celular, abre tu página web. Descargable desde el dashboard.
+
+### Shortlink
+URL corta asociada a tu QR para tracking. Ejemplo: `syntiweb.com/s/elcorte`.
+
+### Medios de pago
+Chips informativos que muestran qué métodos de pago acepta tu negocio. **No son pasarela de pago** — solo información visual. Ver [Medios de pago](/studio/medios-de-pago).

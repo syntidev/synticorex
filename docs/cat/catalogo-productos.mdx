@@ -1,41 +1,85 @@
 ---
-title: "Gestionar productos"
-description: "Cómo agregar y organizar tu catálogo de productos"
+title: "Catálogo de productos"
+description: "Administra los productos de tu tienda digital con fotos, precios, variantes y badges"
 ---
 
-## Agregar un producto
+## ¿Qué es?
 
-1. Panel de administración → **Productos**
-2. Toca **+ Nuevo producto**
-3. Completa los campos:
-   - **Nombre** del producto
-   - **Descripción** (materiales, características, etc.)
-   - **Precio** en REF
-   - **Foto** principal
-   - **Badge** si aplica (Nuevo, Hot, Promo)
-4. Guarda
+El catálogo de productos es la sección central de SYNTIcat. Desde el dashboard administras todos tus productos: fotos, precios, variantes (talla, color), badges y disponibilidad. En la landing, tus clientes ven un catálogo visual profesional con tarjetas de producto.
 
-## Límites por plan
+## ¿Dónde lo encuentro?
 
-| Plan | Productos |
-|------|-----------|
-| Básico | 20 |
-| Semestral | 100 |
-| Anual | Ilimitados |
+**Dashboard → Qué Vendes** (segundo ícono en el menú lateral, 🛒)
 
-## Organizar en categorías
+## ¿Qué hace?
 
-Puedes agrupar tus productos por categorías para que el cliente navegue más fácil.
+### Crear / editar un producto
 
-Ejemplos:
-- Tienda de ropa: Camisas · Pantalones · Zapatos · Accesorios
-- Electrónica: Celulares · Accesorios · Audio · Cables
-- Cosméticos: Skincare · Maquillaje · Cabello · Fragancias
+| Campo | Obligatorio | Descripción |
+|-------|-------------|-------------|
+| **Nombre** | ✅ Sí | Nombre del producto |
+| **Precio** | ✅ Sí | Precio en USD/REF |
+| **Descripción** | No | Descripción detallada del producto |
+| **Imágenes** | No | 1 a 6 fotos según plan (máx 2MB, auto WebP 800px) |
+| **Badge** | No | 🆕 Nuevo, 🔥 Hot, 💰 Promo |
+| **Activo** | — | Toggle para mostrar/ocultar en el catálogo |
+| **Variantes** | No | Talla, color, talla+color u opciones libres (según plan) |
 
-## Activar y desactivar productos
+### Variantes de producto
 
-Si un producto está agotado, desactívalo con el toggle. Desaparece del catálogo pero queda guardado para cuando vuelva a estar disponible.
+| Tipo de variante | Descripción | Plan mínimo |
+|-----------------|-------------|-------------|
+| **Simple** (sin variantes) | Producto sin opciones | Básico |
+| **Talla** (`size`) | Selector de talla: XS, S, M, L, XL, etc. | Semestral |
+| **Talla + Color** (`size_color`) | Selector de talla y color combinados | Semestral |
+| **Opciones libres** (`options`) | Lista personalizable: extras, personalización, mensaje | Anual |
+
+### Badges de producto
+
+| Badge | Ícono | Cuándo usarlo |
+|-------|-------|---------------|
+| **Nuevo** | 🆕 | Producto recién llegado |
+| **Hot** | 🔥 | Producto más vendido o tendencia |
+| **Promo** | 💰 | Producto en oferta o promoción |
+
+### En la landing (lo que ve tu cliente)
+
+Los productos se muestran en un grid de tarjetas. Cada tarjeta muestra:
+- Foto principal (con badge si tiene)
+- Nombre del producto
+- Precio (en REF/Bs según configuración de moneda)
+- Botón "Agregar al carrito" (Semestral+) o "Consultar por WhatsApp" (Básico)
+
+Si un producto está agotado, desactívalo con el toggle — desaparece del catálogo pero queda guardado para cuando vuelva a estar disponible.
+
+## ¿Qué NO hace?
+
+- No tiene categorías de productos — todos aparecen en un grid plano
+- No tiene búsqueda ni filtros (por precio, categoría, etc.)
+- No maneja inventario ni stock automático
+- No tiene reseñas ni valoraciones de clientes
+- No permite comparar productos
+
+## Disponibilidad por plan
+
+| Característica | Básico (REF 9/mes) | Semestral (REF 39) | Anual (REF 69/año) |
+|---------------|---------------------|---------------------|---------------------|
+| Máximo de productos | 20 | 100 | Ilimitados |
+| Imágenes por producto | 1 | 3 | 6 |
+| Variantes | Solo simple | Talla + talla/color | Todas + opciones |
+| Badges | ✅ | ✅ | ✅ |
+
+## Ejemplo práctico
+
+### Caso: Proveedor "DistribuVE" en Valencia
+
+Carlos es proveedor mayorista con plan Anual. Sube:
+1. "Detergente industrial 5L" → $12 → badge 🔥 Hot → 3 fotos
+2. "Cloro al 10% galón" → $8 → opciones: "Cantidad: 1 galón / Caja 6 galones (+$40)"
+3. "Kit limpieza oficina" → $25 → badge 🆕 Nuevo
+
+Su catálogo profesional le permite compartir el link a sus clientes por WhatsApp en lugar de mandar fotos una por una.
 
 <Note>
-  Agregar buenas fotos a tus productos aumenta significativamente las conversiones. Un producto sin foto recibe mucho menos atención que uno con foto.
+  Agregar buenas fotos a tus productos aumenta significativamente las consultas. Un producto sin foto recibe mucho menos atención que uno con foto.
 </Note>

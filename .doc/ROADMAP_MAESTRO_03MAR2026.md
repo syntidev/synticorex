@@ -544,6 +544,27 @@ Commit: docs: roadmap actualizado 06 MAR 2026
 - [ ] wizard-food.blade.php
 - [ ] wizard-cat.blade.php
 
+
+### 08 MAR 2026
+- [x] A.20 — AiDocSeeder: base de conocimiento para bot de soporte y Mintlify
+  - Creado `database/seeders/AiDocSeeder.php` — 27 entradas en tabla `ai_docs`
+  - Categorías: `shared` (5), `studio` (14), `food` (5), `cat` (3)
+  - Campos: `slug`, `title`, `product`, `content` (texto plano FULLTEXT), `source_file`
+  - Punto crítico cubierto: "medios de pago = chips informativos, NO pasarela"
+  - Actualizado `DatabaseSeeder.php` con `AiDocSeeder::class`
+  - ⚠️ EJECUTAR NUEVAMENTE al cierre de Fase D (cuando productos Food y Cat estén completos)
+  - ⚠️ EJECUTAR NUEVAMENTE al cierre de Fase C si cambian planes, precios o límites
+
+  #### Prompt re-ejecución AiDocSeeder
+Contexto: Al ejecutar este seeder nuevamente, el agente debe:
+1. Leer ROADMAP_MAESTRO vigente completo como única fuente de verdad
+2. Actualizar TODOS los 27 documentos existentes con cambios de planes, precios y límites
+3. Agregar nuevas entradas para features completadas en Fase C y D (SYNTIfood completo, SYNTIcat completo)
+4. Mantener regla: content = texto plano sin MDX, optimizado para FULLTEXT search
+5. Nunca documentar features no ejecutadas
+6. Ejecutar: php artisan db:seed --class=AiDocSeeder
+7. Verificar con: SELECT COUNT(*), product FROM ai_docs GROUP BY product;
+
 ---
 
 **Autor:** Carlos Bolívar (Arquitecto) + Claude (Co-arquitecto y ejecutor)

@@ -1,27 +1,90 @@
 ---
-title: "Sistema de órdenes SC"
-description: "Cómo funciona el código de seguimiento de pedidos"
+title: "Mini Order (SC-XXXX)"
+description: "Código de seguimiento que identifica cada pedido de tu tienda digital"
 ---
 
-Cada pedido en SYNTIcat recibe un código único en formato **SC-XXXX** (ejemplo: SC-0042, SC-0043). Este código es el identificador del pedido para ti y para tu cliente.
+## ¿Qué es?
 
-## Para qué sirve
+El **Mini Order** es el sistema de códigos de seguimiento de SYNTIcat. Cada pedido que un cliente envía desde el carrito recibe automáticamente un código único en formato **SC-XXXX** (ejemplo: SC-0001, SC-0042, SC-0123). Este código viaja en el mensaje de WhatsApp y queda guardado como archivo JSON en tu espacio del servidor.
 
-- **Seguimiento fácil** — cuando el cliente te pregunta por su pedido, lo buscas por el código
-- **Evita confusiones** — si tienes varios pedidos similares, el código los distingue
-- **Profesionalismo** — le da a tu tienda la imagen de un negocio organizado
+## ¿Dónde lo encuentro?
 
-## Cómo funciona
+**En la landing (lo que ve tu cliente):**
+- El código SC-XXXX aparece en el mensaje de WhatsApp al finalizar el pedido
+- También aparece en la pantalla de confirmación después de enviar el pedido
 
-1. El cliente finaliza su carrito en SYNTIcat
-2. El sistema genera automáticamente el próximo código disponible (SC-0001, SC-0002, etc.)
-3. Ese código aparece en el mensaje de WhatsApp que el cliente te envía
-4. Ambos tienen el mismo código para comunicarse
+**En el servidor:**
+- Los pedidos se guardan en `storage/tenants/{tu_tenant_id}/orders/2026/03/SC-XXXX.json`
+- Organizados por año y mes automáticamente
 
-## Dónde ver las órdenes
+## ¿Qué hace?
 
-Los pedidos se guardan como archivos JSON en el servidor, organizados por fecha. Próximamente tendrás un panel de órdenes dentro del dashboard.
+- **Genera un código secuencial único** para cada pedido (SC-0001, SC-0002, SC-0003...)
+- **Guarda el pedido completo como JSON**: productos, cantidades, variantes, precios, total y fecha
+- **Incluye el código en el mensaje de WhatsApp** para que ambos (tú y el cliente) tengan la misma referencia
+- **Pantalla de confirmación**: El cliente ve el código SC-XXXX después de enviar su pedido
+
+### Formato del JSON guardado
+
+Cada pedido se guarda con:
+- Código SC-XXXX
+- Lista de productos con nombre, variante, cantidad y precio
+- Total del pedido
+- Fecha y hora
+- ID del tenant
+
+### Para qué sirve el código
+
+| Uso | Ejemplo |
+|-----|---------|
+| **Identificar pedidos** | "¿Tu pedido es el SC-0047? Déjame revisarlo" |
+| **Evitar confusiones** | Si tienes 3 pedidos similares, el código los distingue |
+| **Profesionalismo** | Le da imagen de negocio organizado |
+| **Seguimiento** | "Tu pedido SC-0047 ya está listo para recoger" |
+
+## ¿Qué NO hace?
+
+- **No rastrea estados** (preparando, enviado, entregado) — eso se coordina por WhatsApp
+- **No envía notificaciones** automáticas al cliente sobre su pedido
+- **No tiene panel de órdenes** visible en el dashboard (próximamente)
+- **No genera factura** a partir del pedido
+- **No permite cancelar** un pedido desde la plataforma
+- **No tiene historial de pedidos** visible para el cliente
+
+## Disponibilidad por plan
+
+| Característica | Básico | Semestral | Anual |
+|---------------|--------|-----------|-------|
+| Código SC-XXXX | ❌ | ❌ | ✅ |
+| JSON guardado en servidor | ❌ | ❌ | ✅ |
+| Pantalla de confirmación | ❌ | ❌ | ✅ |
 
 <Note>
-  El sistema de órdenes SC está disponible en los planes Semestral y Anual de SYNTIcat. En el plan Básico los clientes escriben directamente sin código de orden.
+  El Mini Order con código SC-XXXX es exclusivo del plan **Anual** (REF 69/año). En el plan Semestral hay carrito pero sin código de seguimiento.
 </Note>
+
+## Ejemplo práctico
+
+### Caso: Tienda de zapatos "PasoFirme" en San Cristóbal
+
+Andrea tiene una tienda de zapatos con plan Anual. Un cliente pide:
+- 1× Bota montañera (Talla 42) — $35
+- 1× Par de medias — $5
+
+Al tocar "Finalizar pedido", se genera el código **SC-0023**. El mensaje que recibe Andrea por WhatsApp:
+
+```
+🛍️ Nuevo pedido SYNTIcat
+📦 Orden: SC-0023
+
+• 1× Bota montañera (Talla 42) — REF 35.00
+• 1× Par de medias — REF 5.00
+
+💰 Total: REF 40.00
+
+Código de seguimiento: SC-0023
+```
+
+Andrea confirma: *"Hola, tu pedido SC-0023 está listo. ¿Lo recoges o te lo envío? Pago Móvil Banesco al 04141234567"*
+
+El archivo `SC-0023.json` queda guardado en el servidor para referencia futura.

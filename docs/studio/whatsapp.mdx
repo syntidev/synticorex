@@ -1,0 +1,87 @@
+---
+title: "WhatsApp"
+description: "Cómo funciona la integración con WhatsApp en SYNTIweb"
+---
+
+## ¿Qué es?
+
+WhatsApp es el canal principal de comunicación entre tu negocio y tus clientes en SYNTIweb. No es un chat integrado en la página — es un **botón que abre WhatsApp** directamente con tu número, listo para que el cliente te escriba.
+
+## ¿Dónde lo encuentro?
+
+**Para configurar tu WhatsApp:**
+- **Dashboard → Tu Información → Negocio** → Campo **"WhatsApp (ventas)"**
+- Para el segundo número: Campo **"WhatsApp Soporte"** (Plan Crecimiento+)
+
+**En la landing (lo que ve tu cliente):**
+- Botón flotante de WhatsApp (esquina inferior derecha, siempre visible)
+- Botón de WhatsApp en la sección de contacto
+- Botones CTA en servicios que enlazan a WhatsApp
+
+## ¿Qué hace?
+
+- **Botón flotante** en toda la landing — siempre accesible para el cliente
+- **Abre WhatsApp Web o la app** con tu número pre-cargado
+- **Mensaje pre-escrito** (en algunos contextos): "Hola, vi tu negocio en SYNTIweb..."
+- **Dos líneas de WhatsApp** (Plan Crecimiento+): ventas y soporte separados
+- En **SYNTIfood** (plan Anual): el Pedido Rápido envía el pedido completo como mensaje de WhatsApp
+- En **SYNTIcat** (plan Semestral+): el carrito envía el pedido con código SC-XXXX por WhatsApp
+
+### Formato del número
+
+El número se guarda en formato internacional sin el `+`. Ejemplo:
+- Venezuela: `584141234567` (58 + 414 + 1234567)
+- El campo acepta mínimo 10 dígitos
+
+## ¿Qué NO hace?
+
+- No tiene chat integrado en la página — redirige a WhatsApp
+- No guarda historial de conversaciones
+- No envía mensajes automáticos (broadcast, seguimiento)
+- No tiene bot o respuestas automáticas
+- No funciona con WhatsApp Business API — usa el WhatsApp personal del dueño
+- No valida si el número es realmente de WhatsApp
+
+## Disponibilidad por plan
+
+### SYNTIstudio
+
+| Característica | Oportunidad | Crecimiento | Visión |
+|---------------|-------------|-------------|--------|
+| WhatsApp ventas | ✅ (1 línea) | ✅ | ✅ |
+| WhatsApp soporte | ❌ | ✅ (2da línea) | ✅ (ilimitadas) |
+| Botón flotante | ✅ | ✅ | ✅ |
+| CTA a WhatsApp | ✅ | ✅ | ✅ |
+
+### SYNTIfood
+
+| Característica | Básico | Semestral | Anual |
+|---------------|--------|-----------|-------|
+| WhatsApp ventas | ✅ | ✅ | ✅ |
+| Pedido Rápido → WhatsApp | ❌ | ❌ | ✅ |
+
+### SYNTIcat
+
+| Característica | Básico | Semestral | Anual |
+|---------------|--------|-----------|-------|
+| Botón WA directo (por producto) | ✅ | ✅ | ✅ |
+| Carrito → WhatsApp | ❌ | ✅ | ✅ |
+| Mini Order SC-XXXX → WhatsApp | ❌ | ❌ | ✅ |
+
+## Ejemplo práctico
+
+### Caso: Peluquería "Estilo Único" en Barinas
+
+Ana tiene una peluquería con plan Crecimiento:
+
+1. Configura WhatsApp ventas: `584161234567` (su número principal)
+2. Configura WhatsApp soporte: `584241234567` (número de la asistente)
+3. En la landing aparecen dos botones:
+   - **"Escríbenos"** → abre WhatsApp con el número de ventas
+   - **"Soporte"** → abre WhatsApp con el número de la asistente
+
+Un cliente ve el servicio "Alisado Brasileño" → toca **"Solicitar cita"** → se abre WhatsApp con Ana automáticamente.
+
+<Note>
+  SYNTIweb usa el formato `https://wa.me/NUMERO` para abrir WhatsApp. Funciona en celular (abre la app) y en escritorio (abre WhatsApp Web).
+</Note>

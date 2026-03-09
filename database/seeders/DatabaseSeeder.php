@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             ColorPalettesSeeder::class,
             DollarRatesSeeder::class,
             DemoDataSeeder::class,
+            AiDocSeeder::class,
         ]);
     }
 }

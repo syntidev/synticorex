@@ -1,48 +1,102 @@
 ---
-title: "Carrito y checkout"
-description: "Cómo funciona el carrito de compras en SYNTIcat"
+title: "Carrito y WhatsApp"
+description: "El carrito de compras que envía el pedido completo por WhatsApp"
 ---
 
-El carrito de SYNTIcat permite que tu cliente seleccione varios productos y te envíe el pedido completo por WhatsApp. Disponible en planes Semestral y Anual.
+## ¿Qué es?
 
-## Cómo funciona para tu cliente
+El carrito de SYNTIcat permite que tus clientes seleccionen varios productos, elijan variantes (talla, color), revisen su pedido y te lo envíen completo por WhatsApp. No es un checkout con pasarela de pago — es un **carrito que genera un mensaje de WhatsApp** con el pedido listo.
+
+## ¿Dónde lo encuentro?
+
+**En la landing (lo que ve tu cliente):**
+- Botón **"Agregar al carrito"** en cada tarjeta de producto
+- **Cart Drawer** (panel lateral derecho) que se desliza al agregar un producto
+- Botón **"Finalizar pedido"** dentro del drawer
+
+**Configuración:** Se activa automáticamente en los planes Semestral y Anual. No requiere configuración adicional.
+
+## ¿Qué hace?
+
+### Flujo del carrito
 
 <Steps>
-  <Step title="Navega el catálogo">
-    El cliente ve todos tus productos con fotos y precios.
+  <Step title="El cliente navega el catálogo">
+    Ve todos los productos con fotos y precios.
   </Step>
   <Step title="Agrega al carrito">
-    Toca **Agregar al carrito** en cada producto que quiere. Un drawer lateral muestra el carrito actualizado.
+    Toca **"Agregar al carrito"** en cada producto. Si tiene variantes (talla, color), las elige antes de agregar.
   </Step>
-  <Step title="Selecciona variantes si aplica">
-    Si el producto tiene tallas o colores, los elige antes de agregar.
+  <Step title="Cart Drawer se abre">
+    Un panel lateral se desliza desde la derecha mostrando los productos en el carrito, cantidades y total.
   </Step>
   <Step title="Revisa el carrito">
-    Ve todos los productos seleccionados, cantidades y el total.
+    Puede cambiar cantidades, eliminar productos y ver el total actualizado.
   </Step>
   <Step title="Checkout por WhatsApp">
-    Toca **Finalizar pedido** — se genera el código SC-XXXX y se abre WhatsApp con el mensaje completo listo para enviar.
+    Toca **"Finalizar pedido"** → Se abre WhatsApp con el mensaje completo incluyendo productos, variantes, cantidades y total.
   </Step>
 </Steps>
 
-## Cómo recibes el pedido
+### Formato del mensaje de WhatsApp
 
 ```
 🛍️ Nuevo pedido SYNTIcat
 📦 Orden: SC-0047
 
 Productos:
-• 1x Camisa polo azul (Talla M) - REF 15.00
-• 2x Correa de cuero marrón - REF 8.00 c/u
+• 1× Camisa polo azul (Talla M) — REF 15.00
+• 2× Correa de cuero marrón — REF 8.00 c/u
 
 💰 Total: REF 31.00
    Bs. 1,131.50
 ```
 
-## El drawer del carrito
+### Cart Drawer (panel lateral)
 
-El carrito aparece como un panel lateral que se desliza desde la derecha. El cliente puede ver su selección en cualquier momento sin salir del catálogo.
+El carrito aparece como un panel que se desliza desde la derecha. El cliente puede:
+- Ver todos los productos seleccionados
+- Modificar cantidades
+- Eliminar productos
+- Ver el total en tiempo real
+- Sin cerrar el catálogo — navega y agrega simultáneamente
 
-<Tip>
-  El código SC-XXXX es clave para el seguimiento. Cuando el cliente te escribe con su código, sabes exactamente qué pidió sin tener que preguntar.
-</Tip>
+### Plan Básico (sin carrito)
+
+En el plan Básico no hay carrito. Cada producto tiene un botón **"Consultar por WhatsApp"** que abre WhatsApp directamente con un mensaje sobre ese producto individual.
+
+## ¿Qué NO hace?
+
+- **No procesa pagos** — no tiene Stripe, PayPal ni ninguna pasarela
+- **No pide datos del cliente** — no hay formulario de dirección, nombre, etc.
+- **No calcula envío** — no tiene integración con delivery
+- **No tiene cupones ni descuentos** automáticos
+- **No es persistente** — el carrito usa localStorage; si el cliente borra datos del navegador, se pierde
+- **No tiene lista de deseos / favoritos**
+- **No envía confirmación automática** al cliente
+
+## Disponibilidad por plan
+
+| Característica | Básico | Semestral | Anual |
+|---------------|--------|-----------|-------|
+| Carrito de compras | ❌ (solo botón WA directo) | ✅ Carrito básico | ✅ Carrito completo |
+| Cart Drawer lateral | ❌ | ✅ | ✅ |
+| Código SC-XXXX | ❌ | ❌ | ✅ |
+| Variantes en carrito | ❌ | ✅ (talla/color) | ✅ (todas) |
+
+## Ejemplo práctico
+
+### Caso: Tienda "ElectroVE" en Barquisimeto
+
+Miguel vende accesorios electrónicos con plan Semestral:
+
+1. Un cliente entra al catálogo
+2. Agrega "Auriculares Bluetooth" ($20) → se abre el Cart Drawer
+3. Agrega "Cable USB-C" ($5) y "Funda para celular" ($8, color negro)
+4. En el drawer ve: 3 productos, Total REF 33.00
+5. Toca "Finalizar pedido" → WhatsApp se abre con el mensaje completo
+6. Miguel recibe el pedido, confirma stock y coordina pago por Pago Móvil
+
+<Warning>
+  SYNTIweb **no cobra a los clientes**. El carrito genera el mensaje de WhatsApp — el pago se coordina entre el negocio y el cliente directamente.
+</Warning>
