@@ -111,5 +111,8 @@
   "appearance": {
     "default": "light",
     "strict": false
-  }  
+  },
+  "styling": {
+    "eyebrows": "breadcrumbs"
+  }
 }
