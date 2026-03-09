@@ -51,6 +51,12 @@
     .sf-cat-pill{display:inline-flex;align-items:center;gap:2;padding:.5rem 1rem;background:transparent;border:1px solid var(--foreground/.1);border-radius:99px;font-size:.875rem;font-weight:600;color:var(--foreground);cursor:pointer;white-space:nowrap;shrink:0;transition:all .2s;text-decoration:none}
     .sf-cat-pill:hover{bg:var(--surface,.3);border-color:var(--foreground/.2)}
     .sf-cat-pill.active{bg:var(--primary);color:var(--primary-foreground);border-color:var(--primary)}
+    /* ── Badges ── */
+    .sf-badge{position:absolute;top:3;left:3;display:inline-flex;align-items:center;gap:1.5;padding:.35rem .75rem;border-radius:99px;font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em}
+    .sf-badge-popular{background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#fff}
+    .sf-badge-new{background:linear-gradient(135deg,#34d399,#10b981);color:#fff}
+    .sf-badge-discount{background:linear-gradient(135deg,#f87171,#ef4444);color:#fff}
+    .sf-item-wrapper{position:relative;border-radius:12px;overflow:hidden}
     .sf-drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);z-index:200;opacity:0;pointer-events:none;transition:opacity .3s ease}
     .sf-drawer-overlay.open{opacity:1;pointer-events:auto}
     .sf-drawer{position:fixed;right:0;top:0;bottom:0;width:min(420px,95vw);z-index:201;transform:translateX(105%);transition:transform .4s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;box-shadow:-20px 0 60px rgba(0,0,0,.12);border-top-left-radius:2rem;border-bottom-left-radius:2rem}
@@ -235,6 +241,28 @@
                             $canUseExtras = $isPlanAnual && !empty($itemOptions) && count($itemOptions) > 0;
                         @endphp
                         <div class="px-4 py-3" x-data="{ optionsOpen: false, selectedOptions: [] }">
+                            <div class="sf-item-wrapper">
+                                @php
+                                    $badge = $item['badge'] ?? null;
+                                    $badgeType = null;
+                                    if (str_contains($item['nombre'] ?? '', 'Popular') || ($item['rating'] ?? 0) >= 4.5) {
+                                        $badgeType = 'popular';
+                                    } elseif (strtotime($item['fecha_creacion'] ?? '') > strtotime('-7 days')) {
+                                        $badgeType = 'new';
+                                    } elseif (!empty($item['descuento'])) {
+                                        $badgeType = 'discount';
+                                    }
+                                @endphp
+
+                                @if($badgeType)
+                                <span class="sf-badge sf-badge-{{ $badgeType }}">
+                                    @if($badgeType === 'popular') ⭐ Popular
+                                    @elseif($badgeType === 'new') ✨ Nuevo
+                                    @elseif($badgeType === 'discount') 🔴 {{ $item['descuento'] ?? '10%' }}
+                                    @endif
+                                </span>
+                                @endif
+
                             <div class="sf-item">
                                 <div class="sf-item-content">
                                     <div>
@@ -286,6 +314,7 @@
                                         <span class="iconify tabler--bowl-chopsticks size-6 text-foreground/20"></span>
                                     </div>
                                 @endif
+                            </div>
                             </div>
 
                             {{-- Inline Options Panel --}}
