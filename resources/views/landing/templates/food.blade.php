@@ -27,6 +27,14 @@
 <style>
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    /* ── Hero Slider ── */
+    .sf-hero-slider{position:relative;overflow:hidden;height:300px;md:height:400px;bg:var(--surface,#f3f4f6)}
+    .sf-hero-slides{position:relative;width:100%;height:100%;display:flex}
+    .sf-hero-slide{position:absolute;inset:0;width:100%;height:100%;opacity:0;transition:opacity .8s ease-in-out;background-size:cover;background-position:center}
+    .sf-hero-slide.active{opacity:1}
+    .sf-hero-dots{position:absolute;bottom:6;left:50%;transform:translateX(-50%);z-index:10;display:flex;gap:2;align-items:center;justify-content:center}
+    .sf-hero-dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.4);cursor:pointer;transition:all .3s ease;border:2px solid transparent}
+    .sf-hero-dot.active{background:#fff;width:28px;border-radius:99px}
     .sf-drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);z-index:200;opacity:0;pointer-events:none;transition:opacity .3s ease}
     .sf-drawer-overlay.open{opacity:1;pointer-events:auto}
     .sf-drawer{position:fixed;right:0;top:0;bottom:0;width:min(420px,95vw);z-index:201;transform:translateX(105%);transition:transform .4s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;box-shadow:-20px 0 60px rgba(0,0,0,.12);border-top-left-radius:2rem;border-bottom-left-radius:2rem}
@@ -95,14 +103,52 @@
             @if($isPlanAnual)
             <button onclick="toggleDrawer()" class="relative group p-2 rounded-full transition-colors bg-primary text-primary-foreground hover:bg-primary/90 shadow-xl shadow-primary/20">
                 <span class="iconify tabler--shopping-bag size-6"></span>
-                <span id="sf-cart-count" class="absolute -top-1 -right-1 size-5 bg-error text-white text-[10px] font-black rounded-full flex items-center justify-center border-2 border-background" style="display:none">0</span>
+                <span id="sf-cart-count" class="absolute -top-2 -right-2 size-6 bg-error text-white text-xs font-black rounded-full flex items-center justify-center border-2 border-background" style="display:none">0</span>
             </button>
             @endif
         </div>
     </div>
 </header>
 
-{{-- 2. HERO MINIMAL --}}
+{{-- 2. HERO SLIDER --}}
+@php
+    $heroSlides = [];
+    if (!empty($customization->hero_slider_images)) {
+        $heroSlides = json_decode($customization->hero_slider_images, true) ?? [];
+    } elseif (!empty($customization->hero_main_filename)) {
+        $heroSlides = [$customization->hero_main_filename];
+    }
+    if (empty($heroSlides)) {
+        $heroSlides = ['https://images.unsplash.com/photo-1495521821757-a1efb6729352?w=1200'];
+    }
+@endphp
+
+@if(!empty($heroSlides))
+<section class="sf-hero-slider bg-surface/50">
+    <div class="sf-hero-slides">
+        @foreach($heroSlides as $idx => $slide)
+            @php
+                $slideUrl = str_starts_with($slide, 'http')
+                    ? $slide
+                    : asset('storage/tenants/' . $tenant->id . '/' . $slide);
+            @endphp
+            <div class="sf-hero-slide {{ $idx === 0 ? 'active' : '' }}"
+                 style="background-image:url('{{ $slideUrl }}')"></div>
+        @endforeach
+    </div>
+
+    <div class="sf-hero-dots">
+        @foreach($heroSlides as $idx => $slide)
+            <button class="sf-hero-dot {{ $idx === 0 ? 'active' : '' }}"
+                    data-slide="{{ $idx }}"
+                    onclick="goToSlide({{ $idx }})"
+                    aria-label="Slide {{ $idx + 1 }}"></button>
+        @endforeach
+    </div>
+</section>
+@endif
+
+{{-- 3. HERO MINIMAL --}}
 @if($tenant->slogan || $dollarRate)
 <section class="bg-background border-b border-foreground/5">
     <div class="mx-auto max-w-3xl px-4 py-6">
@@ -118,7 +164,7 @@
 </section>
 @endif
 
-{{-- 3. CATEGORIES + ITEMS --}}
+{{-- 4. CATEGORIES + ITEMS --}}
 <main class="mx-auto max-w-3xl px-4 py-6 space-y-4 pb-32">
     @forelse($categories as $catIdx => $cat)
         @if(!empty($cat['activo']))
@@ -240,7 +286,7 @@
     @endforelse
 </main>
 
-{{-- 4. DRAWER PEDIDO --}}
+{{-- 5. DRAWER PEDIDO --}}
 @if($isPlanAnual)
 <div class="sf-drawer-overlay" id="sf-overlay" onclick="toggleDrawer()"></div>
 <aside class="sf-drawer bg-background" id="sf-drawer">
@@ -300,7 +346,7 @@
 </div>
 @endif
 
-{{-- MODAL Datos Cliente --}}
+{{-- 6. MODAL Datos Cliente --}}
 @if($isPlanAnual)
 <div id="sf-data-modal" class="sf-modal-overlay">
     <div class="sf-modal p-6 space-y-5">
@@ -356,7 +402,7 @@
 </div>
 @endif
 
-{{-- 5. FOOTER --}}
+{{-- 7. FOOTER --}}
 <footer class="bg-surface/50 border-t border-foreground/5 py-14">
     <div class="mx-auto max-w-3xl px-4 text-center">
         @if(!empty($customization->logo_filename))
@@ -394,6 +440,56 @@
 @endsection
 
 @push('scripts')
+<script>
+// ── Hero Slider ──
+(function() {
+    var currentSlide = 0;
+    var slides = document.querySelectorAll('.sf-hero-slide');
+    var dots = document.querySelectorAll('.sf-hero-dot');
+    var autoplayInterval;
+
+    window.goToSlide = function(index) {
+        if (index < 0 || index >= slides.length) return;
+
+        slides.forEach(function(s) { s.classList.remove('active'); });
+        dots.forEach(function(d) { d.classList.remove('active'); });
+
+        slides[index].classList.add('active');
+        dots[index].classList.add('active');
+        currentSlide = index;
+
+        // Reset autoplay timer
+        clearInterval(autoplayInterval);
+        startAutoplay();
+    };
+
+    function autoplay() {
+        var nextSlide = (currentSlide + 1) % slides.length;
+        goToSlide(nextSlide);
+    }
+
+    function startAutoplay() {
+        if (slides.length > 1) {
+            autoplayInterval = setInterval(autoplay, 5000);
+        }
+    }
+
+    // Start on DOMContentLoaded
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', startAutoplay);
+    } else {
+        startAutoplay();
+    }
+
+    // Pause autoplay on hover
+    var slider = document.querySelector('.sf-hero-slider');
+    if (slider) {
+        slider.addEventListener('mouseenter', function() { clearInterval(autoplayInterval); });
+        slider.addEventListener('mouseleave', startAutoplay);
+    }
+})();
+</script>
+
 <script>
 (function(){
     'use strict';
@@ -502,9 +598,23 @@
         var overlay = document.getElementById('sf-overlay');
         var drawer  = document.getElementById('sf-drawer');
         if (!overlay || !drawer) return;
+
+        var isClosing = drawer.classList.contains('open');
+
         overlay.classList.toggle('open');
         drawer.classList.toggle('open');
-        document.body.style.overflow = drawer.classList.contains('open') ? 'hidden' : '';
+
+        // FIX: Siempre restaurar overflow correctamente basado en overlay state
+        document.body.style.overflow = overlay.classList.contains('open') ? 'hidden' : '';
+
+        // FIX: Cleanup en caso de cierre forzado (esperar transición .4s)
+        if (isClosing) {
+            setTimeout(function() {
+                if (!drawer.classList.contains('open')) {
+                    document.body.style.overflow = '';
+                }
+            }, 450);
+        }
     };
 
     function renderDrawer() {
