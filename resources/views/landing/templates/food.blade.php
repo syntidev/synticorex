@@ -35,6 +35,13 @@
     .sf-hero-dots{position:absolute;bottom:6;left:50%;transform:translateX(-50%);z-index:10;display:flex;gap:2;align-items:center;justify-content:center}
     .sf-hero-dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.4);cursor:pointer;transition:all .3s ease;border:2px solid transparent}
     .sf-hero-dot.active{background:#fff;width:28px;border-radius:99px}
+    /* ── Product Item (Horizontal) ── */
+    .sf-item{display:flex;flex-direction:column;gap:3px;md:flex-direction:row;md:gap:4;md:items-start}
+    .sf-item-img{width:100%;height:180px;md:width:96px;md:height:96px;md:shrink-0;border-radius:12px;object-fit:cover;bg:var(--surface,#f3f4f6)}
+    .sf-item-content{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:space-between}
+    .sf-item-name{font-weight:800;font-size:.875rem;color:var(--foreground);line-clamp:2}
+    .sf-item-desc{font-size:.75rem;opacity:.45;line-clamp:2;md:line-clamp:1}
+    .sf-item-footer{display:flex;gap:2;align-items:center;justify-content:space-between;mt:2}
     .sf-drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);z-index:200;opacity:0;pointer-events:none;transition:opacity .3s ease}
     .sf-drawer-overlay.open{opacity:1;pointer-events:auto}
     .sf-drawer{position:fixed;right:0;top:0;bottom:0;width:min(420px,95vw);z-index:201;transform:translateX(105%);transition:transform .4s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;box-shadow:-20px 0 60px rgba(0,0,0,.12);border-top-left-radius:2rem;border-bottom-left-radius:2rem}
@@ -204,42 +211,56 @@
                             $canUseExtras = $isPlanAnual && !empty($itemOptions) && count($itemOptions) > 0;
                         @endphp
                         <div class="px-4 py-3" x-data="{ optionsOpen: false, selectedOptions: [] }">
-                            <div class="flex items-center gap-3">
-                                <div class="flex-1 min-w-0">
-                                    <p class="text-sm font-bold text-foreground truncate">{{ $item['nombre'] }}</p>
-                                    @if(!empty($item['descripcion']))
-                                        <p class="text-xs text-foreground/40 line-clamp-1">{{ $item['descripcion'] }}</p>
-                                    @endif
+                            <div class="sf-item">
+                                <div class="sf-item-content">
+                                    <div>
+                                        <p class="sf-item-name">{{ $item['nombre'] }}</p>
+                                        @if(!empty($item['descripcion']))
+                                            <p class="sf-item-desc">{{ $item['descripcion'] }}</p>
+                                        @endif
+                                    </div>
+
+                                    <div class="sf-item-footer">
+                                        @if(!$hidePrice)
+                                        <p class="text-sm font-black tracking-tight text-foreground" data-price-usd="{{ $item['precio'] ?? 0 }}">
+                                            {{ $currencySymbol }} 0.00
+                                        </p>
+                                        @endif
+
+                                        @if($isPlanAnual)
+                                        @if($canUseExtras)
+                                        <button type="button"
+                                                @click="optionsOpen = !optionsOpen"
+                                                class="size-9 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0 hover:bg-primary hover:text-primary-foreground transition-colors"
+                                                title="Personalizar">
+                                            <span class="iconify tabler--adjustments-horizontal size-4"></span>
+                                        </button>
+                                        @else
+                                        <button id="sf-add-{{ $itemId }}"
+                                                onclick="addToCart('{{ addslashes($itemId) }}', '{{ addslashes($item['nombre'] ?? '') }}', {{ $item['precio'] ?? 0 }})"
+                                                class="size-9 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0 hover:bg-primary hover:text-primary-foreground transition-colors">
+                                            <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+                                        </button>
+                                        @endif
+                                        <div id="qty-row-{{ $itemId }}" class="flex items-center gap-1 bg-surface rounded-full px-2 py-1" style="display:none!important">
+                                            <button class="size-6 rounded-full bg-background flex items-center justify-center text-xs font-bold" onclick="changeQty('{{ addslashes($itemId) }}', -1)">−</button>
+                                            <span class="text-xs font-black min-w-[14px] text-center" id="qty-val-{{ $itemId }}">1</span>
+                                            <button class="size-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xs font-bold" onclick="changeQty('{{ addslashes($itemId) }}', 1)">+</button>
+                                        </div>
+                                        @endif
+                                    </div>
                                 </div>
 
-                                @if(!$hidePrice)
-                                <p class="text-sm font-black tracking-tight text-foreground whitespace-nowrap" data-price-usd="{{ $item['precio'] ?? 0 }}">
-                                    {{ $currencySymbol }} 0.00
-                                </p>
-                                @endif
-
-                                @if($isPlanAnual)
-                                {{-- Add button OR Customize button if has options --}}
-                                @if($canUseExtras)
-                                <button type="button" 
-                                        @click="optionsOpen = !optionsOpen"
-                                        class="size-9 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0 hover:bg-primary hover:text-primary-foreground transition-colors"
-                                        title="Personalizar">
-                                    <span class="iconify tabler--adjustments-horizontal size-4"></span>
-                                </button>
+                                @if(!empty($item['foto']))
+                                    <img src="{{ asset('storage/tenants/' . $tenant->id . '/menu/' . $item['foto']) }}"
+                                         alt="{{ $item['nombre'] }}"
+                                         class="sf-item-img"
+                                         loading="lazy"
+                                         onerror="this.style.display='none';">
                                 @else
-                                <button id="sf-add-{{ $itemId }}"
-                                        onclick="addToCart('{{ addslashes($itemId) }}', '{{ addslashes($item['nombre'] ?? '') }}', {{ $item['precio'] ?? 0 }})"
-                                        class="size-9 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0 hover:bg-primary hover:text-primary-foreground transition-colors">
-                                    <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
-                                </button>
-                                @endif
-                                {{-- Qty controls (hidden until added) --}}
-                                <div id="qty-row-{{ $itemId }}" class="flex items-center gap-1 bg-surface rounded-full px-2 py-1" style="display:none!important">
-                                    <button class="size-6 rounded-full bg-background flex items-center justify-center text-xs font-bold" onclick="changeQty('{{ addslashes($itemId) }}', -1)">−</button>
-                                    <span class="text-xs font-black min-w-[14px] text-center" id="qty-val-{{ $itemId }}">1</span>
-                                    <button class="size-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xs font-bold" onclick="changeQty('{{ addslashes($itemId) }}', 1)">+</button>
-                                </div>
+                                    <div class="sf-item-img bg-surface flex items-center justify-center">
+                                        <span class="iconify tabler--bowl-chopsticks size-6 text-foreground/20"></span>
+                                    </div>
                                 @endif
                             </div>
 
