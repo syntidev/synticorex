@@ -24,15 +24,6 @@ El **Mini Order** es el sistema de códigos de seguimiento de SYNTIcat. Cada ped
 - **Incluye el código en el mensaje de WhatsApp** para que ambos (tú y el cliente) tengan la misma referencia
 - **Pantalla de confirmación**: El cliente ve el código SC-XXXX después de enviar su pedido
 
-### Formato del JSON guardado
-
-Cada pedido se guarda con:
-- Código SC-XXXX
-- Lista de productos con nombre, variante, cantidad y precio
-- Total del pedido
-- Fecha y hora
-- ID del tenant
-
 ### Para qué sirve el código
 
 | Uso | Ejemplo |
@@ -46,7 +37,7 @@ Cada pedido se guarda con:
 
 - **No rastrea estados** (preparando, enviado, entregado) — eso se coordina por WhatsApp
 - **No envía notificaciones** automáticas al cliente sobre su pedido
-- **No tiene panel de órdenes** visible en el dashboard (próximamente)
+- **No tiene panel de órdenes** visible en el panel (próximamente)
 - **No genera factura** a partir del pedido
 - **No permite cancelar** un pedido desde la plataforma
 - **No tiene historial de pedidos** visible para el cliente
@@ -68,8 +59,8 @@ Cada pedido se guarda con:
 ### Caso: Tienda de zapatos "PasoFirme" en San Cristóbal
 
 Andrea tiene una tienda de zapatos con plan Anual. Un cliente pide:
-- 1× Bota montañera (Talla 42) — $35
-- 1× Par de medias — $5
+- 1× Bota montañera (Talla 42) — REF 35
+- 1× Par de medias — REF 5
 
 Al tocar "Finalizar pedido", se genera el código **SC-0023**. El mensaje que recibe Andrea por WhatsApp:
 
@@ -88,3 +79,9 @@ Código de seguimiento: SC-0023
 Andrea confirma: *"Hola, tu pedido SC-0023 está listo. ¿Lo recoges o te lo envío? Pago Móvil Banesco al 04141234567"*
 
 El archivo `SC-0023.json` queda guardado en el servidor para referencia futura.
+
+## Ver también
+
+- [Carrito y WhatsApp](/cat/carrito-whatsapp) — Cómo funciona el checkout
+- [¿Qué es SYNTIcat?](/cat/que-es-synticat) — Planes y comparativa
+- [WhatsApp](/shared/whatsapp) — Canal de comunicación con clientes

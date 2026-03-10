@@ -369,9 +369,9 @@
 
     <div class="mx-auto max-w-5xl pb-32">
         {{-- Foto grande --}}
-        <div id="sf-detail-img-wrap" class="w-full bg-surface h-48 flex items-center justify-center overflow-hidden">
+        <div id="sf-detail-img-wrap" class="w-full bg-surface aspect-video flex items-center justify-center overflow-hidden">
             <img id="sf-detail-img" src="" alt="" class="w-full h-full object-cover hidden">
-            <div id="sf-detail-placeholder" class="w-full h-48 flex items-center justify-center bg-surface">
+            <div id="sf-detail-placeholder" class="w-full h-full flex items-center justify-center bg-surface">
                 <span class="iconify tabler--bowl-chopsticks size-20 text-foreground/15"></span>
             </div>
         </div>

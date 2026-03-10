@@ -1,0 +1,220 @@
+﻿=== FILE: C:\laragon\www\synticorex\docs\cat\badges-productos.mdx ===
+
+
+
+=== FILE: C:\laragon\www\synticorex\docs\cat\carrito-whatsapp.mdx ===
+
+
+
+=== FILE: C:\laragon\www\synticorex\docs\cat\catalogo-productos.mdx ===
+
+
+
+=== FILE: C:\laragon\www\synticorex\docs\cat\mini-order-sc.mdx ===
+
+
+
+=== FILE: C:\laragon\www\synticorex\docs\cat\que-es-cat.mdx ===
+
+
+
+=== FILE: C:\laragon\www\synticorex\docs\cat\que-es-synticat.mdx ===
+
+
+
+=== FILE: C:\laragon\www\synticorex\docs\cat\variantes.mdx ===
+
+
+
+=== FILE: C:\laragon\www\synticorex\docs\cat\wizard-cat.mdx ===
+
+
+
+=== FILE: C:\laragon\www\synticorex\docs\food\categorias-e-items.mdx ===
+
+
+
+=== FILE: C:\laragon\www\synticorex\docs\food\categorias-menu.mdx ===
+
+
+
+=== FILE: C:\laragon\www\synticorex\docs\food\extras-opciones.mdx ===
+
+
+
+=== FILE: C:\laragon\www\synticorex\docs\food\horarios-atencion.mdx ===
+
+
+
+=== FILE: C:\laragon\www\synticorex\docs\food\items-lista.mdx ===
+
+
+
+=== FILE: C:\laragon\www\synticorex\docs\food\pedido-rapido-whatsapp.mdx ===
+
+
+
+=== FILE: C:\laragon\www\synticorex\docs\food\pedido-rapido.mdx ===
+
+
+
+=== FILE: C:\laragon\www\synticorex\docs\food\que-es-food.mdx ===
+
+
+
+=== FILE: C:\laragon\www\synticorex\docs\food\que-es-syntifood.mdx ===
+
+
+
+=== FILE: C:\laragon\www\synticorex\docs\food\seccion-comandas.mdx ===
+
+
+
+=== FILE: C:\laragon\www\synticorex\docs\food\seccion-menu.mdx ===
+
+
+
+=== FILE: C:\laragon\www\synticorex\docs\food\wizard-food.mdx ===
+
+
+
+=== FILE: C:\laragon\www\synticorex\docs\primeros-pasos\planes-y-precios.mdx ===
+
+
+
+=== FILE: C:\laragon\www\synticorex\docs\primeros-pasos\primeros-pasos.mdx ===
+
+
+
+=== FILE: C:\laragon\www\synticorex\docs\primeros-pasos\que-es-syntiweb.mdx ===
+
+
+
+=== FILE: C:\laragon\www\synticorex\docs\referencia\glosario.mdx ===
+
+
+
+=== FILE: C:\laragon\www\synticorex\docs\referencia\preguntas-frecuentes.mdx ===
+
+
+
+=== FILE: C:\laragon\www\synticorex\docs\shared\cuenta-y-planes.mdx ===
+
+
+
+=== FILE: C:\laragon\www\synticorex\docs\shared\dominio-y-subdominio.mdx ===
+
+
+
+=== FILE: C:\laragon\www\synticorex\docs\shared\faq.mdx ===
+
+
+
+=== FILE: C:\laragon\www\synticorex\docs\shared\glosario.mdx ===
+
+
+
+=== FILE: C:\laragon\www\synticorex\docs\shared\imagenes.mdx ===
+
+
+
+=== FILE: C:\laragon\www\synticorex\docs\shared\introduccion.mdx ===
+
+
+
+=== FILE: C:\laragon\www\synticorex\docs\shared\moneda-y-precios.mdx ===
+
+
+
+=== FILE: C:\laragon\www\synticorex\docs\shared\quickstart.mdx ===
+
+
+
+=== FILE: C:\laragon\www\synticorex\docs\shared\troubleshooting.mdx ===
+
+
+
+=== FILE: C:\laragon\www\synticorex\docs\shared\whatsapp.mdx ===
+
+
+
+=== FILE: C:\laragon\www\synticorex\docs\studio\asistente-configuracion.mdx ===
+
+
+
+=== FILE: C:\laragon\www\synticorex\docs\studio\dashboard.mdx ===
+
+
+
+=== FILE: C:\laragon\www\synticorex\docs\studio\hero-y-banner.mdx ===
+
+
+
+=== FILE: C:\laragon\www\synticorex\docs\studio\medios-de-pago.mdx ===
+
+
+
+=== FILE: C:\laragon\www\synticorex\docs\studio\paletas-de-color.mdx ===
+
+
+
+=== FILE: C:\laragon\www\synticorex\docs\studio\panel-administracion.mdx ===
+
+
+
+=== FILE: C:\laragon\www\synticorex\docs\studio\panel-flotante.mdx ===
+
+
+
+=== FILE: C:\laragon\www\synticorex\docs\studio\productos-y-servicios.mdx ===
+
+
+
+=== FILE: C:\laragon\www\synticorex\docs\studio\qr-sticker.mdx ===
+
+
+
+=== FILE: C:\laragon\www\synticorex\docs\studio\que-es-studio.mdx ===
+
+
+
+=== FILE: C:\laragon\www\synticorex\docs\studio\que-es-syntistudio.mdx ===
+
+
+
+=== FILE: C:\laragon\www\synticorex\docs\studio\seccion-config.mdx ===
+
+
+
+=== FILE: C:\laragon\www\synticorex\docs\studio\seccion-diseno.mdx ===
+
+
+
+=== FILE: C:\laragon\www\synticorex\docs\studio\seccion-info.mdx ===
+
+
+
+=== FILE: C:\laragon\www\synticorex\docs\studio\seccion-productos.mdx ===
+
+
+
+=== FILE: C:\laragon\www\synticorex\docs\studio\seccion-servicios.mdx ===
+
+
+
+=== FILE: C:\laragon\www\synticorex\docs\studio\seccion-visual.mdx ===
+
+
+
+=== FILE: C:\laragon\www\synticorex\docs\studio\seo-automatico.mdx ===
+
+
+
+=== FILE: C:\laragon\www\synticorex\docs\studio\whatsapp.mdx ===
+
+
+
+=== FILE: C:\laragon\www\synticorex\docs\studio\wizard-onboarding.mdx ===
+
+
+

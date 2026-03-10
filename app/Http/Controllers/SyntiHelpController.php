@@ -37,9 +37,10 @@ class SyntiHelpController extends Controller
             return $this->noResultsResponse($question, $tenant?->id);
         }
 
-        // 2. Construir respuesta desde el doc más relevante
+        // 2. Construir respuesta con IA (RAG)
         $topDoc   = $results->first();
         $fragment = $topDoc->extractRelevantFragment($question);
+        $answer   = (new \App\Services\AI\BytezProvider)->ask($question, $fragment);
 
         // 3. Si hay múltiples resultados, agregar links de referencia
         $references = $results->map(fn($doc) => [
@@ -48,7 +49,6 @@ class SyntiHelpController extends Controller
         ])->values()->toArray();
 
         // 4. Log
-        $answer = $this->formatAnswer($fragment, $topDoc->title);
 
         $log = AiChatLog::create([
             'tenant_id' => $tenant?->id,

@@ -1,0 +1,186 @@
+ESTRUCTURA DEL PROYECTO 
+================================================ 
+Fecha: lun 09/03/2026 19:16:30,52 
+Ruta: C:\laragon\www\synticorex\docs 
+================================================ 
+ 
+[ARBOL DE DIRECTORIOS] 
+ 
+Listado de rutas de carpetas para el volumen OS
+El número de serie del volumen es 92E8-531C
+C:.
+|   context.md
+|   docs.json
+|   estructura_proyecto.txt
+|   generar_txt_simple.bat
+|   
++---cat
+|       badges-productos.mdx
+|       carrito-whatsapp.mdx
+|       catalogo-productos.mdx
+|       mini-order-sc.mdx
+|       que-es-cat.mdx
+|       que-es-synticat.mdx
+|       variantes.mdx
+|       wizard-cat.mdx
+|       
++---food
+|       categorias-e-items.mdx
+|       categorias-menu.mdx
+|       extras-opciones.mdx
+|       horarios-atencion.mdx
+|       items-lista.mdx
+|       pedido-rapido-whatsapp.mdx
+|       pedido-rapido.mdx
+|       que-es-food.mdx
+|       que-es-syntifood.mdx
+|       seccion-comandas.mdx
+|       seccion-menu.mdx
+|       wizard-food.mdx
+|       
++---images
+|       favicon-32x32.png
+|       favicon.ico
+|       syntiweb-dark.svg
+|       syntiweb-light.svg
+|       
++---logo
+|       android-chrome-192x192.png
+|       android-chrome-512x512.png
+|       apple-touch-icon.png
+|       favicon-16x16.png
+|       favicon-32x32.png
+|       favicon-html-snippet.html
+|       favicon.ico
+|       site.webmanifest
+|       syntiweb-dark.svg
+|       syntiweb-light.svg
+|       
++---primeros-pasos
+|       planes-y-precios.mdx
+|       primeros-pasos.mdx
+|       que-es-syntiweb.mdx
+|       
++---referencia
+|       glosario.mdx
+|       preguntas-frecuentes.mdx
+|       
++---shared
+|       cuenta-y-planes.mdx
+|       dominio-y-subdominio.mdx
+|       faq.mdx
+|       glosario.mdx
+|       imagenes.mdx
+|       introduccion.mdx
+|       moneda-y-precios.mdx
+|       quickstart.mdx
+|       troubleshooting.mdx
+|       whatsapp.mdx
+|       
+\---studio
+        asistente-configuracion.mdx
+        dashboard.mdx
+        hero-y-banner.mdx
+        medios-de-pago.mdx
+        paletas-de-color.mdx
+        panel-administracion.mdx
+        panel-flotante.mdx
+        productos-y-servicios.mdx
+        qr-sticker.mdx
+        que-es-studio.mdx
+        que-es-syntistudio.mdx
+        seccion-config.mdx
+        seccion-diseno.mdx
+        seccion-info.mdx
+        seccion-productos.mdx
+        seccion-servicios.mdx
+        seccion-visual.mdx
+        seo-automatico.mdx
+        whatsapp.mdx
+        wizard-onboarding.mdx
+        
+ 
+================================================ 
+[LISTA COMPLETA DE RUTAS] 
+================================================ 
+C:\laragon\www\synticorex\docs\cat
+C:\laragon\www\synticorex\docs\context.md
+C:\laragon\www\synticorex\docs\docs.json
+C:\laragon\www\synticorex\docs\estructura_proyecto.txt
+C:\laragon\www\synticorex\docs\food
+C:\laragon\www\synticorex\docs\generar_txt_simple.bat
+C:\laragon\www\synticorex\docs\images
+C:\laragon\www\synticorex\docs\logo
+C:\laragon\www\synticorex\docs\primeros-pasos
+C:\laragon\www\synticorex\docs\referencia
+C:\laragon\www\synticorex\docs\shared
+C:\laragon\www\synticorex\docs\studio
+C:\laragon\www\synticorex\docs\cat\badges-productos.mdx
+C:\laragon\www\synticorex\docs\cat\carrito-whatsapp.mdx
+C:\laragon\www\synticorex\docs\cat\catalogo-productos.mdx
+C:\laragon\www\synticorex\docs\cat\mini-order-sc.mdx
+C:\laragon\www\synticorex\docs\cat\que-es-cat.mdx
+C:\laragon\www\synticorex\docs\cat\que-es-synticat.mdx
+C:\laragon\www\synticorex\docs\cat\variantes.mdx
+C:\laragon\www\synticorex\docs\cat\wizard-cat.mdx
+C:\laragon\www\synticorex\docs\food\categorias-e-items.mdx
+C:\laragon\www\synticorex\docs\food\categorias-menu.mdx
+C:\laragon\www\synticorex\docs\food\extras-opciones.mdx
+C:\laragon\www\synticorex\docs\food\horarios-atencion.mdx
+C:\laragon\www\synticorex\docs\food\items-lista.mdx
+C:\laragon\www\synticorex\docs\food\pedido-rapido-whatsapp.mdx
+C:\laragon\www\synticorex\docs\food\pedido-rapido.mdx
+C:\laragon\www\synticorex\docs\food\que-es-food.mdx
+C:\laragon\www\synticorex\docs\food\que-es-syntifood.mdx
+C:\laragon\www\synticorex\docs\food\seccion-comandas.mdx
+C:\laragon\www\synticorex\docs\food\seccion-menu.mdx
+C:\laragon\www\synticorex\docs\food\wizard-food.mdx
+C:\laragon\www\synticorex\docs\images\favicon-32x32.png
+C:\laragon\www\synticorex\docs\images\favicon.ico
+C:\laragon\www\synticorex\docs\images\syntiweb-dark.svg
+C:\laragon\www\synticorex\docs\images\syntiweb-light.svg
+C:\laragon\www\synticorex\docs\logo\android-chrome-192x192.png
+C:\laragon\www\synticorex\docs\logo\android-chrome-512x512.png
+C:\laragon\www\synticorex\docs\logo\apple-touch-icon.png
+C:\laragon\www\synticorex\docs\logo\favicon-16x16.png
+C:\laragon\www\synticorex\docs\logo\favicon-32x32.png
+C:\laragon\www\synticorex\docs\logo\favicon-html-snippet.html
+C:\laragon\www\synticorex\docs\logo\favicon.ico
+C:\laragon\www\synticorex\docs\logo\site.webmanifest
+C:\laragon\www\synticorex\docs\logo\syntiweb-dark.svg
+C:\laragon\www\synticorex\docs\logo\syntiweb-light.svg
+C:\laragon\www\synticorex\docs\primeros-pasos\planes-y-precios.mdx
+C:\laragon\www\synticorex\docs\primeros-pasos\primeros-pasos.mdx
+C:\laragon\www\synticorex\docs\primeros-pasos\que-es-syntiweb.mdx
+C:\laragon\www\synticorex\docs\referencia\glosario.mdx
+C:\laragon\www\synticorex\docs\referencia\preguntas-frecuentes.mdx
+C:\laragon\www\synticorex\docs\shared\cuenta-y-planes.mdx
+C:\laragon\www\synticorex\docs\shared\dominio-y-subdominio.mdx
+C:\laragon\www\synticorex\docs\shared\faq.mdx
+C:\laragon\www\synticorex\docs\shared\glosario.mdx
+C:\laragon\www\synticorex\docs\shared\imagenes.mdx
+C:\laragon\www\synticorex\docs\shared\introduccion.mdx
+C:\laragon\www\synticorex\docs\shared\moneda-y-precios.mdx
+C:\laragon\www\synticorex\docs\shared\quickstart.mdx
+C:\laragon\www\synticorex\docs\shared\troubleshooting.mdx
+C:\laragon\www\synticorex\docs\shared\whatsapp.mdx
+C:\laragon\www\synticorex\docs\studio\asistente-configuracion.mdx
+C:\laragon\www\synticorex\docs\studio\dashboard.mdx
+C:\laragon\www\synticorex\docs\studio\hero-y-banner.mdx
+C:\laragon\www\synticorex\docs\studio\medios-de-pago.mdx
+C:\laragon\www\synticorex\docs\studio\paletas-de-color.mdx
+C:\laragon\www\synticorex\docs\studio\panel-administracion.mdx
+C:\laragon\www\synticorex\docs\studio\panel-flotante.mdx
+C:\laragon\www\synticorex\docs\studio\productos-y-servicios.mdx
+C:\laragon\www\synticorex\docs\studio\qr-sticker.mdx
+C:\laragon\www\synticorex\docs\studio\que-es-studio.mdx
+C:\laragon\www\synticorex\docs\studio\que-es-syntistudio.mdx
+C:\laragon\www\synticorex\docs\studio\seccion-config.mdx
+C:\laragon\www\synticorex\docs\studio\seccion-diseno.mdx
+C:\laragon\www\synticorex\docs\studio\seccion-info.mdx
+C:\laragon\www\synticorex\docs\studio\seccion-productos.mdx
+C:\laragon\www\synticorex\docs\studio\seccion-servicios.mdx
+C:\laragon\www\synticorex\docs\studio\seccion-visual.mdx
+C:\laragon\www\synticorex\docs\studio\seo-automatico.mdx
+C:\laragon\www\synticorex\docs\studio\whatsapp.mdx
+C:\laragon\www\synticorex\docs\studio\wizard-onboarding.mdx

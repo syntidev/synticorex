@@ -18,7 +18,7 @@ Tu menú digital queda en `tunegocio.syntiweb.com`.
 ## ¿Qué hace?
 
 - **Menú digital híbrido:** 1 foto representativa por categoría + lista de platos debajo con nombre y precio
-- **Pedido Rápido → WhatsApp** (plan Anual): El cliente toca [+] en cada plato, acumula su pedido y lo envía como mensaje estructurado por WhatsApp
+- **Pedido Rápido → WhatsApp** (plan Anual): Tu cliente toca [+] en cada plato, acumula su pedido y lo envía como mensaje estructurado por WhatsApp
 - **Tasa BCV automática** (plan Semestral+): Precios se muestran en REF y/o Bs. con tasa del día
 - **Categorías organizadas:** Entradas, Platos fuertes, Bebidas, Postres, etc.
 - **Extras y opciones** (plan Semestral+): Tamaño, punto de cocción, extras
@@ -28,13 +28,13 @@ Tu menú digital queda en `tunegocio.syntiweb.com`.
 ### Estructura del menú (visual)
 
 ```
-┌─────────────────────────────────────┐
-│ 🐟 PESCADOS        [1 foto]         │
-├──────────────────────────┬──────────┤
-│ Al ajillo            [+] │  $8.00  │
-│ A la primavera       [+] │  $9.00  │
-│ Frito                [+] │  $7.00  │
-└──────────────────────────┴──────────┘
+┌─────────────────────────────────────────┐
+│ 🐟 PESCADOS        [1 foto]            │
+├──────────────────────────┬──────────────┤
+│ Al ajillo            [+] │  REF 8.00   │
+│ A la primavera       [+] │  REF 9.00   │
+│ Frito                [+] │  REF 7.00   │
+└──────────────────────────┴──────────────┘
        [Ver pedido (3 items) →]
 ```
 
@@ -82,7 +82,7 @@ Esta estructura es intencional: **no requiere foto por cada plato**. Solo 1 foto
 Pedro tiene una arepera con el plan Anual:
 
 1. Crea categorías: "Arepas Clásicas" (foto de arepa rellena), "Arepas Premium" (foto de arepa gourmet), "Bebidas" (foto de jugo), "Combos" (foto de combo)
-2. Agrega ítems: Arepa de queso $3, Arepa reina pepiada $4, Arepa dominó $3.50...
+2. Agrega ítems: Arepa de queso REF 3, Arepa reina pepiada REF 4, Arepa dominó REF 3.50...
 3. Activa el Pedido Rápido
 
 Un cliente escanea el QR en la mesa:
@@ -90,17 +90,12 @@ Un cliente escanea el QR en la mesa:
 - Toca [+] en "Arepa reina pepiada" y [+] en "Jugo de guayaba"
 - Toca **"Ver pedido (2 items)"**
 - Toca **"Enviar pedido"**
-- Se abre WhatsApp con el mensaje:
-
-```
-🍽️ Pedido desde La Reina del Maíz
-
-1× Arepa reina pepiada — $4.00
-1× Jugo de guayaba — $2.50
-
-Total: $6.50
-
-Enviado desde syntiweb.com
-```
+- Se abre WhatsApp con el mensaje estructurado
 
 Pedro confirma por WhatsApp y prepara el pedido.
+
+## Ver también
+
+- [Categorías e ítems](/food/categorias-e-items) — Cómo organizar tu menú
+- [Pedido Rápido](/food/pedido-rapido) — El acumulador de platos → WhatsApp
+- [Configurar tu menú](/food/wizard-food) — El asistente de primeros pasos
