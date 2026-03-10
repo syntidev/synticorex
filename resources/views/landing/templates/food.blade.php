@@ -87,10 +87,11 @@
         @if(!empty($customization->logo_filename))
             <img src="{{ asset('storage/tenants/' . $tenant->id . '/' . $customization->logo_filename) }}"
                  alt="{{ $tenant->business_name }}"
-                 class="size-20 rounded-2xl object-cover shrink-0 shadow-lg border-4 border-background -mt-12 relative z-10 bg-background">
+                 class="w-16 h-16 rounded-2xl border-2 border-white shadow-md object-cover -mt-8 ml-4 relative z-10 bg-white">
         @else
-            <div class="size-20 bg-primary rounded-2xl flex items-center justify-center shrink-0 shadow-lg border-4 border-background -mt-12 relative z-10">
-                <span class="text-primary-foreground font-black text-2xl">{{ mb_substr($tenant->business_name, 0, 1) }}</span>
+            <div class="w-16 h-16 rounded-2xl border-2 border-white shadow-md -mt-8 ml-4 relative z-10 flex items-center justify-center font-black text-white text-2xl"
+                 style="background:var(--primary)">
+                {{ mb_substr($tenant->business_name, 0, 1) }}
             </div>
         @endif
         <div class="flex-1 min-w-0">
@@ -140,6 +141,20 @@
     </div>
 </div>
 
+{{-- 2b. HERO SLIDER CATEGORÍAS --}}
+<div class="relative w-full h-36 overflow-hidden bg-gray-100">
+  <div id="sf-hero-slides" class="flex h-full transition-transform duration-700 ease-in-out">
+    @foreach($tenant->slider_images ?? [] as $slide)
+    <div class="w-full h-full shrink-0 bg-cover bg-center"
+         style="background-image:url('{{ asset('storage/'.$slide) }}')"></div>
+    @endforeach
+    @if(empty($tenant->slider_images))
+    <div class="w-full h-full shrink-0 bg-gradient-to-r from-primary/20 to-primary/5"></div>
+    @endif
+  </div>
+  <div id="sf-hero-dots" class="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5"></div>
+</div>
+
 {{-- 3. STICKY BAR --}}
 <div id="sf-sticky-bar" class="sticky top-0 z-[100] bg-background/95 backdrop-blur-2xl" style="border-bottom:1px solid rgba(0,0,0,.06)">
     <div class="mx-auto max-w-5xl px-4 flex items-center justify-between h-14">
@@ -181,8 +196,27 @@
     @php $activeCats = array_filter($categories, fn($c) => !empty($c['activo'])); @endphp
     @if(count($activeCats) >= 2)
     <nav id="sf-cat-nav" class="border-t border-foreground/5">
-        <div class="mx-auto max-w-5xl px-4">
-            <div id="sf-cat-tabs" class="flex gap-0 overflow-x-auto no-scrollbar">
+        <div class="mx-auto max-w-5xl px-2 flex items-center gap-1">
+            {{-- Search icon --}}
+            <button class="flex-shrink-0 size-9 flex items-center justify-center rounded-lg text-foreground/40 hover:text-foreground transition-colors">
+                <span class="iconify tabler--search size-4"></span>
+            </button>
+            {{-- Hamburger → dropdown all categories --}}
+            <div class="relative flex-shrink-0">
+                <button id="sf-cat-menu-btn" onclick="sfToggleCatMenu()" class="size-9 flex items-center justify-center rounded-lg text-foreground/40 hover:text-foreground transition-colors">
+                    <span class="iconify tabler--menu-2 size-4"></span>
+                </button>
+                <div id="sf-cat-dropdown" class="absolute left-0 top-full mt-1 w-56 bg-white rounded-xl shadow-xl border border-foreground/5 z-[200] overflow-hidden" style="display:none">
+                    @foreach($activeCats as $catIdx => $cat)
+                    <button onclick="sfScrollToCategory({{ $catIdx }});sfToggleCatMenu()"
+                            class="w-full text-left px-4 py-3 text-sm font-semibold text-foreground/70 hover:bg-surface hover:text-foreground transition-colors border-b border-foreground/5 last:border-0">
+                        {{ $cat['nombre'] }}
+                    </button>
+                    @endforeach
+                </div>
+            </div>
+            {{-- Category tabs --}}
+            <div id="sf-cat-tabs" class="flex gap-0 overflow-x-auto no-scrollbar flex-1">
                 @foreach($activeCats as $catIdx => $cat)
                 <button
                     data-cat-nav="{{ $catIdx }}"
@@ -194,6 +228,8 @@
             </div>
         </div>
     </nav>
+    {{-- Dropdown backdrop --}}
+    <div id="sf-cat-backdrop" onclick="sfToggleCatMenu()" style="display:none;position:fixed;inset:0;z-index:199"></div>
     @endif
 </div>
 
@@ -300,7 +336,7 @@
                 <h2 class="text-base font-black tracking-tight text-foreground">{{ $cat['nombre'] }}</h2>
                 <span class="text-xs font-bold text-foreground/30">({{ count($activeItems) }})</span>
             </div>
-            <div class="grid grid-cols-2 gap-3">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 @foreach($activeItems as $item)
                 @php
                     $itemId   = $item['id'] ?? '';
@@ -369,48 +405,29 @@
 
     <div class="mx-auto max-w-5xl pb-32">
         {{-- Foto grande --}}
-        <div id="sf-detail-img-wrap" class="w-full bg-surface h-48 flex items-center justify-center overflow-hidden">
+        <div id="sf-detail-img-wrap" class="w-full bg-surface h-40 flex items-center justify-center overflow-hidden">
             <img id="sf-detail-img" src="" alt="" class="w-full h-full object-cover hidden">
-            <div id="sf-detail-placeholder" class="w-full h-48 flex items-center justify-center bg-surface">
+            <div id="sf-detail-placeholder" class="w-full h-40 flex items-center justify-center bg-surface">
                 <span class="iconify tabler--bowl-chopsticks size-20 text-foreground/15"></span>
             </div>
         </div>
 
         {{-- Info principal --}}
-        <div class="px-4 pt-5 pb-4 border-b border-foreground/5">
+        <div class="px-4 pt-3 pb-4 border-b border-foreground/5">
             <div class="flex items-start justify-between gap-3">
-                <h1 id="sf-detail-name" class="text-2xl font-black tracking-tight text-foreground leading-tight"></h1>
+                <h1 id="sf-detail-name" class="text-xl font-black tracking-tight text-foreground leading-tight"></h1>
                 <span id="sf-detail-badge" class="text-[10px] font-black px-2.5 py-1 rounded-full shrink-0 hidden mt-1"></span>
             </div>
-            <p id="sf-detail-desc" class="text-sm text-foreground/50 leading-relaxed mt-2 hidden"></p>
-            <p id="sf-detail-price" class="text-3xl font-black text-primary mt-3"></p>
+            <p id="sf-detail-desc" class="text-xs text-foreground/50 leading-relaxed mt-1 hidden"></p>
+            <p id="sf-detail-price" class="text-2xl font-black text-primary mt-2"></p>
         </div>
 
         {{-- Notas especiales --}}
-        <div class="px-4 py-4 border-b border-foreground/5">
+        <div class="px-4 py-3 border-b border-foreground/5">
             <p class="text-sm font-black text-foreground mb-2">Notas especiales <span class="text-foreground/30 font-medium">(opcional)</span></p>
-            <textarea id="sf-detail-notes" rows="3" placeholder="Ej: Sin cebolla, extra salsa, etc."
+            <textarea id="sf-detail-notes" rows="2" placeholder="Ej: Sin cebolla, extra salsa, etc."
                       class="w-full text-sm px-4 py-3 rounded-xl border border-foreground/10 bg-surface/50 resize-none outline-none focus:border-primary/40 transition-colors text-foreground placeholder:text-foreground/30"></textarea>
         </div>
-
-        {{-- Cantidad + Agregar --}}
-        @if($isPlanAnual)
-        <div class="px-4 py-4 border-b border-foreground/5 flex items-center justify-between">
-            <p class="text-sm font-black text-foreground">Cantidad</p>
-            <div class="flex items-center gap-4">
-                <button onclick="sfDetailQty(-1)" class="size-10 rounded-full border border-foreground/15 flex items-center justify-center text-xl font-black text-foreground hover:bg-surface transition-colors">−</button>
-                <span id="sf-detail-qty" class="text-lg font-black min-w-[20px] text-center">1</span>
-                <button onclick="sfDetailQty(1)" class="size-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xl font-black hover:opacity-90 transition-opacity">+</button>
-            </div>
-        </div>
-        <div class="px-4 pt-4">
-            <button onclick="sfDetailAdd()" id="sf-detail-add-btn"
-                    class="w-full h-14 rounded-2xl font-black text-base text-primary-foreground border-none shadow-lg shadow-primary/25 hover:opacity-90 transition-opacity"
-                    style="background:var(--primary)">
-                Agregar al pedido
-            </button>
-        </div>
-        @endif
 
         {{-- También te puede gustar --}}
         <div id="sf-also-like-wrap" class="px-4 pt-8 hidden">
@@ -418,7 +435,23 @@
             <div id="sf-also-like-grid" class="flex gap-3 overflow-x-auto pb-2 no-scrollbar" style="scroll-snap-type:x mandatory"></div>
         </div>
     </div>
+
 </div>
+
+@if($isPlanAnual)
+<div id="sf-detail-bottom-bar" class="fixed bottom-0 left-0 right-0 z-[200] bg-white border-t border-gray-100 shadow-lg px-4 py-3 flex items-center gap-3" style="display:none">
+    <div class="flex items-center gap-3 shrink-0">
+        <button onclick="sfDetailQty(-1)" class="size-9 rounded-full border border-gray-200 flex items-center justify-center text-xl font-black">−</button>
+        <span id="sf-detail-qty" class="text-base font-black min-w-[20px] text-center">1</span>
+        <button onclick="sfDetailQty(1)" class="size-9 rounded-full flex items-center justify-center text-xl font-black text-white" style="background:var(--primary)">+</button>
+    </div>
+    <button onclick="sfDetailAdd()" id="sf-detail-add-btn"
+            class="flex-1 h-12 rounded-2xl font-black text-sm text-white border-none shadow-md"
+            style="background:var(--primary)">
+        Agregar — <span id="sf-detail-add-price"></span>
+    </button>
+</div>
+@endif
 
 {{-- 5. DRAWER PEDIDO --}}
 @if($isPlanAnual)
@@ -825,16 +858,21 @@
         document.getElementById('sf-detail-view').style.display = 'block';
         document.getElementById('sf-detail-view').scrollTop = 0;
         document.body.style.overflow = 'hidden';
+        var bar = document.getElementById('sf-detail-bottom-bar');
+        if(bar) { bar.style.display='flex'; document.getElementById('sf-detail-add-price').textContent = sfFmt(item.precio || 0); }
     };
 
     window.sfCloseDetail = function() {
         document.getElementById('sf-detail-view').style.display = 'none';
         document.body.style.overflow = '';
+        var bar = document.getElementById('sf-detail-bottom-bar');
+        if(bar) bar.style.display='none';
     };
 
     window.sfDetailQty = function(delta) {
         sfDetail.qty = Math.max(1, sfDetail.qty + delta);
         document.getElementById('sf-detail-qty').textContent = sfDetail.qty;
+        document.getElementById('sf-detail-add-price').textContent = sfFmt(sfDetail.price * sfDetail.qty);
     };
 
     window.sfDetailAdd = function() {
@@ -986,21 +1024,36 @@
         var tabBar = document.getElementById('sf-cat-tabs');
         if (!catSections.length || !tabBar) return;
         var btns = tabBar.querySelectorAll('[data-cat-nav]');
+        var ticking = false;
+        function setActive(idx) {
+            btns.forEach(function(btn, i) {
+                var active = String(i) === String(idx);
+                btn.classList.toggle('text-primary', active);
+                btn.classList.toggle('border-primary', active);
+                btn.classList.toggle('text-foreground/40', !active);
+                btn.classList.toggle('border-transparent', !active);
+                if (active) {
+                    // Scroll tab into view without stealing page scroll
+                    var btnLeft = btn.offsetLeft;
+                    var btnW = btn.offsetWidth;
+                    var barW = tabBar.offsetWidth;
+                    var target = btnLeft - (barW / 2) + (btnW / 2);
+                    tabBar.scrollTo({ left: target, behavior: 'smooth' });
+                }
+            });
+        }
         var observer = new IntersectionObserver(function(entries) {
             entries.forEach(function(entry) {
                 if (!entry.isIntersecting) return;
-                var idx = entry.target.id.replace('sf-cat-', '');
-                btns.forEach(function(btn, i) {
-                    var active = String(i) === String(idx);
-                    btn.classList.toggle('text-primary', active);
-                    btn.classList.toggle('font-bold', active);
-                    btn.classList.toggle('border-primary', active);
-                    btn.classList.toggle('text-foreground/40', !active);
-                    btn.classList.toggle('border-transparent', !active);
-                    if (active) btn.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
+                if (ticking) return;
+                ticking = true;
+                requestAnimationFrame(function() {
+                    var idx = entry.target.id.replace('sf-cat-', '');
+                    setActive(idx);
+                    ticking = false;
                 });
             });
-        }, { rootMargin: '-20% 0px -70% 0px', threshold: 0 });
+        }, { rootMargin: '-10% 0px -80% 0px', threshold: 0 });
         catSections.forEach(function(sec) { observer.observe(sec); });
     })();
 
@@ -1042,5 +1095,39 @@
     });
     setInterval(function() { track('time_on_page'); }, 30000);
 })();
+
+(function(){
+  var slides = document.querySelectorAll('#sf-hero-slides > div');
+  if(!slides.length) return;
+  var dots = document.getElementById('sf-hero-dots');
+  var cur = 0;
+  slides.forEach(function(_,i){
+    var d = document.createElement('div');
+    d.className = i===0
+      ? 'w-4 h-1.5 rounded-full bg-white transition-all duration-300'
+      : 'w-1.5 h-1.5 rounded-full bg-white/50 transition-all duration-300';
+    dots.appendChild(d);
+  });
+  function go(n){
+    cur = (n + slides.length) % slides.length;
+    document.getElementById('sf-hero-slides').style.transform =
+      'translateX(-' + (cur * 100) + '%)';
+    dots.querySelectorAll('div').forEach(function(d,i){
+      d.className = i===cur
+        ? 'w-4 h-1.5 rounded-full bg-white transition-all duration-300'
+        : 'w-1.5 h-1.5 rounded-full bg-white/50 transition-all duration-300';
+    });
+  }
+  setInterval(function(){ go(cur+1); }, 5000);
+})();
+
+    // ── Hamburger category menu ──────────────────────────────────
+    function sfToggleCatMenu() {
+        var dd = document.getElementById('sf-cat-dropdown');
+        var bd = document.getElementById('sf-cat-backdrop');
+        var open = dd.style.display === 'none';
+        dd.style.display = open ? 'block' : 'none';
+        bd.style.display = open ? 'block' : 'none';
+    }
 </script>
 @endpush

@@ -49,3 +49,7 @@ Route::prefix('synti')->middleware(['throttle:30,1'])->group(function () {
     Route::post('/ask',      [SyntiHelpController::class, 'ask']);
     Route::post('/feedback', [SyntiHelpController::class, 'feedback']);
 });
+
+// SYNTiA pública — sin auth, solo docs marketing
+Route::post('/synti/public-ask', [SyntiHelpController::class, 'publicAsk'])
+    ->middleware('throttle:10,60');

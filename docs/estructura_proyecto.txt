@@ -1,6 +1,6 @@
 ESTRUCTURA DEL PROYECTO 
 ================================================ 
-Fecha: lun 09/03/2026 19:16:30,52 
+Fecha: lun 09/03/2026 22:43:40,97 
 Ruta: C:\laragon\www\synticorex\docs 
 ================================================ 
  
@@ -12,7 +12,7 @@ C:.
 |   context.md
 |   docs.json
 |   estructura_proyecto.txt
-|   generar_txt_simple.bat
+|   generar.bat
 |   
 +---cat
 |       badges-productos.mdx
@@ -108,7 +108,7 @@ C:\laragon\www\synticorex\docs\context.md
 C:\laragon\www\synticorex\docs\docs.json
 C:\laragon\www\synticorex\docs\estructura_proyecto.txt
 C:\laragon\www\synticorex\docs\food
-C:\laragon\www\synticorex\docs\generar_txt_simple.bat
+C:\laragon\www\synticorex\docs\generar.bat
 C:\laragon\www\synticorex\docs\images
 C:\laragon\www\synticorex\docs\logo
 C:\laragon\www\synticorex\docs\primeros-pasos

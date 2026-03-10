@@ -39,13 +39,12 @@ class SyntiHelpController extends Controller
 
         // 2. Construir respuesta con IA (RAG)
         $topDoc   = $results->first();
-        $fragment = $topDoc->extractRelevantFragment($question);
-        $answer   = (new \App\Services\AI\BytezProvider)->ask($question, $fragment);
+        $answer   = (new \App\Services\AI\BytezProvider)->ask($question, $topDoc->content);
 
         // 3. Si hay múltiples resultados, agregar links de referencia
         $references = $results->map(fn($doc) => [
             'title' => $doc->title,
-            'url'   => "https://docs.syntiweb.com/{$doc->slug}",
+            'url'   => "https://syntiweb.com/ayuda/{$doc->slug}",
         ])->values()->toArray();
 
         // 4. Log
@@ -100,8 +99,41 @@ class SyntiHelpController extends Controller
 
         return response()->json([
             'success' => false,
-            'answer'  => 'No encontré información sobre eso en la documentación. Puedes revisar la guía completa en docs.syntiweb.com o contactar soporte.',
+            'answer'  => 'SYNTiA no encontró información sobre eso. Puedes revisar la guía completa en docs.syntiweb.com o contactar soporte.',
             'source'  => null,
+        ]);
+    }
+
+    public function publicAsk(Request $request): JsonResponse
+    {
+        $request->validate([
+            'question' => 'required|string|max:300',
+        ]);
+
+        $docs = AiDoc::search($request->question, 3)
+            ->whereIn('product', ['shared', 'primeros-pasos'])
+            ->get();
+
+        if ($docs->isEmpty()) {
+            $docs = AiDoc::search($request->question, 3)
+                ->whereIn('product', ['shared', 'primeros-pasos', 'referencia'])
+                ->get();
+        }
+
+        if ($docs->isEmpty()) {
+            return response()->json([
+                'success' => false,
+                'answer'  => 'No encontré información sobre eso. Para más ayuda visita syntiweb.com o escríbenos.',
+            ]);
+        }
+
+        $context  = $docs->pluck('content')->implode("\n\n");
+        $provider = new \App\Services\AI\BytezProvider();
+        $answer   = $provider->ask($request->question, $context);
+
+        return response()->json([
+            'success' => true,
+            'answer'  => $answer,
         ]);
     }
 }

@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="500" height="500">
+  <!--
+    SYNTIweb — POSITIVE (fondo claro)
+    Bracket: #1a1a1a | Círculo: #4A80E4
+    Sombra: feDropShadow suave diagonal en ambos elementos
+  -->
+  <defs>
+    <filter id="sh-bracket" x="-15%" y="-15%" width="140%" height="140%">
+      <feDropShadow dx="1" dy="2" stdDeviation="2.5" flood-color="#000000" flood-opacity="0.18"/>
+    </filter>
+    <filter id="sh-circle" x="-20%" y="-20%" width="150%" height="150%">
+      <feDropShadow dx="1.5" dy="2.5" stdDeviation="3" flood-color="#000000" flood-opacity="0.22"/>
+    </filter>
+  </defs>
+
+  <path
+    d="M 30,22 L 78,22 L 78,70 Q 78,78 70,78 L 62,78 L 62,38 L 22,38 L 22,30 Q 22,22 30,22 Z"
+    fill="#1a1a1a"
+    filter="url(#sh-bracket)"
+  />
+  <circle cx="38" cy="63" r="14" fill="#4A80E4" filter="url(#sh-circle)"/>
+</svg>

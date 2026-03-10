@@ -1,6 +1,6 @@
 {{--
     ============================================================
-    SYNTI — Asistente SYNTIweb
+    SYNTiA — Asistente SYNTIweb
     Archivo: resources/views/dashboard/partials/synti-assistant.blade.php
     Incluir en: resources/views/dashboard/index.blade.php (al final del body)
     Shortcut: Alt + H
@@ -28,7 +28,7 @@
                shadow-[0_4px_24px_rgba(74,128,228,0.45)]
                hover:shadow-[0_4px_32px_rgba(74,128,228,0.6)]
                transition-all duration-200 select-none"
-        title="Asistente SYNTI (Alt+H)"
+        title="Asistente SYNTiA (Alt+H)"
     >
         {{-- Ícono --}}
         <span class="relative flex h-5 w-5 items-center justify-center">
@@ -40,7 +40,7 @@
                       d="M18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456z"/>
             </svg>
         </span>
-        <span class="text-sm font-medium tracking-wide">SYNTI</span>
+        <span class="text-sm font-medium tracking-wide">SYNTiA</span>
         {{-- Atajo de teclado --}}
         <span class="hidden group-hover:flex items-center gap-0.5 text-[10px]
                      text-white/60 font-mono ml-1">
@@ -98,7 +98,7 @@
                                  bg-emerald-400 rounded-full border-2 border-white"></span>
                 </div>
                 <div>
-                    <p class="text-sm font-semibold text-gray-900 leading-none">SYNTI</p>
+                    <p class="text-sm font-semibold text-gray-900 leading-none">SYNTiA</p>
                     <p class="text-[11px] text-gray-400 mt-0.5">Asistente SYNTIweb</p>
                 </div>
             </div>
@@ -145,7 +145,7 @@
                 <div class="flex-1">
                     <div class="bg-gray-50 rounded-2xl rounded-tl-sm px-4 py-3
                                 text-sm text-gray-700 leading-relaxed">
-                        Hola 👋 Soy SYNTI. Puedo ayudarte con cualquier duda sobre
+                        Hola 👋 Soy SYNTiA. Puedo ayudarte con cualquier duda sobre
                         <span class="font-medium text-[#4A80E4]">SYNTIweb</span> —
                         cómo usar el dashboard, configurar tu página, planes y más.
                     </div>
@@ -171,11 +171,11 @@
                     <div x-show="msg.role === 'user'" class="flex justify-end">
                         <div class="max-w-[82%] bg-[#4A80E4] text-white rounded-2xl
                                     rounded-tr-sm px-4 py-2.5 text-sm leading-relaxed">
-                            <span x-text="msg.content"></span>
+                            <span x-html="renderMarkdown(msg.content)"></span>
                         </div>
                     </div>
 
-                    {{-- Mensaje SYNTI --}}
+                    {{-- Mensaje SYNTiA --}}
                     <div x-show="msg.role === 'assistant'" class="flex gap-3">
                         <div class="w-6 h-6 rounded-lg bg-[#4A80E4] flex-shrink-0 mt-0.5
                                     flex items-center justify-center">
@@ -188,7 +188,7 @@
                         <div class="flex-1">
                             <div class="bg-gray-50 rounded-2xl rounded-tl-sm px-4 py-3
                                         text-sm text-gray-700 leading-relaxed"
-                                 x-text="msg.content">
+                                 x-html="renderMarkdown(msg.content)">
                             </div>
                             {{-- Fuente --}}
                             <div x-show="msg.source" class="flex items-center gap-1.5 mt-1.5">
@@ -419,6 +419,13 @@ function syntiAssistant() {
         autoResize(el) {
             el.style.height = 'auto';
             el.style.height = Math.min(el.scrollHeight, 96) + 'px';
+        },
+
+        renderMarkdown(text) {
+            return text
+                .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+                .replace(/`(.+?)`/g, '<code class="bg-gray-100 px-1 rounded text-xs">$1</code>')
+                .replace(/\n/g, '<br>');
         },
     };
 }
