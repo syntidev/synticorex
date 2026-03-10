@@ -108,6 +108,8 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('tenant/{tenantId}/upload')->group(function () {
         Route::post('/logo',                    [ImageUploadController::class, 'uploadLogo']);
         Route::post('/hero',                    [ImageUploadController::class, 'uploadHero']);
+        Route::post('/hero-slot/{slot}',        [ImageUploadController::class, 'uploadHeroSlot'])->where('slot', '[1-5]');
+        Route::delete('/hero-slot/{slot}',      [ImageUploadController::class, 'deleteHeroSlot'])->where('slot', '[1-5]');
         Route::post('/product/{productId}',     [ImageUploadController::class, 'uploadProduct']);
         Route::post('/service/{serviceId}',     [ImageUploadController::class, 'uploadService']);
         Route::post('/about',                    [ImageUploadController::class, 'uploadAbout']);

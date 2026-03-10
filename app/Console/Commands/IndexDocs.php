@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\File;
 class IndexDocs extends Command
 {
     protected $signature   = 'ai:index-docs {--product=all : studio|food|cat|shared|all}';
-    protected $description = 'Indexa archivos /docs/*.mdx para el asistente SYNTI';
+    protected $description = 'Indexa archivos /docs/*.md para el asistente SYNTiA';
 
     public function handle(): int
     {
@@ -24,7 +24,7 @@ class IndexDocs extends Command
         }
 
         $folders = $product === 'all'
-            ? ['shared', 'studio', 'food', 'cat']
+            ? ['shared', 'studio', 'food', 'cat', 'primeros-pasos', 'referencia']
             : [$product];
 
         $this->info('🔄 Iniciando indexación...');
@@ -32,13 +32,13 @@ class IndexDocs extends Command
         $count = 0;
 
         foreach ($folders as $folder) {
-            $files = File::glob("{$basePath}/{$folder}/*.mdx");
+            $files = File::glob("{$basePath}/{$folder}/*.md");
 
             foreach ($files as $file) {
                 $raw     = File::get($file);
                 $title   = $this->extractTitle($raw);
                 $content = $this->stripFrontmatter($raw);
-                $slug    = "{$folder}/" . basename($file, '.mdx');
+                $slug    = "{$folder}/" . basename($file, '.md');
 
                 AiDoc::updateOrCreate(
                     ['slug' => $slug],

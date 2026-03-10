@@ -27,6 +27,8 @@ class TenantCustomization extends Model
         'hero_main_filename',
         'hero_secondary_filename',
         'hero_tertiary_filename',
+        'hero_image_4_filename',
+        'hero_image_5_filename',
         'hero_layout',
         'theme_slug',          // Preline official theme (default, harvest, moon, etc.)
         'social_networks',

@@ -105,35 +105,31 @@ class SyntiHelpController extends Controller
     }
 
     public function publicAsk(Request $request): JsonResponse
-    {
-        $request->validate([
-            'question' => 'required|string|max:300',
-        ]);
+{
+    $request->validate([
+        'question' => 'required|string|max:300',
+    ]);
 
-        $docs = AiDoc::search($request->question, 3)
-            ->whereIn('product', ['shared', 'primeros-pasos'])
-            ->get();
+    $results = AiDoc::search($request->question, 5);
 
-        if ($docs->isEmpty()) {
-            $docs = AiDoc::search($request->question, 3)
-                ->whereIn('product', ['shared', 'primeros-pasos', 'referencia'])
-                ->get();
-        }
+    $docs = $results->filter(fn($doc) => 
+        in_array($doc->product, ['shared', 'primeros-pasos', 'referencia'])
+    );
 
-        if ($docs->isEmpty()) {
-            return response()->json([
-                'success' => false,
-                'answer'  => 'No encontré información sobre eso. Para más ayuda visita syntiweb.com o escríbenos.',
-            ]);
-        }
-
-        $context  = $docs->pluck('content')->implode("\n\n");
-        $provider = new \App\Services\AI\BytezProvider();
-        $answer   = $provider->ask($request->question, $context);
-
+    if ($docs->isEmpty()) {
         return response()->json([
-            'success' => true,
-            'answer'  => $answer,
+            'success' => false,
+            'answer'  => 'No encontré información sobre eso. Para más ayuda visita syntiweb.com o escríbenos.',
         ]);
     }
+
+    $context  = $docs->pluck('content')->implode("\n\n");
+    $provider = new \App\Services\AI\BytezProvider();
+    $answer   = $provider->ask($request->question, $context);
+
+    return response()->json([
+        'success' => true,
+        'answer'  => $answer,
+    ]);
+}
 }

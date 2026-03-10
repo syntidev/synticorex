@@ -11,8 +11,8 @@ SYNTIweb está diseñado para el mercado venezolano dolarizado. Puedes mostrar l
 |------|-------------|---------|
 | **Solo REF** | Precio en dólares de referencia | `REF 5.00` |
 | **Solo bolívares** | Conversión automática con tasa BCV | `Bs. 182.50` |
-| **REF y Bs. con toggle** | Tu cliente cambia entre los dos con un botón | REF ↔ Bs. |
-| **Euro con toggle** | Euros y bolívares alternados | € ↔ Bs. |
+| **REF y Bs. con un botón de cambio** | Tu cliente cambia entre los dos con un botón | REF ↔ Bs. |
+| **Euro con un botón de cambio** | Euros y bolívares alternados | € ↔ Bs. |
 | **Ocultar precios** | No muestra precios, solo "Más Info" | Botón WhatsApp |
 
 ## Cambiar el modo de moneda
@@ -34,7 +34,7 @@ Si usas bolívares, SYNTIweb actualiza la tasa BCV automáticamente cada día. N
 Puedes elegir si el símbolo que aparece es **REF** o **$**. Los dos significan lo mismo — referencia en dólares. Elige el que prefieran tus clientes.
 
 <Tip>
-  El modo **REF y bolívares con toggle** es el favorito de los negocios venezolanos porque el cliente ve el precio en lo que prefiera sin confusión.
+  El modo **REF y bolívares con un botón de cambio** es el favorito de los negocios venezolanos porque el cliente ve el precio en lo que prefiera sin confusión.
 </Tip>
 
 ## Ver también

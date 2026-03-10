@@ -54,7 +54,66 @@
                     </div>
                 </div>
 
-                {{-- Hero Card (400x300) --}}
+                @if($blueprint === 'food')
+                {{-- FOOD: Galería Hero hasta 5 imágenes --}}
+                <div class="bg-surface rounded-xl shadow-sm border border-border sm:col-span-2">
+                    <div class="p-5">
+                        <div class="flex items-center gap-3 mb-3 pb-3 border-b border-border">
+                            <div class="size-9 rounded-lg bg-primary/10 flex items-center justify-center">
+                                <span class="iconify tabler--layout-dashboard size-5 text-primary"></span>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-foreground">Galería Hero</h3>
+                                <p class="text-xs text-muted-foreground-1">Hasta 5 imágenes para el slider del menú</p>
+                            </div>
+                        </div>
+                        {{-- slots: hero-slot-1 hero-slot-2 hero-slot-3 hero-slot-4 hero-slot-5 --}}
+                        <div class="grid grid-cols-3 sm:grid-cols-5 gap-3">
+                            @php
+                                $heroSlots = [
+                                    1 => 'hero_main_filename',
+                                    2 => 'hero_secondary_filename',
+                                    3 => 'hero_tertiary_filename',
+                                    4 => 'hero_image_4_filename',
+                                    5 => 'hero_image_5_filename',
+                                ];
+                            @endphp
+                            @foreach($heroSlots as $slotN => $slotCol)
+                            <div class="relative aspect-video rounded-xl overflow-hidden bg-layer border-2 border-dashed border-layer-line group cursor-pointer"
+                                 onclick="document.getElementById('hero-slot-{{ $slotN }}-file').click()">
+                                @if($customization && $customization->$slotCol)
+                                    <img src="{{ asset('storage/tenants/' . $tenant->id . '/' . $customization->$slotCol) }}"
+                                         class="w-full h-full object-cover">
+                                    <div class="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-center justify-center gap-2">
+                                        <button onclick="event.stopPropagation(); openImgPreview('{{ asset('storage/tenants/' . $tenant->id . '/' . $customization->$slotCol) }}')"
+                                                class="opacity-0 group-hover:opacity-100 size-8 rounded-full bg-white/20 text-white flex items-center justify-center transition-opacity">
+                                            <span class="iconify tabler--eye size-4"></span>
+                                        </button>
+                                        <button onclick="event.stopPropagation(); deleteHeroSlot({{ $slotN }})"
+                                                class="opacity-0 group-hover:opacity-100 size-8 rounded-full bg-red-500/80 text-white flex items-center justify-center transition-opacity">
+                                            <span class="iconify tabler--trash size-4"></span>
+                                        </button>
+                                    </div>
+                                    <span class="absolute top-1.5 left-1.5 size-5 rounded-full bg-black/50 text-white text-[10px] font-bold flex items-center justify-center">{{ $slotN }}</span>
+                                @else
+                                    <div class="flex flex-col items-center justify-center h-full gap-1">
+                                        <span class="iconify tabler--plus size-5 text-muted-foreground-1 group-hover:text-primary transition-colors"></span>
+                                        <span class="text-[10px] text-muted-foreground-1 font-medium">Foto {{ $slotN }}</span>
+                                    </div>
+                                @endif
+                                <input type="file" id="hero-slot-{{ $slotN }}-file" accept="image/*" class="hidden"
+                                       onchange="uploadHeroSlot({{ $slotN }}, this)">
+                            </div>
+                            @endforeach
+                            <p class="text-xs text-muted-foreground-1 mt-2 col-span-full">
+                                <span class="iconify tabler--info-circle size-3.5 inline-block mr-1"></span>
+                                La primera foto es obligatoria. Las demás son opcionales y se muestran en el slider.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                @else
+                {{-- STUDIO/CAT: Hero single image --}}
                 <div class="bg-surface rounded-xl shadow-sm border border-border">
                     <div class="p-5">
                         <div class="flex items-center gap-3 mb-3 pb-3 border-b border-border">
@@ -96,7 +155,9 @@
                         </button>
                     </div>
                 </div>
+                @endif
 
+                @if($blueprint !== 'food')
                 {{-- Acerca De Card --}}
                 <div class="bg-surface rounded-xl shadow-sm border border-border">
                     <div class="p-5">
@@ -139,6 +200,7 @@
                         </button>
                     </div>
                 </div>
+                @endif
 
                 {{-- QR Card --}}
                 <div class="bg-surface rounded-xl shadow-sm border border-border">
@@ -241,6 +303,50 @@
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') { window.closeImgPreview && closeImgPreview(); }
         });
+
+        window.uploadHeroSlot = async function(slot, input) {
+            if (!input.files[0]) return;
+            var fd = new FormData();
+            fd.append('image', input.files[0]);
+            try {
+                var res = await fetch('/tenant/{{ $tenant->id }}/upload/hero-slot/' + slot, {
+                    method: 'POST',
+                    headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content },
+                    body: fd
+                });
+                var data = await res.json();
+                if (data.success) {
+                    toast('Foto ' + slot + ' guardada', 'success');
+                    setTimeout(function() { location.reload(); }, 800);
+                } else {
+                    toast(data.message || 'Error al subir', 'error');
+                }
+            } catch(e) {
+                toast('Error de conexión', 'error');
+            }
+        };
+
+        window.deleteHeroSlot = async function(slot) {
+            if (!confirm('¿Eliminar esta foto del slider?')) return;
+            try {
+                var res = await fetch('/tenant/{{ $tenant->id }}/upload/hero-slot/' + slot, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                var data = await res.json();
+                if (data.success) {
+                    toast('Foto eliminada', 'success');
+                    setTimeout(function() { location.reload(); }, 800);
+                } else {
+                    toast(data.message || 'Error', 'error');
+                }
+            } catch(e) {
+                toast('Error de conexión', 'error');
+            }
+        };
 
         (function () {
             function applyQRColor(sel) {

@@ -84,9 +84,10 @@
                                 <label for="product-badge" class="inline-block text-xs font-semibold text-muted-foreground-1 uppercase tracking-wide mb-1.5">Badge</label>
                                 <select id="product-badge" class="py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs text-sm rounded-lg text-foreground focus:border-primary-focus focus:ring-primary-focus">
                                     <option value="">Sin badge</option>
-                                    <option value="hot">🔥 Hot</option>
-                                    <option value="new">✨ New</option>
-                                    <option value="promo">🎉 Promo</option>
+                                    <option value="popular">Popular</option>
+                                    <option value="nuevo">Nuevo</option>
+                                    <option value="promo">Promo</option>
+                                    <option value="destacado">Destacado</option>
                                 </select>
                             </div>
                             <label class="col-span-3 sm:col-span-1 flex flex-col gap-1.5 cursor-pointer p-2.5 rounded-lg bg-layer border border-layer-line hover:bg-layer-hover transition-colors h-full justify-center">
@@ -97,7 +98,7 @@
                                 </span>
                             </label>
                             <label class="col-span-3 sm:col-span-1 flex flex-col gap-1.5 cursor-pointer p-2.5 rounded-lg bg-layer border border-layer-line hover:bg-layer-hover transition-colors h-full justify-center">
-                                <span class="text-xs font-semibold text-muted-foreground-1 uppercase tracking-wide">Destacado ⭐</span>
+                                <span class="text-xs font-semibold text-muted-foreground-1 uppercase tracking-wide flex items-center gap-1"><span class="iconify tabler--star-filled size-3 text-amber-400" aria-hidden="true"></span> Destacado</span>
                                 <span class="flex items-center gap-2">
                                     <input type="checkbox" id="product-is-featured" class="size-4 rounded-sm border-border text-primary focus:ring-primary/20 cursor-pointer">
                                     <span class="text-xs text-foreground">Marcar como especial</span>

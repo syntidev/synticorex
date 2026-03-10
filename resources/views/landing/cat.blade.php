@@ -276,7 +276,20 @@
                     @endif
 
                     @if($product->badge)
-                        <span class="absolute top-3 left-3 inline-flex items-center py-0.5 px-3 rounded-full text-xs font-medium bg-white/20 backdrop-blur-md text-white border-none uppercase text-[10px] font-black">{{ $product->badge }}</span>
+                        @php
+                            $badgeLower = strtolower($product->badge);
+                            $badgeConfig = match($badgeLower) {
+                                'popular'   => ['icon' => 'tabler--star-filled', 'bgColor' => 'bg-amber-100',  'textColor' => 'text-amber-700',  'label' => 'Popular'],
+                                'nuevo'     => ['icon' => 'tabler--sparkles',    'bgColor' => 'bg-green-100',  'textColor' => 'text-green-700',  'label' => 'Nuevo'],
+                                'promo'     => ['icon' => 'tabler--tag',         'bgColor' => 'bg-orange-100', 'textColor' => 'text-orange-700', 'label' => 'Promo'],
+                                'destacado' => ['icon' => 'tabler--bolt',        'bgColor' => 'bg-purple-100', 'textColor' => 'text-purple-700', 'label' => 'Destacado'],
+                                default     => ['icon' => 'tabler--star',        'bgColor' => 'bg-primary/10', 'textColor' => 'text-primary',    'label' => $product->badge]
+                            };
+                        @endphp
+                        <span class="absolute top-3 left-3 inline-flex items-center gap-1 py-0.5 px-2.5 rounded-full text-[10px] font-black {{ $badgeConfig['bgColor'] }} {{ $badgeConfig['textColor'] }}">
+                            <span class="iconify {{ $badgeConfig['icon'] }} size-3"></span>
+                            {{ $badgeConfig['label'] }}
+                        </span>
                     @endif
                 </div>
 

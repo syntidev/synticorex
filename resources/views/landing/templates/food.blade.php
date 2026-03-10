@@ -59,16 +59,18 @@
 {{-- 1. HERO SLIDER --}}
 @php
     $heroImages = array_values(array_filter([
-        $customization->hero_image ?? null,
-        $customization->hero_image_2 ?? null,
-        $customization->hero_image_3 ?? null,
+        $customization->hero_main_filename      ?? null,
+        $customization->hero_secondary_filename ?? null,
+        $customization->hero_tertiary_filename  ?? null,
+        $customization->hero_image_4_filename   ?? null,
+        $customization->hero_image_5_filename   ?? null,
     ]));
 @endphp
 @if(count($heroImages) > 0)
 <div id="sf-hero-slider" class="relative w-full overflow-hidden bg-surface" style="height:220px">
     @foreach($heroImages as $hIdx => $hImg)
     <div class="sf-slide absolute inset-0 transition-opacity duration-700" style="opacity:{{ $hIdx === 0 ? '1' : '0' }}">
-        <img src="{{ asset('storage/' . $hImg) }}" alt="Hero" class="w-full h-full object-cover">
+        <img src="{{ asset('storage/tenants/' . $tenant->id . '/' . $hImg) }}" alt="{{ $tenant->business_name }}" class="w-full h-full object-cover" loading="{{ $hIdx === 0 ? 'eager' : 'lazy' }}">
     </div>
     @endforeach
     @if(count($heroImages) > 1)
@@ -139,20 +141,6 @@
             </button>
         </div>
     </div>
-</div>
-
-{{-- 2b. HERO SLIDER CATEGORÍAS --}}
-<div class="relative w-full h-36 overflow-hidden bg-gray-100">
-  <div id="sf-hero-slides" class="flex h-full transition-transform duration-700 ease-in-out">
-    @foreach($tenant->slider_images ?? [] as $slide)
-    <div class="w-full h-full shrink-0 bg-cover bg-center"
-         style="background-image:url('{{ asset('storage/'.$slide) }}')"></div>
-    @endforeach
-    @if(empty($tenant->slider_images))
-    <div class="w-full h-full shrink-0 bg-gradient-to-r from-primary/20 to-primary/5"></div>
-    @endif
-  </div>
-  <div id="sf-hero-dots" class="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5"></div>
 </div>
 
 {{-- 3. STICKY BAR --}}
@@ -323,6 +311,69 @@
 {{-- 3. MENU VIEW --}}
 <div id="sf-menu-view">
 <main class="mx-auto max-w-5xl px-4 py-6 space-y-8 pb-32">
+    @php
+        $featuredItems = [];
+        foreach ($categories as $fCat) {
+            if (empty($fCat['activo'])) continue;
+            foreach ($fCat['items'] ?? [] as $fItem) {
+                if (empty($fItem['activo'])) continue;
+                if (in_array($fItem['badge'] ?? '', ['popular', 'nuevo', 'promo', 'destacado'], true) || !empty($fItem['is_featured'])) {
+                    $featuredItems[] = $fItem;
+                }
+            }
+        }
+    @endphp
+
+    @if(count($featuredItems) > 0)
+    <div id="sf-cat-featured" class="scroll-mt-28">
+        <div class="flex items-center gap-2 mb-3">
+            <span class="iconify tabler--star-filled size-5 text-amber-500"></span>
+            <h2 class="text-base font-black tracking-tight text-foreground">Destacados</h2>
+            <span class="text-xs font-bold text-foreground/30">({{ count($featuredItems) }})</span>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            @foreach($featuredItems as $fItem)
+            @php
+                $fSiblings = array_values(array_filter($featuredItems, fn($i) => ($i['id'] ?? '') !== ($fItem['id'] ?? '')));
+            @endphp
+            <div class="flex flex-row items-center gap-3 px-4 py-3 rounded-xl border border-amber-200/60 bg-amber-50/40 cursor-pointer hover:bg-amber-50 transition-colors"
+                 onclick="sfOpenDetail({{ json_encode($fItem) }}, {{ json_encode($fSiblings) }})">
+                @if(!empty($fItem['image_path']))
+                    <img src="{{ asset('storage/' . $fItem['image_path']) }}"
+                         alt="{{ $fItem['nombre'] }}"
+                         class="size-20 rounded-xl object-cover shrink-0 order-2"
+                         loading="lazy">
+                @else
+                    <div class="size-20 rounded-xl shrink-0 flex items-center justify-center order-2 bg-amber-100/60">
+                        <span class="iconify tabler--star size-7 text-amber-400"></span>
+                    </div>
+                @endif
+                <div class="flex flex-col gap-0.5 flex-1 order-1 min-w-0">
+                    @if($fItem['badge'] === 'popular')
+                        <span class="self-start inline-flex items-center gap-1 text-[9px] font-black px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-700"><span class="iconify tabler--star-filled size-3"></span> Popular</span>
+                    @elseif($fItem['badge'] === 'nuevo')
+                        <span class="self-start inline-flex items-center gap-1 text-[9px] font-black px-1.5 py-0.5 rounded-full bg-green-100 text-green-700"><span class="iconify tabler--sparkles size-3"></span> Nuevo</span>
+                    @elseif($fItem['badge'] === 'promo')
+                        <span class="self-start inline-flex items-center gap-1 text-[9px] font-black px-1.5 py-0.5 rounded-full bg-orange-100 text-orange-700"><span class="iconify tabler--tag size-3"></span> Promo</span>
+                    @elseif($fItem['badge'] === 'destacado')
+                        <span class="self-start inline-flex items-center gap-1 text-[9px] font-black px-1.5 py-0.5 rounded-full bg-purple-100 text-purple-700"><span class="iconify tabler--bolt size-3"></span> Destacado</span>
+                    @endif
+                    <p class="text-sm font-black text-foreground leading-tight line-clamp-2">{{ $fItem['nombre'] }}</p>
+                    @if(!empty($fItem['descripcion']))
+                        <p class="text-[11px] text-foreground/45 leading-snug line-clamp-2">{{ $fItem['descripcion'] }}</p>
+                    @endif
+                    @if(!$hidePrice)
+                        <p class="text-sm font-black text-primary mt-auto pt-1" data-price-usd="{{ $fItem['precio'] ?? 0 }}">
+                            {{ $currencySymbol }} {{ number_format((float)($fItem['precio'] ?? 0), 2, ',', '.') }}
+                        </p>
+                    @endif
+                </div>
+            </div>
+            @endforeach
+        </div>
+    </div>
+    @endif
+
     @forelse($categories as $catIdx => $cat)
         @if(!empty($cat['activo']))
         @php
@@ -358,9 +409,13 @@
                     <div class="flex flex-col gap-0.5 flex-1 order-1 min-w-0">
                         @if(!empty($item['badge']))
                             @if($item['badge'] === 'popular')
-                                <span class="self-start text-[9px] font-black px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-700">⭐ Popular</span>
+                                <span class="self-start inline-flex items-center gap-1 text-[9px] font-black px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-700"><span class="iconify tabler--star-filled size-3"></span> Popular</span>
                             @elseif($item['badge'] === 'nuevo')
-                                <span class="self-start text-[9px] font-black px-1.5 py-0.5 rounded-full bg-green-100 text-green-700">✨ Nuevo</span>
+                                <span class="self-start inline-flex items-center gap-1 text-[9px] font-black px-1.5 py-0.5 rounded-full bg-green-100 text-green-700"><span class="iconify tabler--sparkles size-3"></span> Nuevo</span>
+                            @elseif($item['badge'] === 'promo')
+                                <span class="self-start inline-flex items-center gap-1 text-[9px] font-black px-1.5 py-0.5 rounded-full bg-orange-100 text-orange-700"><span class="iconify tabler--tag size-3"></span> Promo</span>
+                            @elseif($item['badge'] === 'destacado')
+                                <span class="self-start inline-flex items-center gap-1 text-[9px] font-black px-1.5 py-0.5 rounded-full bg-purple-100 text-purple-700"><span class="iconify tabler--bolt size-3"></span> Destacado</span>
                             @endif
                         @endif
                         <p class="text-sm font-black text-foreground leading-tight line-clamp-2">{{ $item['nombre'] }}</p>
@@ -817,12 +872,20 @@
         // Badge
         var badgeEl = document.getElementById('sf-detail-badge');
         if (item.badge === 'popular') {
-            badgeEl.textContent = '⭐ Popular';
-            badgeEl.className = 'text-[10px] font-black px-2.5 py-1 rounded-full shrink-0 bg-amber-100 text-amber-700';
+            badgeEl.innerHTML = '<span class="iconify tabler--star-filled size-3"></span> Popular';
+            badgeEl.className = 'text-[10px] font-black px-2.5 py-1 rounded-full shrink-0 bg-amber-100 text-amber-700 inline-flex items-center gap-1';
             badgeEl.classList.remove('hidden');
         } else if (item.badge === 'nuevo') {
-            badgeEl.textContent = '✨ Nuevo';
-            badgeEl.className = 'text-[10px] font-black px-2.5 py-1 rounded-full shrink-0 bg-green-100 text-green-700';
+            badgeEl.innerHTML = '<span class="iconify tabler--sparkles size-3"></span> Nuevo';
+            badgeEl.className = 'text-[10px] font-black px-2.5 py-1 rounded-full shrink-0 bg-green-100 text-green-700 inline-flex items-center gap-1';
+            badgeEl.classList.remove('hidden');
+        } else if (item.badge === 'promo') {
+            badgeEl.innerHTML = '<span class="iconify tabler--tag size-3"></span> Promo';
+            badgeEl.className = 'text-[10px] font-black px-2.5 py-1 rounded-full shrink-0 bg-orange-100 text-orange-700 inline-flex items-center gap-1';
+            badgeEl.classList.remove('hidden');
+        } else if (item.badge === 'destacado') {
+            badgeEl.innerHTML = '<span class="iconify tabler--bolt size-3"></span> Destacado';
+            badgeEl.className = 'text-[10px] font-black px-2.5 py-1 rounded-full shrink-0 bg-purple-100 text-purple-700 inline-flex items-center gap-1';
             badgeEl.classList.remove('hidden');
         } else {
             badgeEl.classList.add('hidden');
@@ -842,8 +905,10 @@
                 var imgHtml = s.image_path
                     ? '<img src="/storage/' + s.image_path + '" class="w-full h-32 object-cover" loading="lazy">'
                     : '<div class="w-full h-32 flex items-center justify-center bg-surface/60"><span class="iconify tabler--bowl-chopsticks size-8 text-foreground/15"></span></div>';
-                var badgeHtml = s.badge === 'popular' ? '<span class="self-start text-[9px] font-black px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-700 mb-0.5">⭐ Popular</span>' :
-                                s.badge === 'nuevo'   ? '<span class="self-start text-[9px] font-black px-1.5 py-0.5 rounded-full bg-green-100 text-green-700 mb-0.5">✨ Nuevo</span>' : '';
+                var badgeHtml = s.badge === 'popular'   ? '<span class="self-start inline-flex items-center gap-1 text-[9px] font-black px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-700 mb-0.5"><span class="iconify tabler--star-filled size-3"></span> Popular</span>' :
+                                s.badge === 'nuevo'     ? '<span class="self-start inline-flex items-center gap-1 text-[9px] font-black px-1.5 py-0.5 rounded-full bg-green-100 text-green-700 mb-0.5"><span class="iconify tabler--sparkles size-3"></span> Nuevo</span>' :
+                                s.badge === 'promo'     ? '<span class="self-start inline-flex items-center gap-1 text-[9px] font-black px-1.5 py-0.5 rounded-full bg-orange-100 text-orange-700 mb-0.5"><span class="iconify tabler--tag size-3"></span> Promo</span>' :
+                                s.badge === 'destacado' ? '<span class="self-start inline-flex items-center gap-1 text-[9px] font-black px-1.5 py-0.5 rounded-full bg-purple-100 text-purple-700 mb-0.5"><span class="iconify tabler--bolt size-3"></span> Destacado</span>' : '';
                 card.innerHTML = imgHtml + '<div class="p-3 flex flex-col gap-1">' + badgeHtml +
                     '<p class="text-sm font-black text-foreground leading-tight line-clamp-2">' + s.nombre + '</p>' +
                     '<p class="text-sm font-black text-primary mt-1">' + sfFmt(s.precio || 0) + '</p></div>';
@@ -1094,31 +1159,6 @@
         if (e.target.closest('a[href^="tel:"]')) track('click_call');
     });
     setInterval(function() { track('time_on_page'); }, 30000);
-})();
-
-(function(){
-  var slides = document.querySelectorAll('#sf-hero-slides > div');
-  if(!slides.length) return;
-  var dots = document.getElementById('sf-hero-dots');
-  var cur = 0;
-  slides.forEach(function(_,i){
-    var d = document.createElement('div');
-    d.className = i===0
-      ? 'w-4 h-1.5 rounded-full bg-white transition-all duration-300'
-      : 'w-1.5 h-1.5 rounded-full bg-white/50 transition-all duration-300';
-    dots.appendChild(d);
-  });
-  function go(n){
-    cur = (n + slides.length) % slides.length;
-    document.getElementById('sf-hero-slides').style.transform =
-      'translateX(-' + (cur * 100) + '%)';
-    dots.querySelectorAll('div').forEach(function(d,i){
-      d.className = i===cur
-        ? 'w-4 h-1.5 rounded-full bg-white transition-all duration-300'
-        : 'w-1.5 h-1.5 rounded-full bg-white/50 transition-all duration-300';
-    });
-  }
-  setInterval(function(){ go(cur+1); }, 5000);
 })();
 
     // ── Hamburger category menu ──────────────────────────────────

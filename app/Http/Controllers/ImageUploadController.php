@@ -411,4 +411,91 @@ class ImageUploadController extends Controller
             ], 422);
         }
     }
+
+    /**
+     * Upload a hero gallery slot image (slots 1-5) for food blueprint.
+     */
+    public function uploadHeroSlot(Request $request, int $tenantId, int $slot): JsonResponse
+    {
+        $slotMap = [
+            1 => 'hero_main_filename',
+            2 => 'hero_secondary_filename',
+            3 => 'hero_tertiary_filename',
+            4 => 'hero_image_4_filename',
+            5 => 'hero_image_5_filename',
+        ];
+
+        if (!isset($slotMap[$slot])) {
+            return response()->json(['success' => false, 'message' => 'Slot inválido'], 422);
+        }
+
+        try {
+            $tenant = Tenant::where('id', $tenantId)
+                ->where('status', 'active')
+                ->firstOrFail();
+
+            $request->validate(['image' => 'required|image']);
+
+            $file = $request->file('image');
+            $filename = $this->imageUploadService->process($file, $tenantId, 'hero-slot-' . $slot);
+
+            $customization = $tenant->customization ?? new TenantCustomization(['tenant_id' => $tenant->id]);
+            $customization->{$slotMap[$slot]} = $filename;
+            $customization->save();
+
+            return response()->json([
+                'success'  => true,
+                'filename' => $filename,
+                'url'      => asset('storage/tenants/' . $tenantId . '/' . $filename),
+            ]);
+        } catch (Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 422);
+        }
+    }
+
+    /**
+     * Delete a hero gallery slot image (slots 1-5) for food blueprint.
+     */
+    public function deleteHeroSlot(int $tenantId, int $slot): JsonResponse
+    {
+        $slotMap = [
+            1 => 'hero_main_filename',
+            2 => 'hero_secondary_filename',
+            3 => 'hero_tertiary_filename',
+            4 => 'hero_image_4_filename',
+            5 => 'hero_image_5_filename',
+        ];
+
+        if (!isset($slotMap[$slot])) {
+            return response()->json(['success' => false, 'message' => 'Slot inválido'], 422);
+        }
+
+        try {
+            $tenant = Tenant::where('id', $tenantId)
+                ->where('status', 'active')
+                ->firstOrFail();
+
+            $customization = $tenant->customization;
+            if (!$customization) {
+                return response()->json(['success' => false, 'message' => 'Sin customización'], 404);
+            }
+
+            $column = $slotMap[$slot];
+            $old = $customization->$column;
+
+            if ($old) {
+                $path = storage_path('app/public/tenants/' . $tenantId . '/' . $old);
+                if (file_exists($path)) {
+                    unlink($path);
+                }
+            }
+
+            $customization->$column = null;
+            $customization->save();
+
+            return response()->json(['success' => true]);
+        } catch (Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 422);
+        }
+    }
 }
