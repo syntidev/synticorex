@@ -10,14 +10,6 @@
                  style="background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22><filter id=%22n%22><feTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/></filter><rect width=%22200%22 height=%22200%22 filter=%22url(%23n)%22 opacity=%221%22/></svg>');background-size:200px"></div>
         </div>
         <div class="max-w-xl space-y-6">
-            {{-- Badge ciudad --}}
-            @if($tenant->city ?? $tenant->tagline)
-            <div class="inline-flex items-center gap-2 border border-primary/20 bg-primary/5 backdrop-blur-sm rounded-full px-4 py-1.5 text-sm text-primary">
-                <span class="size-2 rounded-full bg-primary"></span>
-                {{ $tenant->city ?? $tenant->tagline }}
-            </div>
-            @endif
-
             {{-- Título --}}
             <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight"
                 style="text-shadow: 0 4px 24px color-mix(in oklch, var(--color-foreground) 15%, transparent), 0 1px 4px color-mix(in oklch, var(--color-foreground) 8%, transparent);">
@@ -50,22 +42,6 @@
                     Ver servicios
                     <span class="iconify tabler--arrow-down size-5"></span>
                 </a>
-            </div>
-
-            {{-- Línea divisora + stats --}}
-            <div class="flex gap-8 pt-4 border-t border-border">
-                <div>
-                    <div class="text-2xl font-bold text-primary" style="text-shadow: 0 2px 8px color-mix(in oklch, var(--color-primary) 30%, transparent)">{{ $products->count() ?? '0' }}+</div>
-                    <div class="text-xs text-muted-foreground-1">Productos</div>
-                </div>
-                <div>
-                    <div class="text-2xl font-bold text-primary" style="text-shadow: 0 2px 8px color-mix(in oklch, var(--color-primary) 30%, transparent)">SEO</div>
-                    <div class="text-xs text-muted-foreground-1">Incluido</div>
-                </div>
-                <div>
-                    <div class="text-2xl font-bold text-primary" style="text-shadow: 0 2px 8px color-mix(in oklch, var(--color-primary) 30%, transparent)">24/7</div>
-                    <div class="text-xs text-muted-foreground-1">En línea</div>
-                </div>
             </div>
         </div>
     </div>

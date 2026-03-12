@@ -685,21 +685,7 @@
 {{-- ═══════════════════════════════════════════════════ --}}
 {{-- FOOTER                                             --}}
 {{-- ═══════════════════════════════════════════════════ --}}
-<footer class="mt-auto w-full max-w-[85rem] py-10 px-4 sm:px-6 lg:px-8 mx-auto">
-    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
-        <div>
-            <a class="flex items-center gap-2 font-semibold text-xl text-foreground focus:outline-hidden focus:opacity-80" href="{{ url('/') }}">
-                <img src="{{ asset('brand/syntiweb-logo-positive.svg') }}" width="24" height="24" alt="SYNTIweb">
-                SYNTIweb
-            </a>
-            <p class="mt-1 text-xs text-muted-foreground-2">&copy; {{ date('Y') }} SYNTIweb. Todos los derechos reservados.</p>
-        </div>
-        <div class="space-x-4 text-sm">
-            <a class="inline-flex gap-x-2 text-muted-foreground-2 hover:text-foreground focus:outline-hidden focus:text-foreground" href="{{ url('/planes') }}">Planes</a>
-            <a class="inline-flex gap-x-2 text-muted-foreground-2 hover:text-foreground focus:outline-hidden focus:text-foreground" href="/demo">Demo</a>
-        </div>
-    </div>
-</footer>
+@include('marketing.sections.footer-mkt')
 <!-- SYNTiA Pública -->
 <div id="syntia-widget" style="position:fixed;bottom:24px;right:24px;z-index:9999;font-family:sans-serif;">
   <div id="syntia-box" style="display:none;width:320px;background:#fff;border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,.15);overflow:hidden;margin-bottom:12px;">

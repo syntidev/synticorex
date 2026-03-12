@@ -62,5 +62,6 @@
             </article>
         </section>
     </main>
+    @include('marketing.sections.footer-mkt')
 </body>
 </html>

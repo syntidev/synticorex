@@ -154,6 +154,7 @@
             <p class="text-xs text-muted-foreground-1">
                 &copy; {{ date('Y') }} {{ $tenant->business_name }}. Todos los derechos reservados.
             </p>
+            @if(!($tenant->white_label ?? false))
             <p class="text-xs text-muted-foreground-1">
                 Potenciado por
                 <a href="https://syntiweb.com" target="_blank" rel="noopener noreferrer"
@@ -161,6 +162,7 @@
                     SYNTIweb
                 </a>
             </p>
+            @endif
         </div>
 
     </div>

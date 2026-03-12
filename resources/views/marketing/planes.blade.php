@@ -393,13 +393,7 @@
     </section>
 
     {{-- ═══ FOOTER ═══ --}}
-    <footer class="py-8 bg-surface border-t border-border/30">
-        <div class="mx-auto max-w-7xl px-4 text-center">
-            <a href="{{ url('/') }}" class="text-sm text-foreground/40 hover:text-foreground/60 transition-colors">
-                © {{ date('Y') }} SYNTIweb · syntiweb.com
-            </a>
-        </div>
-    </footer>
+    @include('marketing.sections.footer-mkt')
 
     {{-- Iconify --}}
     <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js" defer></script>

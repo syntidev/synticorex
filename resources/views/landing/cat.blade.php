@@ -449,23 +449,23 @@
 @endif
 
 {{-- 6. FOOTER --}}
-<footer class="bg-gray-100/50 dark:bg-neutral-800/50 border-t border-gray-100 dark:border-neutral-800 py-14">
+<footer class="bg-surface/50 border-t border-foreground/5 py-14">
     <div class="mx-auto max-w-[1280px] px-5 sm:px-8 text-center">
         {{-- Logo / Icon --}}
         @if(!empty($customization->logo_filename))
             <img src="{{ asset('storage/tenants/' . $tenant->id . '/' . $customization->logo_filename) }}"
                  alt="{{ $tenant->business_name }}"
-                 class="size-14 rounded-2xl object-cover mx-auto mb-5 border border-gray-100 dark:border-neutral-800 shadow-sm"
+                 class="size-14 rounded-2xl object-cover mx-auto mb-5 border border-foreground/5 shadow-sm"
                  onerror="this.style.display='none';">
         @else
-            <div class="size-14 bg-white dark:bg-neutral-900 rounded-2xl mx-auto mb-5 flex items-center justify-center border border-gray-100 dark:border-neutral-800 shadow-sm">
-                <span class="iconify tabler--layout-grid size-7 text-[#4A80E4]"></span>
+            <div class="size-14 bg-background rounded-2xl mx-auto mb-5 flex items-center justify-center border border-foreground/5 shadow-sm">
+                <span class="iconify tabler--layout-grid size-7 text-primary"></span>
             </div>
         @endif
 
         <h2 class="text-2xl font-black tracking-tighter mb-1">{{ $tenant->business_name }}</h2>
         @if($tenant->description)
-            <p class="text-gray-400 dark:text-neutral-500 text-sm max-w-md mx-auto">{{ Str::limit($tenant->description, 160) }}</p>
+            <p class="text-foreground/40 text-sm max-w-md mx-auto">{{ Str::limit($tenant->description, 160) }}</p>
         @endif
 
         @if($waClean)
@@ -477,9 +477,19 @@
         </a>
         @endif
 
-        <div class="mt-10 pt-8 border-t border-gray-100 dark:border-neutral-800 flex flex-col md:flex-row justify-between items-center gap-4">
-            <p class="text-xs font-bold text-gray-300 dark:text-neutral-600 uppercase tracking-[0.25em]">© {{ date('Y') }} {{ $tenant->business_name }}</p>
-            <p class="text-xs text-gray-300 dark:text-neutral-600">Sitio creado con <span class="text-[#4A80E4] font-bold">SYNTIweb</span></p>
+        <div class="mt-8 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs text-foreground/40">
+            <a href="{{ route('marketing.about') }}" class="hover:text-foreground transition-colors">Nosotros</a>
+            <span class="opacity-50">•</span>
+            <a href="{{ route('marketing.privacy') }}" class="hover:text-foreground transition-colors">Privacidad</a>
+            <span class="opacity-50">•</span>
+            <a href="{{ route('marketing.terms') }}" class="hover:text-foreground transition-colors">Términos</a>
+        </div>
+
+        <div class="mt-10 pt-8 border-t border-foreground/5 flex flex-col md:flex-row justify-between items-center gap-4">
+            <p class="text-xs font-bold text-foreground/20 uppercase tracking-[0.25em]">© {{ date('Y') }} {{ $tenant->business_name }}</p>
+            @if(!($tenant->white_label ?? false))
+            <p class="text-xs text-foreground/20">Sitio creado con <span class="text-primary font-bold">SYNTIweb</span></p>
+            @endif
         </div>
     </div>
 </footer>

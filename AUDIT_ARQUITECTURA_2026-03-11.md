@@ -313,9 +313,9 @@
 
 | # | Archivo | Violación |
 |---|---------|-----------|
-| 1 | `errors/404.blade.php` | CDN Tailwind `<script src="https://cdn.tailwindcss.com">` en lugar de `@vite()` |
-| 2 | `errors/500.blade.php` | Mismo problema |
-| 3 | `errors/tenant-not-found.blade.php` | Mismo problema |
+| 1 | `errors/404.blade.php` | ~~CDN Tailwind~~ ✅ **RESUELTO 2026-03-12** — Rediseño completo, branding SyntiWeb, SVG protagonista |
+| 2 | `errors/500.blade.php` | ~~CDN Tailwind~~ ✅ **RESUELTO 2026-03-12** — Diseño consistente con 404, badge rojo 500 |
+| 3 | `errors/tenant-not-found.blade.php` | ~~CDN Tailwind~~ ✅ **RESUELTO 2026-03-12** — Diseño consistente, mantiene `$identifier` |
 | 4 | `layouts/admin.blade.php` | CDN Tailwind — vista experimental |
 | 5 | `dashboard/_archive/services-section.blade.php` | Clases DaisyUI: `btn`, `btn-primary`, `join-item`, `btn-ghost` |
 | 6 | `dashboard/_archive/products-section.blade.php` | Clases DaisyUI: `btn`, `btn-primary`, `btn-error` |
@@ -458,14 +458,14 @@
 | **FAQ como tabla propia** | NO | 4h |
 | **Sistema de notificaciones** | NO | 8h |
 | **Multi-usuario por tenant** (pivot users_tenants) | NO | 10h |
-| **White Label** (favicon propio, footer custom) | NO | 3h |
+| **White Label** (favicon propio, footer custom) | ⚡ PARCIAL — `@if(!$tenant->white_label)` en footer tenant implementado. Toggle en dashboard pendiente. | 3h (resid: 2.5h) |
 | **Factories para Tenant/Product/Service** | NO (sí para testing) | 2h |
 | **Tests de integración reales** (más allá de Breeze) | NO (sí para calidad) | 15h |
 | **Eliminar código FlyonUI residual** | NO | 1h |
-| **Migrar errors/ a @vite()** | NO | 0.5h |
+| **Migrar errors/ a @vite()** | ✅ RESUELTO 2026-03-12 | ~~0.5h~~ |
 | **Categorías de productos** (SyntiStudio/Cat) | NO | 6h |
 | **Sitemap XML dinámico** | NO | 3h |
-| **Footer "Powered by SyntiWeb" en footer.blade.php** | SÍ (branding) | 0.5h |
+| **Footer "Powered by SyntiWeb" en footer.blade.php** | ✅ RESUELTO 2026-03-12 — white_label conditional + `footer-mkt.blade.php` compartido aplicado en 7 páginas | ~~0.5h~~ |
 | **Pagos online** (Stripe/PayPal/local) | NO | 30h+ |
 | **Verificación DNS custom_domain** | NO | 5h |
 
@@ -497,11 +497,11 @@ El problema no es la calidad del código existente. El problema son **3 agujeros
 |----------|:-----:|
 | Fixes de seguridad (#1 + #2 + #3) | 2h |
 | Limpieza código muerto FlyonUI + _archive | 1h |
-| Migrar error pages a @vite | 0.5h |
-| Footer "Powered by" en footer.blade.php principal | 0.5h |
+| ~~Migrar error pages a @vite~~ ✅ 404/500/tenant-not-found rediseñados | ~~0.5h~~ |
+| ~~Footer "Powered by" + estandarización footers marketing~~ ✅ | ~~0.5h~~ |
 | Factory + fix tests rotos | 2h |
 | Smoke testing manual completo | 3h |
-| **TOTAL para beta deployable** | **~9h** |
+| **TOTAL para beta deployable** | **~8h** |
 
 ---
 

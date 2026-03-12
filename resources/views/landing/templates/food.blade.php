@@ -662,7 +662,9 @@
 
         <div class="mt-10 pt-8 border-t border-foreground/5 flex flex-col md:flex-row justify-between items-center gap-4">
             <p class="text-xs font-bold text-foreground/20 uppercase tracking-[0.25em]">© {{ date('Y') }} {{ $tenant->business_name }}</p>
+            @if(!($tenant->white_label ?? false))
             <p class="text-xs text-foreground/20">Sitio creado con <span class="text-primary font-bold">SYNTIweb</span></p>
+            @endif
         </div>
     </div>
 </footer>
