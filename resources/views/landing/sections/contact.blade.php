@@ -70,7 +70,7 @@
         <div class="grid gap-4 sm:grid-cols-2 flex-1">
           
           {{-- Card: Horario --}}
-          <div class="bg-card border border-card-line rounded-lg p-4 shadow-sm">
+          <div class="bg-card border border-card-line rounded-2xl overflow-hidden p-4 shadow-sm">
             <div class="flex flex-col items-center text-center gap-2">
               <span class="iconify tabler--clock size-8 text-primary"></span>
               <h4 class="text-foreground font-semibold text-sm">Horario</h4>
@@ -94,7 +94,7 @@
           </div>
 
           {{-- Card: Dirección --}}
-          <div class="bg-card border border-card-line rounded-lg p-4 shadow-sm">
+          <div class="bg-card border border-card-line rounded-2xl overflow-hidden p-4 shadow-sm">
             <div class="flex flex-col items-center text-center gap-2">
               <span class="iconify tabler--map-pin size-8 text-primary"></span>
               <h4 class="text-foreground font-semibold text-sm">Dirección</h4>
@@ -106,7 +106,7 @@
           </div>
 
           {{-- Card: WhatsApp --}}
-          <div class="bg-card border border-card-line rounded-lg p-4 shadow-sm">
+          <div class="bg-card border border-card-line rounded-2xl overflow-hidden p-4 shadow-sm">
             <div class="flex flex-col items-center text-center gap-2">
               <span class="iconify tabler--brand-whatsapp size-8 text-primary"></span>
               <h4 class="text-foreground font-semibold text-sm">WhatsApp</h4>
@@ -123,7 +123,7 @@
           </div>
 
           {{-- Card: Email + Soporte --}}
-          <div class="bg-card border border-card-line rounded-lg p-4 shadow-sm">
+          <div class="bg-card border border-card-line rounded-2xl overflow-hidden p-4 shadow-sm">
             <div class="flex flex-col items-center text-center gap-2">
               <span class="iconify tabler--mail size-8 text-primary"></span>
               <h4 class="text-foreground font-semibold text-sm">Contacto</h4>
@@ -167,7 +167,7 @@
     <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
 
           {{-- Card: Horario --}}
-          <div class="bg-card border border-card-line rounded-lg p-5 shadow-sm">
+          <div class="bg-card border border-card-line rounded-2xl overflow-hidden p-5 shadow-sm">
             <div class="flex flex-col items-center text-center gap-2">
               <span class="iconify tabler--clock size-8 text-primary"></span>
               <h4 class="text-foreground font-semibold text-sm">Horario</h4>
@@ -191,7 +191,7 @@
           </div>
 
           {{-- Card: Dirección --}}
-          <div class="bg-card border border-card-line rounded-lg p-5 shadow-sm">
+          <div class="bg-card border border-card-line rounded-2xl overflow-hidden p-5 shadow-sm">
             <div class="flex flex-col items-center text-center gap-2">
               <span class="iconify tabler--map-pin size-8 text-primary"></span>
               <h4 class="text-foreground font-semibold text-sm">Dirección</h4>
@@ -203,7 +203,7 @@
           </div>
 
           {{-- Card: WhatsApp --}}
-          <div class="bg-card border border-card-line rounded-lg p-5 shadow-sm">
+          <div class="bg-card border border-card-line rounded-2xl overflow-hidden p-5 shadow-sm">
             <div class="flex flex-col items-center text-center gap-2">
               <span class="iconify tabler--brand-whatsapp size-8 text-primary"></span>
               <h4 class="text-foreground font-semibold text-sm">WhatsApp</h4>
@@ -220,7 +220,7 @@
           </div>
 
           {{-- Card: Email / Teléfono --}}
-          <div class="bg-card border border-card-line rounded-lg p-5 shadow-sm">
+          <div class="bg-card border border-card-line rounded-2xl overflow-hidden p-5 shadow-sm">
             <div class="flex flex-col items-center text-center gap-2">
               <span class="iconify tabler--mail size-8 text-primary"></span>
               <h4 class="text-foreground font-semibold text-sm">Contacto</h4>
