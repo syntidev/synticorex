@@ -14,6 +14,7 @@ use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
@@ -42,7 +43,7 @@ class OnboardingController extends Controller
             return redirect('/register');
         }
 
-        $plans    = Plan::orderBy('id')->get();
+        $plans    = $this->getPlansForBlueprint('studio');
         $segments = self::SEGMENTS;
 
         return view('onboarding.wizard', compact('plans', 'segments', 'mode'));
@@ -70,7 +71,10 @@ class OnboardingController extends Controller
         $validated = $request->validate([
             'business_name'                    => 'required|string|max:255',
             'business_segment'                 => 'required|string',
-            'plan_id'                          => 'required|exists:plans,id',
+            'plan_id'                          => [
+                'required',
+                Rule::exists('plans', 'id')->where(static fn ($query) => $query->where('blueprint', 'studio')),
+            ],
             'subdomain'                        => 'required|alpha_dash|unique:tenants,subdomain',
             'slogan'                           => 'nullable|string|max:255',
             'description'                      => 'nullable|string|max:500',
@@ -90,8 +94,8 @@ class OnboardingController extends Controller
 
         $tenant = DB::transaction(function () use ($validated): Tenant {
 
-            // Get admin user ID for tenant_id assignment
-            $adminUserId = \App\Models\User::first()->id;
+            // Use the authenticated user as tenant owner
+            $adminUserId = auth()->id();
 
             // 1. Crear tenant
             $tenant = Tenant::create([
@@ -164,7 +168,7 @@ class OnboardingController extends Controller
             return redirect('/register');
         }
 
-        $plans = Plan::where('blueprint', 'food')->orderBy('id')->get();
+        $plans = $this->getPlansForBlueprint('food');
 
         return view('onboarding.wizard-food', compact('plans', 'mode'));
     }
@@ -180,7 +184,7 @@ class OnboardingController extends Controller
             return redirect('/register');
         }
 
-        $plans = Plan::where('blueprint', 'cat')->orderBy('id')->get();
+        $plans = $this->getPlansForBlueprint('cat');
 
         return view('onboarding.wizard-cat', compact('plans', 'mode'));
     }
@@ -193,7 +197,10 @@ class OnboardingController extends Controller
         $validated = $request->validate([
             'business_name'  => 'required|string|max:255',
             'business_type'  => 'required|string',
-            'plan_id'        => 'required|exists:plans,id',
+            'plan_id'        => [
+                'required',
+                Rule::exists('plans', 'id')->where(static fn ($query) => $query->where('blueprint', 'food')),
+            ],
             'subdomain'      => 'required|alpha_dash|unique:tenants,subdomain',
             'whatsapp_sales' => 'nullable|string|max:20',
             'first_category' => 'required|string|max:100',
@@ -204,7 +211,7 @@ class OnboardingController extends Controller
 
         $tenant = DB::transaction(function () use ($validated, $items): Tenant {
 
-            $adminUserId = \App\Models\User::first()->id;
+            $adminUserId = auth()->id();
 
             // 1. Crear tenant
             $tenant = Tenant::create([
@@ -253,7 +260,10 @@ class OnboardingController extends Controller
         $validated = $request->validate([
             'business_name'             => 'required|string|max:255',
             'store_type'                => 'required|string',
-            'plan_id'                   => 'required|exists:plans,id',
+            'plan_id'                   => [
+                'required',
+                Rule::exists('plans', 'id')->where(static fn ($query) => $query->where('blueprint', 'cat')),
+            ],
             'subdomain'                 => 'required|alpha_dash|unique:tenants,subdomain',
             'whatsapp_sales'            => 'nullable|string|max:20',
             'first_product_name'        => 'required|string|max:255',
@@ -263,7 +273,7 @@ class OnboardingController extends Controller
 
         $tenant = DB::transaction(function () use ($validated): Tenant {
 
-            $adminUserId = \App\Models\User::first()->id;
+            $adminUserId = auth()->id();
 
             // 1. Crear tenant
             $tenant = Tenant::create([
@@ -328,5 +338,29 @@ class OnboardingController extends Controller
 
         return redirect("/tenant/{$tenant->id}/dashboard")
             ->with('success', "¡Página de {$tenant->business_name} publicada exitosamente!");
+    }
+
+    /**
+     * Return plans for a product blueprint, removing duplicated labels safely.
+     */
+    private function getPlansForBlueprint(string $blueprint)
+    {
+        $plans = Plan::where('blueprint', $blueprint)
+            ->orderByDesc('id')
+            ->get();
+
+        // Studio had legacy + prefixed records in some environments.
+        if ($blueprint === 'studio') {
+            $prefixedStudioPlans = $plans->filter(static fn (Plan $plan): bool => str_starts_with((string) $plan->slug, 'studio-'));
+
+            if ($prefixedStudioPlans->isNotEmpty()) {
+                $plans = $prefixedStudioPlans;
+            }
+        }
+
+        return $plans
+            ->unique(static fn (Plan $plan): string => strtolower(Str::ascii((string) $plan->name)))
+            ->sortBy('price_usd')
+            ->values();
     }
 }

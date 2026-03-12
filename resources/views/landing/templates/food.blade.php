@@ -356,7 +356,7 @@
                     @elseif($fItem['badge'] === 'promo')
                         <span class="self-start inline-flex items-center gap-1 text-[9px] font-black px-1.5 py-0.5 rounded-full bg-orange-100 text-orange-700"><span class="iconify tabler--tag size-3"></span> Promo</span>
                     @elseif($fItem['badge'] === 'destacado')
-                        <span class="self-start inline-flex items-center gap-1 text-[9px] font-black px-1.5 py-0.5 rounded-full bg-purple-100 text-purple-700"><span class="iconify tabler--bolt size-3"></span> Destacado</span>
+                        <span class="self-start inline-flex items-center gap-1 text-[9px] font-black px-1.5 py-0.5 rounded-full bg-purple-100 text-purple-700"><span class="iconify tabler--bolt size-3"></span> Recomendado</span>
                     @endif
                     <p class="text-sm font-black text-foreground leading-tight line-clamp-2">{{ $fItem['nombre'] }}</p>
                     @if(!empty($fItem['descripcion']))
@@ -415,7 +415,7 @@
                             @elseif($item['badge'] === 'promo')
                                 <span class="self-start inline-flex items-center gap-1 text-[9px] font-black px-1.5 py-0.5 rounded-full bg-orange-100 text-orange-700"><span class="iconify tabler--tag size-3"></span> Promo</span>
                             @elseif($item['badge'] === 'destacado')
-                                <span class="self-start inline-flex items-center gap-1 text-[9px] font-black px-1.5 py-0.5 rounded-full bg-purple-100 text-purple-700"><span class="iconify tabler--bolt size-3"></span> Destacado</span>
+                                <span class="self-start inline-flex items-center gap-1 text-[9px] font-black px-1.5 py-0.5 rounded-full bg-purple-100 text-purple-700"><span class="iconify tabler--bolt size-3"></span> Recomendado</span>
                             @endif
                         @endif
                         <p class="text-sm font-black text-foreground leading-tight line-clamp-2">{{ $item['nombre'] }}</p>
@@ -884,7 +884,7 @@
             badgeEl.className = 'text-[10px] font-black px-2.5 py-1 rounded-full shrink-0 bg-orange-100 text-orange-700 inline-flex items-center gap-1';
             badgeEl.classList.remove('hidden');
         } else if (item.badge === 'destacado') {
-            badgeEl.innerHTML = '<span class="iconify tabler--bolt size-3"></span> Destacado';
+            badgeEl.innerHTML = '<span class="iconify tabler--bolt size-3"></span> Recomendado';
             badgeEl.className = 'text-[10px] font-black px-2.5 py-1 rounded-full shrink-0 bg-purple-100 text-purple-700 inline-flex items-center gap-1';
             badgeEl.classList.remove('hidden');
         } else {
@@ -908,7 +908,7 @@
                 var badgeHtml = s.badge === 'popular'   ? '<span class="self-start inline-flex items-center gap-1 text-[9px] font-black px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-700 mb-0.5"><span class="iconify tabler--star-filled size-3"></span> Popular</span>' :
                                 s.badge === 'nuevo'     ? '<span class="self-start inline-flex items-center gap-1 text-[9px] font-black px-1.5 py-0.5 rounded-full bg-green-100 text-green-700 mb-0.5"><span class="iconify tabler--sparkles size-3"></span> Nuevo</span>' :
                                 s.badge === 'promo'     ? '<span class="self-start inline-flex items-center gap-1 text-[9px] font-black px-1.5 py-0.5 rounded-full bg-orange-100 text-orange-700 mb-0.5"><span class="iconify tabler--tag size-3"></span> Promo</span>' :
-                                s.badge === 'destacado' ? '<span class="self-start inline-flex items-center gap-1 text-[9px] font-black px-1.5 py-0.5 rounded-full bg-purple-100 text-purple-700 mb-0.5"><span class="iconify tabler--bolt size-3"></span> Destacado</span>' : '';
+                                s.badge === 'destacado' ? '<span class="self-start inline-flex items-center gap-1 text-[9px] font-black px-1.5 py-0.5 rounded-full bg-purple-100 text-purple-700 mb-0.5"><span class="iconify tabler--bolt size-3"></span> Recomendado</span>' : '';
                 card.innerHTML = imgHtml + '<div class="p-3 flex flex-col gap-1">' + badgeHtml +
                     '<p class="text-sm font-black text-foreground leading-tight line-clamp-2">' + s.nombre + '</p>' +
                     '<p class="text-sm font-black text-primary mt-1">' + sfFmt(s.precio || 0) + '</p></div>';

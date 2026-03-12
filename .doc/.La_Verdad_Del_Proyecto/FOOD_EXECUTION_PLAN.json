@@ -1,0 +1,177 @@
+{
+  "meta": {
+    "name": "Food MVP Priority Orchestrator",
+    "product": "food",
+    "version": "1.0.0",
+    "updated_at": "2026-03-11",
+    "source": [
+      ".doc/ROADMAP_MAESTRO_03MAR2026.md",
+      ".doc/.La_Verdad_Del_Proyecto/ANEXO_CONTINUIDAD_STUDIO_MVP.md"
+    ]
+  },
+  "tasks": [
+    {
+      "id": "F1.1",
+      "sprint": "F1",
+      "title": "Validar blueprint food onboarding",
+      "description": "Confirm onboarding crea tenant food con estructura base correcta.",
+      "priority": "P0",
+      "status": "pending",
+      "depends_on": []
+    },
+    {
+      "id": "F1.2",
+      "sprint": "F1",
+      "title": "Asegurar CRUD categorias",
+      "description": "Verificar alta, edicion, orden y borrado de categorias food.",
+      "priority": "P0",
+      "status": "pending",
+      "depends_on": [
+        "F1.1"
+      ]
+    },
+    {
+      "id": "F1.3",
+      "sprint": "F1",
+      "title": "Asegurar CRUD items",
+      "description": "Verificar items por categoria con validaciones de precio y opciones.",
+      "priority": "P0",
+      "status": "pending",
+      "depends_on": [
+        "F1.2"
+      ]
+    },
+    {
+      "id": "F1.4",
+      "sprint": "F1",
+      "title": "Validar menu publico",
+      "description": "Confirmar rendering menu por subdominio con contenido dinamico.",
+      "priority": "P0",
+      "status": "pending",
+      "depends_on": [
+        "F1.3"
+      ]
+    },
+    {
+      "id": "F2.1",
+      "sprint": "F2",
+      "title": "Completar pedido rapido whatsapp",
+      "description": "Validar construccion de mensaje y salida whatsapp desde menu.",
+      "priority": "P0",
+      "status": "pending",
+      "depends_on": [
+        "F1.4"
+      ]
+    },
+    {
+      "id": "F2.2",
+      "sprint": "F2",
+      "title": "Aplicar limites por plan food",
+      "description": "Asegurar topes de fotos, items y features por plan.",
+      "priority": "P0",
+      "status": "pending",
+      "depends_on": [
+        "F2.1"
+      ]
+    },
+    {
+      "id": "F2.3",
+      "sprint": "F2",
+      "title": "Proteger API food con sanctum",
+      "description": "Asegurar auth para mutaciones de categorias/items.",
+      "priority": "P0",
+      "status": "pending",
+      "depends_on": [
+        "F2.2"
+      ]
+    },
+    {
+      "id": "F2.4",
+      "sprint": "F2",
+      "title": "Aplicar ownership tenant en food",
+      "description": "Garantizar aislamiento tenant en rutas y controladores food.",
+      "priority": "P0",
+      "status": "pending",
+      "depends_on": [
+        "F2.3"
+      ]
+    },
+    {
+      "id": "F3.1",
+      "sprint": "F3",
+      "title": "Verificar UX scroll y sticky",
+      "description": "Validar reglas criticas de scroll, header sticky y categorias sticky.",
+      "priority": "P1",
+      "status": "pending",
+      "depends_on": [
+        "F2.4"
+      ]
+    },
+    {
+      "id": "F3.2",
+      "sprint": "F3",
+      "title": "Validar badges y carrito flotante",
+      "description": "Confirmar popular/nuevo/descuento y carrito fixed bottom.",
+      "priority": "P1",
+      "status": "pending",
+      "depends_on": [
+        "F3.1"
+      ]
+    },
+    {
+      "id": "F3.3",
+      "sprint": "F3",
+      "title": "Integrar dashboard tab food",
+      "description": "Conectar gestion food en panel para categorias, items y estado.",
+      "priority": "P1",
+      "status": "pending",
+      "depends_on": [
+        "F3.2"
+      ]
+    },
+    {
+      "id": "F3.4",
+      "sprint": "F3",
+      "title": "Agregar pricing y legal links food",
+      "description": "Alinear pagina food de marketing y links legales visibles.",
+      "priority": "P1",
+      "status": "pending",
+      "depends_on": [
+        "F3.3"
+      ]
+    },
+    {
+      "id": "F4.1",
+      "sprint": "F4",
+      "title": "Remover logs y codigo muerto food",
+      "description": "Eliminar logs de debug y residuos legacy en flujo food.",
+      "priority": "P2",
+      "status": "pending",
+      "depends_on": [
+        "F3.4"
+      ]
+    },
+    {
+      "id": "F4.2",
+      "sprint": "F4",
+      "title": "Pruebas E2E food",
+      "description": "Validar flujo completo de menu y pedido whatsapp en moviles.",
+      "priority": "P1",
+      "status": "pending",
+      "depends_on": [
+        "F4.1"
+      ]
+    },
+    {
+      "id": "F4.3",
+      "sprint": "F4",
+      "title": "Checklist release food",
+      "description": "Completar smoke test y demo compartible del producto food.",
+      "priority": "P1",
+      "status": "pending",
+      "depends_on": [
+        "F4.2"
+      ]
+    }
+  ]
+}

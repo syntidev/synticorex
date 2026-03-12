@@ -6,6 +6,33 @@
 **Stack definitivo (sin cambios):** Laravel 12 + Preline 4.1.2 + Tailwind v4 + MySQL multi-tenant
 **Herramientas:** VS Code + Copilot Pro+ | Suite Anthropic como primaria
 
+## ANEXO DE CONTINUIDAD (PERSISTENTE)
+
+Para retomar trabajo entre sesiones sin depender de memoria volatil, usar como fuente principal:
+
+- `.doc/.La_Verdad_Del_Proyecto/ANEXO_CONTINUIDAD_STUDIO_MVP.md`
+- `.doc/.La_Verdad_Del_Proyecto/STUDIO_EXECUTION_PLAN.json`
+- `.doc/.La_Verdad_Del_Proyecto/CAT_EXECUTION_PLAN.json`
+- `.doc/.La_Verdad_Del_Proyecto/FOOD_EXECUTION_PLAN.json`
+- `scripts/studio_plan_orchestrator.php`
+
+Este anexo concentra el plan hibrido entre auditoria tecnica, roadmap y prioridades operativas para llevar Studio a produccion.
+
+### Ejecucion obligatoria con orden logico
+
+Antes de iniciar cualquier desarrollo de Studio:
+1. Ejecutar `php scripts/studio_plan_orchestrator.php next`
+2. Trabajar unicamente la tarea indicada.
+3. Al cerrar, marcar `php scripts/studio_plan_orchestrator.php done <TASK_ID>`
+
+Para Cat y Food usar el mismo flujo con selector de plan:
+- `php scripts/studio_plan_orchestrator.php next --plan=cat`
+- `php scripts/studio_plan_orchestrator.php next --plan=food`
+- `php scripts/studio_plan_orchestrator.php done <TASK_ID> --plan=cat`
+- `php scripts/studio_plan_orchestrator.php done <TASK_ID> --plan=food`
+
+No se debe saltar tareas ni cambiar prioridad sin actualizar primero el plan JSON y el anexo de continuidad.
+
 ---
 
 ## REGLAS DE CALIDAD — OBLIGATORIAS EN CADA PROMPT

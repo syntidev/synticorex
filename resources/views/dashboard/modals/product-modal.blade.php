@@ -87,7 +87,7 @@
                                     <option value="popular">Popular</option>
                                     <option value="nuevo">Nuevo</option>
                                     <option value="promo">Promo</option>
-                                    <option value="destacado">Destacado</option>
+                                    <option value="destacado">Recomendado</option>
                                 </select>
                             </div>
                             <label class="col-span-3 sm:col-span-1 flex flex-col gap-1.5 cursor-pointer p-2.5 rounded-lg bg-layer border border-layer-line hover:bg-layer-hover transition-colors h-full justify-center">

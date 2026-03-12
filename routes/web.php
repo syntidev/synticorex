@@ -11,6 +11,8 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\QRTrackingController;
 use App\Http\Controllers\OnboardingController;
+use App\Http\Controllers\Auth\SocialAuthController;
+use App\Http\Controllers\TenantsController;
 use App\Services\DollarRateService;
 
 // ═══ Marketing Landing Page (root domain) ═══════════════════════════════
@@ -37,11 +39,15 @@ Route::get('/studio', [MarketingController::class, 'studio'])->name('marketing.s
 Route::get('/food',   [MarketingController::class, 'food'])->name('marketing.food');
 Route::get('/cat',    [MarketingController::class, 'cat'])->name('marketing.cat');
 
+// ═══ Google OAuth ═════════════════════════════════════════════════════════════
+Route::get('/auth/google',          [SocialAuthController::class, 'redirectToGoogle'])->name('auth.google');
+Route::get('/auth/google/callback', [SocialAuthController::class, 'handleGoogleCallback'])->name('auth.google.callback');
+
 // ═══ Onboarding selector ═════════════════════════════════════════════════════
 Route::get('/onboarding', [OnboardingController::class, 'selector'])->name('onboarding.selector');
 
-// ═══ Onboarding Wizard ═══════════════════════════════════════════════════════
-Route::middleware(['web'])->group(function () {
+// ═══ Onboarding Wizard (requiere autenticación) ══════════════════════════════
+Route::middleware(['auth'])->group(function () {
     Route::get('/onboarding/nuevo', [OnboardingController::class, 'index'])
          ->name('onboarding.index');
     Route::post('/onboarding/guardar', [OnboardingController::class, 'store'])
@@ -62,6 +68,15 @@ Route::middleware(['web'])->group(function () {
     Route::post('/onboarding/studio/guardar', [OnboardingController::class, 'store'])->name('onboarding.store.studio');
     Route::post('/onboarding/food/guardar',   [OnboardingController::class, 'storeFood'])->name('onboarding.store.food');
     Route::post('/onboarding/cat/guardar',    [OnboardingController::class, 'storeCat'])->name('onboarding.store.cat');
+});
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// DASHBOARD AUTHENTICATED (MUST be before /{subdomain} catch-all)
+// ═══════════════════════════════════════════════════════════════════════════════
+
+Route::middleware(['auth', 'verified'])->group(function () {
+    // My Tenants listing
+    Route::get('/mis-negocios', [TenantsController::class, 'index'])->name('tenants.index');
 });
 
 // Landing page pública por subdomain
@@ -101,9 +116,11 @@ Route::post('/api/euro-rate/refresh', function (DollarRateService $service) {
     return response()->json($result);
 });
 
-// ═══ Dashboard — requiere autenticación ══════════════════════════════════════
-Route::middleware(['auth'])->group(function () {
+// ═══════════════════════════════════════════════════════════════════════════════
+// DASHBOARD AUTHENTICATED (continued — uploads, CRUD, etc.)
+// ═══════════════════════════════════════════════════════════════════════════════
 
+Route::middleware(['auth', 'verified'])->group(function () {
     // Image upload
     Route::prefix('tenant/{tenantId}/upload')->group(function () {
         Route::post('/logo',                    [ImageUploadController::class, 'uploadLogo']);
@@ -119,7 +136,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // Tenant dashboard
-    Route::get('/tenant/{tenantId}/dashboard',       [DashboardController::class, 'index']);
+    Route::get('/tenant/{tenantId}/dashboard',       [DashboardController::class, 'index'])->name('dashboard.edit-tenant');
     Route::post('/tenant/{tenantId}/update-info',    [DashboardController::class, 'updateInfo']);
     Route::post('/tenant/{tenantId}/update-theme',   [DashboardController::class, 'updateTheme']);
     Route::post('/tenant/{tenantId}/update-palette', [DashboardController::class, 'updatePalette']); // Legacy

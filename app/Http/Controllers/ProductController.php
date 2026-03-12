@@ -174,7 +174,7 @@ class ProductController extends Controller
                 'position' => ['nullable', 'integer', 'min:0', 'max:255'],
                 'is_active' => ['nullable', 'boolean'],
                 'is_featured' => ['nullable', 'boolean'],
-                'badge' => ['nullable', 'string', 'in:hot,new,promo'],
+                'badge' => ['nullable', 'string', 'in:popular,nuevo,promo,destacado'],
             ]);
 
             // Set tenant_id
@@ -250,7 +250,7 @@ class ProductController extends Controller
                 'position' => ['nullable', 'integer', 'min:0', 'max:255'],
                 'is_active' => ['nullable', 'boolean'],
                 'is_featured' => ['nullable', 'boolean'],
-                'badge' => ['nullable', 'string', 'in:hot,new,promo'],
+                'badge' => ['nullable', 'string', 'in:popular,nuevo,promo,destacado'],
             ]);
 
             $product->update($validated);

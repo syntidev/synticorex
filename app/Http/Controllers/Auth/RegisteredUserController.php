@@ -51,6 +51,11 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        // Smart redirect: si tiene tenants → /mis-negocios | sin tenants → /onboarding
+        if ($user->tenants()->exists()) {
+            return redirect()->route('tenants.index');
+        }
+
+        return redirect()->route('onboarding.selector');
     }
 }

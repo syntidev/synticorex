@@ -282,7 +282,7 @@
                                 'popular'   => ['icon' => 'tabler--star-filled', 'bgColor' => 'bg-amber-100',  'textColor' => 'text-amber-700',  'label' => 'Popular'],
                                 'nuevo'     => ['icon' => 'tabler--sparkles',    'bgColor' => 'bg-green-100',  'textColor' => 'text-green-700',  'label' => 'Nuevo'],
                                 'promo'     => ['icon' => 'tabler--tag',         'bgColor' => 'bg-orange-100', 'textColor' => 'text-orange-700', 'label' => 'Promo'],
-                                'destacado' => ['icon' => 'tabler--bolt',        'bgColor' => 'bg-purple-100', 'textColor' => 'text-purple-700', 'label' => 'Destacado'],
+                                'destacado' => ['icon' => 'tabler--bolt',        'bgColor' => 'bg-purple-100', 'textColor' => 'text-purple-700', 'label' => 'Recomendado'],
                                 default     => ['icon' => 'tabler--star',        'bgColor' => 'bg-primary/10', 'textColor' => 'text-primary',    'label' => $product->badge]
                             };
                         @endphp

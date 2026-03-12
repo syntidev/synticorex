@@ -1,0 +1,278 @@
+{
+    "meta": {
+        "name": "Studio MVP Priority Orchestrator",
+        "version": "1.0.0",
+        "updated_at": "2026-03-11",
+        "source": [
+            ".doc/ROADMAP_MAESTRO_03MAR2026.md",
+            ".doc/.La_Verdad_Del_Proyecto/ANEXO_CONTINUIDAD_STUDIO_MVP.md"
+        ]
+    },
+    "tasks": [
+        {
+            "id": "S1.1",
+            "sprint": "S1",
+            "title": "Fix onboarding owner assignment",
+            "description": "Replace User::first() with auth()->id() in onboarding tenant creation.",
+            "priority": "P0",
+            "status": "done",
+            "depends_on": [],
+            "completed_at": "2026-03-11T21:45:36+00:00"
+        },
+        {
+            "id": "S1.2",
+            "sprint": "S1",
+            "title": "Fix post-register redirect",
+            "description": "Redirect new users to onboarding when they have no tenant.",
+            "priority": "P0",
+            "status": "done",
+            "depends_on": [
+                "S1.1"
+            ],
+            "completed_at": "2026-03-11T22:28:51+00:00"
+        },
+        {
+            "id": "S1.3",
+            "sprint": "S1",
+            "title": "Create My Tenants page",
+            "description": "Build authenticated listing page for user tenants.",
+            "priority": "P0",
+            "status": "done",
+            "depends_on": [
+                "S1.2"
+            ],
+            "completed_at": "2026-03-11T22:58:37+00:00"
+        },
+        {
+            "id": "S1.4",
+            "sprint": "S1",
+            "title": "Implement smart post-login redirect",
+            "description": "Send users to tenant dashboard or onboarding based on ownership.",
+            "priority": "P0",
+            "status": "pending",
+            "depends_on": [
+                "S1.3"
+            ]
+        },
+        {
+            "id": "S2.1",
+            "sprint": "S2",
+            "title": "Protect API routes with sanctum",
+            "description": "Wrap API mutation routes in auth:sanctum middleware.",
+            "priority": "P0",
+            "status": "pending",
+            "depends_on": [
+                "S1.4"
+            ]
+        },
+        {
+            "id": "S2.2",
+            "sprint": "S2",
+            "title": "Add PIN brute-force throttle",
+            "description": "Apply throttle:5,1 to verify-pin endpoint.",
+            "priority": "P0",
+            "status": "pending",
+            "depends_on": [
+                "S2.1"
+            ]
+        },
+        {
+            "id": "S2.3",
+            "sprint": "S2",
+            "title": "Validate verified custom domains",
+            "description": "Require domain_verified=true in tenant identification for custom domains.",
+            "priority": "P0",
+            "status": "pending",
+            "depends_on": [
+                "S2.2"
+            ]
+        },
+        {
+            "id": "S2.4",
+            "sprint": "S2",
+            "title": "Remove dashboard console logs",
+            "description": "Delete debug console.log statements from dashboard templates/scripts.",
+            "priority": "P1",
+            "status": "pending",
+            "depends_on": [
+                "S2.3"
+            ]
+        },
+        {
+            "id": "S2.5",
+            "sprint": "S2",
+            "title": "Enforce tenant ownership in auth routes",
+            "description": "Ensure authenticated users can only mutate their own tenant resources.",
+            "priority": "P0",
+            "status": "pending",
+            "depends_on": [
+                "S2.4"
+            ]
+        },
+        {
+            "id": "S3.1",
+            "sprint": "S3",
+            "title": "Create Terms page",
+            "description": "Add public terms and conditions page.",
+            "priority": "P1",
+            "status": "pending",
+            "depends_on": [
+                "S2.5"
+            ]
+        },
+        {
+            "id": "S3.2",
+            "sprint": "S3",
+            "title": "Create Privacy page",
+            "description": "Add public privacy policy page.",
+            "priority": "P1",
+            "status": "pending",
+            "depends_on": [
+                "S3.1"
+            ]
+        },
+        {
+            "id": "S3.3",
+            "sprint": "S3",
+            "title": "Create About page",
+            "description": "Add public company/project profile page.",
+            "priority": "P1",
+            "status": "pending",
+            "depends_on": [
+                "S3.2"
+            ]
+        },
+        {
+            "id": "S3.4",
+            "sprint": "S3",
+            "title": "Link legal pages in footers",
+            "description": "Expose terms/privacy/about links in marketing and tenant footer.",
+            "priority": "P1",
+            "status": "pending",
+            "depends_on": [
+                "S3.3"
+            ]
+        },
+        {
+            "id": "S4.1",
+            "sprint": "S4",
+            "title": "Remove FlyonUI residual code",
+            "description": "Delete flyonui services/config/seeders and legacy js file.",
+            "priority": "P2",
+            "status": "pending",
+            "depends_on": [
+                "S3.4"
+            ]
+        },
+        {
+            "id": "S4.2",
+            "sprint": "S4",
+            "title": "Delete dashboard archive",
+            "description": "Delete dashboard/_archive legacy files.",
+            "priority": "P2",
+            "status": "pending",
+            "depends_on": [
+                "S4.1"
+            ]
+        },
+        {
+            "id": "S4.3",
+            "sprint": "S4",
+            "title": "Delete backup template files",
+            "description": "Delete food.blade.php.bak and food.blade.php.bak2.",
+            "priority": "P2",
+            "status": "pending",
+            "depends_on": [
+                "S4.2"
+            ]
+        },
+        {
+            "id": "S4.4",
+            "sprint": "S4",
+            "title": "Delete old app js",
+            "description": "Remove resources/js/old_app.js.",
+            "priority": "P2",
+            "status": "pending",
+            "depends_on": [
+                "S4.3"
+            ]
+        },
+        {
+            "id": "S5.1",
+            "sprint": "S5",
+            "title": "Create My Tenants dashboard UX",
+            "description": "Implement my-tenants view with CTAs to public and admin paths.",
+            "priority": "P1",
+            "status": "pending",
+            "depends_on": [
+                "S4.4"
+            ]
+        },
+        {
+            "id": "S5.2",
+            "sprint": "S5",
+            "title": "Route /dashboard to my-tenants",
+            "description": "Make authenticated dashboard route open my-tenants index.",
+            "priority": "P1",
+            "status": "pending",
+            "depends_on": [
+                "S5.1"
+            ]
+        },
+        {
+            "id": "S5.3",
+            "sprint": "S5",
+            "title": "Add tenant action shortcuts",
+            "description": "Add buttons to open tenant public site and panel from my-tenants.",
+            "priority": "P1",
+            "status": "pending",
+            "depends_on": [
+                "S5.2"
+            ]
+        },
+        {
+            "id": "S5.4",
+            "sprint": "S5",
+            "title": "Validate floating panel flow",
+            "description": "Confirm Alt+S and long-press flow still work after routing changes.",
+            "priority": "P1",
+            "status": "pending",
+            "depends_on": [
+                "S5.3"
+            ]
+        },
+        {
+            "id": "S6.1",
+            "sprint": "S6",
+            "title": "Fix 404 error page assets",
+            "description": "Replace CDN Tailwind with @vite or local minimal CSS in 404.",
+            "priority": "P1",
+            "status": "pending",
+            "depends_on": [
+                "S5.4"
+            ]
+        },
+        {
+            "id": "S6.2",
+            "sprint": "S6",
+            "title": "Fix 500 error page assets",
+            "description": "Replace CDN Tailwind with @vite or local minimal CSS in 500.",
+            "priority": "P1",
+            "status": "pending",
+            "depends_on": [
+                "S6.1"
+            ]
+        },
+        {
+            "id": "S6.3",
+            "sprint": "S6",
+            "title": "Fix tenant-not-found page assets",
+            "description": "Replace CDN Tailwind with @vite or local minimal CSS in tenant-not-found.",
+            "priority": "P1",
+            "status": "pending",
+            "depends_on": [
+                "S6.2"
+            ]
+        }
+    ]
+}

@@ -30,7 +30,14 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        // Smart redirect: si tiene tenants → /mis-negocios | sin tenants → /onboarding
+        $user = $request->user();
+
+        if ($user->tenants()->exists()) {
+            return redirect()->route('tenants.index');
+        }
+
+        return redirect()->route('onboarding.selector');
     }
 
     /**

@@ -108,10 +108,19 @@
                                             </div>
                                             <div class="flex items-center gap-1.5 mt-0.5">
                                                 @if(!empty($item['badge']))
-                                                    @php $b = $item['badge']; @endphp
-                                                    <span class="inline-flex items-center py-0.5 px-1.5 rounded-full text-xs font-medium
-                                                        {{ $b === 'hot' ? 'bg-red-100 text-red-700' : ($b === 'new' ? 'bg-green-100 text-green-700' : ($b === 'promo' ? 'bg-yellow-100 text-yellow-700' : 'bg-blue-100 text-blue-700')) }}">
-                                                        {{ $b === 'hot' ? '🔥 Hot' : ($b === 'new' ? '✨ New' : ($b === 'promo' ? '🎉 Promo' : '⭐ Destacado')) }}
+                                                    @php
+                                                        $b = $item['badge'];
+                                                        $badgeCfg = match($b) {
+                                                            'popular'   => ['icon' => 'tabler--star-filled', 'bg' => 'bg-amber-100',  'text' => 'text-amber-700',  'label' => 'Popular'],
+                                                            'nuevo'     => ['icon' => 'tabler--sparkles',    'bg' => 'bg-green-100',  'text' => 'text-green-700',  'label' => 'Nuevo'],
+                                                            'promo'     => ['icon' => 'tabler--tag',         'bg' => 'bg-orange-100', 'text' => 'text-orange-700', 'label' => 'Promo'],
+                                                            'destacado' => ['icon' => 'tabler--bolt',        'bg' => 'bg-purple-100', 'text' => 'text-purple-700', 'label' => 'Recomendado'],
+                                                            default     => ['icon' => 'tabler--star',        'bg' => 'bg-gray-100',   'text' => 'text-gray-700',   'label' => $b],
+                                                        };
+                                                    @endphp
+                                                    <span class="inline-flex items-center gap-1 py-0.5 px-1.5 rounded-full text-xs font-medium {{ $badgeCfg['bg'] }} {{ $badgeCfg['text'] }}">
+                                                        <span class="iconify {{ $badgeCfg['icon'] }} size-3"></span>
+                                                        {{ $badgeCfg['label'] }}
                                                     </span>
                                                 @endif
                                                 @if(!($item['activo'] ?? true))
@@ -255,10 +264,10 @@
                         <select id="menu-item-badge"
                                 class="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                             <option value="">Sin badge</option>
-                            <option value="hot">🔥 Hot</option>
-                            <option value="new">✨ New</option>
-                            <option value="promo">🎉 Promo</option>
-                            <option value="destacado">⭐ Destacado</option>
+                            <option value="popular">Popular</option>
+                            <option value="nuevo">Nuevo</option>
+                            <option value="promo">Promo</option>
+                            <option value="destacado">Recomendado</option>
                         </select>
                     </div>
 

@@ -8,6 +8,7 @@ use App\Models\AiDoc;
 use App\Models\AiChatLog;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class SyntiHelpController extends Controller
 {
@@ -28,7 +29,6 @@ class SyntiHelpController extends Controller
         // 1. Buscar en docs
         $results = AiDoc::search($question, self::RESULTS_LIMIT, $product);
 
-        // Fallback: si no hay resultados con el producto, busca en todos
         if ($results->isEmpty() && $product) {
             $results = AiDoc::search($question, self::RESULTS_LIMIT);
         }
@@ -39,16 +39,22 @@ class SyntiHelpController extends Controller
 
         // 2. Construir respuesta con IA (RAG)
         $topDoc   = $results->first();
-        $answer   = (new \App\Services\AI\BytezProvider)->ask($question, $topDoc->content);
+        $provider = \App\Services\AI\AIServiceSwitcher::getProvider();
+        
+        // Lógica de estado: si ya saludamos en esta sesión, es falso
+        $isFirst = !Session::has('syntia_greeted');
+        $answer = $provider->ask($question, $topDoc->content, $isFirst);
+        
+        // Marcamos que ya saludamos
+        Session::put('syntia_greeted', true);
 
-        // 3. Si hay múltiples resultados, agregar links de referencia
+        // 3. Referencias
         $references = $results->map(fn($doc) => [
             'title' => $doc->title,
             'url'   => "https://syntiweb.com/ayuda/{$doc->slug}",
         ])->values()->toArray();
 
         // 4. Log
-
         $log = AiChatLog::create([
             'tenant_id' => $tenant?->id,
             'product'   => $product,
@@ -81,7 +87,6 @@ class SyntiHelpController extends Controller
 
     private function formatAnswer(string $fragment, string $sourceTitle): string
     {
-        // Limpia markdown básico para mostrar en el widget
         $clean = preg_replace('/#{1,6}\s+/', '', $fragment);
         $clean = preg_replace('/\*{1,2}([^*]+)\*{1,2}/', '$1', $clean ?? '');
         $clean = preg_replace('/`([^`]+)`/', '$1', $clean ?? '');
@@ -105,31 +110,32 @@ class SyntiHelpController extends Controller
     }
 
     public function publicAsk(Request $request): JsonResponse
-{
-    $request->validate([
-        'question' => 'required|string|max:300',
-    ]);
+    {
+        $request->validate([
+            'question' => 'required|string|max:300',
+        ]);
 
-    $results = AiDoc::search($request->question, 5);
+        $results = AiDoc::search($request->question, 5);
+        $docs = $results->filter(fn($doc) => 
+            in_array($doc->product, ['shared', 'primeros-pasos', 'referencia'])
+        );
 
-    $docs = $results->filter(fn($doc) => 
-        in_array($doc->product, ['shared', 'primeros-pasos', 'referencia'])
-    );
+        if ($docs->isEmpty()) {
+            return response()->json([
+                'success' => false,
+                'answer'  => 'No encontré información sobre eso. Para más ayuda visita syntiweb.com o escríbenos.',
+            ]);
+        }
 
-    if ($docs->isEmpty()) {
+        $context  = $docs->pluck('content')->implode("\n\n");
+        $provider = \App\Services\AI\AIServiceSwitcher::getProvider();
+        
+        // En preguntas públicas asumimos que no saludamos o forzamos false
+        $answer = $provider->ask($request->question, $context, false);
+
         return response()->json([
-            'success' => false,
-            'answer'  => 'No encontré información sobre eso. Para más ayuda visita syntiweb.com o escríbenos.',
+            'success' => true,
+            'answer'  => $answer,
         ]);
     }
-
-    $context  = $docs->pluck('content')->implode("\n\n");
-    $provider = new \App\Services\AI\BytezProvider();
-    $answer   = $provider->ask($request->question, $context);
-
-    return response()->json([
-        'success' => true,
-        'answer'  => $answer,
-    ]);
-}
 }
