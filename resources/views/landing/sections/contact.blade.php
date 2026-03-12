@@ -1,5 +1,5 @@
-{{--
-    Contact Section � SYNTIweb Preline 4.1.2
+﻿{{--
+    Contact Section — SYNTIweb Preline 4.1.2
     Centralizado: map + cards grid (Horario, Direccion, WhatsApp, Email)
 --}}
 
@@ -20,7 +20,7 @@
     $email = $tenant->email ?? '';
     $phone = $tenant->phone ?? '';
 
-    // T�tulo y subt�tulo de la secci�n Contacto (variables propias, independientes de description)
+    // Título y subtítulo de la sección Contacto (variables propias, independientes de description)
     $contactTitle    = data_get($tenant->settings, 'business_info.contact.title')
                         ?: ($tenant->slogan ?: 'Estamos para ayudarte');
     $contactSubtitle = data_get($tenant->settings, 'business_info.contact.subtitle')
@@ -37,14 +37,14 @@
     <div class="text-center mb-12 space-y-3">
       <h2 class="text-foreground text-2xl font-semibold md:text-3xl lg:text-4xl"
           style="text-shadow: 0 4px 24px color-mix(in oklch, var(--color-foreground) 15%, transparent), 0 1px 4px color-mix(in oklch, var(--color-foreground) 8%, transparent);">
-        {!! $customization->getSectionTitle('contact', 'Cont�ctanos') !!}
+        {!! $customization->getSectionTitle('contact', 'Contáctanos') !!}
       </h2>
       <div class="w-16 h-0.5 mx-auto mt-4 rounded-full"
            style="background:var(--color-primary);box-shadow:0 0 12px 2px color-mix(in oklch,var(--color-primary) 60%,transparent)"></div>
     </div>
 
     @if($hasMaps)
-    {{-- -- Plan 2/3: mapa izquierda + cards derecha ------------------ --}}
+    {{-- ══ Plan 2/3: mapa izquierda + cards derecha ══════════════════ --}}
     <div class="grid items-stretch gap-10 lg:grid-cols-2 lg:gap-12">
 
       {{-- Columna 1: Google Maps --}}
@@ -55,7 +55,7 @@
           style="border:0; height: 100%; min-height: 280px;"
           allowfullscreen="" loading="lazy"
           referrerpolicy="no-referrer-when-downgrade"
-          title="Ubicaci�n en Google Maps">
+          title="Ubicación en Google Maps">
         </iframe>
       </div>
 
@@ -70,14 +70,14 @@
         <div class="grid gap-4 sm:grid-cols-2 flex-1">
           
           {{-- Card: Horario --}}
-          <div class="bg-card border border-card-line rounded-2xl p-4 shadow-sm">
+          <div class="bg-card border border-card-line rounded-lg p-4 shadow-sm">
             <div class="flex flex-col items-center text-center gap-2">
               <span class="iconify tabler--clock size-8 text-primary"></span>
               <h4 class="text-foreground font-semibold text-sm">Horario</h4>
               <div class="text-foreground/70 text-xs space-y-1">
                 @php
-                  $days = ['monday'=>'Lun','tuesday'=>'Mar','wednesday'=>'Mi�',
-                           'thursday'=>'Jue','friday'=>'Vie','saturday'=>'S�b','sunday'=>'Dom'];
+                  $days = ['monday'=>'Lun','tuesday'=>'Mar','wednesday'=>'Mié',
+                           'thursday'=>'Jue','friday'=>'Vie','saturday'=>'Sáb','sunday'=>'Dom'];
                   $hours = is_string($tenant->business_hours) 
                     ? json_decode($tenant->business_hours, true) 
                     : (is_array($tenant->business_hours) ? $tenant->business_hours : []);
@@ -85,19 +85,19 @@
                     ->map(fn($h,$d) => ($days[$d] ?? $d).': '.$h['open'].'-'.$h['close']);
                   $firstDay = $open->keys()->first();
                   $lastDay = $open->keys()->last();
-                  $hoursStr = $open->isEmpty() ? 'Lun�S�b 9:00�18:00' 
-                    : ($days[$firstDay].'�'.$days[$lastDay].': '.$hours[$firstDay]['open'].'�'.$hours[$lastDay]['close']);
+                  $hoursStr = $open->isEmpty() ? 'Lun–Sáb 9:00–18:00' 
+                    : ($days[$firstDay].'–'.$days[$lastDay].': '.$hours[$firstDay]['open'].'–'.$hours[$lastDay]['close']);
                 @endphp
                 <p>{{ $hoursStr }}</p>
               </div>
             </div>
           </div>
 
-          {{-- Card: Direcci�n --}}
-          <div class="bg-card border border-card-line rounded-2xl p-4 shadow-sm">
+          {{-- Card: Dirección --}}
+          <div class="bg-card border border-card-line rounded-lg p-4 shadow-sm">
             <div class="flex flex-col items-center text-center gap-2">
               <span class="iconify tabler--map-pin size-8 text-primary"></span>
-              <h4 class="text-foreground font-semibold text-sm">Direcci�n</h4>
+              <h4 class="text-foreground font-semibold text-sm">Dirección</h4>
               <address class="text-foreground/70 text-xs not-italic leading-snug">
                 {{ $address }}<br>
                 {{ $city }}{{ $tenant->state ? ', ' . $tenant->state : '' }}
@@ -106,7 +106,7 @@
           </div>
 
           {{-- Card: WhatsApp --}}
-          <div class="bg-card border border-card-line rounded-2xl p-4 shadow-sm">
+          <div class="bg-card border border-card-line rounded-lg p-4 shadow-sm">
             <div class="flex flex-col items-center text-center gap-2">
               <span class="iconify tabler--brand-whatsapp size-8 text-primary"></span>
               <h4 class="text-foreground font-semibold text-sm">WhatsApp</h4>
@@ -123,7 +123,7 @@
           </div>
 
           {{-- Card: Email + Soporte --}}
-          <div class="bg-card border border-card-line rounded-2xl p-4 shadow-sm">
+          <div class="bg-card border border-card-line rounded-lg p-4 shadow-sm">
             <div class="flex flex-col items-center text-center gap-2">
               <span class="iconify tabler--mail size-8 text-primary"></span>
               <h4 class="text-foreground font-semibold text-sm">Contacto</h4>
@@ -154,7 +154,7 @@
     </div>{{-- /grid plan 2/3 --}}
 
     @else
-    {{-- -- Plan 1: header centrado + 4 cards en fila ------------------ --}}
+    {{-- ══ Plan 1: header centrado + 4 cards en fila ══════════════════ --}}
     @if($contactTitle || $contactSubtitle)
     <div class="text-center mb-8 space-y-1">
       <h3 class="text-foreground text-lg font-semibold">{{ $contactTitle }}</h3>
@@ -167,14 +167,14 @@
     <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
 
           {{-- Card: Horario --}}
-          <div class="bg-card border border-card-line rounded-2xl p-5 shadow-sm">
+          <div class="bg-card border border-card-line rounded-lg p-5 shadow-sm">
             <div class="flex flex-col items-center text-center gap-2">
               <span class="iconify tabler--clock size-8 text-primary"></span>
               <h4 class="text-foreground font-semibold text-sm">Horario</h4>
               <div class="text-foreground/70 text-xs space-y-1">
                 @php
-                  $days2 = ['monday'=>'Lun','tuesday'=>'Mar','wednesday'=>'Mi�',
-                            'thursday'=>'Jue','friday'=>'Vie','saturday'=>'S�b','sunday'=>'Dom'];
+                  $days2 = ['monday'=>'Lun','tuesday'=>'Mar','wednesday'=>'Mié',
+                            'thursday'=>'Jue','friday'=>'Vie','saturday'=>'Sáb','sunday'=>'Dom'];
                   $hours2 = is_string($tenant->business_hours)
                     ? json_decode($tenant->business_hours, true)
                     : (is_array($tenant->business_hours) ? $tenant->business_hours : []);
@@ -182,19 +182,19 @@
                     ->map(fn($h,$d) => ($days2[$d] ?? $d).': '.$h['open'].'-'.$h['close']);
                   $fDay = $open2->keys()->first();
                   $lDay = $open2->keys()->last();
-                  $hoursStr2 = $open2->isEmpty() ? 'Lun�S�b 9:00�18:00'
-                    : ($days2[$fDay].'�'.$days2[$lDay].': '.$hours2[$fDay]['open'].'�'.$hours2[$lDay]['close']);
+                  $hoursStr2 = $open2->isEmpty() ? 'Lun–Sáb 9:00–18:00'
+                    : ($days2[$fDay].'–'.$days2[$lDay].': '.$hours2[$fDay]['open'].'–'.$hours2[$lDay]['close']);
                 @endphp
                 <p>{{ $hoursStr2 }}</p>
               </div>
             </div>
           </div>
 
-          {{-- Card: Direcci�n --}}
-          <div class="bg-card border border-card-line rounded-2xl p-5 shadow-sm">
+          {{-- Card: Dirección --}}
+          <div class="bg-card border border-card-line rounded-lg p-5 shadow-sm">
             <div class="flex flex-col items-center text-center gap-2">
               <span class="iconify tabler--map-pin size-8 text-primary"></span>
-              <h4 class="text-foreground font-semibold text-sm">Direcci�n</h4>
+              <h4 class="text-foreground font-semibold text-sm">Dirección</h4>
               <address class="text-foreground/70 text-xs not-italic leading-snug">
                 {{ $address }}<br>
                 {{ $city }}{{ $tenant->state ? ', ' . $tenant->state : '' }}
@@ -203,7 +203,7 @@
           </div>
 
           {{-- Card: WhatsApp --}}
-          <div class="bg-card border border-card-line rounded-2xl p-5 shadow-sm">
+          <div class="bg-card border border-card-line rounded-lg p-5 shadow-sm">
             <div class="flex flex-col items-center text-center gap-2">
               <span class="iconify tabler--brand-whatsapp size-8 text-primary"></span>
               <h4 class="text-foreground font-semibold text-sm">WhatsApp</h4>
@@ -219,8 +219,8 @@
             </div>
           </div>
 
-          {{-- Card: Email / Tel�fono --}}
-          <div class="bg-card border border-card-line rounded-2xl p-5 shadow-sm">
+          {{-- Card: Email / Teléfono --}}
+          <div class="bg-card border border-card-line rounded-lg p-5 shadow-sm">
             <div class="flex flex-col items-center text-center gap-2">
               <span class="iconify tabler--mail size-8 text-primary"></span>
               <h4 class="text-foreground font-semibold text-sm">Contacto</h4>
