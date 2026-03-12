@@ -53,11 +53,11 @@
 
             <div class="bg-card border border-card-line rounded-2xl shadow-2xs overflow-hidden flex flex-col hover:-translate-y-1 hover:shadow-md transition-all duration-300">
 
-                {{-- Accent panel — replaces image, shows location icon --}}
-                <div class="relative w-full bg-primary/10 flex items-center justify-center py-10">
-                    <div class="w-16 h-16 rounded-2xl bg-primary/15 border border-primary/25 flex items-center justify-center">
-                        <span class="iconify tabler--map-pin-filled text-primary size-6" aria-hidden="true"></span>
-                    </div>
+                {{-- Accent panel — hereda estilo de servicios: chip rounded-full, ícono size-14 --}}
+                <div class="relative h-52 w-full bg-surface flex items-center justify-center">
+                    <span class="inline-flex items-center justify-center p-5 rounded-full bg-primary/10 text-primary group-hover:bg-primary/20 transition-colors duration-300">
+                        <span class="iconify tabler--map-pin-filled size-14" aria-hidden="true"></span>
+                    </span>
                 </div>
 
                 {{-- Card body --}}
