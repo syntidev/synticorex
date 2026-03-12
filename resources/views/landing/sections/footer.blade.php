@@ -88,7 +88,7 @@
     <div class="relative mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8">
 
         {{-- ── Fila principal ── --}}
-        <div class="flex flex-col gap-6 py-8 sm:flex-row sm:items-center sm:justify-between">
+        <div class="flex flex-col gap-4 py-5 sm:flex-row sm:items-center sm:justify-between">
 
             {{-- Logo + Nombre del negocio --}}
             <a href="#home" class="flex items-center gap-3 shrink-0">
@@ -142,7 +142,7 @@
         </div>
 
         {{-- ── Barra de copyright ── --}}
-        <div class="flex flex-col items-center justify-between gap-2 border-t border-base-200 py-4 sm:flex-row">
+        <div class="flex flex-col items-center justify-between gap-2 border-t border-base-200 py-3 sm:flex-row">
             <p class="text-xs text-muted-foreground-1">
                 &copy; {{ date('Y') }} {{ $tenant->business_name }}. Todos los derechos reservados.
             </p>
