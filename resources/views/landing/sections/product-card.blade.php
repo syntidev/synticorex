@@ -27,10 +27,11 @@
     {{-- IMAGEN CON ZOOM --}}
     <div class="relative mb-2 h-96 overflow-hidden rounded-lg bg-surface shadow-lg lg:mb-3">
 
-        {{-- Chip Destacado — top-left (texto, sin icon) --}}
+        {{-- Chip is_featured — top-left, dorado con estrella --}}
         @if($product->is_featured)
-            <span class="absolute top-3 left-3 z-30 rounded-lg bg-white px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-foreground shadow-sm">
-                Destacado
+            <span class="absolute top-3 left-3 z-30 inline-flex items-center gap-1 rounded-lg bg-amber-400 px-2.5 py-1.5 text-xs font-bold text-amber-900 shadow-md">
+                <span class="iconify tabler--star-filled size-3.5" aria-hidden="true"></span>
+                Especial
             </span>
         @endif
 
@@ -83,16 +84,18 @@
             @endif
         @endif
 
-        {{-- Badges en pie de foto (con colores + descuento automático) --}}
+        {{-- Badges en pie de foto — colores sólidos + regla de exclusión promo/descuento --}}
         @php
             $hasDiscount = $product->compare_price_usd && $product->compare_price_usd > $product->price_usd;
-            $badgeLower = $product->badge ? strtolower($product->badge) : null;
-            $badgeConfig = $badgeLower ? match($badgeLower) {
-                'popular'   => ['icon' => 'tabler--star-filled', 'bg' => 'bg-amber-100',   'text' => 'text-amber-700',  'label' => 'Popular'],
-                'nuevo'     => ['icon' => 'tabler--sparkles',    'bg' => 'bg-emerald-100', 'text' => 'text-emerald-700','label' => 'Nuevo'],
-                'promo'     => ['icon' => 'tabler--tag',         'bg' => 'bg-orange-100',  'text' => 'text-orange-700', 'label' => 'Promo'],
-                'destacado' => ['icon' => 'tabler--bolt',        'bg' => 'bg-purple-100',  'text' => 'text-purple-700', 'label' => 'Recomendado'],
-                default     => ['icon' => 'tabler--star',        'bg' => 'bg-primary/10',  'text' => 'text-primary',    'label' => $product->badge]
+            $badgeLower  = $product->badge ? strtolower($product->badge) : null;
+            // Si badge es 'promo' y hay descuento activo, el descuento ya lo comunica — suprimir redundancia
+            $showBadge   = $badgeLower && !($badgeLower === 'promo' && $hasDiscount);
+            $badgeConfig = $showBadge ? match($badgeLower) {
+                'popular'   => ['icon' => 'tabler--star-filled', 'bg' => 'bg-amber-500',   'text' => 'text-white', 'label' => 'Popular'],
+                'nuevo'     => ['icon' => 'tabler--sparkles',    'bg' => 'bg-emerald-500', 'text' => 'text-white', 'label' => 'Nuevo'],
+                'promo'     => ['icon' => 'tabler--tag',         'bg' => 'bg-orange-500',  'text' => 'text-white', 'label' => 'Promo'],
+                'destacado' => ['icon' => 'tabler--bolt',        'bg' => 'bg-violet-600',  'text' => 'text-white', 'label' => 'Recomendado'],
+                default     => ['icon' => 'tabler--star',        'bg' => 'bg-primary',     'text' => 'text-primary-foreground', 'label' => $product->badge]
             } : null;
         @endphp
         @if($badgeConfig || $hasDiscount)
