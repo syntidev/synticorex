@@ -50,28 +50,27 @@
                 @endphp
 
                 <div class="{{ $isExtra ? 'service-extra hidden' : '' }}">
-                    <div class="group flex flex-col h-full bg-card border border-card-line shadow-sm hover:shadow-md hover:-translate-y-0.5 hover:ring-2 hover:ring-primary/20 transition-all duration-300 rounded-xl">
+                    <div class="group flex flex-col h-full bg-card border border-card-line shadow-sm hover:shadow-md hover:-translate-y-0.5 hover:ring-2 hover:ring-primary/20 transition-all duration-300 rounded-2xl">
 
-                        {{-- Cabecera: imagen O ícono sobre fondo brand --}}
-                        <div class="relative h-52 flex flex-col justify-center items-center rounded-t-xl overflow-hidden"
-                             style="background: linear-gradient(135deg, color-mix(in oklch, var(--color-primary) 90%, #000) 0%, var(--color-primary) 60%, color-mix(in oklch, var(--color-primary) 85%, #fff) 100%)">
-                            {{-- Dot pattern overlay --}}
-                            <div class="absolute inset-0 opacity-[0.07]"
-                                 style="background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2260%22><circle cx=%2230%22 cy=%2230%22 r=%221.5%22 fill=%22white%22/></svg>');background-size:30px"></div>
-                            @if($service->image_filename)
+                        {{-- Cabecera: imagen (llena) O ícono (chip sutil, sin bloque de color) --}}
+                        @if($service->image_filename)
+                            <div class="relative h-52 rounded-t-2xl overflow-hidden bg-surface">
                                 <img src="{{ asset('storage/tenants/' . $tenant->id . '/' . $service->image_filename) }}"
                                      alt="{{ $service->name }}"
-                                     class="size-full object-cover"
-                                     onerror="this.style.display='none'; this.parentElement.classList.add('items-center','justify-center');">
-                            @else
-                                <span class="iconify tabler--{{ $iconName }} size-20 text-white/90"></span>
-                            @endif
-                        </div>
+                                     class="size-full object-cover transition duration-300 group-hover:scale-105"
+                                     onerror="this.closest('.relative').classList.add('hidden');">
+                            </div>
+                        @else
+                            <div class="flex justify-center items-center pt-8 pb-2">
+                                <span class="inline-flex items-center justify-center p-4 rounded-full bg-primary/10 text-primary group-hover:bg-primary/20 transition-colors duration-300">
+                                    <span class="iconify tabler--{{ $iconName }} size-8"></span>
+                                </span>
+                            </div>
+                        @endif
 
                         {{-- Contenido --}}
-                        <div class="p-4 md:p-6">
-                            <span class="block mb-1 text-xs font-semibold uppercase text-primary">Servicio</span>
-                            <h3 class="text-xl font-semibold text-foreground group-hover:text-primary transition-colors">
+                        <div class="p-4 md:p-6 text-center">
+                            <h3 class="text-xl font-semibold text-primary transition-colors">
                                 {{ $service->name }}
                             </h3>
                             <p class="mt-3 text-muted-foreground-1 line-clamp-3">
@@ -83,8 +82,8 @@
                         <div class="mt-auto flex border-t border-line-2">
                             <a href="{{ $ctaLink }}"
                                {{ $waPhone ? 'target="_blank" rel="noopener noreferrer"' : '' }}
-                               class="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-b-xl bg-layer text-foreground shadow-2xs hover:bg-muted-hover focus:outline-hidden focus:bg-muted-focus disabled:opacity-50 disabled:pointer-events-none transition-colors">
-                                <span class="iconify tabler--brand-whatsapp size-4 text-success"></span>
+                               class="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-b-2xl bg-primary border border-primary-line text-primary-foreground hover:bg-primary-hover focus:outline-hidden focus:bg-primary-focus disabled:opacity-50 disabled:pointer-events-none transition cursor-pointer">
+                                <span class="iconify tabler--brand-whatsapp size-4"></span>
                                 {{ $ctaText }}
                             </a>
                         </div>
