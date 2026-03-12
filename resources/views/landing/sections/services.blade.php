@@ -50,7 +50,7 @@
                 @endphp
 
                 <div class="{{ $isExtra ? 'service-extra hidden' : '' }}">
-                    <div class="group flex flex-col h-full bg-card border border-card-line shadow-sm hover:shadow-md hover:-translate-y-0.5 hover:ring-2 hover:ring-primary/20 transition-all duration-300 rounded-2xl">
+                    <div class="group flex flex-col h-full bg-card border border-card-line shadow-sm hover:shadow-md hover:-translate-y-0.5 hover:ring-2 hover:ring-primary/20 transition-all duration-300 rounded-2xl overflow-hidden">
 
                         {{-- Cabecera: imagen (llena) O ícono (chip sutil, sin bloque de color) --}}
                         @if($service->image_filename)
@@ -61,9 +61,9 @@
                                      onerror="this.closest('.relative').classList.add('hidden');">
                             </div>
                         @else
-                            <div class="flex justify-center items-center pt-8 pb-2">
-                                <span class="inline-flex items-center justify-center p-4 rounded-full bg-primary/10 text-primary group-hover:bg-primary/20 transition-colors duration-300">
-                                    <span class="iconify tabler--{{ $iconName }} size-8"></span>
+                            <div class="relative h-52 flex items-center justify-center bg-surface/50">
+                                <span class="inline-flex items-center justify-center p-5 rounded-full bg-primary/10 text-primary group-hover:bg-primary/20 transition-colors duration-300">
+                                    <span class="iconify tabler--{{ $iconName }} size-14"></span>
                                 </span>
                             </div>
                         @endif
@@ -82,7 +82,7 @@
                         <div class="mt-auto flex border-t border-line-2">
                             <a href="{{ $ctaLink }}"
                                {{ $waPhone ? 'target="_blank" rel="noopener noreferrer"' : '' }}
-                               class="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-b-2xl bg-primary border border-primary-line text-primary-foreground hover:bg-primary-hover focus:outline-hidden focus:bg-primary-focus disabled:opacity-50 disabled:pointer-events-none transition cursor-pointer">
+                               class="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium bg-primary border border-primary-line text-primary-foreground hover:bg-primary-hover focus:outline-hidden focus:bg-primary-focus disabled:opacity-50 disabled:pointer-events-none transition cursor-pointer">
                                 <span class="iconify tabler--brand-whatsapp size-4"></span>
                                 {{ $ctaText }}
                             </a>
