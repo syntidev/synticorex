@@ -1,0 +1,178 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Agent Router: Validate Task",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"scripts/agent_router.ps1",
+				"-Task",
+				"${input:agentRouterTaskText}",
+				"-CurrentAgent",
+				"${input:agentRouterCurrentAgent}"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Agent Router: Validate Tenant Task (Strict)",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"scripts/agent_router.ps1",
+				"-Task",
+				"${input:agentRouterTaskText}",
+				"-CurrentAgent",
+				"opus"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Move CSS, JS, and Fonts to admin_assets",
+			"type": "shell",
+			"command": "xcopy",
+			"args": [
+				"c:\\laragon\\www\\synticorex\\_tema_cuba\\cuba-laravel\\cuba-laravel\\public\\assets\\css",
+				"c:\\laragon\\www\\synticorex\\public\\admin_assets\\css",
+				"/E",
+				"/I"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Move JS to admin_assets",
+			"type": "shell",
+			"command": "xcopy",
+			"args": [
+				"c:\\laragon\\www\\synticorex\\_tema_cuba\\cuba-laravel\\cuba-laravel\\public\\assets\\js",
+				"c:\\laragon\\www\\synticorex\\public\\admin_assets\\js",
+				"/E",
+				"/I"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Move Fonts to admin_assets",
+			"type": "shell",
+			"command": "xcopy",
+			"args": [
+				"c:\\laragon\\www\\synticorex\\_tema_cuba\\cuba-laravel\\cuba-laravel\\public\\assets\\fonts",
+				"c:\\laragon\\www\\synticorex\\public\\admin_assets\\fonts",
+				"/E",
+				"/I"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Roadmap: Next Studio Priority",
+			"type": "shell",
+			"command": "php",
+			"args": [
+				"scripts/studio_plan_orchestrator.php",
+				"next"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Roadmap: Studio Status",
+			"type": "shell",
+			"command": "php",
+			"args": [
+				"scripts/studio_plan_orchestrator.php",
+				"status"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Roadmap: Studio List",
+			"type": "shell",
+			"command": "php",
+			"args": [
+				"scripts/studio_plan_orchestrator.php",
+				"list"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Roadmap: Next Cat Priority",
+			"type": "shell",
+			"command": "php",
+			"args": [
+				"scripts/studio_plan_orchestrator.php",
+				"next",
+				"--plan=cat"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Roadmap: Cat Status",
+			"type": "shell",
+			"command": "php",
+			"args": [
+				"scripts/studio_plan_orchestrator.php",
+				"status",
+				"--plan=cat"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Roadmap: Next Food Priority",
+			"type": "shell",
+			"command": "php",
+			"args": [
+				"scripts/studio_plan_orchestrator.php",
+				"next",
+				"--plan=food"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Roadmap: Food Status",
+			"type": "shell",
+			"command": "php",
+			"args": [
+				"scripts/studio_plan_orchestrator.php",
+				"status",
+				"--plan=food"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		}
+	],
+	"inputs": [
+		{
+			"id": "agentRouterTaskText",
+			"type": "promptString",
+			"description": "Describe la tarea a clasificar por peso/densidad"
+		},
+		{
+			"id": "agentRouterCurrentAgent",
+			"type": "pickString",
+			"description": "Agente actual",
+			"options": [
+				"opus",
+				"sonnet",
+				"haiku",
+				"auto"
+			],
+			"default": "sonnet"
+		}
+	]
+}
