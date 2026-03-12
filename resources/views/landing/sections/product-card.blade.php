@@ -1,9 +1,133 @@
-{{-- Product Card — Preline 4.1.2 + Tailwind v4 --}}
-<div class="group flex flex-col bg-card border border-card-line rounded-2xl shadow-sm hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] hover:-translate-y-1 hover:ring-2 hover:ring-primary/15 transition-all duration-300 overflow-hidden">
+{{-- Product Card — Diseño Limpio (Preline 4.1.2 + Tailwind v4) --}}
+{{-- Conceptó: imagen con zoom, badges textuales en pie de foto, info sin card --}}
+<div class="group">
+    {{-- IMAGEN CON ZOOM --}}
+    <div class="relative mb-2 overflow-hidden rounded-lg bg-background lg:mb-3">
+        @php
+            $isPlan3 = isset($plan) && (int) $plan->id === 3;
+            $galleryImages = $product->relationLoaded('galleryImages') ? $product->galleryImages : collect();
+            $hasGallery = $isPlan3 && $galleryImages->isNotEmpty();
+            $allImages = collect();
+            $waNumber = preg_replace('/\D/', '', $tenant->getActiveWhatsapp() ?? '');
+            $waBase   = $waNumber ? 'https://wa.me/' . $waNumber : '#';
+            $waProductMsg = 'Hola, vi tu vitrina y me interesa: ' . $product->name
+                          . ($product->price_usd ? ' — REF ' . number_format($product->price_usd, 2) : '')
+                          . '. ¿Está disponible?';
 
-    {{-- IMAGEN / SLIDER --}}
-    <div class="relative">
-    <div class="aspect-4/4 overflow-hidden rounded-2xl bg-surface">
+            if ($hasGallery && isset($tenant)) {
+                if ($product->image_filename) {
+                    $allImages->push(asset('storage/tenants/' . $tenant->id . '/' . $product->image_filename));
+                }
+                foreach ($galleryImages as $gi) {
+                    $allImages->push(asset('storage/tenants/' . $tenant->id . '/' . $gi->image_filename));
+                }
+            }
+            $sliderId = 'slider-' . ($product->id ?? uniqid());
+        @endphp
+
+        <div class="aspect-square overflow-hidden rounded-lg bg-surface block h-96">
+            {{-- Slider (Plan 3 con galería) --}}
+            @if($hasGallery && $allImages->count() > 1)
+                <div class="product-slider relative size-full" id="{{ $sliderId }}">
+                    @foreach($allImages as $idx => $imageUrl)
+                        <div class="product-slide absolute inset-0 transition-opacity duration-500 {{ $idx === 0 ? 'opacity-100 z-10' : 'opacity-0 z-0' }}" data-slide="{{ $idx }}">
+                            <img src="{{ $imageUrl }}" class="size-full object-cover rounded-lg group-hover:scale-110 transition duration-200" alt="{{ $product->name }}"
+                                 onerror="this.style.display='none'; this.parentElement.style.display='none';">
+                        </div>
+                    @endforeach
+
+                    {{-- Arrows --}}
+                    <button type="button" onclick="changeSlide('{{ $sliderId }}', -1)" class="absolute left-2 top-1/2 -translate-y-1/2 z-20 w-8 h-8 bg-white/80 hover:bg-white rounded-full flex items-center justify-center shadow-lg transition-all opacity-0 group-hover:opacity-100">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                    </button>
+                    <button type="button" onclick="changeSlide('{{ $sliderId }}', 1)" class="absolute right-2 top-1/2 -translate-y-1/2 z-20 w-8 h-8 bg-white/80 hover:bg-white rounded-full flex items-center justify-center shadow-lg transition-all opacity-0 group-hover:opacity-100">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                    </button>
+
+                    {{-- Dots --}}
+                    <div class="absolute bottom-2 left-1/2 -translate-x-1/2 z-20 flex gap-1.5">
+                        @foreach($allImages as $idx => $imageUrl)
+                            <button type="button" onclick="goToSlide('{{ $sliderId }}', {{ $idx }})" class="slider-dot w-2 h-2 rounded-full transition-all {{ $idx === 0 ? 'bg-primary scale-110' : 'bg-white/60 hover:bg-white/80' }}" data-dot="{{ $idx }}"></button>
+                        @endforeach
+                    </div>
+                </div>
+            {{-- Single image --}}
+            @else
+                @if($product->image_filename)
+                    <img src="{{ asset('storage/tenants/' . ($tenant->id ?? '') . '/' . $product->image_filename) }}"
+                         class="size-full object-cover rounded-lg group-hover:scale-110 transition duration-200"
+                         alt="{{ $product->name }}"
+                         onerror="this.style.display='none'; this.parentElement.style.display='none';">
+                @elseif($product->image_url)
+                    <img src="{{ $product->image_url }}"
+                         class="size-full object-cover rounded-lg group-hover:scale-110 transition duration-200"
+                         alt="{{ $product->name }}"
+                         loading="lazy">
+                @else
+                    <div class="size-full bg-muted flex items-center justify-center rounded-lg">
+                        <svg class="w-16 h-16 text-foreground/20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                    </div>
+                @endif
+            @endif
+        </div>
+
+        {{-- Badges textuales en pie de foto (sin icons) --}}
+        @if($product->discount_percentage || $product->badge)
+            <div class="absolute left-0 bottom-2 flex gap-2 z-30">
+                @if($product->discount_percentage)
+                    <span class="rounded-r-lg bg-red-500 px-3 py-1.5 text-xs font-semibold uppercase tracking-wider text-white">
+                        -{{ (int) $product->discount_percentage }}%
+                    </span>
+                @endif
+                @if($product->badge)
+                    @php
+                        $badgeLower = strtolower($product->badge);
+                        $badgeLabel = match($badgeLower) {
+                            'popular'   => 'Popular',
+                            'nuevo'     => 'Nuevo',
+                            'promo'     => 'Promo',
+                            'destacado' => 'Destacado',
+                            default     => ucfirst($product->badge)
+                        };
+                    @endphp
+                    <span class="rounded-lg bg-white px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-foreground">
+                        {{ $badgeLabel }}
+                    </span>
+                @endif
+            </div>
+        @endif
+    </div>
+
+    {{-- INFO LIMPIA: TÍTULO, MARCA, PRECIO (sin card, solo texto) --}}
+    <div class="flex items-start justify-between gap-2 px-0">
+        <div class="flex flex-col flex-1">
+            <h3 class="text-lg font-bold text-foreground hover:text-primary transition-colors">
+                {{ Str::limit($product->name, 40) }}
+            </h3>
+            @if($product->brand)
+                <span class="text-sm text-foreground/60">{{ $product->brand }}</span>
+            @endif
+        </div>
+
+        <div class="flex flex-col items-end">
+            @if($product->price_usd)
+                <span class="font-bold text-foreground lg:text-lg">REF {{ number_format($product->price_usd, 2) }}</span>
+                @if($product->discount_percentage)
+                    <span class="text-xs text-red-500 line-through">REF {{ number_format($product->price_usd / (1 - $product->discount_percentage / 100), 2) }}</span>
+                @endif
+            @endif
+        </div>
+    </div>
+
+    {{-- CTA OCULTO (hover) --}}
+    <a href="{{ $waBase }}" target="_blank" rel="noopener noreferrer"
+       class="inline-flex items-center gap-2 text-sm py-2 px-0 rounded-lg font-medium text-primary hover:text-primary-hover opacity-0 group-hover:opacity-100 transition-opacity duration-200 mt-2">
+        <span class="iconify tabler--brand-whatsapp size-4"></span>
+        Ver más
+    </a>
+
         @php
             $isPlan3 = isset($plan) && (int) $plan->id === 3;
             $galleryImages = $product->relationLoaded('galleryImages') ? $product->galleryImages : collect();
