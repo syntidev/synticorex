@@ -141,14 +141,6 @@
 
         </div>
 
-        <div class="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 border-t border-base-200 pt-4 text-xs text-muted-foreground-1">
-            <a href="{{ route('marketing.about') }}" class="hover:text-foreground transition-colors">Nosotros</a>
-            <span class="opacity-50">•</span>
-            <a href="{{ route('marketing.privacy') }}" class="hover:text-foreground transition-colors">Privacidad</a>
-            <span class="opacity-50">•</span>
-            <a href="{{ route('marketing.terms') }}" class="hover:text-foreground transition-colors">Terminos</a>
-        </div>
-
         {{-- ── Barra de copyright ── --}}
         <div class="flex flex-col items-center justify-between gap-2 border-t border-base-200 py-4 sm:flex-row">
             <p class="text-xs text-muted-foreground-1">
