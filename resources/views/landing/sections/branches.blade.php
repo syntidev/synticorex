@@ -51,7 +51,7 @@
             @foreach($activeBranches as $branch)
             @php $branchMethods = $branchPayMethodsData[(string)$branch->id] ?? []; @endphp
 
-            <div class="bg-card border border-card-line rounded-xl shadow-2xs overflow-hidden flex flex-col hover:-translate-y-1 hover:shadow-md transition-all duration-300">
+            <div class="bg-card border border-card-line rounded-2xl shadow-2xs overflow-hidden flex flex-col hover:-translate-y-1 hover:shadow-md transition-all duration-300">
 
                 {{-- Accent panel — replaces image, shows location icon --}}
                 <div class="relative w-full bg-primary/10 flex items-center justify-center py-10">
