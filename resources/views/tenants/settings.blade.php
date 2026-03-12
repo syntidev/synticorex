@@ -405,8 +405,6 @@
 
 @push('scripts')
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        console.log('Settings page cargada');
-    });
+    // Hook reservado para futuras interacciones de settings.
 </script>
 @endpush

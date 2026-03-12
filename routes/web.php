@@ -27,9 +27,7 @@ Route::domain('app.synticorex.test')->group(function () {
     Route::get('/', fn() => redirect()->route('login'));
 
     Route::middleware(['auth', 'verified'])->group(function () {
-        Route::get('/dashboard', function () {
-            return view('dashboard'); // Volveremos al dashboard original por ahora
-        })->name('dashboard');
+        Route::get('/dashboard', fn () => redirect()->route('tenants.index'))->name('dashboard');
     });
 });
 
@@ -38,6 +36,9 @@ Route::get('/planes', [MarketingController::class, 'planes'])->name('marketing.p
 Route::get('/studio', [MarketingController::class, 'studio'])->name('marketing.studio');
 Route::get('/food',   [MarketingController::class, 'food'])->name('marketing.food');
 Route::get('/cat',    [MarketingController::class, 'cat'])->name('marketing.cat');
+Route::get('/terminos', [MarketingController::class, 'terms'])->name('marketing.terms');
+Route::get('/privacidad', [MarketingController::class, 'privacy'])->name('marketing.privacy');
+Route::get('/nosotros', [MarketingController::class, 'about'])->name('marketing.about');
 
 // ═══ Google OAuth ═════════════════════════════════════════════════════════════
 Route::get('/auth/google',          [SocialAuthController::class, 'redirectToGoogle'])->name('auth.google');
@@ -85,7 +86,8 @@ Route::middleware('tenant')->get('/{subdomain}', [TenantRendererController::clas
     ->name('tenant.landing');
 
 // ═══ Tenant panel — acciones públicas (protegidas por PIN, no por auth) ═════
-Route::post('/tenant/{tenantId}/verify-pin',    [TenantRendererController::class, 'verifyPin']);
+Route::post('/tenant/{tenantId}/verify-pin',    [TenantRendererController::class, 'verifyPin'])
+    ->middleware('throttle:5,1');
 Route::post('/tenant/{tenantId}/toggle-status', [TenantRendererController::class, 'toggleStatus']);
 Route::patch('/tenant/{tenantId}/toggle-whatsapp', [TenantRendererController::class, 'toggleWhatsapp']);
 
@@ -198,7 +200,7 @@ Route::post('/{subdomain}/checkout', [CheckoutController::class, 'store'])
     ->name('tenant.checkout');
 
 // Orders dashboard (auth required)
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'tenant.owner:tenantId'])->group(function () {
     Route::get('/tenant/{tenantId}/orders', [OrdersController::class, 'index'])->name('tenant.orders');
 });
 
@@ -209,7 +211,7 @@ Route::post('/{subdomain}/food-checkout', [\App\Http\Controllers\Food\ComandaCon
     ->name('food.checkout');
 
 // ═══ SYNTIfood Menu Engine ═══════════════════════════════════════════════════
-Route::middleware(['auth'])->prefix('tenant/{tenantId}/food')->group(function () {
+Route::middleware(['auth', 'tenant.owner:tenantId'])->prefix('tenant/{tenantId}/food')->group(function () {
     Route::apiResource('categories', \App\Http\Controllers\Food\CategoriesController::class)->except(['show']);
     Route::apiResource('categories.items', \App\Http\Controllers\Food\ItemsController::class)->except(['show']);
 });

@@ -278,8 +278,6 @@
             const display_mode = document.querySelector('input[name="display_mode"]:checked')?.value;
             const tenantId     = {{ $tenant->id }};
             
-            console.log('Payload moneda:', {symbol, display_mode});
-            
             if (!display_mode) {
                 alert('✗ Seleccioná un modo de visualización');
                 return;

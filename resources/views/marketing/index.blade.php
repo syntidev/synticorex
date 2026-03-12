@@ -160,14 +160,15 @@
                         <li><a href="#solucion" class="hover:text-white transition-colors">Cómo funciona</a></li>
                         <li><a href="#segmentos" class="hover:text-white transition-colors">Segmentos</a></li>
                         <li><a href="#planes" class="hover:text-white transition-colors">Planes</a></li>
+                        <li><a href="{{ route('marketing.about') }}" class="hover:text-white transition-colors">Nosotros</a></li>
                     </ul>
                 </div>
                 {{-- Legal --}}
                 <div>
                     <h4 class="text-white font-semibold text-sm mb-4">Legal</h4>
                     <ul class="space-y-2 text-sm">
-                        <li><a href="#" class="hover:text-white transition-colors">Privacidad</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Términos</a></li>
+                        <li><a href="{{ route('marketing.privacy') }}" class="hover:text-white transition-colors">Privacidad</a></li>
+                        <li><a href="{{ route('marketing.terms') }}" class="hover:text-white transition-colors">Términos</a></li>
                         <li><a href="mailto:soporte@syntiweb.com" class="hover:text-white transition-colors">soporte@syntiweb.com</a></li>
                     </ul>
                 </div>

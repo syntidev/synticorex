@@ -75,13 +75,13 @@
                                 <div class="grid grid-cols-2 gap-3 mb-4 text-center">
                                     <div>
                                         <p class="text-2xl font-bold text-gray-900 dark:text-white">
-                                            {{ $tenant->products()->count() }}
+                                            {{ $tenant->products_count }}
                                         </p>
                                         <p class="text-xs text-gray-500 dark:text-gray-400">Productos</p>
                                     </div>
                                     <div>
                                         <p class="text-2xl font-bold text-gray-900 dark:text-white">
-                                            {{ $tenant->services()->count() }}
+                                            {{ $tenant->services_count }}
                                         </p>
                                         <p class="text-xs text-gray-500 dark:text-gray-400">Servicios</p>
                                     </div>

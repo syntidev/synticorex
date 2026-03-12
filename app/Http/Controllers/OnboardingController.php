@@ -15,6 +15,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
@@ -84,7 +85,7 @@ class OnboardingController extends Controller
             'content_blocks.hero.subtitle'     => 'nullable|string|max:200',
             'about_text'                       => 'nullable|string|max:1000',
             'phone'                            => 'nullable|string|max:20',
-            'whatsapp_sales'                   => 'nullable|string|max:20',
+            'whatsapp_sales'                   => 'required|string|max:20',
             'email'                            => 'nullable|email|max:255',
             'city'                             => 'nullable|string|max:100',
             'value_prop_1'                     => 'nullable|string|max:100',
@@ -92,7 +93,11 @@ class OnboardingController extends Controller
             'value_prop_3'                     => 'nullable|string|max:100',
         ]);
 
-        $tenant = DB::transaction(function () use ($validated): Tenant {
+        $whatsappSales = $this->normalizePhoneOrFail($validated['whatsapp_sales'] ?? null, 'whatsapp_sales');
+        $phone = $this->normalizePhone($validated['phone'] ?? null) ?? $whatsappSales;
+        $accountEmail = (string) (auth()->user()?->email ?? '');
+
+        $tenant = DB::transaction(function () use ($validated, $phone, $whatsappSales, $accountEmail): Tenant {
 
             // Use the authenticated user as tenant owner
             $adminUserId = auth()->id();
@@ -107,9 +112,9 @@ class OnboardingController extends Controller
                 'business_segment' => $validated['business_segment'],
                 'slogan'           => $validated['slogan'] ?? null,
                 'description'      => $validated['description'] ?? null,
-                'phone'            => $validated['phone'] ?? null,
-                'whatsapp_sales'   => $validated['whatsapp_sales'] ?? null,
-                'email'            => $validated['email'] ?? null,
+                'phone'            => $phone,
+                'whatsapp_sales'   => $whatsappSales,
+                'email'            => $accountEmail,
                 'city'             => $validated['city'] ?? null,
                 'status'           => 'active',
                 'plan_activated_at'    => Carbon::now(),
@@ -202,14 +207,17 @@ class OnboardingController extends Controller
                 Rule::exists('plans', 'id')->where(static fn ($query) => $query->where('blueprint', 'food')),
             ],
             'subdomain'      => 'required|alpha_dash|unique:tenants,subdomain',
-            'whatsapp_sales' => 'nullable|string|max:20',
+            'whatsapp_sales' => 'required|string|max:20',
             'first_category' => 'required|string|max:100',
             'items'          => 'required|string',
         ]);
 
+        $whatsappSales = $this->normalizePhoneOrFail($validated['whatsapp_sales'] ?? null, 'whatsapp_sales');
+        $accountEmail = (string) (auth()->user()?->email ?? '');
+
         $items = json_decode($validated['items'], true) ?? [];
 
-        $tenant = DB::transaction(function () use ($validated, $items): Tenant {
+        $tenant = DB::transaction(function () use ($validated, $items, $whatsappSales, $accountEmail): Tenant {
 
             $adminUserId = auth()->id();
 
@@ -221,7 +229,9 @@ class OnboardingController extends Controller
                 'base_domain'      => 'syntiweb.com',
                 'business_name'    => $validated['business_name'],
                 'business_segment' => $validated['business_type'],
-                'whatsapp_sales'   => $validated['whatsapp_sales'] ?? null,
+                'phone'            => $whatsappSales,
+                'whatsapp_sales'   => $whatsappSales,
+                'email'            => $accountEmail,
                 'status'           => 'active',
                 'plan_activated_at'    => Carbon::now(),
                 'subscription_ends_at' => Carbon::now()->addYear(),
@@ -265,13 +275,16 @@ class OnboardingController extends Controller
                 Rule::exists('plans', 'id')->where(static fn ($query) => $query->where('blueprint', 'cat')),
             ],
             'subdomain'                 => 'required|alpha_dash|unique:tenants,subdomain',
-            'whatsapp_sales'            => 'nullable|string|max:20',
+            'whatsapp_sales'            => 'required|string|max:20',
             'first_product_name'        => 'required|string|max:255',
             'first_product_price'       => 'required|numeric|min:0',
             'first_product_description' => 'nullable|string|max:500',
         ]);
 
-        $tenant = DB::transaction(function () use ($validated): Tenant {
+        $whatsappSales = $this->normalizePhoneOrFail($validated['whatsapp_sales'] ?? null, 'whatsapp_sales');
+        $accountEmail = (string) (auth()->user()?->email ?? '');
+
+        $tenant = DB::transaction(function () use ($validated, $whatsappSales, $accountEmail): Tenant {
 
             $adminUserId = auth()->id();
 
@@ -283,7 +296,9 @@ class OnboardingController extends Controller
                 'base_domain'      => 'syntiweb.com',
                 'business_name'    => $validated['business_name'],
                 'business_segment' => $validated['store_type'],
-                'whatsapp_sales'   => $validated['whatsapp_sales'] ?? null,
+                'phone'            => $whatsappSales,
+                'whatsapp_sales'   => $whatsappSales,
+                'email'            => $accountEmail,
                 'status'           => 'active',
                 'plan_activated_at'    => Carbon::now(),
                 'subscription_ends_at' => Carbon::now()->addYear(),
@@ -362,5 +377,37 @@ class OnboardingController extends Controller
             ->unique(static fn (Plan $plan): string => strtolower(Str::ascii((string) $plan->name)))
             ->sortBy('price_usd')
             ->values();
+    }
+
+    private function normalizePhone(?string $value): ?string
+    {
+        if ($value === null) {
+            return null;
+        }
+
+        $digits = preg_replace('/\D+/', '', $value);
+
+        if (!is_string($digits) || $digits === '') {
+            return null;
+        }
+
+        if (strlen($digits) < 10 || strlen($digits) > 15) {
+            return null;
+        }
+
+        return '+' . $digits;
+    }
+
+    private function normalizePhoneOrFail(?string $value, string $field): string
+    {
+        $normalized = $this->normalizePhone($value);
+
+        if ($normalized === null) {
+            throw ValidationException::withMessages([
+                $field => 'Ingresa un numero de celular valido (10 a 15 digitos).',
+            ]);
+        }
+
+        return $normalized;
     }
 }

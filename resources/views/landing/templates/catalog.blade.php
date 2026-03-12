@@ -429,6 +429,14 @@
         </a>
         @endif
 
+        <div class="mt-8 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs text-foreground/40">
+            <a href="{{ route('marketing.about') }}" class="hover:text-foreground transition-colors">Nosotros</a>
+            <span class="opacity-50">•</span>
+            <a href="{{ route('marketing.privacy') }}" class="hover:text-foreground transition-colors">Privacidad</a>
+            <span class="opacity-50">•</span>
+            <a href="{{ route('marketing.terms') }}" class="hover:text-foreground transition-colors">Terminos</a>
+        </div>
+
         <div class="mt-10 pt-8 border-t border-foreground/5 flex flex-col md:flex-row justify-between items-center gap-4">
             <p class="text-xs font-bold text-foreground/20 uppercase tracking-[0.25em]">© {{ date('Y') }} {{ $tenant->business_name }}</p>
             <p class="text-xs text-foreground/20">Sitio creado con <span class="text-primary font-bold">SYNTIweb</span></p>

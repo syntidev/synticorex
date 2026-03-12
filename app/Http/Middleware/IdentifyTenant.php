@@ -74,8 +74,11 @@ final class IdentifyTenant
             return null;
         }
 
-        // 3. Custom domain: host = tenants.custom_domain
-        return Tenant::where('custom_domain', $host)->where('status', 'active')->first();
+        // 3. Custom domain: host = tenants.custom_domain (must be verified)
+        return Tenant::where('custom_domain', $hostLower)
+            ->where('domain_verified', true)
+            ->where('status', 'active')
+            ->first();
     }
 
     /**

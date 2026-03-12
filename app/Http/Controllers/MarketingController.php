@@ -167,4 +167,19 @@ class MarketingController extends Controller
     {
         return view('marketing.cat');
     }
+
+    public function terms(): View
+    {
+        return view('marketing.terms');
+    }
+
+    public function privacy(): View
+    {
+        return view('marketing.privacy');
+    }
+
+    public function about(): View
+    {
+        return view('marketing.about');
+    }
 }

@@ -50,8 +50,6 @@
                 forceFallback: false,
                 onEnd: function() { saveSectionsOrder(); }
             });
-
-            console.log('✅ SortableJS listo — ' + sortableEl.children.length + ' secciones');
         };
 
         function saveSectionsOrder() {

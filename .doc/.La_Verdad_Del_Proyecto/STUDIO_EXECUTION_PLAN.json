@@ -2,7 +2,7 @@
     "meta": {
         "name": "Studio MVP Priority Orchestrator",
         "version": "1.0.0",
-        "updated_at": "2026-03-11",
+        "updated_at": "2026-03-12",
         "source": [
             ".doc/ROADMAP_MAESTRO_03MAR2026.md",
             ".doc/.La_Verdad_Del_Proyecto/ANEXO_CONTINUIDAD_STUDIO_MVP.md"
@@ -49,10 +49,11 @@
             "title": "Implement smart post-login redirect",
             "description": "Send users to tenant dashboard or onboarding based on ownership.",
             "priority": "P0",
-            "status": "pending",
+            "status": "done",
             "depends_on": [
                 "S1.3"
-            ]
+            ],
+            "completed_at": "2026-03-12T03:40:08+00:00"
         },
         {
             "id": "S2.1",
@@ -60,10 +61,11 @@
             "title": "Protect API routes with sanctum",
             "description": "Wrap API mutation routes in auth:sanctum middleware.",
             "priority": "P0",
-            "status": "pending",
+            "status": "done",
             "depends_on": [
                 "S1.4"
-            ]
+            ],
+            "completed_at": "2026-03-12T03:42:19+00:00"
         },
         {
             "id": "S2.2",
@@ -71,10 +73,11 @@
             "title": "Add PIN brute-force throttle",
             "description": "Apply throttle:5,1 to verify-pin endpoint.",
             "priority": "P0",
-            "status": "pending",
+            "status": "done",
             "depends_on": [
                 "S2.1"
-            ]
+            ],
+            "completed_at": "2026-03-12T03:42:50+00:00"
         },
         {
             "id": "S2.3",
@@ -82,10 +85,11 @@
             "title": "Validate verified custom domains",
             "description": "Require domain_verified=true in tenant identification for custom domains.",
             "priority": "P0",
-            "status": "pending",
+            "status": "done",
             "depends_on": [
                 "S2.2"
-            ]
+            ],
+            "completed_at": "2026-03-12T03:44:07+00:00"
         },
         {
             "id": "S2.4",
@@ -93,10 +97,11 @@
             "title": "Remove dashboard console logs",
             "description": "Delete debug console.log statements from dashboard templates/scripts.",
             "priority": "P1",
-            "status": "pending",
+            "status": "done",
             "depends_on": [
                 "S2.3"
-            ]
+            ],
+            "completed_at": "2026-03-12T03:44:47+00:00"
         },
         {
             "id": "S2.5",
@@ -104,10 +109,11 @@
             "title": "Enforce tenant ownership in auth routes",
             "description": "Ensure authenticated users can only mutate their own tenant resources.",
             "priority": "P0",
-            "status": "pending",
+            "status": "done",
             "depends_on": [
                 "S2.4"
-            ]
+            ],
+            "completed_at": "2026-03-12T03:45:56+00:00"
         },
         {
             "id": "S3.1",
@@ -115,10 +121,11 @@
             "title": "Create Terms page",
             "description": "Add public terms and conditions page.",
             "priority": "P1",
-            "status": "pending",
+            "status": "done",
             "depends_on": [
                 "S2.5"
-            ]
+            ],
+            "completed_at": "2026-03-12T03:47:22+00:00"
         },
         {
             "id": "S3.2",
@@ -126,10 +133,11 @@
             "title": "Create Privacy page",
             "description": "Add public privacy policy page.",
             "priority": "P1",
-            "status": "pending",
+            "status": "done",
             "depends_on": [
                 "S3.1"
-            ]
+            ],
+            "completed_at": "2026-03-12T03:52:50+00:00"
         },
         {
             "id": "S3.3",
@@ -137,10 +145,11 @@
             "title": "Create About page",
             "description": "Add public company/project profile page.",
             "priority": "P1",
-            "status": "pending",
+            "status": "done",
             "depends_on": [
                 "S3.2"
-            ]
+            ],
+            "completed_at": "2026-03-12T03:53:34+00:00"
         },
         {
             "id": "S3.4",
@@ -148,10 +157,11 @@
             "title": "Link legal pages in footers",
             "description": "Expose terms/privacy/about links in marketing and tenant footer.",
             "priority": "P1",
-            "status": "pending",
+            "status": "done",
             "depends_on": [
                 "S3.3"
-            ]
+            ],
+            "completed_at": "2026-03-12T03:54:44+00:00"
         },
         {
             "id": "S4.1",
@@ -159,10 +169,11 @@
             "title": "Remove FlyonUI residual code",
             "description": "Delete flyonui services/config/seeders and legacy js file.",
             "priority": "P2",
-            "status": "pending",
+            "status": "done",
             "depends_on": [
                 "S3.4"
-            ]
+            ],
+            "completed_at": "2026-03-12T03:56:03+00:00"
         },
         {
             "id": "S4.2",
@@ -170,10 +181,11 @@
             "title": "Delete dashboard archive",
             "description": "Delete dashboard/_archive legacy files.",
             "priority": "P2",
-            "status": "pending",
+            "status": "done",
             "depends_on": [
                 "S4.1"
-            ]
+            ],
+            "completed_at": "2026-03-12T03:56:37+00:00"
         },
         {
             "id": "S4.3",
@@ -181,10 +193,11 @@
             "title": "Delete backup template files",
             "description": "Delete food.blade.php.bak and food.blade.php.bak2.",
             "priority": "P2",
-            "status": "pending",
+            "status": "done",
             "depends_on": [
                 "S4.2"
-            ]
+            ],
+            "completed_at": "2026-03-12T03:57:03+00:00"
         },
         {
             "id": "S4.4",
@@ -192,10 +205,11 @@
             "title": "Delete old app js",
             "description": "Remove resources/js/old_app.js.",
             "priority": "P2",
-            "status": "pending",
+            "status": "done",
             "depends_on": [
                 "S4.3"
-            ]
+            ],
+            "completed_at": "2026-03-12T03:57:25+00:00"
         },
         {
             "id": "S5.1",
@@ -203,10 +217,11 @@
             "title": "Create My Tenants dashboard UX",
             "description": "Implement my-tenants view with CTAs to public and admin paths.",
             "priority": "P1",
-            "status": "pending",
+            "status": "done",
             "depends_on": [
                 "S4.4"
-            ]
+            ],
+            "completed_at": "2026-03-12T03:58:00+00:00"
         },
         {
             "id": "S5.2",
@@ -214,10 +229,11 @@
             "title": "Route /dashboard to my-tenants",
             "description": "Make authenticated dashboard route open my-tenants index.",
             "priority": "P1",
-            "status": "pending",
+            "status": "done",
             "depends_on": [
                 "S5.1"
-            ]
+            ],
+            "completed_at": "2026-03-12T03:58:29+00:00"
         },
         {
             "id": "S5.3",
@@ -225,10 +241,11 @@
             "title": "Add tenant action shortcuts",
             "description": "Add buttons to open tenant public site and panel from my-tenants.",
             "priority": "P1",
-            "status": "pending",
+            "status": "done",
             "depends_on": [
                 "S5.2"
-            ]
+            ],
+            "completed_at": "2026-03-12T03:58:38+00:00"
         },
         {
             "id": "S5.4",
@@ -236,10 +253,11 @@
             "title": "Validate floating panel flow",
             "description": "Confirm Alt+S and long-press flow still work after routing changes.",
             "priority": "P1",
-            "status": "pending",
+            "status": "done",
             "depends_on": [
                 "S5.3"
-            ]
+            ],
+            "completed_at": "2026-03-12T04:00:02+00:00"
         },
         {
             "id": "S6.1",
@@ -247,10 +265,11 @@
             "title": "Fix 404 error page assets",
             "description": "Replace CDN Tailwind with @vite or local minimal CSS in 404.",
             "priority": "P1",
-            "status": "pending",
+            "status": "done",
             "depends_on": [
                 "S5.4"
-            ]
+            ],
+            "completed_at": "2026-03-12T04:00:53+00:00"
         },
         {
             "id": "S6.2",
@@ -258,10 +277,11 @@
             "title": "Fix 500 error page assets",
             "description": "Replace CDN Tailwind with @vite or local minimal CSS in 500.",
             "priority": "P1",
-            "status": "pending",
+            "status": "done",
             "depends_on": [
                 "S6.1"
-            ]
+            ],
+            "completed_at": "2026-03-12T04:00:58+00:00"
         },
         {
             "id": "S6.3",
@@ -269,10 +289,11 @@
             "title": "Fix tenant-not-found page assets",
             "description": "Replace CDN Tailwind with @vite or local minimal CSS in tenant-not-found.",
             "priority": "P1",
-            "status": "pending",
+            "status": "done",
             "depends_on": [
                 "S6.2"
-            ]
+            ],
+            "completed_at": "2026-03-12T04:01:06+00:00"
         }
     ]
 }

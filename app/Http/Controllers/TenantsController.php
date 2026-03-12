@@ -18,6 +18,7 @@ class TenantsController extends Controller
         $user = $request->user();
         $tenants = $user->tenants()
             ->with('plan', 'colorPalette')
+            ->withCount(['products', 'services'])
             ->orderBy('created_at', 'desc')
             ->get();
 

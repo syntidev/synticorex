@@ -210,9 +210,6 @@
 
 @push('scripts')
 <script>
-    // Agregar interactividad si es necesaria
-    document.addEventListener('DOMContentLoaded', function() {
-        console.log('Dashboard cargado');
-    });
+    // Hook reservado para futuras interacciones del dashboard.
 </script>
 @endpush

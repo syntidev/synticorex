@@ -94,6 +94,16 @@
     </div>
     
     <div class="border-t border-border my-4 mx-auto max-w-[1280px]"></div>
+
+    <div class="mx-auto max-w-[1280px] px-4 pt-2 sm:px-6 lg:px-8">
+        <div class="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs text-foreground/60">
+            <a href="{{ route('marketing.about') }}" class="hover:text-primary transition-colors">Nosotros</a>
+            <span class="opacity-50">•</span>
+            <a href="{{ route('marketing.privacy') }}" class="hover:text-primary transition-colors">Privacidad</a>
+            <span class="opacity-50">•</span>
+            <a href="{{ route('marketing.terms') }}" class="hover:text-primary transition-colors">Terminos</a>
+        </div>
+    </div>
     
     <div class="mx-auto max-w-[1280px] px-4 py-8 sm:px-6 lg:px-8">
         <div class="text-foreground text-center text-base">
