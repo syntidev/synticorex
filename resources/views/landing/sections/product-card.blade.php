@@ -83,17 +83,30 @@
             @endif
         @endif
 
-        {{-- Badges en pie de foto (texto, sin iconos) --}}
-        @if($product->badge || $product->discount_percentage)
-            <div class="absolute left-0 bottom-2 flex gap-2 z-20">
-                @if($product->discount_percentage)
-                    <span class="rounded-r-lg bg-red-500 px-3 py-1.5 text-xs font-semibold uppercase tracking-wider text-white">
-                        -{{ (int) $product->discount_percentage }}%
+        {{-- Badges en pie de foto (con colores + descuento automático) --}}
+        @php
+            $hasDiscount = $product->compare_price_usd && $product->compare_price_usd > $product->price_usd;
+            $badgeLower = $product->badge ? strtolower($product->badge) : null;
+            $badgeConfig = $badgeLower ? match($badgeLower) {
+                'popular'   => ['icon' => 'tabler--star-filled', 'bg' => 'bg-amber-100',   'text' => 'text-amber-700',  'label' => 'Popular'],
+                'nuevo'     => ['icon' => 'tabler--sparkles',    'bg' => 'bg-emerald-100', 'text' => 'text-emerald-700','label' => 'Nuevo'],
+                'promo'     => ['icon' => 'tabler--tag',         'bg' => 'bg-orange-100',  'text' => 'text-orange-700', 'label' => 'Promo'],
+                'destacado' => ['icon' => 'tabler--bolt',        'bg' => 'bg-purple-100',  'text' => 'text-purple-700', 'label' => 'Recomendado'],
+                default     => ['icon' => 'tabler--star',        'bg' => 'bg-primary/10',  'text' => 'text-primary',    'label' => $product->badge]
+            } : null;
+        @endphp
+        @if($badgeConfig || $hasDiscount)
+            <div class="absolute left-2 bottom-2 flex gap-1.5 z-20">
+                @if($hasDiscount)
+                    <span class="inline-flex items-center gap-1 rounded-lg bg-red-500 px-2.5 py-1.5 text-xs font-bold text-white shadow-sm">
+                        <span class="iconify tabler--rosette-discount size-3.5" aria-hidden="true"></span>
+                        Oferta
                     </span>
                 @endif
-                @if($product->badge)
-                    <span class="rounded-lg bg-white px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-foreground">
-                        {{ ucfirst($product->badge) }}
+                @if($badgeConfig)
+                    <span class="inline-flex items-center gap-1 rounded-lg {{ $badgeConfig['bg'] }} {{ $badgeConfig['text'] }} px-2.5 py-1.5 text-xs font-bold shadow-sm">
+                        <span class="iconify {{ $badgeConfig['icon'] }} size-3.5" aria-hidden="true"></span>
+                        {{ $badgeConfig['label'] }}
                     </span>
                 @endif
             </div>
@@ -117,9 +130,9 @@
                 <span class="font-bold text-foreground/70 lg:text-lg" data-price-usd="{{ $product->price_usd }}">
                     <span class="text-[11px] font-medium opacity-40 mr-0.5">REF</span>{{ number_format($product->price_usd, 2) }}
                 </span>
-                @if($product->discount_percentage)
-                    <span class="text-sm text-red-500 line-through">
-                        REF {{ number_format($product->price_usd / (1 - $product->discount_percentage / 100), 2) }}
+                @if($product->compare_price_usd && $product->compare_price_usd > $product->price_usd)
+                    <span class="text-sm text-red-500/70 line-through" data-price-usd="{{ $product->compare_price_usd }}">
+                        <span class="text-[10px] font-medium opacity-40 mr-0.5">REF</span>{{ number_format($product->compare_price_usd, 2) }}
                     </span>
                 @endif
             @endif

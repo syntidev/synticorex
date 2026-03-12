@@ -434,6 +434,7 @@
                     document.getElementById('product-name').value = product.name;
                     document.getElementById('product-description').value = product.description || '';
                     document.getElementById('product-price').value = product.price_usd;
+                    document.getElementById('product-compare-price').value = product.compare_price_usd || '';
                     document.getElementById('product-badge').value = product.badge || '';
                     document.getElementById('product-is-active').checked = product.is_active == 1;
                     document.getElementById('product-is-featured').checked = product.is_featured == 1;
@@ -670,6 +671,7 @@
                 name: document.getElementById('product-name').value,
                 description: document.getElementById('product-description').value,
                 price_usd: parseFloat(document.getElementById('product-price').value),
+                compare_price_usd: document.getElementById('product-compare-price').value ? parseFloat(document.getElementById('product-compare-price').value) : null,
                 badge: document.getElementById('product-badge').value || null,
                 is_active: document.getElementById('product-is-active').checked ? 1 : 0,
                 is_featured: document.getElementById('product-is-featured').checked ? 1 : 0

@@ -60,15 +60,24 @@
                         </div>
                         @endif
 
-                        {{-- Name + Price 2-col --}}
+                        {{-- Name --}}
+                        <div>
+                            <label for="product-name" class="inline-block text-xs font-semibold text-muted-foreground-1 uppercase tracking-wide mb-1.5">Nombre *</label>
+                            <input type="text" id="product-name" class="py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50" required maxlength="100" placeholder="Nombre del producto">
+                        </div>
+
+                        {{-- Price + Compare Price 2-col --}}
                         <div class="grid grid-cols-2 gap-3">
                             <div class="col-span-2 sm:col-span-1">
-                                <label for="product-name" class="inline-block text-xs font-semibold text-muted-foreground-1 uppercase tracking-wide mb-1.5">Nombre *</label>
-                                <input type="text" id="product-name" class="py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50" required maxlength="100" placeholder="Nombre del producto">
+                                <label for="product-price" class="inline-block text-xs font-semibold text-muted-foreground-1 uppercase tracking-wide mb-1.5">Precio de venta *</label>
+                                <input type="number" id="product-price" class="py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50" required step="0.01" min="0" placeholder="0.00">
                             </div>
                             <div class="col-span-2 sm:col-span-1">
-                                <label for="product-price" class="inline-block text-xs font-semibold text-muted-foreground-1 uppercase tracking-wide mb-1.5">Precio USD *</label>
-                                <input type="number" id="product-price" class="py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50" required step="0.01" min="0" placeholder="0.00">
+                                <label for="product-compare-price" class="inline-flex items-center gap-1 text-xs font-semibold text-muted-foreground-1 uppercase tracking-wide mb-1.5">
+                                    Precio original
+                                    <span class="iconify tabler--info-circle size-3 opacity-50" aria-hidden="true" title="El precio antes del descuento. Se muestra tachado."></span>
+                                </label>
+                                <input type="number" id="product-compare-price" class="py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50" step="0.01" min="0" placeholder="Opcional">
                             </div>
                         </div>
 

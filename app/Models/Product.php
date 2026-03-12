@@ -20,6 +20,7 @@ class Product extends Model
         'name',
         'description',
         'price_usd',
+        'compare_price_usd',
         'price_bs',
         'image_filename',
         'image_url',
@@ -38,6 +39,7 @@ class Product extends Model
     {
         return [
             'price_usd' => 'decimal:2',
+            'compare_price_usd' => 'decimal:2',
             'price_bs' => 'decimal:2',
             'position' => 'integer',
             'is_active' => 'boolean',
