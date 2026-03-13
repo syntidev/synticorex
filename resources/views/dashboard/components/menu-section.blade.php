@@ -54,30 +54,30 @@
             <div class="px-6 pb-6 space-y-4 mt-4" id="menu-categories-container">
                 @if(count($menu) > 0)
                     @foreach($menu as $cat)
-                    <div class="rounded-xl border border-border bg-surface overflow-hidden" x-data="{ open: false }">
+                    <div class="rounded-xl border border-border bg-surface overflow-hidden" x-data="{ open: true }">
                         {{-- Category header --}}
                         <div class="px-4 py-3 flex items-center justify-between gap-3 bg-layer/50">
                             <button type="button" @click="open = !open" class="flex items-center gap-3 flex-1 text-left min-w-0">
                                 <span class="iconify tabler--chevron-right size-4 text-muted-foreground-1 transition-transform duration-200"
                                       :class="open && 'rotate-90'" aria-hidden="true"></span>
-                                <span class="font-semibold text-sm text-foreground truncate">{{ $cat['nombre'] }}</span>
-                                <span class="text-xs text-muted-foreground-1 shrink-0">{{ count($cat['items'] ?? []) }} platos</span>
-                                @if(!($cat['activo'] ?? true))
+                                <span class="font-semibold text-sm text-foreground truncate">{{ $cat['nombre'] ?? $cat['name'] ?? '' }}</span>
+                                <span class="text-xs text-muted-foreground-1 shrink-0">{{ count($cat['items'] ?? []) }} ítems</span>
+                                @if(!($cat['activo'] ?? $cat['active'] ?? true))
                                     <span class="inline-flex items-center py-0.5 px-2 rounded-full text-xs font-medium bg-red-100 text-red-700">Inactiva</span>
                                 @endif
                             </button>
                             <div class="flex items-center gap-1 shrink-0">
-                                <button onclick="MenuAdmin.openItemModal('{{ $cat['id'] }}')"
+                                <button onclick="MenuAdmin.openItemModal('{{ $cat['id'] }}', '{{ e($cat[\'nombre\'] ?? $cat[\'name\'] ?? \'\') }}')"
                                         class="inline-flex items-center justify-center size-8 rounded-lg text-blue-600 hover:bg-blue-50 transition-colors"
-                                        title="Agregar plato">
+                                        title="Agregar ítem">
                                     <span class="iconify tabler--plus size-4" aria-hidden="true"></span>
                                 </button>
-                                <button onclick="MenuAdmin.openCategoryModal('{{ $cat['id'] }}', '{{ e($cat['nombre']) }}', {{ ($cat['activo'] ?? true) ? 'true' : 'false' }})"
+                                <button onclick="MenuAdmin.openCategoryModal('{{ $cat['id'] }}', '{{ e($cat['nombre'] ?? $cat['name'] ?? '') }}', {{ ($cat['activo'] ?? $cat['active'] ?? true) ? 'true' : 'false' }})"
                                         class="inline-flex items-center justify-center size-8 rounded-lg text-foreground/60 hover:bg-layer transition-colors"
                                         title="Editar categoría">
                                     <span class="iconify tabler--pencil size-4" aria-hidden="true"></span>
                                 </button>
-                                <button onclick="MenuAdmin.deleteCategory('{{ $cat['id'] }}', '{{ e($cat['nombre']) }}')"
+                                <button onclick="MenuAdmin.deleteCategory('{{ $cat['id'] }}', '{{ e($cat['nombre'] ?? $cat['name'] ?? '') }}')"
                                         class="inline-flex items-center justify-center size-8 rounded-lg text-red-500 hover:bg-red-50 transition-colors"
                                         title="Eliminar categoría">
                                     <span class="iconify tabler--trash size-4" aria-hidden="true"></span>
@@ -104,7 +104,7 @@
                                                 @if($item['is_featured'] ?? false)
                                                     <span class="text-yellow-500 shrink-0" title="Destacado">⭐</span>
                                                 @endif
-                                                <span class="text-sm text-foreground truncate">{{ $item['nombre'] }}</span>
+                                                <span class="text-sm text-foreground truncate">{{ $item['nombre'] ?? $item['name'] ?? '' }}</span>
                                             </div>
                                             <div class="flex items-center gap-1.5 mt-0.5">
                                                 @if(!empty($item['badge']))
@@ -123,22 +123,22 @@
                                                         {{ $badgeCfg['label'] }}
                                                     </span>
                                                 @endif
-                                                @if(!($item['activo'] ?? true))
+                                                @if(!($item['activo'] ?? $item['active'] ?? true))
                                                     <span class="inline-flex items-center py-0.5 px-1.5 rounded-full text-xs font-medium bg-red-100 text-red-700">Off</span>
                                                 @endif
                                             </div>
                                         </div>
                                     </div>
                                     <div class="flex items-center gap-3 shrink-0">
-                                        <span class="text-sm font-bold text-primary">REF {{ number_format($item['precio'] ?? 0, 2) }}</span>
-                                        <button onclick="MenuAdmin.openItemModal('{{ $cat['id'] }}', '{{ $item['id'] }}', {{ json_encode(['nombre' => $item['nombre'], 'precio' => $item['precio'] ?? 0, 'activo' => $item['activo'] ?? true, 'descripcion' => $item['descripcion'] ?? '', 'badge' => $item['badge'] ?? '', 'is_featured' => $item['is_featured'] ?? false, 'image_url' => !empty($item['image_path']) ? asset('storage/tenants/' . $tenant->id . '/' . $item['image_path']) : ''], JSON_HEX_APOS | JSON_HEX_QUOT) }})"
+                                        <span class="text-sm font-bold text-primary">REF {{ number_format($item['precio'] ?? $item['price'] ?? 0, 2) }}</span>
+                                        <button onclick="MenuAdmin.openItemModal('{{ $cat['id'] }}', '{{ e($cat[\'nombre\'] ?? $cat[\'name\'] ?? \'\') }}', '{{ $item['id'] }}', {{ json_encode(['nombre' => $item['nombre'] ?? $item['name'] ?? '', 'precio' => $item['precio'] ?? $item['price'] ?? 0, 'activo' => $item['activo'] ?? $item['active'] ?? true, 'descripcion' => $item['descripcion'] ?? $item['description'] ?? '', 'badge' => $item['badge'] ?? '', 'is_featured' => $item['is_featured'] ?? false, 'image_url' => !empty($item['image_path']) ? asset('storage/tenants/' . $tenant->id . '/' . $item['image_path']) : ''], JSON_HEX_APOS | JSON_HEX_QUOT) }})"
                                                 class="inline-flex items-center justify-center size-7 rounded-lg text-foreground/60 hover:bg-layer transition-colors"
-                                                title="Editar plato">
+                                                title="Editar ítem">
                                             <span class="iconify tabler--pencil size-3.5" aria-hidden="true"></span>
                                         </button>
-                                        <button onclick="MenuAdmin.deleteItem('{{ $cat['id'] }}', '{{ $item['id'] }}', '{{ e($item['nombre']) }}')"
+                                        <button onclick="MenuAdmin.deleteItem('{{ $cat['id'] }}', '{{ $item['id'] }}', '{{ e($item['nombre'] ?? $item['name'] ?? '') }}')"
                                                 class="inline-flex items-center justify-center size-7 rounded-lg text-red-500 hover:bg-red-50 transition-colors"
-                                                title="Eliminar plato">
+                                                title="Eliminar ítem">
                                             <span class="iconify tabler--trash size-3.5" aria-hidden="true"></span>
                                         </button>
                                     </div>
@@ -148,9 +148,9 @@
                             @else
                             <div class="border-t border-border px-4 py-6 text-center">
                                 <span class="iconify tabler--bowl size-8 text-foreground/15 mx-auto mb-2" aria-hidden="true"></span>
-                                <p class="text-sm text-muted-foreground-1">Sin platos en esta categoría</p>
-                                <button onclick="MenuAdmin.openItemModal('{{ $cat['id'] }}')"
-                                        class="mt-2 text-sm text-blue-600 hover:underline font-medium">+ Agregar plato</button>
+                                <p class="text-sm text-muted-foreground-1">Sin ítems en esta categoría</p>
+                                <button onclick="MenuAdmin.openItemModal('{{ $cat['id'] }}', '{{ e($cat[\'nombre\'] ?? $cat[\'name\'] ?? \'\') }}')"
+                                        class="mt-2 text-sm text-blue-600 hover:underline font-medium">+ Agregar ítem</button>
                             </div>
                             @endif
                         </div>
@@ -216,11 +216,14 @@
     {{-- ═══ MODAL: Plato (crear / editar) ═══ --}}
     <div id="menu-item-modal" class="hidden fixed inset-0 z-[80] overflow-y-auto">
         <div class="fixed inset-0 bg-black/50 backdrop-blur-sm" onclick="MenuAdmin.closeItemModal()"></div>
-        <div class="flex min-h-full items-center justify-center p-4">
+        <div class="flex min-h-full items-start justify-center pt-16 px-4 pb-4">
             <div class="relative w-full max-w-md bg-surface rounded-xl shadow-xl border border-border">
                 <div class="px-6 pt-5 pb-4 border-b border-border flex items-center justify-between">
-                    <h3 id="menu-item-modal-title" class="text-lg font-bold text-foreground">Nuevo Plato</h3>
-                    <button onclick="MenuAdmin.closeItemModal()" class="size-8 inline-flex items-center justify-center rounded-lg text-foreground/60 hover:bg-layer transition-colors">
+                    <div class="min-w-0 flex-1">
+                        <h3 id="menu-item-modal-title" class="text-base font-bold text-foreground leading-tight">Nuevo ítem</h3>
+                        <p id="menu-item-modal-cat" class="text-xs text-muted-foreground-1 mt-0.5 truncate"></p>
+                    </div>
+                    <button onclick="MenuAdmin.closeItemModal()" class="ml-2 shrink-0 size-8 inline-flex items-center justify-center rounded-lg text-foreground/60 hover:bg-layer transition-colors">
                         <span class="iconify tabler--x size-4" aria-hidden="true"></span>
                     </button>
                 </div>
@@ -228,8 +231,8 @@
                     <input type="hidden" id="menu-item-cat-id" value="">
                     <input type="hidden" id="menu-item-edit-id" value="">
                     <div>
-                        <label class="block text-sm font-medium text-foreground mb-1.5">Nombre del plato</label>
-                        <input type="text" id="menu-item-nombre" maxlength="200" placeholder="Ej: Tequeños, Hamburguesa…"
+                        <label class="block text-sm font-medium text-foreground mb-1.5">Nombre del ítem</label>
+                        <input type="text" id="menu-item-nombre" maxlength="200" placeholder="Ej: Hamburguesa, Coca Cola, Torta de Chocolate…"
                                class="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground-1 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                     </div>
                     <div>
@@ -274,7 +277,7 @@
                     {{-- EXTRAS / OPTIONS SECTION --}}
                     @php 
                         $plan = $tenant->plan ?? null;
-                        $canUseExtras = $plan && \Illuminate\Support\Str::contains(['food-semestral', 'food-anual'], $plan->slug ?? '');
+                        $canUseExtras = $plan && \Illuminate\Support\Str::contains($plan->slug ?? '', ['food-semestral', 'food-anual']);
                     @endphp
 
                     @if($canUseExtras)
@@ -351,6 +354,7 @@
     }
 
     function reload() {
+        if (window.__dashboardSaveState) { window.__dashboardSaveState(); }
         window.location.reload();
     }
 
@@ -435,10 +439,11 @@
 
     // ── Item Modal ──────────────────────────────────────────────
 
-    function openItemModal(catId, itemId, itemData) {
+    function openItemModal(catId, catNombre, itemId, itemData) {
         var isEdit = !!itemId;
         var d = itemData || {};
-        document.getElementById('menu-item-modal-title').textContent = isEdit ? 'Editar Plato' : 'Nuevo Plato';
+        document.getElementById('menu-item-modal-title').textContent = isEdit ? 'Editar ítem' : 'Nuevo ítem';
+        document.getElementById('menu-item-modal-cat').textContent = catNombre ? 'en ' + catNombre : '';
         document.getElementById('menu-item-cat-id').value = catId || '';
         document.getElementById('menu-item-edit-id').value = itemId || '';
         document.getElementById('menu-item-nombre').value = d.nombre || '';
@@ -537,6 +542,7 @@
             }
 
             toast(isEdit ? 'Plato actualizado' : 'Plato agregado', 'success');
+            if (data.warning) { setTimeout(function() { toast(data.warning, 'warning'); }, 500); }
             closeItemModal();
             reload();
         } catch (err) {

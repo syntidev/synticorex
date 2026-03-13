@@ -35,14 +35,31 @@ class TenantRendererController extends Controller
         private readonly BusinessHoursService $businessHoursService
     ) {}
 
+    /** @var array<string, string> Blueprint to template fallback */
+    private const BLUEPRINT_TEMPLATE_MAP = [
+        'cat'  => 'landing.templates.catalog',
+        'food' => 'landing.templates.food',
+    ];
+
     /**
      * Resolve which Blade view to render based on tenant settings.
+     * Falls back to plan blueprint if no engine template is configured.
      */
     private function resolveTemplate(Tenant $tenant): string
     {
-        $templateKey = data_get($tenant->settings, 'engine_settings.template', 'default');
+        $templateKey = data_get($tenant->settings, 'engine_settings.template', '');
 
-        return self::TEMPLATE_MAP[$templateKey] ?? 'landing.templates.studio';
+        if ($templateKey !== '' && isset(self::TEMPLATE_MAP[$templateKey])) {
+            return self::TEMPLATE_MAP[$templateKey];
+        }
+
+        // Fallback: resolve from plan blueprint
+        $blueprint = $tenant->plan?->blueprint ?? '';
+        if ($blueprint !== '' && isset(self::BLUEPRINT_TEMPLATE_MAP[$blueprint])) {
+            return self::BLUEPRINT_TEMPLATE_MAP[$blueprint];
+        }
+
+        return 'landing.templates.studio';
     }
 
     /**
@@ -98,8 +115,12 @@ class TenantRendererController extends Controller
             // ═══════════════════════════════════════════════════════════════════════
             // Prioridad: customization->theme_slug > 'default'
             // ═══════════════════════════════════════════════════════════════════════
-            $customization = $tenant->customization;
-            $themeSlug = $customization?->theme_slug ?? 'default';
+            $customization = $tenant->customization
+                ?? \App\Models\TenantCustomization::create([
+                    'tenant_id'   => $tenant->id,
+                    'hero_layout' => 'gradient',
+                ]);
+            $themeSlug = $customization->theme_slug ?? 'default';
 
             // Get current dollar + euro rates
             $dollarRate = $this->dollarRateService->getCurrentRate();
@@ -213,8 +234,12 @@ class TenantRendererController extends Controller
             }
 
             // Preline Theme System
-            $customization = $tenant->customization;
-            $themeSlug = $customization?->theme_slug ?? 'default';
+            $customization = $tenant->customization
+                ?? \App\Models\TenantCustomization::create([
+                    'tenant_id'   => $tenant->id,
+                    'hero_layout' => 'gradient',
+                ]);
+            $themeSlug = $customization->theme_slug ?? 'default';
             $dollarRate = $this->dollarRateService->getCurrentRate();
             $euroRate   = $this->dollarRateService->getCurrentEuroRate();
             $products = $this->calculateProductPrices($tenant->products, $dollarRate);
@@ -281,8 +306,12 @@ class TenantRendererController extends Controller
             }
 
             // Preline Theme System
-            $customization = $tenant->customization;
-            $themeSlug = $customization?->theme_slug ?? 'default';
+            $customization = $tenant->customization
+                ?? \App\Models\TenantCustomization::create([
+                    'tenant_id'   => $tenant->id,
+                    'hero_layout' => 'gradient',
+                ]);
+            $themeSlug = $customization->theme_slug ?? 'default';
             $dollarRate = $this->dollarRateService->getCurrentRate();
             $euroRate   = $this->dollarRateService->getCurrentEuroRate();
             $products = $this->calculateProductPrices($tenant->products, $dollarRate);

@@ -94,13 +94,23 @@ class ItemsController extends Controller
             return response()->json(['success' => false, 'error' => 'category_not_found'], 404);
         }
 
+        $warning = null;
         if ($request->hasFile('imagen')) {
-            $imagePath = $this->processItemImage($request->file('imagen'), $tenant->id, $item['id']);
-            $this->menuService->updateItem($tenant->id, $category, $item['id'], ['image_path' => $imagePath]);
-            $item['image_path'] = $imagePath;
+            try {
+                $imagePath = $this->processItemImage($request->file('imagen'), $tenant->id, $item['id']);
+                $this->menuService->updateItem($tenant->id, $category, $item['id'], ['image_path' => $imagePath]);
+                $item['image_path'] = $imagePath;
+            } catch (\Throwable $e) {
+                report($e);
+                $warning = 'El plato se guardó pero la imagen no pudo procesarse. Intenta subirla de nuevo.';
+            }
         }
 
-        return response()->json(['success' => true, 'item' => $item], 201);
+        $response = ['success' => true, 'item' => $item];
+        if ($warning) {
+            $response['warning'] = $warning;
+        }
+        return response()->json($response, 201);
     }
 
     public function update(Request $request, int $tenantId, string $category, string $item): JsonResponse
@@ -147,9 +157,15 @@ class ItemsController extends Controller
             $validated['image_path'] = null;
         }
 
+        $warning = null;
         if ($request->hasFile('imagen')) {
-            $imagePath = $this->processItemImage($request->file('imagen'), $tenant->id, $item);
-            $validated['image_path'] = $imagePath;
+            try {
+                $imagePath = $this->processItemImage($request->file('imagen'), $tenant->id, $item);
+                $validated['image_path'] = $imagePath;
+            } catch (\Throwable $e) {
+                report($e);
+                $warning = 'El plato se actualizó pero la imagen no pudo procesarse. Intenta subirla de nuevo.';
+            }
         }
 
         unset($validated['imagen'], $validated['remove_image']);
@@ -160,7 +176,11 @@ class ItemsController extends Controller
             return response()->json(['success' => false, 'error' => 'item_not_found'], 404);
         }
 
-        return response()->json(['success' => true, 'item' => $updated]);
+        $response = ['success' => true, 'item' => $updated];
+        if ($warning) {
+            $response['warning'] = $warning;
+        }
+        return response()->json($response);
     }
 
     public function destroy(int $tenantId, string $category, string $item): JsonResponse

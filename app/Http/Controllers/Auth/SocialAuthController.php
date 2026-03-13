@@ -26,6 +26,28 @@ class SocialAuthController extends Controller
      */
     public function handleGoogleCallback(): RedirectResponse
     {
+        // Handle user cancellation or Google-side errors before calling Socialite
+        if (request()->has('error')) {
+            $messages = [
+                'access_denied' => 'Cancelaste el acceso con Google. Puedes intentarlo de nuevo o usar tu correo.',
+                'invalid_scope' => 'Los permisos solicitados no son válidos. Contacta soporte.',
+            ];
+
+            $error = request()->query('error', 'unknown');
+
+            return redirect()->route('login')->with(
+                'status',
+                $messages[$error] ?? 'Ocurrió un problema con Google. Intenta de nuevo.'
+            );
+        }
+
+        if (!request()->has('code')) {
+            return redirect()->route('login')->with(
+                'status',
+                'No se recibió respuesta de Google. Intenta iniciar sesión nuevamente.'
+            );
+        }
+
         try {
             $googleUser = Socialite::driver('google')->user();
         } catch (InvalidStateException $exception) {
@@ -40,6 +62,13 @@ class SocialAuthController extends Controller
                     'email' => 'No se pudo validar la sesión con Google. Intenta iniciar sesión nuevamente.',
                 ]);
             }
+        } catch (\Throwable $exception) {
+            report($exception);
+
+            return redirect()->route('login')->with(
+                'status',
+                'Error inesperado al conectar con Google. Intenta de nuevo.'
+            );
         }
 
         $user = User::where('google_id', $googleUser->getId())->first();

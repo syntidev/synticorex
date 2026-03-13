@@ -21,7 +21,8 @@ final class EnsureTenantOwnership
         $user = $request->user();
 
         if ($user === null) {
-            abort(401, 'No autenticado.');
+            return redirect()->guest(route('login'))
+                ->with('warning', 'Tu sesión expiró. Inicia sesión para continuar.');
         }
 
         $tenantIdRaw = $request->route($tenantParameter);
@@ -49,6 +50,7 @@ final class EnsureTenantOwnership
             ], 403);
         }
 
-        abort(403, 'No autorizado para este tenant.');
+        return redirect()->route('tenants.index')
+            ->with('error', 'No tienes acceso a ese negocio.');
     }
 }

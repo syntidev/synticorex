@@ -30,19 +30,96 @@ class DollarRateService
     private const CACHE_TTL = 3600;
 
     /**
-     * DolarAPI endpoint for official USD rate.
-     */
-    private const API_URL = 'https://ve.dolarapi.com/v1/dolares/oficial';
-
-    /**
-     * DolarAPI endpoint for official EUR rate.
-     */
-    private const EURO_API_URL = 'https://ve.dolarapi.com/v1/euros/oficial';
-
-    /**
      * HTTP timeout in seconds.
      */
     private const HTTP_TIMEOUT = 10;
+
+    /**
+     * USD BCV sources in priority order.
+     * Each entry: url + extractor callable (array $data): ?float
+     */
+    private function usdSources(): array
+    {
+        return [
+            [
+                'name'    => 'dolarapi',
+                'url'     => 'https://ve.dolarapi.com/v1/dolares/oficial',
+                'extract' => static fn(array $d): ?float =>
+                    isset($d['promedio']) && is_numeric($d['promedio']) ? (float) $d['promedio'] : null,
+            ],
+            [
+                'name'    => 'pydolarve',
+                'url'     => 'https://pydolarve.org/api/v1/dollar?page=bcv',
+                'extract' => static fn(array $d): ?float =>
+                    isset($d['monitors']['bcv']['price']) && is_numeric($d['monitors']['bcv']['price'])
+                        ? (float) $d['monitors']['bcv']['price'] : null,
+            ],
+        ];
+    }
+
+    /**
+     * EUR BCV sources in priority order.
+     */
+    private function eurSources(): array
+    {
+        return [
+            [
+                'name'    => 'dolarapi',
+                'url'     => 'https://ve.dolarapi.com/v1/euros/oficial',
+                'extract' => static fn(array $d): ?float =>
+                    isset($d['promedio']) && is_numeric($d['promedio']) ? (float) $d['promedio'] : null,
+            ],
+            [
+                'name'    => 'pydolarve',
+                'url'     => 'https://pydolarve.org/api/v1/dollar?page=bcv&monitor=euro',
+                'extract' => static fn(array $d): ?float =>
+                    isset($d['monitors']['euro']['price']) && is_numeric($d['monitors']['euro']['price'])
+                        ? (float) $d['monitors']['euro']['price'] : null,
+            ],
+        ];
+    }
+
+    /**
+     * Try each source in order and return the first valid rate.
+     *
+     * @param  array<array{name: string, url: string, extract: callable}> $sources
+     * @return array{value: float, source: string}|null
+     */
+    private function fetchFromSources(array $sources): ?array
+    {
+        foreach ($sources as $src) {
+            try {
+                $response = Http::timeout(self::HTTP_TIMEOUT)->acceptJson()->get($src['url']);
+
+                if (!$response->successful()) {
+                    Log::warning('DollarRateService: Source failed, trying next', [
+                        'source' => $src['name'],
+                        'status' => $response->status(),
+                    ]);
+                    continue;
+                }
+
+                $value = ($src['extract'])($response->json() ?? []);
+
+                if ($value !== null && $value > 0) {
+                    Log::info('DollarRateService: Rate fetched', ['source' => $src['name'], 'rate' => $value]);
+                    return ['value' => $value, 'source' => $src['name']];
+                }
+
+                Log::warning('DollarRateService: Source returned invalid value, trying next', [
+                    'source' => $src['name'],
+                    'value'  => $value,
+                ]);
+            } catch (Throwable $e) {
+                Log::warning('DollarRateService: Source threw exception, trying next', [
+                    'source' => $src['name'],
+                    'error'  => $e->getMessage(),
+                ]);
+            }
+        }
+
+        return null;
+    }
 
     /**
      * Maximum rate change percentage to trigger alert.
@@ -66,7 +143,7 @@ class DollarRateService
 
                 if ($rate === null) {
                     Log::warning('DollarRateService: No active USD rate found in database, using fallback');
-                    return 36.50;
+                    return (float) config('currency.fallback_usd', 36.50);
                 }
 
                 Log::debug('DollarRateService: USD rate retrieved from database', [
@@ -82,7 +159,7 @@ class DollarRateService
                 'error' => $e->getMessage(),
             ]);
 
-            return 36.50;
+            return (float) config('currency.fallback_usd', 36.50);
         }
     }
 
@@ -103,7 +180,7 @@ class DollarRateService
 
                 if ($rate === null) {
                     Log::warning('DollarRateService: No active EUR rate found, using fallback');
-                    return 495.00;
+                    return (float) config('currency.fallback_eur', 495.00);
                 }
 
                 Log::debug('DollarRateService: EUR rate retrieved from database', [
@@ -118,198 +195,126 @@ class DollarRateService
                 'error' => $e->getMessage(),
             ]);
 
-            return 495.00;
+            return (float) config('currency.fallback_eur', 495.00);
         }
     }
 
     /**
-     * Fetch rate from external API and store in database.
+     * Fetch USD rate from all sources (fallback chain) and store in database.
      *
      * @return array{success: bool, rate?: float, message: string, source?: string}
      */
     public function fetchAndStore(): array
     {
-        Log::info('DollarRateService: Starting rate fetch from API');
+        Log::info('DollarRateService: Starting USD rate fetch (multi-source)');
+
+        $fetched = $this->fetchFromSources($this->usdSources());
+
+        if ($fetched === null) {
+            Log::error('DollarRateService: All USD sources failed');
+            return ['success' => false, 'message' => 'All USD sources failed'];
+        }
+
+        $newRate    = $fetched['value'];
+        $sourceName = $fetched['source'];
+
+        // Check for unusual rate changes
+        $previousRate = $this->getCurrentRate();
+        $changePercent = $previousRate > 0
+            ? abs(($newRate - $previousRate) / $previousRate) * 100
+            : 0;
+
+        if ($changePercent > self::MAX_RATE_CHANGE_PERCENT) {
+            Log::warning('DollarRateService: Unusual USD rate change detected', [
+                'previous_rate'  => $previousRate,
+                'new_rate'       => $newRate,
+                'change_percent' => round($changePercent, 2),
+                'source'         => $sourceName,
+            ]);
+        }
 
         try {
-            $response = Http::timeout(self::HTTP_TIMEOUT)
-                ->acceptJson()
-                ->get(self::API_URL);
-
-            if (!$response->successful()) {
-                Log::error('DollarRateService: API request failed', [
-                    'status' => $response->status(),
-                    'body' => $response->body(),
-                ]);
-
-                return [
-                    'success' => false,
-                    'message' => "API returned status {$response->status()}",
-                ];
-            }
-
-            $data = $response->json();
-
-            if (!isset($data['promedio']) || !is_numeric($data['promedio'])) {
-                Log::error('DollarRateService: Invalid API response structure', [
-                    'data' => $data,
-                ]);
-
-                return [
-                    'success' => false,
-                    'message' => 'Invalid API response: missing or invalid "promedio" field',
-                ];
-            }
-
-            $newRate = (float) $data['promedio'];
-
-            // Validate rate is positive
-            if ($newRate <= 0) {
-                Log::error('DollarRateService: Invalid rate value', [
-                    'rate' => $newRate,
-                ]);
-
-                return [
-                    'success' => false,
-                    'message' => 'Invalid rate value: must be positive',
-                ];
-            }
-
-            // Check for unusual rate changes
-            $previousRate = $this->getCurrentRate();
-            if ($previousRate !== null) {
-                $changePercent = abs(($newRate - $previousRate) / $previousRate) * 100;
-
-                if ($changePercent > self::MAX_RATE_CHANGE_PERCENT) {
-                    Log::warning('DollarRateService: Unusual rate change detected', [
-                        'previous_rate' => $previousRate,
-                        'new_rate' => $newRate,
-                        'change_percent' => round($changePercent, 2),
-                    ]);
-                }
-            }
-
-            // Deactivate previous active USD rates
             DollarRate::query()
                 ->where('currency_type', 'USD')
                 ->where('is_active', true)
-                ->update([
-                    'is_active' => false,
-                    'effective_until' => Carbon::now(),
-                ]);
+                ->update(['is_active' => false, 'effective_until' => Carbon::now()]);
 
-            // Create new USD rate record
             $dollarRate = DollarRate::create([
-                'rate' => $newRate,
-                'source' => 'dolarapi',
-                'currency_type' => 'USD',
+                'rate'           => $newRate,
+                'source'         => $sourceName,
+                'currency_type'  => 'USD',
                 'effective_from' => Carbon::now(),
-                'effective_until' => null,
-                'is_active' => true,
+                'effective_until'=> null,
+                'is_active'      => true,
             ]);
 
-            // Invalidate cache
             Cache::forget(self::CACHE_KEY);
 
-            Log::info('DollarRateService: Rate successfully stored', [
-                'rate' => $newRate,
-                'source' => 'dolarapi',
+            Log::info('DollarRateService: USD rate stored', [
+                'rate'    => $newRate,
+                'source'  => $sourceName,
                 'rate_id' => $dollarRate->id,
             ]);
 
             return [
                 'success' => true,
-                'rate' => $newRate,
-                'source' => 'dolarapi',
-                'message' => 'Rate successfully fetched and stored',
+                'rate'    => $newRate,
+                'source'  => $sourceName,
+                'message' => "USD rate fetched from {$sourceName}",
             ];
         } catch (Throwable $e) {
-            Log::error('DollarRateService: Exception during fetch', [
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString(),
-            ]);
-
-            return [
-                'success' => false,
-                'message' => "Exception: {$e->getMessage()}",
-            ];
+            Log::error('DollarRateService: Failed to persist USD rate', ['error' => $e->getMessage()]);
+            return ['success' => false, 'message' => "DB error: {$e->getMessage()}"];
         }
     }
 
     /**
-     * Fetch Euro rate from external API and store in database.
+     * Fetch EUR rate from all sources (fallback chain) and store in database.
      *
      * @return array{success: bool, rate?: float, message: string, source?: string}
      */
     public function fetchAndStoreEuro(): array
     {
-        Log::info('DollarRateService: Starting EUR rate fetch from API');
+        Log::info('DollarRateService: Starting EUR rate fetch (multi-source)');
+
+        $fetched = $this->fetchFromSources($this->eurSources());
+
+        if ($fetched === null) {
+            Log::error('DollarRateService: All EUR sources failed');
+            return ['success' => false, 'message' => 'All EUR sources failed'];
+        }
+
+        $newRate    = $fetched['value'];
+        $sourceName = $fetched['source'];
 
         try {
-            $response = Http::timeout(self::HTTP_TIMEOUT)
-                ->acceptJson()
-                ->get(self::EURO_API_URL);
-
-            if (!$response->successful()) {
-                Log::error('DollarRateService: EUR API request failed', [
-                    'status' => $response->status(),
-                    'body' => $response->body(),
-                ]);
-
-                return [
-                    'success' => false,
-                    'message' => "EUR API returned status {$response->status()}",
-                ];
-            }
-
-            $data = $response->json();
-
-            if (!isset($data['promedio']) || !is_numeric($data['promedio'])) {
-                Log::error('DollarRateService: Invalid EUR API response structure', ['data' => $data]);
-
-                return [
-                    'success' => false,
-                    'message' => 'Invalid EUR API response: missing or invalid "promedio" field',
-                ];
-            }
-
-            $newRate = (float) $data['promedio'];
-
-            if ($newRate <= 0) {
-                return ['success' => false, 'message' => 'Invalid EUR rate value: must be positive'];
-            }
-
-            // Deactivate previous active EUR rates
             DollarRate::query()
                 ->where('currency_type', 'EUR')
                 ->where('is_active', true)
                 ->update(['is_active' => false, 'effective_until' => Carbon::now()]);
 
             DollarRate::create([
-                'rate'          => $newRate,
-                'source'        => 'dolarapi',
-                'currency_type' => 'EUR',
+                'rate'           => $newRate,
+                'source'         => $sourceName,
+                'currency_type'  => 'EUR',
                 'effective_from' => Carbon::now(),
-                'effective_until' => null,
-                'is_active'     => true,
+                'effective_until'=> null,
+                'is_active'      => true,
             ]);
 
             Cache::forget(self::EURO_CACHE_KEY);
 
-            Log::info('DollarRateService: EUR rate successfully stored', ['rate' => $newRate]);
+            Log::info('DollarRateService: EUR rate stored', ['rate' => $newRate, 'source' => $sourceName]);
 
             return [
                 'success' => true,
                 'rate'    => $newRate,
-                'source'  => 'dolarapi',
-                'message' => 'EUR rate successfully fetched and stored',
+                'source'  => $sourceName,
+                'message' => "EUR rate fetched from {$sourceName}",
             ];
         } catch (Throwable $e) {
-            Log::error('DollarRateService: Exception during EUR fetch', [
-                'error' => $e->getMessage(),
-            ]);
-
-            return ['success' => false, 'message' => "Exception: {$e->getMessage()}"];
+            Log::error('DollarRateService: Failed to persist EUR rate', ['error' => $e->getMessage()]);
+            return ['success' => false, 'message' => "DB error: {$e->getMessage()}"];
         }
     }
 

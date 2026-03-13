@@ -435,6 +435,14 @@
                                 Configuración
                             </button>
                         </li>
+                        <li>
+                            <button class="sidebar-tab-btn" role="tab"
+                                    aria-selected="false" aria-controls="tab-billing"
+                                    data-tab="billing" tabindex="-1">
+                                <span class="iconify tabler--receipt size-4 shrink-0"></span>
+                                Facturación
+                            </button>
+                        </li>
                     </ul>
                 </div>
 
@@ -451,11 +459,28 @@
                         </a>
                     </li>
                     <li>
+                        <a href="{{ route('tenants.index') }}"
+                           class="w-full flex items-center gap-x-2 py-2 px-2.5 text-sm text-gray-600 dark:text-neutral-400 rounded-lg hover:bg-gray-100 dark:hover:bg-neutral-700 focus:outline-hidden focus:bg-gray-100 dark:focus:bg-neutral-700">
+                            <span class="iconify tabler--layout-grid size-4 shrink-0"></span>
+                            Mis Negocios
+                        </a>
+                    </li>
+                    <li>
                         <a href="mailto:soporte@synticorex.com"
                            class="w-full flex items-center gap-x-2 py-2 px-2.5 text-sm text-gray-600 dark:text-neutral-400 rounded-lg hover:bg-gray-100 dark:hover:bg-neutral-700 focus:outline-hidden focus:bg-gray-100 dark:focus:bg-neutral-700">
                             <span class="iconify tabler--help size-4 shrink-0"></span>
                             Soporte
                         </a>
+                    </li>
+                    <li>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit"
+                                    class="w-full flex items-center gap-x-2 py-2 px-2.5 text-sm text-red-500 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 focus:outline-hidden transition-colors cursor-pointer">
+                                <span class="iconify tabler--logout size-4 shrink-0"></span>
+                                Cerrar sesión
+                            </button>
+                        </form>
                     </li>
                 </ul>
                 {{-- Branding --}}
@@ -489,10 +514,10 @@
                     @endif
                 </p>
             </div>
-            <a href="mailto:soporte@synticorex.com"
-               class="text-sm py-1.5 px-3 rounded-lg font-medium transition-colors bg-red-600 text-white hover:bg-red-700 shrink-0">
+            <button onclick="document.querySelector('[data-tab=billing]').click()" type="button"
+               class="text-sm py-1.5 px-3 rounded-lg font-medium transition-colors bg-red-600 text-white hover:bg-red-700 shrink-0 cursor-pointer">
                 Renovar plan
-            </a>
+            </button>
         </div>
         @elseif($isExpiringSoon && $daysUntilExpiry !== null)
         <div class="flex p-4 gap-3 bg-yellow-50 dark:bg-yellow-900/20 border-b border-yellow-200 dark:border-yellow-800 text-yellow-800 dark:text-yellow-300 items-center flex-wrap">
@@ -503,10 +528,10 @@
                     Renueva antes del <strong>{{ $tenant->subscription_ends_at->format('d/m/Y') }}</strong> para mantener tu landing pública activa sin interrupciones.
                 </p>
             </div>
-            <a href="mailto:soporte@synticorex.com"
-               class="text-sm py-1.5 px-3 rounded-lg font-medium transition-colors bg-yellow-500 text-white hover:bg-yellow-600 shrink-0">
+            <button onclick="document.querySelector('[data-tab=billing]').click()" type="button"
+               class="text-sm py-1.5 px-3 rounded-lg font-medium transition-colors bg-yellow-500 text-white hover:bg-yellow-600 shrink-0 cursor-pointer">
                 Renovar ahora
-            </a>
+            </button>
         </div>
         @endif
 
@@ -544,6 +569,9 @@
 
                 {{-- ═══ TAB 6: CONFIGURACIÓN ═══ --}}
                 @include('dashboard.components.config-section')
+
+                {{-- ═══ TAB 7: FACTURACIÓN ═══ --}}
+                @include('dashboard.components.billing-section')
 
             </div>
         </div>

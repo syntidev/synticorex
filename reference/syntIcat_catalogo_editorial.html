@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap');
+  
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  :root {
+    --accent: #E8440A;
+    --accent2: #1A1A2E;
+    --bg: #F7F5F1;
+    --surface: #FFFFFF;
+    --text: #1A1A2E;
+    --muted: #8B8B8B;
+    --tag: #E8440A;
+  }
+
+  body {
+    background: var(--bg);
+    font-family: 'DM Sans', system-ui, sans-serif;
+    color: var(--text);
+    max-width: 420px;
+    margin: 0 auto;
+    min-height: 100vh;
+  }
+
+  /* NAVBAR */
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    background: var(--surface);
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .logo {
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .logo-dot {
+    width: 8px; height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .cart-btn {
+    width: 38px; height: 38px;
+    background: var(--accent);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: none;
+    position: relative;
+  }
+  .cart-btn svg { fill: white; }
+  .cart-count {
+    position: absolute;
+    top: -4px; right: -4px;
+    background: var(--text);
+    color: white;
+    font-size: 9px;
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+  }
+
+  /* HERO EDITORIAL GRID */
+  .hero-label {
+    padding: 14px 20px 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .hero-label span {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .hero-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(0,0,0,0.1);
+  }
+
+  .editorial-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 3px;
+    padding: 0 4px;
+    margin-bottom: 3px;
+  }
+
+  .editorial-cell {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    background: #E0DDD8;
+  }
+  .editorial-cell:first-child {
+    grid-column: 1 / 3;
+    aspect-ratio: 16/9;
+  }
+  .editorial-cell:nth-child(2) {
+    aspect-ratio: 1;
+  }
+  .editorial-cell:nth-child(3) {
+    aspect-ratio: 1;
+  }
+
+  .editorial-cell img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    display: block;
+  }
+  .editorial-cell:hover img {
+    transform: scale(1.03);
+  }
+
+  .cell-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(10,10,20,0.72) 0%, rgba(10,10,20,0) 55%);
+  }
+  .cell-info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 14px 16px;
+  }
+  .cell-tag {
+    display: inline-block;
+    background: var(--accent);
+    color: white;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 2px;
+    margin-bottom: 6px;
+  }
+  .cell-name {
+    font-family: 'Fraunces', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: white;
+    line-height: 1.1;
+    letter-spacing: -0.5px;
+  }
+  .cell-price {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 300;
+    color: rgba(255,255,255,0.85);
+    margin-top: 4px;
+  }
+  .editorial-cell:nth-child(2) .cell-name {
+    font-size: 16px;
+  }
+  .editorial-cell:nth-child(3) .cell-name {
+    font-size: 16px;
+  }
+
+  /* WA BUTTON EN HERO */
+  .wa-hero-btn {
+    position: absolute;
+    bottom: 14px;
+    right: 14px;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 20px;
+    padding: 6px 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: white;
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+  }
+  .wa-icon { width: 14px; height: 14px; }
+
+  /* SECTION SEPARATOR */
+  .section-header {
+    padding: 20px 20px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .section-title {
+    font-family: 'Fraunces', serif;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+  .section-sub {
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 300;
+  }
+
+  /* FILTER PILLS */
+  .filter-scroll {
+    display: flex;
+    gap: 8px;
+    padding: 0 20px 16px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .filter-scroll::-webkit-scrollbar { display: none; }
+  .pill {
+    flex-shrink: 0;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 400;
+    cursor: pointer;
+    border: 1px solid rgba(0,0,0,0.12);
+    background: transparent;
+    color: var(--muted);
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .pill.active {
+    background: var(--text);
+    color: white;
+    border-color: var(--text);
+    font-weight: 500;
+  }
+
+  /* PRODUCT GRID */
+  .product-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding: 0 12px;
+  }
+
+  .product-card {
+    background: var(--surface);
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    border: 1px solid rgba(0,0,0,0.05);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .product-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.09);
+  }
+
+  /* Línea de acento (el detalle diferenciador) */
+  .product-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: transparent;
+    transition: background 0.3s;
+    z-index: 2;
+  }
+  .product-card.accent-orange::before { background: #E8440A; }
+  .product-card.accent-blue::before { background: #2563EB; }
+  .product-card.accent-green::before { background: #059669; }
+  .product-card.accent-purple::before { background: #7C3AED; }
+
+  .product-img-wrap {
+    position: relative;
+    aspect-ratio: 1;
+    overflow: hidden;
+    background: #F0EDE8;
+  }
+  .product-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+  .product-card:hover .product-img-wrap img {
+    transform: scale(1.05);
+  }
+
+  .product-body {
+    padding: 10px 12px 12px;
+  }
+  .product-name {
+    font-family: 'Fraunces', serif;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.2px;
+    margin-bottom: 2px;
+  }
+  .product-desc {
+    font-size: 10px;
+    color: var(--muted);
+    line-height: 1.4;
+    font-weight: 300;
+    margin-bottom: 8px;
+  }
+  .product-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .product-price {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text);
+  }
+  .product-price span {
+    font-size: 10px;
+    font-weight: 300;
+    color: var(--muted);
+    display: block;
+    line-height: 1;
+  }
+  .wa-btn {
+    width: 30px; height: 30px;
+    background: #25D366;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s;
+    flex-shrink: 0;
+  }
+  .wa-btn:hover { transform: scale(1.1); }
+  .wa-btn svg { fill: white; }
+
+  /* BADGE en img */
+  .img-badge {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: var(--accent);
+    color: white;
+    font-size: 8px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 7px;
+    border-radius: 3px;
+    z-index: 2;
+  }
+  .img-badge.new { background: var(--text); }
+
+  /* WA STICKY */
+  .wa-sticky {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: #25D366;
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 20px rgba(37,211,102,0.4);
+    cursor: pointer;
+    z-index: 200;
+    transition: transform 0.2s;
+  }
+  .wa-sticky:hover { transform: scale(1.08); }
+  .wa-sticky svg { fill: white; }
+
+  /* FOOTER */
+  .footer {
+    margin-top: 32px;
+    padding: 24px 20px 80px;
+    border-top: 1px solid rgba(0,0,0,0.07);
+    text-align: center;
+  }
+  .footer-logo {
+    font-family: 'Fraunces', serif;
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .footer-powered {
+    font-size: 10px;
+    color: var(--muted);
+  }
+  .footer-powered strong { color: var(--accent); }
+
+  /* Placeholder img */
+  .img-placeholder {
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 32px;
+    background: #F0EDE8;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .img-placeholder span {
+    font-size: 10px;
+    font-family: 'DM Sans', sans-serif;
+    color: #B0ADA8;
+    font-weight: 300;
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="logo">
+    <div class="logo-dot"></div>
+    Tienda Demo
+  </div>
+  <button class="cart-btn" onclick="alert('📦 Ver carrito WhatsApp')">
+    <svg width="18" height="18" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18M16 10a4 4 0 01-8 0"/></svg>
+    <div class="cart-count">3</div>
+  </button>
+</nav>
+
+<!-- HERO LABEL -->
+<div class="hero-label">
+  <span>Destacados</span>
+</div>
+
+<!-- EDITORIAL HERO GRID -->
+<div class="editorial-grid">
+
+  <!-- CELL 1 — FEATURED (full width) -->
+  <div class="editorial-cell" onclick="sendWA('Camiseta Básica Premium', '12.00')">
+    <div class="img-placeholder">
+      👕
+      <span>foto principal</span>
+    </div>
+    <div class="cell-overlay"></div>
+    <div class="cell-info">
+      <div class="cell-tag">Destacado</div>
+      <div class="cell-name">Camiseta Básica Premium</div>
+      <div class="cell-price">REF $12,00</div>
+    </div>
+    <div class="wa-hero-btn">
+      <svg class="wa-icon" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+      Pedir
+    </div>
+  </div>
+
+  <!-- CELL 2 — secundaria izquierda -->
+  <div class="editorial-cell" onclick="sendWA('Pantalón Casual', '25.00')">
+    <div class="img-placeholder">
+      👖
+      <span>foto</span>
+    </div>
+    <div class="cell-overlay"></div>
+    <div class="cell-info">
+      <div class="cell-name">Pantalón Casual</div>
+      <div class="cell-price">REF $25,00</div>
+    </div>
+  </div>
+
+  <!-- CELL 3 — secundaria derecha -->
+  <div class="editorial-cell" onclick="sendWA('Zapatos Deportivos', '45.00')">
+    <div class="img-placeholder">
+      👟
+      <span>foto</span>
+    </div>
+    <div class="cell-overlay"></div>
+    <div class="cell-info">
+      <div class="cell-tag">Hot</div>
+      <div class="cell-name">Zapatos Deportivos</div>
+      <div class="cell-price">REF $45,00</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- CATÁLOGO COMPLETO -->
+<div class="section-header">
+  <div class="section-title">Catálogo</div>
+  <div class="section-sub">6 productos</div>
+</div>
+
+<!-- FILTER PILLS -->
+<div class="filter-scroll">
+  <button class="pill active" onclick="filterCat(this, 'all')">Todos</button>
+  <button class="pill" onclick="filterCat(this, 'ropa')">Ropa</button>
+  <button class="pill" onclick="filterCat(this, 'calzado')">Calzado</button>
+  <button class="pill" onclick="filterCat(this, 'accesorios')">Accesorios</button>
+</div>
+
+<!-- PRODUCT GRID -->
+<div class="product-grid" id="grid">
+
+  <div class="product-card accent-orange" data-cat="ropa">
+    <div class="product-img-wrap">
+      <div class="img-badge">Top</div>
+      <div class="img-placeholder">👕<span>camiseta</span></div>
+    </div>
+    <div class="product-body">
+      <div class="product-name">Camiseta Básica</div>
+      <div class="product-desc">100% algodón, varios colores</div>
+      <div class="product-footer">
+        <div class="product-price">
+          <span>REF</span>$12,00
+        </div>
+        <button class="wa-btn" onclick="event.stopPropagation();sendWA('Camiseta Básica','12.00')">
+          <svg width="15" height="15" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="product-card accent-blue" data-cat="ropa">
+    <div class="product-img-wrap">
+      <div class="img-placeholder">👖<span>pantalón</span></div>
+    </div>
+    <div class="product-body">
+      <div class="product-name">Pantalón Casual</div>
+      <div class="product-desc">Corte recto, tela liviana</div>
+      <div class="product-footer">
+        <div class="product-price"><span>REF</span>$25,00</div>
+        <button class="wa-btn" onclick="event.stopPropagation();sendWA('Pantalón Casual','25.00')">
+          <svg width="15" height="15" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="product-card accent-orange" data-cat="calzado">
+    <div class="product-img-wrap">
+      <div class="img-badge new">Nuevo</div>
+      <div class="img-placeholder">👟<span>zapatos</span></div>
+    </div>
+    <div class="product-body">
+      <div class="product-name">Zapatos Deportivos</div>
+      <div class="product-desc">Running, talla 36-44</div>
+      <div class="product-footer">
+        <div class="product-price"><span>REF</span>$45,00</div>
+        <button class="wa-btn" onclick="event.stopPropagation();sendWA('Zapatos Deportivos','45.00')">
+          <svg width="15" height="15" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="product-card accent-green" data-cat="accesorios">
+    <div class="product-img-wrap">
+      <div class="img-placeholder">👜<span>bolso</span></div>
+    </div>
+    <div class="product-body">
+      <div class="product-name">Bolso de Mano</div>
+      <div class="product-desc">Cuero sintético, varios colores</div>
+      <div class="product-footer">
+        <div class="product-price"><span>REF</span>$30,00</div>
+        <button class="wa-btn" onclick="event.stopPropagation();sendWA('Bolso de Mano','30.00')">
+          <svg width="15" height="15" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="product-card accent-purple" data-cat="accesorios">
+    <div class="product-img-wrap">
+      <div class="img-placeholder">🧢<span>gorra</span></div>
+    </div>
+    <div class="product-body">
+      <div class="product-name">Gorra Bordada</div>
+      <div class="product-desc">Ajustable, diseño exclusivo</div>
+      <div class="product-footer">
+        <div class="product-price"><span>REF</span>$10,00</div>
+        <button class="wa-btn" onclick="event.stopPropagation();sendWA('Gorra Bordada','10.00')">
+          <svg width="15" height="15" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="product-card accent-blue" data-cat="accesorios">
+    <div class="product-img-wrap">
+      <div class="img-placeholder">⌚<span>reloj</span></div>
+    </div>
+    <div class="product-body">
+      <div class="product-name">Reloj Casual</div>
+      <div class="product-desc">Acero inoxidable, unisex</div>
+      <div class="product-footer">
+        <div class="product-price"><span>REF</span>$55,00</div>
+        <button class="wa-btn" onclick="event.stopPropagation();sendWA('Reloj Casual','55.00')">
+          <svg width="15" height="15" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-logo">Tienda Demo</div>
+  <div class="footer-powered">Catálogo creado con <strong>SYNTIcat</strong></div>
+</div>
+
+<!-- WA STICKY FLOAT -->
+<div class="wa-sticky" onclick="alert('Abrir WhatsApp del negocio')">
+  <svg width="26" height="26" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+</div>
+
+<script>
+function filterCat(btn, cat) {
+  document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.product-card').forEach(card => {
+    const match = cat === 'all' || card.dataset.cat === cat;
+    card.style.display = match ? 'block' : 'none';
+  });
+}
+
+function sendWA(product, price) {
+  const msg = encodeURIComponent(`Hola! Me interesa *${product}* (REF $${price}). ¿Está disponible?`);
+  alert(`→ WhatsApp: "Hola! Me interesa ${product} (REF $${price}). ¿Está disponible?"`);
+}
+</script>
+</body>
+</html>

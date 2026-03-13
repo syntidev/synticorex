@@ -34,17 +34,17 @@ class TenantBootstrapFood
 
         $filteredItems = array_values(array_filter(
             array_map(fn($item) => [
-                'name'   => trim($item['name'] ?? ''),
-                'price'  => (float) ($item['price'] ?? 0),
-                'active' => true,
+                'nombre' => trim($item['name'] ?? $item['nombre'] ?? ''),
+                'precio' => (float) ($item['price'] ?? $item['precio'] ?? 0),
+                'activo' => true,
             ], $items),
-            fn($item) => $item['name'] !== ''
+            fn($item) => $item['nombre'] !== ''
         ));
 
         $menu['categories'][] = [
             'id'     => 1,
-            'name'   => $categoryName,
-            'active' => true,
+            'nombre' => $categoryName,
+            'activo' => true,
             'items'  => $filteredItems,
         ];
         $menu['updated_at'] = now()->toISOString();

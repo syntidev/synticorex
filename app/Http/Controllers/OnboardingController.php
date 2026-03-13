@@ -233,6 +233,9 @@ class OnboardingController extends Controller
                 'whatsapp_sales'   => $whatsappSales,
                 'email'            => $accountEmail,
                 'status'           => 'active',
+                'settings'         => [
+                    'engine_settings' => ['template' => 'food'],
+                ],
                 'plan_activated_at'    => Carbon::now(),
                 'subscription_ends_at' => Carbon::now()->addYear(),
                 'edit_pin'             => bcrypt('1234'),
@@ -300,6 +303,9 @@ class OnboardingController extends Controller
                 'whatsapp_sales'   => $whatsappSales,
                 'email'            => $accountEmail,
                 'status'           => 'active',
+                'settings'         => [
+                    'engine_settings' => ['template' => 'synticat'],
+                ],
                 'plan_activated_at'    => Carbon::now(),
                 'subscription_ends_at' => Carbon::now()->addYear(),
                 'edit_pin'             => bcrypt('1234'),

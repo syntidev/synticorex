@@ -401,50 +401,8 @@
 </div>
 @endif
 
-{{-- 6. FOOTER --}}
-<footer class="bg-surface/50 border-t border-foreground/5 py-14">
-    <div class="mx-auto max-w-[1280px] px-5 sm:px-8 text-center">
-        @if(!empty($customization->logo_filename))
-            <img src="{{ asset('storage/tenants/' . $tenant->id . '/' . $customization->logo_filename) }}"
-                 alt="{{ $tenant->business_name }}"
-                 class="size-14 rounded-2xl object-cover mx-auto mb-5 border border-foreground/5 shadow-sm"
-                 onerror="this.style.display='none';">
-        @else
-            <div class="size-14 bg-background rounded-2xl mx-auto mb-5 flex items-center justify-center border border-foreground/5 shadow-sm">
-                <span class="iconify tabler--layout-grid size-7 text-primary"></span>
-            </div>
-        @endif
-
-        <h2 class="text-2xl font-black tracking-tighter mb-1">{{ $tenant->business_name }}</h2>
-        @if($tenant->description)
-            <p class="text-foreground/40 text-sm max-w-md mx-auto">{{ Str::limit($tenant->description, 160) }}</p>
-        @endif
-
-        @if($waClean)
-        <a href="https://wa.me/{{ $waClean }}" target="_blank"
-           class="inline-flex items-center gap-2 text-sm py-1.5 px-3 rounded-2xl font-medium transition-colors mt-6 border-none font-bold text-white"
-           style="background:#25D366;">
-            <span class="iconify tabler--brand-whatsapp size-4"></span>
-            Escribir por WhatsApp
-        </a>
-        @endif
-
-        <div class="mt-8 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs text-foreground/40">
-            <a href="{{ route('marketing.about') }}" class="hover:text-foreground transition-colors">Nosotros</a>
-            <span class="opacity-50">•</span>
-            <a href="{{ route('marketing.privacy') }}" class="hover:text-foreground transition-colors">Privacidad</a>
-            <span class="opacity-50">•</span>
-            <a href="{{ route('marketing.terms') }}" class="hover:text-foreground transition-colors">Terminos</a>
-        </div>
-
-        <div class="mt-10 pt-8 border-t border-foreground/5 flex flex-col md:flex-row justify-between items-center gap-4">
-            <p class="text-xs font-bold text-foreground/20 uppercase tracking-[0.25em]">© {{ date('Y') }} {{ $tenant->business_name }}</p>
-            @if(!($tenant->white_label ?? false))
-            <p class="text-xs text-foreground/20">Sitio creado con <span class="text-primary font-bold">SYNTIweb</span></p>
-            @endif
-        </div>
-    </div>
-</footer>
+{{-- 6. FOOTER (shared component — same as Studio) --}}
+    @include('landing.sections.footer', ['sConfig' => $customization->getSectionConfig('footer')])
 
 @endsection
 

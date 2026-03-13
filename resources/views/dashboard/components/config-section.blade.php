@@ -311,15 +311,21 @@
                             </div>
                             <div class="flex items-center justify-between px-5 py-2.5">
                                 <span class="text-xs text-muted-foreground-1">Renovación</span>
-                                <span class="text-xs font-semibold text-foreground">Por definir</span>
+                                @if($tenant->subscription_ends_at)
+                                    <span class="text-xs font-semibold {{ $isFrozen ? 'text-red-600' : ($isExpiringSoon ? 'text-yellow-600' : 'text-foreground') }}">
+                                        {{ $tenant->subscription_ends_at->format('d/m/Y') }}
+                                    </span>
+                                @else
+                                    <span class="text-xs font-semibold text-foreground">Sin fecha</span>
+                                @endif
                             </div>
                         </div>
                         <div class="px-5 pb-4 pt-2">
-                            <a href="https://syntiweb.com/planes" target="_blank" rel="noopener noreferrer"
-                               class="w-full inline-flex items-center justify-center text-sm py-1.5 px-3 rounded-lg font-medium transition-colors bg-blue-100 text-blue-700 hover:bg-blue-200 gap-2">
-                                <span class="iconify tabler--external-link size-4" aria-hidden="true"></span>
-                                Ver planes disponibles
-                            </a>
+                            <button onclick="document.querySelector('[data-tab=billing]').click()" type="button"
+                               class="w-full inline-flex items-center justify-center text-sm py-1.5 px-3 rounded-lg font-medium transition-colors bg-blue-100 text-blue-700 hover:bg-blue-200 gap-2 cursor-pointer">
+                                <span class="iconify tabler--receipt size-4" aria-hidden="true"></span>
+                                Ir a Facturación
+                            </button>
                         </div>
                     </div>
                 </div>

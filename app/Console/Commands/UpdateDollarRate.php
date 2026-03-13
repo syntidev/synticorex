@@ -42,19 +42,33 @@ class UpdateDollarRate extends Command
      */
     public function handle(): int
     {
-        $this->info('🔄 Fetching dollar rate from DolarAPI...');
+        $exitCode = Command::SUCCESS;
 
-        $result = $this->dollarRateService->fetchAndPropagate();
+        // ── USD ──────────────────────────────────────────────────
+        $this->info('🔄 Fetching USD rate...');
+        $usd = $this->dollarRateService->fetchAndPropagate();
 
-        if ($result['success']) {
-            $this->info("✅ Rate updated: Bs. {$result['rate']}");
-            $this->info("📊 Propagated to {$result['updated_tenants']} tenants");
-
-            return Command::SUCCESS;
+        if ($usd['success']) {
+            $this->info("✅ USD updated: Bs. {$usd['rate']}");
+            $this->info("📊 Propagated to {$usd['updated_tenants']} tenants");
+        } else {
+            $this->error("❌ USD failed: {$usd['message']}");
+            $exitCode = Command::FAILURE;
         }
 
-        $this->error("❌ Failed: {$result['message']}");
+        // ── EUR ──────────────────────────────────────────────────
+        $this->info('🔄 Fetching EUR rate...');
+        $eur = $this->dollarRateService->fetchAndStoreEuro();
 
-        return Command::FAILURE;
+        if ($eur['success']) {
+            $this->info("✅ EUR updated: Bs. {$eur['rate']} (source: {$eur['source']})");
+            $propagated = $this->dollarRateService->propagateEuroRateToTenants($eur['rate']);
+            $this->info("📊 EUR propagated to {$propagated['updated_count']} tenants");
+        } else {
+            $this->error("❌ EUR failed: {$eur['message']}");
+            $exitCode = Command::FAILURE;
+        }
+
+        return $exitCode;
     }
 }

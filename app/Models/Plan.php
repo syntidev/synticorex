@@ -21,43 +21,45 @@ class Plan extends Model
     /** @var int Plan VISIÓN (premium) */
     public const VISION = 3;
 
-    /**
-     * The attributes that are mass assignable.
-     *
+    /** @var list<string> */
+    protected $fillable = [
+        'slug',
+        'blueprint',
         'name',
-        'email',
-        'email_verified_at',
-        'password',
-        'remember_token',
+        'price_usd',
+        'products_limit',
+        'services_limit',
+        'images_limit',
+        'color_palettes',
+        'social_networks_limit',
+        'show_dollar_rate',
+        'show_header_top',
+        'show_about_section',
+        'show_payment_methods',
+        'show_faq',
+        'show_cta_special',
+        'analytics_level',
+        'seo_level',
+        'whatsapp_numbers',
+        'whatsapp_hour_filter',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-
-     * @var array<int, string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
-
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
+    /** @return array<string, string> */
     protected function casts(): array
     {
         return [
+            'show_dollar_rate'     => 'boolean',
+            'show_header_top'      => 'boolean',
+            'show_about_section'   => 'boolean',
+            'show_payment_methods' => 'boolean',
+            'show_faq'             => 'boolean',
+            'show_cta_special'     => 'boolean',
+            'whatsapp_hour_filter' => 'boolean',
+            'price_usd'            => 'decimal:2',
         ];
     }
 
-    /**
-     * Get the tenants for the user.
-     *
-     * @return HasMany<Tenant, $this>
-     */
+    /** @return HasMany<Tenant, $this> */
     public function tenants(): HasMany
     {
         return $this->hasMany(Tenant::class);

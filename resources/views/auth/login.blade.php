@@ -2,6 +2,12 @@
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
+    @if(session('warning'))
+        <div class="mb-4 rounded-lg bg-amber-50 border border-amber-200 px-4 py-3 text-sm text-amber-800">
+            {{ session('warning') }}
+        </div>
+    @endif
+
     {{-- Google OAuth --}}
     <div class="mb-6">
         <a href="{{ route('auth.google') }}"

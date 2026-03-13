@@ -7,7 +7,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Database\Seeders\TestingSeeder;
 
-class SeedTestData extends Command
+class SeedTesting extends Command
 {
     protected $signature = 'seed:testing';
     protected $description = 'Run the TestingSeeder to create test tenants';

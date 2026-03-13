@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>SYNTI.dev | Production Core</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -18,6 +19,7 @@
         
         .glass-panel { background: rgba(15, 15, 15, 0.7); border: 1px solid rgba(255, 255, 255, 0.05); }
     </style>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 <body class="antialiased overflow-hidden">
     <div class="flex h-screen">
@@ -35,6 +37,10 @@
                 <a href="#" class="nav-item-carbon flex items-center gap-3 p-3 rounded-r-lg text-slate-500">
                     <div class="w-1.5 h-1.5 bg-slate-800 rounded-full"></div>
                     <span class="mono text-xs uppercase tracking-widest text-slate-500">02_Tenants_Core</span>
+                </a>
+                <a href="{{ route('admin.billing.view') }}" class="nav-item-carbon {{ request()->routeIs('admin.billing.*') ? 'active' : '' }} flex items-center gap-3 p-3 rounded-r-lg {{ request()->routeIs('admin.billing.*') ? '' : 'text-slate-500' }}">
+                    <div class="w-1.5 h-1.5 {{ request()->routeIs('admin.billing.*') ? 'bg-blue-500' : 'bg-slate-800' }} rounded-full"></div>
+                    <span class="mono text-xs uppercase tracking-widest {{ request()->routeIs('admin.billing.*') ? '' : 'text-slate-500' }}">03_Billing_Queue</span>
                 </a>
             </nav>
 

@@ -13,6 +13,7 @@ use App\Http\Controllers\QRTrackingController;
 use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\Auth\SocialAuthController;
 use App\Http\Controllers\TenantsController;
+use App\Http\Controllers\BillingController;
 use App\Services\DollarRateService;
 
 // ═══ Marketing Landing Page (root domain) ═══════════════════════════════
@@ -102,27 +103,29 @@ Route::get('/api/euro-rate', function (DollarRateService $service) {
     return response()->json(['success' => true, 'rate' => $service->getCurrentEuroRate()]);
 });
 
-// Actualizar tasa desde DolarAPI y propagarla a tenants (escribe en BD)
-Route::post('/api/dollar-rate/refresh', function (DollarRateService $service) {
-    $result = $service->fetchAndStore();
-    if ($result['success']) {
-        $service->propagateRateToTenants($result['rate']);
-    }
-    return response()->json($result);
-});
-Route::post('/api/euro-rate/refresh', function (DollarRateService $service) {
-    $result = $service->fetchAndStoreEuro();
-    if ($result['success']) {
-        $service->propagateEuroRateToTenants($result['rate']);
-    }
-    return response()->json($result);
+// Actualizar tasa desde DolarAPI y propagarla a tenants (escribe en BD — solo admin)
+Route::middleware(['auth', \App\Http\Middleware\EnsureAdmin::class])->group(function () {
+    Route::post('/api/dollar-rate/refresh', function (DollarRateService $service) {
+        $result = $service->fetchAndStore();
+        if ($result['success']) {
+            $service->propagateRateToTenants($result['rate']);
+        }
+        return response()->json($result);
+    });
+    Route::post('/api/euro-rate/refresh', function (DollarRateService $service) {
+        $result = $service->fetchAndStoreEuro();
+        if ($result['success']) {
+            $service->propagateEuroRateToTenants($result['rate']);
+        }
+        return response()->json($result);
+    });
 });
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // DASHBOARD AUTHENTICATED (continued — uploads, CRUD, etc.)
 // ═══════════════════════════════════════════════════════════════════════════════
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified', 'tenant.owner:tenantId'])->group(function () {
     // Image upload
     Route::prefix('tenant/{tenantId}/upload')->group(function () {
         Route::post('/logo',                    [ImageUploadController::class, 'uploadLogo']);
@@ -191,7 +194,20 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // QR download
     Route::get('/tenant/{tenantId}/qr/download',                  [QRTrackingController::class, 'downloadQR']);
 
-}); // end middleware(['auth'])
+    // ── Billing / Facturación SYNTIweb ───────────────────────────────
+    Route::get('/tenant/{tenantId}/billing',                      [BillingController::class, 'getBillingData'])->name('tenant.billing.data');
+    Route::post('/tenant/{tenantId}/billing/report-payment',      [BillingController::class, 'reportPayment'])->name('tenant.billing.report');
+
+}); // end middleware(['auth', 'verified', 'tenant.owner:tenantId'])
+
+// ═══ Admin — Cola de revisión de pagos ═══════════════════════════════════════
+Route::middleware(['auth', \App\Http\Middleware\EnsureAdmin::class])->prefix('admin')->group(function () {
+    Route::get('/billing',                          [BillingController::class, 'adminQueue'])->name('admin.billing.queue');
+    Route::get('/billing/view',                     fn () => view('admin.billing'))->name('admin.billing.view');
+    Route::post('/billing/{invoiceId}/approve',     [BillingController::class, 'approvePayment'])->name('admin.billing.approve');
+    Route::post('/billing/{invoiceId}/reject',      [BillingController::class, 'rejectPayment'])->name('admin.billing.reject');
+    Route::get('/billing/{invoiceId}/receipt',       [BillingController::class, 'viewReceipt'])->name('admin.billing.receipt');
+});
 
 // ═══ Mini Order Engine — SYNTIcat ════════════════════════════════════════════
 Route::post('/{subdomain}/checkout', [CheckoutController::class, 'store'])

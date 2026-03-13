@@ -291,6 +291,13 @@ class Tenant extends Model
 
     public function getBlueprintSlug(): string
     {
+        // Source of truth: plan.blueprint field from DB
+        $planBlueprint = $this->plan?->blueprint;
+        if ($planBlueprint !== null && $planBlueprint !== '') {
+            return $planBlueprint;
+        }
+
+        // Fallback: infer from business_segment (legacy tenants without plan relationship)
         return match(true) {
             in_array($this->business_segment, ['restaurante', 'Restaurante', 'comida', 'Comida', 'Food', 'food', 'Alimentos', 'pizzeria', 'cafetería', 'café']) => 'food',
             in_array($this->business_segment, ['comercio', 'Comercio', 'tienda', 'Tienda', 'retail', 'Retail', 'ropa', 'electrónica']) => 'retail',

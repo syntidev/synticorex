@@ -37,7 +37,16 @@ class MenuService
         $content = Storage::disk(self::DISK)->get($path);
         $data = json_decode($content, true);
 
-        return is_array($data) ? $data : ['categories' => []];
+        if (!is_array($data)) {
+            return ['categories' => []];
+        }
+
+        // Normalize legacy English keys to canonical Spanish schema
+        if (isset($data['categories'])) {
+            $data['categories'] = array_map([$this, 'normalizeCategory'], $data['categories']);
+        }
+
+        return $data;
     }
 
     public function getCategories(int $tenantId): array
@@ -242,6 +251,33 @@ class MenuService
         $menu = $this->getMenu($tenantId);
         $this->persist($tenantId, $menu);
         return $menu;
+    }
+
+    // ─── Schema normalization ────────────────────────────────────
+
+    private function normalizeCategory(array $cat): array
+    {
+        return [
+            'id'     => isset($cat['id']) ? (string) $cat['id'] : null,
+            'nombre' => $cat['nombre'] ?? $cat['name'] ?? '',
+            'foto'   => $cat['foto'] ?? null,
+            'activo' => $cat['activo'] ?? $cat['active'] ?? true,
+            'items'  => array_map([$this, 'normalizeItem'], $cat['items'] ?? []),
+        ];
+    }
+
+    private function normalizeItem(array $item): array
+    {
+        return [
+            'id'          => isset($item['id']) ? (string) $item['id'] : null,
+            'nombre'      => $item['nombre'] ?? $item['name'] ?? '',
+            'precio'      => (float) ($item['precio'] ?? $item['price'] ?? 0),
+            'descripcion' => $item['descripcion'] ?? $item['description'] ?? null,
+            'image_path'  => $item['image_path'] ?? null,
+            'badge'       => $item['badge'] ?? null,
+            'is_featured' => (bool) ($item['is_featured'] ?? false),
+            'activo'      => $item['activo'] ?? $item['active'] ?? true,
+        ];
     }
 
     // ─── Internals ───────────────────────────────────────────────
