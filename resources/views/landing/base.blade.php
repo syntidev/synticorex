@@ -78,6 +78,48 @@
     @endif
 
     @include('landing.sections.floating-panel')
+
+    {{-- ═══ Toast aviso de negocio cerrado (compartido por todos los templates) ═══ --}}
+    @if(!($isOpen ?? true))
+    <div id="closed-toast" class="fixed top-4 left-1/2 -translate-x-1/2 z-[9998] max-w-sm w-[calc(100%-2rem)] pointer-events-none opacity-0 -translate-y-4 transition-all duration-300" role="alert">
+        <div class="bg-red-50 border border-red-200 rounded-2xl shadow-lg px-5 py-4 flex items-start gap-3 pointer-events-auto">
+            <span class="shrink-0 mt-0.5 size-5 rounded-full bg-red-500 flex items-center justify-center">
+                <span class="iconify tabler--clock-off size-3 text-white"></span>
+            </span>
+            <div class="flex-1 min-w-0">
+                <p class="text-sm font-bold text-red-700">Estamos cerrados</p>
+                <p class="text-xs text-red-500 mt-0.5 leading-snug">{{ $closedMessage ?? 'Te responderemos durante nuestro horario de atención.' }}</p>
+            </div>
+            <button onclick="hideClosedToast()" class="shrink-0 p-1 rounded-full hover:bg-red-100 transition-colors cursor-pointer">
+                <span class="iconify tabler--x size-4 text-red-400"></span>
+            </button>
+        </div>
+    </div>
+    <script>
+        (function(){
+            var toast = document.getElementById('closed-toast');
+            var shown = false;
+            var cooldown = false;
+            window.showClosedToast = function() {
+                if (cooldown || !toast) return;
+                cooldown = true;
+                toast.style.opacity = '1';
+                toast.style.transform = 'translateX(-50%) translateY(0)';
+                setTimeout(function(){ hideClosedToast(); }, 5000);
+                setTimeout(function(){ cooldown = false; }, 8000);
+            };
+            window.hideClosedToast = function() {
+                if (!toast) return;
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(-50%) translateY(-1rem)';
+            };
+            window.__tenantIsOpen = false;
+        })();
+    </script>
+    @else
+    <script>window.__tenantIsOpen = true; window.showClosedToast = function(){};</script>
+    @endif
+
     <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js" defer></script>
     @stack('scripts')
 </body>

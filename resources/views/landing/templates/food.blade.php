@@ -876,6 +876,7 @@
     };
 
     window.addToCart = function(id, name, price) {
+        if (!window.__tenantIsOpen) showClosedToast();
         var isNew = !cart[id];
         if (cart[id]) { cart[id].qty++; } else { cart[id] = { name: name, price: parseFloat(price) || 0, qty: 1, options: [] }; }
         updateBadge();
@@ -890,6 +891,7 @@
     };
 
     window.addToCartWithOptions = function(id, name, price, selectedOptions) {
+        if (!window.__tenantIsOpen) showClosedToast();
         selectedOptions = selectedOptions || [];
         var totalPrice = parseFloat(price) || 0;
         var optionLabels = [];

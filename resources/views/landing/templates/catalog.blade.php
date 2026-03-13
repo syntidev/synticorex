@@ -153,6 +153,14 @@
             </div>
             @endif
 
+            {{-- Indicador Abierto/Cerrado --}}
+            @if($showHoursIndicator ?? false)
+            <span class="hidden sm:inline-flex items-center gap-1.5 rounded-full {{ ($isOpen ?? false) ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-600' }} px-3 py-1 text-xs font-bold">
+                <span class="h-1.5 w-1.5 rounded-full {{ ($isOpen ?? false) ? 'bg-green-500' : 'bg-red-500' }} animate-pulse"></span>
+                {{ ($isOpen ?? false) ? 'ABIERTO' : 'CERRADO' }}
+            </span>
+            @endif
+
             @if($waClean)
             <a href="https://wa.me/{{ $waClean }}" target="_blank"
                class="hidden sm:flex text-sm py-1.5 px-3 rounded-2xl font-medium transition-colors gap-1.5 border-none font-bold text-white"
@@ -633,6 +641,7 @@
     };
 
     window.addToCart = function(id, name, price, img) {
+        if (!window.__tenantIsOpen) showClosedToast();
         const isNew = !cart[id];
         if (cart[id]) cart[id].qty++; else cart[id] = { name, price: parseFloat(price) || 0, qty: 1, img };
         updateBadge();
@@ -774,6 +783,7 @@
     }
 
     window.sendWhatsApp = function() {
+        if (!window.__tenantIsOpen) showClosedToast();
         @if(!$needsName && !$needsLocation)
             buildAndSend('', '');
             return;
