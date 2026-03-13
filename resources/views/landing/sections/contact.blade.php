@@ -81,14 +81,31 @@
                   $hours = is_string($tenant->business_hours) 
                     ? json_decode($tenant->business_hours, true) 
                     : (is_array($tenant->business_hours) ? $tenant->business_hours : []);
-                  $open = collect($hours)->filter(fn($h) => $h && isset($h['open']))
-                    ->map(fn($h,$d) => ($days[$d] ?? $d).': '.$h['open'].'-'.$h['close']);
-                  $firstDay = $open->keys()->first();
-                  $lastDay = $open->keys()->last();
-                  $hoursStr = $open->isEmpty() ? 'Sin horario configurado' 
-                    : ($days[$firstDay].'–'.$days[$lastDay].': '.$hours[$firstDay]['open'].'–'.$hours[$lastDay]['close']);
+                  $ranges = [];
+                  $currentRange = null;
+                  foreach ($days as $key => $label) {
+                      $h = $hours[$key] ?? null;
+                      if ($h && isset($h['open'], $h['close']) && empty($h['closed'])) {
+                          $slot = $h['open'] . '-' . $h['close'];
+                          if ($currentRange && $currentRange['slot'] === $slot) {
+                              $currentRange['end'] = $label;
+                          } else {
+                              if ($currentRange) $ranges[] = $currentRange;
+                              $currentRange = ['start' => $label, 'end' => $label, 'slot' => $slot];
+                          }
+                      } else {
+                          if ($currentRange) { $ranges[] = $currentRange; $currentRange = null; }
+                      }
+                  }
+                  if ($currentRange) $ranges[] = $currentRange;
                 @endphp
-                <p>{{ $hoursStr }}</p>
+                @if(empty($ranges))
+                  <p>Sin horario configurado</p>
+                @else
+                  @foreach($ranges as $r)
+                    <p>{{ $r['start'] === $r['end'] ? $r['start'] : $r['start'] . '–' . $r['end'] }}: {{ $r['slot'] }}</p>
+                  @endforeach
+                @endif
               </div>
             </div>
           </div>
@@ -178,14 +195,31 @@
                   $hours2 = is_string($tenant->business_hours)
                     ? json_decode($tenant->business_hours, true)
                     : (is_array($tenant->business_hours) ? $tenant->business_hours : []);
-                  $open2 = collect($hours2)->filter(fn($h) => $h && isset($h['open']))
-                    ->map(fn($h,$d) => ($days2[$d] ?? $d).': '.$h['open'].'-'.$h['close']);
-                  $fDay = $open2->keys()->first();
-                  $lDay = $open2->keys()->last();
-                  $hoursStr2 = $open2->isEmpty() ? 'Sin horario configurado'
-                    : ($days2[$fDay].'–'.$days2[$lDay].': '.$hours2[$fDay]['open'].'–'.$hours2[$lDay]['close']);
+                  $ranges2 = [];
+                  $curRange2 = null;
+                  foreach ($days2 as $key2 => $label2) {
+                      $h2 = $hours2[$key2] ?? null;
+                      if ($h2 && isset($h2['open'], $h2['close']) && empty($h2['closed'])) {
+                          $slot2 = $h2['open'] . '-' . $h2['close'];
+                          if ($curRange2 && $curRange2['slot'] === $slot2) {
+                              $curRange2['end'] = $label2;
+                          } else {
+                              if ($curRange2) $ranges2[] = $curRange2;
+                              $curRange2 = ['start' => $label2, 'end' => $label2, 'slot' => $slot2];
+                          }
+                      } else {
+                          if ($curRange2) { $ranges2[] = $curRange2; $curRange2 = null; }
+                      }
+                  }
+                  if ($curRange2) $ranges2[] = $curRange2;
                 @endphp
-                <p>{{ $hoursStr2 }}</p>
+                @if(empty($ranges2))
+                  <p>Sin horario configurado</p>
+                @else
+                  @foreach($ranges2 as $r2)
+                    <p>{{ $r2['start'] === $r2['end'] ? $r2['start'] : $r2['start'] . '–' . $r2['end'] }}: {{ $r2['slot'] }}</p>
+                  @endforeach
+                @endif
               </div>
             </div>
           </div>

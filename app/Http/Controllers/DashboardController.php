@@ -263,7 +263,7 @@ class DashboardController extends Controller
             
             // Hours indicator feature (all plans)
             if ($request->has('show_hours_indicator')) {
-                data_set($settings, 'engine_settings.features.show_hours_indicator', $validated['show_hours_indicator'] ?? false);
+                data_set($settings, 'engine_settings.features.show_hours_indicator', (bool) ($validated['show_hours_indicator'] ?? false));
             }
             if ($request->has('closed_message')) {
                 data_set($settings, 'business_info.closed_message', $validated['closed_message'] ?? 'Estamos cerrados. Te responderemos durante nuestro horario de atención.');

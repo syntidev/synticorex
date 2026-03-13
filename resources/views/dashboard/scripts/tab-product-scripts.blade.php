@@ -316,6 +316,10 @@
             data.whatsapp_sales = document.getElementById('info-whatsapp')?.value?.trim() || '';
             data.whatsapp_support = document.getElementById('info-whatsapp-support')?.value?.trim() || '';
 
+            // Forzar valores booleanos correctos para checkboxes
+            data.show_hours_indicator = document.getElementById('show-hours-toggle')?.checked ? 1 : 0;
+            data.closed_message = document.getElementById('closed-message-input')?.value?.trim() || '';
+
             try {
                 const response = await fetch('/tenant/{{ $tenant->id }}/update-info', {
                     method: 'POST',

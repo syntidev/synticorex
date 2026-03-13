@@ -148,6 +148,7 @@
             <div class="flex gap-2">
                 <a href="{{ $waBase }}?text={{ urlencode($waProductMsg) }}"
                    target="_blank" rel="noopener noreferrer"
+                   onclick="if(typeof showClosedToast==='function' && !window.__tenantIsOpen) showClosedToast();"
                    class="py-2 px-3 flex-1 inline-flex justify-center items-center gap-x-2 text-sm font-medium text-nowrap rounded-xl bg-primary border border-primary-line text-primary-foreground hover:bg-primary-hover shadow-sm focus:outline-hidden focus:bg-primary-focus transition cursor-pointer">
                     Más info
                 </a>
@@ -162,6 +163,7 @@
             <div class="flex gap-2">
                 <a href="{{ $waBase . '?text=' . urlencode($waProductMsg) }}"
                    target="_blank" rel="noopener noreferrer"
+                   onclick="if(typeof showClosedToast==='function' && !window.__tenantIsOpen) showClosedToast();"
                    class="py-2 px-3 flex-1 inline-flex justify-center items-center gap-x-2 text-sm font-medium text-nowrap rounded-xl bg-primary border border-primary-line text-primary-foreground hover:bg-primary-hover shadow-sm focus:outline-hidden focus:bg-primary-focus transition cursor-pointer">
                     <span class="iconify tabler--brand-whatsapp size-4"></span>
                     Pedir por WhatsApp
@@ -177,12 +179,14 @@
             <div class="flex gap-2">
                 <a href="{{ $waBase . '?text=' . urlencode($waProductMsg) }}"
                    target="_blank" rel="noopener noreferrer"
+                   onclick="if(typeof showClosedToast==='function' && !window.__tenantIsOpen) showClosedToast();"
                    class="py-2 px-3 flex-1 inline-flex justify-center items-center gap-x-2 text-sm font-medium text-nowrap rounded-xl bg-primary border border-primary-line text-primary-foreground hover:bg-primary-hover shadow-sm focus:outline-hidden focus:bg-primary-focus transition cursor-pointer">
                     <span class="iconify tabler--brand-whatsapp size-4"></span>
                     WhatsApp
                 </a>
                 <a href="{{ $waBase . '?text=' . urlencode($waProductMsg) }}"
                    target="_blank" rel="noopener noreferrer"
+                   onclick="if(typeof showClosedToast==='function' && !window.__tenantIsOpen) showClosedToast();"
                    class="py-2 px-3 flex-1 inline-flex justify-center items-center gap-x-2 text-sm font-medium text-nowrap rounded-xl border border-line-2 text-foreground hover:bg-surface focus:outline-hidden transition cursor-pointer">
                     Más info
                 </a>
