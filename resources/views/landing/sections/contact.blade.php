@@ -85,7 +85,7 @@
                     ->map(fn($h,$d) => ($days[$d] ?? $d).': '.$h['open'].'-'.$h['close']);
                   $firstDay = $open->keys()->first();
                   $lastDay = $open->keys()->last();
-                  $hoursStr = $open->isEmpty() ? 'Lun–Sáb 9:00–18:00' 
+                  $hoursStr = $open->isEmpty() ? 'Sin horario configurado' 
                     : ($days[$firstDay].'–'.$days[$lastDay].': '.$hours[$firstDay]['open'].'–'.$hours[$lastDay]['close']);
                 @endphp
                 <p>{{ $hoursStr }}</p>
@@ -182,7 +182,7 @@
                     ->map(fn($h,$d) => ($days2[$d] ?? $d).': '.$h['open'].'-'.$h['close']);
                   $fDay = $open2->keys()->first();
                   $lDay = $open2->keys()->last();
-                  $hoursStr2 = $open2->isEmpty() ? 'Lun–Sáb 9:00–18:00'
+                  $hoursStr2 = $open2->isEmpty() ? 'Sin horario configurado'
                     : ($days2[$fDay].'–'.$days2[$lDay].': '.$hours2[$fDay]['open'].'–'.$hours2[$lDay]['close']);
                 @endphp
                 <p>{{ $hoursStr2 }}</p>

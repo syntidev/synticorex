@@ -261,6 +261,9 @@ class TenantRendererController extends Controller
                 'showEuro' => data_get($tenant->settings, 'engine_settings.currency.display.saved_display_mode', 'reference_only') === 'euro_toggle',
                 'hidePrice' => data_get($tenant->settings, 'engine_settings.currency.display.saved_display_mode', 'reference_only') === 'hidden',
                 'blueprint' => $tenant->getBlueprint(),
+                'showHoursIndicator' => $this->businessHoursService->isHoursFeatureEnabled($tenant),
+                'isOpen' => $this->businessHoursService->isOpen($tenant),
+                'closedMessage' => data_get($tenant->settings, 'business_info.closed_message', 'Estamos cerrados. Te responderemos durante nuestro horario de atención.'),
             ];
 
             $viewData['schema'] = $this->buildSchema($tenant);
@@ -340,6 +343,9 @@ class TenantRendererController extends Controller
                 'hidePrice' => data_get($tenant->settings, 'engine_settings.currency.display.saved_display_mode', 'reference_only') === 'hidden',
                 'blueprint' => $tenant->getBlueprint(),
                 'isPreview' => true,
+                'showHoursIndicator' => $this->businessHoursService->isHoursFeatureEnabled($tenant),
+                'isOpen' => $this->businessHoursService->isOpen($tenant),
+                'closedMessage' => data_get($tenant->settings, 'business_info.closed_message', 'Estamos cerrados. Te responderemos durante nuestro horario de atención.'),
             ];
 
             $viewData['schema'] = $this->buildSchema($tenant);

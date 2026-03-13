@@ -99,7 +99,7 @@
         <div class="flex-1 min-w-0">
             <div class="flex items-center gap-2 flex-wrap">
                 <h1 class="text-xl font-black tracking-tight text-foreground">{{ $tenant->business_name }}</h1>
-                @if($tenant->is_open ?? false)
+                @if($isOpen ?? false)
                     <span class="inline-flex items-center gap-1.5 text-xs font-bold text-green-600"><span class="size-1.5 rounded-full bg-green-500"></span>Abierto</span>
                 @else
                     <span class="inline-flex items-center gap-1.5 text-xs font-bold text-red-500"><span class="size-1.5 rounded-full bg-red-500"></span>Cerrado</span>
@@ -132,9 +132,9 @@
                 </div>
             @endif
             <span class="text-sm font-bold tracking-tight truncate max-w-[120px]">{{ $tenant->business_name }}</span>
-            <span class="text-[10px] font-bold {{ ($tenant->is_open ?? false) ? 'text-green-500' : 'text-red-500' }} items-center gap-1 hidden sm:flex">
-                <span class="size-1.5 rounded-full {{ ($tenant->is_open ?? false) ? 'bg-green-500' : 'bg-red-500' }}"></span>
-                {{ ($tenant->is_open ?? false) ? 'Abierto' : 'Cerrado' }}
+            <span class="text-[10px] font-bold {{ ($isOpen ?? false) ? 'text-green-500' : 'text-red-500' }} items-center gap-1 hidden sm:flex">
+                <span class="size-1.5 rounded-full {{ ($isOpen ?? false) ? 'bg-green-500' : 'bg-red-500' }}"></span>
+                {{ ($isOpen ?? false) ? 'Abierto' : 'Cerrado' }}
             </span>
         </div>
 
@@ -244,7 +244,7 @@
                     @if($sfSubtitle)
                         <p class="text-xs text-foreground/50 mt-0.5 leading-snug">{{ $sfSubtitle }}</p>
                     @endif
-                    @if($tenant->is_open ?? false)
+                    @if($isOpen ?? false)
                         <span class="inline-flex items-center gap-1 text-xs font-bold text-green-600 mt-1"><span class="size-1.5 rounded-full bg-green-500"></span>Abierto ahora</span>
                     @else
                         <span class="inline-flex items-center gap-1 text-xs font-bold text-red-500 mt-1"><span class="size-1.5 rounded-full bg-red-500"></span>Cerrado ahora</span>
@@ -390,11 +390,11 @@
 </div>
 
 {{-- Banner cerrado --}}
-@if(!($tenant->is_open ?? true))
+@if(!($isOpen ?? true))
 <div class="mx-auto max-w-7xl px-4 pt-4">
     <div class="rounded-xl bg-red-50 border border-red-100 px-6 py-4 text-center">
         <p class="text-sm font-bold text-red-600">Restaurante cerrado</p>
-        <p class="text-xs text-red-400 mt-0.5">No estamos recibiendo pedidos en este momento. ¡Vuelve pronto!</p>
+        <p class="text-xs text-red-400 mt-0.5">{{ $closedMessage ?? 'No estamos recibiendo pedidos en este momento. ¡Vuelve pronto!' }}</p>
     </div>
 </div>
 @endif
