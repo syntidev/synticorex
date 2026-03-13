@@ -157,10 +157,10 @@ $themesByCategory = collect($prelineThemes)->groupBy('category');
                     <span class="iconify tabler--color-swatch size-6 text-primary" aria-hidden="true"></span>
                 </div>
                 <h3 class="text-sm font-bold text-foreground mb-1">Paleta Personalizada</h3>
-                <p class="text-xs text-muted-foreground-1 mb-4">Crea tu propia combinaciÃ³n de colores con el Plan VISIÃ“N</p>
+                <p class="text-xs text-muted-foreground-1 mb-4">Crea tu propia combinación de colores con el Plan VISIÓN</p>
                 <span class="inline-flex items-center py-0.5 px-2 rounded-full text-sm font-medium bg-yellow-100 text-yellow-700 mb-3">
                     <span class="iconify tabler--lock size-3 mr-1"></span>
-                    Plan VISIÃ“N
+                    Plan VISIÓN
                 </span>
                 <a href="https://syntiweb.com/planes" target="_blank" rel="noopener noreferrer"
                    class="inline-flex items-center text-xs py-1 px-2 rounded-lg font-medium transition-colors bg-blue-100 text-blue-700 hover:bg-blue-200 gap-1">

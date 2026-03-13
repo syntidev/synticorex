@@ -67,7 +67,7 @@
                                 @endif
                             </button>
                             <div class="flex items-center gap-1 shrink-0">
-                                <button onclick="MenuAdmin.openItemModal('{{ $cat['id'] }}', '{{ e($cat[\'nombre\'] ?? $cat[\'name\'] ?? \'\') }}')"
+                                <button onclick="MenuAdmin.openItemModal('{{ $cat['id'] }}', '{{ e($cat['nombre'] ?? $cat['name'] ?? '') }}')"
                                         class="inline-flex items-center justify-center size-8 rounded-lg text-blue-600 hover:bg-blue-50 transition-colors"
                                         title="Agregar ítem">
                                     <span class="iconify tabler--plus size-4" aria-hidden="true"></span>
@@ -131,7 +131,7 @@
                                     </div>
                                     <div class="flex items-center gap-3 shrink-0">
                                         <span class="text-sm font-bold text-primary">REF {{ number_format($item['precio'] ?? $item['price'] ?? 0, 2) }}</span>
-                                        <button onclick="MenuAdmin.openItemModal('{{ $cat['id'] }}', '{{ e($cat[\'nombre\'] ?? $cat[\'name\'] ?? \'\') }}', '{{ $item['id'] }}', {{ json_encode(['nombre' => $item['nombre'] ?? $item['name'] ?? '', 'precio' => $item['precio'] ?? $item['price'] ?? 0, 'activo' => $item['activo'] ?? $item['active'] ?? true, 'descripcion' => $item['descripcion'] ?? $item['description'] ?? '', 'badge' => $item['badge'] ?? '', 'is_featured' => $item['is_featured'] ?? false, 'image_url' => !empty($item['image_path']) ? asset('storage/tenants/' . $tenant->id . '/' . $item['image_path']) : ''], JSON_HEX_APOS | JSON_HEX_QUOT) }})"
+                                        <button onclick="MenuAdmin.openItemModal('{{ $cat['id'] }}', '{{ e($cat['nombre'] ?? $cat['name'] ?? '') }}', '{{ $item['id'] }}', {{ json_encode(['nombre' => $item['nombre'] ?? $item['name'] ?? '', 'precio' => $item['precio'] ?? $item['price'] ?? 0, 'activo' => $item['activo'] ?? $item['active'] ?? true, 'descripcion' => $item['descripcion'] ?? $item['description'] ?? '', 'badge' => $item['badge'] ?? '', 'is_featured' => $item['is_featured'] ?? false, 'image_url' => !empty($item['image_path']) ? asset('storage/tenants/' . $tenant->id . '/' . $item['image_path']) : ''], JSON_HEX_APOS | JSON_HEX_QUOT) }})"
                                                 class="inline-flex items-center justify-center size-7 rounded-lg text-foreground/60 hover:bg-layer transition-colors"
                                                 title="Editar ítem">
                                             <span class="iconify tabler--pencil size-3.5" aria-hidden="true"></span>
@@ -149,7 +149,7 @@
                             <div class="border-t border-border px-4 py-6 text-center">
                                 <span class="iconify tabler--bowl size-8 text-foreground/15 mx-auto mb-2" aria-hidden="true"></span>
                                 <p class="text-sm text-muted-foreground-1">Sin ítems en esta categoría</p>
-                                <button onclick="MenuAdmin.openItemModal('{{ $cat['id'] }}', '{{ e($cat[\'nombre\'] ?? $cat[\'name\'] ?? \'\') }}')"
+                                <button onclick="MenuAdmin.openItemModal('{{ $cat['id'] }}', '{{ e($cat['nombre'] ?? $cat['name'] ?? '') }}')"
                                         class="mt-2 text-sm text-blue-600 hover:underline font-medium">+ Agregar ítem</button>
                             </div>
                             @endif
@@ -250,7 +250,8 @@
                     <div>
                         <label class="block text-sm font-medium text-foreground mb-1.5">Foto <span class="text-muted-foreground-1 font-normal">(opcional)</span></label>
                         <div id="menu-item-foto-preview" class="hidden mb-2 relative inline-block">
-                            <img id="menu-item-foto-thumb" src="" alt="" class="size-20 rounded-lg object-cover border border-border">
+                            <img id="menu-item-foto-thumb" src="" alt="" class="size-20 rounded-lg object-cover border border-border"
+                                 onerror="this.style.display='none'; this.closest('#menu-item-foto-preview').classList.add('hidden');">
                             <button type="button" onclick="MenuAdmin.removeItemPhoto()"
                                     class="absolute -top-1.5 -right-1.5 size-5 rounded-full bg-red-500 text-white flex items-center justify-center hover:bg-red-600 transition-colors shadow-sm"
                                     title="Quitar foto">

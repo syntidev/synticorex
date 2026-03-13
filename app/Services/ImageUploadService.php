@@ -18,6 +18,11 @@ class ImageUploadService
         'hero'    => 1600,
         'product' => 1000,
         'service' => 1000,
+        'hero-slot-1' => 1600,
+        'hero-slot-2' => 1600,
+        'hero-slot-3' => 1600,
+        'hero-slot-4' => 1600,
+        'hero-slot-5' => 1600,
     ];
     private const WEBP_QUALITY = 90;
 
@@ -50,8 +55,8 @@ class ImageUploadService
         // Create ImageManager with GD driver
         $manager = new ImageManager(new Driver());
 
-        // Load image
-        $image = $manager->read($file->getRealPath());
+        // Load image — getPathname() instead of getRealPath() (returns false on Windows)
+        $image = $manager->read($file->getPathname());
 
         // Resize if width exceeds per-type maximum
         $maxWidth = self::MAX_WIDTHS[$type] ?? 1000;
@@ -107,11 +112,12 @@ class ImageUploadService
      */
     private function generateFilename(string $type, int $index): string
     {
-        return match ($type) {
-            'logo' => 'logo.webp',
-            'hero' => 'hero.webp',
-            'product' => 'product_' . str_pad((string)$index, 2, '0', STR_PAD_LEFT) . '.webp',
-            'service' => 'service_' . str_pad((string)$index, 2, '0', STR_PAD_LEFT) . '.webp',
+        return match (true) {
+            $type === 'logo' => 'logo.webp',
+            $type === 'hero' => 'hero.webp',
+            $type === 'product' => 'product_' . str_pad((string)$index, 2, '0', STR_PAD_LEFT) . '.webp',
+            $type === 'service' => 'service_' . str_pad((string)$index, 2, '0', STR_PAD_LEFT) . '.webp',
+            str_starts_with($type, 'hero-slot-') => 'hero_slot_' . substr($type, 10) . '.webp',
             default => throw new Exception("Tipo de imagen no válido: {$type}"),
         };
     }
@@ -145,8 +151,8 @@ class ImageUploadService
         // Create ImageManager with GD driver
         $manager = new ImageManager(new Driver());
 
-        // Load image
-        $image = $manager->read($file->getRealPath());
+        // Load image — getPathname() instead of getRealPath() (returns false on Windows)
+        $image = $manager->read($file->getPathname());
 
         // Resize if width exceeds maximum
         if ($image->width() > $maxWidth) {

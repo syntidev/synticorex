@@ -156,7 +156,7 @@
                                        placeholder="Contáctanos y te atendemos a la brevedad.">
                                 <p class="text-xs text-muted-foreground-1 mt-1">Párrafo descriptivo debajo del título de la sección Contáctanos. Variable independiente.</p>
                             </div>
-                            @if($tenant->isAtLeastCrecimiento())
+                            @if($tenant->isAtLeastCrecimiento() && !in_array($blueprint ?? '', ['food', 'cat']))
                             <div class="form-control sm:col-span-2 lg:col-span-3">
                                 <label class="inline-block text-sm font-medium text-foreground mb-1">
                                     <span class="flex items-center gap-1">
@@ -222,6 +222,7 @@
                         </div>
 
                         {{-- ══ Contenido Hero ════════════════════════════════════════ --}}
+                        @if($blueprint !== 'food')
                         <div class="border-t border-border my-4 mt-6 text-xs text-muted-foreground-1">Contenido del Hero</div>
 
                         <div class="form-control mt-3">
@@ -247,7 +248,9 @@
                                    value="{{ $customization?->getContentBlock('hero', 'subtitle') ?? '' }}">
                             <p class="mt-1.5 text-xs text-muted-foreground-2">Texto secundario del Hero. Si está vacío, no se muestra subtítulo.</p>
                         </div>
+                        @endif
 
+                        @if($blueprint !== 'food')
                         <div class="form-control mt-3">
                             <label class="inline-block text-sm font-medium text-foreground mb-1" for="info-about-text">
                                 Texto Sección Acerca De
@@ -257,11 +260,14 @@
                                       placeholder="Cuéntale a tus clientes quiénes son, qué los hace especiales...">{{ $customization?->about_text ?? '' }}</textarea>
                             <p class="mt-1.5 text-xs text-muted-foreground-2">Texto de la sección &ldquo;Acerca de nosotros&rdquo;. <strong>Variable independiente</strong>, no comparte contenido con Hero ni Contacto.</p>
                         </div>
+                        @endif
+                        @if(!in_array($blueprint ?? '', ['food', 'cat']))
                         {{-- ══ Títulos de Secciones (editables por sección) ══════════ --}}
                         <div class="border-t border-border my-4 mt-6 text-xs text-muted-foreground-1">Títulos de Secciones</div>
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
 
+                            @if(!in_array($blueprint ?? '', ['food', 'cat']))
                             <div class="form-control">
                                 <label class="inline-block text-sm font-medium text-foreground mb-1" for="info-products-title">
                                     Título Sección Productos
@@ -284,7 +290,9 @@
                                        placeholder="Descubre lo mejor que tenemos para ofrecerte…"
                                        value="{{ $customization?->getContentBlock('products', 'subtitle') ?? '' }}">
                             </div>
+                            @endif
 
+                            @if($blueprint !== 'food')
                             <div class="form-control">
                                 <label class="inline-block text-sm font-medium text-foreground mb-1" for="info-services-title">
                                     Título Sección Servicios
@@ -319,23 +327,9 @@
                                        value="{{ $customization?->getContentBlock('about', 'title') ?? '' }}">
                                 <p class="text-xs text-muted-foreground-1 mt-1">Vacío = "Acerca de nosotros"</p>
                             </div>
-
-                            @if($tenant->isAtLeastCrecimiento())
-                            <div class="form-control">
-                                <label class="inline-block text-sm font-medium text-foreground mb-1" for="info-testimonials-title">
-                                    <span class="flex items-center gap-1">
-                                        Título Sección Testimonios
-                                        <span class="inline-flex items-center py-0.5 px-2 rounded-full text-xs font-medium bg-green-100 text-green-700">{{ $plan->name }}</span>
-                                    </span>
-                                </label>
-                                <input id="info-testimonials-title" type="text"
-                                       class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none"
-                                       name="content_blocks[testimonials][title]"
-                                       placeholder="Testimonios de Clientes"
-                                       value="{{ $customization?->getContentBlock('testimonials', 'title') ?? '' }}">
-                            </div>
                             @endif
 
+                            @if($blueprint !== 'food')
                             <div class="form-control">
                                 <label class="inline-block text-sm font-medium text-foreground mb-1" for="info-contact-h2">
                                     Título Sección Contacto (h2)
@@ -347,7 +341,9 @@
                                        value="{{ $customization?->getContentBlock('contact', 'title') ?? '' }}">
                                 <p class="text-xs text-muted-foreground-1 mt-1">Vacío = "Contáctanos"</p>
                             </div>
+                            @endif
 
+                            @if($blueprint !== 'food')
                             <div class="form-control">
                                 <label class="inline-block text-sm font-medium text-foreground mb-1" for="info-payment-title">
                                     Título Sección Medios de Pago
@@ -359,8 +355,9 @@
                                        value="{{ $customization?->getContentBlock('payment_methods', 'title') ?? '' }}">
                                 <p class="text-xs text-muted-foreground-1 mt-1">Vacío = "Medios de Pago"</p>
                             </div>
+                            @endif
 
-                            @if($tenant->isAtLeastCrecimiento())
+                            @if($blueprint !== 'food' && $tenant->isAtLeastCrecimiento())
                             <div class="form-control">
                                 <label class="inline-block text-sm font-medium text-foreground mb-1" for="info-testimonials-title">
                                     <span class="flex items-center gap-1">
@@ -376,7 +373,7 @@
                             </div>
                             @endif
 
-                            @if($tenant->plan_id >= 3)
+                            @if($blueprint !== 'food' && $tenant->plan_id >= 3)
                             <div class="form-control">
                                 <label class="inline-block text-sm font-medium text-foreground mb-1" for="info-faq-title">
                                     <span class="flex items-center gap-1">
@@ -407,6 +404,7 @@
                             @endif
 
                         </div>
+                        @endif
 
                         <div class="flex items-center gap-3 justify-end pt-4 border-t border-border mt-4">
                             <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg bg-layer border border-layer-line text-layer-foreground shadow-2xs hover:bg-layer-hover disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-layer-focus" onclick="resetForm('form-info')">Cancelar</button>

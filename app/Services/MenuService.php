@@ -257,12 +257,19 @@ class MenuService
 
     private function normalizeCategory(array $cat): array
     {
+        $items = array_map([$this, 'normalizeItem'], $cat['items'] ?? []);
+
+        // Featured items first, then preserve original order
+        usort($items, static fn(array $a, array $b): int =>
+            (int) ($b['is_featured'] ?? false) <=> (int) ($a['is_featured'] ?? false)
+        );
+
         return [
             'id'     => isset($cat['id']) ? (string) $cat['id'] : null,
             'nombre' => $cat['nombre'] ?? $cat['name'] ?? '',
             'foto'   => $cat['foto'] ?? null,
             'activo' => $cat['activo'] ?? $cat['active'] ?? true,
-            'items'  => array_map([$this, 'normalizeItem'], $cat['items'] ?? []),
+            'items'  => $items,
         ];
     }
 

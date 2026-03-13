@@ -34,12 +34,12 @@ final class BusinessHoursService
         $currentTime = $now->format('H:i');
 
         // Verificar si hay horario para el día actual
-        if (!isset($businessHours[$currentDay]) || !$businessHours[$currentDay]['enabled']) {
+        if (!isset($businessHours[$currentDay]) || !$this->isDayEnabled($businessHours[$currentDay])) {
             return false;
         }
 
         $daySchedule = $businessHours[$currentDay];
-        $openTime = $daySchedule['open'] ?? '09:00';
+        $openTime  = $daySchedule['open']  ?? '09:00';
         $closeTime = $daySchedule['close'] ?? '18:00';
 
         // Comparar hora actual con horario de apertura/cierre
@@ -66,7 +66,7 @@ final class BusinessHoursService
             $checkDate = $now->copy()->addDays($i);
             $dayName = strtolower($checkDate->locale('en')->dayName);
 
-            if (!isset($businessHours[$dayName]) || !$businessHours[$dayName]['enabled']) {
+            if (!isset($businessHours[$dayName]) || !$this->isDayEnabled($businessHours[$dayName])) {
                 continue;
             }
 
@@ -96,6 +96,32 @@ final class BusinessHoursService
         }
 
         return 'Horario no disponible';
+    }
+
+    /**
+     * Determina si un día está habilitado en el horario.
+     * Soporta dos formatos:
+     *  - Nuevo: null | {open, close} | {closed: true}
+     *  - Legado: {enabled: true/false, open, close}
+     *
+     * @param mixed $dayData
+     * @return bool
+     */
+    private function isDayEnabled(mixed $dayData): bool
+    {
+        if (!is_array($dayData)) {
+            return false;
+        }
+        // Formato legado: clave 'enabled'
+        if (array_key_exists('enabled', $dayData)) {
+            return (bool) $dayData['enabled'];
+        }
+        // Formato nuevo: {closed: true} → cerrado
+        if (!empty($dayData['closed'])) {
+            return false;
+        }
+        // Formato nuevo: tiene open/close → abierto
+        return isset($dayData['open'], $dayData['close']);
     }
 
     /**

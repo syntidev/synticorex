@@ -110,6 +110,9 @@ class ItemsController extends Controller
         if ($warning) {
             $response['warning'] = $warning;
         }
+        if (!empty($item['image_path'])) {
+            $response['image_url'] = asset('storage/tenants/' . $tenant->id . '/' . $item['image_path']);
+        }
         return response()->json($response, 201);
     }
 
@@ -179,6 +182,9 @@ class ItemsController extends Controller
         $response = ['success' => true, 'item' => $updated];
         if ($warning) {
             $response['warning'] = $warning;
+        }
+        if (!empty($updated['image_path'])) {
+            $response['image_url'] = asset('storage/tenants/' . $tenant->id . '/' . $updated['image_path']);
         }
         return response()->json($response);
     }

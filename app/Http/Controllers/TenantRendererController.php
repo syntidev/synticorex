@@ -171,13 +171,11 @@ class TenantRendererController extends Controller
 
             $schema = $this->buildSchema($tenant);
 			
-			$menu = [];
-				if (data_get($tenant->settings, 'engine_settings.template') === 'food') {
-				$menuPath = 'tenants/' . $tenant->id . '/menu/menu.json';
-				if (\Storage::exists($menuPath)) {
-				$menu = json_decode(\Storage::get($menuPath), true) ?? [];
-				}
-			}
+            $menu = [];
+            if (data_get($tenant->settings, 'engine_settings.template') === 'food') {
+                $menuService = new \App\Services\MenuService();
+                $menu = $menuService->getCategories($tenant->id);
+            }
 
             return view($this->resolveTemplate($tenant), compact('tenant', 'plan', 'products', 'services', 'dollarRate', 'euroRate', 'themeSlug', 'meta', 'customization', 'currencySettings', 'displayMode', 'savedDisplayMode', 'showReference', 'showBolivares', 'showEuro', 'hidePrice', 'trackingQRSmall', 'trackingShortlink', 'showHoursIndicator', 'isOpen', 'closedMessage', 'blueprint', 'schema', 'menu'));
         } catch (Throwable $e) {
@@ -267,6 +265,12 @@ class TenantRendererController extends Controller
 
             $viewData['schema'] = $this->buildSchema($tenant);
 
+            // Load food menu if applicable
+            $viewData['menu'] = [];
+            if (data_get($tenant->settings, 'engine_settings.template') === 'food') {
+                $viewData['menu'] = (new \App\Services\MenuService())->getCategories($tenant->id);
+            }
+
             Log::info('TenantRendererController: Rendering by custom domain', [
                 'domain' => $domain,
                 'tenant_id' => $tenant->id,
@@ -339,6 +343,12 @@ class TenantRendererController extends Controller
             ];
 
             $viewData['schema'] = $this->buildSchema($tenant);
+
+            // Load food menu if applicable
+            $viewData['menu'] = [];
+            if (data_get($tenant->settings, 'engine_settings.template') === 'food') {
+                $viewData['menu'] = (new \App\Services\MenuService())->getCategories($tenant->id);
+            }
 
             Log::debug('TenantRendererController: Preview mode', [
                 'tenant_id' => $tenantId,

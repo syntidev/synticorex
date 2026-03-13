@@ -46,6 +46,12 @@
                     'branches'        => ['label' => 'Sucursales',       'icon' => 'tabler:building-bank',      'plan' => 3],
                 ];
 
+                // Food blueprint: only show sections that food.blade.php actually renders
+                if ($blueprint === 'food') {
+                    $foodSections = ['products', 'contact', 'payment_methods'];
+                    $allSections = array_intersect_key($allSections, array_flip($foodSections));
+                }
+
                 $currentOrder = $customization->visual_effects['sections_order'] ?? [];
 
                 $availableSections = [];
@@ -138,6 +144,7 @@
 {{-- ════════════════════════════════════════════════════════════
      2. TESTIMONIOS (Plan 2+)
 ════════════════════════════════════════════════════════════ --}}
+@if($blueprint !== 'food')
 @if($plan->id >= 2)
 <div class="bg-surface rounded-xl shadow-sm border border-border mb-6">
     <div class="px-5 pt-5 pb-3 flex items-center justify-between gap-3 flex-wrap">
@@ -386,6 +393,7 @@
     </div>
 </div>
 @endif
+@endif {{-- $blueprint !== 'food' --}}
 
 {{-- ── Upsell Plan 1 ──────────────────────────────────── --}}
 @if($plan->id === 1)
