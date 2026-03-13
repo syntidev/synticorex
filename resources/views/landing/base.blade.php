@@ -98,13 +98,18 @@
     <script>
         (function(){
             var toast = document.getElementById('closed-toast');
-            var shown = false;
             var cooldown = false;
-            window.showClosedToast = function() {
-                if (cooldown || !toast) return;
+            window.showClosedToast = function(redirectUrl) {
+                if (cooldown || !toast) {
+                    if (redirectUrl) window.open(redirectUrl, '_blank');
+                    return;
+                }
                 cooldown = true;
                 toast.style.opacity = '1';
                 toast.style.transform = 'translateX(-50%) translateY(0)';
+                if (redirectUrl) {
+                    setTimeout(function(){ window.open(redirectUrl, '_blank'); }, 1500);
+                }
                 setTimeout(function(){ hideClosedToast(); }, 5000);
                 setTimeout(function(){ cooldown = false; }, 8000);
             };

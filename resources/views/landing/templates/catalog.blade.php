@@ -783,24 +783,32 @@
     }
 
     window.sendWhatsApp = function() {
-        if (!window.__tenantIsOpen) showClosedToast();
-        @if(!$needsName && !$needsLocation)
-            buildAndSend('', '');
-            return;
-        @endif
+        var _doSend = function() {
+            @if(!$needsName && !$needsLocation)
+                buildAndSend('', '');
+                return;
+            @endif
 
-        const nameEl  = document.getElementById('sc-customer-name');
-        const locEl   = document.getElementById('sc-customer-location');
-        const name    = nameEl ? nameEl.value.trim() : '';
-        const loc     = locEl  ? locEl.value.trim()  : '';
+            const nameEl  = document.getElementById('sc-customer-name');
+            const locEl   = document.getElementById('sc-customer-location');
+            const name    = nameEl ? nameEl.value.trim() : '';
+            const loc     = locEl  ? locEl.value.trim()  : '';
 
-        if ((nameEl && !name) || (locEl && !loc)) {
-            openDataModal();
+            if ((nameEl && !name) || (locEl && !loc)) {
+                openDataModal();
+                return;
+            }
+
+            if (name) localStorage.setItem('sc_customer_name', name);
+            buildAndSend(name, loc);
+        };
+
+        if (!window.__tenantIsOpen) {
+            showClosedToast();
+            setTimeout(_doSend, 1500);
             return;
         }
-
-        if (name) localStorage.setItem('sc_customer_name', name);
-        buildAndSend(name, loc);
+        _doSend();
     };
 
     window.confirmDataAndSend = function() {

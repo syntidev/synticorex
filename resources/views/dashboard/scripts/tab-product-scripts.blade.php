@@ -320,6 +320,8 @@
             data.show_hours_indicator = document.getElementById('show-hours-toggle')?.checked ? 1 : 0;
             data.closed_message = document.getElementById('closed-message-input')?.value?.trim() || '';
 
+            console.log('[saveInfo] Sending data:', JSON.stringify({show_hours_indicator: data.show_hours_indicator, closed_message: data.closed_message}));
+
             try {
                 const response = await fetch('/tenant/{{ $tenant->id }}/update-info', {
                     method: 'POST',

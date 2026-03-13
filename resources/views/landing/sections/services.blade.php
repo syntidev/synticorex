@@ -82,7 +82,7 @@
                         <div class="mt-auto flex border-t border-line-2">
                             <a href="{{ $ctaLink }}"
                                {{ $waPhone ? 'target="_blank" rel="noopener noreferrer"' : '' }}
-                               onclick="if(typeof showClosedToast==='function' && !window.__tenantIsOpen) showClosedToast();"
+                               onclick="if(!window.__tenantIsOpen){event.preventDefault();showClosedToast(this.href);}"
                                class="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium bg-primary border border-primary-line text-primary-foreground hover:bg-primary-hover focus:outline-hidden focus:bg-primary-focus disabled:opacity-50 disabled:pointer-events-none transition cursor-pointer">
                                 <span class="iconify tabler--brand-whatsapp size-4"></span>
                                 {{ $ctaText }}

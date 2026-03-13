@@ -21,19 +21,35 @@ final class BusinessHoursService
      * @param Tenant $tenant
      * @return bool
      */
+    /** Venezuela timezone constant */
+    private const TENANT_TZ = 'America/Caracas';
+
+    /**
+     * Normaliza business_hours: maneja tanto array como string (double-encoded JSON).
+     */
+    private function normalizeHours(mixed $raw): array
+    {
+        if (is_array($raw)) {
+            return $raw;
+        }
+        if (is_string($raw) && $raw !== '') {
+            $decoded = json_decode($raw, true);
+            return is_array($decoded) ? $decoded : [];
+        }
+        return [];
+    }
+
     public function isOpen(Tenant $tenant): bool
     {
-        // Si no tiene horarios configurados, asumimos que está abierto
-        $businessHours = $tenant->business_hours ?? [];
+        $businessHours = $this->normalizeHours($tenant->business_hours);
         if (empty($businessHours)) {
             return true;
         }
 
-        $now = Carbon::now();
-        $currentDay = strtolower($now->locale('en')->dayName); // 'monday', 'tuesday', etc.
+        $now = Carbon::now(self::TENANT_TZ);
+        $currentDay = strtolower($now->locale('en')->dayName);
         $currentTime = $now->format('H:i');
 
-        // Verificar si hay horario para el día actual
         if (!isset($businessHours[$currentDay]) || !$this->isDayEnabled($businessHours[$currentDay])) {
             return false;
         }
@@ -42,7 +58,6 @@ final class BusinessHoursService
         $openTime  = $daySchedule['open']  ?? '09:00';
         $closeTime = $daySchedule['close'] ?? '18:00';
 
-        // Comparar hora actual con horario de apertura/cierre
         return $currentTime >= $openTime && $currentTime < $closeTime;
     }
 
@@ -54,12 +69,12 @@ final class BusinessHoursService
      */
     public function getNextOpenTime(Tenant $tenant): string
     {
-        $businessHours = $tenant->business_hours ?? [];
+        $businessHours = $this->normalizeHours($tenant->business_hours);
         if (empty($businessHours)) {
             return 'Horario no configurado';
         }
 
-        $now = Carbon::now();
+        $now = Carbon::now(self::TENANT_TZ);
         $daysToCheck = 7; // Revisar próximos 7 días
 
         for ($i = 0; $i < $daysToCheck; $i++) {

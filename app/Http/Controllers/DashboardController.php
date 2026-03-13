@@ -261,12 +261,21 @@ class DashboardController extends Controller
             // Save settings in settings JSON
             $settings = $tenant->settings ?? [];
             
-            // Hours indicator feature (all plans)
-            if ($request->has('show_hours_indicator')) {
-                data_set($settings, 'engine_settings.features.show_hours_indicator', (bool) ($validated['show_hours_indicator'] ?? false));
-            }
-            if ($request->has('closed_message')) {
-                data_set($settings, 'business_info.closed_message', $validated['closed_message'] ?? 'Estamos cerrados. Te responderemos durante nuestro horario de atención.');
+            // Hours indicator feature (all plans) — always process, not conditional
+            $showHoursRaw = $request->input('show_hours_indicator');
+            $showHours = filter_var($showHoursRaw, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) ?? false;
+            data_set($settings, 'engine_settings.features.show_hours_indicator', $showHours);
+
+            Log::debug('DashboardController: show_hours_indicator save', [
+                'raw_value' => $showHoursRaw,
+                'parsed' => $showHours,
+                'has_key' => $request->has('show_hours_indicator'),
+                'all_keys' => array_keys($request->all()),
+            ]);
+
+            $closedMsg = $request->input('closed_message');
+            if ($closedMsg !== null) {
+                data_set($settings, 'business_info.closed_message', $closedMsg ?: 'Estamos cerrados. Te responderemos durante nuestro horario de atención.');
             }
             
             // contact_title y contact_subtitle: disponibles para todos los planes

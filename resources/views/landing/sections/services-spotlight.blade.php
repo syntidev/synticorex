@@ -74,7 +74,7 @@
                     <div class="mt-auto pt-5">
                         <a href="{{ $ctaLink }}"
                            {{ $waPhone ? 'target="_blank" rel="noopener noreferrer"' : '' }}
-                           onclick="if(typeof showClosedToast==='function' && !window.__tenantIsOpen) showClosedToast();"
+                           onclick="if(!window.__tenantIsOpen){event.preventDefault();showClosedToast(this.href);}"
                            class="inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:text-primary-hover transition-colors group/btn">
                             <span class="iconify tabler--brand-whatsapp size-4"></span>
                             <span>{{ $ctaText }}</span>

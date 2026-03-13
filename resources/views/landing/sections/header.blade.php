@@ -110,7 +110,7 @@
             @endphp
             @if($wa)
                 <a href="https://wa.me/{{ preg_replace('/\D/', '', $wa) }}?text={{ urlencode($waMessage) }}" target="_blank" rel="noopener noreferrer"
-                   onclick="if(typeof showClosedToast==='function' && !window.__tenantIsOpen) showClosedToast();"
+                   onclick="if(!window.__tenantIsOpen){event.preventDefault();showClosedToast(this.href);}"
                    class="py-1.5 px-3 rounded-lg font-medium transition-colors text-sm bg-green-600 text-white hover:bg-green-700 hidden sm:flex font-bold shadow-lg">WhatsApp</a>
             @endif
         </div>
