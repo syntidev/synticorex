@@ -71,17 +71,6 @@
                             </div>
                             <div class="form-control">
                                 <label class="inline-block text-sm font-medium text-foreground mb-1">
-                                    Teléfono
-                                </label>
-                                <input id="info-phone" type="tel" name="phone" class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none"
-                                       value="{{ $tenant->phone }}" 
-                                       placeholder="+58 414 123 4567"
-                                       aria-label="Teléfono de tu negocio"
-                                       autocomplete="tel">
-                                <p class="text-xs text-muted-foreground-1 mt-1">Incluye código de país</p>
-                            </div>
-                            <div class="form-control">
-                                <label class="inline-block text-sm font-medium text-foreground mb-1">
                                     WhatsApp
                                 </label>
                                 <div class="flex items-center gap-2">
@@ -98,16 +87,40 @@
                                 <p id="wa-validation-msg" class="text-xs mt-1 hidden text-red-500"></p>
                                 <p class="text-xs text-muted-foreground-1 mt-1">Solo Venezuela. Operadoras: 412, 414, 416, 422, 424, 426</p>
                             </div>
+                            <div class="form-control">
+                                <label class="inline-block text-sm font-medium text-foreground mb-1">
+                                    Teléfono
+                                </label>
+                                <div class="flex items-center gap-2">
+                                    <span class="py-1.5 sm:py-2 px-3 bg-muted/60 border border-layer-line rounded-lg text-sm font-medium text-foreground select-none shrink-0">+58</span>
+                                    <input id="info-phone" type="tel" name="phone"
+                                           class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none"
+                                           value="{{ preg_replace('/^58/', '', preg_replace('/\D/', '', $tenant->phone ?? '')) }}"
+                                           placeholder="4121234567"
+                                           maxlength="10"
+                                           pattern="(0?)(412|414|416|422|424|426)\d{7}"
+                                           aria-label="Teléfono de tu negocio"
+                                           autocomplete="tel">
+                                </div>
+                                <p id="phone-validation-msg" class="text-xs mt-1 hidden text-red-500"></p>
+                                <p class="text-xs text-muted-foreground-1 mt-1">Solo Venezuela. Operadoras: 412, 414, 416, 422, 424, 426</p>
+                            </div>
                             @if($plan->whatsapp_numbers >= 2)
                             <div class="form-control">
                                 <label class="inline-block text-sm font-medium text-foreground mb-1" for="info-whatsapp-support">
                                     WhatsApp Soporte
                                 </label>
-                                <input id="info-whatsapp-support" type="tel" class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none"
-                                       name="whatsapp_support"
-                                       value="{{ $tenant->whatsapp_support }}"
-                                       placeholder="+58 414 000 0000"
-                                       aria-label="WhatsApp de soporte o línea secundaria">
+                                <div class="flex items-center gap-2">
+                                    <span class="py-1.5 sm:py-2 px-3 bg-muted/60 border border-layer-line rounded-lg text-sm font-medium text-foreground select-none shrink-0">+58</span>
+                                    <input id="info-whatsapp-support" type="tel" name="whatsapp_support"
+                                           class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none"
+                                           value="{{ preg_replace('/^58/', '', preg_replace('/\D/', '', $tenant->whatsapp_support ?? '')) }}"
+                                           placeholder="4241234567"
+                                           maxlength="10"
+                                           pattern="(0?)(412|414|416|422|424|426)\d{7}"
+                                           aria-label="WhatsApp de soporte o línea secundaria"
+                                           autocomplete="tel">
+                                </div>
                                 <p class="text-xs text-muted-foreground-1 mt-1">Línea de respaldo si la principal no está disponible</p>
                             </div>
                             @endif
@@ -228,46 +241,6 @@
                             <p class="text-xs text-muted-foreground-1 mt-1">Usada como <strong>meta descripción en Google</strong>, OpenGraph y Schema.org. Vacío = usa la descripción del negocio como fallback.</p>
                         </div>
 
-                        {{-- ══ Contenido Hero ════════════════════════════════════════ --}}
-                        @if($blueprint !== 'food')
-                        <div class="border-t border-border my-4 mt-6 text-xs text-muted-foreground-1">Contenido del Hero</div>
-
-                        <div class="form-control mt-3">
-                            <label class="inline-block text-sm font-medium text-foreground mb-1" for="info-hero-title">
-                                Título Hero <span class="text-muted-foreground-1 font-normal">(opcional)</span>
-                            </label>
-                            <input id="info-hero-title" type="text"
-                                   class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none"
-                                   name="content_blocks[hero][title]"
-                                   placeholder="Ej: La mejor pizzería de Maracaibo"
-                                   value="{{ $customization?->getContentBlock('hero', 'title') ?? '' }}">
-                            <p class="mt-1.5 text-xs text-muted-foreground-2">Si lo dejas vacío, el Hero usa tu <strong>Eslogan</strong> como título.</p>
-                        </div>
-
-                        <div class="form-control mt-3">
-                            <label class="inline-block text-sm font-medium text-foreground mb-1" for="info-hero-subtitle">
-                                Subtítulo Hero
-                            </label>
-                            <input id="info-hero-subtitle" type="text"
-                                   class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none"
-                                   name="content_blocks[hero][subtitle]"
-                                   placeholder="Ej: Masa artesanal, ingredientes frescos, entrega en 30 min"
-                                   value="{{ $customization?->getContentBlock('hero', 'subtitle') ?? '' }}">
-                            <p class="mt-1.5 text-xs text-muted-foreground-2">Texto secundario del Hero. Si está vacío, no se muestra subtítulo.</p>
-                        </div>
-                        @endif
-
-                        @if($blueprint !== 'food')
-                        <div class="form-control mt-3">
-                            <label class="inline-block text-sm font-medium text-foreground mb-1" for="info-about-text">
-                                Texto Sección Acerca De
-                            </label>
-                            <textarea id="info-about-text" class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none" rows="4"
-                                      name="about_text"
-                                      placeholder="Cuéntale a tus clientes quiénes son, qué los hace especiales...">{{ $customization?->about_text ?? '' }}</textarea>
-                            <p class="mt-1.5 text-xs text-muted-foreground-2">Texto de la sección &ldquo;Acerca de nosotros&rdquo;. <strong>Variable independiente</strong>, no comparte contenido con Hero ni Contacto.</p>
-                        </div>
-                        @endif
                         @if(!in_array($blueprint ?? '', ['food', 'cat']))
                         {{-- ══ Títulos de Secciones (editables por sección) ══════════ --}}
                         <div class="border-t border-border my-4 mt-6 text-xs text-muted-foreground-1">Títulos de Secciones</div>
@@ -380,7 +353,7 @@
                             </div>
                             @endif
 
-                            @if($blueprint !== 'food' && $tenant->plan_id >= 3)
+                            @if($blueprint !== 'food' && $tenant->isVision())
                             <div class="form-control">
                                 <label class="inline-block text-sm font-medium text-foreground mb-1" for="info-faq-title">
                                     <span class="flex items-center gap-1">
@@ -700,6 +673,8 @@
             ═══════════════════════════════════════════════════════════ --}}
             <div class="bg-surface rounded-xl shadow-sm border border-border mb-6">
                 @php
+                    $planSlug      = (string) ($plan->slug ?? 'studio-oportunidad');
+                    $isPlan1       = in_array($planSlug, ['studio-oportunidad', 'food-basico', 'cat-basico'], true);
                     $rawSocial      = $customization->social_networks ?? [];
                     $socialNetworks = is_array($rawSocial) ? $rawSocial : [];
                     $allNetworksMeta = [
@@ -711,7 +686,7 @@
                         'x'         => ['label' => 'Twitter / X','placeholder' => '@tuusuario',    'icon' => 'tabler--brand-x'],
                     ];
                     $plan1Networks  = ['instagram', 'facebook', 'tiktok', 'linkedin'];
-                    $availableKeys  = $plan->id === 1 ? $plan1Networks : array_keys($allNetworksMeta);
+                    $availableKeys  = $isPlan1 ? $plan1Networks : array_keys($allNetworksMeta);
                     $plan1Selected  = array_key_first(array_intersect_key($socialNetworks, array_flip($plan1Networks))) ?? '';
                     $plan1Handle    = $plan1Selected ? ($socialNetworks[$plan1Selected] ?? '') : '';
                 @endphp
@@ -723,14 +698,14 @@
                         </div>
                         <h3 class="text-lg font-bold text-foreground">Redes Sociales</h3>
                     </div>
-                    @if($plan->id === 1)
+                    @if($isPlan1)
                         <span class="inline-flex items-center py-0.5 px-2 rounded-full text-sm font-medium bg-yellow-100 text-yellow-700">Plan OPORTUNIDAD — 1 red social</span>
                     @else
                         <span class="inline-flex items-center py-0.5 px-2 rounded-full text-sm font-medium bg-green-100 text-green-700">Plan {{ $plan->name }} — Todas las redes</span>
                     @endif
                 </div>
                 <div class="px-6 pb-6">
-                    @if($plan->id === 1)
+                    @if($isPlan1)
                     {{-- ── Plan 1: radio select + single handle ── --}}
                     <div class="mb-4">
                         <label class="inline-block text-sm font-medium text-foreground mb-1">Elige tu red social</label>

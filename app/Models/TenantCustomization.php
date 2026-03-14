@@ -179,6 +179,8 @@ class TenantCustomization extends Model
      */
     public function canAccessSection(string $section, int $planId): bool
     {
+        $planTier = $this->resolvePlanTier($planId);
+
         $planRequirements = [
             'hero'            => 1,
             'products'        => 1,
@@ -194,7 +196,29 @@ class TenantCustomization extends Model
         ];
 
         $requiredPlan = $planRequirements[$section] ?? 1;
-        return $planId >= $requiredPlan;
+        return $planTier >= $requiredPlan;
+    }
+
+    /**
+     * Normalize concrete plan IDs to cross-blueprint tier scale (1/2/3).
+     */
+    private function resolvePlanTier(int $planId): int
+    {
+        if ($planId <= 0) {
+            return 1;
+        }
+
+        if (in_array($planId, [1, 2, 3], true)) {
+            return $planId;
+        }
+
+        $slug = (string) (Plan::query()->whereKey($planId)->value('slug') ?? '');
+
+        return match ($slug) {
+            'studio-crecimiento', 'food-semestral', 'cat-semestral' => 2,
+            'studio-vision', 'food-anual', 'cat-anual' => 3,
+            default => 1,
+        };
     }
 
     /**

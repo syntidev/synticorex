@@ -12,6 +12,76 @@
                 };
             @endphp
 
+            {{-- ── Categorías CAT ──────────────────────────────────── --}}
+            <div class="p-6 pb-0">
+            <div class="bg-surface rounded-xl shadow-sm border border-border mb-4">
+                <div class="px-6 py-4 flex items-center justify-between gap-3 flex-wrap">
+                    <div class="flex items-center gap-3">
+                        <div class="size-9 rounded-xl bg-primary/10 flex items-center justify-center">
+                            <span class="iconify tabler--tag size-4 text-primary" aria-hidden="true"></span>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-bold text-foreground">Categorías</h3>
+                            <p class="text-xs text-muted-foreground-1">Organiza tus productos por categoría y subcategoría</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <input type="text" id="cat-new-category-input"
+                               class="py-1.5 px-3 text-sm bg-layer border border-layer-line rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus w-44"
+                               maxlength="60" placeholder="Nueva categoría..."
+                               onkeydown="if(event.key==='Enter'){event.preventDefault();addCatCategory();}">
+                        <button onclick="addCatCategory()"
+                                class="inline-flex items-center text-sm py-1.5 px-3 rounded-lg font-medium bg-primary text-primary-foreground hover:bg-primary-hover gap-1 cursor-pointer">
+                            <span class="iconify tabler--plus size-4" aria-hidden="true"></span>
+                            Agregar
+                        </button>
+                    </div>
+                </div>
+
+                <div id="cat-categories-list" class="px-6 pb-4 space-y-2">
+                    @forelse($catCategories as $cat)
+                    <div class="cat-group" data-cat-id="{{ $cat['id'] }}" data-cat-name="{{ $cat['name'] }}">
+                        {{-- Categoría padre --}}
+                        <div class="flex items-center gap-2 flex-wrap" data-cat-row="1">
+                            <span class="inline-flex items-center gap-1.5 py-1 px-2.5 rounded-full text-xs font-semibold bg-primary/10 text-primary border border-primary/20">
+                                <span class="iconify tabler--folder size-3" aria-hidden="true"></span>
+                                {{ $cat['name'] }}
+                                <button type="button" onclick="deleteCatCategory('{{ $cat['id'] }}')"
+                                        class="size-3.5 flex items-center justify-center rounded-full hover:bg-primary/20 cursor-pointer transition-colors"
+                                        title="Eliminar categoría">
+                                    <span class="iconify tabler--x size-3"></span>
+                                </button>
+                            </span>
+
+                            {{-- Subcategorías --}}
+                            @foreach($cat['subcategories'] ?? [] as $sub)
+                            <span class="inline-flex items-center gap-1.5 py-1 px-2.5 rounded-full text-xs font-medium bg-layer text-foreground border border-layer-line"
+                                  data-sub-id="{{ $sub['id'] }}" data-sub-name="{{ $sub['name'] }}">
+                                {{ $sub['name'] }}
+                                <button type="button" onclick="deleteCatCategory('{{ $sub['id'] }}')"
+                                        class="size-3.5 flex items-center justify-center rounded-full hover:bg-red-100 cursor-pointer transition-colors"
+                                        title="Eliminar subcategoría">
+                                    <span class="iconify tabler--x size-3"></span>
+                                </button>
+                            </span>
+                            @endforeach
+
+                            {{-- Mini input para agregar subcategoría inline --}}
+                            <span class="inline-flex items-center gap-1" data-sub-input-wrap="1">
+                                <input type="text" placeholder="+ sub"
+                                       class="py-0.5 px-2 text-xs bg-transparent border border-dashed border-layer-line rounded-full text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus w-24"
+                                       maxlength="60"
+                                       onkeydown="if(event.key==='Enter'){event.preventDefault();addCatSubcategory('{{ $cat['id'] }}', this);}">
+                            </span>
+                        </div>
+                    </div>
+                    @empty
+                    <p class="text-xs text-muted-foreground-1 py-1" id="cat-no-categories-msg">Sin categorías. Agrega la primera.</p>
+                    @endforelse
+                </div>
+            </div>
+            </div>
+
             {{-- ── Productos card ─────────────────────────────────── --}}
             <div class="p-6">
             <div class="bg-surface rounded-xl shadow-sm border border-border">
@@ -202,10 +272,23 @@
                             <input type="text" id="cat-product-name" class="py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus" required maxlength="100" placeholder="Nombre del producto">
                         </div>
 
-                        {{-- Categoría --}}
-                        <div>
-                            <label for="cat-product-category" class="inline-block text-xs font-semibold text-muted-foreground-1 uppercase tracking-wide mb-1.5">Categoría</label>
-                            <input type="text" id="cat-product-category" class="py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus" maxlength="60" placeholder="Ropa, Electrónico, Calzado...">
+                        {{-- Categoría + Subcategoría --}}
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label for="cat-product-category" class="inline-block text-xs font-semibold text-muted-foreground-1 uppercase tracking-wide mb-1.5">Categoría</label>
+                                <select id="cat-product-category" onchange="updateSubcategorySelect()" class="py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs text-sm rounded-lg text-foreground focus:border-primary-focus focus:ring-primary-focus">
+                                    <option value="">Sin categoría</option>
+                                    @foreach($catCategories as $cat)
+                                    <option value="{{ $cat['name'] }}" data-cat-id="{{ $cat['id'] }}" data-subs="{{ json_encode($cat['subcategories'] ?? []) }}">{{ $cat['name'] }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div>
+                                <label for="cat-product-subcategory" class="inline-block text-xs font-semibold text-muted-foreground-1 uppercase tracking-wide mb-1.5">Subcategoría</label>
+                                <select id="cat-product-subcategory" class="py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs text-sm rounded-lg text-foreground focus:border-primary-focus focus:ring-primary-focus">
+                                    <option value="">Sin subcategoría</option>
+                                </select>
+                            </div>
                         </div>
 
                         {{-- Precio + Precio original --}}
@@ -294,6 +377,170 @@
     var _catMaxProducts = {{ $maxProducts }};
     var _catCurrentCount = {{ $currentCount }};
     var _catVariantRowIdx = 0;
+
+    // ── Categorías ──────────────────────────────────────────
+    window.updateSubcategorySelect = function() {
+        var catSel = document.getElementById('cat-product-category');
+        var subSel = document.getElementById('cat-product-subcategory');
+        subSel.innerHTML = '<option value="">Sin subcategoría</option>';
+        var opt = catSel.options[catSel.selectedIndex];
+        if (!opt || !opt.dataset.subs) return;
+        try {
+            var subs = JSON.parse(opt.dataset.subs);
+            subs.forEach(function(s) {
+                var o = document.createElement('option');
+                o.value = s.name; o.textContent = s.name;
+                subSel.appendChild(o);
+            });
+        } catch(e) {}
+    };
+
+    window.addCatCategory = function() {
+        var input = document.getElementById('cat-new-category-input');
+        var name = (input.value || '').trim();
+        if (!name) { input.focus(); return; }
+
+        fetch('/tenant/{{ $tenant->id }}/cat-categories', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            },
+            body: JSON.stringify({ name: name })
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(res) {
+            if (!res.success) { alert(res.message || 'Error al agregar'); return; }
+            var cat = res.data;
+            input.value = '';
+            var noMsg = document.getElementById('cat-no-categories-msg');
+            if (noMsg) noMsg.remove();
+            var list = document.getElementById('cat-categories-list');
+            var group = document.createElement('div');
+            group.className = 'cat-group';
+            group.dataset.catId = cat.id;
+            group.dataset.catName = cat.name;
+            group.innerHTML =
+                '<div class="flex items-center gap-2 flex-wrap" data-cat-row="1">' +
+                '  <span class="inline-flex items-center gap-1.5 py-1 px-2.5 rounded-full text-xs font-semibold bg-primary/10 text-primary border border-primary/20">' +
+                '    <span class="iconify tabler--folder size-3"></span>' +
+                '    ' + cat.name +
+                '    <button type="button" onclick="deleteCatCategory(\'' + cat.id + '\')" class="size-3.5 flex items-center justify-center rounded-full hover:bg-primary/20 cursor-pointer transition-colors" title="Eliminar categoría"><span class="iconify tabler--x size-3"></span></button>' +
+                '  </span>' +
+                '  <span class="inline-flex items-center gap-1" data-sub-input-wrap="1">' +
+                '    <input type="text" placeholder="+ sub" class="py-0.5 px-2 text-xs bg-transparent border border-dashed border-layer-line rounded-full text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus w-24" maxlength="60" onkeydown="if(event.key===\'Enter\'){event.preventDefault();addCatSubcategory(\'' + cat.id + '\', this);}">' +
+                '  </span>' +
+                '</div>';
+            list.appendChild(group);
+            // Añadir al select
+            var select = document.getElementById('cat-product-category');
+            if (select) {
+                var opt = document.createElement('option');
+                opt.value = cat.name; opt.textContent = cat.name;
+                opt.dataset.catId = cat.id;
+                opt.dataset.subs = '[]';
+                select.appendChild(opt);
+            }
+        })
+        .catch(function() { alert('Error de conexión'); });
+    };
+
+    window.addCatSubcategory = function(parentId, inputEl) {
+        var name = (inputEl.value || '').trim();
+        if (!name) return;
+
+        fetch('/tenant/{{ $tenant->id }}/cat-categories', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            },
+            body: JSON.stringify({ name: name, parent_id: parentId })
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(res) {
+            if (!res.success) { alert(res.message || 'Error al agregar subcategoría'); return; }
+            var sub = res.data;
+            inputEl.value = '';
+            // Insertar chip antes del input (dentro del flex-wrap del grupo)
+            var group = document.querySelector('.cat-group[data-cat-id="' + parentId + '"]');
+            if (!group) return;
+            var wrap = group.querySelector('[data-cat-row]');
+            if (!wrap) return;
+            var inputWrap = wrap.querySelector('[data-sub-input-wrap]');
+            if (!inputWrap) return;
+            var chip = document.createElement('span');
+            chip.className = 'inline-flex items-center gap-1.5 py-1 px-2.5 rounded-full text-xs font-medium bg-layer text-foreground border border-layer-line';
+            chip.dataset.subId = sub.id; chip.dataset.subName = sub.name;
+            chip.innerHTML = sub.name +
+                '<button type="button" onclick="deleteCatCategory(\'' + sub.id + '\')" class="size-3.5 flex items-center justify-center rounded-full hover:bg-red-100 cursor-pointer transition-colors" title="Eliminar subcategoría"><span class="iconify tabler--x size-3"></span></button>';
+            wrap.insertBefore(chip, inputWrap);
+            // Actualizar subs en el option del select de categoría
+            var catSelect = document.getElementById('cat-product-category');
+            if (catSelect) {
+                var opt = catSelect.querySelector('option[data-cat-id="' + parentId + '"]');
+                if (opt) {
+                    try {
+                        var subs = JSON.parse(opt.dataset.subs || '[]');
+                        subs.push({ id: sub.id, name: sub.name });
+                        opt.dataset.subs = JSON.stringify(subs);
+                    } catch(e) {}
+                }
+            }
+        })
+        .catch(function() { alert('Error de conexión'); });
+    };
+
+    window.deleteCatCategory = function(catId) {
+        if (!confirm('¿Eliminar?')) return;
+        fetch('/tenant/{{ $tenant->id }}/cat-categories/' + catId, {
+            method: 'DELETE',
+            headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content }
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(res) {
+            if (!res.success) { alert(res.message || 'Error al eliminar'); return; }
+            // Remover grupo padre completo si es categoría raíz
+            var group = document.querySelector('.cat-group[data-cat-id="' + catId + '"]');
+            if (group) {
+                group.remove();
+                // Quitar del select
+                var catSelect = document.getElementById('cat-product-category');
+                if (catSelect) {
+                    var opt = catSelect.querySelector('option[data-cat-id="' + catId + '"]');
+                    if (opt) opt.remove();
+                }
+            } else {
+                // Es subcategoría
+                var subChip = document.querySelector('[data-sub-id="' + catId + '"]');
+                if (subChip) {
+                    // Actualizar data-subs del parent option
+                    var parentGroup = subChip.closest('.cat-group');
+                    if (parentGroup) {
+                        var pId = parentGroup.dataset.catId;
+                        var catSelect = document.getElementById('cat-product-category');
+                        if (catSelect) {
+                            var opt = catSelect.querySelector('option[data-cat-id="' + pId + '"]');
+                            if (opt) {
+                                try {
+                                    var subs = JSON.parse(opt.dataset.subs || '[]');
+                                    subs = subs.filter(function(s) { return s.id !== catId; });
+                                    opt.dataset.subs = JSON.stringify(subs);
+                                } catch(e) {}
+                            }
+                        }
+                    }
+                    subChip.remove();
+                }
+            }
+            // Si no quedan categorías
+            var list = document.getElementById('cat-categories-list');
+            if (list && !list.querySelector('.cat-group')) {
+                list.innerHTML = '<p class="text-xs text-muted-foreground-1 py-1" id="cat-no-categories-msg">Sin categorías. Agrega la primera.</p>';
+            }
+        })
+        .catch(function() { alert('Error de conexión'); });
+    };
 
     // ── Límite ──────────────────────────────────────────────
     window.checkAndOpenCatProductModal = function() {
@@ -406,16 +653,19 @@
 
     // ── Editar producto existente ─────────────────────────────
     window.editCatProduct = function(id) {
-        fetch('/dashboard/products/' + id + '/json', {
+        fetch('/api/tenants/{{ $tenant->id }}/products/' + id, {
             headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content }
         })
         .then(function(r) { return r.json(); })
-        .then(function(p) {
+        .then(function(res) {
+            var p = res.data || res; // API returns { success, data: {...} }
             document.getElementById('cat-product-modal-title').innerHTML =
                 '<span class="iconify tabler--pencil size-4 opacity-80"></span> Editar Producto';
             document.getElementById('cat-product-id').value = p.id;
             document.getElementById('cat-product-name').value = p.name || '';
             document.getElementById('cat-product-category').value = p.category_name || '';
+            updateSubcategorySelect();
+            document.getElementById('cat-product-subcategory').value = p.subcategory_name || '';
             document.getElementById('cat-product-price').value = p.price_usd || '';
             document.getElementById('cat-product-compare-price').value = p.compare_price_usd || '';
             document.getElementById('cat-product-description').value = p.description || '';
@@ -461,6 +711,7 @@
         var formData = new FormData();
         formData.append('name',             document.getElementById('cat-product-name').value);
         formData.append('category_name',    document.getElementById('cat-product-category').value);
+        formData.append('subcategory_name', document.getElementById('cat-product-subcategory').value);
         formData.append('price_usd',        document.getElementById('cat-product-price').value);
         formData.append('compare_price_usd',document.getElementById('cat-product-compare-price').value);
         formData.append('description',      document.getElementById('cat-product-description').value);
@@ -479,14 +730,25 @@
         @endfor
 
         if (id) formData.append('_method', 'PUT');
-        var url = id ? '/dashboard/products/' + id : '/dashboard/products';
+        var url = id
+            ? '/tenant/{{ $tenant->id }}/products/' + id
+            : '/tenant/{{ $tenant->id }}/products';
         formData.append('_token', document.querySelector('meta[name="csrf-token"]').content);
 
         var btn = e.target.querySelector('[type="submit"]');
         btn.disabled = true;
 
         fetch(url, { method: 'POST', body: formData })
-        .then(function(r) { return r.json(); })
+        .then(function(r) {
+            return r.text().then(function(text) {
+                var data;
+                try { data = JSON.parse(text); } catch (e) { data = { success: false, message: text || 'Respuesta inválida del servidor' }; }
+                if (!r.ok) {
+                    data.success = false;
+                }
+                return data;
+            });
+        })
         .then(function(data) {
             if (data.success) {
                 closeCatProductModal();

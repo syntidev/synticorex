@@ -183,7 +183,13 @@ class TenantRendererController extends Controller
                 ->values()
                 ->all();
 
-            return view($this->resolveTemplate($tenant), compact('tenant', 'plan', 'products', 'services', 'dollarRate', 'euroRate', 'themeSlug', 'meta', 'customization', 'currencySettings', 'displayMode', 'savedDisplayMode', 'showReference', 'showBolivares', 'showEuro', 'hidePrice', 'trackingQRSmall', 'trackingShortlink', 'showHoursIndicator', 'isOpen', 'closedMessage', 'blueprint', 'schema', 'menu', 'featuredItems'));
+            // CAT categories for catalog landing
+            $catCategories = [];
+            if ($tenant->getBlueprintSlug() === 'cat') {
+                $catCategories = array_values(data_get($tenant->settings ?? [], 'cat_categories', []));
+            }
+
+            return view($this->resolveTemplate($tenant), compact('tenant', 'plan', 'products', 'services', 'dollarRate', 'euroRate', 'themeSlug', 'meta', 'customization', 'currencySettings', 'displayMode', 'savedDisplayMode', 'showReference', 'showBolivares', 'showEuro', 'hidePrice', 'trackingQRSmall', 'trackingShortlink', 'showHoursIndicator', 'isOpen', 'closedMessage', 'blueprint', 'schema', 'menu', 'featuredItems', 'catCategories'));
         } catch (Throwable $e) {
             Log::error('TenantRendererController: Error rendering landing page', [
                 'subdomain' => $subdomain,
@@ -286,6 +292,12 @@ class TenantRendererController extends Controller
                 ->values()
                 ->all();
 
+            // CAT categories for catalog landing
+            $viewData['catCategories'] = [];
+            if ($tenant->getBlueprintSlug() === 'cat') {
+                $viewData['catCategories'] = array_values(data_get($tenant->settings ?? [], 'cat_categories', []));
+            }
+
             Log::info('TenantRendererController: Rendering by custom domain', [
                 'domain' => $domain,
                 'tenant_id' => $tenant->id,
@@ -373,6 +385,12 @@ class TenantRendererController extends Controller
                 ->filter(fn($item) => !empty($item['badge']))
                 ->values()
                 ->all();
+
+            // CAT categories for catalog landing
+            $viewData['catCategories'] = [];
+            if ($tenant->getBlueprintSlug() === 'cat') {
+                $viewData['catCategories'] = array_values(data_get($tenant->settings ?? [], 'cat_categories', []));
+            }
 
             Log::debug('TenantRendererController: Preview mode', [
                 'tenant_id' => $tenantId,

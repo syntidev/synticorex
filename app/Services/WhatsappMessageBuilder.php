@@ -15,7 +15,7 @@ class WhatsappMessageBuilder
     public function build(array $order): string
     {
         $lines   = [];
-        $lines[] = "🛍 Pedido {$order['id']}";
+        $lines[] = "Orden {$order['id']}";
         $lines[] = '';
 
         foreach ($order['items'] as $item) {
@@ -28,6 +28,7 @@ class WhatsappMessageBuilder
         $lines[] = 'Subtotal: REF ' . number_format($order['subtotal'], 2, ',', '.');
         $lines[] = '';
         $lines[] = "Nombre: {$order['customer']['name']}";
+        $lines[] = "Telefono: {$order['customer']['phone']}";
 
         if (!empty($order['customer']['location'])) {
             $lines[] = "Sector: {$order['customer']['location']}";

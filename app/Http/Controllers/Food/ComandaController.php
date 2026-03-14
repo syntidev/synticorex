@@ -43,8 +43,8 @@ class ComandaController extends Controller
             ], 422);
         }
 
-        $planSlug = $tenant->plan->slug ?? '';
-        $canPersist = $planSlug === 'food-anual' || ($tenant->plan_id ?? 0) >= 3;
+        $planSlug = (string) ($tenant->plan->slug ?? '');
+        $canPersist = $planSlug === 'food-anual';
 
         // Generate comanda (always gets SF-XXXX code)
         $comanda = $this->comandaService->generate($tenant, $validated['customer_name'], $validated['modalidad'], $validated['items']);

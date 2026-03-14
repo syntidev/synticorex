@@ -152,6 +152,11 @@ Route::middleware(['auth', 'verified', 'tenant.owner:tenantId'])->group(function
     Route::put('/tenant/{tenantId}/products/{productId}',    [DashboardController::class, 'updateProduct']);
     Route::delete('/tenant/{tenantId}/products/{productId}', [DashboardController::class, 'deleteProduct']);
 
+    // CAT Categories CRUD
+    Route::get('/tenant/{tenantId}/cat-categories',                          [DashboardController::class, 'getCatCategories']);
+    Route::post('/tenant/{tenantId}/cat-categories',                         [DashboardController::class, 'createCatCategory']);
+    Route::delete('/tenant/{tenantId}/cat-categories/{categoryId}',          [DashboardController::class, 'deleteCatCategory']);
+
     // Services CRUD
     Route::post('/tenant/{tenantId}/services',               [DashboardController::class, 'createService']);
     Route::put('/tenant/{tenantId}/services/{serviceId}',    [DashboardController::class, 'updateService']);
@@ -193,6 +198,8 @@ Route::middleware(['auth', 'verified', 'tenant.owner:tenantId'])->group(function
     Route::get('/tenant/{tenantId}/comandas-json',                [DashboardController::class, 'getComandasJson']);
     Route::post('/tenant/{tenantId}/comandas/{comandaId}/action', [DashboardController::class, 'updateComandaAction'])
         ->where('comandaId', '[A-Z0-9-]+');
+    Route::post('/tenant/{tenantId}/orders/{orderId}/action', [DashboardController::class, 'updateOrderAction'])
+        ->where('orderId', '[A-Z0-9-]+');
 
     // Analytics (datos del tenant — privado)
     Route::get('/tenant/{tenantId}/analytics',                    [AnalyticsController::class, 'getData']);

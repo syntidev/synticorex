@@ -3,9 +3,11 @@
     $payMethods      = $customization->payment_methods ?? [];
     $globalEnabled   = $payMethods['global'] ?? [];
     $currencyEnabled = $payMethods['currency'] ?? [];
+    $planSlug        = (string) ($tenant->plan->slug ?? 'studio-oportunidad');
+    $isBasicPlan     = in_array($planSlug, ['studio-oportunidad', 'food-basico', 'cat-basico'], true);
 
     // Plan 1: fijos — no configurables
-    if ($tenant->plan_id === 1) {
+    if ($isBasicPlan) {
         $globalEnabled   = ['pagoMovil', 'cash'];
         $currencyEnabled = [];
     }

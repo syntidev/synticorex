@@ -28,6 +28,8 @@ class Product extends Model
         'is_active',
         'is_featured',
         'badge',
+        'category_name',
+        'subcategory_name',
     ];
 
     /**

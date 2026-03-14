@@ -73,7 +73,7 @@
 
     @yield('content')
 
-    @if(isset($plan) && $plan->id >= 2 && isset($customization) && $customization->header_message)
+    @if(isset($tenant, $customization) && $tenant->isAtLeastCrecimiento() && $customization->header_message)
         @include('landing.sections.header-top')
     @endif
 

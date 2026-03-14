@@ -64,10 +64,16 @@ trait HasBlueprint
      */
     public function getMaxItems(): int
     {
+        // Plan's products_limit is the primary source of truth
+        if ($this->plan) {
+            $limit = $this->plan->products_limit;
+            if ($limit === null) return 9999; // null = ilimitado
+            if ($limit > 0)     return (int) $limit;
+        }
+
         $blueprint = $this->getBlueprint();
 
         if (! $blueprint) {
-            // Fallback to existing plan limits (6/12/18)
             return match ((int) $this->plan_id) {
                 1 => 6,
                 2 => 12,

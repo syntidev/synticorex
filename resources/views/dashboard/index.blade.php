@@ -293,9 +293,11 @@
                             default => 'Plan',
                         };
 
-                        $planTone = $plan->id === 1
-                            ? 'bg-amber-100 text-amber-700'
-                            : ($plan->id === 2 ? 'bg-emerald-100 text-emerald-700' : 'bg-sky-100 text-sky-700');
+                        $planTone = match($plan->slug ?? '') {
+                            'studio-oportunidad', 'food-basico', 'cat-basico' => 'bg-amber-100 text-amber-700',
+                            'studio-crecimiento', 'food-semestral', 'cat-semestral' => 'bg-emerald-100 text-emerald-700',
+                            default => 'bg-sky-100 text-sky-700',
+                        };
                     @endphp
                     <div class="hidden sm:flex items-center gap-2 py-1 px-2 min-h-8">
                         <span class="{{ $tenant->is_open ? 'dot-online' : 'dot-offline' }}"
@@ -428,6 +430,15 @@
                                 Comandas
                             </button>
                         </li>
+                        @elseif($blueprint === 'cat')
+                        <li>
+                            <button class="sidebar-tab-btn" role="tab"
+                                    aria-selected="false" aria-controls="tab-pedidos"
+                                    data-tab="pedidos" tabindex="-1">
+                                <span class="iconify tabler--receipt-2 size-4 shrink-0"></span>
+                                Ordenes
+                            </button>
+                        </li>
                         @endif
                         <li>
                             <button class="sidebar-tab-btn" role="tab"
@@ -437,6 +448,7 @@
                                 Cómo Se Ve
                             </button>
                         </li>
+                        @if($blueprint === 'studio')
                         <li>
                             <button class="sidebar-tab-btn" role="tab"
                                     aria-selected="false" aria-controls="tab-mensaje"
@@ -445,6 +457,7 @@
                                 Tu Mensaje
                             </button>
                         </li>
+                        @endif
                         <li>
                             <button class="sidebar-tab-btn" role="tab"
                                     aria-selected="false" aria-controls="tab-ventas"
@@ -580,7 +593,7 @@
                 @if($blueprint === 'food')
                     @include('dashboard.components.menu-section')
                     @include('dashboard.components.comandas-section')
-                @elseif($blueprint === 'catalog')
+                @elseif($blueprint === 'cat')
                     @include('dashboard.components.catalog-products-section')
                     @include('dashboard.components.orders-section')
                 @else
@@ -597,7 +610,9 @@
                 @include('dashboard.components.design-section')
 
                 {{-- ═══ TAB 4: TU MENSAJE ═══ --}}
-                @include('dashboard.components.message-section')
+                @if($blueprint === 'studio')
+                    @include('dashboard.components.message-section')
+                @endif
 
                 {{-- ═══ TAB 5: PULSO DEL NEGOCIO ═══ --}}
                 @include('dashboard.components.sales-section')

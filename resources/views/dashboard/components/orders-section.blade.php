@@ -1,6 +1,44 @@
         <!-- Tab: Pedidos (Mini Order Engine) -->
         <div id="tab-pedidos" class="tab-content">
             <div class="p-6">
+            @php
+                $paymentMethods = (array) data_get($customization?->payment_methods, 'global', []);
+                $paymentCurrencies = (array) data_get($customization?->payment_methods, 'currency', []);
+                $paymentDetails = (array) data_get($customization?->payment_methods, 'details', []);
+
+                $paymentLabels = [
+                    'pagoMovil' => 'Pago Movil',
+                    'cash' => 'Efectivo',
+                    'puntoventa' => 'Punto de Venta',
+                    'biopago' => 'Biopago',
+                    'cashea' => 'Cashea',
+                    'krece' => 'Krece',
+                    'wepa' => 'Wepa',
+                    'lysto' => 'Lysto',
+                    'chollo' => 'Chollo',
+                    'wally' => 'Wally',
+                    'kontigo' => 'Kontigo',
+                    'zelle' => 'Zelle',
+                    'paypal' => 'PayPal',
+                    'zinli' => 'Zinli',
+                    'airtm' => 'AirTM',
+                    'reserve' => 'Reserve (RSV)',
+                    'binancepay' => 'Binance Pay',
+                    'usdt' => 'USDT',
+                    'usd' => 'USD',
+                    'eur' => 'EUR',
+                ];
+
+                $paymentText = collect(array_merge($paymentMethods, $paymentCurrencies))
+                    ->map(fn(string $code): string => $paymentLabels[$code] ?? strtoupper($code))
+                    ->filter()
+                    ->values()
+                    ->implode(', ');
+
+                if ($paymentText === '') {
+                    $paymentText = 'Pago Movil, Transferencia o Divisas';
+                }
+            @endphp
 
             {{-- ── Hero header ──────────────────────────────────────────── --}}
             <div class="mb-5 pb-5 border-b border-border">
@@ -11,10 +49,10 @@
                     </div>
                     <div>
                         <h2 class="text-lg font-bold text-foreground leading-tight" style="font-family:'Plus Jakarta Sans',sans-serif">
-                            Pedidos
+                            Ordenes CAT
                         </h2>
                         <p class="text-xs text-muted-foreground-1 mt-0.5">
-                            Mini Order Engine
+                            Carrito y ordenes por WhatsApp
                             @if($isPlanAnual && count($orders) > 0)
                                 •
                                 @php
@@ -63,15 +101,104 @@
                                     <th class="px-4 py-3 text-left text-xs font-bold text-muted-foreground-1 uppercase tracking-wider">ID</th>
                                     <th class="px-4 py-3 text-left text-xs font-bold text-muted-foreground-1 uppercase tracking-wider">Fecha</th>
                                     <th class="px-4 py-3 text-left text-xs font-bold text-muted-foreground-1 uppercase tracking-wider">Cliente</th>
+                                    <th class="px-4 py-3 text-left text-xs font-bold text-muted-foreground-1 uppercase tracking-wider">Telefono</th>
                                     <th class="px-4 py-3 text-center text-xs font-bold text-muted-foreground-1 uppercase tracking-wider">Items</th>
                                     <th class="px-4 py-3 text-right text-xs font-bold text-muted-foreground-1 uppercase tracking-wider">Total</th>
+                                    <th class="px-4 py-3 text-center text-xs font-bold text-muted-foreground-1 uppercase tracking-wider">Estado</th>
+                                    <th class="px-4 py-3 text-center text-xs font-bold text-muted-foreground-1 uppercase tracking-wider">Accion</th>
+                                    <th class="px-4 py-3 text-center text-xs font-bold text-muted-foreground-1 uppercase tracking-wider">Pago</th>
                                     <th class="px-4 py-3 text-center text-xs font-bold text-muted-foreground-1 uppercase tracking-wider">Detalle</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-border" x-data="{ expanded: null }">
                                 @foreach($orders as $idx => $order)
+                                @php
+                                    $status = $order['status'] ?? 'pending';
+                                @endphp
                                 <tr class="hover:bg-muted/30 transition-colors cursor-pointer"
                                     @click="expanded = expanded === {{ $idx }} ? null : {{ $idx }}">
+                                    @php
+                                        $customerPhoneRaw = preg_replace('/\D+/', '', (string) data_get($order, 'customer.phone', ''));
+
+                                        if (str_starts_with($customerPhoneRaw, '0')) {
+                                            $customerPhone = '58' . substr($customerPhoneRaw, 1);
+                                        } elseif (str_starts_with($customerPhoneRaw, '58')) {
+                                            $customerPhone = $customerPhoneRaw;
+                                        } elseif (strlen($customerPhoneRaw) === 10 && str_starts_with($customerPhoneRaw, '4')) {
+                                            $customerPhone = '58' . $customerPhoneRaw;
+                                        } else {
+                                            $customerPhone = '';
+                                        }
+
+                                        $paymentBlocks = [];
+
+                                        if (in_array('pagoMovil', $paymentMethods, true)) {
+                                            $pagoMovilConfig = (array) ($paymentDetails['pagoMovil'] ?? []);
+                                            $pagoMovilPhone = (bool) ($pagoMovilConfig['use_business_whatsapp'] ?? true)
+                                                ? trim((string) ($tenant->getActiveWhatsapp() ?? ''))
+                                                : trim((string) ($pagoMovilConfig['phone'] ?? ''));
+                                            $pagoMovilDocument = trim(
+                                                trim((string) ($pagoMovilConfig['document_type'] ?? ''))
+                                                . (((string) ($pagoMovilConfig['document_type'] ?? '')) !== '' && ((string) ($pagoMovilConfig['document_number'] ?? '')) !== '' ? '-' : '')
+                                                . trim((string) ($pagoMovilConfig['document_number'] ?? ''))
+                                            );
+                                            $pagoMovilLines = array_filter([
+                                                '1. Pago Movil',
+                                                !empty($pagoMovilConfig['bank']) ? 'Banco: ' . $pagoMovilConfig['bank'] : null,
+                                                $pagoMovilPhone !== '' ? 'Telefono: ' . $pagoMovilPhone : null,
+                                                $pagoMovilDocument !== '' ? 'Documento: ' . $pagoMovilDocument : null,
+                                                !empty($pagoMovilConfig['account_holder']) ? 'Titular: ' . $pagoMovilConfig['account_holder'] : null,
+                                            ]);
+                                            if (count($pagoMovilLines) > 1) {
+                                                $paymentBlocks[] = implode("\n", $pagoMovilLines);
+                                            }
+                                        }
+
+                                        if (in_array('paypal', $paymentMethods, true)) {
+                                            $paypalConfig = (array) ($paymentDetails['paypal'] ?? []);
+                                            $paypalLines = array_filter([
+                                                '2. PayPal',
+                                                !empty($paypalConfig['email']) ? 'Correo: ' . $paypalConfig['email'] : null,
+                                                !empty($paypalConfig['account_holder']) ? 'Titular: ' . $paypalConfig['account_holder'] : null,
+                                            ]);
+                                            if (count($paypalLines) > 1) {
+                                                $paymentBlocks[] = implode("\n", $paypalLines);
+                                            }
+                                        }
+
+                                        if (in_array('zinli', $paymentMethods, true)) {
+                                            $zinliConfig = (array) ($paymentDetails['zinli'] ?? []);
+                                            $zinliLines = array_filter([
+                                                '3. Zinli',
+                                                !empty($zinliConfig['email']) ? 'Correo: ' . $zinliConfig['email'] : null,
+                                                !empty($zinliConfig['account_holder']) ? 'Titular: ' . $zinliConfig['account_holder'] : null,
+                                            ]);
+                                            if (count($zinliLines) > 1) {
+                                                $paymentBlocks[] = implode("\n", $zinliLines);
+                                            }
+                                        }
+
+                                        $otherPaymentText = collect(array_merge($paymentMethods, $paymentCurrencies))
+                                            ->reject(fn(string $code): bool => in_array($code, ['pagoMovil', 'paypal', 'zinli'], true))
+                                            ->map(fn(string $code): string => $paymentLabels[$code] ?? strtoupper($code))
+                                            ->filter()
+                                            ->values()
+                                            ->implode(', ');
+
+                                        $paymentReplyMessage = "Hola {$order['customer']['name']}, recibimos tu orden {$order['id']}.";
+
+                                        if ($paymentBlocks !== []) {
+                                            $paymentReplyMessage .= "\n\nFormas de pago disponibles:\n\n" . implode("\n\n", $paymentBlocks);
+                                        } else {
+                                            $paymentReplyMessage .= "\n\nFormas de pago disponibles: {$paymentText}.";
+                                        }
+
+                                        if ($otherPaymentText !== '') {
+                                            $paymentReplyMessage .= "\n\nOtros medios disponibles: {$otherPaymentText}.";
+                                        }
+
+                                        $paymentReplyMessage .= "\n\nCuando pagues, envia el comprobante por este chat para confirmar tu pedido.";
+                                    @endphp
                                     <td class="px-4 py-3">
                                         <span class="inline-flex items-center py-0.5 px-2 rounded-full text-xs font-bold bg-primary/10 text-primary">
                                             {{ $order['id'] }}
@@ -86,9 +213,47 @@
                                             <div class="text-xs text-muted-foreground-1">{{ $order['customer']['location'] }}</div>
                                         @endif
                                     </td>
+                                    <td class="px-4 py-3 text-sm text-foreground">{{ $customerPhone !== '' ? $customerPhone : '—' }}</td>
                                     <td class="px-4 py-3 text-center text-sm text-foreground">{{ count($order['items'] ?? []) }}</td>
                                     <td class="px-4 py-3 text-right text-sm font-bold text-foreground">
                                         REF {{ number_format($order['subtotal'] ?? 0, 2, ',', '.') }}
+                                    </td>
+                                    <td class="px-4 py-3 text-center" @click.stop>
+                                        @if($status === 'attended')
+                                            <span class="inline-flex items-center py-0.5 px-2 rounded-full text-xs font-medium bg-emerald-100 text-emerald-700">Atendida</span>
+                                        @else
+                                            <span class="inline-flex items-center py-0.5 px-2 rounded-full text-xs font-medium bg-amber-100 text-amber-700">Pendiente</span>
+                                        @endif
+                                    </td>
+                                    <td class="px-4 py-3 text-center" @click.stop>
+                                        <div class="flex items-center justify-center gap-2">
+                                            @if($status === 'pending')
+                                                <button type="button"
+                                                        class="inline-flex items-center justify-center size-8 rounded-lg bg-emerald-100 text-emerald-700 hover:bg-emerald-200 transition-colors cursor-pointer"
+                                                        title="Marcar atendida"
+                                                        onclick="handleOrderAction('{{ $order['id'] }}', 'attended', this)">
+                                                    <span class="iconify tabler--check size-4"></span>
+                                                </button>
+                                            @endif
+                                            <button type="button"
+                                                    class="inline-flex items-center justify-center size-8 rounded-lg bg-red-100 text-red-700 hover:bg-red-200 transition-colors cursor-pointer"
+                                                    title="Eliminar orden"
+                                                    onclick="handleOrderAction('{{ $order['id'] }}', 'delete', this)">
+                                                <span class="iconify tabler--trash size-4"></span>
+                                            </button>
+                                        </div>
+                                    </td>
+                                    <td class="px-4 py-3 text-center" @click.stop>
+                                        @if($customerPhone !== '')
+                                            <a href="https://wa.me/{{ $customerPhone }}?text={{ rawurlencode($paymentReplyMessage) }}"
+                                               target="_blank"
+                                               rel="noopener"
+                                               class="inline-flex h-9 min-w-11 items-center justify-center rounded-lg px-2.5 text-xs font-semibold bg-emerald-500 text-white hover:bg-emerald-600 transition-colors cursor-pointer">
+                                                Enviar pack
+                                            </a>
+                                        @else
+                                            <span class="inline-flex h-9 min-w-11 items-center justify-center rounded-lg px-2.5 text-xs font-semibold bg-muted text-muted-foreground-1">Sin numero</span>
+                                        @endif
                                     </td>
                                     <td class="px-4 py-3 text-center">
                                         <span class="iconify size-4 transition-transform duration-200 text-muted-foreground-1"
@@ -97,7 +262,7 @@
                                 </tr>
                                 {{-- Inline detail row --}}
                                 <tr x-show="expanded === {{ $idx }}" x-collapse>
-                                    <td colspan="6" class="px-4 py-4 bg-muted/20">
+                                    <td colspan="10" class="px-4 py-4 bg-muted/20">
                                         <div class="space-y-2">
                                             @foreach($order['items'] ?? [] as $item)
                                             <div class="flex items-center justify-between text-sm">
@@ -134,4 +299,44 @@
             @endif
 
             </div>
+
+            @if($isPlanAnual)
+            <script>
+            (function(){
+                var tenantId = @json($tenant->id);
+
+                window.handleOrderAction = function(orderId, action) {
+                    if (!orderId || !action) {
+                        return;
+                    }
+
+                    if (action === 'delete' && !confirm('¿Eliminar esta orden? Esta acción no se puede deshacer.')) {
+                        return;
+                    }
+
+                    fetch('/tenant/' + tenantId + '/orders/' + encodeURIComponent(orderId) + '/action', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        body: JSON.stringify({ action: action })
+                    })
+                    .then(function(r){ return r.json(); })
+                    .then(function(data){
+                        if (!data.success) {
+                            alert(data.message || 'No se pudo procesar la acción.');
+                            return;
+                        }
+
+                        window.location.reload();
+                    })
+                    .catch(function(){
+                        alert('Error de conexión al procesar la orden.');
+                    });
+                };
+            })();
+            </script>
+            @endif
         </div>

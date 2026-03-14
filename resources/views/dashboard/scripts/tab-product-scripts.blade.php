@@ -325,9 +325,6 @@
             const formData = new FormData(event.target);
             const data = formDataToNested(formData);
             
-            // Agregar campos críticos explícitamente
-            data.phone = document.getElementById('info-phone')?.value?.trim() || '';
-
             var validOps = ['412','414','416','422','424','426'];
             var waMsg = document.getElementById('wa-validation-msg');
             function normalizeVeWhatsapp(raw) {
@@ -352,6 +349,17 @@
             }
             if (waMsg) waMsg.classList.add('hidden');
             data.whatsapp_sales = waRaw ? '58' + waRaw : '';
+
+            // Teléfono — mismo formato Venezuela
+            var phoneRaw = normalizeVeWhatsapp(document.getElementById('info-phone')?.value || '');
+            var phoneMsg = document.getElementById('phone-validation-msg');
+            if (phoneRaw && (!validOps.some(function(op){ return phoneRaw.startsWith(op); }) || phoneRaw.length !== 10)) {
+                if (phoneMsg) { phoneMsg.textContent = 'Número inválido. Usa 10 dígitos con operadora: 412, 414, 416, 422, 424, 426'; phoneMsg.classList.remove('hidden'); }
+                document.getElementById('info-phone')?.focus();
+                return;
+            }
+            if (phoneMsg) phoneMsg.classList.add('hidden');
+            data.phone = phoneRaw ? '58' + phoneRaw : '';
 
             var waSupportInput = document.getElementById('info-whatsapp-support');
             var waSupportRaw = normalizeVeWhatsapp(waSupportInput?.value || '');

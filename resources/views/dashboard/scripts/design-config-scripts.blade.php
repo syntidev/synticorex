@@ -374,6 +374,7 @@
         @php
             $plan1NetworksList = ['instagram', 'facebook', 'tiktok', 'linkedin'];
             $allNetworksList   = ['instagram', 'facebook', 'tiktok', 'linkedin', 'youtube', 'x'];
+            $isPlan1Social = in_array(($plan->slug ?? ''), ['studio-oportunidad', 'food-basico', 'cat-basico'], true);
         @endphp
         let selectedSocialNetwork = '{{ $plan1Selected ?? '' }}';
 
@@ -409,10 +410,10 @@
 
         async function saveSocialNetworks() {
             const tenantId = {{ $tenant->id }};
-            const plan = {{ $plan->id }};
+            const isPlan1 = @json($isPlan1Social);
             let payload = {};
 
-            if (plan === 1) {
+            if (isPlan1) {
                 if (!selectedSocialNetwork) {
                     alert('✗ Selecciona una red social primero');
                     return;
@@ -454,7 +455,7 @@
         // ── End Social Networks ─────────────────────────────────────
 
         // ── Payment Methods ──────────────────────────────────────────
-        @if($plan->id !== 1)
+        @if(!in_array(($plan->slug ?? ''), ['studio-oportunidad', 'food-basico', 'cat-basico'], true))
         const payAllKeys  = @json(array_keys($allPayMeta));
         const currAllKeys = @json(array_keys($allCurrencyMeta));
         const allPayMetaData  = @json($allPayMeta);
@@ -495,6 +496,7 @@
                 txtSpan.classList.add(on ? 'text-primary' : 'text-foreground');
             }
             updatePaymentPreview();
+            syncPaymentDetailCards();
         }
 
         function toggleCurrency(key) {
@@ -558,10 +560,38 @@
             ).join('');
         }
 
-        // Inicializar previa al cargar
-        document.addEventListener('DOMContentLoaded', updatePaymentPreview);
+        function togglePaymentDetailPhone() {
+            const useBusiness = document.getElementById('pay-detail-pagoMovil-use-business');
+            const phoneInput = document.getElementById('pay-detail-pagoMovil-phone');
+            if (!useBusiness || !phoneInput) return;
+            phoneInput.disabled = useBusiness.checked;
+            if (useBusiness.checked) {
+                phoneInput.value = phoneInput.dataset.businessPhone || '';
+            }
+        }
 
-        @if($plan->id === 3)
+        function syncPaymentDetailCards() {
+            [
+                ['pagoMovil', 'payment-detail-card-pagoMovil'],
+                ['paypal', 'payment-detail-card-paypal'],
+                ['zinli', 'payment-detail-card-zinli'],
+            ].forEach(([methodKey, cardId]) => {
+                const card = document.getElementById(cardId);
+                const checkbox = document.getElementById('pay-check-' + methodKey);
+                if (!card || !checkbox) return;
+                card.classList.toggle('opacity-60', !checkbox.checked);
+                card.classList.toggle('border-primary/30', checkbox.checked);
+            });
+            togglePaymentDetailPhone();
+        }
+
+        // Inicializar previa al cargar
+        document.addEventListener('DOMContentLoaded', () => {
+            updatePaymentPreview();
+            syncPaymentDetailCards();
+        });
+
+        @if(in_array(($plan->slug ?? ''), ['studio-vision', 'food-anual', 'cat-anual'], true))
         function toggleBranchPayMethod(branchId, key) {
             const check = document.getElementById('pay-branch-check-' + branchId + '-' + key);
             const label = document.getElementById('pay-branch-label-' + branchId + '-' + key);
@@ -607,12 +637,31 @@
             });
             const payload = { global: globalSelected, currency: currencySelected };
 
-            @if(in_array($blueprint, ['food', 'studio', 'catalog'], true))
+            payload.details = {
+                pagoMovil: {
+                    bank: document.getElementById('pay-detail-pagoMovil-bank')?.value?.trim() || '',
+                    use_business_whatsapp: !!document.getElementById('pay-detail-pagoMovil-use-business')?.checked,
+                    phone: document.getElementById('pay-detail-pagoMovil-phone')?.value?.trim() || '',
+                    document_type: document.getElementById('pay-detail-pagoMovil-document-type')?.value?.trim() || '',
+                    document_number: document.getElementById('pay-detail-pagoMovil-document-number')?.value?.trim() || '',
+                    account_holder: document.getElementById('pay-detail-pagoMovil-holder')?.value?.trim() || '',
+                },
+                paypal: {
+                    email: document.getElementById('pay-detail-paypal-email')?.value?.trim() || '',
+                    account_holder: document.getElementById('pay-detail-paypal-holder')?.value?.trim() || '',
+                },
+                zinli: {
+                    email: document.getElementById('pay-detail-zinli-email')?.value?.trim() || '',
+                    account_holder: document.getElementById('pay-detail-zinli-holder')?.value?.trim() || '',
+                },
+            };
+
+            @if(in_array($blueprint, ['food', 'studio', 'cat'], true))
             const legalToggle = document.getElementById('legal-links-enabled');
             payload.show_legal_links = !!(legalToggle && legalToggle.checked);
             @endif
 
-            @if($plan->id === 3)
+            @if(in_array(($plan->slug ?? ''), ['studio-vision', 'food-anual', 'cat-anual'], true))
             const branchData = {};
             @foreach($activeBranchList as $branch)
             const bMethods_{{ $branch->id }} = payAllKeys.filter(k => {
@@ -633,6 +682,31 @@
             const tenantId = {{ $tenant->id }};
             const payload = buildPaymentMethodsPayload();
 
+            // Validar datos completos para cada método activo
+            const errors = [];
+            if (payload.global.includes('pagoMovil')) {
+                const pm = payload.details.pagoMovil;
+                if (!pm.bank)            errors.push('Pago Móvil: selecciona el banco');
+                if (!pm.use_business_whatsapp && !pm.phone) errors.push('Pago Móvil: ingresa el teléfono');
+                if (!pm.account_holder)  errors.push('Pago Móvil: ingresa el titular');
+                if (!pm.document_type)   errors.push('Pago Móvil: selecciona el tipo de documento');
+                if (!pm.document_number) errors.push('Pago Móvil: ingresa el número de documento');
+            }
+            if (payload.global.includes('paypal')) {
+                const pp = payload.details.paypal;
+                if (!pp.email)           errors.push('PayPal: ingresa el correo');
+                if (!pp.account_holder)  errors.push('PayPal: ingresa el titular');
+            }
+            if (payload.global.includes('zinli')) {
+                const zl = payload.details.zinli;
+                if (!zl.email)           errors.push('Zinli: ingresa el correo');
+                if (!zl.account_holder)  errors.push('Zinli: ingresa el titular');
+            }
+            if (errors.length > 0) {
+                alert('Completa los datos requeridos:\n\n• ' + errors.join('\n• '));
+                return;
+            }
+
             try {
                 const response = await fetch('/tenant/' + tenantId + '/update-payment-methods', {
                     method: 'POST',
@@ -644,7 +718,7 @@
                 });
                 const result = await response.json();
                 if (result.success) {
-                    alert('✓ Medios de pago y denominaciones guardados correctamente');
+                    alert('✓ Medios de pago y datos de cobro guardados correctamente');
                 } else {
                     alert('✗ ' + (result.message || 'Error al guardar'));
                 }
@@ -654,7 +728,7 @@
             }
         }
 
-        @if(in_array($blueprint, ['food', 'studio', 'catalog'], true))
+        @if(in_array($blueprint, ['food', 'studio', 'cat'], true))
         async function saveLegalLinksConfig(toggle) {
             if (!toggle || toggle.disabled) return;
 
@@ -693,7 +767,7 @@
         // ── End Payment Methods ──────────────────────────────────────
 
         // ── Branches (Plan 3 / VISIÓN) ──────────────────────────────
-        @if($plan->id === 3)
+        @if(in_array(($plan->slug ?? ''), ['studio-vision', 'food-anual', 'cat-anual'], true))
         let branchCount = {{ $branches->count() }};
 
         async function toggleBranchesSection() {

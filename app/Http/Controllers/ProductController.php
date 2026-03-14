@@ -48,6 +48,16 @@ class ProductController extends Controller
                 $query->where('badge', $request->input('badge'));
             }
 
+            // Filter by category
+            if ($request->filled('category')) {
+                $query->where('category_name', $request->input('category'));
+            }
+
+            // Filter by subcategory
+            if ($request->filled('subcategory')) {
+                $query->where('subcategory_name', $request->input('subcategory'));
+            }
+
             // Search by name
             if ($request->has('search')) {
                 $search = $request->input('search');
@@ -175,6 +185,8 @@ class ProductController extends Controller
                 'is_active' => ['nullable', 'boolean'],
                 'is_featured' => ['nullable', 'boolean'],
                 'badge' => ['nullable', 'string', 'in:popular,nuevo,promo,destacado'],
+                'category_name' => ['nullable', 'string', 'max:80'],
+                'subcategory_name' => ['nullable', 'string', 'max:80'],
             ]);
 
             // Set tenant_id
@@ -251,6 +263,8 @@ class ProductController extends Controller
                 'is_active' => ['nullable', 'boolean'],
                 'is_featured' => ['nullable', 'boolean'],
                 'badge' => ['nullable', 'string', 'in:popular,nuevo,promo,destacado'],
+                'category_name' => ['nullable', 'string', 'max:80'],
+                'subcategory_name' => ['nullable', 'string', 'max:80'],
             ]);
 
             $product->update($validated);

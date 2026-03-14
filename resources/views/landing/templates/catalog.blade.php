@@ -17,7 +17,8 @@
     $payMethods      = ($customization->payment_methods ?? []);
     $globalEnabled   = $payMethods['global'] ?? [];
     $currencyEnabled = $payMethods['currency'] ?? [];
-    if ($tenant->plan_id === 1) {
+    $planSlug = (string) ($tenant->plan->slug ?? 'cat-basico');
+    if ($planSlug === 'cat-basico') {
         $globalEnabled   = ['pagoMovil', 'cash'];
         $currencyEnabled = [];
     }
@@ -64,8 +65,9 @@
         : ($p->image_url ?? null);
 
     $customerFields = $customization->customer_required_fields
-        ?? ($tenant->settings['cat_settings']['customer_fields'] ?? ['name', 'location']);
+        ?? ($tenant->settings['cat_settings']['customer_fields'] ?? ['name', 'phone', 'location']);
     $needsName     = in_array('name',     (array) $customerFields);
+    $needsPhone    = true;
     $needsLocation = in_array('location', (array) $customerFields);
     $showCart      = $tenant->plan && $tenant->plan->slug !== 'cat-basico';
 @endphp
@@ -131,8 +133,8 @@
 
 {{-- 1. NAVBAR APP STYLE --}}
 <header class="sticky top-0 z-[100] w-full bg-background/90 backdrop-blur-2xl" style="border-bottom:1px solid rgba(0,0,0,.07);">
-    <div class="mx-auto max-w-[1280px] px-5 sm:px-8 flex items-center justify-between h-16">
-        <a href="#" class="flex items-center gap-3 min-w-0">
+    <div class="mx-auto max-w-[1280px] px-4 sm:px-8 py-3 flex items-center gap-3">
+        <a href="#" class="flex items-center gap-3 min-w-0 shrink-0">
             @if(!empty($customization->logo_filename))
                 <img src="{{ asset('storage/tenants/' . $tenant->id . '/' . $customization->logo_filename) }}"
                      alt="{{ $tenant->business_name }}"
@@ -143,12 +145,71 @@
                     <span class="iconify tabler--bag size-6 text-primary-foreground"></span>
                 </div>
             @endif
-            <span class="text-xl font-black tracking-tighter truncate">{{ $tenant->business_name }}</span>
+            <span class="text-xl font-black tracking-tighter truncate max-w-[170px] sm:max-w-[220px]">{{ $tenant->business_name }}</span>
         </a>
 
-        <div class="flex items-center gap-3">
+        {{-- Centro: lupa compacta + categorías --}}
+        <div class="flex items-center gap-1 flex-1 min-w-0">
+            <button id="sc-search-btn" onclick="scToggleSearch()" class="flex-shrink-0 size-9 flex items-center justify-center rounded-lg text-foreground/45 hover:text-foreground transition-colors">
+                <span class="iconify tabler--search size-4"></span>
+            </button>
+
+            <div id="sc-search-wrap" class="flex-1 items-center gap-2" style="display:none">
+                <input id="sc-search-input" type="text" placeholder="Buscar producto..."
+                       class="flex-1 text-sm py-1.5 px-3 rounded-lg border border-foreground/10 bg-background focus:outline-none focus:ring-2 focus:ring-primary/20"
+                       oninput="searchProducts(this.value)">
+                <button onclick="scCloseSearch()" class="size-7 flex items-center justify-center rounded-lg text-foreground/40 hover:text-foreground hover:bg-surface/50 transition-colors">
+                    <span class="iconify tabler--x size-4"></span>
+                </button>
+            </div>
+
+            <button type="button"
+                    class="md:hidden inline-flex items-center gap-1 py-1.5 px-2.5 rounded-lg border border-foreground/10 text-xs font-semibold text-foreground/70 bg-surface/60 cursor-pointer"
+                    data-hs-overlay="#sc-mobile-cats-overlay">
+                <span class="iconify tabler--menu-2 size-4"></span>
+                Categorías
+            </button>
+
+            <div id="sc-header-cats" class="hidden md:flex items-center gap-2 overflow-x-auto no-scrollbar flex-1">
+                <button onclick="filterCategory('all')" data-cat="all" class="sc-cat-pill active" data-active="true">Todos</button>
+                @php $catCategories = $catCategories ?? []; @endphp
+                @foreach($catCategories as $cat)
+                    @php $hasSubs = !empty($cat['subcategories']); @endphp
+                    @if($hasSubs)
+                    <div class="hs-dropdown relative inline-flex [--placement:bottom]">
+                        <button id="sc-cat-dd-h-{{ $loop->index }}" type="button"
+                                class="hs-dropdown-toggle sc-cat-pill inline-flex items-center gap-1 cursor-pointer"
+                                data-cat="{{ $cat['name'] }}" aria-haspopup="menu" aria-expanded="false" aria-label="Dropdown">
+                            {{ $cat['name'] }}
+                            <span class="iconify tabler--chevron-down size-3 transition-transform hs-dropdown-open:rotate-180"></span>
+                        </button>
+                        <div class="hs-dropdown-menu hs-dropdown-open:opacity-100 w-48 hidden z-50 transition-[opacity,margin] duration-150 opacity-0 bg-background shadow-xl rounded-xl border border-foreground/8 p-1.5"
+                             role="menu" aria-orientation="vertical" aria-labelledby="sc-cat-dd-h-{{ $loop->index }}">
+                            <button onclick="filterCategory('{{ $cat['name'] }}')" class="flex items-center gap-2 w-full py-2 px-3 rounded-lg text-sm font-semibold text-foreground/80 hover:bg-surface transition-colors cursor-pointer" data-cat="{{ $cat['name'] }}">
+                                <span class="iconify tabler--category size-4 text-primary/60"></span>
+                                Todo {{ $cat['name'] }}
+                            </button>
+                            <div class="h-px bg-foreground/5 my-1"></div>
+                            @foreach($cat['subcategories'] as $sub)
+                            <button onclick="filterCategory('{{ $cat['name'] }}', '{{ $sub['name'] }}')" class="flex items-center gap-2 w-full py-2 px-3 rounded-lg text-sm text-foreground/70 hover:bg-surface hover:text-foreground transition-colors cursor-pointer" data-cat="{{ $cat['name'] }}" data-sub="{{ $sub['name'] }}">
+                                <span class="iconify tabler--point-filled size-3 text-foreground/20"></span>
+                                {{ $sub['name'] }}
+                            </button>
+                            @endforeach
+                        </div>
+                    </div>
+                    @else
+                    <button onclick="filterCategory('{{ $cat['name'] }}')" data-cat="{{ $cat['name'] }}" class="sc-cat-pill">{{ $cat['name'] }}</button>
+                    @endif
+                @endforeach
+            </div>
+        </div>
+
+        <span id="sc-products-count" class="hidden xl:inline text-xs text-foreground/40 font-medium shrink-0">{{ $products->count() }} producto{{ $products->count() !== 1 ? 's' : '' }}</span>
+
+        <div class="flex items-center gap-2 shrink-0">
             @if(str_contains($savedDisplayMode, 'toggle'))
-            <div class="hidden md:flex bg-surface/50 p-1 rounded-xl border border-foreground/5 backdrop-blur-md">
+            <div class="hidden sm:flex bg-surface/50 p-1 rounded-xl border border-foreground/5 backdrop-blur-md">
                 <button class="sc-curr-btn px-4 py-1.5 text-xs font-bold rounded-lg transition-all" data-currency="ref" onclick="setCurrency('ref')">{{ $currencySymbol }}</button>
                 <button class="sc-curr-btn px-4 py-1.5 text-xs font-bold rounded-lg transition-all" data-currency="bs" onclick="setCurrency('bs')">Bs</button>
             </div>
@@ -188,7 +249,7 @@
 
 {{-- 2. HERO EDITORIAL BENTO --}}
 @if($showcase->count() >= 1)
-<section class="bg-background">
+<section id="sc-hero-showcase" class="bg-background">
 
     {{-- Label destacados --}}
     <div class="mx-auto max-w-[1280px] flex items-center gap-3 px-4 sm:px-8 pt-6 pb-3">
@@ -239,7 +300,7 @@
             @foreach($showcase->slice(1, 2) as $item)
             @php $simg = $productImg($item); @endphp
             <div class="sc-bento-cell sc-bento-sec rounded-2xl"
-                 onclick="heroNav('{{ $item->category_id ?? 'all' }}')">
+                 onclick="heroNav('{{ $item->category_name ?? 'all' }}')">
                 @if($simg)
                     <img src="{{ $simg }}" alt="{{ $item->name }}" onerror="this.style.display='none'">
                 @else
@@ -265,37 +326,62 @@
 </section>
 @endif
 
-{{-- 3. SEPARADOR + CATÁLOGO HEADER + CATEGORY PILLS --}}
-{{-- Separador editorial --}}
-<div class="mx-auto max-w-[1280px] px-4 sm:px-8 pt-10 pb-2">
-    <div class="flex items-center gap-4">
-        <div class="flex-1 h-px bg-foreground/10"></div>
-        <p class="text-[10px] font-black uppercase tracking-[.25em] text-foreground/30 shrink-0">Nuestros productos</p>
-        <div class="flex-1 h-px bg-foreground/10"></div>
+{{-- 3. Menú integrado en header superior --}}
+
+{{-- Drawer móvil de categorías/subcategorías --}}
+<div id="sc-mobile-cats-overlay" class="hs-overlay hidden size-full fixed top-0 start-0 z-[120] overflow-x-hidden overflow-y-auto pointer-events-none" role="dialog" tabindex="-1" aria-labelledby="sc-mobile-cats-title">
+    <div class="hs-overlay-open:opacity-100 hs-overlay-open:duration-300 opacity-0 transition-all hs-overlay-open:mt-0 hs-overlay-open:mb-0 mt-8 mb-8 ease-out sm:max-w-sm sm:w-full m-4 sm:mx-auto min-h-[calc(100%-3.5rem)] flex items-end sm:items-center">
+        <div class="w-full flex flex-col bg-background border border-foreground/10 shadow-2xl rounded-2xl pointer-events-auto">
+            <div class="flex justify-between items-center py-3.5 px-4 border-b border-foreground/8">
+                <h3 id="sc-mobile-cats-title" class="font-black text-base">Categorías</h3>
+                <button type="button" class="size-9 inline-flex justify-center items-center rounded-xl border border-foreground/10 text-foreground/60 hover:bg-surface cursor-pointer" data-hs-overlay="#sc-mobile-cats-overlay">
+                    <span class="iconify tabler--x size-4"></span>
+                </button>
+            </div>
+
+            <div class="p-4 max-h-[70vh] overflow-y-auto space-y-2">
+                <button type="button" onclick="filterCategory('all')" data-hs-overlay="#sc-mobile-cats-overlay" class="w-full text-left py-2.5 px-3 rounded-xl bg-primary text-primary-foreground text-sm font-semibold cursor-pointer">Todos</button>
+
+                @foreach($catCategories as $cat)
+                    @php $hasSubs = !empty($cat['subcategories']); @endphp
+                    <div class="rounded-xl border border-foreground/8 overflow-hidden bg-surface/30">
+                        <button type="button"
+                                onclick="filterCategory('{{ $cat['name'] }}')"
+                                data-hs-overlay="#sc-mobile-cats-overlay"
+                                class="w-full text-left py-2.5 px-3 text-sm font-semibold text-foreground/80 cursor-pointer hover:bg-surface transition-colors">
+                            {{ $cat['name'] }}
+                        </button>
+
+                        @if($hasSubs)
+                        <div class="px-2 pb-2 space-y-1">
+                            @foreach($cat['subcategories'] as $sub)
+                            <button type="button"
+                                    onclick="filterCategory('{{ $cat['name'] }}', '{{ $sub['name'] }}')"
+                                    data-hs-overlay="#sc-mobile-cats-overlay"
+                                    class="w-full text-left py-2 px-3 rounded-lg text-sm text-foreground/65 hover:bg-background transition-colors cursor-pointer">
+                                • {{ $sub['name'] }}
+                            </button>
+                            @endforeach
+                        </div>
+                        @endif
+                    </div>
+                @endforeach
+            </div>
+        </div>
     </div>
 </div>
 
-<div class="mx-auto max-w-[1280px] px-4 sm:px-8 pt-4">
-    <div class="flex items-baseline justify-between mb-4">
-        <h2 class="text-2xl font-black tracking-tight">Catálogo</h2>
-        <span class="text-xs text-foreground/40 font-medium">{{ $products->count() }} producto{{ $products->count() !== 1 ? 's' : '' }}</span>
-    </div>
-    <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-4">
-        <button onclick="filterCategory('all')" data-cat="all" class="sc-cat-pill active"
-                data-active="true">Todos</button>
-        @if(isset($categories))
-            @foreach($categories as $cat)
-                <button onclick="filterCategory('{{ $cat->id }}')" data-cat="{{ $cat->id }}"
-                        class="sc-cat-pill">{{ $cat->name }}</button>
-            @endforeach
-        @endif
-    </div>
-</div>
-
-{{-- 4. PRODUCT GRID — Diseño Editorial --}}
+{{-- 4. PRODUCT GRID — Lazy load + Paginación --}}
 <section class="pb-16 lg:pb-24" id="productos">
     <div class="mx-auto max-w-[1280px] px-5 sm:px-8">
-        <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6">
+        {{-- Mensaje sin resultados --}}
+        <div id="sc-no-results" class="hidden py-16 text-center">
+            <span class="iconify tabler--mood-empty size-12 text-foreground/15 mx-auto mb-3"></span>
+            <p class="text-foreground/40 font-bold">No se encontraron productos</p>
+            <p class="text-xs text-foreground/25 mt-1">Prueba otra búsqueda o categoría</p>
+        </div>
+
+        <div id="sc-products-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6">
             @foreach($products as $product)
             @php
                 $img = $productImg($product);
@@ -326,18 +412,23 @@
             @endphp
 
             <div class="sc-product-card group relative flex flex-col bg-background rounded-2xl border border-foreground/5 overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5"
-                 data-category="{{ $product->category_id ?? 'all' }}">
+                 data-category="{{ $product->category_name ?? '' }}"
+                 data-subcategory="{{ $product->subcategory_name ?? '' }}"
+                 data-name="{{ strtolower($product->name) }}"
+                  data-search="{{ mb_strtolower(trim(($product->name ?? '') . ' ' . ($product->description ?? '') . ' ' . ($product->category_name ?? '') . ' ' . ($product->subcategory_name ?? ''))) }}"
+                 style="{{ $loop->index >= 12 ? 'display:none' : '' }}"
+                 data-index="{{ $loop->index }}">
 
-                {{-- Línea de acento por categoría (aparece en hover) --}}
-                <div class="sc-card-accent" data-cat="{{ $product->category_id ?? '' }}"></div>
+                <div class="sc-card-accent" data-cat="{{ $product->category_name ?? '' }}"></div>
 
                 {{-- ── IMAGEN 1:1 ── --}}
                 <div class="relative aspect-[3/4] overflow-hidden bg-surface m-2.5 rounded-xl cursor-pointer"
                      onclick='openPM({{ $product->id }}, @json($product->name), {{ $product->price_usd ?? 0 }}, @json($img), @json($product->description ?? ""), {{ $product->compare_price_usd ?? 0 }}, {{ $product->is_featured ? "true" : "false" }}, @json($product->variants ?? []), @json($pmImages))'>
 
                     @if($img)
-                        <img src="{{ $img }}" alt="{{ $product->name }}"
-                             class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        <img data-src="{{ $img }}" alt="{{ $product->name }}"
+                             class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 sc-lazy"
+                             {{ $loop->index < 6 ? 'src=' . $img : '' }}
                              loading="lazy" onerror="this.style.display='none';">
                     @else
                         <div class="w-full h-full flex flex-col items-center justify-center gap-2">
@@ -346,7 +437,6 @@
                         </div>
                     @endif
 
-                    {{-- Chip is_featured — estrella dorada top-left --}}
                     @if($product->is_featured ?? false)
                         <span class="sc-badge absolute top-2 left-2 z-10 bg-amber-400 text-amber-900 shadow-sm">
                             <span class="iconify tabler--star-filled size-3" aria-hidden="true"></span>
@@ -354,7 +444,6 @@
                         </span>
                     @endif
 
-                    {{-- Badges bottom-left: Oferta + badge semántico --}}
                     @if($hasDiscount || $badgeCfg)
                         <div class="absolute bottom-2 left-2 z-10 flex flex-wrap gap-1">
                             @if($hasDiscount)
@@ -372,24 +461,26 @@
                         </div>
                     @endif
 
-                </div>{{-- /imagen --}}
+                </div>
 
                 {{-- ── INFO + CTA ── --}}
                 <div class="flex flex-col flex-1 px-3 pb-3 pt-1 gap-1">
-
-                    {{-- Nombre --}}
                     <h3 class="font-bold text-sm leading-snug line-clamp-2 group-hover:text-primary transition-colors duration-200">
                         {{ Str::limit($product->name, 45) }}
                     </h3>
 
-                    {{-- Descripción corta (si existe) --}}
+                    @if($product->category_name)
+                    <p class="text-[10px] text-foreground/35 font-semibold uppercase tracking-wider">
+                        {{ $product->category_name }}@if($product->subcategory_name) / {{ $product->subcategory_name }}@endif
+                    </p>
+                    @endif
+
                     @if($product->description)
                         <p class="text-[11px] text-foreground/45 leading-snug line-clamp-1 font-normal">
                             {{ Str::limit($product->description, 55) }}
                         </p>
                     @endif
 
-                    {{-- Precio + botón add (mt-auto empuja al fondo) --}}
                     <div class="flex items-end justify-between gap-2 mt-auto pt-2">
 
                         @if(!$hidePrice)
@@ -405,7 +496,6 @@
                         </div>
                         @endif
 
-                        {{-- Qty control (visible cuando está en carrito) --}}
                         <div id="qty-row-{{ $product->id }}" class="flex items-center gap-1 bg-surface rounded-full px-1.5 py-1" style="display:none!important">
                             <button class="size-5 rounded-full bg-background flex items-center justify-center text-xs font-bold leading-none"
                                     onclick="changeQty({{ $product->id }}, -1)">−</button>
@@ -414,7 +504,6 @@
                                     onclick="changeQty({{ $product->id }}, 1)">+</button>
                         </div>
 
-                        {{-- Botón + agregar al carrito --}}
                         <button onclick="addToCart({{ $product->id }}, '{{ addslashes($product->name) }}', {{ $product->price_usd ?? 0 }}, '{{ $img }}')"
                                 class="sc-add-btn bg-primary text-primary-foreground shrink-0"
                                 title="Agregar al pedido">
@@ -423,13 +512,24 @@
                             </svg>
                         </button>
 
-                    </div>{{-- /precio+cta --}}
+                    </div>
+                </div>
 
-                </div>{{-- /info --}}
-
-            </div>{{-- /sc-product-card --}}
+            </div>
             @endforeach
         </div>
+
+        {{-- Botón cargar más --}}
+        @if($products->count() > 12)
+        <div id="sc-load-more-wrap" class="text-center mt-8">
+            <button onclick="loadMoreProducts()" id="sc-load-more-btn"
+                    class="inline-flex items-center gap-2 py-3 px-8 rounded-2xl bg-surface hover:bg-surface/80 text-sm font-bold text-foreground/60 transition-colors cursor-pointer border border-foreground/8">
+                <span class="iconify tabler--arrow-down size-4"></span>
+                Ver más productos
+                <span id="sc-remaining-count" class="text-xs opacity-50"></span>
+            </button>
+        </div>
+        @endif
     </div>
 </section>
 
@@ -582,7 +682,7 @@
 </aside>
 
 {{-- MODAL Datos Cliente --}}
-@if($needsName || $needsLocation)
+@if($needsName || $needsPhone || $needsLocation)
 <div id="sc-data-modal" class="sc-modal-overlay">
     <div class="sc-modal p-6 space-y-5">
         <div class="flex items-start gap-3">
@@ -606,13 +706,19 @@
         @if($needsName)
         <div class="sc-field">
             <input type="text" id="sc-customer-name" placeholder=" " autocomplete="given-name" inputmode="text">
-            <label for="sc-customer-name">👤 ¿Cómo te llamas?</label>
+            <label for="sc-customer-name">Nombre</label>
+        </div>
+        @endif
+        @if($needsPhone)
+        <div class="sc-field">
+            <input type="tel" id="sc-customer-phone" placeholder=" " autocomplete="tel" inputmode="numeric" maxlength="13">
+            <label for="sc-customer-phone">WhatsApp (58XXXXXXXXXX)</label>
         </div>
         @endif
         @if($needsLocation)
         <div class="sc-field">
             <input type="text" id="sc-customer-location" placeholder=" " autocomplete="off" inputmode="text">
-            <label for="sc-customer-location">📍 Referencia / Sector</label>
+            <label for="sc-customer-location">Referencia / Sector</label>
         </div>
         @endif
 
@@ -709,19 +815,196 @@
         renderDrawer();
     };
 
-    window.filterCategory = function(catId) {
-        document.querySelectorAll('.sc-cat-pill').forEach(btn => {
-            const active = String(btn.dataset.cat) === String(catId);
-            if (active) {
-                btn.className = 'sc-cat-pill text-sm py-1.5 px-6 rounded-2xl font-medium transition-colors bg-primary text-primary-foreground hover:bg-primary/90 shrink-0';
-            } else {
-                btn.className = 'sc-cat-pill text-sm py-1.5 px-6 rounded-2xl font-medium transition-colors text-foreground/80 hover:bg-surface border border-foreground/10 whitespace-nowrap shrink-0';
+    var _scPage = 1;
+    var _scPerPage = 12;
+    var _scActiveCat = 'all';
+    var _scActiveSub = '';
+    var _scSearchRaw = '';
+    var _scSearchTerm = '';
+    var _scSearchAnchored = false;
+    var _scIndex = [];
+
+    function normalizeSearchText(value) {
+        var text = String(value || '').toLowerCase();
+        if (typeof text.normalize === 'function') {
+            text = text.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        }
+        return text
+            .replace(/[^a-z0-9\s]/g, ' ')
+            .replace(/\s+/g, ' ')
+            .trim();
+    }
+
+    window.scToggleSearch = function() {
+        var wrap = document.getElementById('sc-search-wrap');
+        var btn = document.getElementById('sc-search-btn');
+        var cats = document.getElementById('sc-header-cats');
+        if (!wrap || !btn) return;
+
+        var isOpen = wrap.style.display === 'flex';
+        if (isOpen) {
+            wrap.style.display = 'none';
+            if (cats && window.innerWidth >= 768) cats.style.display = 'flex';
+            btn.classList.remove('text-foreground');
+            btn.classList.add('text-foreground/45');
+            return;
+        }
+
+        wrap.style.display = 'flex';
+        if (cats) cats.style.display = 'none';
+        btn.classList.remove('text-foreground/45');
+        btn.classList.add('text-foreground');
+        var input = document.getElementById('sc-search-input');
+        if (input) setTimeout(function() { input.focus(); }, 10);
+    };
+
+    window.scCloseSearch = function() {
+        var input = document.getElementById('sc-search-input');
+        if (input) input.value = '';
+        searchProducts('');
+        scToggleSearch();
+    };
+
+    function buildSearchIndex() {
+        _scIndex = Array.from(document.querySelectorAll('#sc-products-grid .sc-product-card')).map(function(card) {
+            var rawText = String(card.textContent || '').toLowerCase();
+            return {
+                el: card,
+                category: card.dataset.category || '',
+                subcategory: card.dataset.subcategory || '',
+                raw: rawText,
+                norm: normalizeSearchText(rawText),
+            };
+        });
+    }
+
+    function getFilteredCards() {
+        if (!_scIndex.length) buildSearchIndex();
+        return _scIndex.filter(function(item) {
+            var matchCat = _scActiveCat === 'all' || item.category === _scActiveCat;
+            var matchSub = !_scActiveSub || item.subcategory === _scActiveSub;
+            var matchSearch = !_scSearchTerm
+                || item.norm.indexOf(_scSearchTerm) !== -1
+                || item.raw.indexOf(_scSearchRaw) !== -1;
+            return matchCat && matchSub && matchSearch;
+        }).map(function(item) {
+            return item.el;
+        });
+    }
+
+    function renderVisibleCards() {
+        var all = Array.from(document.querySelectorAll('#sc-products-grid .sc-product-card'));
+        var filtered = getFilteredCards();
+        var limit = _scPage * _scPerPage;
+        var visibleCount = 0;
+        var hasActiveSearchOrFilter = !!_scSearchTerm || _scActiveCat !== 'all' || !!_scActiveSub;
+
+        var heroShowcase = document.getElementById('sc-hero-showcase');
+        if (heroShowcase) {
+            heroShowcase.style.display = hasActiveSearchOrFilter ? 'none' : '';
+        }
+
+        all.forEach(function(card) {
+            card.style.display = 'none';
+        });
+
+        filtered.forEach(function(card, i) {
+            if (i < limit) {
+                card.style.display = '';
+                visibleCount++;
+                // Lazy load images
+                var imgs = card.querySelectorAll('img.sc-lazy[data-src]');
+                imgs.forEach(function(img) {
+                    if (!img.src || img.src === window.location.href) {
+                        img.src = img.dataset.src;
+                    }
+                });
             }
         });
-        document.querySelectorAll('.sc-product-card').forEach(card => {
-            const match = catId === 'all' || String(card.dataset.category) === String(catId);
-            card.style.display = match ? '' : 'none';
+
+        // Update count
+        var countText = filtered.length + ' producto' + (filtered.length !== 1 ? 's' : '');
+        var countEl = document.getElementById('sc-products-count');
+        if (countEl) countEl.textContent = countText;
+
+        // No results
+        var noRes = document.getElementById('sc-no-results');
+        if (noRes) noRes.classList.toggle('hidden', filtered.length > 0);
+
+        // Si hay búsqueda/filtro activo, mantener foco visual en el grid de resultados.
+        if (hasActiveSearchOrFilter && window.scrollY > 180) {
+            var productos = document.getElementById('productos');
+            if (productos) {
+                productos.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        // Load more button
+        var lmWrap = document.getElementById('sc-load-more-wrap');
+        if (lmWrap) {
+            var remaining = filtered.length - limit;
+            lmWrap.style.display = remaining > 0 ? '' : 'none';
+            var remEl = document.getElementById('sc-remaining-count');
+            if (remEl) remEl.textContent = '(' + remaining + ')';
+        }
+    }
+
+    window.filterCategory = function(catId, subName) {
+        _scActiveCat = catId || 'all';
+        _scActiveSub = subName || '';
+        _scPage = 1;
+
+        // Update pill active states
+        document.querySelectorAll('.sc-cat-pill').forEach(function(btn) {
+            var active = String(btn.dataset.cat) === String(_scActiveCat);
+            if (active) {
+                btn.classList.add('active');
+                btn.setAttribute('data-active', 'true');
+            } else {
+                btn.classList.remove('active');
+                btn.removeAttribute('data-active');
+            }
         });
+
+        renderVisibleCards();
+    };
+
+    window.searchProducts = function(term) {
+        _scSearchRaw = String(term || '').toLowerCase().trim();
+        _scSearchTerm = normalizeSearchText(term);
+        // Reindexar por seguridad ante cambios dinámicos de cards.
+        buildSearchIndex();
+
+        // Evita el efecto de "subida" tecla a tecla: al iniciar búsqueda, anclamos una vez al catálogo.
+        if (_scSearchRaw && !_scSearchAnchored) {
+            var productos = document.getElementById('productos');
+            if (productos && window.scrollY > (productos.offsetTop + 120)) {
+                productos.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+            _scSearchAnchored = true;
+        }
+        if (!_scSearchRaw) {
+            _scSearchAnchored = false;
+        }
+
+        // Si se escribe en búsqueda, buscar globalmente para no perder resultados por filtro activo.
+        if (_scSearchTerm) {
+            _scActiveCat = 'all';
+            _scActiveSub = '';
+            document.querySelectorAll('.sc-cat-pill').forEach(function(btn) {
+                var active = String(btn.dataset.cat) === 'all';
+                btn.classList.toggle('active', active);
+                if (active) btn.setAttribute('data-active', 'true');
+                else btn.removeAttribute('data-active');
+            });
+        }
+        _scPage = 1;
+        renderVisibleCards();
+    };
+
+    window.loadMoreProducts = function() {
+        _scPage++;
+        renderVisibleCards();
     };
 
     window.addToCart = function(id, name, price, img, variantLabel) {
@@ -837,7 +1120,7 @@
         if (modal) modal.style.display = 'none';
     }
 
-    async function buildAndSend(name, loc) {
+    async function buildAndSend(name, phone, loc) {
         const subdomain = @json($tenant->subdomain);
         const isPlanAnual = @json($tenant->plan->slug ?? '');
         const cartItems = Object.values(cart).map(i => ({
@@ -855,7 +1138,7 @@
                         'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
                     },
-                    body: JSON.stringify({ name, location: loc, items: cartItems })
+                    body: JSON.stringify({ name, phone, location: loc, items: cartItems })
                 });
                 const data = await res.json();
                 if (data.success && data.whatsapp_url) {
@@ -887,6 +1170,7 @@
             return `• ${i.name}${variantText} ×${i.qty} (${formatPrice(i.price * i.qty, true)})`;
         }).join('\n');
         msg += '\n\n*Total: ' + formatPrice(totalUsd, true) + '*';
+        if (phone) msg += `\n\n*WhatsApp:* ${phone}`;
         if (loc) msg += `\n\n📍 *Mi referencia:* ${loc}`;
         window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(msg)}`, '_blank');
     }
@@ -922,23 +1206,32 @@
 
     window.sendWhatsApp = function() {
         var _doSend = function() {
-            @if(!$needsName && !$needsLocation)
-                buildAndSend('', '');
+            @if(!$needsName && !$needsPhone && !$needsLocation)
+                buildAndSend('', '', '');
                 return;
             @endif
 
             const nameEl  = document.getElementById('sc-customer-name');
+            const phoneEl = document.getElementById('sc-customer-phone');
             const locEl   = document.getElementById('sc-customer-location');
             const name    = nameEl ? nameEl.value.trim() : '';
+            const phone   = phoneEl ? phoneEl.value.trim().replace(/\D/g, '') : '';
             const loc     = locEl  ? locEl.value.trim()  : '';
 
-            if ((nameEl && !name) || (locEl && !loc)) {
+            if ((nameEl && !name) || (phoneEl && !phone) || (locEl && !loc)) {
                 openDataModal();
                 return;
             }
 
+            if (phoneEl && !/^58(412|414|416|422|424|426)\d{7}$/.test(phone)) {
+                phoneEl.classList.add('sc-field-error');
+                phoneEl.focus();
+                return;
+            }
+
             if (name) localStorage.setItem('sc_customer_name', name);
-            buildAndSend(name, loc);
+            if (phone) localStorage.setItem('sc_customer_phone', phone);
+            buildAndSend(name, phone, loc);
         };
 
         if (!window.__tenantIsOpen) {
@@ -950,8 +1243,10 @@
 
     window.confirmDataAndSend = function() {
         const nameEl  = document.getElementById('sc-customer-name');
+        const phoneEl = document.getElementById('sc-customer-phone');
         const locEl   = document.getElementById('sc-customer-location');
         const name    = nameEl ? nameEl.value.trim() : '';
+        const phone   = phoneEl ? phoneEl.value.trim().replace(/\D/g, '') : '';
         const loc     = locEl  ? locEl.value.trim()  : '';
 
         @if($needsName)
@@ -962,13 +1257,47 @@
         }
         @endif
 
+        @if($needsPhone)
+        if (phoneEl && !/^58(412|414|416|422|424|426)\d{7}$/.test(phone)) {
+            phoneEl.classList.add('sc-field-error');
+            phoneEl.focus();
+            return;
+        }
+        @endif
+
         if (name) localStorage.setItem('sc_customer_name', name);
+        if (phone) localStorage.setItem('sc_customer_phone', phone);
         closeDataModal();
-        buildAndSend(name, loc);
+        buildAndSend(name, phone, loc);
     };
 
     document.addEventListener('DOMContentLoaded', () => {
         setCurrency('ref');
+        renderVisibleCards();
+
+        window.addEventListener('resize', function() {
+            var cats = document.getElementById('sc-header-cats');
+            var wrap = document.getElementById('sc-search-wrap');
+            if (!cats || !wrap) return;
+            if (window.innerWidth >= 768 && wrap.style.display !== 'flex') {
+                cats.style.display = 'flex';
+            }
+        });
+
+        var searchInput = document.getElementById('sc-search-input');
+        if (searchInput) {
+            searchInput.addEventListener('input', function() {
+                searchProducts(searchInput.value);
+            });
+            searchInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    searchProducts(searchInput.value);
+                }
+            });
+        }
+
+        buildSearchIndex();
 
         const savedName = localStorage.getItem('sc_customer_name');
         if (savedName) {
@@ -976,7 +1305,13 @@
             if (el) el.value = savedName;
         }
 
-        ['sc-customer-name', 'sc-customer-location'].forEach(id => {
+        const savedPhone = localStorage.getItem('sc_customer_phone');
+        if (savedPhone) {
+            const el = document.getElementById('sc-customer-phone');
+            if (el) el.value = savedPhone;
+        }
+
+        ['sc-customer-name', 'sc-customer-phone', 'sc-customer-location'].forEach(id => {
             const el = document.getElementById(id);
             if (el) el.addEventListener('input', () => el.classList.remove('sc-field-error'));
         });
@@ -1177,6 +1512,24 @@ function sharePM() {
 document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') closePM();
 });
+
+// Lazy load observer
+(function() {
+    if (!('IntersectionObserver' in window)) return;
+    var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+            if (!entry.isIntersecting) return;
+            var img = entry.target;
+            if (img.dataset.src && !img.src.includes(img.dataset.src)) {
+                img.src = img.dataset.src;
+            }
+            observer.unobserve(img);
+        });
+    }, { rootMargin: '200px' });
+    document.querySelectorAll('img.sc-lazy[data-src]').forEach(function(img) {
+        observer.observe(img);
+    });
+})();
 </script>
 
 <script>

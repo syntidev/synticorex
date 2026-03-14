@@ -4,6 +4,8 @@
      Compatible: studio.blade.php + catalog.blade.php
 ═══════════════════════════════════════════════════════════════════════════════ --}}
 @php
+    $blueprint = (string) ($blueprint ?? $tenant->blueprint ?? 'studio');
+
     // ── Nav dinámica (espeja lógica del header) ───────────────────────────────
     $footerNavMap = [
         'products'        => ['label' => 'Productos',   'anchor' => '#products'],
@@ -15,10 +17,22 @@
         'branches'        => ['label' => 'Sucursales',  'anchor' => '#branches'],
         'payment_methods' => ['label' => 'Pagos',       'anchor' => '#payment_methods'],
     ];
+    $allowedFooterSections = match ($blueprint) {
+        'cat' => ['products'],
+        'food' => ['products', 'payment_methods'],
+        default => array_keys($footerNavMap),
+    };
+    $footerCategoryTags = collect();
+    if ($blueprint === 'cat' && isset($categories)) {
+        $footerCategoryTags = collect($categories)
+            ->filter(fn ($category) => !empty($category->id) && !empty($category->name))
+            ->values();
+    }
     $footerLinks = [];
     foreach ($customization->getSectionsOrder() as $sec) {
         $k = $sec['name'] ?? '';
         if (($sec['visible'] ?? true)
+            && in_array($k, $allowedFooterSections, true)
             && $customization->canAccessSection($k, $tenant->plan_id)
             && isset($footerNavMap[$k])) {
             if (!collect($footerLinks)->contains('anchor', $footerNavMap[$k]['anchor'])) {
@@ -28,10 +42,10 @@
     }
 
     // ── Redes sociales con límite por plan ───────────────────────────────────
-    // OPORTUNIDAD(1)=2 redes, CRECIMIENTO(2)=4 redes, VISIÓN(3)=ilimitadas
-    $snLimit = match((int)($tenant->plan_id ?? 1)) {
-        1 => 2,
-        2 => 4,
+    $planSlug = (string) ($tenant->plan->slug ?? 'studio-oportunidad');
+    $snLimit = match (true) {
+        in_array($planSlug, ['studio-oportunidad', 'food-basico', 'cat-basico'], true) => 2,
+        in_array($planSlug, ['studio-crecimiento', 'food-semestral', 'cat-semestral'], true) => 4,
         default => 999,
     };
     $rawSn   = $customization->social_networks ?? [];
@@ -107,8 +121,23 @@
                 <span class="text-base font-bold tracking-tight text-foreground">{{ $tenant->business_name }}</span>
             </a>
 
-            {{-- Nav dinámica --}}
-            @if(count($footerLinks) > 0)
+            {{-- Nav dinámica / categorías CAT --}}
+            @if($blueprint === 'cat' && $footerCategoryTags->isNotEmpty())
+            <div class="flex flex-wrap items-center justify-center gap-2 sm:flex-1 sm:px-6">
+                <button type="button"
+                        onclick="window.location.hash='productos'; if (window.filterCategory) window.filterCategory('all');"
+                        class="inline-flex min-h-11 items-center rounded-full border border-border px-4 py-2 text-sm font-medium text-muted-foreground-1 transition-colors hover:border-foreground/20 hover:text-foreground cursor-pointer">
+                    Todos
+                </button>
+                @foreach($footerCategoryTags as $category)
+                <button type="button"
+                        onclick="window.location.hash='productos'; if (window.filterCategory) window.filterCategory('{{ $category->id }}');"
+                        class="inline-flex min-h-11 items-center rounded-full border border-border px-4 py-2 text-sm font-medium text-muted-foreground-1 transition-colors hover:border-foreground/20 hover:text-foreground cursor-pointer">
+                    {{ $category->name }}
+                </button>
+                @endforeach
+            </div>
+            @elseif(count($footerLinks) > 0)
             <nav class="flex flex-wrap items-center gap-x-5 gap-y-2">
                 @foreach($footerLinks as $link)
                     <a href="{{ $link['anchor'] }}"

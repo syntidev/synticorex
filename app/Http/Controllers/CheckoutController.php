@@ -21,6 +21,7 @@ class CheckoutController extends Controller
     {
         $validated = $request->validate([
             'name'         => ['required', 'string', 'max:120'],
+            'phone'        => ['required', 'string', 'max:20', 'regex:/^58(412|414|416|422|424|426)\d{7}$/'],
             'location'     => ['nullable', 'string', 'max:120'],
             'items'        => ['required', 'array', 'min:1'],
             'items.*.title'   => ['required', 'string', 'max:200'],
@@ -42,12 +43,13 @@ class CheckoutController extends Controller
 
         $customer = [
             'name'     => $validated['name'],
+            'phone'    => $validated['phone'],
             'location' => $validated['location'] ?? '',
         ];
 
         $order   = $this->orderService->generate($tenant, $customer, $validated['items']);
         $message = $this->waBuilder->build($order);
-        $waUrl   = $this->waBuilder->url($message, (string) ($tenant->whatsapp_sales ?: $tenant->phone ?: ''));
+        $waUrl   = $this->waBuilder->url($message, (string) ($tenant->getActiveWhatsapp() ?: $tenant->phone ?: ''));
 
         return response()->json([
             'success'       => true,

@@ -140,7 +140,9 @@ class DashboardController extends Controller
 
             // ── Orders (Mini Order Engine — cat-anual) ────────────────────
             $isPlanAnual = $plan && $plan->slug === 'cat-anual';
-            $orders = [];
+            $orders = ($blueprint === 'cat' && $isPlanAnual)
+                ? $this->loadCatOrders($tenant->id)
+                : [];
 
             // ── Comandas (Food Order Engine — food-anual) ─────────────────
             $isFoodAnual = $plan && $plan->slug === 'food-anual';
@@ -151,6 +153,11 @@ class DashboardController extends Controller
             // ── Menu (SYNTIfood) ──────────────────────────────────────────
             $menu = $blueprint === 'food'
                 ? (new MenuService())->getCategories($tenant->id)
+                : [];
+
+            // ── CAT Categories ────────────────────────────────────────────
+            $catCategories = $blueprint === 'cat'
+                ? array_values(data_get($tenant->settings ?? [], 'cat_categories', []))
                 : [];
 
             return view('dashboard.index', compact(
@@ -188,7 +195,8 @@ class DashboardController extends Controller
                 'isPlanAnual',
                 'isFoodAnual',
                 'comandas',
-                'menu'
+                'menu',
+                'catCategories'
             ));
         } catch (\Exception $e) {
             Log::error('Dashboard index error for tenant ' . $tenantId, [
@@ -235,6 +243,50 @@ class DashboardController extends Controller
         usort($comandas, static fn(array $a, array $b): int => strcmp((string) ($b['date'] ?? ''), (string) ($a['date'] ?? '')));
 
         return $comandas;
+    }
+
+    /**
+     * @return array<int, array<string, mixed>>
+     */
+    private function loadCatOrders(int $tenantId): array
+    {
+        $dir = "tenants/{$tenantId}/orders";
+
+        if (!Storage::disk('local')->exists($dir)) {
+            return [];
+        }
+
+        $orders = [];
+
+        foreach (Storage::disk('local')->allFiles($dir) as $filePath) {
+            if (!str_ends_with($filePath, '.json')) {
+                continue;
+            }
+
+            $raw = Storage::disk('local')->get($filePath);
+            $decoded = json_decode($raw, true);
+
+            if (!is_array($decoded)) {
+                continue;
+            }
+
+            $customer = $decoded['customer'] ?? [];
+            if (!is_array($customer)) {
+                $customer = [];
+            }
+
+            $decoded['customer'] = [
+                'name' => (string) ($customer['name'] ?? '—'),
+                'phone' => (string) ($customer['phone'] ?? ''),
+                'location' => (string) ($customer['location'] ?? ''),
+            ];
+
+            $orders[] = $decoded;
+        }
+
+        usort($orders, static fn(array $a, array $b): int => strcmp((string) ($b['date'] ?? ''), (string) ($a['date'] ?? '')));
+
+        return $orders;
     }
 
     /**
@@ -300,6 +352,56 @@ class DashboardController extends Controller
 
         if (!is_array($decoded)) {
             return response()->json(['success' => false, 'message' => 'Comanda inválida'], 422);
+        }
+
+        $decoded['status'] = 'attended';
+        $decoded['attended_at'] = now()->toIso8601String();
+
+        Storage::disk('local')->put($targetPath, json_encode($decoded, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+
+        return response()->json(['success' => true, 'action' => 'attended']);
+    }
+
+    public function updateOrderAction(Request $request, int $tenantId, string $orderId): JsonResponse
+    {
+        $tenant = Tenant::with('plan')
+            ->where('id', $tenantId)
+            ->whereIn('status', ['active', 'frozen'])
+            ->firstOrFail();
+
+        if ($tenant->getBlueprintSlug() !== 'cat') {
+            return response()->json(['success' => false, 'message' => 'Blueprint invalido'], 422);
+        }
+
+        $validated = $request->validate([
+            'action' => ['required', 'string', 'in:attended,delete'],
+        ]);
+
+        $targetPath = null;
+        $dir = "tenants/{$tenantId}/orders";
+
+        foreach (Storage::disk('local')->allFiles($dir) as $filePath) {
+            if (str_ends_with($filePath, "/{$orderId}.json")) {
+                $targetPath = $filePath;
+                break;
+            }
+        }
+
+        if (!$targetPath) {
+            return response()->json(['success' => false, 'message' => 'Orden no encontrada'], 404);
+        }
+
+        if ($validated['action'] === 'delete') {
+            Storage::disk('local')->delete($targetPath);
+
+            return response()->json(['success' => true, 'action' => 'delete']);
+        }
+
+        $raw = Storage::disk('local')->get($targetPath);
+        $decoded = json_decode($raw, true);
+
+        if (!is_array($decoded)) {
+            return response()->json(['success' => false, 'message' => 'Orden invalida'], 422);
         }
 
         $decoded['status'] = 'attended';
@@ -596,6 +698,8 @@ class DashboardController extends Controller
                 'description' => 'nullable|string|max:500',
                 'price_usd' => 'required|numeric|min:0',
                 'compare_price_usd' => 'nullable|numeric|min:0',
+                'category_name' => 'nullable|string|max:80',
+                'subcategory_name' => 'nullable|string|max:80',
                 'badge' => 'nullable|in:popular,nuevo,promo,destacado',
                 'is_active' => 'nullable|boolean',
                 'is_featured' => 'nullable|boolean',
@@ -648,6 +752,8 @@ class DashboardController extends Controller
                 'description' => 'nullable|string|max:500',
                 'price_usd' => 'required|numeric|min:0',
                 'compare_price_usd' => 'nullable|numeric|min:0',
+                'category_name' => 'nullable|string|max:80',
+                'subcategory_name' => 'nullable|string|max:80',
                 'badge' => 'nullable|in:popular,nuevo,promo,destacado',
                 'is_active' => 'nullable|boolean',
                 'is_featured' => 'nullable|boolean',
@@ -780,12 +886,115 @@ class DashboardController extends Controller
         }
     }
 
+    // ── CAT Categories ────────────────────────────────────────────────────────
+
+    public function getCatCategories(int $tenantId): JsonResponse
+    {
+        $tenant = Tenant::where('id', $tenantId)->firstOrFail();
+        $categories = data_get($tenant->settings, 'cat_categories', []);
+
+        return response()->json(['success' => true, 'data' => array_values($categories)]);
+    }
+
+    public function createCatCategory(Request $request, int $tenantId): JsonResponse
+    {
+        $validated = $request->validate([
+            'name'      => 'required|string|max:60',
+            'parent_id' => 'nullable|string|max:40',
+        ]);
+        $tenant = Tenant::where('id', $tenantId)->firstOrFail();
+
+        $settings   = $tenant->settings ?? [];
+        $categories = data_get($settings, 'cat_categories', []);
+        $name       = trim($validated['name']);
+        $parentId   = $validated['parent_id'] ?? null;
+
+        // Si es subcategoría → insertar dentro del parent
+        if ($parentId) {
+            $found = false;
+            foreach ($categories as &$cat) {
+                if (($cat['id'] ?? '') !== $parentId) {
+                    continue;
+                }
+                $subs = $cat['subcategories'] ?? [];
+                if (in_array($name, array_column($subs, 'name'), true)) {
+                    return response()->json(['success' => false, 'message' => 'Esa subcategoría ya existe'], 422);
+                }
+                $subId  = 'sub_' . uniqid();
+                $subs[] = ['id' => $subId, 'name' => $name];
+                $cat['subcategories'] = $subs;
+                $found = true;
+                break;
+            }
+            unset($cat);
+
+            if (!$found) {
+                return response()->json(['success' => false, 'message' => 'Categoría padre no encontrada'], 404);
+            }
+
+            data_set($settings, 'cat_categories', $categories);
+            $tenant->settings = $settings;
+            $tenant->save();
+
+            return response()->json(['success' => true, 'data' => ['id' => $subId, 'name' => $name, 'parent_id' => $parentId]]);
+        }
+
+        // Categoría raíz
+        if (in_array($name, array_column($categories, 'name'), true)) {
+            return response()->json(['success' => false, 'message' => 'Esa categoría ya existe'], 422);
+        }
+
+        $id = 'cat_' . uniqid();
+        $categories[] = ['id' => $id, 'name' => $name, 'subcategories' => []];
+        data_set($settings, 'cat_categories', $categories);
+        $tenant->settings = $settings;
+        $tenant->save();
+
+        return response()->json(['success' => true, 'data' => ['id' => $id, 'name' => $name, 'subcategories' => []]]);
+    }
+
+    public function deleteCatCategory(int $tenantId, string $categoryId): JsonResponse
+    {
+        $tenant = Tenant::where('id', $tenantId)->firstOrFail();
+
+        $settings   = $tenant->settings ?? [];
+        $categories = data_get($settings, 'cat_categories', []);
+
+        // Intentar eliminar como categoría raíz
+        $before = count($categories);
+        $categories = array_values(array_filter($categories, fn($c) => ($c['id'] ?? '') !== $categoryId));
+
+        if (count($categories) < $before) {
+            data_set($settings, 'cat_categories', $categories);
+            $tenant->settings = $settings;
+            $tenant->save();
+
+            return response()->json(['success' => true]);
+        }
+
+        // Intentar eliminar como subcategoría dentro de algún parent
+        foreach ($categories as &$cat) {
+            $subs = $cat['subcategories'] ?? [];
+            $filtered = array_values(array_filter($subs, fn($s) => ($s['id'] ?? '') !== $categoryId));
+            if (count($filtered) < count($subs)) {
+                $cat['subcategories'] = $filtered;
+                data_set($settings, 'cat_categories', $categories);
+                $tenant->settings = $settings;
+                $tenant->save();
+
+                return response()->json(['success' => true]);
+            }
+        }
+        unset($cat);
+
+        return response()->json(['success' => false, 'message' => 'Categoría no encontrada'], 404);
+    }
+
     /**
      * Update existing service.
      *
      * @param Request $request
      * @param int $tenantId
-     * @param int $serviceId
      * @return JsonResponse
      */
     public function updateService(Request $request, int $tenantId, int $serviceId): JsonResponse
@@ -1329,8 +1538,11 @@ class DashboardController extends Controller
                 ->firstOrFail();
 
             $plan = $tenant->plan;
+            $planSlug = (string) ($plan?->slug ?? '');
+            $isPlan1 = in_array($planSlug, ['oportunidad', 'studio-oportunidad', 'food-basico', 'cat-basico'], true);
+            $isPlan3 = in_array($planSlug, ['vision', 'studio-vision', 'food-anual', 'cat-anual'], true);
 
-            if ((int) $plan->id === 1) {
+            if ($isPlan1) {
                 return response()->json([
                     'success' => false,
                     'message' => 'El Plan OPORTUNIDAD tiene medios de pago fijos',
@@ -1350,6 +1562,20 @@ class DashboardController extends Controller
                 'currency'   => 'nullable|array',
                 'currency.*' => 'string|in:' . implode(',', $allowedCurrencies),
                 'branches'   => 'nullable|array',
+                'details' => 'nullable|array',
+                'details.pagoMovil' => 'nullable|array',
+                'details.pagoMovil.bank' => 'nullable|string|max:80',
+                'details.pagoMovil.use_business_whatsapp' => 'nullable|boolean',
+                'details.pagoMovil.phone' => 'nullable|string|max:20',
+                'details.pagoMovil.document_type' => 'nullable|string|in:V,E,J,G,P',
+                'details.pagoMovil.document_number' => 'nullable|string|max:20',
+                'details.pagoMovil.account_holder' => 'nullable|string|max:120',
+                'details.paypal' => 'nullable|array',
+                'details.paypal.email' => 'nullable|email:rfc|max:120',
+                'details.paypal.account_holder' => 'nullable|string|max:120',
+                'details.zinli' => 'nullable|array',
+                'details.zinli.email' => 'nullable|email:rfc|max:120',
+                'details.zinli.account_holder' => 'nullable|string|max:120',
                 'show_legal_links' => 'nullable|boolean',
             ]);
 
@@ -1363,7 +1589,7 @@ class DashboardController extends Controller
             ];
 
             // Plan 3: accept per-branch assignment
-            if ((int) $plan->id === 3) {
+            if ($isPlan3) {
                 $branchIds  = $tenant->branches->pluck('id')->toArray();
                 $branchData = [];
 
@@ -1378,12 +1604,46 @@ class DashboardController extends Controller
                 $data['branches'] = $branchData;
             }
 
+            $details = [];
+
+            $pagoMovilDetails = [
+                'bank' => trim((string) data_get($validated, 'details.pagoMovil.bank', '')),
+                'use_business_whatsapp' => (bool) data_get($validated, 'details.pagoMovil.use_business_whatsapp', true),
+                'phone' => trim((string) data_get($validated, 'details.pagoMovil.phone', '')),
+                'document_type' => trim((string) data_get($validated, 'details.pagoMovil.document_type', '')),
+                'document_number' => trim((string) data_get($validated, 'details.pagoMovil.document_number', '')),
+                'account_holder' => trim((string) data_get($validated, 'details.pagoMovil.account_holder', '')),
+            ];
+            if (collect($pagoMovilDetails)->except('use_business_whatsapp')->filter()->isNotEmpty()) {
+                $details['pagoMovil'] = $pagoMovilDetails;
+            }
+
+            $paypalDetails = [
+                'email' => trim((string) data_get($validated, 'details.paypal.email', '')),
+                'account_holder' => trim((string) data_get($validated, 'details.paypal.account_holder', '')),
+            ];
+            if (collect($paypalDetails)->filter()->isNotEmpty()) {
+                $details['paypal'] = $paypalDetails;
+            }
+
+            $zinliDetails = [
+                'email' => trim((string) data_get($validated, 'details.zinli.email', '')),
+                'account_holder' => trim((string) data_get($validated, 'details.zinli.account_holder', '')),
+            ];
+            if (collect($zinliDetails)->filter()->isNotEmpty()) {
+                $details['zinli'] = $zinliDetails;
+            }
+
+            if ($details !== []) {
+                $data['details'] = $details;
+            }
+
             $customization = $tenant->customization
                 ?? \App\Models\TenantCustomization::firstOrCreate(['tenant_id' => $tenantId]);
 
             $customization->payment_methods = $data;
 
-            if (in_array(($tenant->getBlueprintSlug() ?? ''), ['food', 'studio', 'catalog'], true) && (int) $plan->id > 1) {
+            if (in_array(($tenant->getBlueprintSlug() ?? ''), ['food', 'studio', 'cat'], true) && !$isPlan1) {
                 $contentBlocks = $customization->content_blocks ?? [];
                 $contentBlocks['legal_links']['enabled'] = (bool) ($validated['show_legal_links'] ?? false);
                 $customization->content_blocks = $contentBlocks;
@@ -1421,12 +1681,14 @@ class DashboardController extends Controller
                 ->firstOrFail();
 
             $plan = $tenant->plan;
+            $planSlug = (string) ($plan?->slug ?? '');
+            $isPlan1 = in_array($planSlug, ['oportunidad', 'studio-oportunidad', 'food-basico', 'cat-basico'], true);
 
             // Allowed networks by plan
             $allNetworks = ['instagram', 'facebook', 'tiktok', 'linkedin', 'youtube', 'x'];
             $plan1Networks = ['instagram', 'facebook', 'tiktok', 'linkedin'];
 
-            $allowed = (int) $plan->id === 1 ? $plan1Networks : $allNetworks;
+            $allowed = $isPlan1 ? $plan1Networks : $allNetworks;
 
             // Build validation rules
             $rules = [];
@@ -1446,7 +1708,7 @@ class DashboardController extends Controller
             }
 
             // Plan 1: enforce max 1 network
-            if ((int) $plan->id === 1 && count($networks) > 1) {
+            if ($isPlan1 && count($networks) > 1) {
                 return response()->json([
                     'success' => false,
                     'message' => 'El Plan OPORTUNIDAD solo permite configurar 1 red social',

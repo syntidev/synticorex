@@ -16,7 +16,8 @@
 
     $categories  = $menu ?? [];
     $plan        = $tenant->plan ?? null;
-    $isPlanAnual = $plan && (in_array($plan->slug ?? '', ['food-anual']) || ($plan->id ?? 0) >= 3);
+    $planSlug    = (string) ($plan->slug ?? 'food-basico');
+    $isPlanAnual = $planSlug === 'food-anual';
 
     $customerFields = $customization->customer_required_fields
         ?? ($tenant->settings['food_settings']['customer_fields'] ?? ['name']);
@@ -842,7 +843,7 @@
     $fpMethods  = $customization->payment_methods ?? [];
     $fpGlobal   = $fpMethods['global'] ?? [];
     $fpCurrency = $fpMethods['currency'] ?? [];
-    if ($tenant->plan_id === 1 && empty($fpGlobal)) {
+    if ($planSlug === 'food-basico' && empty($fpGlobal)) {
         $fpGlobal = ['pagoMovil', 'cash'];
     }
     $fpAllMeta = [

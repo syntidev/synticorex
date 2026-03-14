@@ -35,7 +35,7 @@ class OrderService
      * Generate and persist a new order.
      *
      * @param  Tenant  $tenant
-     * @param  array{name: string, location: string}  $customer
+      * @param  array{name: string, phone: string, location: string}  $customer
      * @param  array<int, array{title: string, qty: int, price: float, variant: string|null}>  $items
      * @return array  The saved order array
      */
@@ -50,6 +50,7 @@ class OrderService
             'date'      => now()->toIso8601String(),
             'customer'  => [
                 'name'     => $customer['name'],
+                'phone'    => $customer['phone'],
                 'location' => $customer['location'] ?? '',
             ],
             'items'    => array_map(fn (array $item) => [

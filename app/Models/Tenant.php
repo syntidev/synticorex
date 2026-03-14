@@ -282,10 +282,25 @@ class Tenant extends Model
     }
 
     /**
-     * Si el tenant tiene Plan VISIÓN (plan_id === 3).
+     * Si el tenant está en el plan tope de su blueprint (Plan 3 / anual / visión).
      */
     public function isVision(): bool
     {
+        $topTierSlugs = ['vision', 'studio-vision', 'food-anual', 'cat-anual'];
+
+        $slug = $this->plan?->slug;
+        if (is_string($slug) && in_array($slug, $topTierSlugs, true)) {
+            return true;
+        }
+
+        // Fallback para contexts donde la relación plan no esté cargada.
+        if (!empty($this->plan_id)) {
+            $dbSlug = Plan::query()->whereKey($this->plan_id)->value('slug');
+            if (is_string($dbSlug) && in_array($dbSlug, $topTierSlugs, true)) {
+                return true;
+            }
+        }
+
         return (int) $this->plan_id === Plan::VISION;
     }
 

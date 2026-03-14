@@ -14,13 +14,45 @@
 
 @php
     // $allPayMeta y $allCurrencyMeta vienen del Controller (fuente única de verdad)
+    $planSlug = (string) ($plan->slug ?? 'studio-oportunidad');
+    $isPlan1 = in_array($planSlug, ['studio-oportunidad', 'food-basico', 'cat-basico'], true);
+    $isPlan2 = in_array($planSlug, ['studio-crecimiento', 'food-semestral', 'cat-semestral'], true);
+    $isPlan3 = in_array($planSlug, ['studio-vision', 'food-anual', 'cat-anual'], true);
     $payMethods      = $customization->payment_methods ?? [];
     $globalEnabled   = $payMethods['global'] ?? [];
     $currencyEnabled = $payMethods['currency'] ?? [];
     $branchPayMeta   = $payMethods['branches'] ?? [];
+    $paymentDetails  = is_array($payMethods['details'] ?? null) ? $payMethods['details'] : [];
+    $pagoMovilDetails = (array) ($paymentDetails['pagoMovil'] ?? []);
+    $paypalDetails    = (array) ($paymentDetails['paypal'] ?? []);
+    $zinliDetails     = (array) ($paymentDetails['zinli'] ?? []);
     $activeBranchList = $branches->where('is_active', true);
     $savedMode = $tenant->settings['engine_settings']['currency']['display']['saved_display_mode'] ?? 'reference_only';
     $legalLinksEnabled = (bool) data_get($customization->content_blocks ?? [], 'legal_links.enabled', false);
+    $useBusinessWhatsapp = (bool) ($pagoMovilDetails['use_business_whatsapp'] ?? true);
+    $bankOptions = [
+        '0102' => 'Banco de Venezuela',
+        '0104' => 'Venezolano de Credito',
+        '0105' => 'Banco Mercantil',
+        '0108' => 'Banco Provincial',
+        '0114' => 'Bancaribe',
+        '0115' => 'Banco Exterior',
+        '0128' => 'Banco Caroni',
+        '0134' => 'Banesco',
+        '0137' => 'Banco Sofitasa',
+        '0138' => 'Banco Plaza',
+        '0151' => 'BFC Banco Fondo Comun',
+        '0156' => '100% Banco',
+        '0157' => 'DelSur',
+        '0163' => 'Banco del Tesoro',
+        '0168' => 'Bancrecer',
+        '0171' => 'Banco Activo',
+        '0172' => 'Bancamiga',
+        '0174' => 'Banplus',
+        '0177' => 'Banfanb',
+        '0191' => 'BNC',
+    ];
+    $documentTypeOptions = ['V' => 'V', 'E' => 'E', 'J' => 'J', 'G' => 'G', 'P' => 'P'];
 @endphp
 
             {{-- ══ ROW 1: Tasas BCV (compact bar) ═══════════════ --}}
@@ -67,7 +99,7 @@
                                     <h3 class="text-base font-bold text-foreground">Métodos de Pago</h3>
                                     <p class="text-xs text-muted-foreground-1">
                                         Activa los que aceptas
-                                        @if($plan->id === 1)
+                                        @if($isPlan1)
                                             <span class="inline-flex items-center py-0.5 px-2 rounded-full text-xs font-medium bg-yellow-100 text-yellow-700 ms-1">fijos</span>
                                         @endif
                                     </p>
@@ -75,7 +107,7 @@
                             </div>
                         </div>
                         <div class="px-5 pb-5 pt-1">
-                            @if($plan->id === 1)
+                            @if($isPlan1)
                             <div class="grid grid-cols-2 gap-2 mb-3">
                                 @foreach(['pagoMovil', 'cash'] as $mkey)
                                 @php $m = $allPayMeta[$mkey]; @endphp
@@ -133,7 +165,109 @@
                                 <div id="payment-preview" class="flex flex-wrap justify-center gap-1.5 min-h-6 items-center"></div>
                             </div>
 
-                            @if($plan->id === 3 && $activeBranchList->isNotEmpty())
+                            <div class="rounded-xl border border-border bg-muted/40 p-4 mb-4">
+                                <div class="flex items-start gap-3 mb-4">
+                                    <div class="size-9 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                                        <span class="iconify tabler--receipt-2 size-4.5 text-primary" aria-hidden="true"></span>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-semibold text-foreground">Datos para Cobrar</p>
+                                        <p class="text-xs text-muted-foreground-1">Estos datos se usan para armar el pack que se envia desde Ordenes por WhatsApp.</p>
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-1 xl:grid-cols-3 gap-3">
+                                    <div id="payment-detail-card-pagoMovil" class="rounded-lg border border-border bg-surface p-3 space-y-3">
+                                        <div>
+                                            <p class="text-xs font-bold uppercase tracking-wider text-foreground">Pago Movil</p>
+                                            <p class="text-[11px] text-muted-foreground-1 mt-1">Banco, telefono y documento del titular.</p>
+                                        </div>
+                                        <div>
+                                            <label for="pay-detail-pagoMovil-bank" class="inline-block text-xs font-semibold text-muted-foreground-1 uppercase tracking-wide mb-1.5">Banco</label>
+                                            <select id="pay-detail-pagoMovil-bank" class="py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs text-sm rounded-lg text-foreground focus:border-primary-focus focus:ring-primary-focus">
+                                                <option value="">Selecciona un banco</option>
+                                                @foreach($bankOptions as $bankCode => $bankName)
+                                                <option value="{{ $bankName }}" {{ (($pagoMovilDetails['bank'] ?? '') === $bankName) ? 'selected' : '' }}>{{ $bankCode }} · {{ $bankName }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        @php
+                                            $waRaw = preg_replace('/\D/', '', $tenant->getActiveWhatsapp() ?? '');
+                                            $waLocal = $waRaw ? '0' . preg_replace('/^58/', '', $waRaw) : '';
+                                            $storedPhone = $pagoMovilDetails['phone'] ?? '';
+                                            $displayPhone = $useBusinessWhatsapp ? $waLocal : $storedPhone;
+                                        @endphp
+                                        <div>
+                                            <label for="pay-detail-pagoMovil-phone" class="inline-block text-xs font-semibold text-muted-foreground-1 uppercase tracking-wide mb-1.5">Teléfono principal</label>
+                                            <input type="tel" id="pay-detail-pagoMovil-phone"
+                                                class="py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none"
+                                                maxlength="11"
+                                                pattern="0(412|414|416|422|424|426)[0-9]{7}"
+                                                title="Formato venezolano: 0 + operadora + 7 dígitos. Ej: 04221234567"
+                                                placeholder="04221234567"
+                                                data-business-phone="{{ $waLocal }}"
+                                                value="{{ $displayPhone }}"
+                                                {{ $useBusinessWhatsapp ? 'disabled' : '' }}>
+                                            <p class="mt-1 text-[11px] text-muted-foreground-1">Formato Pago Móvil: 0424... / 0414... / 0422... etc.</p>
+                                        </div>
+                                        <label class="flex items-center justify-between gap-3 rounded-lg border border-border bg-muted/60 px-3 py-2 cursor-pointer overflow-visible">
+                                            <span class="text-xs font-medium text-foreground">Usar WhatsApp principal del negocio</span>
+                                            <input type="checkbox" id="pay-detail-pagoMovil-use-business" class="shrink-0 relative w-[35px] h-[20px] bg-gray-200 checked:bg-primary border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 appearance-none focus:ring-primary-focus focus:ring-2 focus:ring-offset-2 before:inline-block before:size-[16px] before:bg-white before:rounded-full before:transform before:translate-x-0 checked:before:translate-x-full before:transition before:ease-in-out before:duration-200 before:shadow-sm" onchange="togglePaymentDetailPhone()" {{ $useBusinessWhatsapp ? 'checked' : '' }}>
+                                        </label>
+                                        <div>
+                                            <label for="pay-detail-pagoMovil-holder" class="inline-block text-xs font-semibold text-muted-foreground-1 uppercase tracking-wide mb-1.5">Titular</label>
+                                            <input type="text" id="pay-detail-pagoMovil-holder" class="py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus" maxlength="120" placeholder="Nombre del titular" value="{{ $pagoMovilDetails['account_holder'] ?? '' }}">
+                                        </div>
+                                        <div class="grid grid-cols-2 gap-3">
+                                            <div>
+                                                <label for="pay-detail-pagoMovil-document-type" class="inline-block text-xs font-semibold text-muted-foreground-1 uppercase tracking-wide mb-1.5">Tipo doc.</label>
+                                                <select id="pay-detail-pagoMovil-document-type" class="py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs text-sm rounded-lg text-foreground focus:border-primary-focus focus:ring-primary-focus">
+                                                    <option value="">Tipo</option>
+                                                    @foreach($documentTypeOptions as $documentType => $documentLabel)
+                                                    <option value="{{ $documentType }}" {{ (($pagoMovilDetails['document_type'] ?? '') === $documentType) ? 'selected' : '' }}>{{ $documentLabel }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <label for="pay-detail-pagoMovil-document-number" class="inline-block text-xs font-semibold text-muted-foreground-1 uppercase tracking-wide mb-1.5">Documento</label>
+                                                <input type="text" id="pay-detail-pagoMovil-document-number" class="py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus" maxlength="20" placeholder="28123456 o J123456789" value="{{ $pagoMovilDetails['document_number'] ?? '' }}">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div id="payment-detail-card-paypal" class="rounded-lg border border-border bg-surface p-3 space-y-3">
+                                        <div>
+                                            <p class="text-xs font-bold uppercase tracking-wider text-foreground">PayPal</p>
+                                            <p class="text-[11px] text-muted-foreground-1 mt-1">Correo y nombre para pagos internacionales.</p>
+                                        </div>
+                                        <div>
+                                            <label for="pay-detail-paypal-email" class="inline-block text-xs font-semibold text-muted-foreground-1 uppercase tracking-wide mb-1.5">Correo PayPal</label>
+                                            <input type="email" id="pay-detail-paypal-email" class="py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus" maxlength="120" placeholder="cobros@negocio.com" value="{{ $paypalDetails['email'] ?? '' }}">
+                                        </div>
+                                        <div>
+                                            <label for="pay-detail-paypal-holder" class="inline-block text-xs font-semibold text-muted-foreground-1 uppercase tracking-wide mb-1.5">Titular / referencia</label>
+                                            <input type="text" id="pay-detail-paypal-holder" class="py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus" maxlength="120" placeholder="Nombre asociado a PayPal" value="{{ $paypalDetails['account_holder'] ?? '' }}">
+                                        </div>
+                                    </div>
+
+                                    <div id="payment-detail-card-zinli" class="rounded-lg border border-border bg-surface p-3 space-y-3">
+                                        <div>
+                                            <p class="text-xs font-bold uppercase tracking-wider text-foreground">Zinli</p>
+                                            <p class="text-[11px] text-muted-foreground-1 mt-1">Correo o identificador que recibe el pago.</p>
+                                        </div>
+                                        <div>
+                                            <label for="pay-detail-zinli-email" class="inline-block text-xs font-semibold text-muted-foreground-1 uppercase tracking-wide mb-1.5">Correo Zinli</label>
+                                            <input type="email" id="pay-detail-zinli-email" class="py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus" maxlength="120" placeholder="zinli@negocio.com" value="{{ $zinliDetails['email'] ?? '' }}">
+                                        </div>
+                                        <div>
+                                            <label for="pay-detail-zinli-holder" class="inline-block text-xs font-semibold text-muted-foreground-1 uppercase tracking-wide mb-1.5">Titular / referencia</label>
+                                            <input type="text" id="pay-detail-zinli-holder" class="py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus" maxlength="120" placeholder="Nombre asociado a Zinli" value="{{ $zinliDetails['account_holder'] ?? '' }}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            @if($isPlan3 && $activeBranchList->isNotEmpty())
                             <div class="pt-3 border-t border-border" x-data="{ branchPay: false }">
                                 <button type="button" @click="branchPay = !branchPay"
                                         class="flex items-center gap-2 text-xs font-semibold text-muted-foreground-1 hover:text-foreground mb-2 w-full">
@@ -233,7 +367,7 @@
                 </div>
             </div>
 
-            @if(in_array($blueprint, ['food', 'studio', 'catalog'], true))
+            @if(in_array($blueprint, ['food', 'studio', 'cat'], true))
             <div class="mb-5">
                 <div class="bg-surface rounded-xl shadow-sm border border-border">
                     <div class="px-5 pt-5 pb-3">
@@ -257,11 +391,11 @@
                                 <input type="checkbox" id="legal-links-enabled"
                                        onchange="saveLegalLinksConfig(this)"
                                        class="relative w-[35px] h-[20px] bg-gray-200 checked:bg-primary border-2 border-transparent rounded-full transition-colors ease-in-out duration-200 appearance-none focus:ring-primary-focus focus:ring-2 focus:ring-offset-2 before:inline-block before:size-[16px] before:bg-white before:rounded-full before:transform before:translate-x-0 checked:before:translate-x-full before:transition before:ease-in-out before:duration-200 before:shadow-sm cursor-pointer"
-                                       {{ ($plan->id > 1 && $legalLinksEnabled) ? 'checked' : '' }}
-                                       {{ $plan->id === 1 ? 'disabled' : '' }}>
+                                       {{ (!$isPlan1 && $legalLinksEnabled) ? 'checked' : '' }}
+                                       {{ $isPlan1 ? 'disabled' : '' }}>
                             </label>
                         </div>
-                        @if($plan->id === 1)
+                        @if($isPlan1)
                         <p class="text-[11px] text-muted-foreground-1 mt-1.5">Disponible desde Plan CRECIMIENTO.</p>
                         @endif
                     </div>
@@ -324,7 +458,7 @@
                                 <p class="text-xs text-muted-foreground-1">Límites y renovación</p>
                             </div>
                         </div>
-                        <span class="inline-flex items-center py-0.5 px-2 rounded-full text-sm font-medium {{ $plan->id === 1 ? 'bg-yellow-100 text-yellow-700' : ($plan->id === 2 ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700') }}">
+                        <span class="inline-flex items-center py-0.5 px-2 rounded-full text-sm font-medium {{ $isPlan1 ? 'bg-yellow-100 text-yellow-700' : ($isPlan2 ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700') }}">
                             {{ $plan->name }}
                         </span>
                     </div>

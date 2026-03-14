@@ -48,6 +48,7 @@ $prelineThemes = [
 $allowedSlugs = \App\Services\PrelineThemeService::getThemesByPlan($tenant->plan_id);
 $prelineThemes = array_values(array_filter($prelineThemes, fn($t) => in_array($t['slug'], $allowedSlugs)));
 $themesByCategory = collect($prelineThemes)->groupBy('category');
+$plan3Label = ($blueprint ?? '') === 'cat' ? 'Plan Vitrina (Plan 3)' : 'Plan Vision (Plan 3)';
 @endphp
 
 {{-- â”€â”€ Temas + Paleta â€” 2 columnas â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ --}}
@@ -122,7 +123,7 @@ $themesByCategory = collect($prelineThemes)->groupBy('category');
                     </div>
                     <div>
                         <h3 class="text-base font-bold text-foreground">Paleta Custom</h3>
-                        <span class="inline-flex items-center py-0.5 px-2 rounded-full text-xs font-medium bg-blue-100 text-blue-700">Plan VISIÓN</span>
+                        <span class="inline-flex items-center py-0.5 px-2 rounded-full text-xs font-medium bg-blue-100 text-blue-700">{{ $plan3Label }}</span>
                     </div>
                 </div>
             </div>
@@ -157,10 +158,10 @@ $themesByCategory = collect($prelineThemes)->groupBy('category');
                     <span class="iconify tabler--color-swatch size-6 text-primary" aria-hidden="true"></span>
                 </div>
                 <h3 class="text-sm font-bold text-foreground mb-1">Paleta Personalizada</h3>
-                <p class="text-xs text-muted-foreground-1 mb-4">Crea tu propia combinación de colores con el Plan VISIÓN</p>
+                <p class="text-xs text-muted-foreground-1 mb-4">Crea tu propia combinación de colores con {{ $plan3Label }}</p>
                 <span class="inline-flex items-center py-0.5 px-2 rounded-full text-sm font-medium bg-yellow-100 text-yellow-700 mb-3">
                     <span class="iconify tabler--lock size-3 mr-1"></span>
-                    Plan VISIÓN
+                    {{ $plan3Label }}
                 </span>
                 <a href="https://syntiweb.com/planes" target="_blank" rel="noopener noreferrer"
                    class="inline-flex items-center text-xs py-1 px-2 rounded-lg font-medium transition-colors bg-blue-100 text-blue-700 hover:bg-blue-200 gap-1">

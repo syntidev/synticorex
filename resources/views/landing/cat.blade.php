@@ -19,7 +19,7 @@
     $payMethods      = ($customization->payment_methods ?? []);
     $globalEnabled   = $payMethods['global'] ?? [];
     $currencyEnabled = $payMethods['currency'] ?? [];
-    if ($tenant->plan_id === 1) {
+    if ($planSlug === 'cat-basico') {
         $globalEnabled   = ['pagoMovil', 'cash'];
         $currencyEnabled = [];
     }
