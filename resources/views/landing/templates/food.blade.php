@@ -1604,18 +1604,68 @@
     function sfShareModal() {
         var url   = window.location.href;
         var title = document.title;
-        if (navigator.share) {
-            navigator.share({ title: title, url: url }).catch(function() {});
-        } else {
-            navigator.clipboard.writeText(url).then(function() {
-                var btn = document.querySelector('#sf-info-modal button[onclick="sfShareModal()"]');
-                if (btn) {
-                    var orig = btn.innerHTML;
-                    btn.innerHTML = '<span class="iconify tabler--check size-4"></span> ¡Enlace copiado!';
-                    setTimeout(function() { btn.innerHTML = orig; }, 2000);
+        var btn = document.querySelector('#sf-info-modal button[onclick="sfShareModal()"]');
+
+        function showShareFeedback(ok, message) {
+            if (!btn) {
+                if (!ok && message) {
+                    alert(message);
                 }
-            }).catch(function() {});
+                return;
+            }
+            var orig = btn.getAttribute('data-orig-html') || btn.innerHTML;
+            btn.setAttribute('data-orig-html', orig);
+            btn.innerHTML = ok
+                ? '<span class="iconify tabler--check size-4"></span> Enlace copiado'
+                : '<span class="iconify tabler--alert-triangle size-4"></span> No se pudo compartir';
+            setTimeout(function() {
+                btn.innerHTML = orig;
+            }, 2200);
         }
+
+        function fallbackCopy() {
+            if (navigator.clipboard && window.isSecureContext) {
+                return navigator.clipboard.writeText(url).then(function() {
+                    showShareFeedback(true);
+                    return true;
+                });
+            }
+
+            return new Promise(function(resolve) {
+                try {
+                    var input = document.createElement('input');
+                    input.value = url;
+                    input.setAttribute('readonly', '');
+                    input.style.position = 'fixed';
+                    input.style.opacity = '0';
+                    document.body.appendChild(input);
+                    input.select();
+                    input.setSelectionRange(0, 99999);
+                    var copied = document.execCommand('copy');
+                    document.body.removeChild(input);
+
+                    if (copied) {
+                        showShareFeedback(true);
+                        resolve(true);
+                        return;
+                    }
+                } catch (e) {}
+
+                // Last resort: manual copy dialog.
+                window.prompt('Copia este enlace:', url);
+                showShareFeedback(false, 'Copia el enlace manualmente');
+                resolve(false);
+            });
+        }
+
+        if (navigator.share) {
+            navigator.share({ title: title, url: url })
+                .then(function() { showShareFeedback(true); })
+                .catch(function() { fallbackCopy(); });
+            return;
+        }
+
+        fallbackCopy();
     }
     document.querySelectorAll('img[loading="lazy"]').forEach(function(img) {
         img.onload = function() { img.classList.add('loaded'); };
