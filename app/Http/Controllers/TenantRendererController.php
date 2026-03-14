@@ -177,7 +177,13 @@ class TenantRendererController extends Controller
                 $menu = $menuService->getCategories($tenant->id);
             }
 
-            return view($this->resolveTemplate($tenant), compact('tenant', 'plan', 'products', 'services', 'dollarRate', 'euroRate', 'themeSlug', 'meta', 'customization', 'currencySettings', 'displayMode', 'savedDisplayMode', 'showReference', 'showBolivares', 'showEuro', 'hidePrice', 'trackingQRSmall', 'trackingShortlink', 'showHoursIndicator', 'isOpen', 'closedMessage', 'blueprint', 'schema', 'menu'));
+            $featuredItems = collect($menu ?? [])
+                ->flatMap(fn($cat) => $cat['items'] ?? [])
+                ->filter(fn($item) => !empty($item['badge']))
+                ->values()
+                ->all();
+
+            return view($this->resolveTemplate($tenant), compact('tenant', 'plan', 'products', 'services', 'dollarRate', 'euroRate', 'themeSlug', 'meta', 'customization', 'currencySettings', 'displayMode', 'savedDisplayMode', 'showReference', 'showBolivares', 'showEuro', 'hidePrice', 'trackingQRSmall', 'trackingShortlink', 'showHoursIndicator', 'isOpen', 'closedMessage', 'blueprint', 'schema', 'menu', 'featuredItems'));
         } catch (Throwable $e) {
             Log::error('TenantRendererController: Error rendering landing page', [
                 'subdomain' => $subdomain,
@@ -274,6 +280,12 @@ class TenantRendererController extends Controller
                 $viewData['menu'] = (new \App\Services\MenuService())->getCategories($tenant->id);
             }
 
+            $viewData['featuredItems'] = collect($viewData['menu'])
+                ->flatMap(fn($cat) => $cat['items'] ?? [])
+                ->filter(fn($item) => !empty($item['badge']))
+                ->values()
+                ->all();
+
             Log::info('TenantRendererController: Rendering by custom domain', [
                 'domain' => $domain,
                 'tenant_id' => $tenant->id,
@@ -355,6 +367,12 @@ class TenantRendererController extends Controller
             if (data_get($tenant->settings, 'engine_settings.template') === 'food') {
                 $viewData['menu'] = (new \App\Services\MenuService())->getCategories($tenant->id);
             }
+
+            $viewData['featuredItems'] = collect($viewData['menu'])
+                ->flatMap(fn($cat) => $cat['items'] ?? [])
+                ->filter(fn($item) => !empty($item['badge']))
+                ->values()
+                ->all();
 
             Log::debug('TenantRendererController: Preview mode', [
                 'tenant_id' => $tenantId,

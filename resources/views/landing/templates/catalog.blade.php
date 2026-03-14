@@ -591,6 +591,28 @@
 </div>
 @endif
 
+{{-- MODAL Tienda Cerrada (confirmación) --}}
+<div id="sc-closed-modal" class="sc-modal-overlay">
+    <div class="sc-modal p-6 space-y-5">
+        <div class="flex items-start gap-3">
+            <div class="size-10 rounded-2xl bg-red-100 flex items-center justify-center text-red-600 shrink-0">
+                <svg aria-hidden="true" focusable="false" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+            </div>
+            <div class="flex-1">
+                <p class="text-lg font-black text-red-700">Tienda cerrada</p>
+                <p class="text-sm text-foreground/60">Igual puedes enviar tu mensaje. Te responderemos cuando abramos.</p>
+            </div>
+        </div>
+        <div class="flex gap-3">
+            <button id="sc-closed-send-btn" class="py-3 px-4 rounded-xl font-black transition-colors bg-primary text-primary-foreground hover:bg-primary/90 flex-1 cursor-pointer">Enviar de todas formas</button>
+            <button onclick="closeClosedModal()" class="py-3 px-4 rounded-xl font-medium transition-colors text-foreground/80 hover:bg-surface cursor-pointer">Cancelar</button>
+        </div>
+    </div>
+</div>
+
 {{-- 6. FOOTER (shared component — same as Studio) --}}
     @include('landing.sections.footer', ['sConfig' => $customization->getSectionConfig('footer')])
 
@@ -782,6 +804,23 @@
         window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(msg)}`, '_blank');
     }
 
+    function openClosedModal(onConfirm) {
+        var modal = document.getElementById('sc-closed-modal');
+        if (!modal) { onConfirm(); return; }
+        modal.style.display = 'flex';
+        var btn = document.getElementById('sc-closed-send-btn');
+        var handler = function() {
+            btn.removeEventListener('click', handler);
+            closeClosedModal();
+            onConfirm();
+        };
+        btn.addEventListener('click', handler);
+    }
+    window.closeClosedModal = function() {
+        var modal = document.getElementById('sc-closed-modal');
+        if (modal) modal.style.display = 'none';
+    };
+
     window.sendWhatsApp = function() {
         var _doSend = function() {
             @if(!$needsName && !$needsLocation)
@@ -804,8 +843,7 @@
         };
 
         if (!window.__tenantIsOpen) {
-            showClosedToast();
-            setTimeout(_doSend, 1500);
+            openClosedModal(_doSend);
             return;
         }
         _doSend();

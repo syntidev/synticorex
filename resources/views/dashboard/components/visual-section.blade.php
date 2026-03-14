@@ -79,7 +79,7 @@
                                 ];
                             @endphp
                             @foreach($heroSlots as $slotN => $slotCol)
-                            <div class="relative aspect-video rounded-xl overflow-hidden bg-layer border-2 border-dashed border-layer-line group cursor-pointer"
+                            <div id="hero-slot-{{ $slotN }}" class="relative aspect-video rounded-xl overflow-hidden bg-layer border-2 border-dashed border-layer-line group cursor-pointer"
                                  onclick="document.getElementById('hero-slot-{{ $slotN }}-file').click()">
                                 @if($customization && $customization->$slotCol)
                                     <img src="{{ asset('storage/tenants/' . $tenant->id . '/' . $customization->$slotCol) }}"
@@ -306,8 +306,10 @@
 
         window.uploadHeroSlot = async function(slot, input) {
             if (!input.files[0]) return;
+            var slotEl = document.getElementById('hero-slot-' + slot);
             var fd = new FormData();
             fd.append('image', input.files[0]);
+            if (slotEl) { slotEl.style.opacity = '0.5'; slotEl.style.pointerEvents = 'none'; }
             try {
                 var res = await fetch('/tenant/{{ $tenant->id }}/upload/hero-slot/' + slot, {
                     method: 'POST',
@@ -315,19 +317,37 @@
                     body: fd
                 });
                 var data = await res.json();
+                if (slotEl) { slotEl.style.opacity = '1'; slotEl.style.pointerEvents = ''; }
                 if (data.success) {
+                    var newSrc = data.url + '?t=' + Date.now();
+                    var existingImg = slotEl ? slotEl.querySelector('img') : null;
+                    if (existingImg) {
+                        existingImg.src = newSrc;
+                    } else if (slotEl) {
+                        slotEl.innerHTML =
+                            '<img src="' + newSrc + '" class="w-full h-full object-cover">' +
+                            '<div class="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-center justify-center gap-2">' +
+                                '<button onclick="event.stopPropagation();openImgPreview(\'' + newSrc + '\')" class="opacity-0 group-hover:opacity-100 size-8 rounded-full bg-white/20 text-white flex items-center justify-center transition-opacity"><span class="iconify tabler--eye size-4"></span></button>' +
+                                '<button onclick="event.stopPropagation();deleteHeroSlot(' + slot + ')" class="opacity-0 group-hover:opacity-100 size-8 rounded-full bg-red-500/80 text-white flex items-center justify-center transition-opacity"><span class="iconify tabler--trash size-4"></span></button>' +
+                            '</div>' +
+                            '<span class="absolute top-1.5 left-1.5 size-5 rounded-full bg-black/50 text-white text-[10px] font-bold flex items-center justify-center">' + slot + '</span>' +
+                            '<input type="file" id="hero-slot-' + slot + '-file" accept="image/*" class="hidden" onchange="uploadHeroSlot(' + slot + ',this)">';
+                        if (window.Iconify) { window.Iconify.scan(slotEl); }
+                    }
                     toast('Foto ' + slot + ' guardada', 'success');
-                    setTimeout(function() { location.reload(); }, 800);
                 } else {
                     toast(data.message || 'Error al subir', 'error');
                 }
             } catch(e) {
+                if (slotEl) { slotEl.style.opacity = '1'; slotEl.style.pointerEvents = ''; }
                 toast('Error de conexión', 'error');
             }
         };
 
         window.deleteHeroSlot = async function(slot) {
             if (!confirm('¿Eliminar esta foto del slider?')) return;
+            var slotEl = document.getElementById('hero-slot-' + slot);
+            if (slotEl) { slotEl.style.opacity = '0.5'; slotEl.style.pointerEvents = 'none'; }
             try {
                 var res = await fetch('/tenant/{{ $tenant->id }}/upload/hero-slot/' + slot, {
                     method: 'DELETE',
@@ -337,13 +357,23 @@
                     }
                 });
                 var data = await res.json();
+                if (slotEl) { slotEl.style.opacity = '1'; slotEl.style.pointerEvents = ''; }
                 if (data.success) {
+                    if (slotEl) {
+                        slotEl.innerHTML =
+                            '<div class="flex flex-col items-center justify-center h-full gap-1">' +
+                                '<span class="iconify tabler--plus size-5 text-muted-foreground-1 group-hover:text-primary transition-colors"></span>' +
+                                '<span class="text-[10px] text-muted-foreground-1 font-medium">Foto ' + slot + '</span>' +
+                            '</div>' +
+                            '<input type="file" id="hero-slot-' + slot + '-file" accept="image/*" class="hidden" onchange="uploadHeroSlot(' + slot + ',this)">';
+                        if (window.Iconify) { window.Iconify.scan(slotEl); }
+                    }
                     toast('Foto eliminada', 'success');
-                    setTimeout(function() { location.reload(); }, 800);
                 } else {
                     toast(data.message || 'Error', 'error');
                 }
             } catch(e) {
+                if (slotEl) { slotEl.style.opacity = '1'; slotEl.style.pointerEvents = ''; }
                 toast('Error de conexión', 'error');
             }
         };

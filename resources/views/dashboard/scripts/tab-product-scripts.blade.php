@@ -248,6 +248,20 @@
 
                 const result = await response.json();
                 if (result.success) {
+                    const infoPayload = {
+                        show_hours_indicator: document.getElementById('show-hours-toggle')?.checked ? 1 : 0,
+                        closed_message: document.getElementById('closed-message-input')?.value?.trim() || ''
+                    };
+
+                    await fetch('/tenant/{{ $tenant->id }}/update-info', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content
+                        },
+                        body: JSON.stringify(infoPayload)
+                    });
+
                     refreshHoursSummary(payload);
                     window.showToast ? window.showToast('✅ Horario guardado', 'success') : alert('✓ Horario guardado');
                 } else {

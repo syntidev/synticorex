@@ -1,38 +1,119 @@
-# SYNTIWEB - Workspace Instructions
+# SYNTIWEB - Workspace Skills
+# Versión: 4.0 | MAR 2026
+# ⚠️ Las reglas de gobernanza y comportamiento están en copilot-instructions.md
+# Este archivo define SKILLS técnicos del agente — no duplicar reglas
+
 agent:
   instructions: |
-    Eres el agente de desarrollo de SYNTIWEB.
-    Lee siempre .github/copilot-instructions.md antes de generar código.
-    
-    FLUJO OBLIGATORIO:
-    1. Cambios atómicos - un archivo a la vez
-    2. Especifica siempre la ruta completa del archivo
-    3. No toques lo que no te piden
-    4. No instales paquetes sin confirmar
-    5. NUNCA instalar FlyonUI ni DaisyUI — usar Preline 4.1.2
-    6. No cambies versiones de Preline 4.1.2 ni Tailwind 4.2
-    
-    ANTES DE GENERAR PHP:
-    - declare(strict_types=1) obligatorio
-    - Early return pattern
-    - Validar tenant_id siempre
-    - Eager loading, no N+1
-    - Sin lógica compleja en Blade
+    Lee siempre .github/copilot-instructions.md ANTES de actuar.
+    Ese archivo define modos de operación, gobernanza y reglas críticas.
+    Este archivo amplía con skills técnicos especializados.
 
-    SKILL: preline-designer
-    - Stack UI: Preline 4.1.2 + Tailwind 4.2 + Alpine.js 3.4.2
-    - NUNCA crear o referenciar landing/partials/ — usa landing/sections/ siempre
-    - NUNCA usar clases DaisyUI: btn, card, modal, badge, drawer, collapse, dropdown, join, stat, toast, divider, menu, alert
-    - Usar Tailwind utilitario puro para estilos
-    - Componentes interactivos SOLO con atributos hs-* de Preline
-    - Prioriza minimalismo y originalidad
-    - Componentes con 4 estados: Loading, Success, Empty, Error
-    - NUNCA usar clases de Tailwind v3
-    - Íconos: @iconify-json/tabler únicamente
-    
-    SKILL: architect-validator
-    - Valida límites de plan antes de cualquier CRUD
-    - Plan 1: 6 productos / 3 servicios
-    - Plan 2: 12 productos / 6 servicios
-    - Plan 3: 18 productos / 9 servicios
-    - Tenant isolation obligatorio en toda query
+# ─────────────────────────────────────────────
+# SKILL: preline-designer
+# Activa cuando: generar o editar UI de landing o dashboard
+# ─────────────────────────────────────────────
+skills:
+  preline_designer:
+    description: >
+      Diseño UI con Preline 4.1.2 + Tailwind 4.2 + Alpine.js 3.4.2
+    rules:
+      - Tailwind utilitario puro — sin clases de componentes DaisyUI
+      - Componentes interactivos SOLO con atributos hs-* de Preline
+      - Íconos: @iconify-json/tabler únicamente
+      - NUNCA landing/partials/ — siempre landing/sections/
+      - NUNCA Tailwind v3 syntax en v4
+      - Todo componente con 4 estados: Loading / Success / Empty / Error
+      - Touch targets mínimo 44x44px
+      - cursor-pointer en TODO elemento clickeable
+      - overflow-y:hidden en padres MATA el scroll — prohibido
+      - Transiciones: 150–300ms
+    typography:
+      avoid: [Inter, Roboto, Arial, Open Sans, Montserrat]
+      use:
+        moderna: [Satoshi, Cabinet Grotesk, Bricolage Grotesque]
+        editorial: [Playfair Display, Fraunces, Newsreader]
+        tecnica: [IBM Plex, Space Grotesk]
+    antipatterns:
+      - Purple gradient + Inter = SaaS genérico
+      - Glassmorphism everywhere
+      - Cards everywhere
+      - Emojis como íconos UI
+
+# ─────────────────────────────────────────────
+# SKILL: architect-validator
+# Activa cuando: cualquier operación CRUD sobre productos/servicios
+# ─────────────────────────────────────────────
+  architect_validator:
+    description: >
+      Valida límites de plan y tenant isolation antes de cualquier CRUD
+    limits:
+      plan_1: { productos: 6,  servicios: 3, paletas: 10 }
+      plan_2: { productos: 12, servicios: 6, paletas: 17 }
+      plan_3: { productos: 18, servicios: 9, paletas: 17, slider_fotos: 3 }
+    rules:
+      - canAccessSection() antes de render de cualquier sección
+      - tenant_id validado en TODA query — sin excepción
+      - Eager loading obligatorio — cero N+1
+
+# ─────────────────────────────────────────────
+# SKILL: syntifood-designer
+# Activa cuando: landing/sections/food.blade.php
+# ─────────────────────────────────────────────
+  syntifood_designer:
+    description: >
+      Estructura visual obligatoria para landing de tipo food/restaurant
+    layout_order:
+      1: Hero Slider — height:220px, fade 5s, dots, sin flechas
+      2: Header sticky — logo redondo 72px superpuesto, nombre+estado+dirección+redes
+      3: Modal Información — horario, dirección, teléfono, compartir
+      4: Barra categorías sticky — lupa + hamburguesa + tabs deslizantes
+      5: Banner cerrado — franja roja solo si !$tenant->is_open
+      6: Cards productos HORIZONTALES — imagen derecha 96x96px (NO negociable)
+      7: Badges — Popular (amarillo) / Nuevo (verde) / Descuento (rojo)
+      8: Carrito flotante — fixed bottom-6 right-4
+    scroll_rules:
+      - NUNCA overflow-hidden en body, main, section, wrapper padre
+      - NUNCA height:100vh + overflow:hidden combinados en padres
+      - Solo overflow-x:hidden permitido en barra de categorías
+      - Drawer: position:fixed — NUNCA afecta scroll del body
+      - Al abrir drawer → document.body.style.overflow='hidden'
+      - Al cerrar drawer → document.body.style.overflow=''
+    palette:
+      - NUNCA colores SyntiWeb en tenant
+      - Usar --brand-50 --brand-500 --brand-600 --brand-700
+      - Verde abierto "#22c55e" / Rojo cerrado "#ef4444"
+
+# ─────────────────────────────────────────────
+# SKILL: tenant-design-ai
+# Activa cuando: diseño visual de landing pública desde imagen de referencia
+# ─────────────────────────────────────────────
+  tenant_design_ai:
+    description: >
+      Genera landing de tenant desde imagen de referencia — production-ready en 1 iteración
+    process:
+      1: Extraer paleta → mapear a --brand-50/500/600/700
+      2: Identificar atmósfera (minimal / lujoso / orgánico / técnico / playful)
+      3: Respetar tipografía de imagen (peso, tamaño, jerarquía)
+      4: Escribir blade en landing/sections/ — nunca landing/partials/
+    section_variants:
+      hero:      [fullscreen, split, centered]
+      products:  [grid3, masonry, slider]
+      services:  [cards, spotlight, list]
+      about:     [split, centered, timeline]
+      faq:       [accordion, two-col]
+      cta:       [centered, banner, floating]
+
+# ─────────────────────────────────────────────
+# SKILL: ui-design-system
+# Activa cuando: generar tokens de diseño desde color base
+# ─────────────────────────────────────────────
+  ui_design_system:
+    description: >
+      Genera paleta completa, tipografía, grid 8pt, sombras y breakpoints
+    command: >
+      python3 .claude/skills/ui-design-system/scripts/design_token_generator.py
+      [color] [style] [format]
+    styles: [modern, classic, playful]
+    formats: [json, css, scss]
+    example: 'python3 ... "#4A80E4" modern css'

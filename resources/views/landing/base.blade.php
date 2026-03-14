@@ -95,24 +95,76 @@
             </button>
         </div>
     </div>
+
+    {{-- Modal confirmación cerrado (cuando hay redirectUrl) --}}
+    <div id="closed-confirm-modal" class="fixed inset-0 z-[10000] hidden items-center justify-center bg-black/40 p-4">
+        <div class="bg-background rounded-2xl shadow-2xl max-w-sm w-full p-6 space-y-5">
+            <div class="flex items-start gap-3">
+                <div class="size-10 rounded-2xl bg-red-100 flex items-center justify-center text-red-600 shrink-0">
+                    <span class="iconify tabler--clock-off size-5"></span>
+                </div>
+                <div class="flex-1">
+                    <p class="text-lg font-black text-red-700">Estamos cerrados</p>
+                    <p class="text-sm text-foreground/60">Igual puedes enviar tu mensaje. Te responderemos cuando abramos.</p>
+                </div>
+            </div>
+            <div class="flex gap-3">
+                <button id="closed-confirm-send" class="py-3 px-4 rounded-xl font-black transition-colors bg-primary text-primary-foreground hover:bg-primary/90 flex-1 cursor-pointer">Enviar de todas formas</button>
+                <button id="closed-confirm-cancel" class="py-3 px-4 rounded-xl font-medium transition-colors text-foreground/80 hover:bg-surface cursor-pointer">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         (function(){
             var toast = document.getElementById('closed-toast');
+            var modal = document.getElementById('closed-confirm-modal');
+            var sendBtn = document.getElementById('closed-confirm-send');
+            var cancelBtn = document.getElementById('closed-confirm-cancel');
+            var pendingUrl = null;
+            var pendingCallback = null;
             var cooldown = false;
-            window.showClosedToast = function(redirectUrl) {
-                if (cooldown || !toast) {
-                    if (redirectUrl) window.open(redirectUrl, '_blank');
-                    return;
+
+            window.showClosedToast = function(redirectUrlOrCallback) {
+                if (redirectUrlOrCallback) {
+                    if (typeof redirectUrlOrCallback === 'function') {
+                        pendingCallback = redirectUrlOrCallback;
+                        pendingUrl = null;
+                    } else {
+                        pendingUrl = redirectUrlOrCallback;
+                        pendingCallback = null;
+                    }
+                    modal.style.display = 'flex';
+                    modal.classList.remove('hidden');
+                    return false;
                 }
+
+                if (cooldown || !toast) return;
                 cooldown = true;
                 toast.style.opacity = '1';
                 toast.style.transform = 'translateX(-50%) translateY(0)';
-                if (redirectUrl) {
-                    setTimeout(function(){ window.open(redirectUrl, '_blank'); }, 1500);
-                }
                 setTimeout(function(){ hideClosedToast(); }, 5000);
                 setTimeout(function(){ cooldown = false; }, 8000);
             };
+
+            sendBtn.addEventListener('click', function() {
+                var url = pendingUrl;
+                var cb = pendingCallback;
+                pendingUrl = null;
+                pendingCallback = null;
+                modal.style.display = 'none';
+                modal.classList.add('hidden');
+                if (cb) cb();
+                else if (url) window.open(url, '_blank');
+            });
+
+            cancelBtn.addEventListener('click', function() {
+                pendingUrl = null;
+                pendingCallback = null;
+                modal.style.display = 'none';
+                modal.classList.add('hidden');
+            });
+
             window.hideClosedToast = function() {
                 if (!toast) return;
                 toast.style.opacity = '0';

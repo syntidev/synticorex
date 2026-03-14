@@ -51,6 +51,9 @@
     #sf-also-like-grid::-webkit-scrollbar{height:3px}
     #sf-also-like-grid::-webkit-scrollbar-track{background:transparent}
     #sf-also-like-grid::-webkit-scrollbar-thumb{background:var(--primary);border-radius:99px}
+    img { transition: opacity 0.3s ease; }
+    img[loading="lazy"] { opacity: 0; }
+    img.loaded { opacity: 1; }
 </style>
 @endpush
 
@@ -67,7 +70,7 @@
     ]));
 @endphp
 @if(count($heroImages) > 0)
-<div id="sf-hero-slider" class="relative w-full overflow-hidden bg-surface" style="height:220px">
+<div id="sf-hero-slider" class="relative w-full overflow-visible bg-surface" style="height:220px">
     @foreach($heroImages as $hIdx => $hImg)
     <div class="sf-slide absolute inset-0 transition-opacity duration-700" style="opacity:{{ $hIdx === 0 ? '1' : '0' }}">
         <img src="{{ asset('storage/tenants/' . $tenant->id . '/' . $hImg) }}" alt="{{ $tenant->business_name }}" class="w-full h-full object-cover" loading="{{ $hIdx === 0 ? 'eager' : 'lazy' }}">
@@ -84,15 +87,22 @@
 @endif
 
 {{-- 2. BUSINESS INFO --}}
-<div id="sf-business-info" class="mx-auto max-w-7xl px-4 py-5">
-    <div class="flex items-start gap-4">
+<div id="sf-business-info" class="mx-auto max-w-7xl px-4 py-5" style="overflow:visible">
+    <div class="flex items-end gap-4">
         @if(!empty($customization->logo_filename))
             <img src="{{ asset('storage/tenants/' . $tenant->id . '/' . $customization->logo_filename) }}"
                  alt="{{ $tenant->business_name }}"
-                 class="w-16 h-16 rounded-2xl border-2 border-white shadow-md object-cover -mt-8 ml-4 relative z-10 bg-white">
+                 style="width:96px;height:96px;border-radius:50%;border:4px solid #fff;
+                        box-shadow:0 8px 32px rgba(0,0,0,0.25);object-fit:cover;
+                        margin-top:-48px;position:relative;z-index:20;
+                        background:#fff;flex-shrink:0">
         @else
-            <div class="w-16 h-16 rounded-2xl border-2 border-white shadow-md -mt-8 ml-4 relative z-10 flex items-center justify-center font-black text-white text-2xl"
-                 style="background:var(--primary)">
+            <div style="width:96px;height:96px;border-radius:50%;border:4px solid #fff;
+                        box-shadow:0 8px 32px rgba(0,0,0,0.25);
+                        margin-top:-48px;position:relative;z-index:20;
+                        background:var(--primary);flex-shrink:0;
+                        display:flex;align-items:center;justify-content:center;
+                        font-weight:900;color:#fff;font-size:2rem">
                 {{ mb_substr($tenant->business_name, 0, 1) }}
             </div>
         @endif
@@ -116,7 +126,19 @@
 </div>
 
 {{-- 3. STICKY BAR — una sola fila: [identity] [🔍][☰][tabs] [ⓘ][WA][REF/Bs][🛒] --}}
-@php $activeCats = array_filter($categories, fn($c) => !empty($c['activo'])); @endphp
+@php
+    $activeCats = array_filter($categories, fn($c) => !empty($c['activo']));
+    $featuredItems = [];
+    foreach ($categories as $fCat) {
+        if (empty($fCat['activo'])) continue;
+        foreach ($fCat['items'] ?? [] as $fItem) {
+            if (empty($fItem['activo'])) continue;
+            if (in_array($fItem['badge'] ?? '', ['popular', 'nuevo', 'promo', 'destacado'], true) || !empty($fItem['is_featured'])) {
+                $featuredItems[] = $fItem;
+            }
+        }
+    }
+@endphp
 <div id="sf-sticky-bar" class="sticky top-0 z-[100] bg-background/95 backdrop-blur-2xl" style="border-bottom:1px solid rgba(0,0,0,.06)">
     <div class="mx-auto max-w-7xl px-3 flex items-center gap-2 h-14">
 
@@ -159,6 +181,12 @@
                     <span class="iconify tabler--menu-2 size-4"></span>
                 </button>
                 <div id="sf-cat-dropdown" class="absolute left-0 top-full mt-1 w-56 bg-background rounded-xl shadow-xl border border-foreground/5 z-[200] overflow-hidden" style="display:none">
+                    @if(!empty($featuredItems) && count($featuredItems) > 0)
+                    <button onclick="sfScrollToCategory('featured');sfToggleCatMenu()"
+                            class="w-full text-left px-4 py-3 text-sm font-semibold text-foreground/70 hover:bg-surface hover:text-foreground transition-colors border-b border-foreground/5 last:border-0">
+                        ⭐ Destacados
+                    </button>
+                    @endif
                     @foreach($activeCats as $catIdx => $cat)
                     <button onclick="sfScrollToCategory({{ $catIdx }});sfToggleCatMenu()"
                             class="w-full text-left px-4 py-3 text-sm font-semibold text-foreground/70 hover:bg-surface hover:text-foreground transition-colors border-b border-foreground/5 last:border-0">
@@ -170,6 +198,12 @@
             {{-- Category tabs --}}
             @if(count($activeCats) >= 2)
             <div id="sf-cat-tabs" class="flex gap-0 overflow-x-auto no-scrollbar flex-1">
+                @if(!empty($featuredItems) && count($featuredItems) > 0)
+                <button data-cat-nav="featured" onclick="sfScrollToCategory('featured')"
+                        class="sf-cat-tab relative px-3 py-3 text-sm font-semibold whitespace-nowrap transition-colors text-foreground/40 hover:text-foreground border-b-[3px] border-transparent">
+                    ⭐ Destacados
+                </button>
+                @endif
                 @foreach($activeCats as $catIdx => $cat)
                 <button data-cat-nav="{{ $catIdx }}" onclick="sfScrollToCategory({{ $catIdx }})"
                         class="sf-cat-tab relative px-3 py-3 text-sm font-semibold whitespace-nowrap transition-colors text-foreground/40 hover:text-foreground border-b-[3px] border-transparent">
@@ -402,20 +436,8 @@
 {{-- 3. MENU VIEW --}}
 <div id="sf-menu-view">
 <main class="mx-auto max-w-7xl px-4 py-6 space-y-8 pb-32">
-    @php
-        $featuredItems = [];
-        foreach ($categories as $fCat) {
-            if (empty($fCat['activo'])) continue;
-            foreach ($fCat['items'] ?? [] as $fItem) {
-                if (empty($fItem['activo'])) continue;
-                if (in_array($fItem['badge'] ?? '', ['popular', 'nuevo', 'promo', 'destacado'], true) || !empty($fItem['is_featured'])) {
-                    $featuredItems[] = $fItem;
-                }
-            }
-        }
-    @endphp
 
-    @if(count($featuredItems) > 0)
+    @if(!empty($featuredItems) && count($featuredItems) > 0)
     <div id="sf-cat-featured">
         <div class="flex items-center gap-2 mb-3">
             <span class="iconify tabler--star-filled size-5 text-amber-500"></span>
@@ -431,13 +453,13 @@
                  data-sf-q="{{ strtolower($fItem['nombre'] . ' ' . ($fItem['descripcion'] ?? '')) }}"
                  onclick="sfOpenDetail({{ json_encode($fItem) }}, {{ json_encode($fSiblings) }})">
                 @if(!empty($fItem['image_path']))
-                    <img src="{{ asset('storage/tenants/' . $tenant->id . '/' . $fItem['image_path']) }}"
+                    <img src="{{ str_starts_with($fItem['image_path'], 'http') ? $fItem['image_path'] : asset('storage/tenants/' . $tenant->id . '/' . $fItem['image_path']) }}"
                          alt="{{ $fItem['nombre'] }}"
-                         class="size-20 rounded-xl object-cover shrink-0 order-2"
+                         class="size-24 rounded-xl object-cover shrink-0 order-2"
                          loading="lazy">
                 @else
-                    <div class="size-20 rounded-xl shrink-0 flex items-center justify-center order-2 bg-amber-100/60">
-                        <span class="iconify tabler--star size-7 text-amber-400"></span>
+                    <div class="size-24 rounded-xl shrink-0 flex items-center justify-center order-2 bg-foreground/5">
+                        <span class="iconify tabler--tools-kitchen-2 size-7 text-foreground/20"></span>
                     </div>
                 @endif
                 <div class="flex flex-col gap-0.5 flex-1 order-1 min-w-0">
@@ -450,9 +472,9 @@
                     @elseif($fItem['badge'] === 'destacado')
                         <span class="self-start inline-flex items-center gap-1 text-[9px] font-black px-1.5 py-0.5 rounded-full bg-purple-100 text-purple-700"><span class="iconify tabler--bolt size-3"></span> Recomendado</span>
                     @endif
-                    <p class="text-sm font-black text-foreground leading-tight line-clamp-2">{{ $fItem['nombre'] }}</p>
+                    <p class="text-base font-black text-foreground leading-tight line-clamp-2">{{ $fItem['nombre'] }}</p>
                     @if(!empty($fItem['descripcion']))
-                        <p class="text-[11px] text-foreground/45 leading-snug line-clamp-2">{{ $fItem['descripcion'] }}</p>
+                        <p class="text-sm text-foreground/50 leading-snug line-clamp-2">{{ $fItem['descripcion'] }}</p>
                     @endif
                     @if(!$hidePrice)
                     @php
@@ -462,7 +484,7 @@
                         $fDiscountPct = $fHasDiscount ? round((1 - $fPrecioReal / $fPrecioOrig) * 100) : 0;
                     @endphp
                     <div class="flex items-center gap-2 mt-auto pt-1 flex-wrap">
-                        <p class="text-sm font-black text-primary" data-price-usd="{{ $fPrecioReal }}">
+                        <p class="text-base font-black text-primary" data-price-usd="{{ $fPrecioReal }}">
                             {{ $currencySymbol }} {{ number_format($fPrecioReal, 2, ',', '.') }}
                         </p>
                         @if($fHasDiscount)
@@ -504,13 +526,13 @@
                      data-sf-q="{{ strtolower($item['nombre'] . ' ' . ($item['descripcion'] ?? '')) }}"
                      onclick="sfOpenDetail({{ json_encode($item) }}, {{ $siblingsJson }})">
                     @if(!empty($item['image_path']))
-                        <img src="{{ asset('storage/tenants/' . $tenant->id . '/' . $item['image_path']) }}"
+                        <img src="{{ str_starts_with($item['image_path'], 'http') ? $item['image_path'] : asset('storage/tenants/' . $tenant->id . '/' . $item['image_path']) }}"
                              alt="{{ $item['nombre'] }}"
-                             class="size-20 rounded-xl object-cover shrink-0 order-2"
+                             class="size-24 rounded-xl object-cover shrink-0 order-2"
                              loading="lazy">
                     @else
-                        <div class="size-20 rounded-xl shrink-0 flex items-center justify-center order-2" style="background:{{ $catColor }}12">
-                            <span class="iconify tabler--bowl-chopsticks size-7" style="color:{{ $catColor }}60"></span>
+                        <div class="size-24 rounded-xl shrink-0 flex items-center justify-center order-2 bg-foreground/5">
+                            <span class="iconify tabler--tools-kitchen-2 size-7 text-foreground/20"></span>
                         </div>
                     @endif
                     <div class="flex flex-col gap-0.5 flex-1 order-1 min-w-0">
@@ -525,9 +547,9 @@
                                 <span class="self-start inline-flex items-center gap-1 text-[9px] font-black px-1.5 py-0.5 rounded-full bg-purple-100 text-purple-700"><span class="iconify tabler--bolt size-3"></span> Recomendado</span>
                             @endif
                         @endif
-                        <p class="text-sm font-black text-foreground leading-tight line-clamp-2">{{ $item['nombre'] }}</p>
+                        <p class="text-base font-black text-foreground leading-tight line-clamp-2">{{ $item['nombre'] }}</p>
                         @if(!empty($item['descripcion']))
-                            <p class="text-[11px] text-foreground/45 leading-snug line-clamp-2">{{ $item['descripcion'] }}</p>
+                            <p class="text-sm text-foreground/50 leading-snug line-clamp-2">{{ $item['descripcion'] }}</p>
                         @endif
                         @if(!$hidePrice)
                         @php
@@ -592,11 +614,16 @@
             {{-- COLUMNA IZQUIERDA: imagen + nombre + descripción + sugerencias --}}
             <div>
                 {{-- Imagen --}}
-                <div id="sf-detail-img-wrap" class="w-full bg-surface md:rounded-2xl md:overflow-hidden" style="height:300px">
+                <div id="sf-detail-img-wrap" class="relative overflow-hidden w-full bg-surface md:rounded-2xl md:overflow-hidden" style="height:300px">
                     <img id="sf-detail-img" src="" alt="" class="w-full h-full object-cover hidden">
-                    <div id="sf-detail-placeholder" class="w-full h-full flex items-center justify-center bg-surface">
-                        <span class="iconify tabler--bowl-chopsticks size-20 text-foreground/15"></span>
+                    <div id="sf-detail-placeholder" class="w-full h-full flex items-center justify-center bg-gradient-to-br from-surface to-primary/5">
+                        <span class="iconify tabler--bowl-chopsticks size-24 text-foreground/10"></span>
                     </div>
+                    @if($isPlanAnual)
+                    <button onclick="sfDetailAdd()"
+                            class="absolute bottom-3 right-3 size-11 rounded-full flex items-center justify-center text-2xl font-black text-white shadow-xl border-none active:scale-95 transition-transform md:hidden"
+                            style="background:var(--primary)">+</button>
+                    @endif
                 </div>
 
                 {{-- Nombre, badge, desc — solo visible en desktop aquí (en mobile va debajo en col única) --}}
@@ -608,6 +635,21 @@
                     <p id="sf-detail-desc-desk" class="text-sm text-foreground/50 leading-relaxed hidden"></p>
                 </div>
 
+                {{-- Nombre, badge, desc — solo mobile (debajo de imagen) --}}
+                <div class="md:hidden px-4 pt-4">
+                    <div class="flex items-start gap-2 mb-1">
+                        <h1 id="sf-detail-name" class="text-xl font-black tracking-tight text-foreground leading-tight flex-1"></h1>
+                        <span id="sf-detail-badge" class="text-[10px] font-black px-2.5 py-1 rounded-full shrink-0 hidden mt-1"></span>
+                    </div>
+                    <p id="sf-detail-desc" class="text-sm text-foreground/50 leading-relaxed hidden"></p>
+                    {{-- Precio mobile --}}
+                    <div class="md:hidden mt-3" style="background:color-mix(in srgb,var(--primary) 6%,transparent);border:1px solid color-mix(in srgb,var(--primary) 12%,transparent);border-radius:16px;padding:12px 16px">
+                        <p id="sf-detail-price" class="text-4xl font-black text-primary"></p>
+                        <p class="text-xs text-foreground/40 mt-0.5">Precio unitario</p>
+                    </div>
+                </div>
+                <div class="md:hidden border-t border-foreground/8 my-4"></div>
+
                 {{-- También te puede gustar --}}
                 <div id="sf-also-like-wrap" class="px-4 md:px-0 pt-8 hidden">
                     <p class="text-base font-black text-foreground mb-4">También te puede gustar</p>
@@ -615,41 +657,33 @@
                 </div>
             </div>
 
-            {{-- COLUMNA DERECHA: nombre+desc mobile, badge, precio, notas, qty+add --}}
-            <div class="px-4 md:px-0 pt-4 md:pt-0 md:sticky md:top-20">
+            {{-- COLUMNA DERECHA: precio, notas, qty+add --}}
+            <div class="px-4 md:px-0 pt-4 md:pt-0 md:sticky md:top-20 md:p-6" style="background:#fff;border-radius:20px;border:1px solid rgba(0,0,0,0.07);box-shadow:0 2px 16px rgba(0,0,0,0.07)">
 
-                {{-- Nombre+desc solo en MOBILE (en desktop está en col izquierda) --}}
-                <div class="md:hidden mb-4">
-                    <div class="flex items-start gap-2 mb-1">
-                        <h1 id="sf-detail-name" class="text-xl font-black tracking-tight text-foreground leading-tight flex-1"></h1>
-                        <span id="sf-detail-badge" class="text-[10px] font-black px-2.5 py-1 rounded-full shrink-0 hidden mt-1"></span>
-                    </div>
-                    <p id="sf-detail-desc" class="text-sm text-foreground/50 leading-relaxed hidden"></p>
-                </div>
-
-                {{-- Precio --}}
-                <div class="mb-5 border-b border-foreground/5 pb-5">
-                    <p id="sf-detail-price" class="text-3xl font-black text-primary"></p>
+                {{-- Precio (desktop) --}}
+                <div class="hidden md:block mb-5 rounded-2xl bg-primary/5 border border-primary/10 px-4 py-3" style="background:color-mix(in srgb,var(--primary) 6%,transparent);border:1px solid color-mix(in srgb,var(--primary) 12%,transparent);border-radius:16px;padding:12px 16px;margin-bottom:20px">
+                    <p id="sf-detail-price-desk" class="text-4xl font-black text-primary"></p>
+                    <p class="text-xs text-foreground/40 mt-0.5">Precio unitario</p>
                 </div>
 
                 {{-- Notas --}}
                 <div class="mb-5">
                     <p class="text-sm font-black text-foreground mb-2">Notas especiales <span class="text-foreground/30 font-medium">(opcional)</span></p>
                     <textarea id="sf-detail-notes" rows="3" placeholder="Ej: Sin cebolla, extra salsa, etc."
-                              class="w-full text-sm px-4 py-3 rounded-xl border border-foreground/10 bg-surface/50 resize-none outline-none focus:border-primary/40 transition-colors text-foreground placeholder:text-foreground/30"></textarea>
+                              class="w-full text-sm px-4 py-3 rounded-xl border border-foreground/10 bg-surface resize-none outline-none focus:border-primary/40 transition-colors text-foreground placeholder:text-foreground/30 shadow-inner"></textarea>
                 </div>
 
                 @if($isPlanAnual)
                 {{-- Qty + Add — SOLO visible en desktop (en mobile usa el bottom bar fixed) --}}
                 <div class="hidden md:flex items-center gap-4">
                     <div class="flex items-center gap-3 shrink-0">
-                        <button onclick="sfDetailQty(-1)" class="size-10 rounded-full border border-foreground/15 flex items-center justify-center text-xl font-black hover:bg-surface transition-colors">−</button>
+                        <button onclick="sfDetailQty(-1)" class="size-11 rounded-full border border-foreground/15 bg-surface shadow-sm flex items-center justify-center text-xl font-black leading-none select-none hover:bg-surface transition-colors" style="display:flex;align-items:center;justify-content:center"><span class="iconify tabler--minus size-4"></span></button>
                         <span id="sf-detail-qty-desk" class="text-base font-black min-w-[24px] text-center">1</span>
-                        <button onclick="sfDetailQty(1)" class="size-10 rounded-full flex items-center justify-center text-xl font-black text-white hover:opacity-90 transition-opacity" style="background:var(--primary)">+</button>
+                        <button onclick="sfDetailQty(1)" class="size-11 rounded-full flex items-center justify-center text-xl font-black text-white shadow-lg leading-none select-none hover:opacity-90 transition-opacity" style="background:var(--primary);display:flex;align-items:center;justify-content:center"><span class="iconify tabler--plus size-4"></span></button>
                     </div>
                     <button onclick="sfDetailAdd()"
-                            class="flex-1 h-12 rounded-2xl font-black text-sm text-white border-none shadow-md hover:opacity-90 transition-opacity"
-                            style="background:var(--primary)">
+                            class="flex-1 h-14 rounded-2xl font-black text-sm text-white border-none shadow-[0_4px_20px_rgba(0,0,0,0.15)] hover:opacity-90 active:scale-[0.98] transition-transform"
+                            style="background:var(--primary);box-shadow:0 4px 20px rgba(0,0,0,0.18);transform-origin:center;transition:transform 0.15s">
                         Agregar al carrito — <span id="sf-detail-add-price-desk"></span>
                     </button>
                 </div>
@@ -663,13 +697,13 @@
 {{-- BOTTOM BAR: solo mobile --}}
 <div id="sf-detail-bottom-bar" class="fixed bottom-0 left-0 right-0 z-[200] bg-background border-t border-foreground/8 shadow-xl px-4 py-3 md:hidden flex items-center gap-3" style="display:none!important">
     <div class="flex items-center gap-3 shrink-0">
-        <button onclick="sfDetailQty(-1)" class="size-9 rounded-full border border-foreground/15 flex items-center justify-center text-xl font-black">−</button>
+        <button onclick="sfDetailQty(-1)" class="size-11 rounded-full border border-foreground/15 bg-surface shadow-sm flex items-center justify-center text-xl font-black leading-none select-none" style="display:flex;align-items:center;justify-content:center"><span class="iconify tabler--minus size-4"></span></button>
         <span id="sf-detail-qty" class="text-base font-black min-w-[20px] text-center">1</span>
-        <button onclick="sfDetailQty(1)" class="size-9 rounded-full flex items-center justify-center text-xl font-black text-white" style="background:var(--primary)">+</button>
+        <button onclick="sfDetailQty(1)" class="size-11 rounded-full flex items-center justify-center text-xl font-black text-white shadow-lg leading-none select-none" style="background:var(--primary);display:flex;align-items:center;justify-content:center"><span class="iconify tabler--plus size-4"></span></button>
     </div>
     <button onclick="sfDetailAdd()" id="sf-detail-add-btn"
-            class="flex-1 h-12 rounded-2xl font-black text-sm text-white border-none shadow-md"
-            style="background:var(--primary)">
+            class="flex-1 h-14 rounded-2xl font-black text-sm text-white border-none shadow-[0_4px_20px_rgba(0,0,0,0.15)] active:scale-[0.98] transition-transform"
+            style="background:var(--primary);box-shadow:0 4px 20px rgba(0,0,0,0.18);transform-origin:center;transition:transform 0.15s">
         Agregar — <span id="sf-detail-add-price"></span>
     </button>
 </div>
@@ -738,54 +772,66 @@
 {{-- MODAL Datos Cliente --}}
 @if($isPlanAnual)
 <div id="sf-data-modal" class="sf-modal-overlay">
-    <div class="sf-modal p-6 space-y-5">
+    <div class="sf-modal p-5 space-y-3">
         <div class="flex items-start gap-3">
             <div class="size-10 rounded-2xl bg-primary/10 flex items-center justify-center text-primary shrink-0">
-                <svg aria-hidden="true" focusable="false" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="7" r="4"></circle>
-                    <path d="M5.5 21a6.5 6.5 0 0 1 13 0"></path>
-                </svg>
+                <span class="iconify tabler--user size-5"></span>
             </div>
             <div class="flex-1">
                 <p class="text-lg font-black">Antes de enviar</p>
-                <p class="text-sm text-foreground/60">Déjanos tus datos para personalizar tu pedido.</p>
+                <p class="text-sm text-foreground/60">Personaliza tu pedido antes de enviarlo.</p>
             </div>
-            <button onclick="closeDataModal()" class="p-2 rounded-full text-sm text-foreground/80 hover:bg-surface transition-colors">
-                <svg aria-hidden="true" focusable="false" class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M18 6 6 18M6 6l12 12"></path>
-                </svg>
+            <button onclick="closeDataModal()" class="p-2 rounded-full text-sm text-foreground/80 hover:bg-surface transition-colors cursor-pointer">
+                <span class="iconify tabler--x size-4"></span>
             </button>
         </div>
 
         @if($needsName)
-        <div class="sf-field">
-            <input type="text" id="sf-customer-name" placeholder=" " autocomplete="given-name" inputmode="text">
-            <label for="sf-customer-name">¿Cómo te llamas?</label>
-        </div>
+        <input type="text" id="sf-customer-name" placeholder="Persona que recibe" autocomplete="given-name" inputmode="text" class="w-full text-sm px-4 py-3 rounded-2xl bg-surface border border-foreground/10 outline-none focus:border-primary transition-colors">
         @endif
 
         {{-- Modalidad --}}
         <div class="space-y-2">
             <p class="text-xs font-bold text-foreground/50 uppercase tracking-widest">Modalidad</p>
-            <div class="grid grid-cols-3 gap-2">
-                <label class="flex items-center gap-2 cursor-pointer rounded-xl border border-foreground/10 px-3 py-2.5 has-[:checked]:border-primary has-[:checked]:bg-primary/5 transition-colors">
+            <div class="grid grid-cols-3 gap-1.5">
+                <label class="flex items-center gap-2 cursor-pointer rounded-xl border border-foreground/10 px-2 py-2 has-[:checked]:border-primary has-[:checked]:bg-primary/5 transition-colors">
                     <input type="radio" name="sf-modalidad" value="sitio" checked class="accent-[var(--primary)]">
                     <span class="text-xs font-bold text-foreground">🍽 En sitio</span>
                 </label>
-                <label class="flex items-center gap-2 cursor-pointer rounded-xl border border-foreground/10 px-3 py-2.5 has-[:checked]:border-primary has-[:checked]:bg-primary/5 transition-colors">
+                <label class="flex items-center gap-2 cursor-pointer rounded-xl border border-foreground/10 px-2 py-2 has-[:checked]:border-primary has-[:checked]:bg-primary/5 transition-colors">
                     <input type="radio" name="sf-modalidad" value="llevar" class="accent-[var(--primary)]">
-                    <span class="text-xs font-bold text-foreground">🥡 Llevar</span>
+                    <span class="text-xs font-bold text-foreground">🥡 Para llevar</span>
                 </label>
-                <label class="flex items-center gap-2 cursor-pointer rounded-xl border border-foreground/10 px-3 py-2.5 has-[:checked]:border-primary has-[:checked]:bg-primary/5 transition-colors">
+                <label class="flex items-center gap-2 cursor-pointer rounded-xl border border-foreground/10 px-2 py-2 has-[:checked]:border-primary has-[:checked]:bg-primary/5 transition-colors">
                     <input type="radio" name="sf-modalidad" value="delivery" class="accent-[var(--primary)]">
                     <span class="text-xs font-bold text-foreground">🏠 Delivery</span>
                 </label>
             </div>
         </div>
 
+        {{-- Dirección delivery (visible solo si delivery) --}}
+        <div id="sf-delivery-address-wrap" class="space-y-2" style="display:none">
+            <input type="text" id="sf-delivery-address" placeholder="Av. Principal, Casa 5, referencia cercana" autocomplete="street-address" inputmode="text" class="w-full text-sm px-4 py-3 rounded-2xl bg-surface border border-foreground/10 outline-none focus:border-primary transition-colors">
+            <button type="button" onclick="getGeolocation()" class="flex items-center gap-1.5 text-xs font-bold text-primary hover:text-primary/80 transition-colors cursor-pointer py-1">
+                <span class="iconify tabler--current-location size-4"></span>
+                Usar mi ubicación
+            </button>
+            <p id="sf-geo-status" class="text-xs" style="display:none"></p>
+        </div>
+
+        {{-- Mesa/Ubicación (visible solo si en sitio) --}}
+        <div id="sf-table-number-wrap" class="space-y-2" style="display:none">
+            <input type="text" id="sf-table-number" placeholder="Mesa o ubicación (ej: Mesa 5, Terraza)" autocomplete="off" inputmode="text" class="w-full text-sm px-4 py-3 rounded-2xl bg-surface border border-foreground/10 outline-none focus:border-primary transition-colors">
+        </div>
+
+        <p class="text-xs text-foreground/40 text-center">
+            <span class="iconify tabler--bulb size-3.5 inline-block align-middle mr-0.5"></span>
+            Escribe <strong>/datos</strong> en el chat de WhatsApp para recibir información de pago
+        </p>
+
         <div class="flex gap-3">
-            <button onclick="confirmDataAndSend()" class="py-2 px-4 rounded-xl font-medium transition-colors bg-primary text-primary-foreground hover:bg-primary/90 flex-1 font-black">Enviar por WhatsApp</button>
-            <button onclick="closeDataModal()" class="py-2 px-4 rounded-xl font-medium transition-colors text-foreground/80 hover:bg-surface">Cancelar</button>
+            <button onclick="confirmDataAndSend()" class="py-2 px-4 rounded-xl font-medium transition-colors bg-primary text-primary-foreground hover:bg-primary/90 flex-1 font-black cursor-pointer">Enviar por WhatsApp</button>
+            <button onclick="closeDataModal()" class="py-2 px-4 rounded-xl font-medium transition-colors text-foreground/80 hover:bg-surface cursor-pointer">Cancelar</button>
         </div>
     </div>
 </div>
@@ -840,7 +886,7 @@
 {{-- 6. FOOTER --}}
 <footer class="text-center py-6 text-xs text-gray-400 border-t border-gray-100">
     <p>© {{ date('Y') }} {{ $tenant->business_name }}. Todos los derechos reservados.</p>
-    <p class="mt-1">Potenciado por <strong>SYNTIweb</strong></p>
+    <p class="mt-1">Potenciado por <a href="https://syntiweb.com" target="_blank" rel="noopener"><strong>SYNTIweb</strong></a></p>
 </footer>
 
 @endsection
@@ -1037,7 +1083,7 @@
         var img = document.getElementById('sf-detail-img');
         var ph  = document.getElementById('sf-detail-placeholder');
         if (item.image_path) {
-            img.src = '/storage/tenants/{{ $tenant->id }}/' + item.image_path;
+            img.src = item.image_path.startsWith('http') ? item.image_path : '/storage/tenants/{{ $tenant->id }}/' + item.image_path;
             img.classList.remove('hidden');
             ph.classList.add('hidden');
         } else {
@@ -1059,18 +1105,19 @@
         if (dscDesk) { if (desc) { dscDesk.textContent = desc; dscDesk.classList.remove('hidden'); } else { dscDesk.classList.add('hidden'); } }
 
         // Precio con tachado
-        var priceEl = document.getElementById('sf-detail-price');
+        var priceEl     = document.getElementById('sf-detail-price');
+        var priceElDesk = document.getElementById('sf-detail-price-desk');
         var precioReal = parseFloat(item.precio || 0);
         var precioOrig = parseFloat(item.precio_original || 0);
         var hasDisc = precioOrig > precioReal && precioOrig > 0;
         var discPct  = hasDisc ? Math.round((1 - precioReal / precioOrig) * 100) : 0;
-        if (hasDisc) {
-            priceEl.innerHTML = '<span class="text-3xl font-black text-primary">' + sfFmt(precioReal) + '</span>'
+        var priceHtml = hasDisc
+            ? '<span class="text-3xl font-black text-primary">' + sfFmt(precioReal) + '</span>'
                 + ' <span class="text-base text-foreground/35 line-through ml-1">' + sfFmt(precioOrig) + '</span>'
-                + ' <span class="text-xs font-black px-2 py-0.5 rounded-full bg-red-100 text-red-600 ml-1">-' + discPct + '%</span>';
-        } else {
-            priceEl.innerHTML = '<span class="text-3xl font-black text-primary">' + sfFmt(precioReal) + '</span>';
-        }
+                + ' <span class="text-xs font-black px-2 py-0.5 rounded-full bg-red-100 text-red-600 ml-1">-' + discPct + '%</span>'
+            : '<span class="text-3xl font-black text-primary">' + sfFmt(precioReal) + '</span>';
+        if (priceEl)     priceEl.innerHTML     = priceHtml;
+        if (priceElDesk) priceElDesk.innerHTML = priceHtml;
 
         // Reset qty — ambos elementos
         ['sf-detail-qty', 'sf-detail-qty-desk'].forEach(function(id) {
@@ -1110,7 +1157,7 @@
                 card.style.scrollSnapAlign = 'start';
                 card.onclick = function() { sfOpenDetail(s, siblings.filter(function(x){ return x.id !== s.id; })); };
                 var imgHtml = s.image_path
-                    ? '<img src="/storage/tenants/{{ $tenant->id }}/' + s.image_path + '" class="w-full h-32 object-cover" loading="lazy">'
+                    ? '<img src="' + (s.image_path.startsWith('http') ? s.image_path : '/storage/tenants/{{ $tenant->id }}/' + s.image_path) + '" class="w-full h-32 object-cover" loading="lazy">'
                     : '<div class="w-full h-32 flex items-center justify-center bg-surface/60"><span class="iconify tabler--bowl-chopsticks size-8 text-foreground/15"></span></div>';
                 var badgeHtml = s.badge === 'popular'   ? '<span class="self-start inline-flex items-center gap-1 text-[9px] font-black px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-700 mb-0.5"><span class="iconify tabler--star-filled size-3"></span> Popular</span>' :
                                 s.badge === 'nuevo'     ? '<span class="self-start inline-flex items-center gap-1 text-[9px] font-black px-1.5 py-0.5 rounded-full bg-green-100 text-green-700 mb-0.5"><span class="iconify tabler--sparkles size-3"></span> Nuevo</span>' :
@@ -1198,7 +1245,7 @@
         return checked ? checked.value : 'sitio';
     }
 
-    async function buildAndSend(name) {
+    async function buildAndSend(name, address) {
         var subdomain = @json($tenant->subdomain);
         var modalidad = getModalidad();
         var cartItems = Object.values(cart).map(function(i) {
@@ -1248,6 +1295,16 @@
         msg += Object.values(cart).map(function(i) { return '• ' + i.name + ' ×' + i.qty + ' (' + formatPrice(i.price * i.qty, true) + ')'; }).join('\n');
         msg += '\n\n*Total: ' + formatPrice(totalUsd, true) + '*';
         msg += '\nModalidad: ' + (modalidadLabels[modalidad] || modalidad);
+        if (modalidad === 'delivery' && address) {
+            msg += '\n📍 Dirección: ' + address;
+        }
+        if (modalidad === 'sitio') {
+            var tableEl = document.getElementById('sf-table-number');
+            var tableVal = tableEl ? tableEl.value.trim() : '';
+            if (tableVal) {
+                msg += '\n📍 Mesa/Ubicación: ' + tableVal;
+            }
+        }
         window.open('https://wa.me/' + waNumber + '?text=' + encodeURIComponent(msg), '_blank');
         cart = {};
         updateBadge();
@@ -1256,24 +1313,70 @@
     }
 
     window.sendWhatsApp = function() {
+        if (!window.__tenantIsOpen) {
+            showClosedToast(function() { openDataModal(); });
+            return;
+        }
         openDataModal();
     };
 
     window.confirmDataAndSend = function() {
         var nameEl = document.getElementById('sf-customer-name');
         var name   = nameEl ? nameEl.value.trim() : '';
+        var addrEl = document.getElementById('sf-delivery-address');
+        var address = addrEl ? addrEl.value.trim() : '';
 
         @if($needsName)
         if (nameEl && !name) {
-            nameEl.classList.add('sf-field-error');
+            nameEl.style.border = '2px solid #ef4444';
             nameEl.focus();
             return;
         }
+        if (nameEl) nameEl.style.border = '';
         @endif
 
         if (name) localStorage.setItem('sf_customer_name', name);
         closeDataModal();
-        buildAndSend(name);
+        buildAndSend(name, address);
+    };
+
+    window.getGeolocation = function() {
+        var statusEl = document.getElementById('sf-geo-status');
+        var addrEl = document.getElementById('sf-delivery-address');
+        statusEl.style.display = '';
+        if (!navigator.geolocation || !window.isSecureContext) {
+            statusEl.textContent = 'Disponible solo en conexión segura (HTTPS)';
+            statusEl.className = 'text-xs text-foreground/40';
+            return;
+        }
+        statusEl.textContent = 'Obteniendo ubicación…';
+        statusEl.className = 'text-xs text-foreground/50';
+        navigator.geolocation.getCurrentPosition(
+            function(pos) {
+                var lat = pos.coords.latitude;
+                var lon = pos.coords.longitude;
+                fetch('https://nominatim.openstreetmap.org/reverse?lat=' + lat + '&lon=' + lon + '&format=json')
+                    .then(function(r) { return r.json(); })
+                    .then(function(data) {
+                        if (data && data.display_name) {
+                            addrEl.value = data.display_name;
+                            statusEl.innerHTML = '<span class="iconify tabler--circle-check size-3.5 inline-block align-middle mr-0.5"></span> Ubicación confirmada';
+                            statusEl.className = 'text-xs text-green-600 font-bold';
+                        } else {
+                            statusEl.textContent = 'No se pudo obtener ubicación, ingresa manualmente';
+                            statusEl.className = 'text-xs text-red-500';
+                        }
+                    })
+                    .catch(function() {
+                        statusEl.textContent = 'No se pudo obtener ubicación, ingresa manualmente';
+                        statusEl.className = 'text-xs text-red-500';
+                    });
+            },
+            function() {
+                statusEl.textContent = 'No se pudo obtener ubicación, ingresa manualmente';
+                statusEl.className = 'text-xs text-red-500';
+            }
+        );
     };
 
     document.addEventListener('DOMContentLoaded', function() {
@@ -1287,6 +1390,18 @@
 
         var nameEl = document.getElementById('sf-customer-name');
         if (nameEl) nameEl.addEventListener('input', function() { nameEl.classList.remove('sf-field-error'); });
+
+        // Toggle delivery address field
+        var addrWrap = document.getElementById('sf-delivery-address-wrap');
+        var tableWrap = document.getElementById('sf-table-number-wrap');
+        if (addrWrap || tableWrap) {
+            document.querySelectorAll('input[name="sf-modalidad"]').forEach(function(radio) {
+                radio.addEventListener('change', function() {
+                    if (addrWrap) addrWrap.style.display = this.value === 'delivery' ? '' : 'none';
+                    if (tableWrap) tableWrap.style.display = this.value === 'sitio' ? '' : 'none';
+                });
+            });
+        }
 
         // Ajustar scroll-mt dinámicamente según altura real del sticky bar
         function updateScrollMargins() {
@@ -1322,65 +1437,60 @@
 <script>
 // Navbar categorías — scroll + Intersection Observer
 (function() {
-    function sfScrollToCategory(idx) {
-        var el = document.getElementById('sf-cat-' + idx);
-        if (!el) return;
-        var stickyBar = document.getElementById('sf-sticky-bar');
-        var headerH = stickyBar ? stickyBar.offsetHeight : 100;
-        var top = el.getBoundingClientRect().top + window.scrollY - headerH - 8;
-        window.scrollTo({ top: top, behavior: 'smooth' });
-    }
-    window.sfScrollToCategory = sfScrollToCategory;
-
+    // ── Navegación categorías — sistema unificado ──────────────
     function sfSetActiveTab(idx) {
-        document.querySelectorAll('.sf-cat-tab').forEach(function(btn) {
-            var active = parseInt(btn.dataset.catNav) === idx;
+        var idxStr = String(idx);
+        var tabBar = document.getElementById('sf-cat-tabs');
+        if (!tabBar) return;
+        tabBar.querySelectorAll('[data-cat-nav]').forEach(function(btn) {
+            var active = btn.dataset.catNav === idxStr;
             btn.classList.toggle('text-primary', active);
             btn.classList.toggle('font-bold', active);
             btn.classList.toggle('border-primary', active);
             btn.classList.toggle('text-foreground/40', !active);
             btn.classList.toggle('border-transparent', !active);
+            if (active) {
+                var btnLeft = btn.offsetLeft;
+                var barW = tabBar.offsetWidth;
+                tabBar.scrollTo({ left: btnLeft - (barW / 2) + (btn.offsetWidth / 2), behavior: 'smooth' });
+            }
         });
-        var activeBtn = document.querySelector('[data-cat-nav="' + idx + '"]');
-        if (activeBtn) activeBtn.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
     }
 
-    // ── Scroll-spy categorías ───────────────────────────────────
+    function sfScrollToCategory(idx) {
+        var el = document.getElementById('sf-cat-' + idx);
+        if (!el) return;
+        var stickyBar = document.getElementById('sf-sticky-bar');
+        var headerH = stickyBar ? stickyBar.offsetHeight : 60;
+        var top = el.getBoundingClientRect().top + window.scrollY - headerH - 8;
+        window.scrollTo({ top: top, behavior: 'smooth' });
+        sfSetActiveTab(idx);
+    }
+    window.sfScrollToCategory = sfScrollToCategory;
+
+    // ── Scroll-spy ──────────────────────────────────────────────
     (function() {
-        var catSections = document.querySelectorAll('[id^="sf-cat-"]');
-        var tabBar = document.getElementById('sf-cat-tabs');
-        if (!catSections.length || !tabBar) return;
-        var btns = tabBar.querySelectorAll('[data-cat-nav]');
-        var ticking = false;
-        function setActive(idx) {
-            btns.forEach(function(btn, i) {
-                var active = String(i) === String(idx);
-                btn.classList.toggle('text-primary', active);
-                btn.classList.toggle('border-primary', active);
-                btn.classList.toggle('text-foreground/40', !active);
-                btn.classList.toggle('border-transparent', !active);
-                if (active) {
-                    // Scroll tab into view without stealing page scroll
-                    var btnLeft = btn.offsetLeft;
-                    var btnW = btn.offsetWidth;
-                    var barW = tabBar.offsetWidth;
-                    var target = btnLeft - (barW / 2) + (btnW / 2);
-                    tabBar.scrollTo({ left: target, behavior: 'smooth' });
+        var catSections = [];
+        var featEl = document.getElementById('sf-cat-featured');
+        if (featEl) catSections.push(featEl);
+        document.querySelectorAll('[id^="sf-cat-"]').forEach(function(s) {
+            if (/^sf-cat-\d+$/.test(s.id)) catSections.push(s);
+        });
+        if (!catSections.length) return;
+        var lastActive = null;
+        var observer = new IntersectionObserver(function(entries) {
+            var best = null;
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting && (!best || entry.intersectionRatio > best.intersectionRatio)) {
+                    best = entry;
                 }
             });
-        }
-        var observer = new IntersectionObserver(function(entries) {
-            entries.forEach(function(entry) {
-                if (!entry.isIntersecting) return;
-                if (ticking) return;
-                ticking = true;
-                requestAnimationFrame(function() {
-                    var idx = entry.target.id.replace('sf-cat-', '');
-                    setActive(idx);
-                    ticking = false;
-                });
-            });
-        }, { rootMargin: '-10% 0px -80% 0px', threshold: 0 });
+            if (!best) return;
+            var idx = best.target.id.replace('sf-cat-', '');
+            if (idx === lastActive) return;
+            lastActive = idx;
+            sfSetActiveTab(idx);
+        }, { rootMargin: '-15% 0px -75% 0px', threshold: [0, 0.25, 0.5] });
         catSections.forEach(function(sec) { observer.observe(sec); });
     })();
 
@@ -1495,5 +1605,9 @@
             }).catch(function() {});
         }
     }
+    document.querySelectorAll('img[loading="lazy"]').forEach(function(img) {
+        img.onload = function() { img.classList.add('loaded'); };
+        if (img.complete) img.classList.add('loaded');
+    });
 </script>
 @endpush

@@ -32,7 +32,7 @@ class DollarRateService
     /**
      * HTTP timeout in seconds.
      */
-    private const HTTP_TIMEOUT = 10;
+    private const HTTP_TIMEOUT = 5;
 
     /**
      * USD BCV sources in priority order.
@@ -49,10 +49,11 @@ class DollarRateService
             ],
             [
                 'name'    => 'pydolarve',
-                'url'     => 'https://pydolarve.org/api/v1/dollar?page=bcv',
+                'url'     => 'https://pydolarve.org/api/v1/dollar?monitor=bcv',
                 'extract' => static fn(array $d): ?float =>
-                    isset($d['monitors']['bcv']['price']) && is_numeric($d['monitors']['bcv']['price'])
-                        ? (float) $d['monitors']['bcv']['price'] : null,
+                    isset($d['price']) && is_numeric($d['price']) ? (float) $d['price']
+                    : (isset($d['monitors']['bcv']['price']) && is_numeric($d['monitors']['bcv']['price'])
+                        ? (float) $d['monitors']['bcv']['price'] : null),
             ],
         ];
     }
@@ -102,7 +103,7 @@ class DollarRateService
                 $value = ($src['extract'])($response->json() ?? []);
 
                 if ($value !== null && $value > 0) {
-                    Log::info('DollarRateService: Rate fetched', ['source' => $src['name'], 'rate' => $value]);
+                    Log::info('DollarRate source: ' . $src['name'], ['rate' => $value]);
                     return ['value' => $value, 'source' => $src['name']];
                 }
 
@@ -142,13 +143,13 @@ class DollarRateService
                     ->first();
 
                 if ($rate === null) {
-                    Log::warning('DollarRateService: No active USD rate found in database, using fallback');
-                    return (float) config('currency.fallback_usd', 36.50);
+                    $fallback = (float) env('DOLLAR_FALLBACK_RATE', 40.00);
+                    Log::info('DollarRate source: env_fallback', ['rate' => $fallback]);
+                    return $fallback;
                 }
 
-                Log::debug('DollarRateService: USD rate retrieved from database', [
+                Log::info('DollarRate source: database', [
                     'rate' => $rate->rate,
-                    'source' => $rate->source,
                     'effective_from' => $rate->effective_from,
                 ]);
 
@@ -159,7 +160,9 @@ class DollarRateService
                 'error' => $e->getMessage(),
             ]);
 
-            return (float) config('currency.fallback_usd', 36.50);
+            $fallback = (float) env('DOLLAR_FALLBACK_RATE', 40.00);
+            Log::info('DollarRate source: env_fallback', ['rate' => $fallback]);
+            return $fallback;
         }
     }
 
@@ -231,6 +234,14 @@ class DollarRateService
                 'change_percent' => round($changePercent, 2),
                 'source'         => $sourceName,
             ]);
+        }
+
+        if (abs($changePercent) > 20) {
+            Log::critical('DollarRate: rejected suspicious value', [
+                'new'     => $newRate,
+                'current' => $previousRate,
+            ]);
+            return ['success' => false, 'reason' => 'suspicious_rate'];
         }
 
         try {
