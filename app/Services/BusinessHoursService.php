@@ -48,17 +48,38 @@ final class BusinessHoursService
 
         $now = Carbon::now(self::TENANT_TZ);
         $currentDay = strtolower($now->locale('en')->dayName);
+        $previousDay = strtolower($now->copy()->subDay()->locale('en')->dayName);
         $currentTime = $now->format('H:i');
 
-        if (!isset($businessHours[$currentDay]) || !$this->isDayEnabled($businessHours[$currentDay])) {
-            return false;
+        $todaySchedule = $businessHours[$currentDay] ?? null;
+        if ($this->isDayEnabled($todaySchedule)) {
+            $openTime = $todaySchedule['open'] ?? '09:00';
+            $closeTime = $todaySchedule['close'] ?? '18:00';
+
+            // Normal schedule (same-day close): 09:00 -> 18:00
+            if ($openTime < $closeTime) {
+                return $currentTime >= $openTime && $currentTime < $closeTime;
+            }
+
+            // Overnight schedule (crosses midnight): 20:00 -> 04:00
+            // On current day, this branch only covers the "late" segment (>= open).
+            if ($openTime > $closeTime && $currentTime >= $openTime) {
+                return true;
+            }
         }
 
-        $daySchedule = $businessHours[$currentDay];
-        $openTime  = $daySchedule['open']  ?? '09:00';
-        $closeTime = $daySchedule['close'] ?? '18:00';
+        // Check if we are still inside yesterday's overnight tail: 00:00 -> close.
+        $yesterdaySchedule = $businessHours[$previousDay] ?? null;
+        if ($this->isDayEnabled($yesterdaySchedule)) {
+            $yOpen = $yesterdaySchedule['open'] ?? '09:00';
+            $yClose = $yesterdaySchedule['close'] ?? '18:00';
 
-        return $currentTime >= $openTime && $currentTime < $closeTime;
+            if ($yOpen > $yClose && $currentTime < $yClose) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

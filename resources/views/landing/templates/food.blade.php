@@ -1286,6 +1286,11 @@
                 closeDataModal();
                 return;
             }
+            if (data.error === 'closed') {
+                closeDataModal();
+                showClosedToast();
+                return;
+            }
         } catch(e) {
             console.error('Food checkout error:', e);
         }

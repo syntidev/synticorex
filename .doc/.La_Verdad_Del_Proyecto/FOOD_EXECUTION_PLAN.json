@@ -135,13 +135,14 @@
         {
             "id": "F3.4",
             "sprint": "F3",
-            "title": "Agregar pricing y legal links food",
-            "description": "Alinear pagina food de marketing y links legales visibles.",
+            "title": "Agregar legal links food",
+            "description": "Mostrar terminos y privacidad en footer food y controlarlo desde dashboard.",
             "priority": "P1",
-            "status": "pending",
+            "status": "done",
             "depends_on": [
                 "F3.3"
-            ]
+            ],
+            "completed_at": "2026-03-14T00:00:00+00:00"
         },
         {
             "id": "F4.1",
@@ -174,6 +175,17 @@
             "status": "pending",
             "depends_on": [
                 "F4.2"
+            ]
+        },
+        {
+            "id": "F4.4",
+            "sprint": "F4",
+            "title": "Agregar pricing food (PAUSA)",
+            "description": "Alinear pagina food de marketing con pricing final. Queda en pausa por redefinicion comercial.",
+            "priority": "P2",
+            "status": "pending",
+            "depends_on": [
+                "F4.3"
             ]
         }
     ]

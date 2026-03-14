@@ -84,12 +84,19 @@
                                 <label class="inline-block text-sm font-medium text-foreground mb-1">
                                     WhatsApp
                                 </label>
-                                <input id="info-whatsapp" type="tel" name="whatsapp_sales" class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none"
-                                       value="{{ $tenant->whatsapp_sales }}" 
-                                       placeholder="+58 414 123 4567"
-                                       aria-label="Número de WhatsApp de tu negocio"
-                                       autocomplete="tel">
-                                <p class="text-xs text-muted-foreground-1 mt-1">El número que recibirá los mensajes de tus clientes</p>
+                                <div class="flex items-center gap-2">
+                                    <span class="py-1.5 sm:py-2 px-3 bg-muted/60 border border-layer-line rounded-lg text-sm font-medium text-foreground select-none shrink-0">+58</span>
+                                    <input id="info-whatsapp" type="tel" name="whatsapp_sales"
+                                           class="py-1.5 sm:py-2 px-3 block w-full bg-layer border-layer-line shadow-2xs sm:text-sm rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus disabled:opacity-50 disabled:pointer-events-none"
+                                           value="{{ preg_replace('/^58/', '', preg_replace('/\D/', '', $tenant->whatsapp_sales ?? '')) }}"
+                                           placeholder="4241234567"
+                                           maxlength="10"
+                                           pattern="(0?)(412|414|416|422|424|426)\d{7}"
+                                           aria-label="Número de WhatsApp de tu negocio"
+                                           autocomplete="tel">
+                                </div>
+                                <p id="wa-validation-msg" class="text-xs mt-1 hidden text-red-500"></p>
+                                <p class="text-xs text-muted-foreground-1 mt-1">Solo Venezuela. Operadoras: 412, 414, 416, 422, 424, 426</p>
                             </div>
                             @if($plan->whatsapp_numbers >= 2)
                             <div class="form-control">

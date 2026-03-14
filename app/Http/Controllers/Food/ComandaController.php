@@ -33,6 +33,16 @@ class ComandaController extends Controller
             return response()->json(['success' => false, 'error' => 'tenant_not_found'], 404);
         }
 
+        // Block comanda generation if tenant is closed
+        $isOpen = app(\App\Services\BusinessHoursService::class)->isOpen($tenant);
+        if (!$isOpen) {
+            return response()->json([
+                'success' => false,
+                'error'   => 'closed',
+                'message' => 'El negocio está cerrado. No se generó la comanda.',
+            ], 422);
+        }
+
         $planSlug = $tenant->plan->slug ?? '';
         $canPersist = $planSlug === 'food-anual' || ($tenant->plan_id ?? 0) >= 3;
 

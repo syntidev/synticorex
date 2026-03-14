@@ -276,11 +276,15 @@
                 <li class="inline-flex items-center relative pe-1.5">
                     {{-- Business name + status + plan --}}
                     @php
-                        $productLabel = match($blueprint ?? 'studio') {
-                            'food' => 'SYNTIfood',
-                            'catalog' => 'SYNTIcat',
-                            default => 'SYNTIstudio',
-                        };
+                        $businessSegmentLabel = trim((string) ($tenant->business_segment ?? ''));
+
+                        if ($businessSegmentLabel === '') {
+                            $businessSegmentLabel = match($blueprint ?? 'studio') {
+                                'food' => 'Food',
+                                'catalog' => 'Catálogo',
+                                default => 'Studio',
+                            };
+                        }
 
                         $planTier = match($plan->slug ?? '') {
                             'studio-oportunidad', 'food-basico', 'cat-basico' => 'Plan 1',
@@ -300,7 +304,7 @@
                             {{ $tenant->business_name }}
                         </span>
                         <span class="inline-flex items-center py-0.5 px-2 rounded-full text-[11px] font-semibold bg-gray-100 text-gray-700 dark:bg-neutral-700 dark:text-neutral-200">
-                            {{ $productLabel }}
+                            {{ $businessSegmentLabel }}
                         </span>
                         <span class="inline-flex items-center py-0.5 px-2 rounded-full text-[11px] font-bold {{ $planTone }}">
                             {{ $planTier }} · {{ $plan->name }}
@@ -415,6 +419,16 @@
                                 Qué Vendes
                             </button>
                         </li>
+                        @if($blueprint === 'food')
+                        <li>
+                            <button class="sidebar-tab-btn" role="tab"
+                                    aria-selected="false" aria-controls="tab-comandas"
+                                    data-tab="comandas" tabindex="-1">
+                                <span class="iconify tabler--bowl-chopsticks size-4 shrink-0"></span>
+                                Comandas
+                            </button>
+                        </li>
+                        @endif
                         <li>
                             <button class="sidebar-tab-btn" role="tab"
                                     aria-selected="false" aria-controls="tab-diseno"
@@ -565,6 +579,7 @@
                 {{-- ═══ TAB 2: QUÉ VENDES (Productos + Servicios) ═══ --}}
                 @if($blueprint === 'food')
                     @include('dashboard.components.menu-section')
+                    @include('dashboard.components.comandas-section')
                 @elseif($blueprint === 'catalog')
                     @include('dashboard.components.catalog-products-section')
                     @include('dashboard.components.orders-section')

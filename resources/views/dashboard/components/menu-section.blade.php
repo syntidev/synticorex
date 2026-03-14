@@ -303,7 +303,7 @@
                     <div class="rounded-lg border border-amber-200 bg-amber-50 p-3">
                         <p class="text-xs font-medium text-amber-700 flex items-center gap-1.5">
                             <span class="iconify tabler--lock size-3.5"></span>
-                            Extras disponibles desde plan Semestral
+                            Extras disponibles desde Plan Crecimiento
                             <a href="https://syntiweb.com/food" target="_blank" class="underline ml-1 hover:no-underline">Mejorar →</a>
                         </p>
                     </div>

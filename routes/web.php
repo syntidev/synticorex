@@ -189,6 +189,11 @@ Route::middleware(['auth', 'verified', 'tenant.owner:tenantId'])->group(function
     Route::post('/tenant/{tenantId}/update-cta',                  [DashboardController::class, 'updateCta']);
     Route::post('/tenant/{tenantId}/update-business-hours',       [DashboardController::class, 'updateBusinessHours']);
 
+    // Comandas JSON (auto-refresh)
+    Route::get('/tenant/{tenantId}/comandas-json',                [DashboardController::class, 'getComandasJson']);
+    Route::post('/tenant/{tenantId}/comandas/{comandaId}/action', [DashboardController::class, 'updateComandaAction'])
+        ->where('comandaId', '[A-Z0-9-]+');
+
     // Analytics (datos del tenant — privado)
     Route::get('/tenant/{tenantId}/analytics',                    [AnalyticsController::class, 'getData']);
 	Route::get('/tenant/{tenantId}/analytics/today',              [AnalyticsController::class, 'getToday']);

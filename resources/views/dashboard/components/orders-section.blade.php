@@ -35,9 +35,9 @@
                     <div class="size-14 rounded-2xl bg-muted flex items-center justify-center mx-auto mb-4">
                         <span class="iconify tabler--lock size-7 text-muted-foreground-2"></span>
                     </div>
-                    <h3 class="text-base font-bold text-foreground mb-1">Plan Anual requerido</h3>
+                    <h3 class="text-base font-bold text-foreground mb-1">Plan Visión requerido</h3>
                     <p class="text-sm text-muted-foreground-1 max-w-md mx-auto">
-                        Esta función requiere el Plan Anual SYNTIcat para generar pedidos con código SC-XXXX.
+                        Esta función requiere el Plan Visión de SYNTIcat para generar pedidos con código SC-XXXX.
                     </p>
                 </div>
 

@@ -16,6 +16,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class DashboardController extends Controller
 {
@@ -141,6 +142,12 @@ class DashboardController extends Controller
             $isPlanAnual = $plan && $plan->slug === 'cat-anual';
             $orders = [];
 
+            // ── Comandas (Food Order Engine — food-anual) ─────────────────
+            $isFoodAnual = $plan && $plan->slug === 'food-anual';
+            $comandas = ($blueprint === 'food' && $isFoodAnual)
+                ? $this->loadFoodComandas($tenant->id)
+                : [];
+
             // ── Menu (SYNTIfood) ──────────────────────────────────────────
             $menu = $blueprint === 'food'
                 ? (new MenuService())->getCategories($tenant->id)
@@ -179,6 +186,8 @@ class DashboardController extends Controller
                 'themeSlug',
                 'orders',
                 'isPlanAnual',
+                'isFoodAnual',
+                'comandas',
                 'menu'
             ));
         } catch (\Exception $e) {
@@ -188,6 +197,117 @@ class DashboardController extends Controller
             ]);
             return response()->view('errors.500', ['exception' => $e], 500);
         }
+    }
+
+    /**
+     * @return array<int, array<string, mixed>>
+     */
+    private function loadFoodComandas(int $tenantId): array
+    {
+        $dir = "tenants/{$tenantId}/comandas";
+
+        if (!Storage::disk('local')->exists($dir)) {
+            return [];
+        }
+
+        $comandas = [];
+
+        foreach (Storage::disk('local')->allFiles($dir) as $filePath) {
+            if (!str_ends_with($filePath, '.json')) {
+                continue;
+            }
+
+            $raw = Storage::disk('local')->get($filePath);
+            $decoded = json_decode($raw, true);
+
+            if (!is_array($decoded)) {
+                continue;
+            }
+
+            // Normalize legacy shape to avoid nulls in Blade table.
+            if (!isset($decoded['customer']) || !is_array($decoded['customer'])) {
+                $decoded['customer'] = ['name' => $decoded['customer_name'] ?? '—'];
+            }
+
+            $comandas[] = $decoded;
+        }
+
+        usort($comandas, static fn(array $a, array $b): int => strcmp((string) ($b['date'] ?? ''), (string) ($a['date'] ?? '')));
+
+        return $comandas;
+    }
+
+    /**
+     * API endpoint: return comandas as JSON for auto-refresh.
+     */
+    public function getComandasJson(int $tenantId): JsonResponse
+    {
+        $tenant = Tenant::with('plan')
+            ->where('id', $tenantId)
+            ->whereIn('status', ['active', 'frozen'])
+            ->firstOrFail();
+
+        $plan = $tenant->plan;
+        $isFoodAnual = $plan && $plan->slug === 'food-anual';
+
+        if (!$isFoodAnual) {
+            return response()->json(['comandas' => [], 'today' => 0]);
+        }
+
+        $comandas = $this->loadFoodComandas($tenantId);
+        $today = collect($comandas)->filter(fn($c) => isset($c['date']) && str_starts_with($c['date'], date('Y-m-d')))->count();
+
+        return response()->json(['comandas' => $comandas, 'today' => $today]);
+    }
+
+    public function updateComandaAction(Request $request, int $tenantId, string $comandaId): JsonResponse
+    {
+        $tenant = Tenant::with('plan')
+            ->where('id', $tenantId)
+            ->whereIn('status', ['active', 'frozen'])
+            ->firstOrFail();
+
+        if ($tenant->getBlueprintSlug() !== 'food') {
+            return response()->json(['success' => false, 'message' => 'Blueprint inválido'], 422);
+        }
+
+        $validated = $request->validate([
+            'action' => ['required', 'string', 'in:attended,delete'],
+        ]);
+
+        $targetPath = null;
+        $dir = "tenants/{$tenantId}/comandas";
+
+        foreach (Storage::disk('local')->allFiles($dir) as $filePath) {
+            if (str_ends_with($filePath, "/{$comandaId}.json")) {
+                $targetPath = $filePath;
+                break;
+            }
+        }
+
+        if (!$targetPath) {
+            return response()->json(['success' => false, 'message' => 'Comanda no encontrada'], 404);
+        }
+
+        if ($validated['action'] === 'delete') {
+            Storage::disk('local')->delete($targetPath);
+
+            return response()->json(['success' => true, 'action' => 'delete']);
+        }
+
+        $raw = Storage::disk('local')->get($targetPath);
+        $decoded = json_decode($raw, true);
+
+        if (!is_array($decoded)) {
+            return response()->json(['success' => false, 'message' => 'Comanda inválida'], 422);
+        }
+
+        $decoded['status'] = 'attended';
+        $decoded['attended_at'] = now()->toIso8601String();
+
+        Storage::disk('local')->put($targetPath, json_encode($decoded, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+
+        return response()->json(['success' => true, 'action' => 'attended']);
     }
 
     /**
@@ -210,8 +330,8 @@ class DashboardController extends Controller
                 'business_name' => 'sometimes|required|string|max:255',
                 'slogan' => 'nullable|string|max:255',
                 'phone' => 'nullable|string|max:20',
-                'whatsapp_sales' => 'nullable|string|max:20',
-                'whatsapp_support' => 'nullable|string|max:20',
+                'whatsapp_sales' => ['nullable', 'string', 'max:20', 'regex:/^58(412|414|416|422|424|426)\d{7}$/'],
+                'whatsapp_support' => ['nullable', 'string', 'max:20', 'regex:/^58(412|414|416|422|424|426)\d{7}$/'],
                 'email' => 'nullable|email|max:255',
                 'address' => 'nullable|string|max:255',
                 'city' => 'nullable|string|max:100',

@@ -103,7 +103,7 @@ class PlansSeeder extends Seeder
             [
                 'slug'                  => 'food-basico',
                 'blueprint'             => 'food',
-                'name'                  => 'Básico',
+                'name'                  => 'Oportunidad',
                 'price_usd'             => 9.00,
                 'products_limit'        => 50,   // ítems en lista
                 'services_limit'        => 0,
@@ -125,7 +125,7 @@ class PlansSeeder extends Seeder
             [
                 'slug'                  => 'food-semestral',
                 'blueprint'             => 'food',
-                'name'                  => 'Semestral',
+                'name'                  => 'Crecimiento',
                 'price_usd'             => 39.00,
                 'products_limit'        => 100,
                 'services_limit'        => 0,
@@ -147,7 +147,7 @@ class PlansSeeder extends Seeder
             [
                 'slug'                  => 'food-anual',
                 'blueprint'             => 'food',
-                'name'                  => 'Anual',
+                'name'                  => 'Visión',
                 'price_usd'             => 69.00,
                 'products_limit'        => 150,
                 'services_limit'        => 0,
@@ -173,7 +173,7 @@ class PlansSeeder extends Seeder
             [
                 'slug'                  => 'cat-basico',
                 'blueprint'             => 'cat',
-                'name'                  => 'Básico',
+                'name'                  => 'Oportunidad',
                 'price_usd'             => 9.00,
                 'products_limit'        => 20,
                 'services_limit'        => 0,
@@ -195,7 +195,7 @@ class PlansSeeder extends Seeder
             [
                 'slug'                  => 'cat-semestral',
                 'blueprint'             => 'cat',
-                'name'                  => 'Semestral',
+                'name'                  => 'Crecimiento',
                 'price_usd'             => 39.00,
                 'products_limit'        => 100,
                 'services_limit'        => 0,
@@ -217,7 +217,7 @@ class PlansSeeder extends Seeder
             [
                 'slug'                  => 'cat-anual',
                 'blueprint'             => 'cat',
-                'name'                  => 'Anual',
+                'name'                  => 'Visión',
                 'price_usd'             => 69.00,
                 'products_limit'        => null, // ilimitado — requiere D.8
                 'services_limit'        => 0,
