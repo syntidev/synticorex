@@ -220,8 +220,8 @@
                         <input type="hidden" id="cat-variants-json" name="variants">
 
                         {{-- Imagen principal --}}
-                        <div class="image-preview" id="cat-product-image-preview" style="display:none">
-                            <img id="cat-product-image-preview-img" src="" alt="Preview">
+                        <div class="image-preview rounded-xl overflow-hidden border border-border bg-layer" id="cat-product-image-preview" style="display:none">
+                            <img id="cat-product-image-preview-img" src="" alt="Preview" class="w-full max-w-none h-48 sm:h-56 object-cover">
                             <button type="button" onclick="cancelCatProductImage()" class="p-1 rounded-full transition-colors text-foreground hover:bg-muted-hover absolute top-1 right-1">
                                 <span class="iconify tabler--x size-3.5" aria-hidden="true"></span>
                             </button>

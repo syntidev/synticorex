@@ -74,6 +74,7 @@
 
 @push('styles')
 <style>
+    html, body { overflow-x: hidden; }
     .no-scrollbar::-webkit-scrollbar{display:none}
     .no-scrollbar{-ms-overflow-style:none;scrollbar-width:none}
     .sc-drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);z-index:200;opacity:0;pointer-events:none;transition:opacity .3s ease}
@@ -121,11 +122,21 @@
     /* ── Modal producto (bottom sheet) ── */
     .sc-pm-overlay{position:fixed;inset:0;z-index:310;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);display:none;align-items:flex-end;justify-content:center}
     .sc-pm-overlay.open{display:flex}
-    .sc-pm-sheet{background:var(--background);width:100%;max-width:460px;border-radius:28px 28px 0 0;max-height:90vh;overflow-y:auto;position:relative;padding-bottom:env(safe-area-inset-bottom,16px)}
+    .sc-pm-sheet{background:var(--background);width:100%;max-width:460px;border-radius:28px 28px 0 0;max-height:86vh;overflow-y:auto;overflow-x:hidden;position:relative;padding-bottom:env(safe-area-inset-bottom,16px);scrollbar-width:none}
+    .sc-pm-sheet::-webkit-scrollbar{width:0;height:0}
     @media(min-width:640px){.sc-pm-sheet{border-radius:28px;margin:24px;max-height:88vh}}
     .sc-pm-img-wrap{position:relative;overflow:hidden;border-radius:20px;margin:10px 10px 0;background:var(--surface)}
     .sc-pm-img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}
     .sc-pm-close{position:absolute;top:10px;right:10px;z-index:20;width:32px;height:32px;border-radius:50%;background:rgba(0,0,0,.45);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff}
+    @media(max-width:639px){
+        .sc-pm-sheet{max-height:92dvh;border-radius:20px 20px 0 0}
+        .sc-pm-img-wrap{margin:8px 8px 0}
+        .sc-pm-img{aspect-ratio:16/10}
+    }
+
+    @media(max-width:480px){
+        .sc-mobile-tight{font-size:1.125rem}
+    }
 </style>
 @endpush
 
@@ -145,7 +156,7 @@
                     <span class="iconify tabler--bag size-6 text-primary-foreground"></span>
                 </div>
             @endif
-            <span class="text-xl font-black tracking-tighter truncate max-w-[170px] sm:max-w-[220px]">{{ $tenant->business_name }}</span>
+            <span class="text-lg sm:text-xl font-black tracking-tighter truncate max-w-[120px] sm:max-w-[220px] sc-mobile-tight">{{ $tenant->business_name }}</span>
         </a>
 
         {{-- Centro: lupa compacta + categorías --}}
@@ -170,7 +181,7 @@
                 Categorías
             </button>
 
-            <div id="sc-header-cats" class="hidden md:flex items-center gap-2 overflow-x-auto no-scrollbar flex-1">
+            <div id="sc-header-cats" class="hidden md:flex items-center gap-2 overflow-x-auto no-scrollbar flex-1 min-w-0">
                 <button onclick="filterCategory('all')" data-cat="all" class="sc-cat-pill active" data-active="true">Todos</button>
                 @php $catCategories = $catCategories ?? []; @endphp
                 @foreach($catCategories as $cat)
@@ -381,7 +392,7 @@
             <p class="text-xs text-foreground/25 mt-1">Prueba otra búsqueda o categoría</p>
         </div>
 
-        <div id="sc-products-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6">
+        <div id="sc-products-grid" class="grid grid-cols-1 min-[460px]:grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6">
             @foreach($products as $product)
             @php
                 $img = $productImg($product);
@@ -586,7 +597,7 @@
                 Pedir por WhatsApp
             </a>
             <button onclick="sharePM()" title="Compartir"
-                    class="h-12 w-12 rounded-2xl border border-foreground/12 text-foreground/60 hover:bg-surface transition flex items-center justify-center shrink-0">
+                    class="hidden sm:flex h-12 w-12 rounded-2xl border border-foreground/12 text-foreground/60 hover:bg-surface transition items-center justify-center shrink-0">
                 <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
             </button>
         </div>
@@ -1337,7 +1348,7 @@ function openPM(id, name, price, img, desc, comparePrice, isFeatured, variants, 
         desc: desc,
         comparePrice: comparePrice,
         variants: variants || [],
-        images: (images && images.length ? images : (img ? [img] : [])),
+        images: (images && images.length ? [images[0]] : (img ? [img] : [])),
         currentImageIndex: 0
     };
 
@@ -1367,16 +1378,7 @@ function openPM(id, name, price, img, desc, comparePrice, isFeatured, variants, 
     var thumbsWrap = document.getElementById('sc-pm-thumbs');
     if (thumbsWrap) {
         thumbsWrap.innerHTML = '';
-        (_pmCurrent.images || []).forEach(function(src, index) {
-            var tBtn = document.createElement('button');
-            tBtn.type = 'button';
-            tBtn.className = 'sc-pm-thumb shrink-0 size-14 rounded-xl overflow-hidden border-2 transition-all cursor-pointer';
-            tBtn.style.borderColor = 'rgba(0,0,0,.08)';
-            tBtn.style.opacity = '.55';
-            tBtn.innerHTML = '<img src="' + src + '" alt="Thumb" class="w-full h-full object-cover">';
-            tBtn.onclick = function() { setPMImage(index); };
-            thumbsWrap.appendChild(tBtn);
-        });
+        thumbsWrap.style.display = 'none';
     }
     setPMImage(0);
 
