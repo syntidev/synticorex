@@ -613,6 +613,35 @@
     </div>
 </div>
 
+{{-- MODAL Pedido Confirmado --}}
+<div id="sc-confirm-modal" class="sc-modal-overlay">
+    <div class="sc-modal p-6 space-y-5">
+        <div class="flex items-start gap-3">
+            <div class="size-10 rounded-2xl bg-green-100 flex items-center justify-center text-green-600 shrink-0">
+                <svg aria-hidden="true" focusable="false" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+            </div>
+            <div class="flex-1">
+                <p class="text-lg font-black">Pedido enviado</p>
+                <p class="text-sm text-foreground/60">Tu pedido fue registrado exitosamente.</p>
+            </div>
+        </div>
+        <div class="text-center py-2">
+            <p class="text-sm text-foreground/50 mb-1">Tu número de pedido:</p>
+            <p id="sc-confirm-order-id" class="text-3xl font-black tracking-tight text-primary"></p>
+            <p class="text-xs text-foreground/40 mt-2">Guárdalo para hacer seguimiento</p>
+        </div>
+        <div class="flex flex-col gap-3">
+            <button id="sc-confirm-wa-btn" class="py-3 px-4 rounded-xl font-black transition-colors bg-primary text-primary-foreground hover:bg-primary/90 flex items-center justify-center gap-2 cursor-pointer">
+                <svg aria-hidden="true" focusable="false" class="size-4" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M11.999 2C6.477 2 2 6.477 2 12c0 1.89.525 3.657 1.438 5.168L2 22l4.985-1.407A9.96 9.96 0 0 0 12 22c5.523 0 10-4.477 10-10S17.522 2 11.999 2zm.001 18a7.96 7.96 0 0 1-4.08-1.124l-.292-.174-3.01.849.854-2.935-.19-.301A7.96 7.96 0 0 1 4 12c0-4.411 3.589-8 8-8s8 3.589 8 8-3.588 8-7.999 8z"/></svg>
+                Abrir WhatsApp
+            </button>
+            <button onclick="closeConfirmModal()" class="py-3 px-4 rounded-xl font-medium transition-colors text-foreground/80 hover:bg-surface cursor-pointer">Cerrar</button>
+        </div>
+    </div>
+</div>
+
 {{-- 6. FOOTER (shared component — same as Studio) --}}
     @include('landing.sections.footer', ['sConfig' => $customization->getSectionConfig('footer')])
 
@@ -778,10 +807,13 @@
                 });
                 const data = await res.json();
                 if (data.success && data.whatsapp_url) {
-                    window.open(data.whatsapp_url, '_blank');
-                    cart = {};
-                    renderDrawer();
+                    var confirmModal = document.getElementById('sc-confirm-modal');
+                    var orderIdEl   = document.getElementById('sc-confirm-order-id');
+                    var waBtn       = document.getElementById('sc-confirm-wa-btn');
+                    if (orderIdEl) orderIdEl.textContent = data.order_id ?? '';
+                    if (waBtn) waBtn.onclick = function() { window.open(data.whatsapp_url, '_blank'); };
                     closeDataModal();
+                    if (confirmModal) confirmModal.style.display = 'flex';
                     return;
                 }
             } catch(e) {
@@ -819,6 +851,18 @@
     window.closeClosedModal = function() {
         var modal = document.getElementById('sc-closed-modal');
         if (modal) modal.style.display = 'none';
+    };
+
+    window.closeConfirmModal = function() {
+        var modal = document.getElementById('sc-confirm-modal');
+        if (modal) modal.style.display = 'none';
+        cart = {};
+        renderDrawer();
+        var drawer = document.getElementById('sc-drawer');
+        var overlay = document.getElementById('sc-overlay');
+        if (drawer) drawer.classList.remove('open');
+        if (overlay) overlay.classList.remove('open');
+        document.body.style.overflow = '';
     };
 
     window.sendWhatsApp = function() {
