@@ -299,6 +299,20 @@
             @foreach($products as $product)
             @php
                 $img = $productImg($product);
+                $maxImages = match($tenant->plan->slug ?? 'cat-basico') {
+                    'cat-anual' => 6,
+                    'cat-semestral' => 3,
+                    default => 1,
+                };
+                $galleryImages = collect($product->galleryImages ?? [])
+                    ->sortBy('position')
+                    ->map(fn($g) => asset('storage/tenants/' . $tenant->id . '/' . $g->filename));
+                $pmImages = collect([$img])
+                    ->merge($galleryImages)
+                    ->filter()
+                    ->unique()
+                    ->take($maxImages)
+                    ->values();
                 $hasDiscount = $product->compare_price_usd && $product->compare_price_usd > $product->price_usd;
                 $badgeLower  = $product->badge ? strtolower($product->badge) : null;
                 $showBadge   = $badgeLower && !($badgeLower === 'promo' && $hasDiscount);
@@ -319,7 +333,7 @@
 
                 {{-- ── IMAGEN 1:1 ── --}}
                 <div class="relative aspect-[3/4] overflow-hidden bg-surface m-2.5 rounded-xl cursor-pointer"
-                     onclick="openPM({{ $product->id }}, '{{ addslashes($product->name) }}', {{ $product->price_usd ?? 0 }}, '{{ $img }}', '{{ addslashes($product->description ?? '') }}', {{ $product->compare_price_usd ?? 0 }}, {{ $product->is_featured ? 'true' : 'false' }}, {{ json_encode($product->variants ?? []) }})">
+                     onclick='openPM({{ $product->id }}, @json($product->name), {{ $product->price_usd ?? 0 }}, @json($img), @json($product->description ?? ""), {{ $product->compare_price_usd ?? 0 }}, {{ $product->is_featured ? "true" : "false" }}, @json($product->variants ?? []), @json($pmImages))'>
 
                     @if($img)
                         <img src="{{ $img }}" alt="{{ $product->name }}"
@@ -445,6 +459,9 @@
             </div>
             <p id="sc-pm-desc" class="text-sm text-foreground/50 mt-2 leading-relaxed hidden"></p>
         </div>
+
+        {{-- Galería del producto (Plan Semestral/Anual) --}}
+        <div id="sc-pm-thumbs" class="px-5 pt-1 pb-2 flex gap-2 overflow-x-auto no-scrollbar"></div>
 
         {{-- Variantes dinámicas (renderizadas por JS) --}}
         <div id="sc-pm-variants" class="px-5 pt-2 pb-0 space-y-3"></div>
@@ -707,16 +724,34 @@
         });
     };
 
-    window.addToCart = function(id, name, price, img) {
+    window.addToCart = function(id, name, price, img, variantLabel) {
         if (!window.__tenantIsOpen) showClosedToast();
-        const isNew = !cart[id];
-        if (cart[id]) cart[id].qty++; else cart[id] = { name, price: parseFloat(price) || 0, qty: 1, img };
+        const safeVariantKey = (variantLabel || '')
+            .toLowerCase()
+            .replace(/\s+/g, '_')
+            .replace(/[^a-z0-9_:\-]/g, '');
+        const key = safeVariantKey ? `${id}::${safeVariantKey}` : String(id);
+        const isNew = !cart[key];
+        if (cart[key]) cart[key].qty++;
+        else cart[key] = {
+            id: String(id),
+            name,
+            price: parseFloat(price) || 0,
+            qty: 1,
+            img,
+            variant: variantLabel || null,
+        };
         updateBadge();
         renderDrawer();
-        const qr = document.getElementById('qty-row-' + id);
-        if (qr) qr.style.cssText = 'display:flex!important';
-        const qv = document.getElementById('qty-val-' + id);
-        if (qv) qv.textContent = cart[id].qty;
+
+        // Only reflect inline qty controls for non-variant items.
+        if (!variantLabel) {
+            const qr = document.getElementById('qty-row-' + id);
+            if (qr) qr.style.cssText = 'display:flex!important';
+            const qv = document.getElementById('qty-val-' + id);
+            if (qv) qv.textContent = cart[key].qty;
+        }
+
         if (isNew && Object.keys(cart).length === 1) toggleDrawer();
     };
 
@@ -780,9 +815,10 @@
                 </div>
                 <div style="flex:1;min-width:0">
                     <p style="font-weight:800;font-size:.875rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-bottom:2px">${item.name}</p>
+                    ${item.variant ? `<p style="font-size:.68rem;opacity:.55;margin-bottom:2px">${item.variant}</p>` : ''}
                     <p style="font-size:.75rem;font-weight:700;opacity:.45">${item.qty} × ${formatPrice(item.price, true)}</p>
                 </div>
-                <button onclick="changeQty(${id}, -1)"
+                <button onclick="changeQty('${id}', -1)"
                         style="width:32px;height:32px;border-radius:10px;border:none;cursor:pointer;background:transparent;color:#ef4444;font-size:1.25rem;font-weight:900;line-height:1;flex-shrink:0"
                         title="Quitar">×</button>
             `;
@@ -846,7 +882,10 @@
             : `¡Hola! Les escribo desde la web de *${businessName}* 🛍️`;
         let totalUsd = Object.values(cart).reduce((a,b) => a + (b.price * b.qty), 0);
         let msg = greeting + '\n\n*Mi pedido:*\n';
-        msg += Object.values(cart).map(i => `• ${i.name} ×${i.qty} (${formatPrice(i.price * i.qty, true)})`).join('\n');
+        msg += Object.values(cart).map(i => {
+            const variantText = i.variant ? ` (${i.variant})` : '';
+            return `• ${i.name}${variantText} ×${i.qty} (${formatPrice(i.price * i.qty, true)})`;
+        }).join('\n');
         msg += '\n\n*Total: ' + formatPrice(totalUsd, true) + '*';
         if (loc) msg += `\n\n📍 *Mi referencia:* ${loc}`;
         window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(msg)}`, '_blank');
@@ -951,14 +990,60 @@
 <script>
 // ── Modal de Producto ──
 var _pmCurrent = {};
+var _pmSelections = {};
 
-function openPM(id, name, price, img, desc, comparePrice, isFeatured) {
-    _pmCurrent = { id: id, name: name, price: price, img: img, desc: desc, comparePrice: comparePrice };
+function openPM(id, name, price, img, desc, comparePrice, isFeatured, variants, images) {
+    _pmSelections = {};
+    _pmCurrent = {
+        id: id,
+        name: name,
+        price: price,
+        img: img,
+        desc: desc,
+        comparePrice: comparePrice,
+        variants: variants || [],
+        images: (images && images.length ? images : (img ? [img] : [])),
+        currentImageIndex: 0
+    };
+
+    function setPMImage(index) {
+        var imgs = _pmCurrent.images || [];
+        if (!imgs.length) {
+            var noImgEl = document.getElementById('sc-pm-img');
+            if (noImgEl) {
+                noImgEl.src = '';
+                noImgEl.style.display = 'none';
+            }
+            return;
+        }
+        _pmCurrent.currentImageIndex = index;
+        var pmImgEl = document.getElementById('sc-pm-img');
+        pmImgEl.src = imgs[index];
+        pmImgEl.style.display = 'block';
+
+        var thumbs = document.querySelectorAll('.sc-pm-thumb');
+        thumbs.forEach(function(t, i) {
+            t.style.opacity = (i === index) ? '1' : '.55';
+            t.style.borderColor = (i === index) ? 'var(--primary)' : 'rgba(0,0,0,.08)';
+        });
+    }
 
     // Imagen
-    var pmImg = document.getElementById('sc-pm-img');
-    pmImg.src = img || '';
-    pmImg.style.display = img ? 'block' : 'none';
+    var thumbsWrap = document.getElementById('sc-pm-thumbs');
+    if (thumbsWrap) {
+        thumbsWrap.innerHTML = '';
+        (_pmCurrent.images || []).forEach(function(src, index) {
+            var tBtn = document.createElement('button');
+            tBtn.type = 'button';
+            tBtn.className = 'sc-pm-thumb shrink-0 size-14 rounded-xl overflow-hidden border-2 transition-all cursor-pointer';
+            tBtn.style.borderColor = 'rgba(0,0,0,.08)';
+            tBtn.style.opacity = '.55';
+            tBtn.innerHTML = '<img src="' + src + '" alt="Thumb" class="w-full h-full object-cover">';
+            tBtn.onclick = function() { setPMImage(index); };
+            thumbsWrap.appendChild(tBtn);
+        });
+    }
+    setPMImage(0);
 
     // Nombre
     document.getElementById('sc-pm-name').textContent = name;
@@ -1017,8 +1102,9 @@ function openPM(id, name, price, img, desc, comparePrice, isFeatured) {
     var variantError = document.getElementById('sc-pm-variant-error');
     if (variantsEl) {
         variantsEl.innerHTML = '';
-        if (variants && variants.length) {
-            variants.forEach(function(v) {
+        var pmVariants = _pmCurrent.variants || [];
+        if (pmVariants.length) {
+            pmVariants.forEach(function(v) {
                 var groupEl = document.createElement('div');
                 var label = document.createElement('p');
                 label.className = 'text-xs font-black text-foreground/50 uppercase tracking-widest mb-1.5';
