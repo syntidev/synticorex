@@ -75,8 +75,12 @@ class ComandaController extends Controller
         $modalidadLabels = ['sitio' => 'Comer en sitio', 'llevar' => 'Para llevar', 'delivery' => 'Delivery'];
         $lines[] = 'Modalidad: ' . ($modalidadLabels[$comanda['modalidad']] ?? $comanda['modalidad']);
 
-        $message  = implode("\n", $lines);
-        $waNumber = preg_replace('/\D/', '', (string) ($tenant->whatsapp_sales ?: $tenant->phone ?: ''));
+        $message = implode("\n", $lines);
+        $activeWhatsapp = $tenant->getActiveWhatsapp()
+            ?: $tenant->whatsapp_sales
+            ?: $tenant->phone
+            ?: '';
+        $waNumber = preg_replace('/\D/', '', (string) $activeWhatsapp);
         $waUrl    = 'https://wa.me/' . $waNumber . '?text=' . rawurlencode($message);
 
         return response()->json([

@@ -328,11 +328,23 @@
             // Agregar campos críticos explícitamente
             data.phone = document.getElementById('info-phone')?.value?.trim() || '';
 
-            // Normalizar WhatsApp Venezuela: quitar espacios/guiones, quitar 0 inicial, anteponer 58
-            var waRaw = document.getElementById('info-whatsapp')?.value?.trim().replace(/\D/g, '') || '';
-            if (waRaw.startsWith('0')) waRaw = waRaw.substring(1);
             var validOps = ['412','414','416','422','424','426'];
             var waMsg = document.getElementById('wa-validation-msg');
+            function normalizeVeWhatsapp(raw) {
+                var digits = (raw || '').trim().replace(/\D/g, '');
+                if (!digits) {
+                    return '';
+                }
+                if (digits.startsWith('58')) {
+                    digits = digits.substring(2);
+                }
+                if (digits.startsWith('0')) {
+                    digits = digits.substring(1);
+                }
+                return digits;
+            }
+
+            var waRaw = normalizeVeWhatsapp(document.getElementById('info-whatsapp')?.value || '');
             if (waRaw && (!validOps.some(function(op){ return waRaw.startsWith(op); }) || waRaw.length !== 10)) {
                 if (waMsg) { waMsg.textContent = 'N\u00famero inv\u00e1lido. Usa 10 d\u00edgitos con operadora: 412, 414, 416, 422, 424, 426'; waMsg.classList.remove('hidden'); }
                 document.getElementById('info-whatsapp')?.focus();
@@ -341,10 +353,14 @@
             if (waMsg) waMsg.classList.add('hidden');
             data.whatsapp_sales = waRaw ? '58' + waRaw : '';
 
-            var waSupportRaw = document.getElementById('info-whatsapp-support')?.value?.trim().replace(/\D/g, '') || '';
-            if (waSupportRaw.startsWith('0')) waSupportRaw = waSupportRaw.substring(1);
-            if (waSupportRaw && waSupportRaw.length === 10) waSupportRaw = '58' + waSupportRaw;
-            data.whatsapp_support = waSupportRaw || '';
+            var waSupportInput = document.getElementById('info-whatsapp-support');
+            var waSupportRaw = normalizeVeWhatsapp(waSupportInput?.value || '');
+            if (waSupportRaw && (!validOps.some(function(op){ return waSupportRaw.startsWith(op); }) || waSupportRaw.length !== 10)) {
+                alert('WhatsApp secundario inv\u00e1lido. Usa 10 d\u00edgitos con operadora: 412, 414, 416, 422, 424, 426.');
+                waSupportInput?.focus();
+                return;
+            }
+            data.whatsapp_support = waSupportRaw ? '58' + waSupportRaw : '';
 
             // Forzar valores booleanos correctos para checkboxes
             data.show_hours_indicator = document.getElementById('show-hours-toggle')?.checked ? 1 : 0;
