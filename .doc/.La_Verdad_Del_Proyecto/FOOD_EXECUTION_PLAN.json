@@ -150,10 +150,11 @@
             "title": "Remover logs y codigo muerto food",
             "description": "Eliminar logs de debug y residuos legacy en flujo food.",
             "priority": "P2",
-            "status": "pending",
+            "status": "done",
             "depends_on": [
                 "F3.4"
-            ]
+            ],
+            "completed_at": "2026-03-14T07:26:42+00:00"
         },
         {
             "id": "F4.2",
