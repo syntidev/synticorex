@@ -57,12 +57,6 @@ Route::middleware('auth:sanctum')->prefix('tenants')->group(function () {
     });
 });
 
-// SYNTI — Asistente de ayuda
-Route::prefix('synti')->middleware(['auth:sanctum', 'throttle:30,1'])->group(function () {
-    Route::post('/ask',      [SyntiHelpController::class, 'ask']);
-    Route::post('/feedback', [SyntiHelpController::class, 'feedback']);
-});
-
 // SYNTiA pública — sin auth, solo docs marketing
 Route::post('/synti/public-ask', [SyntiHelpController::class, 'publicAsk'])
     ->middleware('throttle:10,60');

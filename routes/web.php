@@ -14,6 +14,7 @@ use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\Auth\SocialAuthController;
 use App\Http\Controllers\TenantsController;
 use App\Http\Controllers\BillingController;
+use App\Http\Controllers\SyntiHelpController;
 use App\Services\DollarRateService;
 
 // ═══ Marketing Landing Page (root domain) ═══════════════════════════════
@@ -234,4 +235,10 @@ Route::middleware(['auth', 'tenant.owner:tenantId'])->prefix('tenant/{tenantId}/
 Route::get('/menu/{subdomain}', [\App\Http\Controllers\Food\MenuController::class, 'show'])
     ->where('subdomain', '[a-z0-9-]+')
     ->name('food.menu.public');
+
+// ═══ SYNTiA — Asistente IA (requiere sesión web) ═════════════════════════════
+Route::middleware(['auth', 'throttle:30,1'])->prefix('api/synti')->group(function () {
+    Route::post('/ask',      [SyntiHelpController::class, 'ask']);
+    Route::post('/feedback', [SyntiHelpController::class, 'feedback']);
+});
 
