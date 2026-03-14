@@ -275,15 +275,35 @@
 
                 <li class="inline-flex items-center relative pe-1.5">
                     {{-- Business name + status + plan --}}
+                    @php
+                        $productLabel = match($blueprint ?? 'studio') {
+                            'food' => 'SYNTIfood',
+                            'catalog' => 'SYNTIcat',
+                            default => 'SYNTIstudio',
+                        };
+
+                        $planTier = match($plan->slug ?? '') {
+                            'studio-oportunidad', 'food-basico', 'cat-basico' => 'Plan 1',
+                            'studio-crecimiento', 'food-semestral', 'cat-semestral' => 'Plan 2',
+                            'studio-vision', 'food-anual', 'cat-anual' => 'Plan 3',
+                            default => 'Plan',
+                        };
+
+                        $planTone = $plan->id === 1
+                            ? 'bg-amber-100 text-amber-700'
+                            : ($plan->id === 2 ? 'bg-emerald-100 text-emerald-700' : 'bg-sky-100 text-sky-700');
+                    @endphp
                     <div class="hidden sm:flex items-center gap-2 py-1 px-2 min-h-8">
                         <span class="{{ $tenant->is_open ? 'dot-online' : 'dot-offline' }}"
                               aria-label="{{ $tenant->is_open ? 'Abierto' : 'Cerrado' }}"></span>
                         <span class="text-sm font-semibold text-gray-800 dark:text-neutral-200 truncate max-w-48">
                             {{ $tenant->business_name }}
                         </span>
-                        <span class="inline-flex items-center py-0.5 px-2 rounded-full text-[11px] font-bold
-                            {{ $plan->id === 1 ? 'bg-amber-100 text-amber-700' : ($plan->id === 2 ? 'bg-emerald-100 text-emerald-700' : 'bg-sky-100 text-sky-700') }}">
-                            {{ $plan->name }}
+                        <span class="inline-flex items-center py-0.5 px-2 rounded-full text-[11px] font-semibold bg-gray-100 text-gray-700 dark:bg-neutral-700 dark:text-neutral-200">
+                            {{ $productLabel }}
+                        </span>
+                        <span class="inline-flex items-center py-0.5 px-2 rounded-full text-[11px] font-bold {{ $planTone }}">
+                            {{ $planTier }} · {{ $plan->name }}
                         </span>
                     </div>
                 </li>
