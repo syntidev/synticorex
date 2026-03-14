@@ -596,8 +596,7 @@
         }
         @endif
 
-        async function savePaymentMethods() {
-            const tenantId = {{ $tenant->id }};
+        function buildPaymentMethodsPayload() {
             const globalSelected = payAllKeys.filter(k => {
                 const el = document.getElementById('pay-check-' + k);
                 return el && el.checked;
@@ -607,6 +606,11 @@
                 return el && el.checked;
             });
             const payload = { global: globalSelected, currency: currencySelected };
+
+            @if(in_array($blueprint, ['food', 'studio', 'catalog'], true))
+            const legalToggle = document.getElementById('legal-links-enabled');
+            payload.show_legal_links = !!(legalToggle && legalToggle.checked);
+            @endif
 
             @if($plan->id === 3)
             const branchData = {};
@@ -621,6 +625,13 @@
             @endforeach
             payload.branches = branchData;
             @endif
+
+            return payload;
+        }
+
+        async function savePaymentMethods() {
+            const tenantId = {{ $tenant->id }};
+            const payload = buildPaymentMethodsPayload();
 
             try {
                 const response = await fetch('/tenant/' + tenantId + '/update-payment-methods', {
@@ -642,6 +653,42 @@
                 alert('✗ Error al guardar medios de pago');
             }
         }
+
+        @if(in_array($blueprint, ['food', 'studio', 'catalog'], true))
+        async function saveLegalLinksConfig(toggle) {
+            if (!toggle || toggle.disabled) return;
+
+            const tenantId = {{ $tenant->id }};
+            const previousDisabled = toggle.disabled;
+            toggle.disabled = true;
+
+            try {
+                const response = await fetch('/tenant/' + tenantId + '/update-payment-methods', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content
+                    },
+                    body: JSON.stringify(buildPaymentMethodsPayload())
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    showToast('✅ Footer legal actualizado');
+                } else {
+                    toggle.checked = !toggle.checked;
+                    showToast('❌ ' + (result.message || 'Error al guardar'), 'error');
+                }
+            } catch (err) {
+                toggle.checked = !toggle.checked;
+                console.error('Error:', err);
+                showToast('❌ Error al guardar footer legal', 'error');
+            } finally {
+                toggle.disabled = previousDisabled;
+            }
+        }
+        @endif
         @endif
         // ── End Payment Methods ──────────────────────────────────────
 

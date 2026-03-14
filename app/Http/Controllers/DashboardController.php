@@ -1230,6 +1230,7 @@ class DashboardController extends Controller
                 'currency'   => 'nullable|array',
                 'currency.*' => 'string|in:' . implode(',', $allowedCurrencies),
                 'branches'   => 'nullable|array',
+                'show_legal_links' => 'nullable|boolean',
             ]);
 
             $data = [
@@ -1261,6 +1262,13 @@ class DashboardController extends Controller
                 ?? \App\Models\TenantCustomization::firstOrCreate(['tenant_id' => $tenantId]);
 
             $customization->payment_methods = $data;
+
+            if (in_array(($tenant->getBlueprintSlug() ?? ''), ['food', 'studio', 'catalog'], true) && (int) $plan->id > 1) {
+                $contentBlocks = $customization->content_blocks ?? [];
+                $contentBlocks['legal_links']['enabled'] = (bool) ($validated['show_legal_links'] ?? false);
+                $customization->content_blocks = $contentBlocks;
+            }
+
             $customization->save();
 
             return response()->json([

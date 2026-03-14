@@ -1,177 +1,180 @@
 {
-  "meta": {
-    "name": "Cat MVP Priority Orchestrator",
-    "product": "cat",
-    "version": "1.0.0",
-    "updated_at": "2026-03-11",
-    "source": [
-      ".doc/ROADMAP_MAESTRO_03MAR2026.md",
-      ".doc/.La_Verdad_Del_Proyecto/ANEXO_CONTINUIDAD_STUDIO_MVP.md"
+    "meta": {
+        "name": "Cat MVP Priority Orchestrator",
+        "product": "cat",
+        "version": "1.0.0",
+        "updated_at": "2026-03-14",
+        "source": [
+            ".doc/ROADMAP_MAESTRO_03MAR2026.md",
+            ".doc/.La_Verdad_Del_Proyecto/ANEXO_CONTINUIDAD_STUDIO_MVP.md"
+        ]
+    },
+    "tasks": [
+        {
+            "id": "C1.1",
+            "sprint": "C1",
+            "title": "Validar blueprint cat en onboarding",
+            "description": "Confirm onboarding crea tenant catalog con configuracion y plan correctos.",
+            "priority": "P0",
+            "status": "done",
+            "depends_on": []
+        },
+        {
+            "id": "C1.2",
+            "sprint": "C1",
+            "title": "Asegurar CRUD productos cat",
+            "description": "Verificar alta, edicion, borrado y orden para catalogo.",
+            "priority": "P0",
+            "status": "done",
+            "depends_on": [
+                "C1.1"
+            ]
+        },
+        {
+            "id": "C1.3",
+            "sprint": "C1",
+            "title": "Validar variantes por plan",
+            "description": "Aplicar limites de variantes y reglas por plan basico/semestral/anual.",
+            "priority": "P0",
+            "status": "done",
+            "depends_on": [
+                "C1.2"
+            ],
+            "completed_at": "2026-03-14T04:38:21+00:00"
+        },
+        {
+            "id": "C1.4",
+            "sprint": "C1",
+            "title": "Cerrar flujo carrito whatsapp",
+            "description": "Validar add to cart, drawer, resumen y mensaje whatsapp final.",
+            "priority": "P0",
+            "status": "done",
+            "depends_on": [
+                "C1.3"
+            ]
+        },
+        {
+            "id": "C2.1",
+            "sprint": "C2",
+            "title": "Implementar mini order SC",
+            "description": "Generar SC-XXXX y persistir orden segun plan permitido.",
+            "priority": "P0",
+            "status": "done",
+            "depends_on": [
+                "C1.4"
+            ]
+        },
+        {
+            "id": "C2.2",
+            "sprint": "C2",
+            "title": "Validar limites de plan en backend",
+            "description": "Bloquear bypass API para cantidad de productos e imagenes.",
+            "priority": "P0",
+            "status": "done",
+            "depends_on": [
+                "C2.1"
+            ]
+        },
+        {
+            "id": "C2.3",
+            "sprint": "C2",
+            "title": "Proteger API cat con sanctum",
+            "description": "Asegurar auth en rutas API usadas por catalogo y ordenes.",
+            "priority": "P0",
+            "status": "done",
+            "depends_on": [
+                "C2.2"
+            ]
+        },
+        {
+            "id": "C2.4",
+            "sprint": "C2",
+            "title": "Aplicar ownership tenant en mutaciones",
+            "description": "Validar usuario autenticado solo modifica su tenant.",
+            "priority": "P0",
+            "status": "done",
+            "depends_on": [
+                "C2.3"
+            ]
+        },
+        {
+            "id": "C3.1",
+            "sprint": "C3",
+            "title": "Optimizar UX catalog mobile",
+            "description": "Verificar touch targets, drawer, badges y responsive catalogo.",
+            "priority": "P1",
+            "status": "done",
+            "depends_on": [
+                "C2.4"
+            ],
+            "completed_at": "2026-03-14T04:38:30+00:00"
+        },
+        {
+            "id": "C3.2",
+            "sprint": "C3",
+            "title": "Integrar dashboard tab cat",
+            "description": "Conectar panel para gestionar variantes, badges y estado catalogo.",
+            "priority": "P1",
+            "status": "done",
+            "depends_on": [
+                "C3.1"
+            ],
+            "completed_at": "2026-03-14T04:38:30+00:00"
+        },
+        {
+            "id": "C3.3",
+            "sprint": "C3",
+            "title": "Agregar pagina pricing cat",
+            "description": "Alinear pricing publico de cat con limites reales.",
+            "priority": "P1",
+            "status": "pending",
+            "depends_on": [
+                "C3.2"
+            ]
+        },
+        {
+            "id": "C3.4",
+            "sprint": "C3",
+            "title": "Agregar legal links cat",
+            "description": "Mostrar terminos y privacidad en layout de cat donde aplique.",
+            "priority": "P1",
+            "status": "pending",
+            "depends_on": [
+                "C3.3"
+            ]
+        },
+        {
+            "id": "C4.1",
+            "sprint": "C4",
+            "title": "Remover logs y codigo muerto cat",
+            "description": "Eliminar console logs y archivos legacy relacionados a cat.",
+            "priority": "P2",
+            "status": "pending",
+            "depends_on": [
+                "C3.4"
+            ]
+        },
+        {
+            "id": "C4.2",
+            "sprint": "C4",
+            "title": "Pruebas E2E cat",
+            "description": "Validar flujo completo registro->catalogo->pedido whatsapp.",
+            "priority": "P1",
+            "status": "pending",
+            "depends_on": [
+                "C4.1"
+            ]
+        },
+        {
+            "id": "C4.3",
+            "sprint": "C4",
+            "title": "Checklist release cat",
+            "description": "Completar smoke test, enlaces y demo compartible de cat.",
+            "priority": "P1",
+            "status": "pending",
+            "depends_on": [
+                "C4.2"
+            ]
+        }
     ]
-  },
-  "tasks": [
-    {
-      "id": "C1.1",
-      "sprint": "C1",
-      "title": "Validar blueprint cat en onboarding",
-      "description": "Confirm onboarding crea tenant catalog con configuracion y plan correctos.",
-      "priority": "P0",
-      "status": "done",
-      "depends_on": []
-    },
-    {
-      "id": "C1.2",
-      "sprint": "C1",
-      "title": "Asegurar CRUD productos cat",
-      "description": "Verificar alta, edicion, borrado y orden para catalogo.",
-      "priority": "P0",
-      "status": "done",
-      "depends_on": [
-        "C1.1"
-      ]
-    },
-    {
-      "id": "C1.3",
-      "sprint": "C1",
-      "title": "Validar variantes por plan",
-      "description": "Aplicar limites de variantes y reglas por plan basico/semestral/anual.",
-      "priority": "P0",
-      "status": "pending",
-      "depends_on": [
-        "C1.2"
-      ]
-    },
-    {
-      "id": "C1.4",
-      "sprint": "C1",
-      "title": "Cerrar flujo carrito whatsapp",
-      "description": "Validar add to cart, drawer, resumen y mensaje whatsapp final.",
-      "priority": "P0",
-      "status": "done",
-      "depends_on": [
-        "C1.3"
-      ]
-    },
-    {
-      "id": "C2.1",
-      "sprint": "C2",
-      "title": "Implementar mini order SC",
-      "description": "Generar SC-XXXX y persistir orden segun plan permitido.",
-      "priority": "P0",
-      "status": "done",
-      "depends_on": [
-        "C1.4"
-      ]
-    },
-    {
-      "id": "C2.2",
-      "sprint": "C2",
-      "title": "Validar limites de plan en backend",
-      "description": "Bloquear bypass API para cantidad de productos e imagenes.",
-      "priority": "P0",
-      "status": "done",
-      "depends_on": [
-        "C2.1"
-      ]
-    },
-    {
-      "id": "C2.3",
-      "sprint": "C2",
-      "title": "Proteger API cat con sanctum",
-      "description": "Asegurar auth en rutas API usadas por catalogo y ordenes.",
-      "priority": "P0",
-      "status": "done",
-      "depends_on": [
-        "C2.2"
-      ]
-    },
-    {
-      "id": "C2.4",
-      "sprint": "C2",
-      "title": "Aplicar ownership tenant en mutaciones",
-      "description": "Validar usuario autenticado solo modifica su tenant.",
-      "priority": "P0",
-      "status": "done",
-      "depends_on": [
-        "C2.3"
-      ]
-    },
-    {
-      "id": "C3.1",
-      "sprint": "C3",
-      "title": "Optimizar UX catalog mobile",
-      "description": "Verificar touch targets, drawer, badges y responsive catalogo.",
-      "priority": "P1",
-      "status": "pending",
-      "depends_on": [
-        "C2.4"
-      ]
-    },
-    {
-      "id": "C3.2",
-      "sprint": "C3",
-      "title": "Integrar dashboard tab cat",
-      "description": "Conectar panel para gestionar variantes, badges y estado catalogo.",
-      "priority": "P1",
-      "status": "pending",
-      "depends_on": [
-        "C3.1"
-      ]
-    },
-    {
-      "id": "C3.3",
-      "sprint": "C3",
-      "title": "Agregar pagina pricing cat",
-      "description": "Alinear pricing publico de cat con limites reales.",
-      "priority": "P1",
-      "status": "pending",
-      "depends_on": [
-        "C3.2"
-      ]
-    },
-    {
-      "id": "C3.4",
-      "sprint": "C3",
-      "title": "Agregar legal links cat",
-      "description": "Mostrar terminos y privacidad en layout de cat donde aplique.",
-      "priority": "P1",
-      "status": "pending",
-      "depends_on": [
-        "C3.3"
-      ]
-    },
-    {
-      "id": "C4.1",
-      "sprint": "C4",
-      "title": "Remover logs y codigo muerto cat",
-      "description": "Eliminar console logs y archivos legacy relacionados a cat.",
-      "priority": "P2",
-      "status": "pending",
-      "depends_on": [
-        "C3.4"
-      ]
-    },
-    {
-      "id": "C4.2",
-      "sprint": "C4",
-      "title": "Pruebas E2E cat",
-      "description": "Validar flujo completo registro->catalogo->pedido whatsapp.",
-      "priority": "P1",
-      "status": "pending",
-      "depends_on": [
-        "C4.1"
-      ]
-    },
-    {
-      "id": "C4.3",
-      "sprint": "C4",
-      "title": "Checklist release cat",
-      "description": "Completar smoke test, enlaces y demo compartible de cat.",
-      "priority": "P1",
-      "status": "pending",
-      "depends_on": [
-        "C4.2"
-      ]
-    }
-  ]
 }

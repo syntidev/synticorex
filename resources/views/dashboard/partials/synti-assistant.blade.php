@@ -14,42 +14,6 @@
     @synti-open.window="openModal()"
     @keydown.escape.window="close()"
 >
-
-    {{-- ── TRIGGER FLOTANTE ─────────────────────────────────── --}}
-    <button
-        @click="toggle()"
-        x-show="!open"
-        x-transition:enter="transition ease-out duration-200"
-        x-transition:enter-start="opacity-0 translate-y-2"
-        x-transition:enter-end="opacity-100 translate-y-0"
-        class="fixed bottom-6 right-6 z-40 group flex items-center gap-2.5
-               bg-[#4A80E4] hover:bg-[#2D5FC4] text-white
-               pl-3.5 pr-4 py-2.5 rounded-full
-               shadow-[0_4px_24px_rgba(74,128,228,0.45)]
-               hover:shadow-[0_4px_32px_rgba(74,128,228,0.6)]
-               transition-all duration-200 select-none"
-        title="Asistente SYNTiA (Alt+H)"
-    >
-        {{-- Ícono --}}
-        <span class="relative flex h-5 w-5 items-center justify-center">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                 stroke-width="1.8" class="w-5 h-5">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                      d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"/>
-                <path stroke-linecap="round" stroke-linejoin="round"
-                      d="M18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456z"/>
-            </svg>
-        </span>
-        <span class="text-sm font-medium tracking-wide">SYNTiA</span>
-        {{-- Atajo de teclado --}}
-        <span class="hidden group-hover:flex items-center gap-0.5 text-[10px]
-                     text-white/60 font-mono ml-1">
-            <kbd class="px-1 py-0.5 bg-white/15 rounded text-[9px]">Alt</kbd>
-            <span>+</span>
-            <kbd class="px-1 py-0.5 bg-white/15 rounded text-[9px]">H</kbd>
-        </span>
-    </button>
-
     {{-- ── OVERLAY ──────────────────────────────────────────── --}}
     <div
         x-show="open"

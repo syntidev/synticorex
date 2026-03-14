@@ -868,6 +868,7 @@
         'eur'        => ['label' => 'Euros',          'icon' => 'tabler--currency-euro'],
     ];
     $fpVisible = array_filter($fpAllMeta, fn($k) => in_array($k, array_merge($fpGlobal, $fpCurrency)), ARRAY_FILTER_USE_KEY);
+    $showLegalLinks = (bool) data_get($customization->content_blocks ?? [], 'legal_links.enabled', false);
 @endphp
 @if(!empty($fpVisible))
 <div class="mx-auto max-w-7xl px-4 py-5 border-t border-foreground/5">
@@ -886,6 +887,13 @@
 {{-- 6. FOOTER --}}
 <footer class="text-center py-6 text-xs text-gray-400 border-t border-gray-100">
     <p>© {{ date('Y') }} {{ $tenant->business_name }}. Todos los derechos reservados.</p>
+    @if($showLegalLinks)
+    <p class="mt-2 flex items-center justify-center gap-3">
+        <a href="{{ route('marketing.privacy') }}" target="_blank" rel="noopener noreferrer" class="hover:text-foreground transition-colors">Privacidad</a>
+        <span aria-hidden="true">•</span>
+        <a href="{{ route('marketing.terms') }}" target="_blank" rel="noopener noreferrer" class="hover:text-foreground transition-colors">Términos</a>
+    </p>
+    @endif
     <p class="mt-1">Potenciado por <a href="https://syntiweb.com" target="_blank" rel="noopener"><strong>SYNTIweb</strong></a></p>
 </footer>
 

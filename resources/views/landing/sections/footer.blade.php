@@ -73,6 +73,8 @@
             },
         ];
     }
+
+    $showLegalLinks = (bool) data_get($customization->content_blocks ?? [], 'legal_links.enabled', false);
 @endphp
 
 <footer id="footer" class="relative overflow-hidden bg-footer border-t border-base-200">
@@ -146,6 +148,13 @@
             <p class="text-xs text-muted-foreground-1">
                 &copy; {{ date('Y') }} {{ $tenant->business_name }}. Todos los derechos reservados.
             </p>
+            @if($showLegalLinks)
+            <p class="text-xs text-muted-foreground-1 flex items-center gap-2">
+                <a href="{{ route('marketing.privacy') }}" target="_blank" rel="noopener noreferrer" class="hover:text-foreground transition-colors">Privacidad</a>
+                <span aria-hidden="true">•</span>
+                <a href="{{ route('marketing.terms') }}" target="_blank" rel="noopener noreferrer" class="hover:text-foreground transition-colors">Términos</a>
+            </p>
+            @endif
             @if(!($tenant->white_label ?? false))
             <p class="text-xs text-muted-foreground-1">
                 Potenciado por

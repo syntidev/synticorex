@@ -20,6 +20,7 @@
     $branchPayMeta   = $payMethods['branches'] ?? [];
     $activeBranchList = $branches->where('is_active', true);
     $savedMode = $tenant->settings['engine_settings']['currency']['display']['saved_display_mode'] ?? 'reference_only';
+    $legalLinksEnabled = (bool) data_get($customization->content_blocks ?? [], 'legal_links.enabled', false);
 @endphp
 
             {{-- ══ ROW 1: Tasas BCV (compact bar) ═══════════════ --}}
@@ -231,6 +232,42 @@
                     </div>
                 </div>
             </div>
+
+            @if(in_array($blueprint, ['food', 'studio', 'catalog'], true))
+            <div class="mb-5">
+                <div class="bg-surface rounded-xl shadow-sm border border-border">
+                    <div class="px-5 pt-5 pb-3">
+                        <div class="flex items-center gap-3">
+                            <div class="size-9 rounded-lg bg-primary/10 flex items-center justify-center">
+                                <span class="iconify tabler--shield-check size-5 text-primary" aria-hidden="true"></span>
+                            </div>
+                            <div>
+                                <h3 class="text-base font-bold text-foreground">Legal y Privacidad</h3>
+                                <p class="text-xs text-muted-foreground-1">Activa los enlaces legales visibles en el footer público</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="px-5 pb-5 pt-1">
+                        <div class="flex items-center justify-between p-3 rounded-lg bg-muted border border-border gap-3">
+                            <div>
+                                <p class="text-sm font-semibold text-foreground">Mostrar Privacidad y Términos</p>
+                                <p class="text-[11px] text-muted-foreground-1">Landing {{ $blueprint === 'food' ? 'Food' : ($blueprint === 'catalog' ? 'Cat' : 'Studio') }}. El cambio se guarda automáticamente.</p>
+                            </div>
+                            <label class="inline-flex items-center cursor-pointer shrink-0">
+                                <input type="checkbox" id="legal-links-enabled"
+                                       onchange="saveLegalLinksConfig(this)"
+                                       class="relative w-[35px] h-[20px] bg-gray-200 checked:bg-primary border-2 border-transparent rounded-full transition-colors ease-in-out duration-200 appearance-none focus:ring-primary-focus focus:ring-2 focus:ring-offset-2 before:inline-block before:size-[16px] before:bg-white before:rounded-full before:transform before:translate-x-0 checked:before:translate-x-full before:transition before:ease-in-out before:duration-200 before:shadow-sm cursor-pointer"
+                                       {{ ($plan->id > 1 && $legalLinksEnabled) ? 'checked' : '' }}
+                                       {{ $plan->id === 1 ? 'disabled' : '' }}>
+                            </label>
+                        </div>
+                        @if($plan->id === 1)
+                        <p class="text-[11px] text-muted-foreground-1 mt-1.5">Disponible desde Plan CRECIMIENTO.</p>
+                        @endif
+                    </div>
+                </div>
+            </div>
+            @endif
 
             {{-- ══ ROW 3: PIN (6/12) + Plan Info (6/12) ═══════ --}}
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
