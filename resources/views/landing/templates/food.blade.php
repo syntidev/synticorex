@@ -1292,7 +1292,6 @@
                 return;
             }
         } catch(e) {
-            console.error('Food checkout error:', e);
         }
 
         // Fallback: direct WhatsApp without SF-XXXX
