@@ -545,6 +545,9 @@
                 {{-- ═══ TAB 2: QUÉ VENDES (Productos + Servicios) ═══ --}}
                 @if($blueprint === 'food')
                     @include('dashboard.components.menu-section')
+                @elseif($blueprint === 'catalog')
+                    @include('dashboard.components.catalog-products-section')
+                    @include('dashboard.components.orders-section')
                 @else
                     @include('dashboard.components.products-section')
                     @include('dashboard.modals.product-modal')

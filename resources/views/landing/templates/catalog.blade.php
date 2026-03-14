@@ -67,6 +67,7 @@
         ?? ($tenant->settings['cat_settings']['customer_fields'] ?? ['name', 'location']);
     $needsName     = in_array('name',     (array) $customerFields);
     $needsLocation = in_array('location', (array) $customerFields);
+    $showCart      = $tenant->plan && $tenant->plan->slug !== 'cat-basico';
 @endphp
 
 @push('styles')
@@ -318,7 +319,7 @@
 
                 {{-- ── IMAGEN 1:1 ── --}}
                 <div class="relative aspect-[3/4] overflow-hidden bg-surface m-2.5 rounded-xl cursor-pointer"
-                     onclick="openPM({{ $product->id }}, '{{ addslashes($product->name) }}', {{ $product->price_usd ?? 0 }}, '{{ $img }}', '{{ addslashes($product->description ?? '') }}', {{ $product->compare_price_usd ?? 0 }}, {{ $product->is_featured ? 'true' : 'false' }})">
+                     onclick="openPM({{ $product->id }}, '{{ addslashes($product->name) }}', {{ $product->price_usd ?? 0 }}, '{{ $img }}', '{{ addslashes($product->description ?? '') }}', {{ $product->compare_price_usd ?? 0 }}, {{ $product->is_featured ? 'true' : 'false' }}, {{ json_encode($product->variants ?? []) }})">
 
                     @if($img)
                         <img src="{{ $img }}" alt="{{ $product->name }}"
@@ -444,6 +445,21 @@
             </div>
             <p id="sc-pm-desc" class="text-sm text-foreground/50 mt-2 leading-relaxed hidden"></p>
         </div>
+
+        {{-- Variantes dinámicas (renderizadas por JS) --}}
+        <div id="sc-pm-variants" class="px-5 pt-2 pb-0 space-y-3"></div>
+
+        @if($showCart)
+        {{-- Agregar al carrito --}}
+        <div class="px-5 pb-3 pt-2" id="sc-pm-add-wrap">
+            <p id="sc-pm-variant-error" class="text-xs font-semibold text-red-500 mb-2" style="display:none">Selecciona una opción antes de continuar</p>
+            <button onclick="pmAddToCart()"
+                    class="w-full h-12 rounded-2xl bg-foreground text-background font-black text-sm inline-flex items-center justify-center gap-2 cursor-pointer hover:bg-foreground/85 transition-colors">
+                <svg aria-hidden="true" focusable="false" class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+                Agregar al carrito
+            </button>
+        </div>
+        @endif
 
         {{-- Botones CTA --}}
         <div class="px-5 pb-5 pt-3 flex gap-3">
@@ -996,9 +1012,63 @@ function openPM(id, name, price, img, desc, comparePrice, isFeatured) {
         ? 'https://wa.me/' + waNumber + '?text=' + encodeURIComponent(msg)
         : '#';
 
+    // Variantes
+    var variantsEl = document.getElementById('sc-pm-variants');
+    var variantError = document.getElementById('sc-pm-variant-error');
+    if (variantsEl) {
+        variantsEl.innerHTML = '';
+        if (variants && variants.length) {
+            variants.forEach(function(v) {
+                var groupEl = document.createElement('div');
+                var label = document.createElement('p');
+                label.className = 'text-xs font-black text-foreground/50 uppercase tracking-widest mb-1.5';
+                label.textContent = v.name;
+                groupEl.appendChild(label);
+                var chipsEl = document.createElement('div');
+                chipsEl.className = 'flex flex-wrap gap-2';
+                (v.options || []).forEach(function(opt) {
+                    var chip = document.createElement('button');
+                    chip.textContent = opt;
+                    chip.className = 'sc-pm-chip px-3 py-1.5 rounded-full border border-foreground/15 text-sm font-semibold text-foreground/70 hover:border-primary hover:text-primary transition-colors cursor-pointer';
+                    chip.dataset.group = v.name;
+                    chip.dataset.value = opt;
+                    chip.onclick = function() {
+                        chipsEl.querySelectorAll('.sc-pm-chip').forEach(function(c) {
+                            c.classList.remove('bg-primary', 'text-primary-foreground', 'border-primary');
+                            c.classList.add('border-foreground/15', 'text-foreground/70');
+                        });
+                        chip.classList.add('bg-primary', 'text-primary-foreground', 'border-primary');
+                        chip.classList.remove('border-foreground/15', 'text-foreground/70');
+                        _pmSelections[v.name] = opt;
+                        if (variantError) variantError.style.display = 'none';
+                    };
+                    chipsEl.appendChild(chip);
+                });
+                groupEl.appendChild(chipsEl);
+                variantsEl.appendChild(groupEl);
+            });
+        }
+    }
+    if (variantError) variantError.style.display = 'none';
+
     // Abrir overlay
     document.getElementById('sc-pm-overlay').classList.add('open');
     document.body.style.overflow = 'hidden';
+}
+
+function pmAddToCart() {
+    var variants = _pmCurrent.variants || [];
+    var errorEl = document.getElementById('sc-pm-variant-error');
+    if (variants.length > 0) {
+        var missing = variants.find(function(v) { return !_pmSelections[v.name]; });
+        if (missing) {
+            if (errorEl) errorEl.style.display = '';
+            return;
+        }
+    }
+    var variantStr = Object.keys(_pmSelections).map(function(k) { return k + ': ' + _pmSelections[k]; }).join(' / ');
+    addToCart(_pmCurrent.id, _pmCurrent.name, _pmCurrent.price, _pmCurrent.img, variantStr || null);
+    closePM();
 }
 
 function closePM() {
