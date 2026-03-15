@@ -14,14 +14,20 @@ class Dashboard extends BaseDashboard
     {
         return [
             \App\Filament\Widgets\StatsOverviewWidget::class,
+            \App\Filament\Widgets\CurrencyRatesWidget::class,
         ];
+    }
+
+    public function getHeaderWidgetsColumns(): int|array
+    {
+        return 3;
     }
 
     public function getFooterWidgets(): array
     {
         return [
-            \App\Filament\Widgets\BlueprintDonutChart::class,
             \App\Filament\Widgets\RevenueLineChart::class,
+            \App\Filament\Widgets\BlueprintDonutChart::class,
             \App\Filament\Widgets\LatestTenantsWidget::class,
         ];
     }

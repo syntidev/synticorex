@@ -47,6 +47,9 @@ class LatestTenantsWidget extends TableWidget
                     ->label('Registrado')
                     ->since(),
             ])
-            ->paginated(false);
+            ->paginated(false)
+            ->emptyStateHeading('Sin tenants aún')
+            ->emptyStateDescription('Los negocios registrados aparecerán aquí.')
+            ->emptyStateIcon('heroicon-o-building-storefront');
     }
 }

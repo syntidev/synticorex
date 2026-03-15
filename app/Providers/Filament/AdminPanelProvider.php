@@ -68,7 +68,16 @@ class AdminPanelProvider extends PanelProvider
                 Authenticate::class,
                 \App\Http\Middleware\EnsureAdmin::class,
             ])
-            ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
+            ->resources([
+                \App\Filament\Resources\Tenants\TenantResource::class,
+                \App\Filament\Resources\Users\UserResource::class,
+                \App\Filament\Resources\Plans\PlanResource::class,
+                \App\Filament\Resources\Invoices\InvoiceResource::class,
+                \App\Filament\Resources\SupportTicketResource::class,
+                \App\Filament\Resources\BlogPostResource::class,
+                \App\Filament\Resources\MediaResource::class,
+                \App\Filament\Resources\LandingSectionResource::class,
+            ])
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([Dashboard::class])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')

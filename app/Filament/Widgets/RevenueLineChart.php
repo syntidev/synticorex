@@ -19,16 +19,23 @@ class RevenueLineChart extends ChartWidget
 
     protected function getData(): array
     {
-        $meses = collect(range(5, 0))->map(function (int $i) {
-            $fecha = now()->subMonths($i);
-            return [
-                'label' => $fecha->format('M'),
-                'total' => (float) Invoice::where('status', 'paid')
-                    ->whereYear('reviewed_at', $fecha->year)
-                    ->whereMonth('reviewed_at', $fecha->month)
-                    ->sum('amount_usd'),
-            ];
-        });
+        try {
+            $meses = collect(range(5, 0))->map(function (int $i) {
+                $fecha = now()->subMonths($i);
+                return [
+                    'label' => $fecha->format('M'),
+                    'total' => (float) Invoice::where('status', 'paid')
+                        ->whereYear('reviewed_at', $fecha->year)
+                        ->whereMonth('reviewed_at', $fecha->month)
+                        ->sum('amount_usd'),
+                ];
+            });
+        } catch (\Throwable) {
+            $meses = collect(range(5, 0))->map(fn (int $i) => [
+                'label' => now()->subMonths($i)->format('M'),
+                'total' => 0,
+            ]);
+        }
 
         return [
             'datasets' => [[

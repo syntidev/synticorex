@@ -19,9 +19,17 @@ class BlueprintDonutChart extends ChartWidget
 
     protected function getData(): array
     {
-        $data = Tenant::selectRaw('blueprint, COUNT(*) as total')
-            ->groupBy('blueprint')
-            ->pluck('total', 'blueprint');
+        try {
+            $data = Tenant::selectRaw('blueprint, COUNT(*) as total')
+                ->groupBy('blueprint')
+                ->pluck('total', 'blueprint');
+        } catch (\Throwable) {
+            $data = collect();
+        }
+
+        if ($data->isEmpty()) {
+            $data = collect(['Studio' => 0, 'Food' => 0, 'Cat' => 0]);
+        }
 
         return [
             'datasets' => [[

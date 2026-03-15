@@ -48,7 +48,7 @@ class PlansTable
                     ->sortable()
                     ->placeholder('∞'),
             ])
-            ->recordActions([
+            ->actions([
                 EditAction::make(),
             ])
             ->defaultSort('blueprint', 'asc');

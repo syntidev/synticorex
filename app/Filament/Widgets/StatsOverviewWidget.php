@@ -17,53 +17,78 @@ class StatsOverviewWidget extends BaseWidget
 
     protected function getStats(): array
     {
-        $activos = Tenant::where('status', 'active')->count();
-        $nuevosEsteMes = Tenant::where('created_at', '>=', now()->startOfMonth())->count();
+        try {
+            $activos = Tenant::where('status', 'active')->count();
+            $nuevosEsteMes = Tenant::where('created_at', '>=', now()->startOfMonth())->count();
+        } catch (\Throwable) {
+            $activos = 0;
+            $nuevosEsteMes = 0;
+        }
 
-        $mrrActual = Invoice::where('status', 'paid')
-            ->whereMonth('reviewed_at', now()->month)
-            ->whereYear('reviewed_at', now()->year)
-            ->sum('amount_usd');
-        $mrrAnterior = Invoice::where('status', 'paid')
-            ->whereMonth('reviewed_at', now()->subMonth()->month)
-            ->whereYear('reviewed_at', now()->subMonth()->year)
-            ->sum('amount_usd');
+        try {
+            $mrrActual = Invoice::where('status', 'paid')
+                ->whereMonth('reviewed_at', now()->month)
+                ->whereYear('reviewed_at', now()->year)
+                ->sum('amount_usd');
+            $mrrAnterior = Invoice::where('status', 'paid')
+                ->whereMonth('reviewed_at', now()->subMonth()->month)
+                ->whereYear('reviewed_at', now()->subMonth()->year)
+                ->sum('amount_usd');
+        } catch (\Throwable) {
+            $mrrActual = 0;
+            $mrrAnterior = 0;
+        }
 
-        $pagosPendientes = Invoice::where('status', 'pending_review')->count();
-        $ticketsAbiertos = SupportTicket::where('status', 'open')->count();
-        $suspendidos = Tenant::where('status', 'suspended')->count();
-        $trial = Tenant::where('status', 'trial')->count();
+        try {
+            $pagosPendientes = Invoice::where('status', 'pending_review')->count();
+        } catch (\Throwable) {
+            $pagosPendientes = 0;
+        }
+
+        try {
+            $ticketsAbiertos = SupportTicket::where('status', 'open')->count();
+        } catch (\Throwable) {
+            $ticketsAbiertos = 0;
+        }
+
+        try {
+            $suspendidos = Tenant::where('status', 'suspended')->count();
+            $trial = Tenant::where('status', 'trial')->count();
+        } catch (\Throwable) {
+            $suspendidos = 0;
+            $trial = 0;
+        }
 
         return [
             Stat::make('Tenants Activos', (string) $activos)
                 ->description($nuevosEsteMes . ' nuevos este mes')
                 ->descriptionIcon('heroicon-m-building-storefront')
-                ->icon('tabler-building-store')
+                ->icon('heroicon-o-building-storefront')
                 ->color('success'),
             Stat::make('MRR', '$ ' . number_format((float) $mrrActual, 2))
                 ->description('vs $' . number_format((float) $mrrAnterior, 2) . ' mes anterior')
                 ->descriptionIcon('heroicon-m-currency-dollar')
-                ->icon('tabler-cash')
+                ->icon('heroicon-o-banknotes')
                 ->color('primary'),
             Stat::make('Pagos Pendientes', (string) $pagosPendientes)
                 ->description('requieren revisión')
                 ->descriptionIcon('heroicon-m-clock')
-                ->icon('tabler-clock')
+                ->icon('heroicon-o-clock')
                 ->color($pagosPendientes > 0 ? 'warning' : 'success'),
             Stat::make('Tickets Abiertos', (string) $ticketsAbiertos)
                 ->description('soporte abierto')
                 ->descriptionIcon('heroicon-m-chat-bubble-left-right')
-                ->icon('tabler-ticket')
+                ->icon('heroicon-o-ticket')
                 ->color($ticketsAbiertos > 0 ? 'danger' : 'success'),
             Stat::make('Tenants Suspendidos', (string) $suspendidos)
                 ->description('por vencimiento')
                 ->descriptionIcon('heroicon-m-exclamation-triangle')
-                ->icon('tabler-ban')
+                ->icon('heroicon-o-no-symbol')
                 ->color($suspendidos > 0 ? 'danger' : 'success'),
             Stat::make('Trial Activos', (string) $trial)
                 ->description('en período de prueba')
                 ->descriptionIcon('heroicon-m-beaker')
-                ->icon('tabler-hourglass')
+                ->icon('heroicon-o-clock')
                 ->color('info'),
         ];
     }

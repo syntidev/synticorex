@@ -78,7 +78,7 @@ class TenantsTable
                     ->label('Plan')
                     ->relationship('plan', 'name'),
             ])
-            ->recordActions([
+            ->actions([
                 EditAction::make(),
                 \Filament\Actions\Action::make('suspend')
                     ->label('Suspender')
