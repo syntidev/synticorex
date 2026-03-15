@@ -33,6 +33,12 @@ class TenantForm
                         ->label('Subdominio')
                         ->required()->maxLength(100)
                         ->unique(ignoreRecord: true),
+                    TextInput::make('custom_domain')
+                        ->label('Dominio personalizado')
+                        ->placeholder('tallerdiesel.oficio.vip')
+                        ->helperText('Dominio externo asignado manualmente. Requiere DNS configurado en Hostinger.')
+                        ->nullable()
+                        ->maxLength(255),
                     TextInput::make('email')
                         ->label('Email')->email()->maxLength(255),
                     TextInput::make('phone')

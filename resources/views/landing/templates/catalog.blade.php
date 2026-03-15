@@ -139,105 +139,146 @@
     $scMapsQuery = rawurlencode(trim(($tenant->address ?? '') . ', ' . ($tenant->city ?? '') . ', ' . ($tenant->country ?? '')));
     $scCatCategories = $catCategories ?? [];
 @endphp
+{{-- ⚠️ MOBILE INTOCABLE: El layout mobile (< 640px) está
+     aprobado y NO se modifica bajo ninguna circunstancia.
+     Solo aplicar cambios en sm: y superiores. --}}
 <div id="sc-sticky-bar" class="sticky top-0 z-[100]" style="background:var(--background,#fff);border-bottom:1px solid rgba(0,0,0,.08);">
 
-    {{-- FILA 1: identity — oculta hasta scroll --}}
-    <div id="sc-identity-row"
-         class="overflow-hidden transition-all duration-300 border-b border-foreground/5"
-         style="max-height:0;opacity:0;">
-        <div class="mx-auto max-w-[1280px] px-3 flex items-center justify-between h-11">
-            {{-- Logo + nombre --}}
-            <a id="synti-cat-trigger-sticky" href="#" class="flex items-center gap-2 shrink-0">
+    {{-- ═══ MOBILE (< 640px): 3 filas explícitas ═══ --}}
+    <div class="sm:hidden">
+        {{-- Fila 1: Logo + Nombre + Currency + Cart --}}
+        <div class="mx-auto max-w-[1280px] px-3 flex items-center gap-1.5 h-12">
+            <a id="synti-cat-trigger-sticky-m" href="#" class="flex items-center gap-2 shrink-0">
                 @if(!empty($customization->logo_filename))
                     <img src="{{ asset('storage/tenants/' . $tenant->id . '/' . $customization->logo_filename) }}"
                          alt="{{ $tenant->business_name }}"
-                         class="size-12 rounded-lg object-cover shrink-0">
+                         class="size-9 rounded-lg object-cover shrink-0">
                 @else
-                    <div class="size-12 bg-primary rounded-lg flex items-center justify-center shrink-0">
+                    <div class="size-9 bg-primary rounded-lg flex items-center justify-center shrink-0">
                         <span class="iconify tabler--bag size-5 text-primary-foreground"></span>
                     </div>
                 @endif
                 <span class="text-sm font-bold tracking-tight truncate max-w-[140px]">{{ $tenant->business_name }}</span>
             </a>
-            {{-- Acciones derechas fila 1 --}}
-            <div class="flex items-center gap-1 shrink-0">
-                @if(str_contains($savedDisplayMode, 'toggle'))
-                <div class="flex bg-surface/50 p-0.5 rounded-lg border border-foreground/8">
-                    <button class="sc-curr-btn px-2 py-1 text-[11px] font-bold rounded-md transition-all" data-currency="ref" onclick="setCurrency('ref')">{{ $currencySymbol }}</button>
-                    <button class="sc-curr-btn px-2 py-1 text-[11px] font-bold rounded-md transition-all" data-currency="bs" onclick="setCurrency('bs')">Bs</button>
-                </div>
-                @endif
-                @if($showCart)
-                <button onclick="toggleDrawer()" id="sc-cart-trigger"
-                        class="relative p-2 rounded-full bg-primary text-primary-foreground shadow-md hover:opacity-90 transition-opacity cursor-pointer">
-                    <span class="iconify tabler--shopping-bag size-5"></span>
-                    <span id="sc-cart-count" class="absolute -top-1 -right-1 size-5 bg-red-500 text-white text-[10px] font-black rounded-full flex items-center justify-center border-2 border-background" style="display:none">0</span>
-                </button>
-                @endif
+            <div class="flex-1"></div>
+            @if(str_contains($savedDisplayMode, 'toggle'))
+            <div class="flex bg-surface/50 p-0.5 rounded-lg border border-foreground/8 shrink-0">
+                <button class="sc-curr-btn px-2.5 py-1.5 text-[11px] font-bold rounded-md transition-all cursor-pointer" data-currency="ref" onclick="setCurrency('ref')">{{ $currencySymbol }}</button>
+                <button class="sc-curr-btn px-2.5 py-1.5 text-[11px] font-bold rounded-md transition-all cursor-pointer" data-currency="bs" onclick="setCurrency('bs')">Bs</button>
             </div>
-        </div>
-    </div>
-
-    {{-- FILA 2: navegación — siempre visible --}}
-    <div class="mx-auto max-w-[1280px] px-3 flex items-center gap-1 h-12">
-
-        {{-- Búsqueda full-width --}}
-        <div class="flex-1 relative">
-            <span class="iconify tabler--search size-4 absolute left-3 top-1/2 -translate-y-1/2 text-foreground/35 pointer-events-none"></span>
-            <input id="sc-search-input" type="search"
-                   placeholder="Buscar en {{ $tenant->business_name }}..."
-                   class="w-full pl-9 pr-3 py-2 text-sm rounded-xl border border-foreground/10 bg-surface/80 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/30"
-                   oninput="searchProducts(this.value)">
-        </div>
-
-        {{-- Hamburger categorías --}}
-        <div class="relative flex-shrink-0">
-            <button id="synti-hamburger-trigger"
-                    onclick="scToggleCatMenu()"
-                    class="size-10 flex items-center justify-center rounded-lg border border-foreground/10 hover:bg-surface/50 transition-colors text-foreground/50 cursor-pointer">
-                <span class="iconify tabler--menu-2 size-5"></span>
+            @endif
+            @if($showCart)
+            <button onclick="toggleDrawer()" id="sc-cart-trigger-m"
+                    class="relative p-2.5 rounded-full bg-primary text-primary-foreground shadow-md hover:opacity-90 transition-opacity cursor-pointer shrink-0">
+                <span class="iconify tabler--shopping-bag size-5"></span>
+                <span class="sc-cart-count-badge absolute -top-1 -right-1 size-5 bg-red-500 text-white text-[10px] font-black rounded-full flex items-center justify-center border-2 border-background" style="display:none">0</span>
             </button>
-            <div id="sc-cat-dropdown"
-                 class="absolute right-0 top-full mt-1 w-64 bg-background rounded-xl shadow-xl border border-foreground/5 z-[200] overflow-hidden"
-                 style="display:none">
-                <div class="px-4 py-2.5 border-b border-foreground/5">
-                    <p class="text-xs font-black uppercase tracking-widest text-foreground/40">Categorías</p>
-                </div>
-                <button onclick="filterCategory('all');scToggleCatMenu()" class="w-full text-left px-4 py-3 text-sm font-semibold text-foreground/70 hover:bg-surface hover:text-foreground transition-colors flex items-center gap-3">
-                    <span class="iconify tabler--layout-grid size-4 text-primary/60"></span>Todos los productos
-                </button>
-                @foreach($scCatCategories as $cat)
-                @php $hasSubs = !empty($cat['subcategories']); @endphp
-                <div>
-                    <button onclick="filterCategory('{{ $cat['name'] }}');{{ !$hasSubs ? 'scToggleCatMenu()' : '' }}"
-                            class="w-full text-left px-4 py-3 text-sm font-semibold text-foreground/70 hover:bg-surface hover:text-foreground transition-colors flex items-center gap-3 border-t border-foreground/4">
-                        <span class="iconify tabler--chevron-right size-3.5 text-primary/70"></span>
-                        <span class="flex-1">{{ $cat['name'] }}</span>
-                        @if($hasSubs)<span class="iconify tabler--chevron-right size-3 text-foreground/30"></span>@endif
-                    </button>
-                    @if($hasSubs)
-                    @foreach($cat['subcategories'] as $sub)
-                    <button onclick="filterCategory('{{ $cat['name'] }}','{{ $sub['name'] }}');scToggleCatMenu()"
-                            class="w-full text-left pl-12 pr-4 py-2 text-xs text-foreground/55 hover:bg-surface hover:text-foreground transition-colors flex items-center gap-2 border-t border-foreground/4">
-                        <span class="iconify tabler--minus size-3 text-foreground/30"></span>{{ $sub['name'] }}
-                    </button>
-                    @endforeach
-                    @endif
-                </div>
-                @endforeach
-            </div>
+            @endif
         </div>
-        <div id="sc-cat-backdrop" onclick="scToggleCatMenu()" style="display:none;position:fixed;inset:0;z-index:199"></div>
-
-        {{-- Info --}}
-        <button onclick="document.getElementById('sc-info-modal').style.display='flex'"
-                class="size-10 flex items-center justify-center rounded-lg border border-foreground/10 text-foreground/50 hover:text-foreground hover:bg-surface/60 transition-colors cursor-pointer shrink-0">
-            <span class="iconify tabler--info-circle size-[18px]"></span>
-        </button>
-
+        {{-- Fila 2: Búsqueda + Hamburger + Info --}}
+        <div class="mx-auto max-w-[1280px] px-3 flex items-center gap-1.5 pb-1.5">
+            <div class="flex-1 relative">
+                <span class="iconify tabler--search size-4 absolute left-3 top-1/2 -translate-y-1/2 text-foreground/35 pointer-events-none"></span>
+                <input type="search"
+                       placeholder="Buscar en {{ $tenant->business_name }}..."
+                       class="sc-search-input w-full pl-9 pr-3 py-2 text-sm rounded-xl border border-foreground/10 bg-surface/80 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/30"
+                       oninput="searchProducts(this.value)">
+            </div>
+            <div class="relative flex-shrink-0">
+                <button onclick="scToggleCatMenu()"
+                        class="size-10 flex items-center justify-center rounded-lg border border-foreground/10 hover:bg-surface/50 transition-colors text-foreground/50 cursor-pointer">
+                    <span class="iconify tabler--menu-2 size-5"></span>
+                </button>
+            </div>
+            <button onclick="document.getElementById('sc-info-modal').style.display='flex'"
+                    class="size-10 flex items-center justify-center rounded-lg border border-foreground/10 text-foreground/50 hover:text-foreground hover:bg-surface/60 transition-colors cursor-pointer shrink-0">
+                <span class="iconify tabler--info-circle size-[18px]"></span>
+            </button>
+        </div>
     </div>
 
-    {{-- FILA 3: tabs categorías scroll horizontal --}}
+    {{-- ═══ DESKTOP (sm+): 1 fila unificada ═══ --}}
+    <div class="hidden sm:block">
+        <div class="mx-auto max-w-[1280px] px-3 flex items-center gap-2 h-14">
+            <a id="synti-cat-trigger-sticky" href="#" class="flex items-center gap-2 shrink-0">
+                @if(!empty($customization->logo_filename))
+                    <img src="{{ asset('storage/tenants/' . $tenant->id . '/' . $customization->logo_filename) }}"
+                         alt="{{ $tenant->business_name }}"
+                         class="size-10 rounded-lg object-cover shrink-0">
+                @else
+                    <div class="size-10 bg-primary rounded-lg flex items-center justify-center shrink-0">
+                        <span class="iconify tabler--bag size-5 text-primary-foreground"></span>
+                    </div>
+                @endif
+                <span class="text-sm font-bold tracking-tight truncate max-w-[140px]">{{ $tenant->business_name }}</span>
+            </a>
+            <div class="relative flex-shrink-0">
+                <button id="synti-hamburger-trigger"
+                        onclick="scToggleCatMenu()"
+                        class="size-10 flex items-center justify-center rounded-lg border border-foreground/10 hover:bg-surface/50 transition-colors text-foreground/50 cursor-pointer">
+                    <span class="iconify tabler--menu-2 size-5"></span>
+                </button>
+            </div>
+            <div class="flex-1 relative">
+                <span class="iconify tabler--search size-4 absolute left-3 top-1/2 -translate-y-1/2 text-foreground/35 pointer-events-none"></span>
+                <input id="sc-search-input" type="search"
+                       placeholder="Buscar en {{ $tenant->business_name }}..."
+                       class="sc-search-input w-full pl-9 pr-3 py-2 text-sm rounded-xl border border-foreground/10 bg-surface/80 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/30"
+                       oninput="searchProducts(this.value)">
+            </div>
+            <button onclick="document.getElementById('sc-info-modal').style.display='flex'"
+                    class="size-10 flex items-center justify-center rounded-lg border border-foreground/10 text-foreground/50 hover:text-foreground hover:bg-surface/60 transition-colors cursor-pointer shrink-0">
+                <span class="iconify tabler--info-circle size-[18px]"></span>
+            </button>
+            @if(str_contains($savedDisplayMode, 'toggle'))
+            <div class="flex bg-surface/50 p-0.5 rounded-lg border border-foreground/8 shrink-0">
+                <button class="sc-curr-btn px-2.5 py-1.5 text-[11px] font-bold rounded-md transition-all cursor-pointer" data-currency="ref" onclick="setCurrency('ref')">{{ $currencySymbol }}</button>
+                <button class="sc-curr-btn px-2.5 py-1.5 text-[11px] font-bold rounded-md transition-all cursor-pointer" data-currency="bs" onclick="setCurrency('bs')">Bs</button>
+            </div>
+            @endif
+            @if($showCart)
+            <button onclick="toggleDrawer()" id="sc-cart-trigger"
+                    class="relative p-2.5 rounded-full bg-primary text-primary-foreground shadow-md hover:opacity-90 transition-opacity cursor-pointer shrink-0">
+                <span class="iconify tabler--shopping-bag size-5"></span>
+                <span id="sc-cart-count" class="absolute -top-1 -right-1 size-5 bg-red-500 text-white text-[10px] font-black rounded-full flex items-center justify-center border-2 border-background" style="display:none">0</span>
+            </button>
+            @endif
+        </div>
+    </div>
+
+    {{-- Dropdown categorías (compartido) --}}
+    <div id="sc-cat-dropdown"
+         class="absolute right-3 sm:left-auto top-full mt-1 w-64 bg-background rounded-xl shadow-xl border border-foreground/5 z-[200] overflow-hidden"
+         style="display:none">
+        <div class="px-4 py-2.5 border-b border-foreground/5">
+            <p class="text-xs font-black uppercase tracking-widest text-foreground/40">Categorías</p>
+        </div>
+        <button onclick="filterCategory('all');scToggleCatMenu()" class="w-full text-left px-4 py-3 text-sm font-semibold text-foreground/70 hover:bg-surface hover:text-foreground transition-colors flex items-center gap-3 cursor-pointer">
+            <span class="iconify tabler--layout-grid size-4 text-primary/60"></span>Todos los productos
+        </button>
+        @foreach($scCatCategories as $cat)
+        @php $hasSubs = !empty($cat['subcategories']); @endphp
+        <div>
+            <button onclick="filterCategory('{{ $cat['name'] }}');{{ !$hasSubs ? 'scToggleCatMenu()' : '' }}"
+                    class="w-full text-left px-4 py-3 text-sm font-semibold text-foreground/70 hover:bg-surface hover:text-foreground transition-colors flex items-center gap-3 border-t border-foreground/4 cursor-pointer">
+                <span class="iconify tabler--chevron-right size-3.5 text-primary/70"></span>
+                <span class="flex-1">{{ $cat['name'] }}</span>
+                @if($hasSubs)<span class="iconify tabler--chevron-right size-3 text-foreground/30"></span>@endif
+            </button>
+            @if($hasSubs)
+            @foreach($cat['subcategories'] as $sub)
+            <button onclick="filterCategory('{{ $cat['name'] }}','{{ $sub['name'] }}');scToggleCatMenu()"
+                    class="w-full text-left pl-12 pr-4 py-2 text-xs text-foreground/55 hover:bg-surface hover:text-foreground transition-colors flex items-center gap-2 border-t border-foreground/4 cursor-pointer">
+                <span class="iconify tabler--minus size-3 text-foreground/30"></span>{{ $sub['name'] }}
+            </button>
+            @endforeach
+            @endif
+        </div>
+        @endforeach
+    </div>
+    <div id="sc-cat-backdrop" onclick="scToggleCatMenu()" style="display:none;position:fixed;inset:0;z-index:199"></div>
+
+    {{-- Tabs categorías (compartido) --}}
     @if(!empty($scCatCategories))
     <div class="border-t border-foreground/5">
         <div class="mx-auto max-w-[1280px] flex overflow-x-auto no-scrollbar">
@@ -257,43 +298,7 @@
 
 </div>
 
-{{-- BUSINESS INFO — identidad tienda ecommerce --}}
-<div id="sc-business-info" class="mx-auto max-w-[1280px] px-4 pb-3" style="overflow:visible;position:relative;padding-top:52px;">
-    <div style="position:relative;">
-        {{-- Logo cuadrado flotante --}}
-        @if(!empty($customization->logo_filename))
-            <img id="synti-cat-trigger"
-                 src="{{ asset('storage/tenants/' . $tenant->id . '/' . $customization->logo_filename) }}"
-                 alt="{{ $tenant->business_name }}"
-                 style="width:80px;height:80px;border-radius:14px;border:3px solid #fff;
-                        box-shadow:0 4px 20px rgba(0,0,0,0.15);object-fit:cover;
-                        position:absolute;top:-52px;left:0;z-index:20;
-                        background:#fff;">
-        @else
-            <div id="synti-cat-trigger"
-                 style="width:80px;height:80px;border-radius:14px;border:3px solid #fff;
-                        box-shadow:0 4px 20px rgba(0,0,0,0.15);
-                        position:absolute;top:-52px;left:0;z-index:20;
-                        background:var(--primary);
-                        display:flex;align-items:center;justify-content:center;">
-                <span class="iconify tabler--shopping-bag size-8 text-white"></span>
-            </div>
-        @endif
-        {{-- Info tienda --}}
-        <div style="padding-left:96px;">
-            <h1 class="text-lg font-black tracking-tight text-foreground leading-tight">{{ $tenant->business_name }}</h1>
-            @if(!empty($tenant->business_segment))
-            <p class="text-xs text-foreground/50 mt-0.5">{{ $tenant->business_segment }}</p>
-            @endif
-            @if(!empty($tenant->address))
-            <p class="text-xs text-foreground/40 mt-0.5 flex items-center gap-1">
-                <span class="iconify tabler--map-pin size-3 shrink-0"></span>
-                {{ $tenant->address }}@if(!empty($tenant->city)), {{ $tenant->city }}@endif
-            </p>
-            @endif
-        </div>
-    </div>
-</div>
+
 
 {{-- MODAL INFORMACIÓN --}}
 <div id="sc-info-modal" class="sc-modal-overlay" onclick="if(event.target===this)this.style.display='none'">
@@ -464,167 +469,174 @@
 </div>
 @endif
 
-{{-- 4. PRODUCT GRID — Lazy load + Paginación --}}
-<section class="pb-16 lg:pb-24" id="productos">
-    <div class="mx-auto max-w-[1280px] px-5 sm:px-8">
-        {{-- Mensaje sin resultados --}}
-        <div id="sc-no-results" class="hidden py-16 text-center">
-            <span class="iconify tabler--mood-empty size-12 text-foreground/15 mx-auto mb-3"></span>
-            <p class="text-foreground/40 font-bold">No se encontraron productos</p>
-            <p class="text-xs text-foreground/25 mt-1">Prueba otra búsqueda o categoría</p>
-        </div>
+@php
+    $hasCats = !empty($scCatCategories);
+    $scCatTotal = count($scCatCategories);
+    $scCatNames = collect($scCatCategories)->pluck('name')->toArray();
+    $orphanProds = $hasCats ? $products->filter(fn($p) => empty($p->category_name) || !in_array($p->category_name, $scCatNames))->values() : collect();
+@endphp
 
-        <div id="sc-products-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 px-4">
-            @foreach($products as $product)
-            @php
-                $img = $productImg($product);
-                $maxImages = match($tenant->plan->slug ?? 'cat-basico') {
-                    'cat-anual' => 6,
-                    'cat-semestral' => 3,
-                    default => 1,
-                };
-                $galleryImages = collect($product->galleryImages ?? [])
-                    ->sortBy('position')
-                    ->map(fn($g) => asset('storage/tenants/' . $tenant->id . '/' . $g->filename));
-                $pmImages = collect([$img])
-                    ->merge($galleryImages)
-                    ->filter()
-                    ->unique()
-                    ->take($maxImages)
-                    ->values();
-                $hasDiscount = $product->compare_price_usd && $product->compare_price_usd > $product->price_usd;
-                $badgeLower  = $product->badge ? strtolower($product->badge) : null;
-                $showBadge   = $badgeLower && !($badgeLower === 'promo' && $hasDiscount);
-                $badgeCfg    = $showBadge ? match($badgeLower) {
-                    'popular'   => ['icon' => 'tabler--star-filled',   'bg' => 'bg-amber-500',   'text' => 'text-white', 'label' => 'Popular'],
-                    'nuevo'     => ['icon' => 'tabler--sparkles',      'bg' => 'bg-emerald-500', 'text' => 'text-white', 'label' => 'Nuevo'],
-                    'promo'     => ['icon' => 'tabler--tag',           'bg' => 'bg-orange-500',  'text' => 'text-white', 'label' => 'Promo'],
-                    'destacado' => ['icon' => 'tabler--bolt',          'bg' => 'bg-violet-600',  'text' => 'text-white', 'label' => 'Recomendado'],
-                    default     => ['icon' => 'tabler--star',          'bg' => 'bg-primary',     'text' => 'text-primary-foreground', 'label' => $product->badge]
-                } : null;
-            @endphp
+{{-- Mensaje sin resultados --}}
+<div id="sc-no-results" class="py-16 text-center mx-auto max-w-[1280px]" style="display:none">
+    <span class="iconify tabler--mood-empty size-12 text-foreground/15 mx-auto mb-3"></span>
+    <p class="text-foreground/40 font-bold">No se encontraron productos</p>
+    <p class="text-xs text-foreground/25 mt-1">Prueba otra búsqueda o categoría</p>
+</div>
 
-            <div class="sc-product-card group relative flex flex-col bg-background rounded-2xl border border-foreground/5 overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5"
-                 data-category="{{ $product->category_name ?? '' }}"
-                 data-subcategory="{{ $product->subcategory_name ?? '' }}"
-                 data-name="{{ strtolower($product->name) }}"
-                  data-search="{{ mb_strtolower(trim(($product->name ?? '') . ' ' . ($product->description ?? '') . ' ' . ($product->category_name ?? '') . ' ' . ($product->subcategory_name ?? ''))) }}"
-                 style="{{ $loop->index >= 12 ? 'display:none' : '' }}"
-                 data-index="{{ $loop->index }}">
+@if($hasCats)
+{{-- ━━ RAMA A: CON CATEGORÍAS ━━ --}}
 
-                <div class="sc-card-accent" data-cat="{{ $product->category_name ?? '' }}"></div>
-
-                {{-- ── IMAGEN 1:1 ── --}}
-                <div class="relative aspect-square overflow-hidden bg-surface m-2.5 rounded-xl cursor-pointer"
-                     onclick='openPM({{ $product->id }}, @json($product->name), {{ $product->price_usd ?? 0 }}, @json($img), @json($product->description ?? ""), {{ $product->compare_price_usd ?? 0 }}, {{ $product->is_featured ? "true" : "false" }}, @json($product->variants ?? []), @json($pmImages))'>
-
-                    @if($img)
-                        <img data-src="{{ $img }}" alt="{{ $product->name }}"
-                             class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 sc-lazy"
-                             {{ $loop->index < 6 ? 'src=' . $img : '' }}
-                             loading="lazy" onerror="this.style.display='none';">
+    @if($scCatTotal <= 4)
+    {{-- Cards de categoría grandes (tap = filtro) --}}
+    <section id="productos" class="pb-6">
+        <div class="mx-auto max-w-[1280px] px-3">
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                @foreach($scCatCategories as $cat)
+                @php
+                    $catProduct = $products->first(fn($p) => ($p->category_name ?? '') === $cat['name']);
+                    $catImg = $catProduct ? $productImg($catProduct) : null;
+                    $catProdCount = $products->filter(fn($p) => ($p->category_name ?? '') === $cat['name'])->count();
+                @endphp
+                <button onclick="filterCategory('{{ $cat['name'] }}')"
+                        class="group relative overflow-hidden rounded-2xl aspect-square bg-surface border border-foreground/6 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 cursor-pointer text-left">
+                    @if($catImg)
+                    <img src="{{ $catImg }}" alt="{{ $cat['name'] }}"
+                         class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
                     @else
-                        <div class="w-full h-full flex flex-col items-center justify-center gap-2">
-                            <span class="iconify tabler--photo size-10 text-foreground/15"></span>
-                            <span class="text-[10px] font-medium text-foreground/25 uppercase tracking-widest">Sin imagen</span>
-                        </div>
+                    <div class="absolute inset-0 bg-gradient-to-br from-primary/10 to-primary/5"></div>
                     @endif
-
-                    @if($product->is_featured ?? false)
-                        <span class="sc-badge absolute top-2 left-2 z-10 bg-amber-400 text-amber-900 shadow-sm">
-                            <span class="iconify tabler--star-filled size-3" aria-hidden="true"></span>
-                            Especial
-                        </span>
-                    @endif
-
-                    @if($hasDiscount || $badgeCfg)
-                        <div class="absolute bottom-2 left-2 z-10 flex flex-wrap gap-1">
-                            @if($hasDiscount)
-                                <span class="sc-badge bg-red-500 text-white shadow-sm">
-                                    <span class="iconify tabler--rosette-discount size-3" aria-hidden="true"></span>
-                                    Oferta
-                                </span>
-                            @endif
-                            @if($badgeCfg)
-                                <span class="sc-badge {{ $badgeCfg['bg'] }} {{ $badgeCfg['text'] }} shadow-sm">
-                                    <span class="iconify {{ $badgeCfg['icon'] }} size-3" aria-hidden="true"></span>
-                                    {{ $badgeCfg['label'] }}
-                                </span>
-                            @endif
-                        </div>
-                    @endif
-
-                </div>
-
-                {{-- ── INFO + CTA ── --}}
-                <div class="flex flex-col flex-1 px-3 pb-3 pt-1 gap-1">
-                    <h3 class="font-bold text-sm leading-snug line-clamp-2 group-hover:text-primary transition-colors duration-200">
-                        {{ Str::limit($product->name, 45) }}
-                    </h3>
-
-                    @if($product->category_name)
-                    <p class="text-[10px] text-foreground/35 font-semibold uppercase tracking-wider">
-                        {{ $product->category_name }}@if($product->subcategory_name) / {{ $product->subcategory_name }}@endif
-                    </p>
-                    @endif
-
-                    @if($product->description)
-                        <p class="text-[11px] text-foreground/45 leading-snug line-clamp-1 font-normal">
-                            {{ Str::limit($product->description, 55) }}
-                        </p>
-                    @endif
-
-                    <div class="flex items-end justify-between gap-2 mt-auto pt-2">
-
-                        @if(!$hidePrice)
-                        <div class="flex flex-col min-w-0">
-                            <span class="text-base font-black tracking-tight leading-none" data-price-usd="{{ $product->price_usd ?? 0 }}">
-                                <span class="text-[10px] font-medium opacity-40 mr-0.5 align-middle">{{ $currencySymbol }}</span>0.00
-                            </span>
-                            @if($hasDiscount)
-                                <span class="text-[11px] text-red-400/80 line-through leading-none mt-0.5" data-price-usd="{{ $product->compare_price_usd }}">
-                                    <span class="text-[9px] opacity-70 mr-0.5">{{ $currencySymbol }}</span>0.00
-                                </span>
-                            @endif
-                        </div>
-                        @endif
-
-                        <div id="qty-row-{{ $product->id }}" class="flex items-center gap-1 bg-surface rounded-full px-1.5 py-1" style="display:none!important">
-                            <button class="size-5 rounded-full bg-background flex items-center justify-center text-xs font-bold leading-none"
-                                    onclick="changeQty({{ $product->id }}, -1)">−</button>
-                            <span class="text-xs font-black min-w-[14px] text-center" id="qty-val-{{ $product->id }}">1</span>
-                            <button class="size-5 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xs font-bold leading-none"
-                                    onclick="changeQty({{ $product->id }}, 1)">+</button>
-                        </div>
-
-                        <button onclick="addToCart({{ $product->id }}, '{{ addslashes($product->name) }}', {{ $product->price_usd ?? 0 }}, '{{ $img }}')"
-                                class="sc-add-btn bg-primary text-primary-foreground shrink-0"
-                                title="Agregar al pedido">
-                            <svg aria-hidden="true" focusable="false" class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M12 5v14M5 12h14"/>
-                            </svg>
-                        </button>
-
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 right-0 p-3">
+                        <p class="text-white font-bold text-sm leading-tight">{{ $cat['name'] }}</p>
+                        <p class="text-white/60 text-xs mt-0.5">{{ $catProdCount }} producto{{ $catProdCount !== 1 ? 's' : '' }}</p>
                     </div>
+                </button>
+                @endforeach
+            </div>
+        </div>
+    </section>
+    @else
+    {{-- >4 categorías: secciones directas abajo --}}
+    <section id="productos" class="pb-2">
+        <div class="mx-auto max-w-[1280px] px-3"></div>
+    </section>
+    @endif
+
+    {{-- SECCIONES POR CATEGORÍA: título + 4 cards + botón ver más --}}
+    <section id="sc-cat-sections" class="pb-16">
+        <div class="mx-auto max-w-[1280px] px-3 space-y-10">
+            @foreach($scCatCategories as $cat)
+            @php
+                $catProds = $products->filter(fn($p) => ($p->category_name ?? '') === $cat['name'])->values();
+                $visibleProds = $catProds->take(4);
+                $hiddenProds  = $catProds->skip(4);
+                $catId = 'cat-' . Str::slug($cat['name']);
+            @endphp
+            @if($catProds->isEmpty()) @continue @endif
+
+            <div class="sc-cat-section" data-cat="{{ $cat['name'] }}">
+                {{-- Título sección --}}
+                <div class="flex items-center justify-between mb-3">
+                    <h2 class="text-base font-black tracking-tight text-foreground">
+                        {{ $cat['name'] }}
+                        <span class="ml-1.5 text-xs font-semibold text-foreground/30">({{ $catProds->count() }})</span>
+                    </h2>
                 </div>
 
+                {{-- Grid 4 cards visibles --}}
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3" id="{{ $catId }}-visible">
+                    @foreach($visibleProds as $product)
+                        @include('landing.sections.sc-product-card', ['product' => $product])
+                    @endforeach
+                </div>
+
+                {{-- Cards ocultas (revelar con "Ver más") --}}
+                @if($hiddenProds->isNotEmpty())
+                <div class="hidden grid grid-cols-2 sm:grid-cols-4 gap-3 mt-3" id="{{ $catId }}-hidden">
+                    @foreach($hiddenProds as $product)
+                        @include('landing.sections.sc-product-card', ['product' => $product])
+                    @endforeach
+                </div>
+                {{-- Botón ver más --}}
+                <div class="mt-4 flex justify-center" id="{{ $catId }}-more-btn">
+                    <button onclick="scShowMore('{{ $catId }}')"
+                            class="flex items-center gap-2 px-6 py-3 rounded-2xl border border-foreground/10 bg-surface text-sm font-bold text-foreground/60 hover:text-foreground hover:bg-foreground/5 active:scale-95 transition-all duration-200 shadow-sm cursor-pointer">
+                        <span class="iconify tabler--grid-dots size-4"></span>
+                        Ver más de {{ $cat['name'] }}
+                        <span class="bg-primary/10 text-primary text-xs font-black px-2 py-0.5 rounded-full">+{{ $hiddenProds->count() }}</span>
+                    </button>
+                </div>
+                @endif
             </div>
             @endforeach
         </div>
+    </section>
 
-        {{-- Botón cargar más --}}
-        @if($products->count() > 12)
-        <div id="sc-load-more-wrap" class="text-center mt-8">
-            <button onclick="loadMoreProducts()" id="sc-load-more-btn"
-                    class="inline-flex items-center gap-2 py-3 px-8 rounded-2xl bg-surface hover:bg-surface/80 text-sm font-bold text-foreground/60 transition-colors cursor-pointer border border-foreground/8">
-                <span class="iconify tabler--arrow-down size-4"></span>
-                Ver más productos
-                <span id="sc-remaining-count" class="text-xs opacity-50"></span>
-            </button>
+    {{-- SECCIÓN HUÉRFANOS: productos sin categoría o con categoría no registrada --}}
+    @if($orphanProds->isNotEmpty())
+    <section id="sc-orphan-section" class="pb-16">
+        <div class="mx-auto max-w-[1280px] px-3">
+            <div class="sc-cat-section" data-cat="__orphan">
+                <div class="flex items-center justify-between mb-3">
+                    <h2 class="text-base font-black tracking-tight text-foreground">
+                        Otros
+                        <span class="ml-1.5 text-xs font-semibold text-foreground/30">({{ $orphanProds->count() }})</span>
+                    </h2>
+                </div>
+                @php
+                    $orphanVisible = $orphanProds->take(4);
+                    $orphanHidden  = $orphanProds->skip(4);
+                @endphp
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3" id="cat-otros-visible">
+                    @foreach($orphanVisible as $product)
+                        @include('landing.sections.sc-product-card', ['product' => $product])
+                    @endforeach
+                </div>
+                @if($orphanHidden->isNotEmpty())
+                <div class="hidden grid grid-cols-2 sm:grid-cols-4 gap-3 mt-3" id="cat-otros-hidden">
+                    @foreach($orphanHidden as $product)
+                        @include('landing.sections.sc-product-card', ['product' => $product])
+                    @endforeach
+                </div>
+                <div class="mt-4 flex justify-center" id="cat-otros-more-btn">
+                    <button onclick="scShowMore('cat-otros')"
+                            class="flex items-center gap-2 px-6 py-3 rounded-2xl border border-foreground/10 bg-surface text-sm font-bold text-foreground/60 hover:text-foreground hover:bg-foreground/5 active:scale-95 transition-all duration-200 shadow-sm cursor-pointer">
+                        <span class="iconify tabler--grid-dots size-4"></span>
+                        Ver más productos
+                        <span class="bg-primary/10 text-primary text-xs font-black px-2 py-0.5 rounded-full">+{{ $orphanHidden->count() }}</span>
+                    </button>
+                </div>
+                @endif
+            </div>
         </div>
-        @endif
-    </div>
-</section>
+    </section>
+    @endif
+
+@else
+{{-- ━━ RAMA B: SIN CATEGORÍAS — grid libre con ver más JS ━━ --}}
+    <section id="productos" class="pb-16">
+        <div class="mx-auto max-w-[1280px] px-3">
+            <div id="sc-products-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                @foreach($products as $product)
+                    @include('landing.sections.sc-product-card', ['product' => $product, 'cardHidden' => $loop->index >= 8])
+                @endforeach
+            </div>
+            @if($products->count() > 8)
+            <div id="sc-load-more-wrap" class="mt-6 flex justify-center">
+                <button id="sc-load-more-btn" onclick="scLoadMore()"
+                        class="flex items-center gap-2 px-8 py-3.5 rounded-2xl bg-primary text-primary-foreground text-sm font-bold shadow-md hover:opacity-90 active:scale-95 transition-all duration-200 cursor-pointer">
+                    <span class="iconify tabler--plus size-4"></span>
+                    Ver más productos
+                    <span class="bg-white/20 text-white text-xs font-black px-2 py-0.5 rounded-full">
+                        +{{ $products->count() - 8 }}
+                    </span>
+                </button>
+            </div>
+            @endif
+        </div>
+    </section>
+@endif
+
 
 
 {{-- MODAL DE PRODUCTO --}}
@@ -1048,24 +1060,51 @@
         }
     }
 
-    window.filterCategory = function(catId, subName) {
-        _scActiveCat = catId || 'all';
-        _scActiveSub = subName || '';
-        _scPage = 1;
+    window.filterCategory = function(catName, subName) {
+        // Reset tabs
+        document.querySelectorAll('.sc-cat-tab').forEach(function(t) {
+            t.classList.remove('active');
+            t.style.borderColor = 'transparent';
+            t.classList.remove('text-foreground');
+            t.classList.add('text-foreground/40');
+        });
+        // Activar tab correcto
+        var activeTab = document.querySelector('.sc-cat-tab[data-cat="' + catName + '"]');
+        if (activeTab) {
+            activeTab.classList.add('active');
+            activeTab.style.borderColor = 'var(--primary)';
+            activeTab.classList.remove('text-foreground/40');
+            activeTab.classList.add('text-foreground');
+        }
 
-        // Update tab active states
-        document.querySelectorAll('.sc-cat-tab').forEach(function(btn) {
-            var active = String(btn.dataset.cat) === String(_scActiveCat);
-            if (active) {
-                btn.classList.add('active');
-                btn.setAttribute('data-active', 'true');
+        if (catName === 'all') {
+            // Mostrar todas las secciones
+            document.querySelectorAll('.sc-cat-section').forEach(function(s) {
+                s.style.display = '';
+            });
+            // Mostrar sección huérfanos
+            var orphan = document.getElementById('sc-orphan-section');
+            if (orphan) orphan.style.display = '';
+            // Ocultar no-results
+            document.getElementById('sc-no-results').style.display = 'none';
+            return;
+        }
+
+        // Filtrar por categoría
+        var found = false;
+        document.querySelectorAll('.sc-cat-section').forEach(function(s) {
+            if (s.getAttribute('data-cat') === catName) {
+                s.style.display = '';
+                found = true;
             } else {
-                btn.classList.remove('active');
-                btn.removeAttribute('data-active');
+                s.style.display = 'none';
             }
         });
+        // Ocultar huérfanos al filtrar
+        var orphan = document.getElementById('sc-orphan-section');
+        if (orphan) orphan.style.display = 'none';
 
-        renderVisibleCards();
+        document.getElementById('sc-no-results').style.display = found ? 'none' : 'block';
     };
 
     window.searchProducts = function(term) {
@@ -1152,10 +1191,11 @@
 
     function updateBadge() {
         let total = Object.values(cart).reduce((a, b) => a + b.qty, 0);
-        const b = document.getElementById('sc-cart-count');
-        b.style.display = total > 0 ? 'flex' : 'none';
-        b.textContent = total;
-        b.classList.remove('bump'); void b.offsetWidth; b.classList.add('bump');
+        document.querySelectorAll('#sc-cart-count, .sc-cart-count-badge').forEach(function(b) {
+            b.style.display = total > 0 ? 'flex' : 'none';
+            b.textContent = total;
+            b.classList.remove('bump'); void b.offsetWidth; b.classList.add('bump');
+        });
     }
 
     window.toggleDrawer = function() {
@@ -1705,24 +1745,6 @@ window.scToggleCatMenu = function() {
     b.style.display = open ? 'none' : 'block';
 };
 </script>
-{{-- IntersectionObserver: identity row --}}
-<script>
-(function(){
-    var businessInfo = document.getElementById('sc-business-info');
-    if(businessInfo) {
-        var obs = new IntersectionObserver(function(entries){
-            entries.forEach(function(entry){
-                var row = document.getElementById('sc-identity-row');
-                if(row){
-                    row.style.maxHeight = entry.isIntersecting ? '0' : '44px';
-                    row.style.opacity   = entry.isIntersecting ? '0' : '1';
-                }
-            });
-        }, {threshold: 0.1});
-        obs.observe(businessInfo);
-    }
-})();
-</script>
 {{-- Long press logo CAT → easter egg --}}
 <script>
 (function(){
@@ -1755,5 +1777,35 @@ window.scToggleCatMenu = function() {
     dots.forEach(function(d,i){ d.addEventListener('click', function(){ goTo(i); }); });
     setInterval(function(){ goTo((cur+1) % slides.length); }, 4000);
 })();
+</script>
+{{-- Ver más por categoría + grid libre --}}
+<script>
+window.scShowMore = function(catId) {
+    var hidden = document.getElementById(catId + '-hidden');
+    var btn    = document.getElementById(catId + '-more-btn');
+    if (hidden) {
+        hidden.classList.remove('hidden');
+        hidden.classList.add('grid');
+    }
+    if (btn) btn.style.display = 'none';
+};
+
+var SC_LOADED = 8;
+window.scLoadMore = function() {
+    var grid = document.getElementById('sc-products-grid');
+    var btn  = document.getElementById('sc-load-more-wrap');
+    var hidden = grid ? grid.querySelectorAll('.sc-card-hidden') : [];
+    var count = 0;
+    hidden.forEach(function(card) {
+        if (count < 8) {
+            card.classList.remove('sc-card-hidden');
+            card.style.display = '';
+            count++;
+        }
+    });
+    if (grid && grid.querySelectorAll('.sc-card-hidden').length === 0) {
+        if (btn) btn.style.display = 'none';
+    }
+};
 </script>
 @endpush
