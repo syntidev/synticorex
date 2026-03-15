@@ -383,6 +383,9 @@ Un pase único sobre app.css + syntiweb-brand.css. Los componentes heredan autom
 
 | # | Tarea | Prioridad |
 |---|-------|-----------|
+| D.0.a | Filament v5 como panel admin — reemplaza dashboard Preline | ✅ HECHO `cf8a8d3` |
+| D.0.b | SYNTIBlog en /admin/blog | ✅ HECHO `cf8a8d3` |
+| D.0.c | Planes normalizados 9 registros + selector Blueprint·Nombre | ✅ HECHO `5f12254` |
 | D.1 | Tablero admin: gestión tenants (ver, editar, suspender, eliminar) | 🔴 CRÍTICO |
 | D.2 | Tablero admin: gestión planes y precios (CRUD desde UI) | 🔴 CRÍTICO |
 | D.3 | Tablero admin: gestión de usuarios/clientes | 🔴 CRÍTICO |
@@ -581,6 +584,23 @@ Commit: docs: roadmap actualizado 06 MAR 2026
   - Actualizado `DatabaseSeeder.php` con `AiDocSeeder::class`
   - ⚠️ EJECUTAR NUEVAMENTE al cierre de Fase D (cuando productos Food y Cat estén completos)
   - ⚠️ EJECUTAR NUEVAMENTE al cierre de Fase C si cambian planes, precios o límites
+
+### 14 MAR 2026
+- [x] D.0.a — Filament v5 instalado como panel admin en /admin (reemplaza dashboard Preline legacy)
+  - Stack: Filament v5 + filament-copilot (vendor: eslam-reda-div) + Anthropic claude-haiku-4-5-20251001
+  - TenantResource funcional: tabla, filtros, acciones (ver, editar, suspender, restaurar)
+  - CopilotTools activos: ListTenantsTool, SearchTenantsTool, SuspendTenantTool, RestoreTenantTool
+  - Provider fijado: COPILOT_PROVIDER=anthropic en .env + AdminPanelProvider.php
+  - Commit: cf8a8d3
+
+- [x] D.0.b — SYNTIBlog operativo en /admin/blog
+  - Blog integrado en panel Filament v5
+  - Commit: cf8a8d3
+
+- [x] D.0.c — Planes normalizados: 9 registros canónicos en tabla plans
+  - Slugs definitivos: studio-oportunidad/crecimiento/vision · food-oportunidad/crecimiento/vision · cat-oportunidad/crecimiento/vision
+  - TenantResource plan_id selector: formato "Blueprint · Nombre" (ej: Studio · Crecimiento)
+  - Commit: 5f12254
 
   #### Prompt re-ejecución AiDocSeeder
 Contexto: Al ejecutar este seeder nuevamente, el agente debe:
