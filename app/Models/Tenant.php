@@ -334,4 +334,9 @@ class Tenant extends Model
     {
         return $this->plan->analytics_level ?? 'basic';
     }
+
+    public function domains(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Domain::class);
+    }
 }

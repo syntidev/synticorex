@@ -37,3 +37,9 @@ Schedule::command('reports:send --period=monthly')
     ->monthlyOn(1, '08:00')
     ->withoutOverlapping()
     ->runInBackground();
+
+Schedule::command('domains:verify-dns')
+    ->dailyAt('06:00');
+
+Schedule::command('domains:process-expirations')
+    ->dailyAt('07:00');

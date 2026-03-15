@@ -90,6 +90,15 @@ class StatsOverviewWidget extends BaseWidget
                 ->descriptionIcon('heroicon-m-beaker')
                 ->icon('heroicon-o-clock')
                 ->color('info'),
+            Stat::make('Dominios por vencer', (string) \App\Models\Domain::where('status', 'expiring_soon')->count())
+                ->color('warning')
+                ->icon('heroicon-o-clock'),
+            Stat::make('DNS fallando', (string) \App\Models\Domain::where('dns_status', 'failing')->count())
+                ->color('danger')
+                ->icon('heroicon-o-exclamation-triangle'),
+            Stat::make('En período de gracia', (string) \App\Models\Domain::where('status', 'grace_period')->count())
+                ->color('danger')
+                ->icon('heroicon-o-shield-exclamation'),
         ];
     }
 }
