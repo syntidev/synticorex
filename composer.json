@@ -7,6 +7,8 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "eslam-reda-div/filament-copilot": "^1.0",
+        "filament/filament": "^5.0",
         "intervention/image": "^3.11",
         "laravel/framework": "^12.0",
         "laravel/socialite": "^5.25",
@@ -54,7 +56,8 @@
         ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
-            "@php artisan package:discover --ansi"
+            "@php artisan package:discover --ansi",
+            "@php artisan filament:upgrade"
         ],
         "post-update-cmd": [
             "@php artisan vendor:publish --tag=laravel-assets --ansi --force"

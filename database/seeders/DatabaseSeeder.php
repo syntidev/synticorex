@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             DollarRatesSeeder::class,
             DemoDataSeeder::class,
             AiDocSeeder::class,
+            BlogSeeder::class,
         ]);
     }
 }

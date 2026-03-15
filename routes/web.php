@@ -82,6 +82,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/mis-negocios', [TenantsController::class, 'index'])->name('tenants.index');
 });
 
+// ═══ Blog público ════════════════════════════════════════════════════════════
+Route::get('/blog', [MarketingController::class, 'blog'])->name('blog.index');
+Route::get('/blog/{slug}', [MarketingController::class, 'blogPost'])
+    ->where('slug', '[a-z0-9-]+')
+    ->name('blog.show');
+
 // Landing page pública por subdomain
 Route::middleware('tenant')->get('/{subdomain}', [TenantRendererController::class, 'show'])
     ->where('subdomain', '[a-z0-9-]+')

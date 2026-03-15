@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Models\BlogCategory;
+use App\Models\BlogPost;
 use App\Models\Plan;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\Request;
 
 class MarketingController extends Controller
 {
@@ -181,5 +184,42 @@ class MarketingController extends Controller
     public function about(): View
     {
         return view('marketing.about');
+    }
+
+    public function blog(Request $request): View
+    {
+        $categories = BlogCategory::orderBy('sort_order')->get();
+        $currentCat = $request->query('cat');
+
+        $query = BlogPost::published()->with('category')->latest('published_at');
+
+        if ($currentCat) {
+            $query->whereHas('category', fn ($q) => $q->where('slug', $currentCat));
+        }
+
+        $featured = BlogPost::published()->featured()->latest('published_at')->first();
+        $posts    = $query->paginate(12)->withQueryString();
+
+        return view('marketing.blog.index', compact('posts', 'categories', 'featured', 'currentCat'));
+    }
+
+    public function blogPost(string $slug): View
+    {
+        $post = BlogPost::published()
+            ->with('category')
+            ->where('slug', $slug)
+            ->firstOrFail();
+
+        $post->increment('views');
+
+        $related = BlogPost::published()
+            ->with('category')
+            ->where('id', '!=', $post->id)
+            ->where('blog_category_id', $post->blog_category_id)
+            ->latest('published_at')
+            ->limit(3)
+            ->get();
+
+        return view('marketing.blog.show', compact('post', 'related'));
     }
 }

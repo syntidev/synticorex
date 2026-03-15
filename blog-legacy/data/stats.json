@@ -1,0 +1,83 @@
+{
+    "total_visits": 28,
+    "today_visits": 1,
+    "today_date": "2026-03-12",
+    "yesterday_visits": 2,
+    "hours": {
+        "0": 0,
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0,
+        "7": 1,
+        "8": 0,
+        "9": 0,
+        "10": 0,
+        "11": 0,
+        "12": 0,
+        "13": 0,
+        "14": 0,
+        "15": 0,
+        "16": 0,
+        "17": 0,
+        "18": 0,
+        "19": 0,
+        "20": 0,
+        "21": 0,
+        "22": 0,
+        "23": 0
+    },
+    "posts": {
+        "cual-producto-syntiweb-es-para-ti": {
+            "views": 2,
+            "today": 2,
+            "date": "2026-03-05",
+            "last": "2026-03-05 06:21"
+        },
+        "seo-automatico-syntiweb-google-encuentra-tu-negocio": {
+            "views": 2,
+            "today": 2,
+            "date": "2026-03-05",
+            "last": "2026-03-05 06:21"
+        },
+        "ia-corrige-tu-negocio-sin-saber-tecnologia": {
+            "views": 1,
+            "today": 1,
+            "date": "2026-03-05",
+            "last": "2026-03-05 06:20"
+        },
+        "qr-dinamico-tu-qr-nunca-queda-viejo": {
+            "views": 2,
+            "today": 2,
+            "date": "2026-03-05",
+            "last": "2026-03-05 06:21"
+        },
+        "temas-visuales-34-opciones-para-que-tu-pagina-hable-de-tu-marca": {
+            "views": 4,
+            "today": 4,
+            "date": "2026-03-05",
+            "last": "2026-03-05 06:21"
+        },
+        "el-radar-tu-pulso-de-venta-en-tiempo-real": {
+            "views": 2,
+            "today": 2,
+            "date": "2026-03-05",
+            "last": "2026-03-05 06:21"
+        },
+        "tu-enlace-tu-negocio-listo-desde-el-primer-dia": {
+            "views": 2,
+            "today": 2,
+            "date": "2026-03-05",
+            "last": "2026-03-05 06:21"
+        },
+        "tu-qr-no-es-una-imagen-es-una-puerta-que-siempre-esta-abierta": {
+            "views": 1,
+            "today": 1,
+            "date": "2026-03-05",
+            "last": "2026-03-05 07:00"
+        }
+    },
+    "yesterday_date": "2026-03-09"
+}

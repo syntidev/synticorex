@@ -1,0 +1,178 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Database\Seeders;
+
+use App\Models\BlogCategory;
+use App\Models\BlogPost;
+use Illuminate\Database\Seeder;
+
+class BlogSeeder extends Seeder
+{
+    public function run(): void
+    {
+        // ── Categorías ──────────────────────────────────────────────
+        $categories = [
+            ['name' => 'Guía de productos',      'color' => '#4A80E4', 'sort_order' => 1],
+            ['name' => 'SEO & Visibilidad',       'color' => '#10b981', 'sort_order' => 2],
+            ['name' => 'Inteligencia Artificial',  'color' => '#f59e0b', 'sort_order' => 3],
+            ['name' => 'Funciones',               'color' => '#8b5cf6', 'sort_order' => 4],
+            ['name' => 'Noticias',                'color' => '#ef4444', 'sort_order' => 5],
+        ];
+
+        $catMap = [];
+        foreach ($categories as $cat) {
+            $record = BlogCategory::firstOrCreate(
+                ['name' => $cat['name']],
+                $cat,
+            );
+            $catMap[$cat['name']] = $record->id;
+        }
+
+        // ── Posts ───────────────────────────────────────────────────
+        $posts = [
+            [
+                'slug'             => 'cual-producto-syntiweb-es-para-ti',
+                'title'            => '¿SYNTIstudio, SYNTIfood o SYNTIcat? Cómo elegir el que tu negocio necesita',
+                'excerpt'          => 'No todos los negocios son iguales. Tampoco las herramientas que los hacen crecer. En 5 minutos sabrás exactamente cuál de los tres productos de SYNTIweb fue hecho para lo que tú vendes.',
+                'content'          => '<p>Cuando alguien nos escribe por WhatsApp, la primera pregunta que hacemos es siempre la misma: <strong>¿qué vendes?</strong></p><p>No porque sea un formulario. Sino porque de esa respuesta depende todo. La herramienta correcta marca la diferencia entre una página que convierte y una que nadie visita.</p><p>Así que aquí va la guía directa, sin rodeos.</p><h2>Si tienes una marca, ofreces servicios o eres freelancer → SYNTIstudio</h2><p>Diseñadores, abogados, contadores, consultores, gestorías, academias, fotógrafos, entrenadores personales. Cualquier negocio donde <strong>lo que vendes eres tú</strong> — tu experiencia, tu proceso, tu reputación.</p><p>SYNTIstudio es tu estudio digital. No una página con información genérica. Una presencia que proyecta exactamente lo que eres: profesional, confiable, listo para trabajar.</p><blockquote>Tu cliente te busca en Google, ve tu página y piensa: «aquí sí confío». Eso es SYNTIstudio.</blockquote><h2>Si tienes un restaurante, arepera, pastelería o cualquier negocio de comida → SYNTIfood</h2><p>La gente no busca tu local. Busca qué comer. Y cuando decide, quiere ver tu menú al instante — no una foto borrosa de Instagram del año pasado.</p><p>SYNTIfood es tu carta digital, siempre visible, siempre actualizada. Con tus precios en bolívares y dólares que se ajustan solos a la tasa del día. Con tu horario que dice cuándo estás abierto, solo.</p><blockquote>Alguien tiene antojo a las 9pm. Busca «pizza cerca». Te encuentra. Ve tu menú. Te escribe. Eso es SYNTIfood.</blockquote><h2>Si tienes una tienda, comercio o vendes productos físicos → SYNTIcat</h2><p>Ferreterías, boutiques, tiendas de repuestos, accesorios, tecnología, artesanías. Cualquier negocio donde <strong>el producto se tiene que ver para que se compre</strong>.</p><p>SYNTIcat es tu catálogo visual, limpio y directo. El cliente ve el producto, lo quiere, y un botón lo lleva directo a tu WhatsApp. Sin tiendas complicadas. Sin carritos abandonados. Solo ventas.</p><blockquote>«¿Tienes ese modelo en azul?» — ese mensaje en tu WhatsApp es SYNTIcat funcionando.</blockquote><h2>¿Cómo decidir en 30 segundos?</h2><p>Respóndete esta pregunta: <strong>¿qué busca tu cliente antes de contactarte?</strong></p><ul><li>Busca <em>quién eres y qué sabes hacer</em> → SYNTIstudio</li><li>Busca <em>qué tienes para comer hoy</em> → SYNTIfood</li><li>Busca <em>un producto específico y su precio</em> → SYNTIcat</li></ul><p>Tan simple como eso. Y si aún tienes dudas, escríbenos. En menos de 5 minutos te decimos cuál es el tuyo.</p>',
+                'image_url'        => 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&q=85',
+                'tag'              => 'Guía de productos',
+                'author'           => 'Equipo SYNTIweb',
+                'avatar_url'       => 'https://i.pravatar.cc/80?img=12',
+                'published_at'     => '2026-03-01',
+                'read_time'        => '5 min',
+                'featured'         => true,
+                'meta_title'       => '¿Cuál producto SYNTIweb es para ti? Guía rápida para elegir',
+                'meta_description' => 'SYNTIstudio, SYNTIfood o SYNTIcat: descubre cuál de los tres productos de SYNTIweb fue hecho exactamente para tu tipo de negocio.',
+                'tags'             => ['productos', 'guia', 'syntistudio', 'syntifood', 'synticat'],
+            ],
+            [
+                'slug'             => 'seo-automatico-syntiweb-google-encuentra-tu-negocio',
+                'title'            => '5 cosas que hace SYNTIweb para que Google te encuentre sin que toques nada',
+                'excerpt'          => 'SEO no es magia negra ni algo que solo entienden los técnicos. Es un conjunto de señales que le dices a Google sobre tu negocio. SYNTIweb las configura todas, solas, desde el primer día.',
+                'content'          => '<p>La pregunta que más nos hacen los nuevos clientes es siempre la misma: <strong>«¿Cómo hago para que me encuentren en Google?»</strong></p><p>La respuesta corta: tú no tienes que hacer nada. SYNTIweb lo hace por ti. Aquí te explicamos exactamente qué, sin jerga técnica.</p><h2>1. Tu página tiene un nombre claro en Google</h2><p>Cuando alguien busca «pizzería en Caracas» o «electricista en Maracaibo», Google lee el título de cada página para decidir a quién mostrar. SYNTIweb configura ese título con tu nombre, tu ciudad y lo que haces — automáticamente, desde el momento en que publicas.</p><h2>2. Google entiende exactamente qué tipo de negocio eres</h2><p>Existe un lenguaje especial que entienden los buscadores, llamado Schema.org. Le dice a Google: «este es un restaurante», «este es un servicio de plomería», «este negocio abre de lunes a viernes». SYNTIweb lo incluye en tu página sin que lo veas. Pero Google sí lo ve.</p><h2>3. Tu página abre en menos de 2 segundos</h2><p>Google penaliza las páginas lentas. Especialmente en móvil. SYNTIweb optimiza cada imagen a menos de 200KB, usa caché inteligente y una arquitectura liviana que vuela en 3G y 4G. Porque así es como navegan la mayoría de tus clientes en Venezuela.</p><h2>4. Cuando alguien comparte tu link, se ve profesional</h2><p>¿Has visto cómo algunos links en WhatsApp muestran una imagen, un título y una descripción? Eso se llama Open Graph. SYNTIweb lo configura para que cuando alguien comparta tu página, no se vea un link frío — se vea tu negocio completo, invitando a entrar.</p><h2>5. Tu horario y ubicación aparecen directamente en los resultados</h2><p>En algunos casos, Google muestra directamente el horario, el número de teléfono y la dirección de un negocio antes de que el usuario entre a la página. Para eso, la información tiene que estar estructurada de una forma muy específica. SYNTIweb lo hace solo.</p><p>El resultado de todo esto no es inmediato — SEO tarda entre 4 y 12 semanas en reflejarse. Pero es acumulativo: cada semana que pasa, tu negocio es más visible. Y tú no tienes que hacer nada.</p>',
+                'image_url'        => 'https://images.unsplash.com/photo-1432888622747-4eb9a8efeb07?w=1200&q=85',
+                'tag'              => 'SEO & Visibilidad',
+                'author'           => 'Equipo SYNTIweb',
+                'avatar_url'       => 'https://i.pravatar.cc/80?img=12',
+                'published_at'     => '2026-02-22',
+                'read_time'        => '6 min',
+                'featured'         => false,
+                'meta_title'       => 'Cómo SYNTIweb posiciona tu negocio en Google automáticamente',
+                'meta_description' => 'SEO automático, Schema.org, Open Graph y velocidad optimizada: 5 cosas que SYNTIweb hace desde el día uno para que Google encuentre tu negocio.',
+                'tags'             => ['seo', 'google', 'visibilidad', 'posicionamiento'],
+            ],
+            [
+                'slug'             => 'ia-corrige-tu-negocio-sin-saber-tecnologia',
+                'title'            => 'Cómo la IA de SYNTIweb corrige y mejora tu negocio sin que sepas nada de tecnología',
+                'excerpt'          => 'Escribiste «pizza de jamon y queso con masa delgda». La IA lo vio, lo entendió y te sugirió «Pizza Jamón y Queso — Masa Delgada y Crocante». Así de simple es trabajar con inteligencia artificial cuando está bien integrada.',
+                'content'          => '<p>La palabra «inteligencia artificial» asusta a mucha gente. Suena a algo complicado, caro, y difícil de usar. En SYNTIweb lo vemos diferente: la IA debería ser invisible. Debería trabajar en silencio mientras tú te concentras en vender.</p><p>Aquí te contamos cómo funciona lo que estamos construyendo.</p><h2>El problema que resuelve</h2><p>Imagínate que estás cargando tu menú o catálogo a las 11 de la noche, después de un día largo. Escribes rápido, sin revisar mucho. «pizza de jamon y queso con masa delgda». Faltas de ortografía, minúsculas, descripción incompleta.</p><p>Ese producto así cargado le da una mala impresión a tu cliente. No porque tú seas descuidado — sino porque estabas cansado y tenías 20 productos más por cargar.</p><h2>Lo que hace la IA</h2><p>Mientras escribes, el sistema analiza lo que pusiste y te ofrece una versión mejorada: sin errores, con mejor presentación, lista para que Google la entienda y para que tu cliente confíe.</p><p>No te obliga a aceptarla. Te la muestra. Tú decides. Un clic en «Aplicar» y listo. Un clic en «Ignorar» si prefieres tu versión.</p><blockquote>No es un robot que te reemplaza. Es un asistente que te cuida la espalda cuando estás ocupado siendo dueño de tu negocio.</blockquote><h2>¿De dónde saca la información para mejorar lo tuyo?</h2><p>La IA está entrenada con el contexto de tu tipo de negocio. Si tienes un restaurante, entiende de comida. Si tienes una ferretería, entiende de productos de construcción. No es genérica — está afinada para el segmento de tu página.</p><p>Y todo ocurre dentro de SYNTIweb. Tu información no sale a ningún lado, no alimenta ningún modelo externo, no se comparte con terceros.</p><h2>¿Cuándo estará disponible?</h2><p>Esta función está en desarrollo activo. Los primeros clientes del Plan Visión tendrán acceso anticipado. Si quieres ser parte del beta, escríbenos directamente.</p>',
+                'image_url'        => 'https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=1200&q=85',
+                'tag'              => 'Inteligencia Artificial',
+                'author'           => 'Equipo SYNTIweb',
+                'avatar_url'       => 'https://i.pravatar.cc/80?img=12',
+                'published_at'     => '2026-02-15',
+                'read_time'        => '4 min',
+                'featured'         => false,
+                'meta_title'       => 'La IA de SYNTIweb mejora tu catálogo y menú automáticamente',
+                'meta_description' => 'Descubre cómo la inteligencia artificial integrada en SYNTIweb corrige errores, mejora descripciones y posiciona mejor tu negocio sin que hagas nada técnico.',
+                'tags'             => ['ia', 'inteligencia-artificial', 'automatizacion', 'productos'],
+            ],
+            [
+                'slug'             => 'qr-dinamico-tu-qr-nunca-queda-viejo',
+                'title'            => 'Tu QR nunca queda viejo: la función que más le gusta a nuestros clientes',
+                'excerpt'          => 'Lo imprimiste en tus mesas, en tus volantes, en la entrada del local. Cambiaste los precios, agregaste platos nuevos, actualizaste el horario. El QR sigue funcionando. Sin reimprimir nada.',
+                'content'          => '<p>Hay una historia que nos cuentan muchos clientes cuando llegan a SYNTIweb. Va más o menos así:</p><p>«Mandé a imprimir 200 volantes con el menú. A la semana cambié los precios y tuve que botar todo».</p><p>O esta otra: «Puse un QR en cada mesa del local. Rediseñé la carta. El QR llevaba a la versión vieja y yo sin darme cuenta».</p><p>El QR dinámico existe exactamente para que eso no vuelva a pasar.</p><h2>¿Qué es un QR dinámico?</h2><p>Un QR normal apunta a una dirección fija. Si esa dirección cambia, el QR queda muerto. Un QR dinámico apunta a un intermediario inteligente que siempre redirige a la versión más reciente de tu página.</p><p>En términos simples: el código que se imprime nunca cambia. Pero lo que el cliente ve al escanearlo sí puede cambiar todas las veces que quieras.</p><h2>Cómo funciona en SYNTIweb</h2><p>Cuando activamos tu página, generamos tu QR permanente. Ese QR está vinculado a tu dirección en SYNTIweb — por ejemplo, <strong>pizza.aqui.menu</strong>.</p><p>Desde tu dashboard puedes actualizar tu menú, cambiar precios, agregar productos, cambiar el horario, subir nuevas fotos. Todo eso se refleja en tiempo real en tu página. El QR impreso sigue funcionando sin que hagas nada extra.</p><blockquote>Lo imprimes una vez. Lo usas para siempre.</blockquote><h2>Cuánto se usa realmente</h2><p>En nuestras analíticas, el QR es consistentemente uno de los tres canales de entrada más usados por los clientes de negocios de comida. Por encima de Instagram en muchos casos. Porque el cliente lo tiene físicamente en la mano, en el momento exacto en que está decidiendo qué pedir.</p><h2>¿Qué incluye el QR en SYNTIweb?</h2><p>Con todos los planes recibes tu QR permanente en formato PNG de alta resolución, listo para imprimir en cualquier tamaño. También está disponible en tu dashboard para descargarlo cuando quieras.</p><p>Si en algún momento decides cambiar tu dirección o dominio, el QR se actualiza automáticamente. Sin reimprimir. Sin perder las visitas.</p>',
+                'image_url'        => 'https://images.unsplash.com/photo-1595079676339-1534801ad6cf?w=1200&q=85',
+                'tag'              => 'Funciones',
+                'author'           => 'Equipo SYNTIweb',
+                'avatar_url'       => 'https://i.pravatar.cc/80?img=12',
+                'published_at'     => '2026-02-08',
+                'read_time'        => '4 min',
+                'featured'         => false,
+                'meta_title'       => 'QR Dinámico SYNTIweb: imprime una vez, actualiza siempre',
+                'meta_description' => 'Descubre cómo el QR dinámico de SYNTIweb permite actualizar tu menú, catálogo o página sin reimprimir nada. Una vez impreso, funciona para siempre.',
+                'tags'             => ['qr', 'qr-dinamico', 'funciones', 'menu-digital'],
+            ],
+            [
+                'slug'             => 'tu-enlace-tu-negocio-listo-desde-el-primer-dia',
+                'title'            => 'Tu enlace, tu negocio. Listo desde el primer día — sin agencias, sin esperas',
+                'excerpt'          => 'Olvídate de dominios, hosting, configuraciones y semanas de espera. Con SYNTIweb tu negocio tiene su propio enlace profesional desde el momento del pago. Llave en mano, 48 horas.',
+                'content'          => '<p>Hay una pregunta que casi todo dueño de negocio ha tenido que responder en algún momento:</p><p><strong>«¿Tienes página web o algún lugar donde te pueda ver?»</strong></p><p>Y la respuesta suele ser la misma: Instagram, un número de WhatsApp, o nada. No porque no quieras tener presencia digital — sino porque el proceso tradicional para conseguirla es innecesariamente complicado.</p><h2>El proceso tradicional es un obstáculo</h2><p>Si hoy intentas crear una página web por los canales convencionales, esto es lo que te espera:</p><p>Buscar un dominio disponible. En 2025, encontrar algo decente que no esté ocupado o cueste una fortuna es una aventura. Luego contratarlo en un registrador con pagos internacionales complicados. Después, configurar los servidores DNS, esperar propagación — que puede tomar hasta 72 horas. Y recién después empieza el trabajo del desarrollador.</p><p>El resultado: <strong>2 a 4 semanas de espera. Cientos de dólares en desarrollo. Costos anuales de hosting + dominio + mantenimiento.</strong> Y tú sin poder hacer nada mientras tanto.</p><blockquote>Tu negocio no puede esperar 4 semanas para existir en internet. Tus competidores no esperaron.</blockquote><h2>Tu enlace, construido para tu segmento</h2><p>En SYNTIweb lo pensamos diferente. En lugar de un dominio genérico, te damos una dirección que habla sola sobre lo que haces — y que puedes construir para que suene exactamente a tu marca.</p><p>Si tienes un restaurante, tu cliente llega a algo como <strong>pizza.aqui.menu</strong> o <strong>arepas.aqui.menu</strong>. Si eres técnico o proveedor de servicios, tu dirección puede ser <strong>plomeria.oficio.vip</strong> o <strong>electricista.oficio.vip</strong>. Si tienes una tienda o comercio local, <strong>ferreteria.punto.vip</strong> o <strong>boutique.lucelo.app</strong>.</p><p>Esa frase corta que pegas en tu bio de Instagram, en tu QR, en tu tarjeta de presentación — y que le dice al cliente exactamente a dónde va antes de llegar.</p><p><strong>URLs disponibles según tu segmento:</strong></p><ul><li><strong>oficio.vip</strong> — Servicios técnicos, oficios, profesionales independientes</li><li><strong>aqui.menu</strong> — Restaurantes, areperas, pastelerías, comida en general</li><li><strong>lucelo.app</strong> — Marcas, moda, productos de imagen personal</li><li><strong>vitrini.app</strong> — Tiendas, catálogos, comercios con productos variados</li><li><strong>synti.link</strong> — Enlace profesional universal para cualquier tipo de negocio</li></ul><h2>Llave en mano desde el momento del pago</h2><p>Con SYNTIweb no hay esperas. Cuando completas tu pago, el proceso empieza de inmediato. En <strong>48 horas</strong> tienes tu página activa, tu enlace listo para compartir y tu QR generado para imprimir.</p><p>Sin gestionar dominios. Sin hablar con servidores. Sin pagarle a alguien para que configure algo que debería ser automático.</p><blockquote>La diferencia entre tener presencia digital y no tenerla no debería ser un proceso de 4 semanas. Con SYNTIweb es de 48 horas.</blockquote><h2>¿Y los costos de mantenimiento?</h2><p>Todo incluido en un solo pago anual. Sin sorpresas. Sin facturas mensuales de hosting. Sin renovaciones de dominio que se te olvidan. Sin cobros extra por actualizaciones.</p><p>Un plan. Un precio. Todo adentro. Y cuando estés listo para tu propio dominio .com, también está disponible — se agrega por $18/año adicionales, incluido gratis en el Plan Visión.</p>',
+                'image_url'        => 'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=1200&q=85',
+                'tag'              => 'Funciones',
+                'author'           => 'Equipo SYNTIweb',
+                'avatar_url'       => 'https://i.pravatar.cc/80?img=12',
+                'published_at'     => '2026-03-03',
+                'read_time'        => '5 min',
+                'featured'         => false,
+                'meta_title'       => 'Tu enlace de negocio listo en 48h — sin dominios ni agencias | SYNTIweb',
+                'meta_description' => 'Olvídate de dominios, hosting y semanas de espera. Con SYNTIweb tu negocio tiene su propio enlace profesional desde el primer día. Llave en mano desde $99/año.',
+                'tags'             => ['enlace', 'dominio', 'llave-en-mano', 'urls', 'syntifood', 'synticat'],
+            ],
+            [
+                'slug'             => 'el-radar-tu-pulso-de-venta-en-tiempo-real',
+                'title'            => 'El Radar: sabe exactamente cómo va tu negocio — visitas, clicks y horas pico en tiempo real',
+                'excerpt'          => 'El Radar es tu analítica de venta en tiempo real. Saber cuántas personas te visitaron hoy, qué producto despertó más interés y a qué hora tienes más tráfico cambia completamente cómo decides tu próxima promoción.',
+                'content'          => '<p>La mayoría de los negocios pequeños operan con una brújula rota.</p><p>Publican en Instagram sin saber si sus seguidores realmente visitan su página. Imprimen volantes sin saber si alguien los escanea. Ofrecen descuentos sin saber cuál producto ya se vende solo — y cuál necesita un empujón.</p><p>Toman decisiones a ciegas. Y en un mercado tan competitivo, eso es un lujo que ningún negocio puede permitirse.</p><h2>El Radar: tu ojo en la nube</h2><p>El Radar es la herramienta analítica incluida en SYNTIweb que convierte la actividad de tu página en información útil, en tiempo real.</p><p>No necesitas saber de marketing digital. No necesitas entender Google Analytics. El Radar está diseñado para dueños de negocios, no para técnicos — y te dice exactamente lo que necesitas saber para actuar.</p><blockquote>No se trata de tener más datos. Se trata de tener los datos correctos en el momento correcto.</blockquote><h2>¿Qué mide el Radar?</h2><p><strong>Visitas hoy.</strong> Cuántas personas entraron a tu página durante el día. Si son pocas, es una señal para activar tu promoción. Si son muchas, es una señal para asegurarte de que tu página esté perfecta.</p><p><strong>Clics a WhatsApp.</strong> El número más importante para un negocio que opera por WhatsApp. Cuántas personas llegaron a tu página y decidieron escribirte. Esa tasa te dice si tu página convence — o si algo necesita mejorar.</p><p><strong>Escaneos QR.</strong> Cuántas veces se escaneó tu código QR físico hoy. Si ese número es bajo después de poner QRs en tus mesas o volantes, es información accionable inmediata.</p><p><strong>Productos vistos.</strong> Cuál de tus productos o servicios genera más interés. Con esta información puedes decidir qué promover, qué poner primero, y qué quizás no vale la pena mantener en tu catálogo.</p><h2>El Impulso: tu puntuación de visibilidad</h2><p>El Radar calcula un puntaje de Impulso — un número entre 0 y 100 que resume qué tan activo y visible está tu negocio en este momento. No es una métrica técnica: es tu termómetro de presencia digital.</p><p>Un Impulso bajo te dice que necesitas activar algo — una promoción, un post, compartir tu enlace. Un Impulso alto te dice que el momento es ahora para convertir ese tráfico en ventas reales.</p><h2>Horarios de pico: decide cuándo publicar</h2><p>El Radar registra a qué horas tu página recibe más visitas. Esa información transforma completamente tu estrategia de redes sociales.</p><p>Si tu hora pico es las 12:00 del mediodía, ese es el momento para publicar tu oferta del día en Instagram. Si es a las 8pm, eso te dice cuándo tu cliente potencial está en su teléfono buscando qué comer o qué comprar.</p><blockquote>Publicar en el momento equivocado es como abrir tu local a las 3am. El Radar te dice cuándo abrir las puertas.</blockquote><h2>Impulso Internacional</h2><p>Una de las funciones más únicas del Radar para el contexto venezolano: visibilidad de dónde vienen tus visitas.</p><p>Familiares en el exterior que quieren enviarle algo a sus allegados en Venezuela buscan negocios locales de confianza. Si tu página tiene presencia y el Radar registra visitas internacionales, eso es una oportunidad de venta real que de otra forma nunca verías.</p><h2>Información que cambia decisiones</h2><p>El Radar no es un reporte técnico para archivar. Es una herramienta que te empuja a actuar. Cuando ves que hoy tuviste 12 visitas pero cero clics a WhatsApp, sabes que algo en tu página no está convenciendo. Cuando ves que el producto #3 de tu catálogo tiene más vistas que el #1, sabes qué promover esta semana.</p><p>Eso es lo que separa a un negocio que crece de uno que solo existe en internet.</p>',
+                'image_url'        => 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=85',
+                'tag'              => 'Funciones',
+                'author'           => 'Equipo SYNTIweb',
+                'avatar_url'       => 'https://i.pravatar.cc/80?img=12',
+                'published_at'     => '2026-03-04',
+                'read_time'        => '5 min',
+                'featured'         => false,
+                'meta_title'       => 'El Radar de SYNTIweb: analítica de ventas en tiempo real para tu negocio',
+                'meta_description' => 'Visitas, clics a WhatsApp, escaneos QR y horas pico — El Radar de SYNTIweb te dice exactamente cómo va tu negocio en tiempo real para que tomes decisiones, no suposiciones.',
+                'tags'             => ['radar', 'analitica', 'visitas', 'whatsapp', 'qr', 'ventas'],
+            ],
+            [
+                'slug'             => 'temas-visuales-34-opciones-para-que-tu-pagina-hable-de-tu-marca',
+                'title'            => 'Más de 34 temas visuales: que tu página hable de tu marca antes de leer una sola palabra',
+                'excerpt'          => 'El color y la personalidad visual de tu negocio es lo primero que siente tu cliente. SYNTIweb incluye más de 34 temas diseñados por segmento — desde parrilla y fuego urbano hasta ejecutivo y nude. Uno para cada tipo de negocio.',
+                'content'          => '<p>Hay negocios que entran por los ojos.</p><p>Una pastelería con colores pastel y tipografía suave genera una expectativa inmediata. Una ferretería industrial con tonos oscuros y contrastes fuertes también. Antes de leer el nombre, antes de ver el menú, el color ya está hablando.</p><p>El diseño visual no es decoración — es comunicación. Y en una página digital, es lo primero que llega.</p><h2>El problema del diseño genérico</h2><p>La mayoría de las páginas de pequeños negocios tienen el mismo aspecto: fondo blanco, texto negro, botón azul. No porque el dueño lo eligió — sino porque nadie le dio alternativas.</p><p>El resultado es una página que podría ser de cualquier negocio. Que no recuerda. Que no conecta. Que no vende.</p><blockquote>Tu cliente no debería tener que leer para entender qué tipo de negocio eres. El color ya debería habérselo dicho.</blockquote><h2>34 temas diseñados por segmento</h2><p>SYNTIweb incluye más de 34 temas visuales organizados por tipo de negocio. No son paletas aleatorias — cada tema está pensado para el cliente de ese segmento, para generar la sensación correcta en el momento correcto.</p><p><strong>Para negocios generales:</strong> Clean, Default, Harvest, Fresh, Ocean, Cashmere, Olive, Bold, Retro, Bubblegum, Autumn, Dark, Moon.</p><p><strong>Para negocios de comida:</strong> Sabor Tradicional, Fuego Urbano, Parrilla, Casa Latina, Dulces, Rosa Vainilla, Pistacho, Cielo Dulce, Chocolate. Cada uno evoca un tipo de cocina y una experiencia distinta — desde la calidez criolla de Casa Latina hasta la energía de Fuego Urbano.</p><p><strong>Para salud y profesionales:</strong> Azul Confianza, Verde Calma, Autoridad, Azul Profesional, Ejecutivo, Prestigio. Temas que proyectan credibilidad — lo que busca el cliente antes de confiarle su salud o sus finanzas a alguien.</p><p><strong>Para oficios y servicios técnicos:</strong> Industrial, Negro Impacto, Metal Urbano. Fuertes, directos, sin adornos. Como los oficios que representan.</p><p><strong>Para belleza, moda y fitness:</strong> Nude, Rosa Studio, Barber, Fitness, Fuerza Roja, Verde Potencia, Azul Eléctrico. Desde la suavidad de un studio de uñas hasta la energía de un gimnasio.</p><p><strong>Para educación:</strong> Académico, Verde Progreso, Claro Simple. Temas que transmiten confianza, orden y crecimiento.</p><h2>Cambia de tema cuando quieras</h2><p>Desde tu panel, cambiar el tema de tu página toma un clic. Sin pedírselo a nadie. Sin esperar. Sin costo extra.</p><p>Eso significa que puedes adaptar la personalidad visual de tu negocio a la temporada, a una campaña especial, o simplemente cuando sientas que es momento de renovarse. Tu página vive y cambia contigo.</p><h2>Plan Visión: personalización total</h2><p>Si los 34+ temas no son suficientes — o si tienes colores de marca muy específicos — el Plan Visión incluye un tema completamente personalizable. Tus colores exactos. Tu paleta de marca. La misma coherencia visual que tienes en tus tarjetas, tus empaques o tu local físico, ahora también en tu página digital.</p><blockquote>Una página que se ve como tú quieres, no como la plantilla de alguien más.</blockquote><h2>El primer segundo importa</h2><p>Los usuarios forman una primera impresión visual en menos de 50 milisegundos. Antes de leer. Antes de hacer scroll. Solo con el color, la tipografía y la composición.</p><p>Esa primera impresión determina si se quedan o se van. Si confían o dudan. Si escriben por WhatsApp o cierran la pestaña.</p><p>Con más de 34 temas diseñados por segmento, SYNTIweb te da las herramientas para ganar ese primer segundo.</p>',
+                'image_url'        => 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&q=85',
+                'tag'              => 'Funciones',
+                'author'           => 'Equipo SYNTIweb',
+                'avatar_url'       => 'https://i.pravatar.cc/80?img=12',
+                'published_at'     => '2026-03-05',
+                'read_time'        => '6 min',
+                'featured'         => false,
+                'meta_title'       => 'Más de 34 temas visuales para tu página de negocio | SYNTIweb',
+                'meta_description' => 'SYNTIweb incluye 34+ temas visuales diseñados por segmento: comida, oficios, belleza, salud, educación y más. Cambia el look de tu negocio con un clic.',
+                'tags'             => ['temas', 'diseño', 'colores', 'branding', 'personalizacion'],
+            ],
+            [
+                'slug'             => 'tu-qr-no-es-una-imagen-es-una-puerta-que-siempre-esta-abierta',
+                'title'            => 'Tu QR no es una imagen — es una puerta que siempre está abierta',
+                'excerpt'          => 'La mayoría de los QR son fotos muertas: si cambia tu menú, tu link o tu número, hay que reimprimir todo. El QR de SYNTIweb es dinámico — lo actualizas desde tu panel y el que ya imprimiste sigue funcionando.',
+                'content'          => '<p>En Venezuela, el código QR se convirtió en infraestructura.</p><p>Está en las mesas de los restaurantes, en los volantes de los técnicos, en las tarjetas de presentación de los profesionales, en las vitrinas de las tiendas. Todo el mundo tiene uno. Pero casi nadie sabe la diferencia entre un QR muerto y uno vivo.</p><h2>El problema del QR estático</h2><p>Un QR estático es básicamente una imagen con una dirección grabada adentro. No cambia. No puedes editarlo. Si la URL a la que apunta deja de funcionar, el QR queda inútil — y todo lo que imprimiste con él también.</p><p>¿Actualizaste tu menú? Reimprimir. ¿Cambió tu número de WhatsApp? Reimprimir. ¿Moviste tu página a otro link? Reimprimir. Cada cambio cuesta tiempo, dinero y la frustración de tener que volver a repartir todo.</p><blockquote>Un QR que no puedes actualizar no es una herramienta — es un gasto fijo disfrazado de tecnología.</blockquote><h2>El QR dinámico de SYNTIweb</h2><p>El QR que genera SYNTIweb no apunta directamente a tu contenido — apunta a tu enlace SYNTIweb, que siempre está activo y siempre apunta a lo más reciente de tu página.</p><p>Eso significa que cuando actualizas tu menú, tu catálogo o tu información de contacto desde el panel, el QR que ya tienes impreso en tus mesas, tus volantes y tus tarjetas sigue funcionando perfectamente. Sin reimprimir nada. Sin avisarle a nadie. El cambio es inmediato.</p><p>Imprimiste una vez. Funciona para siempre.</p><h2>Cada escaneo queda registrado</h2><p>Aquí es donde el QR dinámico de SYNTIweb va más allá de cualquier generador de QR gratuito.</p><p>Cada vez que alguien escanea tu QR, El Radar lo registra. Puedes ver cuántos escaneos tuviste hoy, cuál hora del día tiene más actividad, y cómo va creciendo ese número con el tiempo.</p><p>Si pusiste QRs en tus mesas y ves que los escaneos son bajos, es información. Quizás el QR está en un lugar poco visible. Quizás necesitas un mensaje que invite a escanearlo. Quizás hay que cambiar el diseño del soporte.</p><p>Sin esa data, estás operando a ciegas. Con ella, cada decisión tiene respaldo.</p><blockquote>No se trata de cuántos QR imprimiste. Se trata de cuántos te están ayudando a vender.</blockquote><h2>Un QR que habla de tu negocio</h2><p>El QR de SYNTIweb no es el típico cuadrado negro y blanco genérico. Está generado con tu enlace de segmento — ese que construiste para que suene a marketing.</p><p>Cuando alguien escanea <strong>pizza.aqui.menu</strong> o <strong>plomeria.oficio.vip</strong>, ya sabe exactamente a dónde está yendo antes de llegar. La expectativa está calibrada. Y una expectativa bien calibrada convierte mejor.</p><h2>Dónde usarlo</h2><p>El QR dinámico de SYNTIweb está pensado para estar en todos lados donde tu cliente potencial ya está físicamente: en las mesas y menús de tu local, en los volantes y flyers que repartes, en tus tarjetas de presentación, en las cajas o empaques de tus productos, en la vitrina de tu local, en cualquier impreso que salga con tu nombre.</p><p>Cada uno de esos puntos físicos se convierte en una entrada digital a tu negocio. Y todas esas entradas quedan registradas en El Radar.</p><h2>Incluido desde el primer plan</h2><p>No es un complemento. No es un upgrade. El QR dinámico está incluido en todos los planes SYNTIweb desde el momento en que tu página está activa.</p><p>Listo para descargar, listo para imprimir, listo para funcionar. Sin configuración adicional.</p>',
+                'image_url'        => 'https://images.unsplash.com/photo-1595079676339-1534801ad6cf?w=1200&q=85',
+                'tag'              => 'Funciones',
+                'author'           => 'Equipo SYNTIweb',
+                'avatar_url'       => 'https://i.pravatar.cc/80?img=12',
+                'published_at'     => '2026-03-06',
+                'read_time'        => '5 min',
+                'featured'         => false,
+                'meta_title'       => 'QR dinámico SYNTIweb: actualiza sin reimprimir y mide cada escaneo',
+                'meta_description' => 'El QR de SYNTIweb es dinámico — actualizas tu página y el QR impreso sigue funcionando. Además registra cada escaneo en El Radar para que sepas qué funciona.',
+                'tags'             => ['qr', 'qr-dinamico', 'radar', 'escaneos', 'funciones'],
+            ],
+        ];
+
+        foreach ($posts as $postData) {
+            $tag = $postData['tag'];
+            unset($postData['tag']);
+
+            $postData['blog_category_id'] = $catMap[$tag] ?? null;
+            $postData['status'] = 'published';
+
+            BlogPost::firstOrCreate(
+                ['slug' => $postData['slug']],
+                $postData,
+            );
+        }
+    }
+}
