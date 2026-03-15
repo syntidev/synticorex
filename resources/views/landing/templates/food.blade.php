@@ -89,20 +89,20 @@
 @endif
 
 {{-- 2. BUSINESS INFO --}}
-<div id="sf-business-info" class="mx-auto max-w-7xl px-4 py-5" style="overflow:visible">
+<div id="sf-business-info" class="mx-auto max-w-7xl px-4 pt-14 pb-4" style="overflow:visible;position:relative">
     <div class="flex items-end gap-4">
         @if(!empty($customization->logo_filename))
             <img id="synti-food-trigger" src="{{ asset('storage/tenants/' . $tenant->id . '/' . $customization->logo_filename) }}"
                  alt="{{ $tenant->business_name }}"
                  style="width:96px;height:96px;border-radius:50%;border:4px solid #fff;
                         box-shadow:0 8px 32px rgba(0,0,0,0.25);object-fit:cover;
-                        margin-top:-48px;position:relative;z-index:20;
-                        background:#fff;flex-shrink:0">
+                        position:absolute;top:-48px;left:16px;z-index:20;
+                        background:#fff;">
         @else
             <div style="width:96px;height:96px;border-radius:50%;border:4px solid #fff;
                         box-shadow:0 8px 32px rgba(0,0,0,0.25);
-                        margin-top:-48px;position:relative;z-index:20;
-                        background:var(--primary);flex-shrink:0;
+                        position:absolute;top:-48px;left:16px;z-index:20;
+                        background:var(--primary);
                         display:flex;align-items:center;justify-content:center;
                         font-weight:900;color:#fff;font-size:2rem">
                 {{ mb_substr($tenant->business_name, 0, 1) }}
@@ -142,107 +142,112 @@
     }
 @endphp
 <div id="sf-sticky-bar" class="sticky top-0 z-[100] bg-background/95 backdrop-blur-2xl" style="border-bottom:1px solid rgba(0,0,0,.06)">
-    <div class="mx-auto max-w-7xl px-3 flex items-center gap-2 h-14">
 
-        {{-- A) IDENTITY — oculta hasta que business-info sale del viewport --}}
-        <div id="sf-sticky-identity" class="flex items-center gap-2 shrink-0 transition-opacity duration-300 overflow-hidden" style="opacity:0;pointer-events:none;max-width:0">
-            @if(!empty($customization->logo_filename))
-                <img src="{{ asset('storage/tenants/' . $tenant->id . '/' . $customization->logo_filename) }}"
-                     alt="{{ $tenant->business_name }}"
-                     class="size-8 rounded-full object-cover shrink-0">
-            @else
-                <div class="size-8 bg-primary rounded-full flex items-center justify-center shrink-0">
-                    <span class="text-primary-foreground font-black text-sm">{{ mb_substr($tenant->business_name, 0, 1) }}</span>
+    {{-- FILA 1: identity — oculta hasta scroll --}}
+    <div id="sf-identity-row"
+         class="overflow-hidden transition-all duration-300 border-b border-foreground/5"
+         style="max-height:0;opacity:0;">
+        <div class="mx-auto max-w-7xl px-3 flex items-center justify-between h-11">
+            {{-- Logo + nombre + status --}}
+            <a id="synti-food-trigger-sticky" href="#" class="flex items-center gap-2 shrink-0">
+                @if(!empty($customization->logo_filename))
+                    <img src="{{ asset('storage/tenants/' . $tenant->id . '/' . $customization->logo_filename) }}"
+                         alt="{{ $tenant->business_name }}"
+                         class="size-12 rounded-full object-cover shrink-0">
+                @else
+                    <div class="size-12 bg-primary rounded-full flex items-center justify-center shrink-0">
+                        <span class="text-primary-foreground font-black text-sm">{{ mb_substr($tenant->business_name, 0, 1) }}</span>
+                    </div>
+                @endif
+                <span class="text-sm font-bold tracking-tight truncate max-w-[140px]">{{ $tenant->business_name }}</span>
+                <span class="text-xs font-bold {{ ($isOpen ?? false) ? 'text-green-500' : 'text-red-500' }} flex items-center gap-1">
+                    <span class="size-1.5 rounded-full {{ ($isOpen ?? false) ? 'bg-green-500' : 'bg-red-500' }}"></span>
+                    {{ ($isOpen ?? false) ? 'Abierto' : 'Cerrado' }}
+                </span>
+            </a>
+            {{-- Acciones derechas fila 1 --}}
+            <div class="flex items-center gap-1 shrink-0">
+                @if(str_contains($savedDisplayMode, 'toggle'))
+                <div class="flex bg-surface/50 p-0.5 rounded-lg border border-foreground/8">
+                    <button class="sf-curr-btn px-2 py-1 text-[11px] font-bold rounded-md transition-all" data-currency="ref" onclick="setCurrency('ref')">{{ $currencySymbol }}</button>
+                    <button class="sf-curr-btn px-2 py-1 text-[11px] font-bold rounded-md transition-all" data-currency="bs" onclick="setCurrency('bs')">Bs</button>
                 </div>
-            @endif
-            <span class="text-sm font-bold tracking-tight truncate max-w-[120px]">{{ $tenant->business_name }}</span>
-            <span class="text-[10px] font-bold {{ ($isOpen ?? false) ? 'text-green-500' : 'text-red-500' }} items-center gap-1 hidden sm:flex">
-                <span class="size-1.5 rounded-full {{ ($isOpen ?? false) ? 'bg-green-500' : 'bg-red-500' }}"></span>
-                {{ ($isOpen ?? false) ? 'Abierto' : 'Cerrado' }}
-            </span>
+                @endif
+                @if($showCart ?? false)
+                <button onclick="openCart()" id="sf-cart-trigger"
+                        class="relative p-2 rounded-full bg-primary text-primary-foreground shadow-md hover:opacity-90 transition-opacity cursor-pointer">
+                    <span class="iconify tabler--clipboard-list size-5"></span>
+                    <span id="sf-cart-count" class="absolute -top-1 -right-1 size-5 bg-red-500 text-white text-[10px] font-black rounded-full flex items-center justify-center border-2 border-background" style="display:none">0</span>
+                </button>
+                @endif
+            </div>
+        </div>
+    </div>
+
+    {{-- FILA 2: navegación — siempre visible --}}
+    <div class="mx-auto max-w-7xl px-3 flex items-center gap-1 h-12">
+
+        {{-- Lupa --}}
+        <button id="sf-search-btn" onclick="sfToggleSearch()"
+                class="flex-shrink-0 size-10 flex items-center justify-center rounded-lg border border-foreground/10 hover:bg-surface/50 transition-colors text-foreground/50 cursor-pointer">
+            <span class="iconify tabler--search size-5"></span>
+        </button>
+
+        {{-- Search input overlay --}}
+        <div id="sf-search-wrap" class="absolute inset-x-0 top-0 h-full bg-background/98 backdrop-blur-xl flex items-center px-3 gap-2 z-10" style="display:none">
+            <input id="sf-search-input" type="search" placeholder="Buscar plato..."
+                   class="flex-1 text-sm py-2 px-3 rounded-lg border border-foreground/10 bg-surface focus:outline-none focus:ring-2 focus:ring-primary/20"
+                   oninput="sfSearchFilter(this.value)" autofocus>
+            <button onclick="sfToggleSearch()" class="size-8 flex items-center justify-center rounded-lg text-foreground/40 hover:bg-surface/50 transition-colors cursor-pointer">
+                <span class="iconify tabler--x size-4"></span>
+            </button>
         </div>
 
-        {{-- B) SEARCH + HAMBURGER + TABS — flex-1 para ocupar el espacio central --}}
-        <div class="flex items-center gap-1 flex-1 min-w-0">
-            {{-- Icono búsqueda --}}
-            <button id="sf-search-btn" onclick="sfToggleSearch()" class="flex-shrink-0 size-9 flex items-center justify-center rounded-lg text-foreground/40 hover:text-foreground transition-colors">
-                <span class="iconify tabler--search size-4"></span>
+        {{-- Hamburger --}}
+        <div class="relative flex-shrink-0">
+            <button id="sf-cat-menu-btn" onclick="sfToggleCatMenu()"
+                    class="size-10 flex items-center justify-center rounded-lg border border-foreground/10 hover:bg-surface/50 transition-colors text-foreground/50 cursor-pointer">
+                <span class="iconify tabler--menu-2 size-5"></span>
             </button>
-            {{-- Search input overlay --}}
-            <div id="sf-search-wrap" class="flex-1 flex items-center gap-2" style="display:none">
-                <input id="sf-search-input" type="search" placeholder="Buscar producto..."
-                       class="flex-1 text-sm py-1.5 px-3 rounded-lg border border-foreground/10 bg-background focus:outline-none focus:ring-2 focus:ring-primary/20"
-                       oninput="sfSearchFilter(this.value)">
-                <button onclick="sfToggleSearch()" class="size-7 flex items-center justify-center rounded-lg text-foreground/40 hover:text-foreground hover:bg-surface/50 transition-colors">
-                    <span class="iconify tabler--x size-4"></span>
-                </button>
-            </div>
-            {{-- Hamburger --}}
-            <div class="relative flex-shrink-0">
-                <button id="sf-cat-menu-btn" onclick="sfToggleCatMenu()" class="size-9 flex items-center justify-center rounded-lg text-foreground/40 hover:text-foreground transition-colors">
-                    <span class="iconify tabler--menu-2 size-4"></span>
-                </button>
-                <div id="sf-cat-dropdown" class="absolute left-0 top-full mt-1 w-56 bg-background rounded-xl shadow-xl border border-foreground/5 z-[200] overflow-hidden" style="display:none">
-                    @if(!empty($featuredItems) && count($featuredItems) > 0)
-                    <button onclick="sfScrollToCategory('featured');sfToggleCatMenu()"
-                            class="w-full text-left px-4 py-3 text-sm font-semibold text-foreground/70 hover:bg-surface hover:text-foreground transition-colors border-b border-foreground/5 last:border-0">
-                        ⭐ Destacados
-                    </button>
-                    @endif
-                    @foreach($activeCats as $catIdx => $cat)
-                    <button onclick="sfScrollToCategory({{ $catIdx }});sfToggleCatMenu()"
-                            class="w-full text-left px-4 py-3 text-sm font-semibold text-foreground/70 hover:bg-surface hover:text-foreground transition-colors border-b border-foreground/5 last:border-0">
-                        {{ $cat['nombre'] }}
-                    </button>
-                    @endforeach
-                </div>
-            </div>
-            {{-- Category tabs --}}
-            @if(count($activeCats) >= 2)
-            <div id="sf-cat-tabs" class="flex gap-0 overflow-x-auto no-scrollbar flex-1">
+            <div id="sf-cat-dropdown" class="absolute left-0 top-full mt-1 w-56 bg-background rounded-xl shadow-xl border border-foreground/5 z-[200] overflow-hidden" style="display:none">
                 @if(!empty($featuredItems) && count($featuredItems) > 0)
-                <button data-cat-nav="featured" onclick="sfScrollToCategory('featured')"
-                        class="sf-cat-tab relative px-3 py-3 text-sm font-semibold whitespace-nowrap transition-colors text-foreground/40 hover:text-foreground border-b-[3px] border-transparent">
+                <button onclick="sfScrollToCategory('featured');sfToggleCatMenu()"
+                        class="w-full text-left px-4 py-3 text-sm font-semibold text-foreground/70 hover:bg-surface hover:text-foreground transition-colors border-b border-foreground/5">
                     ⭐ Destacados
                 </button>
                 @endif
                 @foreach($activeCats as $catIdx => $cat)
-                <button data-cat-nav="{{ $catIdx }}" onclick="sfScrollToCategory({{ $catIdx }})"
-                        class="sf-cat-tab relative px-3 py-3 text-sm font-semibold whitespace-nowrap transition-colors text-foreground/40 hover:text-foreground border-b-[3px] border-transparent">
+                <button onclick="sfScrollToCategory({{ $catIdx }});sfToggleCatMenu()"
+                        class="w-full text-left px-4 py-3 text-sm font-semibold text-foreground/70 hover:bg-surface hover:text-foreground transition-colors border-b border-foreground/5 last:border-0">
                     {{ $cat['nombre'] }}
                 </button>
                 @endforeach
             </div>
-            @endif
         </div>
 
-        {{-- C) ACTIONS — info, WhatsApp, moneda, carrito --}}
-        <div class="flex items-center gap-1 shrink-0">
-            <button onclick="document.getElementById('sf-info-modal').style.display='flex'"
-                    class="p-2 rounded-full text-foreground/40 hover:text-foreground hover:bg-surface/50 transition-colors"
-                    title="Información">
-                <span class="iconify tabler--info-square-rounded size-5"></span>
-            </button>
-            @if($waClean)
-            <a href="https://wa.me/{{ $waClean }}" target="_blank" rel="noopener noreferrer"
-               class="size-9 rounded-full flex items-center justify-center transition-opacity hover:opacity-80 shrink-0"
-               style="background:#25D366">
-                <span class="iconify tabler--brand-whatsapp size-5 text-white"></span>
-            </a>
-            @endif
-            @if(str_contains($savedDisplayMode, 'toggle'))
-            <div class="flex bg-surface/50 p-0.5 rounded-lg border border-foreground/5">
-                <button class="sf-curr-btn px-2 py-1 text-[11px] font-bold rounded-md transition-all" data-currency="ref" onclick="setCurrency('ref')">{{ $currencySymbol }}</button>
-                <button class="sf-curr-btn px-2 py-1 text-[11px] font-bold rounded-md transition-all" data-currency="bs" onclick="setCurrency('bs')">Bs</button>
-            </div>
-            @endif
-            @if($isPlanAnual)
-            <button onclick="toggleDrawer()" class="relative p-2 rounded-full bg-primary text-primary-foreground shadow-md shadow-primary/20 hover:opacity-90 transition-opacity">
-                <span class="iconify tabler--clipboard-list size-5"></span>
-                <span id="sf-cart-count" class="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-0.5 bg-red-500 text-white text-[9px] font-black rounded-full flex items-center justify-center border-2 border-background leading-none" style="display:none">0</span>
+        {{-- Tabs categorías --}}
+        @if(count($activeCats) >= 2)
+        <div id="sf-cat-tabs" class="flex gap-0 overflow-x-auto no-scrollbar flex-1">
+            @if(!empty($featuredItems) && count($featuredItems) > 0)
+            <button data-cat-nav="featured" onclick="sfScrollToCategory('featured')"
+                    class="sf-cat-tab relative px-3 py-3 text-sm font-semibold whitespace-nowrap transition-colors text-foreground/40 hover:text-foreground border-b-[3px] border-transparent">
+                ⭐ Destacados
             </button>
             @endif
+            @foreach($activeCats as $catIdx => $cat)
+            <button data-cat-nav="{{ $catIdx }}" onclick="sfScrollToCategory({{ $catIdx }})"
+                    class="sf-cat-tab relative px-3 py-3 text-sm font-semibold whitespace-nowrap transition-colors text-foreground/40 hover:text-foreground border-b-[3px] border-transparent">
+                {{ $cat['nombre'] }}
+            </button>
+            @endforeach
         </div>
+        @endif
+
+        {{-- Info --}}
+        <button onclick="document.getElementById('sf-info-modal').style.display='flex'"
+                class="size-10 flex items-center justify-center rounded-lg border border-foreground/10 text-foreground/50 hover:text-foreground hover:bg-surface/60 transition-colors cursor-pointer shrink-0">
+            <span class="iconify tabler--info-circle size-[18px]"></span>
+        </button>
 
     </div>
     {{-- Dropdown backdrop --}}
@@ -1431,14 +1436,15 @@
 
         // ── IntersectionObserver: identity sticky ──
         var businessInfo = document.getElementById('sf-business-info');
-        var stickyIdent  = document.getElementById('sf-sticky-identity');
-        if (businessInfo && stickyIdent) {
+        if (businessInfo) {
             var identObs = new IntersectionObserver(function(entries) {
                 entries.forEach(function(entry) {
                     var visible = entry.isIntersecting;
-                    stickyIdent.style.opacity       = visible ? '0' : '1';
-                    stickyIdent.style.maxWidth       = visible ? '0' : '280px';
-                    stickyIdent.style.pointerEvents  = visible ? 'none' : 'auto';
+                    var row = document.getElementById('sf-identity-row');
+                    if(row) {
+                        row.style.maxHeight = visible ? '0' : '44px';
+                        row.style.opacity  = visible ? '0' : '1';
+                    }
                 });
             }, { threshold: 0.1 });
             identObs.observe(businessInfo);

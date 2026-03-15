@@ -138,46 +138,50 @@
     $scDaysMap   = ['monday'=>'Lunes','tuesday'=>'Martes','wednesday'=>'Miércoles','thursday'=>'Jueves','friday'=>'Viernes','saturday'=>'Sábado','sunday'=>'Domingo'];
     $scMapsQuery = rawurlencode(trim(($tenant->address ?? '') . ', ' . ($tenant->city ?? '') . ', ' . ($tenant->country ?? '')));
     $scCatCategories = $catCategories ?? [];
-    $catIcons = [
-        'ropa' => 'tabler--hanger', 'ropa dama' => 'tabler--hanger', 'damas' => 'tabler--hanger',
-        'ropa caballero' => 'tabler--shirt', 'caballeros' => 'tabler--shirt',
-        'calzado' => 'tabler--shoe', 'accesorios' => 'tabler--watch',
-        'electronico' => 'tabler--device-mobile', 'electrónico' => 'tabler--device-mobile',
-        'audifonos' => 'tabler--headphones', 'audífonos' => 'tabler--headphones',
-        'celulares' => 'tabler--device-mobile-phone', 'comida' => 'tabler--tools-kitchen-2',
-        'bebidas' => 'tabler--cup', 'hogar' => 'tabler--home', 'deporte' => 'tabler--run',
-        'joyeria' => 'tabler--diamond', 'joyería' => 'tabler--diamond',
-        'belleza' => 'tabler--sparkles', 'juguetes' => 'tabler--building-carousel',
-        'mascotas' => 'tabler--paw', 'libros' => 'tabler--book',
-    ];
-    $resolveIcon = function($name) use ($catIcons) {
-        $lower = strtolower(trim($name));
-        foreach ($catIcons as $key => $icon) {
-            if (str_contains($lower, $key)) return $icon;
-        }
-        return 'tabler--tag';
-    };
 @endphp
-<div id="sc-sticky-bar" class="sticky top-0 z-[100]" style="background:var(--background,#fff);border-bottom:1px solid rgba(0,0,0,.08);backdrop-filter:blur(12px);">
+<div id="sc-sticky-bar" class="sticky top-0 z-[100]" style="background:var(--background,#fff);border-bottom:1px solid rgba(0,0,0,.08);">
 
-    {{-- Fila 1: búsqueda full-width + acciones derechas --}}
-    <div class="mx-auto max-w-[1280px] px-3 flex items-center gap-2 h-14">
-
-        {{-- Logo pequeño --}}
-        <a href="#" class="shrink-0">
-            @if(!empty($customization->logo_filename))
-                <img src="{{ asset('storage/tenants/' . $tenant->id . '/' . $customization->logo_filename) }}"
-                     alt="{{ $tenant->business_name }}"
-                     class="size-8 rounded-lg object-cover"
-                     onerror="this.style.display='none';">
-            @else
-                <div class="size-8 bg-primary rounded-lg flex items-center justify-center">
-                    <span class="iconify tabler--bag size-4 text-primary-foreground"></span>
+    {{-- FILA 1: identity — oculta hasta scroll --}}
+    <div id="sc-identity-row"
+         class="overflow-hidden transition-all duration-300 border-b border-foreground/5"
+         style="max-height:0;opacity:0;">
+        <div class="mx-auto max-w-[1280px] px-3 flex items-center justify-between h-11">
+            {{-- Logo + nombre --}}
+            <a id="synti-cat-trigger-sticky" href="#" class="flex items-center gap-2 shrink-0">
+                @if(!empty($customization->logo_filename))
+                    <img src="{{ asset('storage/tenants/' . $tenant->id . '/' . $customization->logo_filename) }}"
+                         alt="{{ $tenant->business_name }}"
+                         class="size-12 rounded-lg object-cover shrink-0">
+                @else
+                    <div class="size-12 bg-primary rounded-lg flex items-center justify-center shrink-0">
+                        <span class="iconify tabler--bag size-5 text-primary-foreground"></span>
+                    </div>
+                @endif
+                <span class="text-sm font-bold tracking-tight truncate max-w-[140px]">{{ $tenant->business_name }}</span>
+            </a>
+            {{-- Acciones derechas fila 1 --}}
+            <div class="flex items-center gap-1 shrink-0">
+                @if(str_contains($savedDisplayMode, 'toggle'))
+                <div class="flex bg-surface/50 p-0.5 rounded-lg border border-foreground/8">
+                    <button class="sc-curr-btn px-2 py-1 text-[11px] font-bold rounded-md transition-all" data-currency="ref" onclick="setCurrency('ref')">{{ $currencySymbol }}</button>
+                    <button class="sc-curr-btn px-2 py-1 text-[11px] font-bold rounded-md transition-all" data-currency="bs" onclick="setCurrency('bs')">Bs</button>
                 </div>
-            @endif
-        </a>
+                @endif
+                @if($showCart)
+                <button onclick="toggleDrawer()" id="sc-cart-trigger"
+                        class="relative p-2 rounded-full bg-primary text-primary-foreground shadow-md hover:opacity-90 transition-opacity cursor-pointer">
+                    <span class="iconify tabler--shopping-bag size-5"></span>
+                    <span id="sc-cart-count" class="absolute -top-1 -right-1 size-5 bg-red-500 text-white text-[10px] font-black rounded-full flex items-center justify-center border-2 border-background" style="display:none">0</span>
+                </button>
+                @endif
+            </div>
+        </div>
+    </div>
 
-        {{-- Búsqueda prominente full-width --}}
+    {{-- FILA 2: navegación — siempre visible --}}
+    <div class="mx-auto max-w-[1280px] px-3 flex items-center gap-1 h-12">
+
+        {{-- Búsqueda full-width --}}
         <div class="flex-1 relative">
             <span class="iconify tabler--search size-4 absolute left-3 top-1/2 -translate-y-1/2 text-foreground/35 pointer-events-none"></span>
             <input id="sc-search-input" type="search"
@@ -186,85 +190,54 @@
                    oninput="searchProducts(this.value)">
         </div>
 
-        {{-- Acciones derechas --}}
-        <div class="flex items-center gap-1 shrink-0">
-
-            {{-- Hamburger categorías --}}
-            <div class="relative flex-shrink-0">
-                <button id="synti-hamburger-trigger"
-                        onclick="scToggleCatMenu()"
-                        class="size-9 flex items-center justify-center rounded-lg text-foreground/50 hover:text-foreground hover:bg-surface/60 transition-colors cursor-pointer">
-                    <span class="iconify tabler--menu-2 size-5"></span>
-                </button>
-                <div id="sc-cat-dropdown"
-                     class="absolute right-0 top-full mt-1 w-64 bg-background rounded-xl shadow-xl border border-foreground/5 z-[200] overflow-hidden"
-                     style="display:none">
-                    <div class="px-4 py-2.5 border-b border-foreground/5">
-                        <p class="text-xs font-black uppercase tracking-widest text-foreground/40">Categorías</p>
-                    </div>
-                    <button onclick="filterCategory('all');scToggleCatMenu()"
-                            class="w-full text-left px-4 py-3 text-sm font-semibold text-foreground/70 hover:bg-surface hover:text-foreground transition-colors flex items-center gap-3 cursor-pointer">
-                        <span class="iconify tabler--layout-grid size-4 text-primary/60"></span>Todos los productos
-                    </button>
-                    @foreach($scCatCategories as $cat)
-                    @php $chipIcon = $resolveIcon($cat['name']); $hasSubs = !empty($cat['subcategories']); @endphp
-                    <div>
-                        <button onclick="filterCategory('{{ $cat['name'] }}'){{ !$hasSubs ? ';scToggleCatMenu()' : '' }}"
-                                class="w-full text-left px-4 py-3 text-sm font-semibold text-foreground/70 hover:bg-surface hover:text-foreground transition-colors flex items-center gap-3 border-t border-foreground/5 cursor-pointer">
-                            <span class="iconify {{ $chipIcon }} size-4 text-primary/60"></span>
-                            <span class="flex-1">{{ $cat['name'] }}</span>
-                            @if($hasSubs)<span class="iconify tabler--chevron-right size-3 text-foreground/30"></span>@endif
-                        </button>
-                        @if($hasSubs)
-                        @foreach($cat['subcategories'] as $sub)
-                        <button onclick="filterCategory('{{ $cat['name'] }}', '{{ $sub['name'] }}');scToggleCatMenu()"
-                                class="w-full text-left pl-12 pr-4 py-2 text-xs text-foreground/55 hover:bg-surface hover:text-foreground transition-colors flex items-center gap-2 cursor-pointer">
-                            <span class="iconify tabler--point-filled size-2"></span>{{ $sub['name'] }}
-                        </button>
-                        @endforeach
-                        @endif
-                    </div>
-                    @endforeach
+        {{-- Hamburger categorías --}}
+        <div class="relative flex-shrink-0">
+            <button id="synti-hamburger-trigger"
+                    onclick="scToggleCatMenu()"
+                    class="size-10 flex items-center justify-center rounded-lg border border-foreground/10 hover:bg-surface/50 transition-colors text-foreground/50 cursor-pointer">
+                <span class="iconify tabler--menu-2 size-5"></span>
+            </button>
+            <div id="sc-cat-dropdown"
+                 class="absolute right-0 top-full mt-1 w-64 bg-background rounded-xl shadow-xl border border-foreground/5 z-[200] overflow-hidden"
+                 style="display:none">
+                <div class="px-4 py-2.5 border-b border-foreground/5">
+                    <p class="text-xs font-black uppercase tracking-widest text-foreground/40">Categorías</p>
                 </div>
+                <button onclick="filterCategory('all');scToggleCatMenu()" class="w-full text-left px-4 py-3 text-sm font-semibold text-foreground/70 hover:bg-surface hover:text-foreground transition-colors flex items-center gap-3">
+                    <span class="iconify tabler--layout-grid size-4 text-primary/60"></span>Todos los productos
+                </button>
+                @foreach($scCatCategories as $cat)
+                @php $hasSubs = !empty($cat['subcategories']); @endphp
+                <div>
+                    <button onclick="filterCategory('{{ $cat['name'] }}');{{ !$hasSubs ? 'scToggleCatMenu()' : '' }}"
+                            class="w-full text-left px-4 py-3 text-sm font-semibold text-foreground/70 hover:bg-surface hover:text-foreground transition-colors flex items-center gap-3 border-t border-foreground/4">
+                        <span class="iconify tabler--chevron-right size-3.5 text-primary/70"></span>
+                        <span class="flex-1">{{ $cat['name'] }}</span>
+                        @if($hasSubs)<span class="iconify tabler--chevron-right size-3 text-foreground/30"></span>@endif
+                    </button>
+                    @if($hasSubs)
+                    @foreach($cat['subcategories'] as $sub)
+                    <button onclick="filterCategory('{{ $cat['name'] }}','{{ $sub['name'] }}');scToggleCatMenu()"
+                            class="w-full text-left pl-12 pr-4 py-2 text-xs text-foreground/55 hover:bg-surface hover:text-foreground transition-colors flex items-center gap-2 border-t border-foreground/4">
+                        <span class="iconify tabler--minus size-3 text-foreground/30"></span>{{ $sub['name'] }}
+                    </button>
+                    @endforeach
+                    @endif
+                </div>
+                @endforeach
             </div>
-            <div id="sc-cat-backdrop" onclick="scToggleCatMenu()" style="display:none;position:fixed;inset:0;z-index:199"></div>
-
-            {{-- Info modal --}}
-            <button onclick="document.getElementById('sc-info-modal').style.display='flex'"
-                    class="size-9 flex items-center justify-center rounded-lg text-foreground/50 hover:text-foreground hover:bg-surface/60 transition-colors cursor-pointer">
-                <span class="iconify tabler--info-circle size-5"></span>
-            </button>
-
-            {{-- WhatsApp --}}
-            @if($waClean)
-            <a href="https://wa.me/{{ $waClean }}" target="_blank" rel="noopener noreferrer"
-               class="size-9 rounded-full flex items-center justify-center hover:opacity-80 shrink-0 transition-opacity cursor-pointer"
-               style="background:#25D366">
-                <span class="iconify tabler--brand-whatsapp size-5 text-white"></span>
-            </a>
-            @endif
-
-            {{-- Toggle moneda --}}
-            @if(str_contains($savedDisplayMode, 'toggle'))
-            <div class="flex bg-surface/50 p-0.5 rounded-lg border border-foreground/8">
-                <button class="sc-curr-btn px-2 py-1 text-[11px] font-bold rounded-md transition-all cursor-pointer" data-currency="ref" onclick="setCurrency('ref')">{{ $currencySymbol }}</button>
-                <button class="sc-curr-btn px-2 py-1 text-[11px] font-bold rounded-md transition-all cursor-pointer" data-currency="bs" onclick="setCurrency('bs')">Bs</button>
-            </div>
-            @endif
-
-            {{-- Carrito --}}
-            @if($showCart)
-            <button onclick="toggleDrawer()" id="sc-cart-trigger"
-                    class="relative p-2 rounded-full bg-primary text-primary-foreground shadow-md shadow-primary/20 hover:opacity-90 transition-opacity cursor-pointer">
-                <span class="iconify tabler--shopping-bag size-5"></span>
-                <span id="sc-cart-count" class="absolute -top-1 -right-1 size-5 bg-red-500 text-white text-[10px] font-black rounded-full flex items-center justify-center border-2 border-background" style="display:none">0</span>
-            </button>
-            @endif
-
         </div>
+        <div id="sc-cat-backdrop" onclick="scToggleCatMenu()" style="display:none;position:fixed;inset:0;z-index:199"></div>
+
+        {{-- Info --}}
+        <button onclick="document.getElementById('sc-info-modal').style.display='flex'"
+                class="size-10 flex items-center justify-center rounded-lg border border-foreground/10 text-foreground/50 hover:text-foreground hover:bg-surface/60 transition-colors cursor-pointer shrink-0">
+            <span class="iconify tabler--info-circle size-[18px]"></span>
+        </button>
+
     </div>
 
-    {{-- Fila 2: tabs de categorías scroll horizontal --}}
+    {{-- FILA 3: tabs categorías scroll horizontal --}}
     @if(!empty($scCatCategories))
     <div class="border-t border-foreground/5">
         <div class="mx-auto max-w-[1280px] flex overflow-x-auto no-scrollbar">
@@ -282,6 +255,44 @@
     </div>
     @endif
 
+</div>
+
+{{-- BUSINESS INFO — identidad tienda ecommerce --}}
+<div id="sc-business-info" class="mx-auto max-w-[1280px] px-4 pb-3" style="overflow:visible;position:relative;padding-top:52px;">
+    <div style="position:relative;">
+        {{-- Logo cuadrado flotante --}}
+        @if(!empty($customization->logo_filename))
+            <img id="synti-cat-trigger"
+                 src="{{ asset('storage/tenants/' . $tenant->id . '/' . $customization->logo_filename) }}"
+                 alt="{{ $tenant->business_name }}"
+                 style="width:80px;height:80px;border-radius:14px;border:3px solid #fff;
+                        box-shadow:0 4px 20px rgba(0,0,0,0.15);object-fit:cover;
+                        position:absolute;top:-52px;left:0;z-index:20;
+                        background:#fff;">
+        @else
+            <div id="synti-cat-trigger"
+                 style="width:80px;height:80px;border-radius:14px;border:3px solid #fff;
+                        box-shadow:0 4px 20px rgba(0,0,0,0.15);
+                        position:absolute;top:-52px;left:0;z-index:20;
+                        background:var(--primary);
+                        display:flex;align-items:center;justify-content:center;">
+                <span class="iconify tabler--shopping-bag size-8 text-white"></span>
+            </div>
+        @endif
+        {{-- Info tienda --}}
+        <div style="padding-left:96px;">
+            <h1 class="text-lg font-black tracking-tight text-foreground leading-tight">{{ $tenant->business_name }}</h1>
+            @if(!empty($tenant->business_segment))
+            <p class="text-xs text-foreground/50 mt-0.5">{{ $tenant->business_segment }}</p>
+            @endif
+            @if(!empty($tenant->address))
+            <p class="text-xs text-foreground/40 mt-0.5 flex items-center gap-1">
+                <span class="iconify tabler--map-pin size-3 shrink-0"></span>
+                {{ $tenant->address }}@if(!empty($tenant->city)), {{ $tenant->city }}@endif
+            </p>
+            @endif
+        </div>
+    </div>
 </div>
 
 {{-- MODAL INFORMACIÓN --}}
@@ -426,114 +437,31 @@
     </div>
 </div>
 
-{{-- HERO SLIDER CAT --}}
 @php
-    $scHeroSlots = match(true) {
-        in_array($planSlug, ['cat-anual', 'cat-semestral']) => [
-            $customization->hero_main_filename      ?? null,
-            $customization->hero_secondary_filename ?? null,
-            $customization->hero_tertiary_filename  ?? null,
-        ],
-        default => [
-            $customization->hero_main_filename ?? null,
-        ],
-    };
-    $scHeroImages = array_values(array_filter($scHeroSlots));
-    $scHeroFallback = $showcase->first() ? $productImg($showcase->first()) : null;
+    $scHeroImages = array_values(array_filter([
+        $customization->hero_main_filename      ?? null,
+        $customization->hero_secondary_filename ?? null,
+        $customization->hero_tertiary_filename  ?? null,
+    ]));
 @endphp
-
-@if(count($scHeroImages) > 0 || $scHeroFallback)
-<div id="sc-hero-slider" class="relative w-full overflow-hidden bg-surface"
-     style="aspect-ratio:16/9; max-height:320px;">
-
-    @if(count($scHeroImages) > 0)
-        @foreach($scHeroImages as $hIdx => $hImg)
-        <div class="sc-hero-slide absolute inset-0 transition-opacity duration-700"
-             style="opacity:{{ $hIdx === 0 ? '1' : '0' }}">
-            <img src="{{ asset('storage/tenants/' . $tenant->id . '/' . $hImg) }}"
-                 alt="{{ $tenant->business_name }}"
-                 class="w-full h-full object-cover"
-                 loading="{{ $hIdx === 0 ? 'eager' : 'lazy' }}">
-        </div>
-        @endforeach
-    @elseif($scHeroFallback)
-        <div class="sc-hero-slide absolute inset-0" style="opacity:1">
-            <img src="{{ $scHeroFallback }}" alt="{{ $tenant->business_name }}"
-                 class="w-full h-full object-cover" loading="eager">
-        </div>
-    @endif
-
-    {{-- Overlay + info producto destacado --}}
-    @if($showcase->first())
-    @php $s0 = $showcase->first(); @endphp
-    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent pointer-events-none"></div>
-    <div class="absolute bottom-0 left-0 right-0 p-4 pointer-events-none">
-        @if($s0->badge)
-        <span class="inline-block text-[9px] font-black uppercase tracking-widest bg-primary text-primary-foreground px-2 py-1 rounded-md mb-2">
-            {{ $s0->badge }}
-        </span>
-        @endif
-        <div class="text-white font-black text-lg leading-tight drop-shadow-lg">{{ $s0->name }}</div>
-        @if(!$hidePrice && $s0->price_usd)
-        <div class="text-white/75 text-sm mt-0.5" data-price-usd="{{ $s0->price_usd }}">
-            <span class="text-[10px] opacity-60 mr-0.5">{{ $currencySymbol }}</span>0.00
-        </div>
-        @endif
+@if(count($scHeroImages) > 0)
+<div id="sc-hero-slider" class="relative w-full bg-surface" style="height:200px;overflow:hidden;">
+    @foreach($scHeroImages as $hIdx => $hImg)
+    <div class="sc-slide absolute inset-0 transition-opacity duration-700" style="opacity:{{ $hIdx === 0 ? '1' : '0' }}">
+        <img src="{{ asset('storage/tenants/' . $tenant->id . '/' . $hImg) }}"
+             alt="{{ $tenant->business_name }}"
+             class="w-full h-full object-cover object-center"
+             loading="{{ $hIdx === 0 ? 'eager' : 'lazy' }}">
     </div>
-    @endif
-
-    {{-- Dots solo si hay más de 1 imagen --}}
+    @endforeach
     @if(count($scHeroImages) > 1)
-    <div class="absolute bottom-3 right-4 flex gap-1.5 z-10">
+    <div class="absolute bottom-2 right-3 flex gap-1 z-10">
         @foreach($scHeroImages as $hIdx => $hImg)
-        <button class="sc-hero-dot size-1.5 rounded-full transition-all {{ $hIdx === 0 ? 'bg-white' : 'bg-white/40' }}"
-                data-slide="{{ $hIdx }}"
-                onclick="scHeroGoTo({{ $hIdx }})"></button>
+        <button class="sc-dot size-1.5 rounded-full transition-all {{ $hIdx === 0 ? 'bg-white' : 'bg-white/40' }}" data-slide="{{ $hIdx }}"></button>
         @endforeach
     </div>
     @endif
-
 </div>
-
-@if(count($scHeroImages) > 1)
-<script>
-(function(){
-    var slides  = document.querySelectorAll('.sc-hero-slide');
-    var dots    = document.querySelectorAll('.sc-hero-dot');
-    var current = 0;
-    var total   = slides.length;
-    var timer   = null;
-
-    window.scHeroGoTo = function(idx) {
-        slides[current].style.opacity = '0';
-        if(dots[current]) dots[current].classList.replace('bg-white','bg-white/40');
-        current = idx;
-        slides[current].style.opacity = '1';
-        if(dots[current]) dots[current].classList.replace('bg-white/40','bg-white');
-        resetTimer();
-    };
-
-    function next() { scHeroGoTo((current + 1) % total); }
-
-    function resetTimer() {
-        clearInterval(timer);
-        timer = setInterval(next, 4000);
-    }
-
-    resetTimer();
-})();
-</script>
-@endif
-
-{{-- Indicador Abierto/Cerrado bajo el hero --}}
-@if($showHoursIndicator ?? false)
-<div class="flex justify-center py-2 bg-background">
-    <span class="inline-flex items-center gap-1.5 rounded-full {{ ($isOpen ?? false) ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-600' }} px-3 py-1 text-[11px] font-bold">
-        <span class="size-1.5 rounded-full {{ ($isOpen ?? false) ? 'bg-green-500' : 'bg-red-500' }} animate-pulse"></span>
-        {{ ($isOpen ?? false) ? 'ABIERTO' : 'CERRADO' }}
-    </span>
-</div>
-@endif
 @endif
 
 {{-- 4. PRODUCT GRID — Lazy load + Paginación --}}
@@ -1776,5 +1704,56 @@ window.scToggleCatMenu = function() {
     d.style.display = open ? 'none' : 'block';
     b.style.display = open ? 'none' : 'block';
 };
+</script>
+{{-- IntersectionObserver: identity row --}}
+<script>
+(function(){
+    var businessInfo = document.getElementById('sc-business-info');
+    if(businessInfo) {
+        var obs = new IntersectionObserver(function(entries){
+            entries.forEach(function(entry){
+                var row = document.getElementById('sc-identity-row');
+                if(row){
+                    row.style.maxHeight = entry.isIntersecting ? '0' : '44px';
+                    row.style.opacity   = entry.isIntersecting ? '0' : '1';
+                }
+            });
+        }, {threshold: 0.1});
+        obs.observe(businessInfo);
+    }
+})();
+</script>
+{{-- Long press logo CAT → easter egg --}}
+<script>
+(function(){
+    var el = document.getElementById('synti-cat-trigger');
+    if(!el) return;
+    var t = null;
+    el.addEventListener('touchstart',  function(){ t = setTimeout(function(){ if(typeof openSyntiPanel==='function') openSyntiPanel(); if(navigator.vibrate) navigator.vibrate([60,30,60]); }, 3000); },{passive:true});
+    el.addEventListener('touchend',    function(){ clearTimeout(t); },{passive:true});
+    el.addEventListener('touchmove',   function(){ clearTimeout(t); },{passive:true});
+    el.addEventListener('touchcancel', function(){ clearTimeout(t); },{passive:true});
+    el.addEventListener('mousedown',   function(){ t = setTimeout(function(){ if(typeof openSyntiPanel==='function') openSyntiPanel(); }, 3000); });
+    el.addEventListener('mouseup',     function(){ clearTimeout(t); });
+    el.addEventListener('mouseleave',  function(){ clearTimeout(t); });
+})();
+</script>
+{{-- Slider dots JS --}}
+<script>
+(function(){
+    var slides = document.querySelectorAll('#sc-hero-slider .sc-slide');
+    var dots   = document.querySelectorAll('#sc-hero-slider .sc-dot');
+    if(slides.length <= 1) return;
+    var cur = 0;
+    function goTo(n){
+        slides[cur].style.opacity = '0';
+        dots[cur].classList.replace('bg-white','bg-white/40');
+        cur = n;
+        slides[cur].style.opacity = '1';
+        dots[cur].classList.replace('bg-white/40','bg-white');
+    }
+    dots.forEach(function(d,i){ d.addEventListener('click', function(){ goTo(i); }); });
+    setInterval(function(){ goTo((cur+1) % slides.length); }, 4000);
+})();
 </script>
 @endpush
