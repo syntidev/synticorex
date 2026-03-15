@@ -101,7 +101,7 @@ class PlansSeeder extends Seeder
             // ----------------------------------------------------------------
 
             [
-                'slug'                  => 'food-basico',
+                'slug'                  => 'food-oportunidad',
                 'blueprint'             => 'food',
                 'name'                  => 'Oportunidad',
                 'price_usd'             => 9.00,
@@ -123,7 +123,7 @@ class PlansSeeder extends Seeder
             ],
 
             [
-                'slug'                  => 'food-semestral',
+                'slug'                  => 'food-crecimiento',
                 'blueprint'             => 'food',
                 'name'                  => 'Crecimiento',
                 'price_usd'             => 39.00,
@@ -145,7 +145,7 @@ class PlansSeeder extends Seeder
             ],
 
             [
-                'slug'                  => 'food-anual',
+                'slug'                  => 'food-vision',
                 'blueprint'             => 'food',
                 'name'                  => 'Visión',
                 'price_usd'             => 69.00,
@@ -171,7 +171,7 @@ class PlansSeeder extends Seeder
             // ----------------------------------------------------------------
 
             [
-                'slug'                  => 'cat-basico',
+                'slug'                  => 'cat-oportunidad',
                 'blueprint'             => 'cat',
                 'name'                  => 'Oportunidad',
                 'price_usd'             => 9.00,
@@ -193,7 +193,7 @@ class PlansSeeder extends Seeder
             ],
 
             [
-                'slug'                  => 'cat-semestral',
+                'slug'                  => 'cat-crecimiento',
                 'blueprint'             => 'cat',
                 'name'                  => 'Crecimiento',
                 'price_usd'             => 39.00,
@@ -215,7 +215,7 @@ class PlansSeeder extends Seeder
             ],
 
             [
-                'slug'                  => 'cat-anual',
+                'slug'                  => 'cat-vision',
                 'blueprint'             => 'cat',
                 'name'                  => 'Visión',
                 'price_usd'             => 69.00,

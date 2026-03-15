@@ -8,7 +8,12 @@ return [
     |--------------------------------------------------------------------------
     */
 
-    'provider' => env('COPILOT_PROVIDER', 'openai'),
+    'provider' => env('COPILOT_PROVIDER', 'anthropic'),
+
+    'anthropic' => [
+        'api_key' => env('ANTHROPIC_API_KEY'),
+        'model'   => env('COPILOT_MODEL', 'claude-sonnet-4-20250514'),
+    ],
 
     /*
     |--------------------------------------------------------------------------

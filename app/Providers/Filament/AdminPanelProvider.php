@@ -52,8 +52,8 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->plugin(
                 FilamentCopilotPlugin::make()
-                    ->provider('gemini')
-                    ->model('gemini-2.0-flash')
+                    ->provider('anthropic')
+                    ->model('claude-haiku-4-5-20251001')
                     ->systemPrompt('Eres el asistente admin de SYNTIweb. Puedes gestionar tenants: listar, buscar, suspender, restaurar y cambiar planes. Responde siempre en español.')
                     ->quickActions([
                         'Tenants activos'   => 'Lista los 10 tenants con status activo más recientes.',

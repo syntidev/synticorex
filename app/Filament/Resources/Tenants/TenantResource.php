@@ -7,12 +7,17 @@ namespace App\Filament\Resources\Tenants;
 use App\Filament\Resources\Tenants\Pages\CreateTenant;
 use App\Filament\Resources\Tenants\Pages\EditTenant;
 use App\Filament\Resources\Tenants\Pages\ListTenants;
-use App\Filament\Resources\Tenants\Schemas\TenantForm;
 use App\Filament\Resources\Tenants\Tables\TenantsTable;
+use App\Models\Plan;
 use App\Models\Tenant;
+use App\Models\User;
 use BackedEnum;
 use EslamRedaDiv\FilamentCopilot\Contracts\CopilotResource;
+use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
@@ -51,7 +56,59 @@ class TenantResource extends Resource implements CopilotResource
 
     public static function form(Schema $schema): Schema
     {
-        return TenantForm::configure($schema);
+        return $schema
+            ->components([
+                Section::make('Información del negocio')->schema([
+                    Select::make('user_id')
+                        ->label('Usuario propietario')
+                        ->options(User::query()->orderBy('email')->pluck('email', 'id')->all())
+                        ->searchable()
+                        ->required()
+                        ->hint('El usuario que administrará este tenant')
+                        ->columnSpanFull(),
+                    TextInput::make('business_name')
+                        ->label('Nombre del negocio')
+                        ->required()->maxLength(128),
+                    TextInput::make('subdomain')
+                        ->label('Subdominio')
+                        ->required()->maxLength(100)
+                        ->unique(ignoreRecord: true),
+                    TextInput::make('email')
+                        ->label('Email')->email()->maxLength(255),
+                    TextInput::make('phone')
+                        ->label('Teléfono')->maxLength(20),
+                ])->columns(2),
+
+                Section::make('Plan y estado')->schema([
+                    Select::make('plan_id')
+                        ->label('Plan')
+                        ->options(
+                            Plan::query()
+                                ->orderBy('blueprint')
+                                ->orderBy('id')
+                                ->get()
+                                ->mapWithKeys(fn ($plan) => [
+                                    $plan->id => ucfirst($plan->blueprint) . ' · ' . $plan->name,
+                                ])
+                                ->all()
+                        )
+                        ->required(),
+                    Select::make('status')
+                        ->label('Estado')
+                        ->options([
+                            'active'   => 'Activo',
+                            'frozen'   => 'Suspendido',
+                            'archived' => 'Archivado',
+                        ])
+                        ->required(),
+                    DateTimePicker::make('subscription_ends_at')
+                        ->label('Vence suscripción')
+                        ->nullable(),
+                    DateTimePicker::make('trial_ends_at')
+                        ->label('Fin de trial')
+                        ->nullable(),
+                ])->columns(2),
+            ]);
     }
 
     public static function table(Table $table): Table
