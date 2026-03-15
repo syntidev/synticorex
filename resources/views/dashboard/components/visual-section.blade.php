@@ -124,7 +124,7 @@
                                 <h3 class="font-semibold text-foreground">Fotos de portada</h3>
                                 <p class="text-xs text-muted-foreground-1">
                                     @php
-                                        $catMaxHeroSlots = in_array($planSlug, ['cat-semestral', 'cat-anual']) ? 3 : 1;
+                                        $catMaxHeroSlots = in_array($tenant->plan->slug ?? '', ['cat-semestral', 'cat-anual']) ? 3 : 1;
                                         $heroSlots = array_slice([
                                             1 => 'hero_main_filename',
                                             2 => 'hero_secondary_filename',
