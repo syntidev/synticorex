@@ -172,6 +172,21 @@
 
         </div>
 
+        {{-- ── Métodos de pago CAT y Food ── --}}
+        @if(in_array($blueprint ?? '', ['cat', 'food']) && !empty($visiblePay))
+        <div class="border-t border-base-200 py-4">
+            <p class="text-[10px] font-black uppercase tracking-widest text-muted-foreground-1 mb-3 text-center">Métodos de pago</p>
+            <div class="flex flex-wrap items-center justify-center gap-2">
+                @foreach($visiblePay as $key => $pm)
+                <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface text-xs font-medium text-muted-foreground-1 border border-border">
+                    <span class="iconify tabler--{{ $pm['icon'] }} size-3.5"></span>
+                    {{ $pm['label'] }}
+                </span>
+                @endforeach
+            </div>
+        </div>
+        @endif
+
         {{-- ── Barra de copyright ── --}}
         <div class="flex flex-col items-center justify-between gap-2 border-t border-base-200 py-3 sm:flex-row">
             <p class="text-xs text-muted-foreground-1">

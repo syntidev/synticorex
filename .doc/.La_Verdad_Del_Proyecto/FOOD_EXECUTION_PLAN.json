@@ -186,10 +186,20 @@
             "title": "Agregar pricing food (PAUSA)",
             "description": "Alinear pagina food de marketing con pricing final. Queda en pausa por redefinicion comercial.",
             "priority": "P2",
-            "status": "pending",
+            "status": "skipped",
             "depends_on": [
                 "F4.3"
             ]
+        },
+        {
+            "id": "F5.1",
+            "sprint": "F5",
+            "title": "PWA manifest + long press logo trigger",
+            "description": "PWA manifest dinamico por tenant. Long press 800ms en logo activa panel secreto. Hero slider dots fix.",
+            "priority": "P0",
+            "status": "done",
+            "depends_on": ["F4.3"],
+            "completed_at": "2026-03-14T00:00:00+00:00"
         }
     ]
 }

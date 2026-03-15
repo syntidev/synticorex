@@ -127,7 +127,7 @@
             "title": "Agregar pagina pricing cat",
             "description": "Alinear pricing publico de cat con limites reales.",
             "priority": "P1",
-            "status": "pending",
+            "status": "skipped",
             "depends_on": [
                 "C3.2"
             ]
@@ -138,10 +138,11 @@
             "title": "Agregar legal links cat",
             "description": "Mostrar terminos y privacidad en layout de cat donde aplique.",
             "priority": "P1",
-            "status": "pending",
+            "status": "done",
             "depends_on": [
                 "C3.3"
-            ]
+            ],
+            "completed_at": "2026-03-14T00:00:00+00:00"
         },
         {
             "id": "C4.1",
@@ -149,10 +150,11 @@
             "title": "Remover logs y codigo muerto cat",
             "description": "Eliminar console logs y archivos legacy relacionados a cat.",
             "priority": "P2",
-            "status": "pending",
+            "status": "done",
             "depends_on": [
                 "C3.4"
-            ]
+            ],
+            "completed_at": "2026-03-14T00:00:00+00:00"
         },
         {
             "id": "C4.2",
@@ -160,10 +162,11 @@
             "title": "Pruebas E2E cat",
             "description": "Validar flujo completo registro->catalogo->pedido whatsapp.",
             "priority": "P1",
-            "status": "pending",
+            "status": "done",
             "depends_on": [
                 "C4.1"
-            ]
+            ],
+            "completed_at": "2026-03-14T00:00:00+00:00"
         },
         {
             "id": "C4.3",
@@ -171,10 +174,31 @@
             "title": "Checklist release cat",
             "description": "Completar smoke test, enlaces y demo compartible de cat.",
             "priority": "P1",
-            "status": "pending",
+            "status": "done",
             "depends_on": [
                 "C4.2"
-            ]
+            ],
+            "completed_at": "2026-03-14T00:00:00+00:00"
+        },
+        {
+            "id": "C5.1",
+            "sprint": "C5",
+            "title": "App redesign — hero slider + chips + bottom nav + PWA",
+            "description": "Rediseno completo UI/UX CAT: hero slider con gating por plan, category chips con iconos Tabler, grid 2 columnas 1:1, bottom nav mobile, pill moneda flotante, PWA manifest dinamico.",
+            "priority": "P0",
+            "status": "done",
+            "depends_on": ["C4.3"],
+            "completed_at": "2026-03-14T00:00:00+00:00"
+        },
+        {
+            "id": "C5.2",
+            "sprint": "C5",
+            "title": "Favicon global + panel secreto restaurado",
+            "description": "Favicon SYNTIweb en 8 layouts. Panel flotante: trackingQRSmall guard, synti-mobile-trigger oculto, long press hamburger Studio, long press logo Food.",
+            "priority": "P0",
+            "status": "done",
+            "depends_on": ["C5.1"],
+            "completed_at": "2026-03-14T00:00:00+00:00"
         }
     ]
 }
