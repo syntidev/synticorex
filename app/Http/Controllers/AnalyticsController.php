@@ -98,22 +98,20 @@ class AnalyticsController extends Controller
             $tenant = Tenant::findOrFail($tenantId);
 
             // Fechas
-            $today = now()->toDateString();
-            $weekAgo = now()->subDays(6)->toDateString();
+            $today = now('America/Caracas')->toDateString();
+            $weekAgo = now('America/Caracas')->subDays(6)->toDateString();
 
             // Visitantes únicos hoy (COUNT DISTINCT user_ip)
             $visitorsToday = AnalyticsEvent::where('tenant_id', $tenantId)
                 ->where('event_date', $today)
                 ->where('event_type', 'pageview')
-                ->distinct('user_ip')
-                ->count('user_ip');
+                ->selectRaw('COUNT(DISTINCT user_ip) as uv')->value('uv') ?? 0;
 
             // Visitantes únicos esta semana
             $visitorsWeek = AnalyticsEvent::where('tenant_id', $tenantId)
                 ->whereBetween('event_date', [$weekAgo, $today])
                 ->where('event_type', 'pageview')
-                ->distinct('user_ip')
-                ->count('user_ip');
+                ->selectRaw('COUNT(DISTINCT user_ip) as uv')->value('uv') ?? 0;
 
             // Clics WhatsApp
             $whatsappClicks = AnalyticsEvent::where('tenant_id', $tenantId)
@@ -143,17 +141,16 @@ class AnalyticsController extends Controller
             $avgTimeOnPage = AnalyticsEvent::where('tenant_id', $tenantId)
                 ->where('event_type', 'time_on_page')
                 ->whereBetween('event_date', [$weekAgo, $today])
-                ->avg(DB::raw('1')) * 30; // Cada evento = 30 segundos
+                ->count() * 30; // Cada evento = 30 segundos
 
             // Gráfico últimos 7 días (visitantes únicos por día)
             $last7Days = [];
             for ($i = 6; $i >= 0; $i--) {
-                $date = now()->subDays($i)->toDateString();
+                $date = now('America/Caracas')->subDays($i)->toDateString();
                 $visitors = AnalyticsEvent::where('tenant_id', $tenantId)
                     ->where('event_date', $date)
                     ->where('event_type', 'pageview')
-                    ->distinct('user_ip')
-                    ->count('user_ip');
+                    ->selectRaw('COUNT(DISTINCT user_ip) as uv')->value('uv') ?? 0;
 
                 $last7Days[] = [
                     'date' => $date,
@@ -190,12 +187,12 @@ class AnalyticsController extends Controller
 	public function getToday(int $tenantId): JsonResponse
 {
     try {
-        $today = now()->toDateString();
+        $today = now('America/Caracas')->toDateString();
 
         $visitors = AnalyticsEvent::where('tenant_id', $tenantId)
             ->where('event_date', $today)
             ->where('event_type', 'pageview')
-            ->distinct('user_ip')->count('user_ip');
+            ->selectRaw('COUNT(DISTINCT user_ip) as uv')->value('uv') ?? 0;
 
         $whatsapp = AnalyticsEvent::where('tenant_id', $tenantId)
             ->where('event_date', $today)
@@ -205,16 +202,16 @@ class AnalyticsController extends Controller
             ->where('event_date', $today)
             ->where('event_type', 'qr_scan')->count();
 
-        $products = AnalyticsEvent::where('tenant_id', $tenantId)
+        $pageViews = AnalyticsEvent::where('tenant_id', $tenantId)
             ->where('event_date', $today)
-            ->where('event_type', 'product_click')->count();
+            ->where('event_type', 'pageview')->count();
 
         return response()->json([
             'success'         => true,
             'visitors_today'  => $visitors,
             'whatsapp_clicks' => $whatsapp,
             'qr_scans'        => $qr,
-            'products_viewed' => $products,
+            'page_views'      => $pageViews,
         ]);
 
     } catch (\Exception $e) {
