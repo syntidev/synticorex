@@ -10,6 +10,7 @@ use App\Filament\Resources\Users\Tables\UsersTable;
 use App\Models\User;
 use BackedEnum;
 use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
@@ -53,6 +54,35 @@ class UserResource extends Resource
                         ->disabled()
                         ->dehydrated(false),
                 ])->columns(2),
+
+                Section::make('Aliado Comercial')
+                    ->schema([
+                        Select::make('vendor_profile')
+                            ->label('Perfil')
+                            ->options(['standard' => 'Standard', 'pro' => 'Pro'])
+                            ->nullable(),
+                        TextInput::make('vendor_sales_month')
+                            ->label('Ventas este mes')
+                            ->numeric()
+                            ->default(0),
+                        TextInput::make('vendor_total_earned')
+                            ->label('Total ganado ($)')
+                            ->numeric()
+                            ->readOnly(),
+                        TextInput::make('referral_code')
+                            ->label('Código de referido')
+                            ->maxLength(20)
+                            ->unique(ignoreRecord: true),
+                        Section::make('Pago Móvil')
+                            ->schema([
+                                TextInput::make('pago_movil_phone')->label('Teléfono')->maxLength(20),
+                                TextInput::make('pago_movil_cedula')->label('Cédula')->maxLength(15),
+                                TextInput::make('pago_movil_bank')->label('Banco')->maxLength(50),
+                            ])->columns(3)->collapsible(),
+                    ])
+                    ->columns(2)
+                    ->collapsible()
+                    ->collapsed(),
             ]);
     }
 

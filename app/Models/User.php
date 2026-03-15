@@ -33,6 +33,13 @@ class User extends Authenticatable
         'google_id',
         'avatar',
         'role',
+        'vendor_profile',
+        'vendor_sales_month',
+        'vendor_total_earned',
+        'pago_movil_phone',
+        'pago_movil_cedula',
+        'pago_movil_bank',
+        'referral_code',
     ];
 
     /**
@@ -72,6 +79,27 @@ class User extends Authenticatable
     public function isSoporte(): bool
     {
         return $this->role === self::ROLE_SOPORTE;
+    }
+
+    public function isVendor(): bool
+    {
+        return !is_null($this->vendor_profile);
+    }
+
+    public function getCommissionRate(): float
+    {
+        $rates = [
+            'standard' => [1 => 12, 2 => 15, 3 => 18],
+            'pro'      => [1 => 15, 2 => 18, 3 => 22],
+        ];
+
+        $level = match (true) {
+            $this->vendor_sales_month >= 10 => 3,
+            $this->vendor_sales_month >= 5  => 2,
+            default => 1,
+        };
+
+        return (float) ($rates[$this->vendor_profile ?? 'standard'][$level] ?? 12);
     }
 
     /**
