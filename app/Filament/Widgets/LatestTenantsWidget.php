@@ -8,13 +8,13 @@ use App\Models\Tenant;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget;
-use Illuminate\Database\Eloquent\Builder;
 
 class LatestTenantsWidget extends TableWidget
 {
     protected static ?string $heading = 'Últimos 5 negocios registrados';
 
     protected int|string|array $columnSpan = 'full';
+    protected ?string $pollingInterval = null;
 
     public function table(Table $table): Table
     {
@@ -27,8 +27,7 @@ class LatestTenantsWidget extends TableWidget
             )
             ->columns([
                 TextColumn::make('business_name')
-                    ->label('Negocio')
-                    ->searchable(),
+                    ->label('Negocio'),
                 TextColumn::make('plan.blueprint')
                     ->label('Producto')
                     ->badge()

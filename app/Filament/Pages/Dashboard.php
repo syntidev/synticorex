@@ -4,10 +4,6 @@ declare(strict_types=1);
 
 namespace App\Filament\Pages;
 
-use App\Filament\Widgets\BlueprintDonutChart;
-use App\Filament\Widgets\LatestTenantsWidget;
-use App\Filament\Widgets\RevenueLineChart;
-use App\Filament\Widgets\StatsOverviewWidget;
 use Filament\Pages\Dashboard as BaseDashboard;
 
 class Dashboard extends BaseDashboard
@@ -17,10 +13,10 @@ class Dashboard extends BaseDashboard
     public function getWidgets(): array
     {
         return [
-            StatsOverviewWidget::class,
-            BlueprintDonutChart::class,
-            RevenueLineChart::class,
-            LatestTenantsWidget::class,
+            \App\Filament\Widgets\StatsOverviewWidget::class,
+            \App\Filament\Widgets\BlueprintDonutChart::class,
+            \App\Filament\Widgets\RevenueLineChart::class,
+            \App\Filament\Widgets\LatestTenantsWidget::class,
         ];
     }
 

@@ -14,6 +14,11 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable, HasCopilotChat;
 
+    public const ROLE_ADMIN    = 'admin';
+    public const ROLE_VENDEDOR = 'vendedor';
+    public const ROLE_SOPORTE  = 'soporte';
+    public const ROLE_CLIENTE  = 'cliente';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -27,6 +32,7 @@ class User extends Authenticatable
         'remember_token',
         'google_id',
         'avatar',
+        'role',
     ];
 
     /**
@@ -55,7 +61,17 @@ class User extends Authenticatable
 
     public function isAdmin(): bool
     {
-        return $this->is_admin === true;
+        return $this->role === self::ROLE_ADMIN || $this->is_admin === true;
+    }
+
+    public function isVendedor(): bool
+    {
+        return $this->role === self::ROLE_VENDEDOR;
+    }
+
+    public function isSoporte(): bool
+    {
+        return $this->role === self::ROLE_SOPORTE;
     }
 
     /**

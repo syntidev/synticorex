@@ -9,41 +9,35 @@ use Filament\Widgets\ChartWidget;
 
 class RevenueLineChart extends ChartWidget
 {
-    protected ?string $heading = 'Tenants Nuevos — Últimos 6 meses';
-
     protected int|string|array $columnSpan = 2;
+    protected ?string $pollingInterval = null;
+
+    public function getHeading(): string
+    {
+        return 'Tenants Nuevos — Últimos 6 meses';
+    }
 
     protected function getData(): array
     {
-        $months = collect(range(5, 0))->map(fn (int $i) => now()->subMonths($i));
-
-        $counts = Tenant::selectRaw('MONTH(created_at) as mes, COUNT(*) as total')
-            ->whereDate('created_at', '>=', now()->subMonths(5)->startOfMonth())
-            ->groupBy('mes')
-            ->orderBy('mes')
-            ->pluck('total', 'mes')
-            ->toArray();
-
-        $labels = [];
-        $values = [];
-
-        foreach ($months as $month) {
-            $labels[] = $month->translatedFormat('M');
-            $values[] = $counts[(int) $month->format('n')] ?? 0;
-        }
+        $meses = collect(range(5, 0))->map(function (int $i) {
+            $fecha = now()->subMonths($i);
+            return [
+                'label' => $fecha->format('M'),
+                'total' => Tenant::whereYear('created_at', $fecha->year)
+                    ->whereMonth('created_at', $fecha->month)->count(),
+            ];
+        });
 
         return [
-            'datasets' => [
-                [
-                    'label'           => 'Nuevos tenants',
-                    'data'            => $values,
-                    'fill'            => true,
-                    'tension'         => 0.4,
-                    'borderColor'     => '#4A80E4',
-                    'backgroundColor' => 'rgba(74, 128, 228, 0.1)',
-                ],
-            ],
-            'labels' => $labels,
+            'datasets' => [[
+                'label' => 'Nuevos tenants',
+                'data' => $meses->pluck('total')->toArray(),
+                'borderColor' => '#4A80E4',
+                'backgroundColor' => 'rgba(74,128,228,0.15)',
+                'fill' => true,
+                'tension' => 0.4,
+            ]],
+            'labels' => $meses->pluck('label')->toArray(),
         ];
     }
 
