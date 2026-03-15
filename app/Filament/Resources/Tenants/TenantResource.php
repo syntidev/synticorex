@@ -134,5 +134,20 @@ class TenantResource extends Resource implements CopilotResource
     {
         return parent::getEloquentQuery()->with(['plan', 'user']);
     }
+
+    public static function canEdit(\Illuminate\Database\Eloquent\Model $record): bool
+    {
+        return !auth()->user()->isSoporte();
+    }
+
+    public static function canCreate(): bool
+    {
+        return !auth()->user()->isSoporte();
+    }
+
+    public static function canDelete(\Illuminate\Database\Eloquent\Model $record): bool
+    {
+        return !auth()->user()->isSoporte();
+    }
 }
 
