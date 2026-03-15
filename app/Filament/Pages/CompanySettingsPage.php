@@ -12,7 +12,7 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use UnitEnum;
@@ -39,7 +39,7 @@ class CompanySettingsPage extends Page implements HasForms
         $this->form->fill($setting->toArray());
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $form): Schema
     {
         return $form
             ->schema([
@@ -79,22 +79,24 @@ class CompanySettingsPage extends Page implements HasForms
             ->statePath('data');
     }
 
-    protected function getHeaderActions(): array
+    protected function getFormActions(): array
     {
         return [
-            Action::make('guardar')
+            Action::make('save')
                 ->label('Guardar')
-                ->icon('heroicon-o-document')
-                ->action(function (): void {
-                    $data = $this->form->getState();
-
-                    CompanySetting::updateOrCreate(['id' => 1], $data);
-
-                    Notification::make()
-                        ->title('Datos de empresa guardados')
-                        ->success()
-                        ->send();
-                }),
+                ->submit('save'),
         ];
+    }
+
+    public function save(): void
+    {
+        $data = $this->form->getState();
+
+        CompanySetting::updateOrCreate(['id' => 1], $data);
+
+        Notification::make()
+            ->title('Datos de empresa guardados')
+            ->success()
+            ->send();
     }
 }

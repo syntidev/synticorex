@@ -58,7 +58,7 @@
                 <div class="rounded-xl bg-white dark:bg-gray-800 p-5 shadow-sm ring-1 ring-gray-200 dark:ring-gray-700">
                     <div class="flex items-start gap-3 mb-3">
                         <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary-50 dark:bg-primary-900/20 shrink-0">
-                            <x-icon name="{{ $tool['icon'] }}" class="h-5 w-5 text-primary-600 dark:text-primary-400" />
+                            <iconify-icon icon="{{ str_replace('tabler--', 'tabler:', $tool['icon']) }}" width="20" height="20" class="text-primary-600"></iconify-icon>
                         </div>
                         <div>
                             <h4 class="font-semibold text-gray-900 dark:text-white">{{ $tool['name'] }}</h4>
@@ -83,7 +83,7 @@
             <div class="rounded-xl bg-white dark:bg-gray-800 p-5 shadow-sm ring-1 ring-gray-200 dark:ring-gray-700">
                 <div class="flex items-start gap-3 mb-3">
                     <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary-50 dark:bg-primary-900/20 shrink-0">
-                        <x-icon name="tabler--server" class="h-5 w-5 text-primary-600 dark:text-primary-400" />
+                        <iconify-icon icon="tabler:server" width="20" height="20"></iconify-icon>
                     </div>
                     <div>
                         <h4 class="font-semibold text-gray-900 dark:text-white">Uso de Disco</h4>
@@ -109,7 +109,7 @@
             <div class="flex items-center justify-between mb-4">
                 <div class="flex items-center gap-3">
                     <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-red-50 dark:bg-red-900/20 shrink-0">
-                        <x-icon name="tabler--file-alert" class="h-5 w-5 text-red-600 dark:text-red-400" />
+                        <iconify-icon icon="tabler:file-alert" width="20" height="20"></iconify-icon>
                     </div>
                     <div>
                         <h4 class="font-semibold text-gray-900 dark:text-white">Log Viewer</h4>

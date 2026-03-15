@@ -42,17 +42,17 @@ class CurrencyRatesWidget extends BaseWidget
         }
 
         return [
-            Stat::make('USD/BCV', $usdRate > 0 ? number_format($usdRate, 2) . ' Bs' : 'N/D')
+            Stat::make('USD · BCV Oficial', $usdRate > 0 ? number_format($usdRate, 2) . ' Bs' : 'N/D')
                 ->description('Tasa oficial BCV')
                 ->descriptionIcon('heroicon-m-currency-dollar')
                 ->icon('heroicon-o-currency-dollar')
                 ->color('primary'),
-            Stat::make('EUR/BCV', $eurRate > 0 ? number_format($eurRate, 2) . ' Bs' : 'N/D')
+            Stat::make('EUR · BCV Oficial', $eurRate > 0 ? number_format($eurRate, 2) . ' Bs' : 'N/D')
                 ->description('Tasa euro BCV')
                 ->descriptionIcon('heroicon-m-banknotes')
                 ->icon('heroicon-o-banknotes')
                 ->color('success'),
-            Stat::make('Última actualización', $lastUpdateLabel)
+            Stat::make('Actualizado · pydolarve.org', $lastUpdateLabel)
                 ->description('Tasas de cambio')
                 ->descriptionIcon('heroicon-m-clock')
                 ->icon('heroicon-o-clock')

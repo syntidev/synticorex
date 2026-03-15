@@ -12,7 +12,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Illuminate\Support\Facades\Log;
@@ -46,7 +46,7 @@ class MailSettingsPage extends Page implements HasForms
         ]);
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $form): Schema
     {
         return $form
             ->schema([
@@ -96,26 +96,18 @@ class MailSettingsPage extends Page implements HasForms
             ->statePath('data');
     }
 
+    protected function getFormActions(): array
+    {
+        return [
+            Action::make('save')
+                ->label('Guardar')
+                ->submit('save'),
+        ];
+    }
+
     protected function getHeaderActions(): array
     {
         return [
-            Action::make('guardar')
-                ->label('Guardar')
-                ->icon('heroicon-o-document')
-                ->action(function (): void {
-                    $data = $this->form->getState();
-
-                    MailSetting::updateOrCreate(
-                        ['id' => MailSetting::current()?->id ?? 0],
-                        $data,
-                    );
-
-                    Notification::make()
-                        ->title('Configuración de correo guardada')
-                        ->success()
-                        ->send();
-                }),
-
             Action::make('enviar_prueba')
                 ->label('Enviar correo de prueba')
                 ->icon('heroicon-o-paper-airplane')
@@ -147,5 +139,20 @@ class MailSettingsPage extends Page implements HasForms
                     }
                 }),
         ];
+    }
+
+    public function save(): void
+    {
+        $data = $this->form->getState();
+
+        MailSetting::updateOrCreate(
+            ['id' => MailSetting::current()?->id ?? 0],
+            $data,
+        );
+
+        Notification::make()
+            ->title('Configuración de correo guardada')
+            ->success()
+            ->send();
     }
 }

@@ -1,5 +1,8 @@
 <x-filament-panels::page>
-    <x-filament-panels::form wire:submit="save">
+    <form wire:submit="save">
         {{ $this->form }}
-    </x-filament-panels::form>
+        <button type="submit" class="fi-btn fi-btn-primary mt-4 px-4 py-2 rounded-lg">
+            Guardar
+        </button>
+    </form>
 </x-filament-panels::page>

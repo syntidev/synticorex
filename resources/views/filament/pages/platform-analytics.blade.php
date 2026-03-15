@@ -28,7 +28,7 @@
             <div class="rounded-xl bg-white dark:bg-gray-800 p-4 shadow-sm ring-1 ring-gray-200 dark:ring-gray-700">
                 <div class="flex items-center gap-3">
                     <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary-50 dark:bg-primary-900/20">
-                        <x-icon name="{{ $kpi['icon'] }}" class="h-5 w-5 text-primary-600 dark:text-primary-400" />
+                        <iconify-icon icon="{{ str_replace('tabler--', 'tabler:', $kpi['icon']) }}" width="20" height="20" class="text-primary-600 dark:text-primary-400"></iconify-icon>
                     </div>
                     <div>
                         <p class="text-sm text-gray-500 dark:text-gray-400">{{ $kpi['label'] }}</p>

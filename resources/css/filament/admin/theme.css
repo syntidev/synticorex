@@ -7,20 +7,23 @@
 }
 
 .fi-sidebar-item-label {
-    color: #CBD5E1 !important;
+    color: #E2E8F0 !important;
     font-size: 0.875rem !important;
+    font-weight: 500 !important;
+    opacity: 1 !important;
 }
 
 .fi-sidebar-group-label {
-    color: #64748B !important;
+    color: #94A3B8 !important;
     font-size: 0.65rem !important;
     letter-spacing: 0.1em !important;
     text-transform: uppercase !important;
-    font-weight: 600 !important;
+    font-weight: 700 !important;
+    opacity: 1 !important;
 }
 
 .fi-sidebar-item-button:hover .fi-sidebar-item-label {
-    color: #F1F5F9 !important;
+    color: #FFFFFF !important;
 }
 
 .fi-sidebar-item-button[aria-current="page"] {
@@ -34,7 +37,8 @@
 }
 
 .fi-sidebar-item-icon {
-    color: #64748B !important;
+    color: #94A3B8 !important;
+    opacity: 1 !important;
 }
 
 .fi-sidebar-item-button[aria-current="page"] .fi-sidebar-item-icon {
