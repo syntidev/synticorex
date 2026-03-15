@@ -21,7 +21,7 @@ class CompanySettingsPage extends Page implements HasForms
 {
     use InteractsWithForms;
 
-    protected static string|BackedEnum|null $navigationIcon = 'tabler--building';
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-building-office';
 
     protected static ?string $navigationLabel = 'Datos de Empresa';
 
@@ -84,7 +84,7 @@ class CompanySettingsPage extends Page implements HasForms
         return [
             Action::make('guardar')
                 ->label('Guardar')
-                ->icon('tabler--device-floppy')
+                ->icon('heroicon-o-document')
                 ->action(function (): void {
                     $data = $this->form->getState();
 

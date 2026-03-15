@@ -98,7 +98,7 @@ class ViewSupportTicket extends ViewRecord
         return [
             Action::make('sugerir_ia')
                 ->label('Sugerir respuesta con IA')
-                ->icon('tabler--sparkles')
+                ->icon('heroicon-o-sparkles')
                 ->color('info')
                 ->action(function (): void {
                     $ticket = $this->record;
@@ -143,7 +143,7 @@ class ViewSupportTicket extends ViewRecord
 
             Action::make('enviar_respuesta')
                 ->label('Enviar respuesta')
-                ->icon('tabler--send')
+                ->icon('heroicon-o-paper-airplane')
                 ->color('success')
                 ->form([
                     Textarea::make('admin_reply')
@@ -172,7 +172,7 @@ class ViewSupportTicket extends ViewRecord
 
             Action::make('cerrar_ticket')
                 ->label('Cerrar ticket')
-                ->icon('tabler--circle-check')
+                ->icon('heroicon-o-check-circle')
                 ->color('gray')
                 ->requiresConfirmation()
                 ->action(function (): void {

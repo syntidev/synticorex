@@ -11,7 +11,7 @@ use UnitEnum;
 
 class SystemHealthPage extends Page
 {
-    protected static string|BackedEnum|null $navigationIcon = 'tabler--heart-rate-monitor';
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-heart';
 
     protected static ?string $navigationLabel = 'Salud del Sistema';
 

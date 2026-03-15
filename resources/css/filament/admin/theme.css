@@ -1,0 +1,54 @@
+@import '../../../../vendor/filament/filament/resources/css/theme.css';
+
+:root {
+    --sidebar-bg: #0F172A;
+    --sidebar-border: #1E293B;
+    --topbar-bg: #0F172A;
+}
+
+/* Sidebar oscuro con identidad SYNTIweb */
+.fi-sidebar {
+    background-color: #0F172A !important;
+    border-right: 1px solid #1E293B !important;
+}
+
+/* Brand name gradient */
+.fi-brand-name {
+    background: linear-gradient(135deg, #4A80E4, #818CF8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 800 !important;
+    font-size: 1.25rem !important;
+}
+
+/* Navigation items */
+.fi-sidebar-nav .fi-sidebar-item-button {
+    border-radius: 0.5rem;
+    margin: 0.1rem 0.5rem;
+}
+
+/* Active nav item */
+.fi-sidebar-item-button[aria-current="page"] {
+    background: linear-gradient(135deg, #4A80E415, #818CF815) !important;
+    border-left: 3px solid #4A80E4 !important;
+}
+
+/* Stats cards hover */
+.fi-stats-overview-stat {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.fi-stats-overview-stat:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(74, 128, 228, 0.15);
+}
+
+/* Topbar */
+.fi-topbar {
+    background-color: #0F172A !important;
+    border-bottom: 1px solid #1E293B !important;
+}
+
+/* Buttons primary */
+.fi-btn-primary {
+    background: linear-gradient(135deg, #4A80E4, #6366F1) !important;
+}

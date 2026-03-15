@@ -26,7 +26,7 @@ class ListBlogPosts extends ListRecords
         return [
             Action::make('generar_con_ia')
                 ->label('Generar con IA')
-                ->icon('tabler--sparkles')
+                ->icon('heroicon-o-sparkles')
                 ->color('info')
                 ->form([
                     Textarea::make('tema')

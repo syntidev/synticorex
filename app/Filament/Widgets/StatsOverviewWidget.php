@@ -38,26 +38,32 @@ class StatsOverviewWidget extends BaseWidget
             Stat::make('Tenants Activos', (string) $activos)
                 ->description($nuevosEsteMes . ' nuevos este mes')
                 ->descriptionIcon('heroicon-m-building-storefront')
+                ->icon('tabler-building-store')
                 ->color('success'),
             Stat::make('MRR', '$ ' . number_format((float) $mrrActual, 2))
                 ->description('vs $' . number_format((float) $mrrAnterior, 2) . ' mes anterior')
                 ->descriptionIcon('heroicon-m-currency-dollar')
+                ->icon('tabler-cash')
                 ->color('primary'),
             Stat::make('Pagos Pendientes', (string) $pagosPendientes)
                 ->description('requieren revisión')
                 ->descriptionIcon('heroicon-m-clock')
+                ->icon('tabler-clock')
                 ->color($pagosPendientes > 0 ? 'warning' : 'success'),
             Stat::make('Tickets Abiertos', (string) $ticketsAbiertos)
                 ->description('soporte abierto')
                 ->descriptionIcon('heroicon-m-chat-bubble-left-right')
+                ->icon('tabler-ticket')
                 ->color($ticketsAbiertos > 0 ? 'danger' : 'success'),
             Stat::make('Tenants Suspendidos', (string) $suspendidos)
                 ->description('por vencimiento')
                 ->descriptionIcon('heroicon-m-exclamation-triangle')
+                ->icon('tabler-ban')
                 ->color($suspendidos > 0 ? 'danger' : 'success'),
             Stat::make('Trial Activos', (string) $trial)
                 ->description('en período de prueba')
                 ->descriptionIcon('heroicon-m-beaker')
+                ->icon('tabler-hourglass')
                 ->color('info'),
         ];
     }

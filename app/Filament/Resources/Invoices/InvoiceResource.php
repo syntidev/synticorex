@@ -17,6 +17,9 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Auth;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportAction;
+use pxlrbt\FilamentExcel\Columns\Column;
+use pxlrbt\FilamentExcel\Exports\ExcelExport;
 use UnitEnum;
 
 class InvoiceResource extends Resource
@@ -31,7 +34,7 @@ class InvoiceResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Facturas';
 
-    protected static UnitEnum|string|null $navigationGroup = 'Finanzas';
+    protected static UnitEnum|string|null $navigationGroup = 'Facturación';
 
     protected static ?int $navigationSort = 5;
 
@@ -112,6 +115,23 @@ class InvoiceResource extends Resource
                     ->sortable(),
             ])
             ->defaultSort('created_at', 'desc')
+            ->headerActions([
+                ExportAction::make()->exports([
+                    ExcelExport::make('facturas')->fromTable()
+                        ->withFilename('facturas-' . now()->format('Y-m-d'))
+                        ->withColumns([
+                            Column::make('invoice_number')->heading('Nº Factura'),
+                            Column::make('tenant.business_name')->heading('Negocio'),
+                            Column::make('amount_usd')->heading('Monto USD'),
+                            Column::make('payment_channel')->heading('Canal'),
+                            Column::make('status')->heading('Estado'),
+                            Column::make('payment_date')->heading('Fecha pago'),
+                            Column::make('period_start')->heading('Período inicio'),
+                            Column::make('period_end')->heading('Período fin'),
+                            Column::make('reviewed_at')->heading('Revisado'),
+                        ]),
+                ]),
+            ])
             ->filters([
                 SelectFilter::make('status')
                     ->label('Estado')

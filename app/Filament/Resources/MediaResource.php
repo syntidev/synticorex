@@ -25,7 +25,7 @@ class MediaResource extends Resource
 {
     protected static ?string $model = MediaFile::class;
 
-    protected static string|BackedEnum|null $navigationIcon = 'tabler--photo';
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-photo';
 
     protected static ?string $navigationLabel = 'Galería';
 
@@ -70,7 +70,7 @@ class MediaResource extends Resource
             ->actions([
                 Action::make('copiar_url')
                     ->label('Copiar URL')
-                    ->icon('tabler--clipboard')
+                    ->icon('heroicon-o-document-duplicate')
                     ->action(function (MediaFile $record): void {
                         Notification::make()
                             ->title('URL copiada')
@@ -88,7 +88,7 @@ class MediaResource extends Resource
             ->headerActions([
                 Action::make('upload')
                     ->label('Subir archivos')
-                    ->icon('tabler--upload')
+                    ->icon('heroicon-o-arrow-up-tray')
                     ->form([
                         FileUpload::make('files')
                             ->label('Archivos')
@@ -107,19 +107,11 @@ class MediaResource extends Resource
                             $size = filesize($fullPath) ?: 0;
 
                             MediaFile::create([
-                                'model_type'            => 'global',
-                                'model_id'              => 0,
-                                'collection_name'       => 'media-library',
-                                'name'                  => pathinfo($fileName, PATHINFO_FILENAME),
-                                'file_name'             => $fileName,
-                                'mime_type'             => $mimeType,
-                                'disk'                  => 'public',
-                                'conversions_disk'      => 'public',
-                                'size'                  => $size,
-                                'manipulations'         => [],
-                                'custom_properties'     => [],
-                                'generated_conversions' => [],
-                                'responsive_images'     => [],
+                                'name'      => pathinfo($fileName, PATHINFO_FILENAME),
+                                'file_name' => $fileName,
+                                'mime_type' => $mimeType,
+                                'disk'      => 'public',
+                                'size'      => $size,
                             ]);
                         }
 

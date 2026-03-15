@@ -221,6 +221,14 @@ Route::middleware(['auth', 'verified', 'tenant.owner:tenantId'])->group(function
 
 // ═══ Admin — Cola de revisión de pagos ═══════════════════════════════════════
 Route::middleware(['auth', \App\Http\Middleware\EnsureAdmin::class])->prefix('admin')->group(function () {
+    Route::get('/stats-badge', function () {
+        return response()->json([
+            'active'           => \App\Models\Tenant::where('status', 'active')->count(),
+            'pending_payments' => \App\Models\Invoice::where('status', 'pending_review')->count(),
+            'open_tickets'     => \App\Models\SupportTicket::where('status', 'open')->count(),
+        ]);
+    })->name('admin.stats-badge');
+
     Route::get('/billing',                          [BillingController::class, 'adminQueue'])->name('admin.billing.queue');
     Route::get('/billing/view',                     fn () => view('admin.billing'))->name('admin.billing.view');
     Route::post('/billing/{invoiceId}/approve',     [BillingController::class, 'approvePayment'])->name('admin.billing.approve');
@@ -228,6 +236,17 @@ Route::middleware(['auth', \App\Http\Middleware\EnsureAdmin::class])->prefix('ad
     Route::get('/billing/{invoiceId}/receipt',       [BillingController::class, 'viewReceipt'])->name('admin.billing.receipt');
 
     Route::post('/health/refresh', [\App\Http\Controllers\Admin\HealthCheckController::class, 'refresh'])->name('admin.health.refresh');
+
+    // ═══ Admin Tools ═════════════════════════════════════════════════════
+    Route::post('/tools/cache', [\App\Http\Controllers\Admin\AdminToolsController::class, 'clearCache'])->name('admin.tools.cache');
+    Route::post('/tools/logs', [\App\Http\Controllers\Admin\AdminToolsController::class, 'clearLogs'])->name('admin.tools.logs');
+    Route::post('/tools/queue', [\App\Http\Controllers\Admin\AdminToolsController::class, 'restartQueue'])->name('admin.tools.queue');
+    Route::post('/tools/migrate', [\App\Http\Controllers\Admin\AdminToolsController::class, 'runMigrations'])->name('admin.tools.migrate');
+    Route::post('/tools/suspend-expired', [\App\Http\Controllers\Admin\AdminToolsController::class, 'suspendExpiredNow'])->name('admin.tools.suspend');
+    Route::post('/tools/reindex', [\App\Http\Controllers\Admin\AdminToolsController::class, 'reindexAiDocs'])->name('admin.tools.reindex');
+    Route::get('/tools/disk', [\App\Http\Controllers\Admin\AdminToolsController::class, 'getDiskUsage'])->name('admin.tools.disk');
+    Route::get('/tools/log-tail', [\App\Http\Controllers\Admin\AdminToolsController::class, 'getLogTail'])->name('admin.tools.log-tail');
+    Route::post('/tools/test-report/{tenantId}', [\App\Http\Controllers\Admin\AdminToolsController::class, 'sendTestReport'])->name('admin.tools.test-report');
 });
 
 // ═══ Mini Order Engine — SYNTIcat ════════════════════════════════════════════

@@ -11,6 +11,9 @@ use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportAction;
+use pxlrbt\FilamentExcel\Columns\Column;
+use pxlrbt\FilamentExcel\Exports\ExcelExport;
 
 class TenantsTable
 {
@@ -96,6 +99,20 @@ class TenantsTable
                     ->color('gray')
                     ->url(fn (Tenant $r) => url('/' . $r->subdomain))
                     ->openUrlInNewTab(),
+            ])
+            ->headerActions([
+                ExportAction::make()->exports([
+                    ExcelExport::make('tenants')->fromTable()
+                        ->withFilename('tenants-' . now()->format('Y-m-d'))
+                        ->withColumns([
+                            Column::make('business_name')->heading('Negocio'),
+                            Column::make('subdomain')->heading('Subdominio'),
+                            Column::make('plan.name')->heading('Plan'),
+                            Column::make('status')->heading('Estado'),
+                            Column::make('subscription_ends_at')->heading('Vence'),
+                            Column::make('created_at')->heading('Creado'),
+                        ]),
+                ]),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

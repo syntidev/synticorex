@@ -13,13 +13,16 @@ use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportAction;
+use pxlrbt\FilamentExcel\Columns\Column;
+use pxlrbt\FilamentExcel\Exports\ExcelExport;
 use UnitEnum;
 
 class SupportTicketResource extends Resource
 {
     protected static ?string $model = SupportTicket::class;
 
-    protected static string|BackedEnum|null $navigationIcon = 'tabler--message-circle-question';
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-question-mark-circle';
 
     protected static ?string $navigationLabel = 'Tickets';
 
@@ -27,7 +30,7 @@ class SupportTicketResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Tickets';
 
-    protected static UnitEnum|string|null $navigationGroup = 'Soporte';
+    protected static UnitEnum|string|null $navigationGroup = 'Facturación';
 
     protected static ?int $navigationSort = 20;
 
@@ -111,6 +114,20 @@ class SupportTicketResource extends Resource
                         'technical' => 'Técnico',
                         'general' => 'General',
                     ]),
+            ])
+            ->headerActions([
+                ExportAction::make()->exports([
+                    ExcelExport::make('tickets')->fromTable()
+                        ->withFilename('tickets-' . now()->format('Y-m-d'))
+                        ->withColumns([
+                            Column::make('id')->heading('#'),
+                            Column::make('tenant.business_name')->heading('Negocio'),
+                            Column::make('subject')->heading('Asunto'),
+                            Column::make('category')->heading('Categoría'),
+                            Column::make('status')->heading('Estado'),
+                            Column::make('created_at')->heading('Creado'),
+                        ]),
+                ]),
             ])
             ->actions([
                 \Filament\Actions\ViewAction::make(),

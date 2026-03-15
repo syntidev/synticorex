@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace App\Providers\Filament;
 
+use Filament\FontProviders\GoogleFontProvider;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\NavigationGroup;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -29,7 +31,37 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
-            ->colors(['primary' => Color::Blue])
+            ->brandName('SYNTIweb')
+            ->brandLogo(asset('brand/syntiweb-logo-flat-negative.svg'))
+            ->brandLogoHeight('2rem')
+            ->favicon(asset('brand/favicon.ico'))
+            ->darkMode(true)
+            ->colors([
+                'primary' => Color::hex('#4A80E4'),
+                'gray'    => Color::Gray,
+                'info'    => Color::hex('#3B82F6'),
+                'success' => Color::hex('#22C55E'),
+                'warning' => Color::hex('#F59E0B'),
+                'danger'  => Color::hex('#EF4444'),
+            ])
+            ->font('Inter', provider: GoogleFontProvider::class)
+            ->viteTheme('resources/css/filament/admin/theme.css')
+            ->navigationGroups([
+                NavigationGroup::make('Plataforma')
+                    ->collapsed(false),
+                NavigationGroup::make('Facturación')
+                    ->collapsed(false),
+                NavigationGroup::make('Contenido')
+                    ->collapsed(true),
+                NavigationGroup::make('Configuración')
+                    ->collapsed(true),
+                NavigationGroup::make('Sistema')
+                    ->collapsed(true),
+            ])
+            ->renderHook(
+                'panels::topbar.end',
+                fn () => view('filament.components.topbar-stats'),
+            )
             ->login()
             ->authGuard('web')
             ->authMiddleware([

@@ -12,6 +12,7 @@ use App\Models\Plan;
 use App\Models\Tenant;
 use App\Models\User;
 use BackedEnum;
+use UnitEnum;
 use EslamRedaDiv\FilamentCopilot\Contracts\CopilotResource;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
@@ -30,6 +31,8 @@ class TenantResource extends Resource implements CopilotResource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBuildingStorefront;
 
     protected static ?string $navigationLabel = 'Tenants';
+
+    protected static UnitEnum|string|null $navigationGroup = 'Plataforma';
 
     protected static ?string $modelLabel = 'Tenant';
 

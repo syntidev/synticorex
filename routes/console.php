@@ -22,3 +22,18 @@ Schedule::command('tenants:suspend-expired')
     ->dailyAt('02:00')
     ->withoutOverlapping()
     ->runInBackground();
+
+Schedule::command('alerts:check')
+    ->hourly()
+    ->withoutOverlapping()
+    ->runInBackground();
+
+Schedule::command('reports:send --period=weekly')
+    ->weeklyOn(1, '08:00')
+    ->withoutOverlapping()
+    ->runInBackground();
+
+Schedule::command('reports:send --period=monthly')
+    ->monthlyOn(1, '08:00')
+    ->withoutOverlapping()
+    ->runInBackground();

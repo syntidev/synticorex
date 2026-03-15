@@ -23,7 +23,7 @@ class MailSettingsPage extends Page implements HasForms
 {
     use InteractsWithForms;
 
-    protected static string|BackedEnum|null $navigationIcon = 'tabler--mail-cog';
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-envelope';
 
     protected static ?string $navigationLabel = 'Correo SMTP';
 
@@ -101,7 +101,7 @@ class MailSettingsPage extends Page implements HasForms
         return [
             Action::make('guardar')
                 ->label('Guardar')
-                ->icon('tabler--device-floppy')
+                ->icon('heroicon-o-document')
                 ->action(function (): void {
                     $data = $this->form->getState();
 
@@ -118,7 +118,7 @@ class MailSettingsPage extends Page implements HasForms
 
             Action::make('enviar_prueba')
                 ->label('Enviar correo de prueba')
-                ->icon('tabler--send')
+                ->icon('heroicon-o-paper-airplane')
                 ->color('gray')
                 ->form([
                     TextInput::make('test_email')

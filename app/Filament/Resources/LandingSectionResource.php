@@ -24,7 +24,7 @@ class LandingSectionResource extends Resource
 {
     protected static ?string $model = LandingSection::class;
 
-    protected static string|BackedEnum|null $navigationIcon = 'tabler--layout';
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-squares-2x2';
 
     protected static ?string $navigationLabel = 'Landing Page';
 
