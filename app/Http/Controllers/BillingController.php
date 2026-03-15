@@ -45,14 +45,6 @@ class BillingController extends Controller
         ],
     ];
 
-    /**
-     * Precios por plan (USD/año).
-     */
-    private const PLAN_PRICES = [
-        1 => 99.00,   // Oportunidad
-        2 => 149.00,  // Crecimiento
-        3 => 199.00,  // Visión
-    ];
 
     /**
      * Obtener datos de facturación para un tenant (AJAX).
@@ -83,7 +75,7 @@ class BillingController extends Controller
                 'created_at'      => $inv->created_at?->format('d/m/Y H:i'),
             ]);
 
-        $planPrice = self::PLAN_PRICES[$tenant->plan_id] ?? 99.00;
+        $planPrice = (float) ($tenant->plan->price_usd ?? 99.00);
 
         return response()->json([
             'success'  => true,
@@ -153,7 +145,7 @@ class BillingController extends Controller
         }
         $periodEnd = $periodStart->copy()->addYear();
 
-        $planPrice = self::PLAN_PRICES[$tenant->plan_id] ?? 99.00;
+        $planPrice = (float) ($tenant->plan->price_usd ?? 99.00);
 
         $invoice = Invoice::create([
             'tenant_id'         => $tenantId,

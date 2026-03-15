@@ -17,3 +17,8 @@ Schedule::command('tenants:check-expiry')
     ->dailyAt('02:00')
     ->withoutOverlapping()
     ->runInBackground();
+
+Schedule::command('tenants:suspend-expired')
+    ->dailyAt('02:00')
+    ->withoutOverlapping()
+    ->runInBackground();

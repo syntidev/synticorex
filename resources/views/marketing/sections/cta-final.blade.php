@@ -1,4 +1,5 @@
 {{-- ═══ CTA FINAL — "Tu negocio merece ser encontrado" ═════════════════ --}}
+@php $section = \App\Models\LandingSection::forKey('cta_final'); @endphp
 <section id="cta-final" class="relative py-20 lg:py-28 overflow-hidden">
     {{-- Full gradient bg --}}
     <div class="absolute inset-0 mkt-gradient-cta"></div>
@@ -16,8 +17,7 @@
             </div>
 
             <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-tight mb-6">
-                Tu negocio merece ser
-                <span class="block mt-2 bg-gradient-to-r from-blue-200 via-indigo-200 to-purple-200 bg-clip-text text-transparent">encontrado</span>
+                {{ $section?->content['headline'] ?? 'Tu negocio merece ser encontrado' }}
             </h2>
 
             <p class="text-xl text-white/70 mb-10 leading-relaxed max-w-2xl mx-auto">
@@ -28,7 +28,7 @@
             {{-- CTAs --}}
             <div class="flex flex-col sm:flex-row gap-4 justify-center mb-10">
                 <a href="{{ route('register') }}" class="inline-flex items-center py-3 px-10 rounded-lg font-extrabold transition-all bg-white text-blue-700 border-0 shadow-xl shadow-black/10 hover:shadow-black/20 hover:scale-[1.02] text-base">
-                    Crear mi página ahora
+                    {{ $section?->content['boton'] ?? 'Crear mi página ahora' }}
                     <span class="iconify tabler--arrow-right size-5"></span>
                 </a>
                 <a href="#planes" class="inline-flex items-center py-3 px-6 rounded-lg font-medium transition-all border border-white/30 text-white hover:bg-white/10">

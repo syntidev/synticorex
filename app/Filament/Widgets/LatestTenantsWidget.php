@@ -11,7 +11,7 @@ use Filament\Widgets\TableWidget;
 
 class LatestTenantsWidget extends TableWidget
 {
-    protected static ?string $heading = 'Últimos 5 negocios registrados';
+    protected static ?string $heading = 'Últimos 10 negocios registrados';
 
     protected int|string|array $columnSpan = 'full';
     protected ?string $pollingInterval = null;
@@ -23,24 +23,26 @@ class LatestTenantsWidget extends TableWidget
                 Tenant::query()
                     ->with('plan')
                     ->latest()
-                    ->limit(5)
+                    ->limit(10)
             )
             ->columns([
                 TextColumn::make('business_name')
                     ->label('Negocio'),
-                TextColumn::make('plan.blueprint')
-                    ->label('Producto')
-                    ->badge()
-                    ->color(fn (?string $state): string => match ($state) {
-                        'studio' => 'info',
-                        'food'   => 'warning',
-                        'cat'    => 'success',
-                        default  => 'gray',
-                    })
-                    ->formatStateUsing(fn (?string $state): string => $state ? ucfirst($state) : '—'),
+                TextColumn::make('subdomain')
+                    ->label('Subdominio'),
                 TextColumn::make('plan.name')
                     ->label('Plan')
                     ->placeholder('—'),
+                TextColumn::make('status')
+                    ->label('Estado')
+                    ->badge()
+                    ->color(fn (?string $state): string => match ($state) {
+                        'active'    => 'success',
+                        'trial'     => 'info',
+                        'suspended' => 'danger',
+                        'frozen'    => 'warning',
+                        default     => 'gray',
+                    }),
                 TextColumn::make('created_at')
                     ->label('Registrado')
                     ->since(),

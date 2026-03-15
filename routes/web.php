@@ -226,6 +226,8 @@ Route::middleware(['auth', \App\Http\Middleware\EnsureAdmin::class])->prefix('ad
     Route::post('/billing/{invoiceId}/approve',     [BillingController::class, 'approvePayment'])->name('admin.billing.approve');
     Route::post('/billing/{invoiceId}/reject',      [BillingController::class, 'rejectPayment'])->name('admin.billing.reject');
     Route::get('/billing/{invoiceId}/receipt',       [BillingController::class, 'viewReceipt'])->name('admin.billing.receipt');
+
+    Route::post('/health/refresh', [\App\Http\Controllers\Admin\HealthCheckController::class, 'refresh'])->name('admin.health.refresh');
 });
 
 // ═══ Mini Order Engine — SYNTIcat ════════════════════════════════════════════

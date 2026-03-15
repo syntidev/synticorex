@@ -1,4 +1,5 @@
 {{-- ═══ HERO — "Tu Negocio Merece Estar en Google" ═══════════════════ --}}
+@php $section = \App\Models\LandingSection::forKey('hero'); @endphp
 <section id="hero" class="relative min-h-screen flex items-center overflow-hidden mkt-gradient-hero">
     {{-- Decorative blobs --}}
     <div class="absolute inset-0 overflow-hidden pointer-events-none">
@@ -20,8 +21,7 @@
                 </div>
 
                 <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-[1.1] mb-6">
-                    Tu Negocio Merece
-                    <span class="block mt-2 bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent">Estar en Google</span>
+                    {{ $section?->content['headline'] ?? 'Tu Negocio Merece Estar en Google' }}
                 </h1>
 
                 <p class="text-lg lg:text-xl text-blue-100/60 mb-10 leading-relaxed max-w-lg mx-auto lg:mx-0">
@@ -32,12 +32,12 @@
 
                 <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                     <a href="{{ route('register') }}" class="inline-flex items-center py-3 px-8 rounded-lg font-bold transition-all bg-gradient-to-r from-blue-500 to-indigo-500 text-white border-0 shadow-xl shadow-blue-500/25 hover:shadow-blue-500/40 hover:scale-[1.02] text-base">
-                        Crear mi página gratis
+                        {{ $section?->content['cta_primary'] ?? 'Crear mi página gratis' }}
                         <span class="iconify tabler--arrow-right size-5"></span>
                     </a>
                     <a href="#solucion" class="inline-flex items-center py-3 px-6 rounded-lg font-medium transition-all border border-white/20 text-white hover:bg-white/10">
                         <span class="iconify tabler--player-play size-5"></span>
-                        Ver cómo funciona
+                        {{ $section?->content['cta_secondary'] ?? 'Ver cómo funciona' }}
                     </a>
                 </div>
 

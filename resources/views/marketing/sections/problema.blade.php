@@ -1,4 +1,5 @@
 {{-- ═══ PROBLEMA — "El 95% de los negocios son invisibles" ════════════ --}}
+@php $section = \App\Models\LandingSection::forKey('problema'); @endphp
 <section id="problema" class="relative py-20 lg:py-28 bg-slate-50 overflow-hidden">
     {{-- Subtle pattern --}}
     <div class="absolute inset-0 opacity-30" style="background-image: radial-gradient(circle at 1px 1px, rgba(148,163,184,0.15) 1px, transparent 0); background-size: 32px 32px;"></div>
@@ -11,7 +12,7 @@
                 El problema real
             </div>
             <h2 class="text-3xl lg:text-5xl font-extrabold text-slate-900 mb-4">
-                Tu negocio es <span class="text-red-500">invisible</span> en internet
+                {{ $section?->content['headline'] ?? 'Tu negocio es invisible en internet' }}
             </h2>
             <p class="text-lg text-slate-500 max-w-2xl mx-auto">
                 Mientras buscas clientes boca a boca, tu competencia aparece en Google, WhatsApp y redes. Esto es lo que pasa cuando no tienes presencia digital:

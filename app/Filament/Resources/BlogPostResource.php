@@ -93,9 +93,13 @@ class BlogPostResource extends Resource
                 Section::make('Imagen y categoría')
                     ->columns(2)
                     ->schema([
-                        TextInput::make('image_url')
-                            ->label('URL de imagen')
-                            ->maxLength(500),
+                        Select::make('image_url')
+                            ->label('Imagen (desde galería)')
+                            ->options(fn (): array => \App\Models\MediaFile::where('mime_type', 'like', 'image/%')
+                                ->get()
+                                ->mapWithKeys(fn ($m) => [$m->getUrl() => $m->name])
+                                ->toArray())
+                            ->searchable(),
                         Select::make('blog_category_id')
                             ->label('Categoría')
                             ->relationship('category', 'name')

@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             DemoDataSeeder::class,
             AiDocSeeder::class,
             BlogSeeder::class,
+            LandingSectionSeeder::class,
         ]);
     }
 }

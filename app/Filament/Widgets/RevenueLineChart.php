@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Widgets;
 
-use App\Models\Tenant;
+use App\Models\Invoice;
 use Filament\Widgets\ChartWidget;
 
 class RevenueLineChart extends ChartWidget
@@ -14,7 +14,7 @@ class RevenueLineChart extends ChartWidget
 
     public function getHeading(): string
     {
-        return 'Tenants Nuevos — Últimos 6 meses';
+        return 'Ingresos — Últimos 6 meses';
     }
 
     protected function getData(): array
@@ -23,14 +23,16 @@ class RevenueLineChart extends ChartWidget
             $fecha = now()->subMonths($i);
             return [
                 'label' => $fecha->format('M'),
-                'total' => Tenant::whereYear('created_at', $fecha->year)
-                    ->whereMonth('created_at', $fecha->month)->count(),
+                'total' => (float) Invoice::where('status', 'paid')
+                    ->whereYear('reviewed_at', $fecha->year)
+                    ->whereMonth('reviewed_at', $fecha->month)
+                    ->sum('amount_usd'),
             ];
         });
 
         return [
             'datasets' => [[
-                'label' => 'Nuevos tenants',
+                'label' => 'Ingresos USD',
                 'data' => $meses->pluck('total')->toArray(),
                 'borderColor' => '#4A80E4',
                 'backgroundColor' => 'rgba(74,128,228,0.15)',

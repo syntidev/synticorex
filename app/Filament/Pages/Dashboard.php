@@ -10,10 +10,16 @@ class Dashboard extends BaseDashboard
 {
     protected static ?string $title = 'SYNTIweb — Centro de Control';
 
-    public function getWidgets(): array
+    public function getHeaderWidgets(): array
     {
         return [
             \App\Filament\Widgets\StatsOverviewWidget::class,
+        ];
+    }
+
+    public function getFooterWidgets(): array
+    {
+        return [
             \App\Filament\Widgets\BlueprintDonutChart::class,
             \App\Filament\Widgets\RevenueLineChart::class,
             \App\Filament\Widgets\LatestTenantsWidget::class,
