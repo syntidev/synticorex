@@ -83,25 +83,10 @@
     .sc-drawer.open{transform:translateX(0)}
     @keyframes bump{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
     .bump{animation:bump .25s ease-out}
-    /* ── Hero editorial bento ── */
-    .sc-bento-cell{position:relative;overflow:hidden;cursor:pointer;background:var(--surface)}
-    .sc-bento-cell.sc-flash{animation:sc-flash-anim .35s ease-out}
-    @keyframes sc-flash-anim{0%{opacity:1}40%{opacity:.6}100%{opacity:1}}
-    .sc-bento-cell img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease;display:block}
-    .sc-bento-cell:hover img{transform:scale(1.04)}
-    .sc-bento-main{aspect-ratio:16/9}@media(min-width:768px){.sc-bento-main{aspect-ratio:21/9}}
-    .sc-bento-sec{aspect-ratio:1/1}
-    .sc-cell-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(10,10,20,.78) 0%,rgba(10,10,20,0) 55%)}
-    .sc-cell-info{position:absolute;bottom:0;left:0;right:0;padding:14px}
-    .sc-cell-tag{display:inline-block;background:var(--primary);color:#fff;font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:3px 7px;border-radius:3px;margin-bottom:5px}
-    .sc-cell-name{font-size:18px;font-weight:700;color:#fff;line-height:1.1;letter-spacing:-.3px}
-    .sc-bento-main .sc-cell-name{font-size:22px}
-    .sc-cell-price{font-size:13px;font-weight:300;color:rgba(255,255,255,.8);margin-top:3px}
-    .sc-wa-pill{position:absolute;bottom:12px;right:12px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.28);border-radius:20px;padding:5px 12px;color:#fff;font-size:11px;font-weight:500;display:flex;align-items:center;gap:5px;cursor:pointer}
-    /* ── Pills de categoría ── */
-    .sc-cat-pill{flex-shrink:0;padding:6px 16px;border-radius:20px;font-size:12px;font-weight:400;cursor:pointer;border:1px solid rgba(var(--foreground-rgb,0 0 0)/.12);background:transparent;color:var(--foreground);opacity:.6;transition:all .2s;white-space:nowrap}
-    .sc-cat-pill.active,.sc-cat-pill[data-active="true"]{background:var(--foreground);color:var(--background);border-color:var(--foreground);font-weight:500;opacity:1}
-    /* ── Card editorial rediseño ── */
+    /* ── Category chips ── */
+    .sc-cat-chip{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:8px;font-size:11px;font-weight:600;white-space:nowrap;flex-shrink:0;cursor:pointer;border:1px solid rgba(var(--foreground-rgb,0 0 0)/.10);background:var(--surface);color:var(--foreground);transition:all .18s}
+    .sc-cat-chip.active,.sc-cat-chip[data-active="true"]{background:var(--primary);color:var(--primary-foreground);border-color:var(--primary)}
+    /* ── Card editorial ── */
     .sc-product-card{position:relative;background:var(--background);border-radius:14px;overflow:hidden;border:1px solid rgba(var(--foreground-rgb,0 0 0)/.06);transition:transform .2s,box-shadow .2s;display:flex;flex-direction:column}
     .sc-product-card:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(0,0,0,.1)}
     .sc-card-accent{position:absolute;top:0;left:0;right:0;height:2.5px;background:var(--accent-cat,var(--primary));z-index:2;transform:scaleX(0);transform-origin:left;transition:transform .35s cubic-bezier(.4,0,.2,1)}
@@ -137,6 +122,10 @@
     @media(max-width:480px){
         .sc-mobile-tight{font-size:1.125rem}
     }
+    /* ── Bottom nav (mobile only) ── */
+    .sc-bottom-nav{display:none}
+    @media(max-width:767px){.sc-bottom-nav{display:block}}
+    @media(max-width:767px){body{padding-bottom:72px}}
 </style>
 @endpush
 
@@ -144,109 +133,41 @@
 
 {{-- 1. NAVBAR APP STYLE --}}
 <header class="sticky top-0 z-[100] w-full bg-background/90 backdrop-blur-2xl" style="border-bottom:1px solid rgba(0,0,0,.07);">
-    <div class="mx-auto max-w-[1280px] px-4 sm:px-8 py-3 flex items-center gap-3">
-        <a href="#" class="flex items-center gap-3 min-w-0 shrink-0">
+    <div class="mx-auto max-w-[1280px] px-4 sm:px-8 py-2.5 flex items-center justify-between gap-3">
+        {{-- Izquierda: Logo + nombre --}}
+        <a href="#" class="flex items-center gap-2.5 min-w-0 shrink-0">
             @if(!empty($customization->logo_filename))
                 <img src="{{ asset('storage/tenants/' . $tenant->id . '/' . $customization->logo_filename) }}"
                      alt="{{ $tenant->business_name }}"
-                     class="size-10 rounded-xl object-cover shrink-0"
+                     class="size-10 rounded-full object-cover shrink-0"
                      onerror="this.style.display='none';">
             @else
-                <div class="size-10 bg-primary rounded-xl flex items-center justify-center shadow-lg shadow-primary/20 shrink-0">
-                    <span class="iconify tabler--bag size-6 text-primary-foreground"></span>
+                <div class="size-10 bg-primary rounded-full flex items-center justify-center shadow-lg shadow-primary/20 shrink-0">
+                    <span class="iconify tabler--bag size-5 text-primary-foreground"></span>
                 </div>
             @endif
-            <span class="text-lg sm:text-xl font-black tracking-tighter truncate max-w-[120px] sm:max-w-[220px] sc-mobile-tight">{{ $tenant->business_name }}</span>
+            <span class="text-base sm:text-lg font-black tracking-tighter truncate max-w-[120px] sm:max-w-[220px]">{{ $tenant->business_name }}</span>
         </a>
 
-        {{-- Centro: lupa compacta + categorías --}}
-        <div class="flex items-center gap-1 flex-1 min-w-0">
-            <button id="sc-search-btn" onclick="scToggleSearch()" class="flex-shrink-0 size-9 flex items-center justify-center rounded-lg text-foreground/45 hover:text-foreground transition-colors">
-                <span class="iconify tabler--search size-4"></span>
+        {{-- Centro: búsqueda expandible (hidden by default) --}}
+        <div id="sc-search-wrap" class="flex-1 items-center gap-2 max-w-sm mx-auto" style="display:none">
+            <input id="sc-search-input" type="text" placeholder="Buscar producto..."
+                   class="flex-1 text-sm py-1.5 px-3 rounded-lg border border-foreground/10 bg-background focus:outline-none focus:ring-2 focus:ring-primary/20"
+                   oninput="searchProducts(this.value)">
+            <button onclick="scCloseSearch()" class="size-7 flex items-center justify-center rounded-lg text-foreground/40 hover:text-foreground hover:bg-surface/50 transition-colors cursor-pointer">
+                <span class="iconify tabler--x size-4"></span>
             </button>
-
-            <div id="sc-search-wrap" class="flex-1 items-center gap-2" style="display:none">
-                <input id="sc-search-input" type="text" placeholder="Buscar producto..."
-                       class="flex-1 text-sm py-1.5 px-3 rounded-lg border border-foreground/10 bg-background focus:outline-none focus:ring-2 focus:ring-primary/20"
-                       oninput="searchProducts(this.value)">
-                <button onclick="scCloseSearch()" class="size-7 flex items-center justify-center rounded-lg text-foreground/40 hover:text-foreground hover:bg-surface/50 transition-colors">
-                    <span class="iconify tabler--x size-4"></span>
-                </button>
-            </div>
-
-            <button type="button"
-                    class="md:hidden inline-flex items-center gap-1 py-1.5 px-2.5 rounded-lg border border-foreground/10 text-xs font-semibold text-foreground/70 bg-surface/60 cursor-pointer"
-                    data-hs-overlay="#sc-mobile-cats-overlay">
-                <span class="iconify tabler--menu-2 size-4"></span>
-                Categorías
-            </button>
-
-            <div id="sc-header-cats" class="hidden md:flex items-center gap-2 overflow-x-auto no-scrollbar flex-1 min-w-0">
-                <button onclick="filterCategory('all')" data-cat="all" class="sc-cat-pill active" data-active="true">Todos</button>
-                @php $catCategories = $catCategories ?? []; @endphp
-                @foreach($catCategories as $cat)
-                    @php $hasSubs = !empty($cat['subcategories']); @endphp
-                    @if($hasSubs)
-                    <div class="hs-dropdown relative inline-flex [--placement:bottom]">
-                        <button id="sc-cat-dd-h-{{ $loop->index }}" type="button"
-                                class="hs-dropdown-toggle sc-cat-pill inline-flex items-center gap-1 cursor-pointer"
-                                data-cat="{{ $cat['name'] }}" aria-haspopup="menu" aria-expanded="false" aria-label="Dropdown">
-                            {{ $cat['name'] }}
-                            <span class="iconify tabler--chevron-down size-3 transition-transform hs-dropdown-open:rotate-180"></span>
-                        </button>
-                        <div class="hs-dropdown-menu hs-dropdown-open:opacity-100 w-48 hidden z-50 transition-[opacity,margin] duration-150 opacity-0 bg-background shadow-xl rounded-xl border border-foreground/8 p-1.5"
-                             role="menu" aria-orientation="vertical" aria-labelledby="sc-cat-dd-h-{{ $loop->index }}">
-                            <button onclick="filterCategory('{{ $cat['name'] }}')" class="flex items-center gap-2 w-full py-2 px-3 rounded-lg text-sm font-semibold text-foreground/80 hover:bg-surface transition-colors cursor-pointer" data-cat="{{ $cat['name'] }}">
-                                <span class="iconify tabler--category size-4 text-primary/60"></span>
-                                Todo {{ $cat['name'] }}
-                            </button>
-                            <div class="h-px bg-foreground/5 my-1"></div>
-                            @foreach($cat['subcategories'] as $sub)
-                            <button onclick="filterCategory('{{ $cat['name'] }}', '{{ $sub['name'] }}')" class="flex items-center gap-2 w-full py-2 px-3 rounded-lg text-sm text-foreground/70 hover:bg-surface hover:text-foreground transition-colors cursor-pointer" data-cat="{{ $cat['name'] }}" data-sub="{{ $sub['name'] }}">
-                                <span class="iconify tabler--point-filled size-3 text-foreground/20"></span>
-                                {{ $sub['name'] }}
-                            </button>
-                            @endforeach
-                        </div>
-                    </div>
-                    @else
-                    <button onclick="filterCategory('{{ $cat['name'] }}')" data-cat="{{ $cat['name'] }}" class="sc-cat-pill">{{ $cat['name'] }}</button>
-                    @endif
-                @endforeach
-            </div>
         </div>
 
-        <span id="sc-products-count" class="hidden xl:inline text-xs text-foreground/40 font-medium shrink-0">{{ $products->count() }} producto{{ $products->count() !== 1 ? 's' : '' }}</span>
-
+        {{-- Derecha: search + carrito --}}
         <div class="flex items-center gap-2 shrink-0">
-            @if(str_contains($savedDisplayMode, 'toggle'))
-            <div class="hidden sm:flex bg-surface/50 p-1 rounded-xl border border-foreground/5 backdrop-blur-md">
-                <button class="sc-curr-btn px-4 py-1.5 text-xs font-bold rounded-lg transition-all" data-currency="ref" onclick="setCurrency('ref')">{{ $currencySymbol }}</button>
-                <button class="sc-curr-btn px-4 py-1.5 text-xs font-bold rounded-lg transition-all" data-currency="bs" onclick="setCurrency('bs')">Bs</button>
-            </div>
-            @endif
+            <span id="sc-products-count" class="hidden xl:inline text-xs text-foreground/40 font-medium">{{ $products->count() }} producto{{ $products->count() !== 1 ? 's' : '' }}</span>
 
-            {{-- Indicador Abierto/Cerrado --}}
-            @if($showHoursIndicator ?? false)
-            <span class="hidden sm:inline-flex items-center gap-1.5 rounded-full {{ ($isOpen ?? false) ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-600' }} px-3 py-1 text-xs font-bold">
-                <span class="h-1.5 w-1.5 rounded-full {{ ($isOpen ?? false) ? 'bg-green-500' : 'bg-red-500' }} animate-pulse"></span>
-                {{ ($isOpen ?? false) ? 'ABIERTO' : 'CERRADO' }}
-            </span>
-            @endif
+            <button id="sc-search-btn" onclick="scToggleSearch()" class="size-10 flex items-center justify-center rounded-full text-foreground/50 hover:text-foreground hover:bg-surface/50 transition-colors cursor-pointer">
+                <span class="iconify tabler--search size-5"></span>
+            </button>
 
-            @if($waClean)
-            <a href="https://wa.me/{{ $waClean }}" target="_blank"
-               class="hidden sm:flex text-sm py-1.5 px-3 rounded-2xl font-medium transition-colors gap-1.5 border-none font-bold text-white"
-               style="background:#25D366;">
-                <svg aria-hidden="true" focusable="false" class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M16.7 14.3c-.3-.2-1.7-.8-1.9-.9-.3-.1-.5-.2-.7.2s-.8.9-1 .9-.5 0-.9-.4c-.5-.4-1-1-1.2-1.3-.1-.3 0-.5.1-.6.2-.2.3-.3.5-.5.2-.2.2-.3.3-.5.1-.3 0-.5 0-.6s-.7-1.8-1-2.4c-.3-.6-.5-.6-.7-.6h-.6c-.2 0-.6.1-.9.4-.3.3-1.1 1-1.1 2.4s1.1 2.7 1.3 2.9c.2.2 2.1 3.2 5.1 4.3.7.3 1.2.4 1.6.5.7.1 1.4.1 1.9.1.6 0 1.7-.7 1.9-1.3.2-.6.2-1.2.2-1.3 0-.1-.3-.2-.6-.4z"></path>
-                    <path d="M12 3a9 9 0 0 0-9 9 8.9 8.9 0 0 0 1.2 4.5L3 21l4.7-1.2A9 9 0 1 0 12 3Z"></path>
-                </svg>
-                Contactar
-            </a>
-            @endif
-
-            <button onclick="toggleDrawer()" id="sc-cart-trigger" class="relative group p-2 rounded-full transition-colors bg-primary text-primary-foreground hover:bg-primary/90 shadow-xl shadow-primary/20">
+            <button onclick="toggleDrawer()" id="sc-cart-trigger" class="hidden md:flex relative group p-2 rounded-full transition-colors bg-primary text-primary-foreground hover:bg-primary/90 shadow-xl shadow-primary/20 cursor-pointer">
                 <svg aria-hidden="true" focusable="false" class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="9" cy="21" r="1"></circle>
                     <circle cx="19" cy="21" r="1"></circle>
@@ -258,129 +179,198 @@
     </div>
 </header>
 
-{{-- 2. HERO EDITORIAL BENTO --}}
-@if($showcase->count() >= 1)
-<section id="sc-hero-showcase" class="bg-background">
+{{-- HERO SLIDER CAT --}}
+@php
+    $scHeroSlots = match(true) {
+        in_array($planSlug, ['cat-anual', 'cat-semestral']) => [
+            $customization->hero_main_filename      ?? null,
+            $customization->hero_secondary_filename ?? null,
+            $customization->hero_tertiary_filename  ?? null,
+        ],
+        default => [
+            $customization->hero_main_filename ?? null,
+        ],
+    };
+    $scHeroImages = array_values(array_filter($scHeroSlots));
+    $scHeroFallback = $showcase->first() ? $productImg($showcase->first()) : null;
+@endphp
 
-    {{-- Label destacados --}}
-    <div class="mx-auto max-w-[1280px] flex items-center gap-3 px-4 sm:px-8 pt-6 pb-3">
-        @if($tenant->slogan)
-            <p class="text-[10px] font-black uppercase tracking-[.2em] text-primary shrink-0">{{ $tenant->slogan }}</p>
-        @else
-            <p class="text-[10px] font-bold uppercase tracking-[.2em] text-foreground/40 shrink-0">Destacados</p>
-        @endif
-        <div class="flex-1 h-px bg-foreground/10"></div>
-    </div>
+@if(count($scHeroImages) > 0 || $scHeroFallback)
+<div id="sc-hero-slider" class="relative w-full overflow-hidden bg-surface"
+     style="aspect-ratio:16/9; max-height:320px;">
 
-    {{-- Bento grid —  móvil: 2 cols, desktop: 12 cols --}}
-    <div class="mx-auto max-w-[1280px] px-4 sm:px-8 pb-2">
-        <div class="grid grid-cols-2 gap-4">
-
-            @php $s0 = $showcase->get(0); $s0img = $productImg($s0); @endphp
-
-            {{-- CELDA PRINCIPAL — siempre full-width --}}
-            <div class="sc-bento-cell sc-bento-main col-span-2 rounded-2xl"
-                 onclick="heroNav('all')">
-                @if($s0img)
-                    <img src="{{ $s0img }}" alt="{{ $s0->name }}" onerror="this.style.display='none'">
-                @else
-                    <div class="w-full h-full min-h-[200px] md:min-h-[420px] flex items-center justify-center bg-surface">
-                        <span class="iconify tabler--photo size-12 text-foreground/15"></span>
-                    </div>
-                @endif
-                <div class="sc-cell-overlay"></div>
-                <div class="sc-cell-info">
-                    <div class="sc-cell-tag">Destacado</div>
-                    <div class="sc-cell-name">{{ $s0->name }}</div>
-                    @if(!$hidePrice && $s0->price_usd)
-                        <div class="sc-cell-price" data-price-usd="{{ $s0->price_usd }}">
-                            <span class="text-[10px] opacity-60 mr-0.5">{{ $currencySymbol }}</span>0.00
-                        </div>
-                    @endif
-                </div>
-                {{-- WA pill solo visible en la principal --}}
-                @if($waClean)
-                <div class="sc-wa-pill">
-                    <svg class="size-3.5 fill-white" viewBox="0 0 24 24"><path d="M13 5l7 7-7 7M5 12h14" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
-                    Ver colección
-                </div>
-                @endif
-            </div>
-
-            {{-- CELDAS SECUNDARIAS (2 y 3) --}}
-            @foreach($showcase->slice(1, 2) as $item)
-            @php $simg = $productImg($item); @endphp
-            <div class="sc-bento-cell sc-bento-sec rounded-2xl"
-                 onclick="heroNav('{{ $item->category_name ?? 'all' }}')">
-                @if($simg)
-                    <img src="{{ $simg }}" alt="{{ $item->name }}" onerror="this.style.display='none'">
-                @else
-                    <div class="w-full h-full min-h-[140px] flex items-center justify-center bg-surface">
-                        <span class="iconify tabler--photo size-8 text-foreground/15"></span>
-                    </div>
-                @endif
-                <div class="sc-cell-overlay"></div>
-                <div class="sc-cell-info">
-                    @if($item->badge)<div class="sc-cell-tag">{{ $item->badge }}</div>@endif
-                    <div class="sc-cell-name">{{ $item->name }}</div>
-                    @if(!$hidePrice && $item->price_usd)
-                        <div class="sc-cell-price" data-price-usd="{{ $item->price_usd }}">
-                            <span class="text-[10px] opacity-60 mr-0.5">{{ $currencySymbol }}</span>0.00
-                        </div>
-                    @endif
-                </div>
-            </div>
-            @endforeach
-
+    @if(count($scHeroImages) > 0)
+        @foreach($scHeroImages as $hIdx => $hImg)
+        <div class="sc-hero-slide absolute inset-0 transition-opacity duration-700"
+             style="opacity:{{ $hIdx === 0 ? '1' : '0' }}">
+            <img src="{{ asset('storage/tenants/' . $tenant->id . '/' . $hImg) }}"
+                 alt="{{ $tenant->business_name }}"
+                 class="w-full h-full object-cover"
+                 loading="{{ $hIdx === 0 ? 'eager' : 'lazy' }}">
         </div>
+        @endforeach
+    @elseif($scHeroFallback)
+        <div class="sc-hero-slide absolute inset-0" style="opacity:1">
+            <img src="{{ $scHeroFallback }}" alt="{{ $tenant->business_name }}"
+                 class="w-full h-full object-cover" loading="eager">
+        </div>
+    @endif
+
+    {{-- Overlay + info producto destacado --}}
+    @if($showcase->first())
+    @php $s0 = $showcase->first(); @endphp
+    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent pointer-events-none"></div>
+    <div class="absolute bottom-0 left-0 right-0 p-4 pointer-events-none">
+        @if($s0->badge)
+        <span class="inline-block text-[9px] font-black uppercase tracking-widest bg-primary text-primary-foreground px-2 py-1 rounded-md mb-2">
+            {{ $s0->badge }}
+        </span>
+        @endif
+        <div class="text-white font-black text-lg leading-tight drop-shadow-lg">{{ $s0->name }}</div>
+        @if(!$hidePrice && $s0->price_usd)
+        <div class="text-white/75 text-sm mt-0.5" data-price-usd="{{ $s0->price_usd }}">
+            <span class="text-[10px] opacity-60 mr-0.5">{{ $currencySymbol }}</span>0.00
+        </div>
+        @endif
     </div>
-</section>
+    @endif
+
+    {{-- Dots solo si hay más de 1 imagen --}}
+    @if(count($scHeroImages) > 1)
+    <div class="absolute bottom-3 right-4 flex gap-1.5 z-10">
+        @foreach($scHeroImages as $hIdx => $hImg)
+        <button class="sc-hero-dot size-1.5 rounded-full transition-all {{ $hIdx === 0 ? 'bg-white' : 'bg-white/40' }}"
+                data-slide="{{ $hIdx }}"
+                onclick="scHeroGoTo({{ $hIdx }})"></button>
+        @endforeach
+    </div>
+    @endif
+
+</div>
+
+@if(count($scHeroImages) > 1)
+<script>
+(function(){
+    var slides  = document.querySelectorAll('.sc-hero-slide');
+    var dots    = document.querySelectorAll('.sc-hero-dot');
+    var current = 0;
+    var total   = slides.length;
+    var timer   = null;
+
+    window.scHeroGoTo = function(idx) {
+        slides[current].style.opacity = '0';
+        if(dots[current]) dots[current].classList.replace('bg-white','bg-white/40');
+        current = idx;
+        slides[current].style.opacity = '1';
+        if(dots[current]) dots[current].classList.replace('bg-white/40','bg-white');
+        resetTimer();
+    };
+
+    function next() { scHeroGoTo((current + 1) % total); }
+
+    function resetTimer() {
+        clearInterval(timer);
+        timer = setInterval(next, 4000);
+    }
+
+    resetTimer();
+})();
+</script>
 @endif
 
-{{-- 3. Menú integrado en header superior --}}
+{{-- Indicador Abierto/Cerrado bajo el hero --}}
+@if($showHoursIndicator ?? false)
+<div class="flex justify-center py-2 bg-background">
+    <span class="inline-flex items-center gap-1.5 rounded-full {{ ($isOpen ?? false) ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-600' }} px-3 py-1 text-[11px] font-bold">
+        <span class="size-1.5 rounded-full {{ ($isOpen ?? false) ? 'bg-green-500' : 'bg-red-500' }} animate-pulse"></span>
+        {{ ($isOpen ?? false) ? 'ABIERTO' : 'CERRADO' }}
+    </span>
+</div>
+@endif
+@endif
 
-{{-- Drawer móvil de categorías/subcategorías --}}
-<div id="sc-mobile-cats-overlay" class="hs-overlay hidden size-full fixed top-0 start-0 z-[120] overflow-x-hidden overflow-y-auto pointer-events-none" role="dialog" tabindex="-1" aria-labelledby="sc-mobile-cats-title">
-    <div class="hs-overlay-open:opacity-100 hs-overlay-open:duration-300 opacity-0 transition-all hs-overlay-open:mt-0 hs-overlay-open:mb-0 mt-8 mb-8 ease-out sm:max-w-sm sm:w-full m-4 sm:mx-auto min-h-[calc(100%-3.5rem)] flex items-end sm:items-center">
-        <div class="w-full flex flex-col bg-background border border-foreground/10 shadow-2xl rounded-2xl pointer-events-auto">
-            <div class="flex justify-between items-center py-3.5 px-4 border-b border-foreground/8">
-                <h3 id="sc-mobile-cats-title" class="font-black text-base">Categorías</h3>
-                <button type="button" class="size-9 inline-flex justify-center items-center rounded-xl border border-foreground/10 text-foreground/60 hover:bg-surface cursor-pointer" data-hs-overlay="#sc-mobile-cats-overlay">
-                    <span class="iconify tabler--x size-4"></span>
+{{-- 3. CATEGORY PILLS — Sticky under hero --}}
+@php
+    $catCategories = $catCategories ?? [];
+    $catIcons = [
+        'ropa' => 'tabler--hanger', 'ropa dama' => 'tabler--hanger', 'damas' => 'tabler--hanger',
+        'ropa caballero' => 'tabler--shirt', 'caballeros' => 'tabler--shirt',
+        'calzado' => 'tabler--shoe',
+        'accesorios' => 'tabler--watch',
+        'electronico' => 'tabler--device-mobile', 'electrónico' => 'tabler--device-mobile',
+        'audifonos' => 'tabler--headphones', 'audífonos' => 'tabler--headphones',
+        'celulares' => 'tabler--device-mobile-phone',
+        'comida' => 'tabler--tools-kitchen-2',
+        'bebidas' => 'tabler--cup',
+        'hogar' => 'tabler--home',
+        'deporte' => 'tabler--run',
+        'joyeria' => 'tabler--diamond', 'joyería' => 'tabler--diamond',
+        'belleza' => 'tabler--sparkles',
+        'juguetes' => 'tabler--building-carousel',
+        'mascotas' => 'tabler--paw',
+        'libros' => 'tabler--book',
+    ];
+    $resolveIcon = function($name) use ($catIcons) {
+        $lower = strtolower(trim($name));
+        foreach ($catIcons as $key => $icon) {
+            if (str_contains($lower, $key)) return $icon;
+        }
+        return 'tabler--tag';
+    };
+@endphp
+<div class="sticky top-[56px] z-[90] bg-background/95 backdrop-blur-xl" style="border-bottom:1px solid rgba(0,0,0,.06)">
+    <div x-data="{ openSub: null }" class="mx-auto max-w-[1280px]">
+        {{-- Chips row --}}
+        <div class="flex items-center gap-2 overflow-x-auto no-scrollbar px-4 py-2.5">
+            <button onclick="filterCategory('all')" data-cat="all" class="sc-cat-chip active" data-active="true">
+                <span class="iconify tabler--layout-grid size-3.5"></span>
+                <span>Todos</span>
+            </button>
+            @foreach($catCategories as $cat)
+                @php
+                    $hasSubs = !empty($cat['subcategories']);
+                    $chipIcon = $resolveIcon($cat['name']);
+                @endphp
+                @if($hasSubs)
+                <button @click="openSub = (openSub === '{{ $cat['name'] }}') ? null : '{{ $cat['name'] }}'; filterCategory('{{ $cat['name'] }}')"
+                        data-cat="{{ $cat['name'] }}" class="sc-cat-chip cursor-pointer">
+                    <span class="iconify {{ $chipIcon }} size-3.5"></span>
+                    <span>{{ $cat['name'] }}</span>
+                    <span class="iconify tabler--chevron-down size-3 transition-transform" :class="openSub === '{{ $cat['name'] }}' && 'rotate-180'"></span>
                 </button>
-            </div>
-
-            <div class="p-4 max-h-[70vh] overflow-y-auto space-y-2">
-                <button type="button" onclick="filterCategory('all')" data-hs-overlay="#sc-mobile-cats-overlay" class="w-full text-left py-2.5 px-3 rounded-xl bg-primary text-primary-foreground text-sm font-semibold cursor-pointer">Todos</button>
-
-                @foreach($catCategories as $cat)
-                    @php $hasSubs = !empty($cat['subcategories']); @endphp
-                    <div class="rounded-xl border border-foreground/8 overflow-hidden bg-surface/30">
-                        <button type="button"
-                                onclick="filterCategory('{{ $cat['name'] }}')"
-                                data-hs-overlay="#sc-mobile-cats-overlay"
-                                class="w-full text-left py-2.5 px-3 text-sm font-semibold text-foreground/80 cursor-pointer hover:bg-surface transition-colors">
-                            {{ $cat['name'] }}
-                        </button>
-
-                        @if($hasSubs)
-                        <div class="px-2 pb-2 space-y-1">
-                            @foreach($cat['subcategories'] as $sub)
-                            <button type="button"
-                                    onclick="filterCategory('{{ $cat['name'] }}', '{{ $sub['name'] }}')"
-                                    data-hs-overlay="#sc-mobile-cats-overlay"
-                                    class="w-full text-left py-2 px-3 rounded-lg text-sm text-foreground/65 hover:bg-background transition-colors cursor-pointer">
-                                • {{ $sub['name'] }}
-                            </button>
-                            @endforeach
-                        </div>
-                        @endif
-                    </div>
+                @else
+                <button onclick="filterCategory('{{ $cat['name'] }}')" data-cat="{{ $cat['name'] }}" class="sc-cat-chip cursor-pointer">
+                    <span class="iconify {{ $chipIcon }} size-3.5"></span>
+                    <span>{{ $cat['name'] }}</span>
+                </button>
+                @endif
+            @endforeach
+        </div>
+        {{-- Subchips row (shown when a category with subs is active) --}}
+        @foreach($catCategories as $cat)
+            @if(!empty($cat['subcategories']))
+            <div x-show="openSub === '{{ $cat['name'] }}'" x-transition.opacity class="flex items-center gap-1.5 overflow-x-auto no-scrollbar px-4 pb-2">
+                @foreach($cat['subcategories'] as $sub)
+                <button onclick="filterCategory('{{ $cat['name'] }}', '{{ $sub['name'] }}')"
+                        class="sc-cat-chip text-[10px] py-1 px-2.5 bg-surface/60 cursor-pointer" style="font-size:10px">
+                    <span>{{ $sub['name'] }}</span>
+                </button>
                 @endforeach
             </div>
-        </div>
+            @endif
+        @endforeach
     </div>
 </div>
+
+{{-- Currency toggle (moved from header) --}}
+@if(str_contains($savedDisplayMode, 'toggle'))
+<div class="flex justify-center py-2 bg-background">
+    <div class="flex bg-surface/50 p-1 rounded-xl border border-foreground/5 backdrop-blur-md">
+        <button class="sc-curr-btn px-4 py-1.5 text-xs font-bold rounded-lg transition-all" data-currency="ref" onclick="setCurrency('ref')">{{ $currencySymbol }}</button>
+        <button class="sc-curr-btn px-4 py-1.5 text-xs font-bold rounded-lg transition-all" data-currency="bs" onclick="setCurrency('bs')">Bs</button>
+    </div>
+</div>
+@endif
 
 {{-- 4. PRODUCT GRID — Lazy load + Paginación --}}
 <section class="pb-16 lg:pb-24" id="productos">
@@ -392,7 +382,7 @@
             <p class="text-xs text-foreground/25 mt-1">Prueba otra búsqueda o categoría</p>
         </div>
 
-        <div id="sc-products-grid" class="grid grid-cols-1 min-[460px]:grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6">
+        <div id="sc-products-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 px-4">
             @foreach($products as $product)
             @php
                 $img = $productImg($product);
@@ -433,7 +423,7 @@
                 <div class="sc-card-accent" data-cat="{{ $product->category_name ?? '' }}"></div>
 
                 {{-- ── IMAGEN 1:1 ── --}}
-                <div class="relative aspect-[3/4] overflow-hidden bg-surface m-2.5 rounded-xl cursor-pointer"
+                <div class="relative aspect-square overflow-hidden bg-surface m-2.5 rounded-xl cursor-pointer"
                      onclick='openPM({{ $product->id }}, @json($product->name), {{ $product->price_usd ?? 0 }}, @json($img), @json($product->description ?? ""), {{ $product->compare_price_usd ?? 0 }}, {{ $product->is_featured ? "true" : "false" }}, @json($product->variants ?? []), @json($pmImages))'>
 
                     @if($img)
@@ -795,6 +785,98 @@
 {{-- 6. FOOTER (shared component — same as Studio) --}}
     @include('landing.sections.footer', ['sConfig' => $customization->getSectionConfig('footer')])
 
+{{-- 7. BOTTOM NAVIGATION — App nav mobile --}}
+<nav class="sc-bottom-nav fixed bottom-0 left-0 right-0 z-[150] bg-background/95 backdrop-blur-xl"
+     style="border-top:1px solid rgba(0,0,0,.07); padding-bottom: env(safe-area-inset-bottom, 0px)">
+    <div class="flex items-center justify-around py-2 max-w-lg mx-auto">
+        <button onclick="scrollToTop()" class="sc-nav-btn flex flex-col items-center gap-1 py-1 px-3 rounded-xl transition-colors text-primary cursor-pointer">
+            <span class="iconify tabler--home size-5"></span>
+            <span class="text-[10px] font-semibold">Inicio</span>
+        </button>
+        <button onclick="scToggleSearch(); scrollToProducts()" class="sc-nav-btn flex flex-col items-center gap-1 py-1 px-3 rounded-xl transition-colors text-foreground/40 hover:text-foreground cursor-pointer">
+            <span class="iconify tabler--search size-5"></span>
+            <span class="text-[10px] font-semibold">Buscar</span>
+        </button>
+        @if($showCart)
+        <button onclick="toggleDrawer()" class="sc-nav-btn relative flex flex-col items-center gap-1 py-1 px-3 rounded-xl transition-colors text-foreground/40 hover:text-foreground cursor-pointer">
+            <span class="iconify tabler--shopping-bag size-5"></span>
+            <span id="sc-bottom-cart-badge" class="absolute top-0 right-2 size-4 bg-red-500 text-white text-[9px] font-black rounded-full flex items-center justify-center" style="display:none">0</span>
+            <span class="text-[10px] font-semibold">Carrito</span>
+        </button>
+        @endif
+        @if($waClean)
+        <a href="https://wa.me/{{ $waClean }}" target="_blank"
+           class="sc-nav-btn flex flex-col items-center gap-1 py-1 px-3 rounded-xl transition-colors text-foreground/40 hover:text-foreground cursor-pointer">
+            <span class="iconify tabler--brand-whatsapp size-5"></span>
+            <span class="text-[10px] font-semibold">Contacto</span>
+        </a>
+        @endif
+        <button onclick="scrollToFooter()" class="sc-nav-btn flex flex-col items-center gap-1 py-1 px-3 rounded-xl transition-colors text-foreground/40 hover:text-foreground cursor-pointer">
+            <span class="iconify tabler--info-circle size-5"></span>
+            <span class="text-[10px] font-semibold">Info</span>
+        </button>
+    </div>
+</nav>
+
+@if(str_contains($savedDisplayMode, 'toggle'))
+{{-- Pill flotante toggle moneda --}}
+<div id="sc-currency-pill"
+     class="fixed z-[140] flex items-center gap-1 rounded-xl border border-foreground/10 bg-background/95 backdrop-blur-xl shadow-lg overflow-hidden"
+     style="bottom: 76px; right: 16px;">
+    <button onclick="setCurrency('ref')"
+            data-currency="ref"
+            class="sc-curr-btn px-3 py-2 text-[11px] font-black tracking-wide transition-all">
+        {{ $currencySymbol }}
+    </button>
+    <div class="w-px h-4 bg-foreground/10"></div>
+    <button onclick="setCurrency('bs')"
+            data-currency="bs"
+            class="sc-curr-btn px-3 py-2 text-[11px] font-black tracking-wide transition-all">
+        Bs
+    </button>
+    @if(in_array($savedDisplayMode, ['toggle_usd', 'toggle_all']))
+    <div class="w-px h-4 bg-foreground/10"></div>
+    <button onclick="setCurrency('usd')"
+            data-currency="usd"
+            class="sc-curr-btn px-3 py-2 text-[11px] font-black tracking-wide transition-all">
+        $
+    </button>
+    @endif
+</div>
+
+<script>
+(function() {
+    var pill = document.getElementById('sc-currency-pill');
+    if (!pill) return;
+    function syncPill(active) {
+        pill.querySelectorAll('.sc-curr-btn').forEach(function(btn) {
+            var isActive = btn.getAttribute('data-currency') === active;
+            btn.style.background    = isActive ? 'var(--primary)' : 'transparent';
+            btn.style.color         = isActive ? 'var(--primary-foreground)' : 'var(--foreground)';
+            btn.style.borderRadius  = isActive ? '10px' : '';
+        });
+    }
+    var stored = localStorage.getItem('sc_currency') || 'ref';
+    syncPill(stored);
+    var orig = window.setCurrency;
+    window.setCurrency = function(mode) {
+        if (orig) orig(mode);
+        syncPill(mode);
+        localStorage.setItem('sc_currency', mode);
+    };
+    // Ajuste dinámico: sube el pill cuando el bottom nav está visible
+    function adjustPill() {
+        var nav = document.querySelector('.sc-bottom-nav');
+        if (!nav) return;
+        var navH = nav.offsetHeight;
+        pill.style.bottom = (navH + 8) + 'px';
+    }
+    adjustPill();
+    window.addEventListener('resize', adjustPill);
+})();
+</script>
+@endif
+
 @endsection
 
 @push('scripts')
@@ -849,21 +931,18 @@
     window.scToggleSearch = function() {
         var wrap = document.getElementById('sc-search-wrap');
         var btn = document.getElementById('sc-search-btn');
-        var cats = document.getElementById('sc-header-cats');
         if (!wrap || !btn) return;
 
         var isOpen = wrap.style.display === 'flex';
         if (isOpen) {
             wrap.style.display = 'none';
-            if (cats && window.innerWidth >= 768) cats.style.display = 'flex';
             btn.classList.remove('text-foreground');
-            btn.classList.add('text-foreground/45');
+            btn.classList.add('text-foreground/50');
             return;
         }
 
         wrap.style.display = 'flex';
-        if (cats) cats.style.display = 'none';
-        btn.classList.remove('text-foreground/45');
+        btn.classList.remove('text-foreground/50');
         btn.classList.add('text-foreground');
         var input = document.getElementById('sc-search-input');
         if (input) setTimeout(function() { input.focus(); }, 10);
@@ -965,8 +1044,8 @@
         _scActiveSub = subName || '';
         _scPage = 1;
 
-        // Update pill active states
-        document.querySelectorAll('.sc-cat-pill').forEach(function(btn) {
+        // Update chip active states
+        document.querySelectorAll('.sc-cat-chip').forEach(function(btn) {
             var active = String(btn.dataset.cat) === String(_scActiveCat);
             if (active) {
                 btn.classList.add('active');
@@ -1002,7 +1081,7 @@
         if (_scSearchTerm) {
             _scActiveCat = 'all';
             _scActiveSub = '';
-            document.querySelectorAll('.sc-cat-pill').forEach(function(btn) {
+            document.querySelectorAll('.sc-cat-chip').forEach(function(btn) {
                 var active = String(btn.dataset.cat) === 'all';
                 btn.classList.toggle('active', active);
                 if (active) btn.setAttribute('data-active', 'true');
@@ -1070,6 +1149,11 @@
         b.style.display = total > 0 ? 'flex' : 'none';
         b.textContent = total;
         b.classList.remove('bump'); void b.offsetWidth; b.classList.add('bump');
+        var bottomBadge = document.getElementById('sc-bottom-cart-badge');
+        if(bottomBadge) {
+            if(total > 0) { bottomBadge.style.display='flex'; bottomBadge.textContent=total; }
+            else { bottomBadge.style.display='none'; }
+        }
     }
 
     window.toggleDrawer = function() {
@@ -1287,11 +1371,11 @@
         renderVisibleCards();
 
         window.addEventListener('resize', function() {
-            var cats = document.getElementById('sc-header-cats');
             var wrap = document.getElementById('sc-search-wrap');
-            if (!cats || !wrap) return;
-            if (window.innerWidth >= 768 && wrap.style.display !== 'flex') {
-                cats.style.display = 'flex';
+            if (!wrap) return;
+            // Close search on resize if open
+            if (window.innerWidth >= 768 && wrap.style.display === 'flex') {
+                // Keep open on desktop — no action needed
             }
         });
 
@@ -1536,31 +1620,25 @@ document.addEventListener('keydown', function(e) {
 
 <script>
 function heroNav(catId) {
-    // 1. Flash visual en la celda tocada
-    event.currentTarget.classList.add('sc-flash');
-    setTimeout(function() {
-        event.currentTarget && event.currentTarget.classList.remove('sc-flash');
-    }, 400);
-
-    // 2. Activar filtro de categoría
-    var pills = document.querySelectorAll('.sc-cat-pill');
-    pills.forEach(function(p) {
+    // 1. Activar filtro de categoría
+    var chips = document.querySelectorAll('.sc-cat-chip');
+    chips.forEach(function(p) {
         p.classList.remove('active');
         p.removeAttribute('data-active');
     });
-    var targetPill = document.querySelector('.sc-cat-pill[data-cat="' + catId + '"]');
-    if (targetPill) {
-        targetPill.classList.add('active');
-        targetPill.setAttribute('data-active', 'true');
+    var targetChip = document.querySelector('.sc-cat-chip[data-cat="' + catId + '"]');
+    if (targetChip) {
+        targetChip.classList.add('active');
+        targetChip.setAttribute('data-active', 'true');
     } else {
-        var allPill = document.querySelector('.sc-cat-pill[data-cat="all"]');
-        if (allPill) { allPill.classList.add('active'); allPill.setAttribute('data-active','true'); }
+        var allChip = document.querySelector('.sc-cat-chip[data-cat="all"]');
+        if (allChip) { allChip.classList.add('active'); allChip.setAttribute('data-active','true'); }
     }
 
-    // 3. Filtrar productos
+    // 2. Filtrar productos
     filterCategory(catId);
 
-    // 4. Scroll suave al catálogo con un pequeño delay para que se vea el flash primero
+    // 3. Scroll suave al catálogo
     setTimeout(function() {
         var target = document.getElementById('productos');
         if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -1584,6 +1662,17 @@ function heroNav(catId) {
 </script>
 
 {{-- SyntiTrack --}}
+<script>
+function scrollToTop() { window.scrollTo({top:0,behavior:'smooth'}); }
+function scrollToProducts() {
+    var el = document.getElementById('productos');
+    if(el) el.scrollIntoView({behavior:'smooth'});
+}
+function scrollToFooter() {
+    var el = document.querySelector('footer');
+    if(el) el.scrollIntoView({behavior:'smooth'});
+}
+</script>
 <script>
 (function() {
     const TENANT_ID = {{ $tenant->id }};

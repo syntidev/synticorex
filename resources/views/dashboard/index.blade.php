@@ -15,6 +15,11 @@
     {{-- Chart.js para Analytics --}}
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon-16x16.png') }}">
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <style>

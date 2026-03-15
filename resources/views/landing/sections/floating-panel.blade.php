@@ -139,7 +139,7 @@ $canSeeProductsKpi = in_array($planSlug, ['studio-vision', 'vision']);
             <div class="synti-qr-container">
                 <p class="synti-qr-cta">Apunta tu cámara aquí</p>
                 <div class="synti-qr-wrapper" id="qr-floating-display">
-                    {!! $trackingQRSmall !!}
+                    {!! $trackingQRSmall ?? '' !!}
                 </div>
                 <p class="synti-qr-hint">Un código. Toda tu presencia digital.</p>
                 <button onclick="downloadQRFloating()" class="synti-btn-qr-download">
@@ -592,20 +592,7 @@ $canSeeProductsKpi = in_array($planSlug, ['studio-vision', 'vision']);
 .synti-pin-error { color: #f87171; font-size: 13px; margin-top: 10px; }
 
 /* ── Trigger móvil ── */
-#synti-mobile-trigger {
-    position: fixed;
-    bottom: 28px; right: 0;
-    width: 44px; height: 44px;
-    background: #4A80E4;
-    border-radius: 10px 0 0 10px;
-    display: flex; align-items: center; justify-content: center;
-    z-index: 9998;
-    cursor: pointer;
-    box-shadow: -3px 3px 16px rgba(74,128,228,0.45);
-    transition: width 0.15s;
-}
-#synti-mobile-trigger:active { width: 40px; }
-@media(min-width: 1024px) { #synti-mobile-trigger { display: none; } }
+#synti-mobile-trigger { display: none !important; }
 </style>
 
 {{-- ════════════════════════════════════════════════════════════

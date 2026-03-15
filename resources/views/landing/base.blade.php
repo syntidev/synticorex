@@ -28,6 +28,21 @@
     <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 
+    {{-- PWA --}}
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="{{ $tenant->business_name ?? 'SYNTIweb' }}">
+    <meta name="theme-color" content="{{ $customization->primary_color ?? '#4A80E4' }}">
+    @if(isset($tenant) && !empty($tenant->subdomain ?? ''))
+    <link rel="manifest" href="/manifest/{{ $tenant->subdomain }}.json">
+    @endif
+
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon-16x16.png') }}">
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('styles')
 

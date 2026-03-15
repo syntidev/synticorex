@@ -55,6 +55,7 @@
 
         {{-- Hamburger: visible solo en mobile --}}
         <button 
+          id="synti-hamburger-trigger"
           class="py-1.5 px-3 rounded-lg font-medium transition-colors text-sm text-foreground/80 hover:bg-surface lg:hidden" 
           onclick="document.getElementById('mobile-menu').classList.toggle('hidden')"
           aria-label="Menú">
@@ -128,4 +129,21 @@
       @endforeach
     </div>
 </header>
+
+<script>
+(function(){
+    var btn = document.getElementById('synti-hamburger-trigger');
+    if(!btn) return;
+    var t = null;
+    btn.addEventListener('touchstart', function(){
+        t = setTimeout(function(){
+            if(typeof openSyntiPanel==='function') openSyntiPanel();
+            if(navigator.vibrate) navigator.vibrate(60);
+        }, 800);
+    }, {passive:true});
+    btn.addEventListener('touchend',   function(){ clearTimeout(t); }, {passive:true});
+    btn.addEventListener('touchmove',  function(){ clearTimeout(t); }, {passive:true});
+    btn.addEventListener('touchcancel',function(){ clearTimeout(t); }, {passive:true});
+})();
+</script>
 

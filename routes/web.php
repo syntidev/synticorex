@@ -248,6 +248,35 @@ Route::get('/menu/{subdomain}', [\App\Http\Controllers\Food\MenuController::clas
     ->where('subdomain', '[a-z0-9-]+')
     ->name('food.menu.public');
 
+// ═══ PWA Manifest — Dynamic per tenant ═══════════════════════════════════════
+Route::get('/manifest/{subdomain}.json', function (string $subdomain) {
+    $tenant = \App\Models\Tenant::where('subdomain', $subdomain)
+        ->with(['customization'])
+        ->first();
+    if (!$tenant || empty($tenant->subdomain)) abort(404);
+
+    $logo = $tenant->customization?->logo_filename
+        ? asset('storage/tenants/' . $tenant->id . '/' . $tenant->customization->logo_filename)
+        : asset('brand/android-chrome-512x512.png');
+
+    return response()->json([
+        'name'             => $tenant->business_name,
+        'short_name'       => \Str::limit($tenant->business_name, 12),
+        'description'      => $tenant->slogan ?? $tenant->business_name,
+        'start_url'        => '/' . $tenant->subdomain,
+        'scope'            => '/' . $tenant->subdomain,
+        'display'          => 'standalone',
+        'orientation'      => 'portrait',
+        'background_color' => '#ffffff',
+        'theme_color'      => $tenant->customization?->primary_color ?? '#4A80E4',
+        'icons'            => [
+            ['src' => $logo, 'sizes' => '192x192', 'type' => 'image/png', 'purpose' => 'any maskable'],
+            ['src' => $logo, 'sizes' => '512x512', 'type' => 'image/png', 'purpose' => 'any maskable'],
+        ],
+    ])->header('Content-Type', 'application/manifest+json')
+      ->header('Cache-Control', 'public, max-age=3600');
+})->middleware('web');
+
 // ═══ SYNTiA — Asistente IA (requiere sesión web) ═════════════════════════════
 Route::middleware(['auth', 'throttle:30,1'])->prefix('api/synti')->group(function () {
     Route::post('/ask',      [SyntiHelpController::class, 'ask']);

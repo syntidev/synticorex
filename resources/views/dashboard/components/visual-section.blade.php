@@ -113,7 +113,7 @@
                     </div>
                 </div>
                 @elseif($blueprint === 'cat')
-                {{-- CAT: Header fijo de 3 imágenes --}}
+                {{-- CAT: Fotos de portada con gating por plan --}}
                 <div class="bg-surface rounded-xl shadow-sm border border-border sm:col-span-2">
                     <div class="p-5">
                         <div class="flex items-center gap-3 mb-3 pb-3 border-b border-border">
@@ -121,18 +121,25 @@
                                 <span class="iconify tabler--layout-dashboard size-5 text-primary"></span>
                             </div>
                             <div>
-                                <h3 class="font-semibold text-foreground">Header de catálogo</h3>
-                                <p class="text-xs text-muted-foreground-1">3 imágenes fijas para el bloque principal</p>
+                                <h3 class="font-semibold text-foreground">Fotos de portada</h3>
+                                <p class="text-xs text-muted-foreground-1">
+                                    @php
+                                        $catMaxHeroSlots = in_array($planSlug, ['cat-semestral', 'cat-anual']) ? 3 : 1;
+                                        $heroSlots = array_slice([
+                                            1 => 'hero_main_filename',
+                                            2 => 'hero_secondary_filename',
+                                            3 => 'hero_tertiary_filename',
+                                        ], 0, $catMaxHeroSlots, true);
+                                    @endphp
+                                    @if($catMaxHeroSlots === 1)
+                                        Imagen principal del catálogo
+                                    @else
+                                        Hasta 3 imágenes — rotan en slider automático
+                                    @endif
+                                </p>
                             </div>
                         </div>
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                            @php
-                                $heroSlots = [
-                                    1 => 'hero_main_filename',
-                                    2 => 'hero_secondary_filename',
-                                    3 => 'hero_tertiary_filename',
-                                ];
-                            @endphp
                             @foreach($heroSlots as $slotN => $slotCol)
                             <div id="hero-slot-{{ $slotN }}" class="relative aspect-video rounded-xl overflow-hidden bg-layer border-2 border-dashed border-layer-line group cursor-pointer"
                                  onclick="document.getElementById('hero-slot-{{ $slotN }}-file').click()">
@@ -160,10 +167,20 @@
                                        onchange="uploadHeroSlot({{ $slotN }}, this)">
                             </div>
                             @endforeach
+                            @if($catMaxHeroSlots === 1)
                             <p class="text-xs text-muted-foreground-1 mt-2 col-span-full">
                                 <span class="iconify tabler--info-circle size-3.5 inline-block mr-1"></span>
-                                Se muestran siempre como header compuesto de 3 imágenes.
+                                Imagen de portada de tu catálogo.
+                                <a href="/planes" target="_blank" class="text-primary font-semibold hover:underline">
+                                    Plan Semestral o Anual incluye slider de 3 fotos &rarr;
+                                </a>
                             </p>
+                            @else
+                            <p class="text-xs text-muted-foreground-1 mt-2 col-span-full">
+                                <span class="iconify tabler--info-circle size-3.5 inline-block mr-1"></span>
+                                La primera es obligatoria. Las demás rotan automáticamente cada 4 segundos.
+                            </p>
+                            @endif
                         </div>
                     </div>
                 </div>

@@ -34,6 +34,7 @@
     .sf-drawer.open{transform:translateX(0)}
     @keyframes bump{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
     .bump{animation:bump .25s ease-out}
+    .sf-dot { cursor: pointer; transition: all .3s; }
     .sf-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);z-index:300;display:none;align-items:center;justify-content:center;padding:16px}
     .sf-modal{max-width:420px;width:100%;background:var(--background,#fff);border-radius:24px;box-shadow:0 30px 80px rgba(0,0,0,.25);border:1px solid rgba(0,0,0,.05)}
     .sf-field{position:relative}
@@ -91,7 +92,7 @@
 <div id="sf-business-info" class="mx-auto max-w-7xl px-4 py-5" style="overflow:visible">
     <div class="flex items-end gap-4">
         @if(!empty($customization->logo_filename))
-            <img src="{{ asset('storage/tenants/' . $tenant->id . '/' . $customization->logo_filename) }}"
+            <img id="synti-food-trigger" src="{{ asset('storage/tenants/' . $tenant->id . '/' . $customization->logo_filename) }}"
                  alt="{{ $tenant->business_name }}"
                  style="width:96px;height:96px;border-radius:50%;border:4px solid #fff;
                         box-shadow:0 8px 32px rgba(0,0,0,0.25);object-fit:cover;
@@ -1672,5 +1673,19 @@
         img.onload = function() { img.classList.add('loaded'); };
         if (img.complete) img.classList.add('loaded');
     });
+(function(){
+    var el = document.getElementById('synti-food-trigger');
+    if(!el) return;
+    var t = null;
+    el.addEventListener('touchstart', function(){
+        t = setTimeout(function(){
+            if(typeof openSyntiPanel==='function') openSyntiPanel();
+            if(navigator.vibrate) navigator.vibrate(60);
+        }, 800);
+    }, {passive:true});
+    el.addEventListener('touchend',   function(){ clearTimeout(t); }, {passive:true});
+    el.addEventListener('touchmove',  function(){ clearTimeout(t); }, {passive:true});
+    el.addEventListener('touchcancel',function(){ clearTimeout(t); }, {passive:true});
+})();
 </script>
 @endpush
