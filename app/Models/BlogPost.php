@@ -18,6 +18,7 @@ class BlogPost extends Model
         'excerpt',
         'content',
         'image_url',
+        'featured_image',
         'author',
         'avatar_url',
         'read_time',

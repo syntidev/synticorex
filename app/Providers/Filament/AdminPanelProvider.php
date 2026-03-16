@@ -38,11 +38,11 @@ class AdminPanelProvider extends PanelProvider
             ->darkMode(true)
             ->colors([
                 'primary' => Color::hex('#4A80E4'),
-                'gray'    => Color::Gray,
-                'info'    => Color::hex('#3B82F6'),
-                'success' => Color::hex('#22C55E'),
-                'warning' => Color::hex('#F59E0B'),
-                'danger'  => Color::hex('#EF4444'),
+                'gray'    => Color::Slate,
+                'info'    => Color::Blue,
+                'success' => Color::Emerald,
+                'warning' => Color::Amber,
+                'danger'  => Color::Rose,
             ])
             ->font('Inter', provider: GoogleFontProvider::class)
             ->viteTheme('resources/css/filament/admin/theme.css')

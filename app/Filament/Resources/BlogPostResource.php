@@ -94,18 +94,15 @@ class BlogPostResource extends Resource
                 Section::make('Imagen y categoría')
                     ->columns(2)
                     ->schema([
-                        FileUpload::make('image_url')
-                            ->label('Imagen del post')
+                        FileUpload::make('featured_image')
+                            ->label('Imagen destacada')
                             ->image()
                             ->disk('public')
                             ->directory('blog')
                             ->imageResizeMode('cover')
                             ->imageCropAspectRatio('16:9')
-                            ->imageResizeTargetWidth('1200')
-                            ->imageResizeTargetHeight('675')
-                            ->maxSize(3072)
-                            ->uploadingMessage('Subiendo imagen...')
-                            ->helperText('JPG, PNG o WebP. Máx 3MB. Se redimensiona a 1200x675px.'),
+                            ->maxSize(2048)
+                            ->columnSpanFull(),
                         Select::make('blog_category_id')
                             ->label('Categoría')
                             ->relationship('category', 'name')
@@ -151,12 +148,10 @@ class BlogPostResource extends Resource
         return $table
             ->defaultSort('published_at', 'desc')
             ->columns([
-                ImageColumn::make('image_url')
+                ImageColumn::make('featured_image')
                     ->label('Imagen')
-                    ->circular(false)
-                    ->square()
-                    ->width(60)
-                    ->height(60),
+                    ->disk('public')
+                    ->width(80)->height(50),
                 TextColumn::make('title')
                     ->label('Título')
                     ->searchable()

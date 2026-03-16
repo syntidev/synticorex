@@ -8,8 +8,8 @@
     <meta property="og:title" content="{{ $post->meta_title ?: $post->title }}">
     <meta property="og:description" content="{{ $post->meta_description ?: $post->excerpt }}">
     <meta property="og:type" content="article">
-    @if($post->image_url)
-    <meta property="og:image" content="{{ $post->image_url }}">
+    @if($post->featured_image)
+    <meta property="og:image" content="{{ asset('storage/' . $post->featured_image) }}">
     @endif
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -52,9 +52,9 @@
 
         {{-- Hero del post --}}
         <section class="relative">
-            @if($post->image_url)
+            @if($post->featured_image)
             <div class="aspect-[21/9] max-h-[420px] w-full overflow-hidden">
-                <img src="{{ $post->image_url }}" alt="{{ $post->title }}" class="h-full w-full object-cover">
+                <img src="{{ asset('storage/' . $post->featured_image) }}" alt="{{ $post->title }}" class="h-full w-full object-cover">
             </div>
             @else
             <div class="h-48 bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-800"></div>
@@ -116,9 +116,9 @@
             <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 @foreach($related as $relPost)
                 <a href="{{ route('blog.show', $relPost->slug) }}" class="blog-card flex flex-col rounded-xl overflow-hidden bg-white shadow-sm border border-slate-200/60 cursor-pointer">
-                    @if($relPost->image_url)
+                    @if($relPost->featured_image)
                     <div class="aspect-video overflow-hidden">
-                        <img src="{{ $relPost->image_url }}" alt="{{ $relPost->title }}" class="h-full w-full object-cover" loading="lazy">
+                        <img src="{{ asset('storage/' . $relPost->featured_image) }}" alt="{{ $relPost->title }}" class="h-full w-full object-cover" loading="lazy">
                     </div>
                     @endif
                     <div class="flex flex-1 flex-col p-5">
