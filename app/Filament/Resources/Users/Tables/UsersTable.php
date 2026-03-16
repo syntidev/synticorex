@@ -55,7 +55,7 @@ class UsersTable
                         User::ROLE_SOPORTE  => 'Soporte',
                         User::ROLE_CLIENTE  => 'Cliente',
                     ])
-                    ->hidden()
+                    ->hidden(),
                 TextColumn::make('created_at')
                     ->label('Registrado')
                     ->date('d M Y')

@@ -99,7 +99,7 @@
                 </div>
 
                 {{-- Tags --}}
-                @if($post->tags && count($post->tags))
+                @if($post->tags && is_array($post->tags) && count($post->tags))
                 <div class="mt-10 flex flex-wrap gap-2 border-t border-slate-100 pt-6">
                     @foreach($post->tags as $tag)
                     <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600">{{ $tag }}</span>

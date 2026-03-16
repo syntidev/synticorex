@@ -18,6 +18,10 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
+use Filament\Actions\Action;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
 use Filament\Tables;
 use Filament\Tables\Table;
 
@@ -168,8 +172,8 @@ class DomainResource extends Resource
                     ->query(fn ($query) => $query->where('dns_status', 'failing')),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\Action::make('verify_dns')
+                EditAction::make(),
+                Action::make('verify_dns')
                     ->label('Verificar DNS')
                     ->icon('heroicon-o-arrow-path')
                     ->action(function (Domain $record): void {
@@ -184,8 +188,8 @@ class DomainResource extends Resource
                     }),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }

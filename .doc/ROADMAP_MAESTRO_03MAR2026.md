@@ -428,6 +428,24 @@ Un pase único sobre app.css + syntiweb-brand.css. Los componentes heredan autom
 | E.7 | Backup automático DB | 🟠 ALTO |
 | E.8 | Onboarding 5 clientes beta (1 por cada tipo: Studio×2, Food×2, Cat×1) | 🔴 CRÍTICO |
 
+### ⚠️ ROLLBACK PENDIENTE ANTES DE PRODUCCIÓN — Polling Widgets
+
+**Cambio aplicado en local:** `$pollingInterval = null` en todos los widgets
+para reducir carga durante desarrollo.
+
+**Archivos afectados:**
+- app/Filament/Widgets/BlueprintDonutChart.php
+- app/Filament/Widgets/CurrencyRatesWidget.php
+- app/Filament/Widgets/LatestTenantsWidget.php
+- app/Filament/Widgets/RevenueLineChart.php
+- app/Filament/Widgets/StatsOverviewWidget.php
+
+**Restaurar antes de Fase E.1 (deploy Hostinger):**
+- StatsOverviewWidget → '30s'
+- LatestTenantsWidget → '60s'
+- CurrencyRatesWidget → '60s'
+- Charts (Donut, Revenue) → null (mantener desactivado — muy pesados)
+
 ---
 
 ### FASE F — CRECIMIENTO (POST-LANZAMIENTO)

@@ -63,6 +63,7 @@ class AdminPanelProvider extends PanelProvider
                 fn () => view('filament.components.topbar-stats'),
             )
             ->login()
+            ->homeUrl('/admin')
             ->authGuard('web')
             ->authMiddleware([
                 Authenticate::class,
@@ -77,6 +78,7 @@ class AdminPanelProvider extends PanelProvider
                 \App\Filament\Resources\BlogPostResource::class,
                 \App\Filament\Resources\MediaResource::class,
                 \App\Filament\Resources\LandingSectionResource::class,
+                \App\Filament\Resources\DomainResource::class,
             ])
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([Dashboard::class])
