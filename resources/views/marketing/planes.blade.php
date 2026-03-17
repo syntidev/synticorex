@@ -1,31 +1,8 @@
-<!DOCTYPE html>
-<html lang="es" class="scroll-smooth">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+﻿@extends('marketing.layout')
 
-    <title>Planes y Precios — SYNTIweb</title>
-    <meta name="description" content="Elige tu plan SYNTIweb. Precios claros, sin letra pequeña. Landing, menú digital o catálogo para negocios venezolanos.">
+@section('content')
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-
-    <style>
-        :root {
-            --sw-studio: #4A80E4;
-            --sw-food: #f97316;
-            --sw-cat: #10b981;
-        }
-        body { font-family: 'Geist', ui-sans-serif, system-ui, sans-serif; }
-    </style>
-</head>
-<body class="bg-surface text-foreground antialiased">
-
-    {{-- ═══ HEADER ═══ --}}
+    {{-- â•â•â• HEADER â•â•â• --}}
     <header class="bg-surface border-b border-border/40">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
             <a href="{{ url('/') }}" class="flex items-center gap-2">
@@ -41,7 +18,7 @@
         </div>
     </header>
 
-    {{-- ═══ HERO ═══ --}}
+    {{-- â•â•â• HERO â•â•â• --}}
     <section class="bg-surface py-16 lg:py-24 text-center">
         <div class="mx-auto max-w-3xl px-4">
             <h1 class="text-3xl font-bold md:text-4xl lg:text-5xl text-foreground"
@@ -49,12 +26,12 @@
                 Elige tu plan
             </h1>
             <p class="mt-4 text-lg text-foreground/70 max-w-xl mx-auto">
-                Precios claros. Sin letra pequeña. Para negocios venezolanos.
+                Precios claros. Sin letra pequeÃ±a. Para negocios venezolanos.
             </p>
         </div>
     </section>
 
-    {{-- ═══ TABS + PANELS ═══ --}}
+    {{-- â•â•â• TABS + PANELS â•â•â• --}}
     <section class="pb-20 lg:pb-32" x-data="{ tab: 'studio' }">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
@@ -86,12 +63,12 @@
                 </button>
             </div>
 
-            {{-- ═══ PANEL STUDIO ═══ --}}
+            {{-- â•â•â• PANEL STUDIO â•â•â• --}}
             <div x-show="tab === 'studio'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0">
 
                 <div class="text-center mb-10">
                     <h2 class="text-xl font-semibold md:text-2xl text-foreground">Tu web completa. Tu negocio en Google.</h2>
-                    <p class="mt-2 text-foreground/60">Lo que una agencia cobra $180–$500 estático, aquí lo tienes vivo por $99/año.</p>
+                    <p class="mt-2 text-foreground/60">Lo que una agencia cobra $180â€“$500 estÃ¡tico, aquÃ­ lo tienes vivo por $99/aÃ±o.</p>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 max-w-5xl mx-auto">
@@ -100,40 +77,40 @@
                         $isPopular  = $plan->slug === 'crecimiento';
                         $accent     = '#4A80E4';
                         $tagline    = match($plan->slug) {
-                            'oportunidad' => 'Para validar. Menos que datos móviles.',
-                            'crecimiento' => 'El plan que más negocios eligen.',
-                            'vision'      => 'Para dominar. Eres líder local.',
+                            'oportunidad' => 'Para validar. Menos que datos mÃ³viles.',
+                            'crecimiento' => 'El plan que mÃ¡s negocios eligen.',
+                            'vision'      => 'Para dominar. Eres lÃ­der local.',
                             default       => '',
                         };
                         $features = match($plan->slug) {
                             'oportunidad' => [
                                 'Landing profesional completa',
-                                'Apareces en Google (SEO básico)',
+                                'Apareces en Google (SEO bÃ¡sico)',
                                 'WhatsApp integrado por producto',
                                 'Horarios y estado abierto/cerrado',
-                                'Código QR descargable',
-                                '20 productos · 3 servicios',
+                                'CÃ³digo QR descargable',
+                                '20 productos Â· 3 servicios',
                                 '10 paletas de color',
-                                'BCV automático ($ / REF / ambos)',
+                                'BCV automÃ¡tico ($ / REF / ambos)',
                             ],
                             'crecimiento' => [
                                 'Todo de Oportunidad +',
-                                'Sección Acerca de + Testimonios',
-                                'Medios de pago (9 métodos)',
+                                'SecciÃ³n Acerca de + Testimonios',
+                                'Medios de pago (9 mÃ©todos)',
                                 'Todas las redes sociales',
                                 'Analytics tiempo real',
                                 'FAQ (preguntas frecuentes)',
-                                '50 productos · 6 servicios',
-                                '17 paletas · Widget tasa BCV',
+                                '50 productos Â· 6 servicios',
+                                '17 paletas Â· Widget tasa BCV',
                             ],
                             'vision' => [
                                 'Todo de Crecimiento +',
-                                'Sucursales múltiples (hasta 3)',
+                                'Sucursales mÃºltiples (hasta 3)',
                                 'Paleta de colores personalizada',
                                 'Reporte analytics por email',
                                 'Schema.org avanzado (SEO profundo)',
                                 'SYNTiA asistente IA incluida',
-                                '200 productos · 9 servicios',
+                                '200 productos Â· 9 servicios',
                             ],
                             default => [],
                         };
@@ -145,7 +122,7 @@
                         @if($isPopular)
                         <span class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 inline-flex items-center px-3 py-1 rounded-full text-xs font-bold text-white"
                               style="background:{{ $accent }}">
-                            Más popular
+                            MÃ¡s popular
                         </span>
                         @endif
 
@@ -156,7 +133,7 @@
                                       style="color:{{ $accent }};text-shadow:0 4px 24px color-mix(in oklch, {{ $accent }} 20%, transparent)">
                                     ${{ intval($plan->price_usd) }}
                                 </span>
-                                <span class="text-foreground/50 text-sm">/año</span>
+                                <span class="text-foreground/50 text-sm">/aÃ±o</span>
                             </div>
                             <p class="mt-2 text-sm text-foreground/60">{{ $tagline }}</p>
                         </div>
@@ -165,7 +142,7 @@
                             <ul class="space-y-3">
                                 @foreach($features as $feat)
                                 <li class="flex items-start gap-2 text-sm text-foreground/80">
-                                    <span class="mt-0.5 shrink-0" style="color:{{ $accent }}">✓</span>
+                                    <span class="mt-0.5 shrink-0" style="color:{{ $accent }}">âœ“</span>
                                     {{ $feat }}
                                 </li>
                                 @endforeach
@@ -184,11 +161,11 @@
                 </div>
             </div>
 
-            {{-- ═══ PANEL FOOD ═══ --}}
+            {{-- â•â•â• PANEL FOOD â•â•â• --}}
             <div x-show="tab === 'food'" x-cloak x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0">
 
                 <div class="text-center mb-10">
-                    <h2 class="text-xl font-semibold md:text-2xl text-foreground">Tu menú digital. Pedidos por WhatsApp.</h2>
+                    <h2 class="text-xl font-semibold md:text-2xl text-foreground">Tu menÃº digital. Pedidos por WhatsApp.</h2>
                     <p class="mt-2 text-foreground/60">Sin imprimir cartas. Sin apps complicadas.</p>
                 </div>
 
@@ -199,37 +176,37 @@
                         $accent        = '#f97316';
                         $tagline       = match($plan->slug) {
                             'food-basico'    => 'Para empezar. Tu carta en digital.',
-                            'food-semestral' => 'Para crecer. Organización total.',
+                            'food-semestral' => 'Para crecer. OrganizaciÃ³n total.',
                             'food-anual'     => 'Para dominar. Pedidos directos.',
                             default          => '',
                         };
                         $period = match($plan->slug) {
                             'food-basico'    => '/mes',
                             'food-semestral' => '/semestre',
-                            'food-anual'     => '/año',
-                            default          => '/año',
+                            'food-anual'     => '/aÃ±o',
+                            default          => '/aÃ±o',
                         };
                         $features = match($plan->slug) {
                             'food-basico' => [
-                                'Menú digital activo 24/7',
+                                'MenÃº digital activo 24/7',
                                 'Lista de platos con precio',
                                 'Enlace para compartir',
-                                'Hasta 50 ítems en menú',
-                                '6 fotos de categorías',
+                                'Hasta 50 Ã­tems en menÃº',
+                                '6 fotos de categorÃ­as',
                             ],
                             'food-semestral' => [
-                                'Todo de Básico +',
-                                'Categorías organizadas',
-                                'Tasa BCV automática',
-                                'Horarios de atención',
-                                'Hasta 100 ítems · 12 fotos',
+                                'Todo de BÃ¡sico +',
+                                'CategorÃ­as organizadas',
+                                'Tasa BCV automÃ¡tica',
+                                'Horarios de atenciÃ³n',
+                                'Hasta 100 Ã­tems Â· 12 fotos',
                             ],
                             'food-anual' => [
                                 'Todo de Semestral +',
-                                'Pedido Rápido → WhatsApp ⭐',
-                                'Acumulador de ítems',
+                                'Pedido RÃ¡pido â†’ WhatsApp â­',
+                                'Acumulador de Ã­tems',
                                 'String de pedido estructurado',
-                                'Hasta 150 ítems · 18 fotos',
+                                'Hasta 150 Ã­tems Â· 18 fotos',
                             ],
                             default => [],
                         };
@@ -261,7 +238,7 @@
                             <ul class="space-y-3">
                                 @foreach($features as $feat)
                                 <li class="flex items-start gap-2 text-sm text-foreground/80">
-                                    <span class="mt-0.5 shrink-0" style="color:{{ $accent }}">✓</span>
+                                    <span class="mt-0.5 shrink-0" style="color:{{ $accent }}">âœ“</span>
                                     {{ $feat }}
                                 </li>
                                 @endforeach
@@ -280,12 +257,12 @@
                 </div>
             </div>
 
-            {{-- ═══ PANEL CAT ═══ --}}
+            {{-- â•â•â• PANEL CAT â•â•â• --}}
             <div x-show="tab === 'cat'" x-cloak x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0">
 
                 <div class="text-center mb-10">
-                    <h2 class="text-xl font-semibold md:text-2xl text-foreground">Tu catálogo con carrito. Vende más.</h2>
-                    <p class="mt-2 text-foreground/60">Catálogo visual con carrito incluido. Tus clientes escogen y te compran por WhatsApp.</p>
+                    <h2 class="text-xl font-semibold md:text-2xl text-foreground">Tu catÃ¡logo con carrito. Vende mÃ¡s.</h2>
+                    <p class="mt-2 text-foreground/60">CatÃ¡logo visual con carrito incluido. Tus clientes escogen y te compran por WhatsApp.</p>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 max-w-5xl mx-auto">
@@ -296,34 +273,34 @@
                         $tagline       = match($plan->slug) {
                             'cat-basico'    => 'Para empezar. Tu vitrina digital.',
                             'cat-semestral' => 'Para vender. Carrito incluido.',
-                            'cat-anual'     => 'Para escalar. Sin límites.',
+                            'cat-anual'     => 'Para escalar. Sin lÃ­mites.',
                             default         => '',
                         };
                         $period = match($plan->slug) {
                             'cat-basico'    => '/mes',
                             'cat-semestral' => '/semestre',
-                            'cat-anual'     => '/año',
-                            default         => '/año',
+                            'cat-anual'     => '/aÃ±o',
+                            default         => '/aÃ±o',
                         };
                         $features = match($plan->slug) {
                             'cat-basico' => [
-                                'Catálogo visual activo 24/7',
+                                'CatÃ¡logo visual activo 24/7',
                                 'Hasta 20 productos',
                                 '1 foto por producto',
-                                'Botón WhatsApp directo',
+                                'BotÃ³n WhatsApp directo',
                                 'Sin carrito (plan entrada)',
                             ],
                             'cat-semestral' => [
-                                'Todo de Básico +',
-                                'Carrito básico incluido ✅',
+                                'Todo de BÃ¡sico +',
+                                'Carrito bÃ¡sico incluido âœ…',
                                 'Hasta 100 productos',
                                 '3 fotos por producto',
                                 'Variantes: talla y color',
                             ],
                             'cat-anual' => [
                                 'Todo de Semestral +',
-                                'Mini Order ID SC-XXXX ⭐',
-                                '250 productos · 6 fotos c/u',
+                                'Mini Order ID SC-XXXX â­',
+                                '250 productos Â· 6 fotos c/u',
                                 '6 fotos por producto',
                                 'Todas las variantes + opciones',
                             ],
@@ -357,7 +334,7 @@
                             <ul class="space-y-3">
                                 @foreach($features as $feat)
                                 <li class="flex items-start gap-2 text-sm text-foreground/80">
-                                    <span class="mt-0.5 shrink-0" style="color:{{ $accent }}">✓</span>
+                                    <span class="mt-0.5 shrink-0" style="color:{{ $accent }}">âœ“</span>
                                     {{ $feat }}
                                 </li>
                                 @endforeach
@@ -379,26 +356,19 @@
         </div>
     </section>
 
-    {{-- ═══ COMPARATIVA / AYUDA ═══ --}}
+    {{-- â•â•â• COMPARATIVA / AYUDA â•â•â• --}}
     <section class="py-12 bg-background border-t border-border/30">
         <div class="mx-auto max-w-2xl px-4 text-center">
-            <p class="text-lg font-semibold text-foreground mb-2">¿No sabes cuál elegir?</p>
+            <p class="text-lg font-semibold text-foreground mb-2">Â¿No sabes cuÃ¡l elegir?</p>
             <p class="text-foreground/60 mb-6">Te ayudamos a encontrar el plan perfecto para tu negocio.</p>
             <a href="https://wa.me/584120000000?text={{ urlencode('Hola, necesito ayuda para elegir mi plan SYNTIweb') }}"
                target="_blank" rel="noopener noreferrer"
                class="inline-flex items-center gap-2 py-3 px-6 rounded-lg font-semibold text-white transition-all duration-200 hover:-translate-y-0.5"
                style="background:#25d366;box-shadow:0 4px 14px 0 rgba(37,211,102,0.35)">
                 <span class="iconify tabler--brand-whatsapp size-5" aria-hidden="true"></span>
-                Escríbenos por WhatsApp
+                EscrÃ­benos por WhatsApp
             </a>
         </div>
     </section>
 
-    {{-- ═══ FOOTER ═══ --}}
-    @include('marketing.sections.footer-mkt')
-
-    {{-- Iconify --}}
-    <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js" defer></script>
-<x-syntia-widget />
-</body>
-</html>
+@endsection

@@ -1,28 +1,10 @@
-<!DOCTYPE html>
-<html lang="es" class="scroll-smooth">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+﻿@extends('marketing.layout')
 
-    <title>SYNTIcat — Tu catálogo en línea con pedidos por WhatsApp</title>
-    <meta name="description" content="Catálogo visual con carrito para tiendas, proveedores y comercios. Desde $9/mes. 15 días gratis.">
+@section('content')
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-
-    <style>
-        body { font-family: 'Geist', ui-sans-serif, system-ui, sans-serif; }
-    </style>
-</head>
-<body class="bg-surface text-foreground antialiased">
-
-{{-- ═══════════════════════════════════════════════════ --}}
+{{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
 {{-- HEADER                                             --}}
-{{-- ═══════════════════════════════════════════════════ --}}
+{{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
 <header class="flex flex-wrap md:justify-start md:flex-nowrap z-50 w-full text-sm py-3 md:py-0">
     <nav class="max-w-[85rem] w-full mx-auto px-4 md:px-6 lg:px-8">
         <div class="relative md:flex md:items-center md:justify-between">
@@ -46,25 +28,25 @@
     </nav>
 </header>
 
-{{-- ═══════════════════════════════════════════════════ --}}
+{{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
 {{-- 1. HERO                                            --}}
-{{-- ═══════════════════════════════════════════════════ --}}
+{{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
 <div class="relative">
     <div class="max-w-[85rem] px-4 pt-10 sm:px-6 lg:px-8 lg:pt-20 mx-auto">
         <div class="max-w-2xl mx-auto text-center mb-10">
             <h1 class="text-3xl leading-tight font-bold md:text-4xl md:leading-tight lg:text-5xl lg:leading-tight text-foreground">
-                Tu catálogo en línea.<br>Tus clientes compran por WhatsApp.
+                Tu catÃ¡logo en lÃ­nea.<br>Tus clientes compran por WhatsApp.
             </h1>
             <p class="mt-4 lg:text-lg text-foreground">
-                Catálogo visual con carrito para tiendas, proveedores y comercios.<br class="hidden sm:block">
+                CatÃ¡logo visual con carrito para tiendas, proveedores y comercios.<br class="hidden sm:block">
                 El cliente elige, arma su pedido y te escribe directo.
             </p>
             <p class="mt-2 text-sm text-muted-foreground-1">
-                Catálogo visual con carrito incluido. Mini Order SC-XXXX rastreable. Desde $5.75/mes.
+                CatÃ¡logo visual con carrito incluido. Mini Order SC-XXXX rastreable. Desde $5.75/mes.
             </p>
             <div class="mt-8 flex flex-wrap justify-center gap-3">
                 <a class="py-3 px-5 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg bg-primary border border-primary-line text-primary-foreground hover:bg-primary-hover focus:outline-hidden focus:bg-primary-focus disabled:opacity-50 disabled:pointer-events-none" href="{{ route('onboarding.cat') }}">
-                    Empezar gratis 15 días
+                    Empezar gratis 15 dÃ­as
                     <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
                 </a>
                 <a class="py-3 px-5 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg bg-layer border border-layer-line text-layer-foreground shadow-2xs hover:bg-layer-hover disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-layer-focus" href="/demo">
@@ -80,13 +62,13 @@
     <div class="absolute top-1/2 start-1/2 -z-1 transform -translate-y-1/2 -translate-x-1/2 w-[840px] h-[840px] border border-dashed border-primary-200 rounded-full opacity-60 dark:border-primary-900/60"></div>
 </div>
 
-{{-- ═══════════════════════════════════════════════════ --}}
+{{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
 {{-- 2. CARDS DE PLANES                                 --}}
-{{-- ═══════════════════════════════════════════════════ --}}
+{{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
 <div class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
     <div class="max-w-2xl mx-auto text-center mb-10">
-        <h2 class="text-2xl font-bold md:text-3xl md:leading-tight text-foreground">El plan perfecto para tu catálogo</h2>
-        <p class="mt-2 lg:text-lg text-foreground">Catálogo visual con carrito incluido. Tus clientes escogen, acumulan y te compran por WhatsApp.</p>
+        <h2 class="text-2xl font-bold md:text-3xl md:leading-tight text-foreground">El plan perfecto para tu catÃ¡logo</h2>
+        <p class="mt-2 lg:text-lg text-foreground">CatÃ¡logo visual con carrito incluido. Tus clientes escogen, acumulan y te compran por WhatsApp.</p>
     </div>
 
     <div class="mt-6 md:mt-12 grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:items-center max-w-5xl mx-auto">
@@ -129,9 +111,9 @@
     </div>
 </div>
 
-{{-- ═══════════════════════════════════════════════════ --}}
+{{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
 {{-- 3. TABLA COMPARATIVA                               --}}
-{{-- ═══════════════════════════════════════════════════ --}}
+{{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
 <div class="relative">
     <div class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 md:py-14 lg:py-20 mx-auto">
         <div class="max-w-2xl mx-auto text-center mb-10 lg:mb-14">
@@ -142,7 +124,7 @@
         <div class="hidden lg:block sticky top-0 start-0 py-2 bg-layer/60 backdrop-blur-md z-10">
             <div class="grid grid-cols-4 gap-6">
                 <div>
-                    <span class="font-semibold text-lg text-foreground">Características</span>
+                    <span class="font-semibold text-lg text-foreground">CaracterÃ­sticas</span>
                 </div>
                 <div>
                     <span class="font-semibold text-lg text-foreground">{{ strtoupper($planData['plans'][0]['name']) }}</span>
@@ -159,11 +141,11 @@
             </div>
         </div>
 
-        {{-- SECCIÓN: Tu catálogo --}}
+        {{-- SECCIÃ“N: Tu catÃ¡logo --}}
         <div class="space-y-4 lg:space-y-0">
             <ul class="grid lg:grid-cols-4 lg:gap-6">
                 <li class="lg:py-3">
-                    <span class="text-lg font-semibold text-foreground">Tu catálogo</span>
+                    <span class="text-lg font-semibold text-foreground">Tu catÃ¡logo</span>
                 </li>
                 <li class="hidden lg:block py-1.5 lg:py-3"></li>
                 <li class="hidden lg:block py-1.5 lg:py-3"></li>
@@ -177,7 +159,7 @@
                 </li>
                 <li class="col-span-1 py-1.5 lg:py-3 border-b border-line-2">
                     <div class="grid grid-cols-2 md:grid-cols-6 lg:block">
-                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">BÁSICO</span>
+                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">BÃSICO</span>
                         <span class="text-sm text-foreground">20</span>
                     </div>
                 </li>
@@ -202,7 +184,7 @@
                 </li>
                 <li class="col-span-1 py-1.5 lg:py-3 border-b border-line-2">
                     <div class="grid grid-cols-2 md:grid-cols-6 lg:block">
-                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">BÁSICO</span>
+                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">BÃSICO</span>
                         <span class="text-sm text-foreground">1</span>
                     </div>
                 </li>
@@ -227,7 +209,7 @@
                 </li>
                 <li class="col-span-1 py-1.5 lg:py-3 border-b border-line-2">
                     <div class="grid grid-cols-2 md:grid-cols-6 lg:block">
-                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">BÁSICO</span>
+                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">BÃSICO</span>
                         <svg class="shrink-0 size-5 text-muted-foreground" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/></svg>
                     </div>
                 </li>
@@ -252,7 +234,7 @@
                 </li>
                 <li class="col-span-1 py-1.5 lg:py-3 border-b border-line-2">
                     <div class="grid grid-cols-2 md:grid-cols-6 lg:block">
-                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">BÁSICO</span>
+                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">BÃSICO</span>
                         <svg class="shrink-0 size-5 text-muted-foreground" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/></svg>
                     </div>
                 </li>
@@ -271,7 +253,7 @@
             </ul>
         </div>
 
-        {{-- SECCIÓN: Ventas por WhatsApp --}}
+        {{-- SECCIÃ“N: Ventas por WhatsApp --}}
         <div class="mt-6 space-y-4 lg:space-y-0">
             <ul class="grid lg:grid-cols-4 lg:gap-6">
                 <li class="lg:py-3">
@@ -282,14 +264,14 @@
                 <li class="hidden lg:block py-1.5 lg:py-3"></li>
             </ul>
 
-            {{-- Botón WhatsApp directo --}}
+            {{-- BotÃ³n WhatsApp directo --}}
             <ul class="grid lg:grid-cols-4 lg:gap-6">
                 <li class="pb-1.5 lg:py-3">
-                    <span class="font-semibold lg:font-normal text-sm text-foreground">Botón WhatsApp directo</span>
+                    <span class="font-semibold lg:font-normal text-sm text-foreground">BotÃ³n WhatsApp directo</span>
                 </li>
                 <li class="col-span-1 py-1.5 lg:py-3 border-b border-line-2">
                     <div class="grid grid-cols-2 md:grid-cols-6 lg:block">
-                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">BÁSICO</span>
+                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">BÃSICO</span>
                         <svg class="shrink-0 size-5 text-primary" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                     </div>
                 </li>
@@ -314,7 +296,7 @@
                 </li>
                 <li class="col-span-1 py-1.5 lg:py-3 border-b border-line-2">
                     <div class="grid grid-cols-2 md:grid-cols-6 lg:block">
-                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">BÁSICO</span>
+                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">BÃSICO</span>
                         <svg class="shrink-0 size-5 text-muted-foreground" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/></svg>
                     </div>
                 </li>
@@ -339,7 +321,7 @@
                 </li>
                 <li class="col-span-1 py-1.5 lg:py-3 border-b border-line-2">
                     <div class="grid grid-cols-2 md:grid-cols-6 lg:block">
-                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">BÁSICO</span>
+                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">BÃSICO</span>
                         <svg class="shrink-0 size-5 text-muted-foreground" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/></svg>
                     </div>
                 </li>
@@ -364,14 +346,14 @@
                 </li>
                 <li class="col-span-1 py-1.5 lg:py-3 border-b border-line-2">
                     <div class="grid grid-cols-2 md:grid-cols-6 lg:block">
-                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">BÁSICO</span>
+                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">BÃSICO</span>
                         <svg class="shrink-0 size-5 text-muted-foreground" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/></svg>
                     </div>
                 </li>
                 <li class="col-span-1 py-1.5 lg:py-3 border-b border-line-2">
                     <div class="grid grid-cols-2 md:grid-cols-6 lg:block">
                         <span class="lg:hidden md:col-span-2 text-sm text-foreground">SEMESTRAL</span>
-                        <span class="text-sm text-foreground">Básico</span>
+                        <span class="text-sm text-foreground">BÃ¡sico</span>
                     </div>
                 </li>
                 <li class="col-span-1 py-1.5 lg:py-3 border-b border-line-2">
@@ -383,7 +365,7 @@
             </ul>
         </div>
 
-        {{-- SECCIÓN: Soporte incluido --}}
+        {{-- SECCIÃ“N: Soporte incluido --}}
         <div class="mt-6 space-y-4 lg:space-y-0">
             <ul class="grid lg:grid-cols-4 lg:gap-6">
                 <li class="lg:py-3">
@@ -394,14 +376,14 @@
                 <li class="hidden lg:block py-1.5 lg:py-3"></li>
             </ul>
 
-            {{-- Documentación y guías --}}
+            {{-- DocumentaciÃ³n y guÃ­as --}}
             <ul class="grid lg:grid-cols-4 lg:gap-6">
                 <li class="pb-1.5 lg:py-3">
-                    <span class="font-semibold lg:font-normal text-sm text-foreground">Documentación y guías</span>
+                    <span class="font-semibold lg:font-normal text-sm text-foreground">DocumentaciÃ³n y guÃ­as</span>
                 </li>
                 <li class="col-span-1 py-1.5 lg:py-3 border-b border-line-2">
                     <div class="grid grid-cols-2 md:grid-cols-6 lg:block">
-                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">BÁSICO</span>
+                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">BÃSICO</span>
                         <svg class="shrink-0 size-5 text-primary" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                     </div>
                 </li>
@@ -426,7 +408,7 @@
                 </li>
                 <li class="col-span-1 py-1.5 lg:py-3 border-b border-line-2">
                     <div class="grid grid-cols-2 md:grid-cols-6 lg:block">
-                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">BÁSICO</span>
+                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">BÃSICO</span>
                         <svg class="shrink-0 size-5 text-primary" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                     </div>
                 </li>
@@ -451,7 +433,7 @@
                 </li>
                 <li class="col-span-1 py-1.5 lg:py-3 border-b border-line-2">
                     <div class="grid grid-cols-2 md:grid-cols-6 lg:block">
-                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">BÁSICO</span>
+                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">BÃSICO</span>
                         <svg class="shrink-0 size-5 text-muted-foreground" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/></svg>
                     </div>
                 </li>
@@ -476,7 +458,7 @@
                 </li>
                 <li class="col-span-1 py-1.5 lg:py-3 border-b border-line-2">
                     <div class="grid grid-cols-2 md:grid-cols-6 lg:block">
-                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">BÁSICO</span>
+                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">BÃSICO</span>
                         <svg class="shrink-0 size-5 text-muted-foreground" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/></svg>
                     </div>
                 </li>
@@ -511,7 +493,7 @@
                 </div>
                 <div>
                     <a class="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg bg-layer border border-layer-line text-layer-foreground shadow-2xs hover:bg-layer-hover disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-layer-focus" href="{{ route('onboarding.cat') }}">
-                        Máximo ahorro
+                        MÃ¡ximo ahorro
                     </a>
                 </div>
             </div>
@@ -519,15 +501,15 @@
     </div>
 </div>
 
-{{-- ═══════════════════════════════════════════════════ --}}
+{{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
 {{-- 4. FAQ                                             --}}
-{{-- ═══════════════════════════════════════════════════ --}}
+{{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
 <div class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
     <div class="grid md:grid-cols-5 gap-10">
         <div class="md:col-span-2">
             <div class="max-w-xs">
                 <h2 class="text-2xl font-bold md:text-4xl md:leading-tight text-foreground">Preguntas<br>frecuentes</h2>
-                <p class="mt-1 hidden md:block text-muted-foreground-2">Respuestas a las dudas más comunes sobre SYNTIcat.</p>
+                <p class="mt-1 hidden md:block text-muted-foreground-2">Respuestas a las dudas mÃ¡s comunes sobre SYNTIcat.</p>
             </div>
         </div>
 
@@ -537,13 +519,13 @@
                 {{-- Q1 --}}
                 <div class="hs-accordion pb-3 active" id="hs-cat-faq-one">
                     <button class="hs-accordion-toggle group pb-3 inline-flex items-center justify-between gap-x-3 w-full md:text-lg font-semibold text-start text-foreground rounded-lg transition hover:text-muted-foreground-1 focus:outline-hidden" aria-expanded="true" aria-controls="hs-cat-faq-collapse-one">
-                        ¿Qué es el Mini Order SC-XXXX?
+                        Â¿QuÃ© es el Mini Order SC-XXXX?
                         <svg class="hs-accordion-active:hidden block shrink-0 size-5 text-muted-foreground-2 group-hover:text-muted-foreground-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
                         <svg class="hs-accordion-active:block hidden shrink-0 size-5 text-muted-foreground-2 group-hover:text-muted-foreground-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
                     </button>
                     <div id="hs-cat-faq-collapse-one" class="hs-accordion-content w-full overflow-hidden transition-[height] duration-300" role="region" aria-labelledby="hs-cat-faq-one">
                         <p class="text-muted-foreground-2">
-                            Cuando el cliente termina su pedido, el sistema genera un código único tipo SC-0042. Ese código llega al WhatsApp del negocio junto con el detalle completo. Sin pasarela, sin cobro en línea.
+                            Cuando el cliente termina su pedido, el sistema genera un cÃ³digo Ãºnico tipo SC-0042. Ese cÃ³digo llega al WhatsApp del negocio junto con el detalle completo. Sin pasarela, sin cobro en lÃ­nea.
                         </p>
                     </div>
                 </div>
@@ -551,13 +533,13 @@
                 {{-- Q2 --}}
                 <div class="hs-accordion pt-6 pb-3" id="hs-cat-faq-two">
                     <button class="hs-accordion-toggle group pb-3 inline-flex items-center justify-between gap-x-3 w-full md:text-lg font-semibold text-start text-foreground rounded-lg transition hover:text-muted-foreground-1 focus:outline-hidden" aria-expanded="false" aria-controls="hs-cat-faq-collapse-two">
-                        ¿Necesito pasarela de pago?
+                        Â¿Necesito pasarela de pago?
                         <svg class="hs-accordion-active:hidden block shrink-0 size-5 text-muted-foreground-2 group-hover:text-muted-foreground-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
                         <svg class="hs-accordion-active:block hidden shrink-0 size-5 text-muted-foreground-2 group-hover:text-muted-foreground-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
                     </button>
                     <div id="hs-cat-faq-collapse-two" class="hs-accordion-content hidden w-full overflow-hidden transition-[height] duration-300" role="region" aria-labelledby="hs-cat-faq-two">
                         <p class="text-muted-foreground-2">
-                            No. El pedido va a WhatsApp y tú cobras como siempre: Pago móvil, transferencia, efectivo o Zelle.
+                            No. El pedido va a WhatsApp y tÃº cobras como siempre: Pago mÃ³vil, transferencia, efectivo o Zelle.
                         </p>
                     </div>
                 </div>
@@ -565,7 +547,7 @@
                 {{-- Q3 --}}
                 <div class="hs-accordion pt-6 pb-3" id="hs-cat-faq-three">
                     <button class="hs-accordion-toggle group pb-3 inline-flex items-center justify-between gap-x-3 w-full md:text-lg font-semibold text-start text-foreground rounded-lg transition hover:text-muted-foreground-1 focus:outline-hidden" aria-expanded="false" aria-controls="hs-cat-faq-collapse-three">
-                        ¿Qué son las variantes?
+                        Â¿QuÃ© son las variantes?
                         <svg class="hs-accordion-active:hidden block shrink-0 size-5 text-muted-foreground-2 group-hover:text-muted-foreground-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
                         <svg class="hs-accordion-active:block hidden shrink-0 size-5 text-muted-foreground-2 group-hover:text-muted-foreground-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
                     </button>
@@ -579,13 +561,13 @@
                 {{-- Q4 --}}
                 <div class="hs-accordion pt-6 pb-3" id="hs-cat-faq-four">
                     <button class="hs-accordion-toggle group pb-3 inline-flex items-center justify-between gap-x-3 w-full md:text-lg font-semibold text-start text-foreground rounded-lg transition hover:text-muted-foreground-1 focus:outline-hidden" aria-expanded="false" aria-controls="hs-cat-faq-collapse-four">
-                        ¿Cuántas fotos puede tener cada producto?
+                        Â¿CuÃ¡ntas fotos puede tener cada producto?
                         <svg class="hs-accordion-active:hidden block shrink-0 size-5 text-muted-foreground-2 group-hover:text-muted-foreground-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
                         <svg class="hs-accordion-active:block hidden shrink-0 size-5 text-muted-foreground-2 group-hover:text-muted-foreground-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
                     </button>
                     <div id="hs-cat-faq-collapse-four" class="hs-accordion-content hidden w-full overflow-hidden transition-[height] duration-300" role="region" aria-labelledby="hs-cat-faq-four">
                         <p class="text-muted-foreground-2">
-                            Básico: 1 foto. Semestral: 3 fotos. Anual: hasta 6 fotos con visor tipo galería para que el cliente vea el detalle.
+                            BÃ¡sico: 1 foto. Semestral: 3 fotos. Anual: hasta 6 fotos con visor tipo galerÃ­a para que el cliente vea el detalle.
                         </p>
                     </div>
                 </div>
@@ -593,13 +575,13 @@
                 {{-- Q5 --}}
                 <div class="hs-accordion pt-6 pb-3" id="hs-cat-faq-five">
                     <button class="hs-accordion-toggle group pb-3 inline-flex items-center justify-between gap-x-3 w-full md:text-lg font-semibold text-start text-foreground rounded-lg transition hover:text-muted-foreground-1 focus:outline-hidden" aria-expanded="false" aria-controls="hs-cat-faq-collapse-five">
-                        ¿Funciona para proveedores mayoristas?
+                        Â¿Funciona para proveedores mayoristas?
                         <svg class="hs-accordion-active:hidden block shrink-0 size-5 text-muted-foreground-2 group-hover:text-muted-foreground-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
                         <svg class="hs-accordion-active:block hidden shrink-0 size-5 text-muted-foreground-2 group-hover:text-muted-foreground-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
                     </button>
                     <div id="hs-cat-faq-collapse-five" class="hs-accordion-content hidden w-full overflow-hidden transition-[height] duration-300" role="region" aria-labelledby="hs-cat-faq-five">
                         <p class="text-muted-foreground-2">
-                            Sí. Muchos proveedores venezolanos usan SYNTIcat para mostrar su lista de precios actualizada sin enviar PDFs por WhatsApp cada semana.
+                            SÃ­. Muchos proveedores venezolanos usan SYNTIcat para mostrar su lista de precios actualizada sin enviar PDFs por WhatsApp cada semana.
                         </p>
                     </div>
                 </div>
@@ -609,30 +591,24 @@
     </div>
 </div>
 
-{{-- ═══════════════════════════════════════════════════ --}}
+{{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
 {{-- 5. CTA FINAL                                      --}}
-{{-- ═══════════════════════════════════════════════════ --}}
+{{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
 <div class="bg-neutral-900">
     <div class="max-w-[85rem] px-4 py-16 sm:px-6 lg:px-8 lg:py-24 mx-auto text-center">
         <h2 class="text-2xl font-bold md:text-3xl md:leading-tight text-white">
-            Tu tienda en línea. Esta semana.
+            Tu tienda en lÃ­nea. Esta semana.
         </h2>
         <p class="mt-3 text-neutral-400">
-            15 días gratis. Sin tarjeta. Sin tecnicismos.
+            15 dÃ­as gratis. Sin tarjeta. Sin tecnicismos.
         </p>
         <div class="mt-8">
             <a class="py-3 px-6 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg bg-primary border border-primary-line text-primary-foreground hover:bg-primary-hover focus:outline-hidden focus:bg-primary-focus disabled:opacity-50 disabled:pointer-events-none" href="{{ route('onboarding.cat') }}">
-                Crear mi catálogo ahora
+                Crear mi catÃ¡logo ahora
                 <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
             </a>
         </div>
     </div>
 </div>
 
-{{-- ═══════════════════════════════════════════════════ --}}
-{{-- FOOTER                                             --}}
-{{-- ═══════════════════════════════════════════════════ --}}
-@include('marketing.sections.footer-mkt')
-<x-syntia-widget />
-</body>
-</html>
+@endsection

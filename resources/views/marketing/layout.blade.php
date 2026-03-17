@@ -5,13 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>SYNTIweb — Tu Negocio Visible en Google en 5 Minutos</title>
-    <meta name="description" content="SYNTIweb genera tu presencia digital automáticamente. Landing profesional, SEO automático, WhatsApp integrado. Para restaurantes, mecánicos, abogados y más.">
-    <meta name="keywords" content="landing page Venezuela, presencia digital, negocio en Google, SYNTIweb, página web para negocios">
-
-    <meta property="og:title" content="SYNTIweb — Tu Negocio Visible en Google">
-    <meta property="og:description" content="Genera tu presencia digital automáticamente. En 5 minutos. Sin diseñador. Sin programador.">
-    <meta property="og:type" content="website">
+    <title>@yield('title', 'SYNTIweb — Tu Negocio Visible en Google')</title>
+    <meta name="description" content="@yield('description', 'SYNTIweb genera tu presencia digital automáticamente. Landing profesional, SEO automático, WhatsApp integrado.')">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,11 +15,6 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <style>
-        :root {
-            --mkt-blue: #1e40af;
-            --mkt-indigo: #4f46e5;
-            --mkt-purple: #7c3aed;
-        }
         body { font-family: 'Inter', system-ui, sans-serif; }
         .mkt-gradient-text {
             background: linear-gradient(135deg, #3b82f6, #8b5cf6);
@@ -54,30 +44,17 @@
             opacity: 1;
             transform: translateY(0);
         }
-        .mkt-blob {
-            border-radius: 42% 58% 36% 64% / 45% 55% 45% 55%;
-            animation: mkt-morph 8s ease-in-out infinite;
-        }
-        @keyframes mkt-morph {
-            0%,100% { border-radius: 42% 58% 36% 64% / 45% 55% 45% 55%; }
-            33% { border-radius: 55% 45% 60% 40% / 35% 65% 35% 65%; }
-            66% { border-radius: 35% 65% 45% 55% / 55% 45% 55% 45%; }
-        }
         .mkt-float { animation: mkt-float 6s ease-in-out infinite; }
         @keyframes mkt-float {
             0%,100% { transform: translateY(0); }
             50% { transform: translateY(-12px); }
         }
-        .mkt-mockup {
-            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
-            border: 1px solid rgba(0,0,0,0.08);
-        }
-
     </style>
+    @stack('head')
 </head>
-<body class="bg-white text-slate-800 antialiased" x-data="marketingApp()">
+<body class="bg-white text-slate-800 antialiased">
 
-    {{-- ═══ NAVBAR ═══════════════════════════════════════════════════════ --}}
+    {{-- ═══ NAVBAR ════════════════════════════════════════════════════════ --}}
     <header class="flex flex-wrap lg:justify-start lg:flex-nowrap z-50 w-full bg-white border-b border-border sticky top-0">
         <nav class="relative max-w-7xl w-full mx-auto flex flex-wrap basis-full items-center justify-between px-4 sm:px-6 lg:px-8 py-3">
 
@@ -96,8 +73,8 @@
                 </a>
                 <button type="button"
                     class="hs-collapse-toggle p-2 rounded-lg text-slate-600 hover:bg-slate-100 transition"
-                    data-hs-collapse="#mkt-navbar-collapse"
-                    aria-controls="mkt-navbar-collapse"
+                    data-hs-collapse="#mkt-layout-navbar-collapse"
+                    aria-controls="mkt-layout-navbar-collapse"
                     aria-label="Toggle navigation">
                     <span class="iconify tabler--menu-2 size-5 hs-collapse-open:hidden"></span>
                     <span class="iconify tabler--x size-5 hidden hs-collapse-open:block"></span>
@@ -105,7 +82,7 @@
             </div>
 
             {{-- Desktop + Collapse container --}}
-            <div id="mkt-navbar-collapse"
+            <div id="mkt-layout-navbar-collapse"
                  class="hs-collapse hidden overflow-hidden transition-all duration-300 basis-full lg:block lg:basis-auto lg:overflow-visible">
                 <div class="flex flex-col gap-1 mt-4 lg:mt-0 lg:flex-row lg:items-center lg:gap-1">
 
@@ -189,121 +166,16 @@
         </nav>
     </header>
 
-    {{-- ═══ SECTIONS ════════════════════════════════════════════════════ --}}
-    @include('marketing.sections.hero')
-    @include('marketing.sections.syntia')
-    @include('marketing.sections.problema')
-    @include('marketing.sections.solucion')
-    @include('marketing.sections.segmentos')
-    @include('marketing.sections.dashboard')
-    @include('marketing.sections.valor')
-    @include('marketing.sections.planes')
-    @include('marketing.sections.estadisticas')
-    @include('marketing.sections.configuracion')
-    @include('marketing.sections.conversion')
-    @include('marketing.sections.cta-final')
-    {{-- Barra infraestructura --}}
-    <div class="bg-slate-50 border-t border-slate-100 py-8">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <p class="text-center text-xs font-bold uppercase tracking-widest text-slate-300 mb-6">Infraestructura y respaldo técnico</p>
-            <div class="flex items-center justify-center gap-8 flex-wrap">
-                <div class="flex items-center gap-2">
-                    <div class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
-                        <span class="iconify tabler--brand-google size-4 text-blue-500"></span>
-                    </div>
-                    <div>
-                        <div class="text-xs font-semibold text-slate-600">Google Cloud</div>
-                        <div class="text-xs text-slate-400">Servidores certificados</div>
-                    </div>
-                </div>
-                <div class="w-px h-8 bg-slate-200"></div>
-                <div class="flex items-center gap-2">
-                    <div class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
-                        <span class="iconify tabler--bolt size-4 text-blue-500"></span>
-                    </div>
-                    <div>
-                        <div class="text-xs font-semibold text-slate-600">LiteSpeed</div>
-                        <div class="text-xs text-slate-400">Fibra · 99.9% uptime</div>
-                    </div>
-                </div>
-                <div class="w-px h-8 bg-slate-200"></div>
-                <div class="flex items-center gap-2">
-                    <div class="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center">
-                        <span class="iconify tabler--lock size-4 text-emerald-500"></span>
-                    </div>
-                    <div>
-                        <div class="text-xs font-semibold text-slate-600">SSL · Datos seguros</div>
-                        <div class="text-xs text-slate-400">Cifrado end-to-end</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    {{-- ═══ FOOTER ══════════════════════════════════════════════════════ --}}
-    <footer class="bg-[var(--sw-navy)] text-[var(--sw-text-muted)]">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
-                {{-- Brand --}}
-                <div class="md:col-span-2">
-                    <div class="flex items-center gap-2 mb-4">
-                        <img src="{{ asset('brand/syntiweb-logo-negative.svg') }}" 
-                             alt="SYNTIweb" width="32" height="32">
-                        <span class="text-xl font-extrabold text-white"><span style="color:#4A80E4">SYNTI</span><span style="color:#FFFFFF">web</span></span>
-                    </div>
-                    <p class="text-sm leading-relaxed max-w-sm">Tu negocio merece estar en Google. SYNTIweb genera tu presencia digital automáticamente, para que tú te enfoques en lo que mejor haces.</p>
-                </div>
-                {{-- Links --}}
-                <div>
-                    <h4 class="text-white font-semibold text-sm mb-4">Producto</h4>
-                    <ul class="space-y-2 text-sm">
-                        <li><a href="#solucion" class="hover:text-white transition-colors">Cómo funciona</a></li>
-                        <li><a href="#segmentos" class="hover:text-white transition-colors">Segmentos</a></li>
-                        <li><a href="#planes" class="hover:text-white transition-colors">Planes</a></li>
-                        <li><a href="{{ route('marketing.about') }}" class="hover:text-white transition-colors">Nosotros</a></li>
-                    </ul>
-                </div>
-                {{-- Legal --}}
-                <div>
-                    <h4 class="text-white font-semibold text-sm mb-4">Legal</h4>
-                    <ul class="space-y-2 text-sm">
-                        <li><a href="{{ route('marketing.privacy') }}" class="hover:text-white transition-colors">Privacidad</a></li>
-                        <li><a href="{{ route('marketing.terms') }}" class="hover:text-white transition-colors">Términos</a></li>
-                        <li><a href="mailto:soporte@syntiweb.com" class="hover:text-white transition-colors">soporte@syntiweb.com</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="border-t border-white/10 mt-12 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-                <p class="text-xs">&copy; {{ date('Y') }} SYNTIweb — Todos los derechos reservados.</p>
-                <p class="text-xs">Hecho con <span class="text-red-400">&#10084;</span> en Venezuela</p>
-            </div>
-        </div>
-    </footer>
+    {{-- ═══ CONTENT ════════════════════════════════════════════════════════ --}}
+    @yield('content')
 
-    {{-- ═══ SCRIPTS ═════════════════════════════════════════════════════ --}}
-    <script>
-        function marketingApp() {
-            return {
-                scrolled: false,
-                mobileNav: false,
-                init() {
-                    const onScroll = () => { this.scrolled = window.scrollY > 60; };
-                    window.addEventListener('scroll', onScroll, { passive: true });
-                    onScroll();
+    {{-- ═══ FOOTER ════════════════════════════════════════════════════════ --}}
+    @include('marketing.sections.footer-mkt')
 
-                    // Intersection Observer for fade-in
-                    const observer = new IntersectionObserver((entries) => {
-                        entries.forEach(entry => {
-                            if (entry.isIntersecting) {
-                                entry.target.classList.add('visible');
-                            }
-                        });
-                    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
-                    document.querySelectorAll('.mkt-fade-in').forEach(el => observer.observe(el));
-                }
-            };
-        }
-    </script>
+    {{-- ═══ SCRIPTS ════════════════════════════════════════════════════════ --}}
     <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js" defer></script>
-<x-syntia-widget />
+    <x-syntia-widget />
+    @stack('scripts')
+
 </body>
 </html>

@@ -1,18 +1,11 @@
-<!DOCTYPE html>
-<html lang="es" class="scroll-smooth">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Politica de Privacidad - SYNTIweb</title>
-    <meta name="description" content="Politica de privacidad de SYNTIweb sobre recoleccion, uso y resguardo de datos de cuentas y negocios.">
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
-<body class="bg-slate-50 text-slate-800 antialiased">
+﻿@extends('marketing.layout')
+
+@section('content')
     <main class="min-h-screen">
         <section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
             <div class="mb-8 sm:mb-10">
                 <a href="{{ route('home') }}" class="inline-flex items-center gap-2 text-sm font-semibold text-[#4A80E4] hover:opacity-80 transition-opacity cursor-pointer min-h-11">
-                    <span aria-hidden="true">←</span>
+                    <span aria-hidden="true">â†</span>
                     <span>Volver al inicio</span>
                 </a>
                 <h1 class="mt-4 text-3xl sm:text-4xl font-black tracking-tight text-slate-900">Politica de Privacidad</h1>
@@ -57,6 +50,5 @@
             </article>
         </section>
     </main>
-    @include('marketing.sections.footer-mkt')
-</body>
-</html>
+
+@endsection

@@ -1,28 +1,10 @@
-<!DOCTYPE html>
-<html lang="es" class="scroll-smooth">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+﻿@extends('marketing.layout')
 
-    <title>SYNTIstudio — Tu negocio en internet esta semana</title>
-    <meta name="description" content="Landing profesional para marcas, servicios y negocios locales. Desde $99/año. 15 días gratis.">
+@section('content')
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-
-    <style>
-        body { font-family: 'Geist', ui-sans-serif, system-ui, sans-serif; }
-    </style>
-</head>
-<body class="bg-surface text-foreground antialiased">
-
-{{-- ═══════════════════════════════════════════════════ --}}
+{{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
 {{-- HEADER                                             --}}
-{{-- ═══════════════════════════════════════════════════ --}}
+{{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
 <header class="flex flex-wrap md:justify-start md:flex-nowrap z-50 w-full text-sm py-3 md:py-0">
     <nav class="max-w-[85rem] w-full mx-auto px-4 md:px-6 lg:px-8">
         <div class="relative md:flex md:items-center md:justify-between">
@@ -46,9 +28,9 @@
     </nav>
 </header>
 
-{{-- ═══════════════════════════════════════════════════ --}}
+{{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
 {{-- 1. HERO                                            --}}
-{{-- ═══════════════════════════════════════════════════ --}}
+{{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
 <div class="relative">
     <div class="max-w-[85rem] px-4 pt-10 sm:px-6 lg:px-8 lg:pt-20 mx-auto">
         <div class="max-w-2xl mx-auto text-center mb-10">
@@ -57,11 +39,11 @@
             </h1>
             <p class="mt-4 lg:text-lg text-foreground">
                 Landing profesional para marcas, servicios y negocios locales.<br class="hidden sm:block">
-                Lo que una agencia cobra $180–$500 por hacerlo una vez, aquí lo tienes vivo y autogestionable.
+                Lo que una agencia cobra $180â€“$500 por hacerlo una vez, aquÃ­ lo tienes vivo y autogestionable.
             </p>
             <div class="mt-8 flex flex-wrap justify-center gap-3">
                 <a class="py-3 px-5 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg bg-primary border border-primary-line text-primary-foreground hover:bg-primary-hover focus:outline-hidden focus:bg-primary-focus disabled:opacity-50 disabled:pointer-events-none" href="{{ route('onboarding.studio') }}">
-                    Empezar gratis 15 días
+                    Empezar gratis 15 dÃ­as
                     <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
                 </a>
                 <a class="py-3 px-5 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg bg-layer border border-layer-line text-layer-foreground shadow-2xs hover:bg-layer-hover disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-layer-focus" href="/demo">
@@ -77,9 +59,9 @@
     <div class="absolute top-1/2 start-1/2 -z-1 transform -translate-y-1/2 -translate-x-1/2 w-[840px] h-[840px] border border-dashed border-primary-200 rounded-full opacity-60 dark:border-primary-900/60"></div>
 </div>
 
-{{-- ═══════════════════════════════════════════════════ --}}
+{{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
 {{-- 2. CARDS DE PLANES                                 --}}
-{{-- ═══════════════════════════════════════════════════ --}}
+{{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
 <div class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
     <div class="max-w-2xl mx-auto text-center mb-10">
         <h2 class="text-2xl font-bold md:text-3xl md:leading-tight text-foreground">El plan perfecto para tu negocio</h2>
@@ -126,9 +108,9 @@
     </div>
 </div>
 
-{{-- ═══════════════════════════════════════════════════ --}}
+{{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
 {{-- 3. TABLA COMPARATIVA                               --}}
-{{-- ═══════════════════════════════════════════════════ --}}
+{{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
 <div class="relative">
     <div class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 md:py-14 lg:py-20 mx-auto">
         <div class="max-w-2xl mx-auto text-center mb-10 lg:mb-14">
@@ -139,7 +121,7 @@
         <div class="hidden lg:block sticky top-0 start-0 py-2 bg-layer/60 backdrop-blur-md z-10">
             <div class="grid grid-cols-4 gap-6">
                 <div>
-                    <span class="font-semibold text-lg text-foreground">Características</span>
+                    <span class="font-semibold text-lg text-foreground">CaracterÃ­sticas</span>
                 </div>
                 <div>
                     <span class="font-semibold text-lg text-foreground">{{ strtoupper($planData['plans'][0]['name']) }}</span>
@@ -156,21 +138,21 @@
             </div>
         </div>
 
-        {{-- SECCIÓN: Tu catálogo --}}
+        {{-- SECCIÃ“N: Tu catÃ¡logo --}}
         <div class="space-y-4 lg:space-y-0">
             <ul class="grid lg:grid-cols-4 lg:gap-6">
                 <li class="lg:py-3">
-                    <span class="text-lg font-semibold text-foreground">Tu catálogo</span>
+                    <span class="text-lg font-semibold text-foreground">Tu catÃ¡logo</span>
                 </li>
                 <li class="hidden lg:block py-1.5 lg:py-3"></li>
                 <li class="hidden lg:block py-1.5 lg:py-3"></li>
                 <li class="hidden lg:block py-1.5 lg:py-3"></li>
             </ul>
 
-            {{-- Productos en catálogo --}}
+            {{-- Productos en catÃ¡logo --}}
             <ul class="grid lg:grid-cols-4 lg:gap-6">
                 <li class="pb-1.5 lg:py-3">
-                    <span class="font-semibold lg:font-normal text-sm text-foreground">Productos en catálogo</span>
+                    <span class="font-semibold lg:font-normal text-sm text-foreground">Productos en catÃ¡logo</span>
                 </li>
                 <li class="col-span-1 py-1.5 lg:py-3 border-b border-line-2">
                     <div class="grid grid-cols-2 md:grid-cols-6 lg:block">
@@ -186,7 +168,7 @@
                 </li>
                 <li class="col-span-1 py-1.5 lg:py-3 border-b border-line-2">
                     <div class="grid grid-cols-2 md:grid-cols-6 lg:block">
-                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">VISIÓN</span>
+                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">VISIÃ“N</span>
                         <span class="text-sm text-foreground">200</span>
                     </div>
                 </li>
@@ -211,16 +193,16 @@
                 </li>
                 <li class="col-span-1 py-1.5 lg:py-3 border-b border-line-2">
                     <div class="grid grid-cols-2 md:grid-cols-6 lg:block">
-                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">VISIÓN</span>
+                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">VISIÃ“N</span>
                         <span class="text-sm text-foreground">9</span>
                     </div>
                 </li>
             </ul>
 
-            {{-- Galería 3 fotos por producto --}}
+            {{-- GalerÃ­a 3 fotos por producto --}}
             <ul class="grid lg:grid-cols-4 lg:gap-6">
                 <li class="pb-1.5 lg:py-3">
-                    <span class="font-semibold lg:font-normal text-sm text-foreground">Galería 3 fotos por producto</span>
+                    <span class="font-semibold lg:font-normal text-sm text-foreground">GalerÃ­a 3 fotos por producto</span>
                 </li>
                 <li class="col-span-1 py-1.5 lg:py-3 border-b border-line-2">
                     <div class="grid grid-cols-2 md:grid-cols-6 lg:block">
@@ -236,7 +218,7 @@
                 </li>
                 <li class="col-span-1 py-1.5 lg:py-3 border-b border-line-2">
                     <div class="grid grid-cols-2 md:grid-cols-6 lg:block">
-                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">VISIÓN</span>
+                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">VISIÃ“N</span>
                         <svg class="shrink-0 size-5 text-primary" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                     </div>
                 </li>
@@ -261,14 +243,14 @@
                 </li>
                 <li class="col-span-1 py-1.5 lg:py-3 border-b border-line-2">
                     <div class="grid grid-cols-2 md:grid-cols-6 lg:block">
-                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">VISIÓN</span>
+                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">VISIÃ“N</span>
                         <span class="text-sm text-foreground">17 + custom</span>
                     </div>
                 </li>
             </ul>
         </div>
 
-        {{-- SECCIÓN: Presencia digital --}}
+        {{-- SECCIÃ“N: Presencia digital --}}
         <div class="mt-6 space-y-4 lg:space-y-0">
             <ul class="grid lg:grid-cols-4 lg:gap-6">
                 <li class="lg:py-3">
@@ -298,7 +280,7 @@
                 </li>
                 <li class="col-span-1 py-1.5 lg:py-3 border-b border-line-2">
                     <div class="grid grid-cols-2 md:grid-cols-6 lg:block">
-                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">VISIÓN</span>
+                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">VISIÃ“N</span>
                         <span class="text-sm text-foreground">2</span>
                     </div>
                 </li>
@@ -323,7 +305,7 @@
                 </li>
                 <li class="col-span-1 py-1.5 lg:py-3 border-b border-line-2">
                     <div class="grid grid-cols-2 md:grid-cols-6 lg:block">
-                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">VISIÓN</span>
+                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">VISIÃ“N</span>
                         <span class="text-sm text-foreground">Todas</span>
                     </div>
                 </li>
@@ -337,7 +319,7 @@
                 <li class="col-span-1 py-1.5 lg:py-3 border-b border-line-2">
                     <div class="grid grid-cols-2 md:grid-cols-6 lg:block">
                         <span class="lg:hidden md:col-span-2 text-sm text-foreground">OPORTUNIDAD</span>
-                        <span class="text-sm text-foreground">Básico</span>
+                        <span class="text-sm text-foreground">BÃ¡sico</span>
                     </div>
                 </li>
                 <li class="col-span-1 py-1.5 lg:py-3 border-b border-line-2">
@@ -348,7 +330,7 @@
                 </li>
                 <li class="col-span-1 py-1.5 lg:py-3 border-b border-line-2">
                     <div class="grid grid-cols-2 md:grid-cols-6 lg:block">
-                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">VISIÓN</span>
+                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">VISIÃ“N</span>
                         <span class="text-sm text-foreground">Avanzado</span>
                     </div>
                 </li>
@@ -373,14 +355,14 @@
                 </li>
                 <li class="col-span-1 py-1.5 lg:py-3 border-b border-line-2">
                     <div class="grid grid-cols-2 md:grid-cols-6 lg:block">
-                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">VISIÓN</span>
+                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">VISIÃ“N</span>
                         <svg class="shrink-0 size-5 text-primary" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                     </div>
                 </li>
             </ul>
         </div>
 
-        {{-- SECCIÓN: Soporte incluido --}}
+        {{-- SECCIÃ“N: Soporte incluido --}}
         <div class="mt-6 space-y-4 lg:space-y-0">
             <ul class="grid lg:grid-cols-4 lg:gap-6">
                 <li class="lg:py-3">
@@ -391,10 +373,10 @@
                 <li class="hidden lg:block py-1.5 lg:py-3"></li>
             </ul>
 
-            {{-- Documentación y guías --}}
+            {{-- DocumentaciÃ³n y guÃ­as --}}
             <ul class="grid lg:grid-cols-4 lg:gap-6">
                 <li class="pb-1.5 lg:py-3">
-                    <span class="font-semibold lg:font-normal text-sm text-foreground">Documentación y guías</span>
+                    <span class="font-semibold lg:font-normal text-sm text-foreground">DocumentaciÃ³n y guÃ­as</span>
                 </li>
                 <li class="col-span-1 py-1.5 lg:py-3 border-b border-line-2">
                     <div class="grid grid-cols-2 md:grid-cols-6 lg:block">
@@ -410,7 +392,7 @@
                 </li>
                 <li class="col-span-1 py-1.5 lg:py-3 border-b border-line-2">
                     <div class="grid grid-cols-2 md:grid-cols-6 lg:block">
-                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">VISIÓN</span>
+                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">VISIÃ“N</span>
                         <svg class="shrink-0 size-5 text-primary" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                     </div>
                 </li>
@@ -435,7 +417,7 @@
                 </li>
                 <li class="col-span-1 py-1.5 lg:py-3 border-b border-line-2">
                     <div class="grid grid-cols-2 md:grid-cols-6 lg:block">
-                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">VISIÓN</span>
+                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">VISIÃ“N</span>
                         <svg class="shrink-0 size-5 text-primary" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                     </div>
                 </li>
@@ -460,7 +442,7 @@
                 </li>
                 <li class="col-span-1 py-1.5 lg:py-3 border-b border-line-2">
                     <div class="grid grid-cols-2 md:grid-cols-6 lg:block">
-                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">VISIÓN</span>
+                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">VISIÃ“N</span>
                         <svg class="shrink-0 size-5 text-primary" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                     </div>
                 </li>
@@ -485,7 +467,7 @@
                 </li>
                 <li class="col-span-1 py-1.5 lg:py-3 border-b border-line-2">
                     <div class="grid grid-cols-2 md:grid-cols-6 lg:block">
-                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">VISIÓN</span>
+                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">VISIÃ“N</span>
                         <svg class="shrink-0 size-5 text-primary" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                     </div>
                 </li>
@@ -516,15 +498,15 @@
     </div>
 </div>
 
-{{-- ═══════════════════════════════════════════════════ --}}
+{{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
 {{-- 4. FAQ                                             --}}
-{{-- ═══════════════════════════════════════════════════ --}}
+{{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
 <div class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
     <div class="grid md:grid-cols-5 gap-10">
         <div class="md:col-span-2">
             <div class="max-w-xs">
                 <h2 class="text-2xl font-bold md:text-4xl md:leading-tight text-foreground">Preguntas<br>frecuentes</h2>
-                <p class="mt-1 hidden md:block text-muted-foreground-2">Respuestas a las dudas más comunes sobre SYNTIstudio.</p>
+                <p class="mt-1 hidden md:block text-muted-foreground-2">Respuestas a las dudas mÃ¡s comunes sobre SYNTIstudio.</p>
             </div>
         </div>
 
@@ -534,13 +516,13 @@
                 {{-- Q1 --}}
                 <div class="hs-accordion pb-3 active" id="hs-studio-faq-one">
                     <button class="hs-accordion-toggle group pb-3 inline-flex items-center justify-between gap-x-3 w-full md:text-lg font-semibold text-start text-foreground rounded-lg transition hover:text-muted-foreground-1 focus:outline-hidden" aria-expanded="true" aria-controls="hs-studio-faq-collapse-one">
-                        ¿Cuánto tiempo tarda en estar lista mi página?
+                        Â¿CuÃ¡nto tiempo tarda en estar lista mi pÃ¡gina?
                         <svg class="hs-accordion-active:hidden block shrink-0 size-5 text-muted-foreground-2 group-hover:text-muted-foreground-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
                         <svg class="hs-accordion-active:block hidden shrink-0 size-5 text-muted-foreground-2 group-hover:text-muted-foreground-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
                     </button>
                     <div id="hs-studio-faq-collapse-one" class="hs-accordion-content w-full overflow-hidden transition-[height] duration-300" role="region" aria-labelledby="hs-studio-faq-one">
                         <p class="text-muted-foreground-2">
-                            En 48 horas tu negocio ya está visible en internet.
+                            En 48 horas tu negocio ya estÃ¡ visible en internet.
                         </p>
                     </div>
                 </div>
@@ -548,13 +530,13 @@
                 {{-- Q2 --}}
                 <div class="hs-accordion pt-6 pb-3" id="hs-studio-faq-two">
                     <button class="hs-accordion-toggle group pb-3 inline-flex items-center justify-between gap-x-3 w-full md:text-lg font-semibold text-start text-foreground rounded-lg transition hover:text-muted-foreground-1 focus:outline-hidden" aria-expanded="false" aria-controls="hs-studio-faq-collapse-two">
-                        ¿Necesito saber de tecnología?
+                        Â¿Necesito saber de tecnologÃ­a?
                         <svg class="hs-accordion-active:hidden block shrink-0 size-5 text-muted-foreground-2 group-hover:text-muted-foreground-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
                         <svg class="hs-accordion-active:block hidden shrink-0 size-5 text-muted-foreground-2 group-hover:text-muted-foreground-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
                     </button>
                     <div id="hs-studio-faq-collapse-two" class="hs-accordion-content hidden w-full overflow-hidden transition-[height] duration-300" role="region" aria-labelledby="hs-studio-faq-two">
                         <p class="text-muted-foreground-2">
-                            No. Tú nos envías la información de tu negocio y nosotros hacemos todo el trabajo técnico.
+                            No. TÃº nos envÃ­as la informaciÃ³n de tu negocio y nosotros hacemos todo el trabajo tÃ©cnico.
                         </p>
                     </div>
                 </div>
@@ -562,7 +544,7 @@
                 {{-- Q3 --}}
                 <div class="hs-accordion pt-6 pb-3" id="hs-studio-faq-three">
                     <button class="hs-accordion-toggle group pb-3 inline-flex items-center justify-between gap-x-3 w-full md:text-lg font-semibold text-start text-foreground rounded-lg transition hover:text-muted-foreground-1 focus:outline-hidden" aria-expanded="false" aria-controls="hs-studio-faq-collapse-three">
-                        ¿Qué pasa si quiero cambiar de plan?
+                        Â¿QuÃ© pasa si quiero cambiar de plan?
                         <svg class="hs-accordion-active:hidden block shrink-0 size-5 text-muted-foreground-2 group-hover:text-muted-foreground-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
                         <svg class="hs-accordion-active:block hidden shrink-0 size-5 text-muted-foreground-2 group-hover:text-muted-foreground-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
                     </button>
@@ -576,13 +558,13 @@
                 {{-- Q4 --}}
                 <div class="hs-accordion pt-6 pb-3" id="hs-studio-faq-four">
                     <button class="hs-accordion-toggle group pb-3 inline-flex items-center justify-between gap-x-3 w-full md:text-lg font-semibold text-start text-foreground rounded-lg transition hover:text-muted-foreground-1 focus:outline-hidden" aria-expanded="false" aria-controls="hs-studio-faq-collapse-four">
-                        ¿El precio incluye el dominio?
+                        Â¿El precio incluye el dominio?
                         <svg class="hs-accordion-active:hidden block shrink-0 size-5 text-muted-foreground-2 group-hover:text-muted-foreground-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
                         <svg class="hs-accordion-active:block hidden shrink-0 size-5 text-muted-foreground-2 group-hover:text-muted-foreground-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
                     </button>
                     <div id="hs-studio-faq-collapse-four" class="hs-accordion-content hidden w-full overflow-hidden transition-[height] duration-300" role="region" aria-labelledby="hs-studio-faq-four">
                         <p class="text-muted-foreground-2">
-                            Incluye tu subdominio en punto.vip u oficio.vip. Dominio .com propio disponible como add-on (+$18/año).
+                            Incluye tu subdominio en punto.vip u oficio.vip. Dominio .com propio disponible como add-on (+$18/aÃ±o).
                         </p>
                     </div>
                 </div>
@@ -590,13 +572,13 @@
                 {{-- Q5 --}}
                 <div class="hs-accordion pt-6 pb-3" id="hs-studio-faq-five">
                     <button class="hs-accordion-toggle group pb-3 inline-flex items-center justify-between gap-x-3 w-full md:text-lg font-semibold text-start text-foreground rounded-lg transition hover:text-muted-foreground-1 focus:outline-hidden" aria-expanded="false" aria-controls="hs-studio-faq-collapse-five">
-                        ¿Hay contrato o permanencia?
+                        Â¿Hay contrato o permanencia?
                         <svg class="hs-accordion-active:hidden block shrink-0 size-5 text-muted-foreground-2 group-hover:text-muted-foreground-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
                         <svg class="hs-accordion-active:block hidden shrink-0 size-5 text-muted-foreground-2 group-hover:text-muted-foreground-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
                     </button>
                     <div id="hs-studio-faq-collapse-five" class="hs-accordion-content hidden w-full overflow-hidden transition-[height] duration-300" role="region" aria-labelledby="hs-studio-faq-five">
                         <p class="text-muted-foreground-2">
-                            No. El pago es anual pero no hay penalización. El trial de 15 días es sin compromiso.
+                            No. El pago es anual pero no hay penalizaciÃ³n. El trial de 15 dÃ­as es sin compromiso.
                         </p>
                     </div>
                 </div>
@@ -606,30 +588,24 @@
     </div>
 </div>
 
-{{-- ═══════════════════════════════════════════════════ --}}
+{{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
 {{-- 5. CTA FINAL                                      --}}
-{{-- ═══════════════════════════════════════════════════ --}}
+{{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
 <div class="bg-neutral-900">
     <div class="max-w-[85rem] px-4 py-16 sm:px-6 lg:px-8 lg:py-24 mx-auto text-center">
         <h2 class="text-2xl font-bold md:text-3xl md:leading-tight text-white">
-            Tu negocio está esperando. Empieza hoy.
+            Tu negocio estÃ¡ esperando. Empieza hoy.
         </h2>
         <p class="mt-3 text-neutral-400">
-            15 días gratis. Sin tarjeta. Sin tecnicismos.
+            15 dÃ­as gratis. Sin tarjeta. Sin tecnicismos.
         </p>
         <div class="mt-8">
             <a class="py-3 px-6 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg bg-primary border border-primary-line text-primary-foreground hover:bg-primary-hover focus:outline-hidden focus:bg-primary-focus disabled:opacity-50 disabled:pointer-events-none" href="{{ route('onboarding.studio') }}">
-                Crear mi página ahora
+                Crear mi pÃ¡gina ahora
                 <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
             </a>
         </div>
     </div>
 </div>
 
-{{-- ═══════════════════════════════════════════════════ --}}
-{{-- FOOTER                                             --}}
-{{-- ═══════════════════════════════════════════════════ --}}
-@include('marketing.sections.footer-mkt')
-<x-syntia-widget />
-</body>
-</html>
+@endsection

@@ -83,38 +83,17 @@
                                 </div>
                             </div>
                             {{-- Screen content: landing pública del negocio --}}
-                            <div style="padding:10px;background:#f8fafc;">
-                                {{-- Mini hero del negocio --}}
-                                <div style="background:linear-gradient(135deg,#4f46e5,#7c3aed);border-radius:10px;padding:12px;margin-bottom:8px;">
-                                    <div style="width:40px;height:40px;background:rgba(255,255,255,0.15);border-radius:8px;margin-bottom:6px;"></div>
-                                    <div style="width:80px;height:8px;background:rgba(255,255,255,0.7);border-radius:4px;margin-bottom:4px;"></div>
-                                    <div style="width:56px;height:6px;background:rgba(255,255,255,0.4);border-radius:4px;margin-bottom:8px;"></div>
-                                    <div style="width:64px;height:20px;background:rgba(255,255,255,0.2);border-radius:6px;display:flex;align-items:center;justify-content:center;">
-                                        <span style="font-size:7px;color:#fff;font-weight:700;">Ver más →</span>
-                                    </div>
-                                </div>
-                                {{-- Productos mock --}}
-                                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;margin-bottom:8px;">
-                                    @foreach(['#fef3c7','#fce7f3','#dbeafe'] as $bg)
-                                    <div style="background:#fff;border-radius:6px;padding:5px;border:1px solid #e2e8f0;">
-                                        <div style="height:28px;background:{{ $bg }};border-radius:4px;margin-bottom:4px;"></div>
-                                        <div style="width:80%;height:4px;background:#e2e8f0;border-radius:2px;margin-bottom:2px;"></div>
-                                        <div style="width:50%;height:4px;background:#bbf7d0;border-radius:2px;"></div>
-                                    </div>
-                                    @endforeach
-                                </div>
-                                {{-- WhatsApp CTA --}}
-                                <div style="background:#25d366;border-radius:8px;padding:7px 10px;display:flex;align-items:center;gap:6px;">
-                                    <span class="iconify tabler--brand-whatsapp" style="color:#fff;font-size:14px;"></span>
-                                    <span style="font-size:8px;font-weight:700;color:#fff;">Escribir al negocio</span>
-                                </div>
+                            <div style="padding:0;background:#ffffff;overflow:hidden;">
+                                <img src="{{ asset('brand/demo_phone.png') }}"
+                                     alt="Demo SYNTIweb"
+                                     style="width:100%;display:block;border-radius:0;">
                             </div>
                         </div>
                     </div>
                 </div>
 
                 {{-- Floating cards --}}
-                <div class="absolute -top-4 -right-6 bg-white rounded-xl shadow-xl p-3 flex items-center gap-2 mkt-float" style="animation-delay:-2s;">
+                <div class="absolute top-8 -right-4 bg-white rounded-xl shadow-xl p-3 flex items-center gap-2 mkt-float" style="animation-delay:-2s;">
                     <div class="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center">
                         <span class="iconify tabler--search size-4 text-emerald-600"></span>
                     </div>
@@ -123,7 +102,7 @@
                         <div class="text-[10px] text-emerald-600 font-medium">Posición #1</div>
                     </div>
                 </div>
-                <div class="absolute -bottom-2 -left-6 bg-white rounded-xl shadow-xl p-3 flex items-center gap-2 mkt-float" style="animation-delay:-4s;">
+                <div class="absolute bottom-8 -left-4 bg-white rounded-xl shadow-xl p-3 flex items-center gap-2 mkt-float" style="animation-delay:-4s;">
                     <div class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
                         <span class="iconify tabler--eye size-4 text-blue-600"></span>
                     </div>
@@ -133,7 +112,7 @@
                     </div>
                 </div>
                 {{-- Badge URL --}}
-                <div class="absolute top-1/2 -right-8 -translate-y-1/2 bg-slate-800 rounded-lg px-3 py-1.5 mkt-float" style="animation-delay:-3s;">
+                <div class="absolute top-1/2 -right-2 -translate-y-1/2 bg-slate-800 rounded-lg px-3 py-1.5 mkt-float" style="animation-delay:-3s;">
                     <span class="text-[9px] font-mono text-slate-400">tubarberia.<span class="text-blue-400">syntiweb.com</span></span>
                 </div>
             </div>
