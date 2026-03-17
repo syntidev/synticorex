@@ -86,7 +86,7 @@
 <div class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
     <div class="max-w-2xl mx-auto text-center mb-10">
         <h2 class="text-2xl font-bold md:text-3xl md:leading-tight text-foreground">El plan perfecto para tu catálogo</h2>
-        <p class="mt-2 lg:text-lg text-foreground">Precios claros. Sin sorpresas.</p>
+        <p class="mt-2 lg:text-lg text-foreground">Catálogo visual con carrito incluido. Tus clientes escogen, acumulan y te compran por WhatsApp.</p>
     </div>
 
     <div class="mt-6 md:mt-12 grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:items-center max-w-5xl mx-auto">

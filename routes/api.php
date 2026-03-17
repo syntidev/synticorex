@@ -8,6 +8,7 @@ use App\Http\Controllers\SyntiHelpController;
 
 // Public endpoint (no auth required)
 Route::get('/public/{subdomain}', [TenantController::class, 'showBySubdomain']);
+Route::get('/parallel-rate', \App\Http\Controllers\ParallelRateController::class);
 
 // Read endpoints remain public.
 Route::prefix('tenants')->group(function () {

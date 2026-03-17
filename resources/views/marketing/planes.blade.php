@@ -101,7 +101,7 @@
                         $accent     = '#4A80E4';
                         $tagline    = match($plan->slug) {
                             'oportunidad' => 'Para validar. Menos que datos móviles.',
-                            'crecimiento' => 'El más vendido. Tu competencia está aquí.',
+                            'crecimiento' => 'El plan que más negocios eligen.',
                             'vision'      => 'Para dominar. Eres líder local.',
                             default       => '',
                         };
@@ -285,7 +285,7 @@
 
                 <div class="text-center mb-10">
                     <h2 class="text-xl font-semibold md:text-2xl text-foreground">Tu catálogo con carrito. Vende más.</h2>
-                    <p class="mt-2 text-foreground/60">Carrito WhatsApp que Cattaly ($97/año) no tiene.</p>
+                    <p class="mt-2 text-foreground/60">Catálogo visual con carrito incluido. Tus clientes escogen y te compran por WhatsApp.</p>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 max-w-5xl mx-auto">

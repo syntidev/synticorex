@@ -57,6 +57,15 @@ class CompanySettingsPage extends Page implements HasForms
                 TextInput::make('whatsapp_support')
                     ->label('WhatsApp soporte')
                     ->placeholder('04121234567'),
+                \Filament\Forms\Components\TextInput::make('parallel_rate_override')
+                    ->label('Tasa Paralelo (override manual)')
+                    ->helperText('Déjalo vacío para usar la API automática (dolarapi.com). Úsalo cuando quieras fijar tu propia tasa.')
+                    ->numeric()
+                    ->step(0.01)
+                    ->nullable()
+                    ->prefix('Bs.')
+                    ->suffix('/ USD')
+                    ->placeholder('ej: 648.69'),
                 TextInput::make('email_support')
                     ->label('Email soporte')
                     ->email(),

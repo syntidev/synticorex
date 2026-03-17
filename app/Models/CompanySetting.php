@@ -14,6 +14,7 @@ class CompanySetting extends Model
         'address',
         'phone',
         'whatsapp_support',
+        'parallel_rate_override',
         'email_support',
         'website',
         'instagram',
