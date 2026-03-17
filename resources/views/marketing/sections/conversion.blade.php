@@ -19,11 +19,11 @@
         <div class="max-w-4xl mx-auto">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-0 items-center relative">
                 {{-- Connecting arrow (desktop) --}}
-                <div class="hidden md:block absolute top-1/2 left-[12%] right-[12%] h-0.5 bg-gradient-to-r from-blue-200 via-indigo-200 to-emerald-200 -translate-y-1/2 z-0"></div>
+                <div class="hidden md:block absolute top-10 left-[12%] right-[12%] h-0.5 bg-gradient-to-r from-blue-200 via-indigo-200 to-emerald-200 z-0"></div>
 
                 {{-- Step 1: Google --}}
                 <div class="mkt-fade-in relative z-10 text-center">
-                    <div class="w-20 h-20 mx-auto mb-4 rounded-2xl bg-white shadow-lg border border-slate-100 flex items-center justify-center group-hover:shadow-xl transition-shadow">
+                    <div class="w-20 h-20 mx-auto mb-4 rounded-full bg-white shadow-lg border border-slate-100 flex items-center justify-center group-hover:shadow-xl transition-shadow">
                         <span class="iconify tabler--world-search size-9 text-blue-500"></span>
                     </div>
                     <h4 class="font-bold text-slate-800 text-sm mb-1">Busca en Google</h4>
@@ -36,7 +36,7 @@
 
                 {{-- Step 2: Encuentra --}}
                 <div class="mkt-fade-in relative z-10 text-center" style="transition-delay: 0.1s;">
-                    <div class="w-20 h-20 mx-auto mb-4 rounded-2xl bg-white shadow-lg border border-slate-100 flex items-center justify-center">
+                    <div class="w-20 h-20 mx-auto mb-4 rounded-full bg-white shadow-lg border border-slate-100 flex items-center justify-center">
                         <span class="iconify tabler--map-pin-filled size-9 text-indigo-500"></span>
                     </div>
                     <h4 class="font-bold text-slate-800 text-sm mb-1">Te encuentra</h4>
@@ -48,7 +48,7 @@
 
                 {{-- Step 3: Ve tu Landing --}}
                 <div class="mkt-fade-in relative z-10 text-center" style="transition-delay: 0.2s;">
-                    <div class="w-20 h-20 mx-auto mb-4 rounded-2xl bg-white shadow-lg border border-slate-100 flex items-center justify-center">
+                    <div class="w-20 h-20 mx-auto mb-4 rounded-full bg-white shadow-lg border border-slate-100 flex items-center justify-center">
                         <span class="iconify tabler--browser size-9 text-purple-500"></span>
                     </div>
                     <h4 class="font-bold text-slate-800 text-sm mb-1">Ve tu página</h4>
@@ -60,7 +60,7 @@
 
                 {{-- Step 4: WhatsApp --}}
                 <div class="mkt-fade-in relative z-10 text-center" style="transition-delay: 0.3s;">
-                    <div class="w-20 h-20 mx-auto mb-4 rounded-2xl bg-emerald-50 shadow-lg border border-emerald-100 flex items-center justify-center">
+                    <div class="w-20 h-20 mx-auto mb-4 rounded-full bg-emerald-50 shadow-lg border border-emerald-100 flex items-center justify-center">
                         <span class="iconify tabler--brand-whatsapp size-9 text-emerald-500"></span>
                     </div>
                     <h4 class="font-bold text-emerald-700 text-sm mb-1">Te escribe</h4>

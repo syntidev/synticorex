@@ -91,104 +91,40 @@
 
     <div class="mt-6 md:mt-12 grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:items-center max-w-5xl mx-auto">
 
-        {{-- Card: BÁSICO --}}
-        <div class="flex flex-col bg-card border border-card-line text-center rounded-xl p-8">
-            <h4 class="font-medium text-lg text-foreground">BÁSICO</h4>
-            <span class="mt-5 font-bold text-5xl text-foreground">$9</span>
-            <p class="mt-2 text-sm text-muted-foreground-1">por mes</p>
-
-            <ul class="mt-7 space-y-2.5 text-sm">
+        @foreach($planData['plans'] as $plan)
+        <div class="flex flex-col {{ $plan['highlighted'] ? 'bg-card border-2 border-primary shadow-xl' : 'bg-card border border-card-line' }} text-center rounded-xl p-8">
+            @if($plan['pill'])
+            <p class="mb-3">
+                <span class="inline-flex items-center gap-1.5 py-1.5 px-3 rounded-lg text-xs uppercase font-semibold
+                    {{ $plan['highlighted'] ? 'bg-primary-100 text-primary-800' : 'bg-layer text-muted-foreground-1' }}">
+                    {{ $plan['pill'] }}
+                </span>
+            </p>
+            @endif
+            <h4 class="font-medium text-lg text-foreground">{{ strtoupper($plan['name']) }}</h4>
+            <span class="mt-5 font-bold text-5xl text-foreground">${{ $plan['price'] }}</span>
+            <p class="mt-2 text-sm text-muted-foreground-1">{{ $plan['billing'] }}</p>
+            <ul class="mt-7 space-y-2.5 text-sm text-left">
+                @foreach($plan['features'] as $feature)
+                @php $val = $feature['p' . ($loop->parent->index + 1)]; @endphp
+                @if($val !== false)
                 <li class="flex gap-x-2">
                     <svg class="shrink-0 mt-0.5 size-4 text-primary" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                    <span class="text-foreground">Hasta 50 platos</span>
+                    <span class="text-foreground">
+                        {{ $feature['label'] }}@if($val !== true) &middot; {{ $val }}@endif
+                    </span>
                 </li>
-                <li class="flex gap-x-2">
-                    <svg class="shrink-0 mt-0.5 size-4 text-primary" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                    <span class="text-foreground">Fotos de platos</span>
-                </li>
-                <li class="flex gap-x-2">
-                    <svg class="shrink-0 mt-0.5 size-4 text-primary" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                    <span class="text-foreground">Precios en REF y Bs</span>
-                </li>
-                <li class="flex gap-x-2">
-                    <svg class="shrink-0 mt-0.5 size-4 text-primary" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                    <span class="text-foreground">Pedido por WhatsApp</span>
-                </li>
+                @endif
+                @endforeach
             </ul>
-
-            <a class="mt-5 py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg bg-layer border border-layer-line text-layer-foreground shadow-2xs hover:bg-layer-hover disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-layer-focus" href="{{ route('onboarding.food') }}">
-                Empezar gratis
+            <a class="mt-5 py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg
+                {{ $plan['highlighted'] ? 'bg-primary border border-primary-line text-primary-foreground hover:bg-primary-hover focus:bg-primary-focus' : 'bg-layer border border-layer-line text-layer-foreground shadow-2xs hover:bg-layer-hover focus:bg-layer-focus' }}
+                focus:outline-hidden disabled:opacity-50 disabled:pointer-events-none"
+                href="{{ route('onboarding.' . explode('-', $plan['slug'])[0]) }}">
+                {{ $plan['cta'] }}
             </a>
         </div>
-
-        {{-- Card: SEMESTRAL (Destacado) --}}
-        <div class="flex flex-col bg-card border-2 border-primary text-center shadow-xl rounded-xl p-8">
-            <p class="mb-3"><span class="inline-flex items-center gap-1.5 py-1.5 px-3 rounded-lg text-xs uppercase font-semibold bg-primary-100 text-primary-800 dark:bg-primary-500/20 dark:text-primary-200">Más popular</span></p>
-            <h4 class="font-medium text-lg text-foreground">SEMESTRAL</h4>
-            <span class="mt-5 font-bold text-5xl text-foreground">$39</span>
-            <p class="mt-2 text-sm text-muted-foreground-1">por 6 meses &middot; $6.50/mes equiv</p>
-
-            <ul class="mt-7 space-y-2.5 text-sm">
-                <li class="flex gap-x-2">
-                    <svg class="shrink-0 mt-0.5 size-4 text-primary" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                    <span class="text-foreground">Hasta 100 platos</span>
-                </li>
-                <li class="flex gap-x-2">
-                    <svg class="shrink-0 mt-0.5 size-4 text-primary" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                    <span class="text-foreground">Categorías ilimitadas</span>
-                </li>
-                <li class="flex gap-x-2">
-                    <svg class="shrink-0 mt-0.5 size-4 text-primary" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                    <span class="text-foreground">Actualización de tasa BCV</span>
-                </li>
-                <li class="flex gap-x-2">
-                    <svg class="shrink-0 mt-0.5 size-4 text-primary" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                    <span class="text-foreground">Soporte WhatsApp Lun-Vie</span>
-                </li>
-            </ul>
-
-            <a class="mt-5 py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg bg-primary border border-primary-line text-primary-foreground hover:bg-primary-hover focus:outline-hidden focus:bg-primary-focus disabled:opacity-50 disabled:pointer-events-none" href="{{ route('onboarding.food') }}">
-                Ahorrar con semestral
-            </a>
-        </div>
-
-        {{-- Card: ANUAL --}}
-        <div class="flex flex-col bg-card border border-card-line text-center rounded-xl p-8">
-            <h4 class="font-medium text-lg text-foreground">ANUAL</h4>
-            <span class="mt-5 font-bold text-5xl text-foreground">$69</span>
-            <p class="mt-2 text-sm text-muted-foreground-1">por año &middot; $5.75/mes equiv</p>
-
-            <ul class="mt-7 space-y-2.5 text-sm">
-                <li class="flex gap-x-2">
-                    <svg class="shrink-0 mt-0.5 size-4 text-primary" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                    <span class="text-foreground">Hasta 150 platos &middot; 18 fotos de categoría</span>
-                </li>
-                <li class="flex gap-x-2">
-                    <svg class="shrink-0 mt-0.5 size-4 text-primary" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                    <span class="text-foreground">Pedido Rápido → WhatsApp (acumula ítems, envía al instante)</span>
-                </li>
-                <li class="flex gap-x-2">
-                    <svg class="shrink-0 mt-0.5 size-4 text-primary" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                    <span class="text-foreground">Comandas con número SF-XXXXXX rastreable</span>
-                </li>
-                <li class="flex gap-x-2">
-                    <svg class="shrink-0 mt-0.5 size-4 text-primary" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                    <span class="text-foreground">Modalidades: comer aquí · para llevar · delivery</span>
-                </li>
-                <li class="flex gap-x-2">
-                    <svg class="shrink-0 mt-0.5 size-4 text-primary" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                    <span class="text-foreground">Analytics completo de platos y visitas</span>
-                </li>
-                <li class="flex gap-x-2">
-                    <svg class="shrink-0 mt-0.5 size-4 text-primary" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                    <span class="text-foreground">BCV automático · badges por ítem</span>
-                </li>
-            </ul>
-
-            <a class="mt-5 py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg bg-layer border border-layer-line text-layer-foreground shadow-2xs hover:bg-layer-hover disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-layer-focus" href="{{ route('onboarding.food') }}">
-                Máximo ahorro
-            </a>
-        </div>
+        @endforeach
 
     </div>
 </div>
@@ -209,16 +145,16 @@
                     <span class="font-semibold text-lg text-foreground">Características</span>
                 </div>
                 <div>
-                    <span class="font-semibold text-lg text-foreground">BÁSICO</span>
-                    <p class="mt-2 text-sm text-muted-foreground-1">$9 por mes</p>
+                    <span class="font-semibold text-lg text-foreground">{{ strtoupper($planData['plans'][0]['name']) }}</span>
+                    <p class="mt-2 text-sm text-muted-foreground-1">${{ $planData['plans'][0]['price'] }}{{ $planData['plans'][0]['billing'] }}</p>
                 </div>
                 <div>
-                    <span class="font-semibold text-lg text-foreground">SEMESTRAL</span>
-                    <p class="mt-2 text-sm text-muted-foreground-1">$39 por 6 meses</p>
+                    <span class="font-semibold text-lg text-foreground">{{ strtoupper($planData['plans'][1]['name']) }}</span>
+                    <p class="mt-2 text-sm text-muted-foreground-1">${{ $planData['plans'][1]['price'] }}{{ $planData['plans'][1]['billing'] }}</p>
                 </div>
                 <div>
-                    <span class="font-semibold text-lg text-foreground">ANUAL</span>
-                    <p class="mt-2 text-sm text-muted-foreground-1">$69 por año</p>
+                    <span class="font-semibold text-lg text-foreground">{{ strtoupper($planData['plans'][2]['name']) }}</span>
+                    <p class="mt-2 text-sm text-muted-foreground-1">${{ $planData['plans'][2]['price'] }}{{ $planData['plans'][2]['billing'] }}</p>
                 </div>
             </div>
         </div>

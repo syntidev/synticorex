@@ -19,6 +19,71 @@
             </p>
         </div>
 
+        {{-- 6 dolores reales --}}
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-16">
+
+            <div class="mkt-card mkt-fade-in rounded-2xl bg-white border border-slate-100 p-6 shadow-sm">
+                <div class="text-2xl mb-3">📱</div>
+                <h4 class="font-bold text-slate-800 text-sm mb-2 leading-snug">
+                    "¿Y cómo te busco para ver tus productos?"
+                </h4>
+                <p class="text-xs text-slate-500 leading-relaxed">
+                    Te preguntan por Instagram, les mandas fotos por WhatsApp, se confunden. O peor: se van sin comprar porque no encontraron lo que buscaban.
+                </p>
+            </div>
+
+            <div class="mkt-card mkt-fade-in rounded-2xl bg-white border border-slate-100 p-6 shadow-sm" style="transition-delay:.08s">
+                <div class="text-2xl mb-3">💸</div>
+                <h4 class="font-bold text-slate-800 text-sm mb-2 leading-snug">
+                    "Una agencia me cobró $300 y ni sé cómo actualizar mi página"
+                </h4>
+                <p class="text-xs text-slate-500 leading-relaxed">
+                    Pagaste, te entregaron algo bonito, pero cada cambio es otro cobro. Los precios cambiaron y la página sigue mostrando lo viejo.
+                </p>
+            </div>
+
+            <div class="mkt-card mkt-fade-in rounded-2xl bg-white border border-slate-100 p-6 shadow-sm" style="transition-delay:.16s">
+                <div class="text-2xl mb-3">💱</div>
+                <h4 class="font-bold text-slate-800 text-sm mb-2 leading-snug">
+                    "¿Cuánto es eso en bolívares?" — te lo preguntan 30 veces al día
+                </h4>
+                <p class="text-xs text-slate-500 leading-relaxed">
+                    Calculas, respondes, calculas de nuevo. La tasa cambió. El cliente ya se fue. Necesitas una vitrina que haga ese trabajo sola.
+                </p>
+            </div>
+
+            <div class="mkt-card mkt-fade-in rounded-2xl bg-white border border-slate-100 p-6 shadow-sm" style="transition-delay:.24s">
+                <div class="text-2xl mb-3">🕐</div>
+                <h4 class="font-bold text-slate-800 text-sm mb-2 leading-snug">
+                    "Llegan mensajes a las 2am preguntando si estás abierto"
+                </h4>
+                <p class="text-xs text-slate-500 leading-relaxed">
+                    Clientes que no saben tu horario, que te escriben cuando duermes. Tu negocio debería responder eso solo, sin que tú estés despierto.
+                </p>
+            </div>
+
+            <div class="mkt-card mkt-fade-in rounded-2xl bg-white border border-slate-100 p-6 shadow-sm" style="transition-delay:.32s">
+                <div class="text-2xl mb-3">📊</div>
+                <h4 class="font-bold text-slate-800 text-sm mb-2 leading-snug">
+                    "No sé qué producto le gusta más a la gente"
+                </h4>
+                <p class="text-xs text-slate-500 leading-relaxed">
+                    Vendes sin datos. No sabes qué ven más, a qué hora llegan, desde dónde te encuentran. Estás manejando de noche sin luces.
+                </p>
+            </div>
+
+            <div class="mkt-card mkt-fade-in rounded-2xl bg-white border border-slate-100 p-6 shadow-sm" style="transition-delay:.40s">
+                <div class="text-2xl mb-3">😤</div>
+                <h4 class="font-bold text-slate-800 text-sm mb-2 leading-snug">
+                    "Mi competencia ya tiene página web y yo sigo en grupos de WhatsApp"
+                </h4>
+                <p class="text-xs text-slate-500 leading-relaxed">
+                    Mientras tú mandas listas de precios por mensaje, ellos aparecen en Google. Cada día que pasa, la brecha se hace más grande.
+                </p>
+            </div>
+
+        </div>
+
         {{-- Pain point cards --}}
         <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
             {{-- Card 1 --}}

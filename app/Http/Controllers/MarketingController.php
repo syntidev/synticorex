@@ -158,17 +158,20 @@ class MarketingController extends Controller
 
     public function studio(): View
     {
-        return view('marketing.studio');
+        $planData = \App\Services\PlanFeatureService::get('studio');
+        return view('marketing.studio', compact('planData'));
     }
 
     public function food(): View
     {
-        return view('marketing.food');
+        $planData = \App\Services\PlanFeatureService::get('food');
+        return view('marketing.food', compact('planData'));
     }
 
     public function cat(): View
     {
-        return view('marketing.cat');
+        $planData = \App\Services\PlanFeatureService::get('cat');
+        return view('marketing.cat', compact('planData'));
     }
 
     public function terms(): View

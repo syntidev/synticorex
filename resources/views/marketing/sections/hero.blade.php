@@ -21,13 +21,16 @@
                 </div>
 
                 <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-[1.1] mb-6">
-                    {{ $section?->content['headline'] ?? 'Tu Negocio Merece Estar en Google' }}
+                    Tu Negocio Existe.<br>
+                    <span class="block mt-2 bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent">
+                        Pero Internet No Lo Sabe.
+                    </span>
                 </h1>
 
                 <p class="text-lg lg:text-xl text-blue-100/60 mb-10 leading-relaxed max-w-lg mx-auto lg:mx-0">
-                    No importa si eres panadero, mecánico o abogado.
-                    <span class="text-white font-medium">SYNTIweb genera tu presencia digital automáticamente.</span>
-                    En 5 minutos. Sin diseñador. Sin programador.
+                    Cada día que no estás en línea, un cliente tuyo le compra a otro.
+                    <span class="text-white font-medium">SYNTIweb lo pone en internet esta semana.</span>
+                    Tú solo vendes.
                 </p>
 
                 <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
@@ -42,80 +45,76 @@
                 </div>
 
                 {{-- Trust --}}
-                <div class="flex items-center gap-6 mt-10 justify-center lg:justify-start text-blue-200/40 text-sm">
+                <div class="flex flex-wrap items-center gap-x-6 gap-y-2 mt-10 justify-center lg:justify-start text-blue-200/40 text-sm">
                     <div class="flex items-center gap-1.5">
                         <span class="iconify tabler--shield-check size-4"></span>
-                        <span>Sin tarjeta</span>
+                        <span>Sin tarjeta de crédito</span>
                     </div>
                     <div class="flex items-center gap-1.5">
                         <span class="iconify tabler--clock size-4"></span>
-                        <span>5 min setup</span>
+                        <span>Listo en 48 horas</span>
                     </div>
                     <div class="flex items-center gap-1.5">
-                        <span class="iconify tabler--device-mobile size-4"></span>
-                        <span>100% responsive</span>
+                        <span class="iconify tabler--currency-dollar size-4"></span>
+                        <span>Tasa BCV automática</span>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <span class="iconify tabler--qrcode size-4"></span>
+                        <span>QR permanente incluido</span>
                     </div>
                 </div>
             </div>
 
             {{-- ── Mockup visual ─────────────────────────── --}}
             <div class="relative hidden lg:flex items-center justify-center">
-                {{-- Main browser mockup --}}
-                <div class="mkt-float relative w-full max-w-md">
-                    <div class="rounded-2xl overflow-hidden shadow-2xl shadow-black/30 border border-white/10">
-                        {{-- Browser bar --}}
-                        <div class="bg-slate-800 px-4 py-2.5 flex items-center gap-2">
-                            <div class="flex gap-1.5">
-                                <div class="w-2.5 h-2.5 rounded-full bg-red-400/80"></div>
-                                <div class="w-2.5 h-2.5 rounded-full bg-amber-400/80"></div>
-                                <div class="w-2.5 h-2.5 rounded-full bg-emerald-400/80"></div>
-                            </div>
-                            <div class="flex-1 ml-3 bg-slate-700/60 rounded-md px-3 py-1 text-xs text-slate-400 font-mono">
-                                tubarberia.syntiweb.com
-                            </div>
-                        </div>
-                        {{-- Landing mock content --}}
-                        <div class="bg-gradient-to-b from-slate-50 to-white p-6 space-y-4">
-                            {{-- Hero mock --}}
-                            <div class="bg-gradient-to-r from-indigo-500 to-purple-500 rounded-xl p-5 text-white">
-                                <div class="w-16 h-2 bg-white/40 rounded mb-2"></div>
-                                <div class="w-32 h-3 bg-white/70 rounded mb-1"></div>
-                                <div class="w-24 h-2 bg-white/40 rounded"></div>
-                                <div class="mt-3 w-20 h-6 bg-white/30 rounded-lg"></div>
-                            </div>
-                            {{-- Products mock --}}
-                            <div class="grid grid-cols-3 gap-2">
-                                <div class="bg-slate-100 rounded-lg p-2">
-                                    <div class="w-full h-10 bg-slate-200 rounded mb-1.5"></div>
-                                    <div class="w-12 h-1.5 bg-slate-300 rounded"></div>
-                                    <div class="w-8 h-1.5 bg-emerald-300 rounded mt-1"></div>
-                                </div>
-                                <div class="bg-slate-100 rounded-lg p-2">
-                                    <div class="w-full h-10 bg-slate-200 rounded mb-1.5"></div>
-                                    <div class="w-14 h-1.5 bg-slate-300 rounded"></div>
-                                    <div class="w-10 h-1.5 bg-emerald-300 rounded mt-1"></div>
-                                </div>
-                                <div class="bg-slate-100 rounded-lg p-2">
-                                    <div class="w-full h-10 bg-slate-200 rounded mb-1.5"></div>
-                                    <div class="w-10 h-1.5 bg-slate-300 rounded"></div>
-                                    <div class="w-6 h-1.5 bg-emerald-300 rounded mt-1"></div>
+                {{-- iPhone 14 mockup --}}
+                <div class="mkt-float relative" style="width:220px;filter:drop-shadow(0 24px 48px rgba(0,0,0,0.35));">
+                    <div style="background:#1a1a2e;border-radius:44px;padding:6px;border:1px solid rgba(255,255,255,0.08);">
+                        <div style="background:#f8fafc;border-radius:38px;overflow:hidden;">
+                            {{-- Isla dinámica --}}
+                            <div style="background:#1a1a2e;height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;position:relative;">
+                                <span style="font-size:10px;font-weight:600;color:#fff;">9:41</span>
+                                <div style="width:72px;height:20px;background:#000;border-radius:10px;position:absolute;top:12px;left:50%;transform:translateX(-50%);"></div>
+                                <div style="display:flex;gap:3px;align-items:flex-end;">
+                                    <div style="width:2px;height:4px;background:#fff;border-radius:1px;"></div>
+                                    <div style="width:2px;height:6px;background:#fff;border-radius:1px;"></div>
+                                    <div style="width:2px;height:8px;background:#fff;border-radius:1px;"></div>
+                                    <div style="width:2px;height:10px;background:#fff;border-radius:1px;"></div>
                                 </div>
                             </div>
-                            {{-- Contact mock --}}
-                            <div class="flex items-center gap-3">
-                                <div class="w-16 h-7 bg-emerald-500 rounded-lg flex items-center justify-center">
-                                    <span class="iconify tabler--brand-whatsapp size-4 text-white"></span>
+                            {{-- Screen content: landing pública del negocio --}}
+                            <div style="padding:10px;background:#f8fafc;">
+                                {{-- Mini hero del negocio --}}
+                                <div style="background:linear-gradient(135deg,#4f46e5,#7c3aed);border-radius:10px;padding:12px;margin-bottom:8px;">
+                                    <div style="width:40px;height:40px;background:rgba(255,255,255,0.15);border-radius:8px;margin-bottom:6px;"></div>
+                                    <div style="width:80px;height:8px;background:rgba(255,255,255,0.7);border-radius:4px;margin-bottom:4px;"></div>
+                                    <div style="width:56px;height:6px;background:rgba(255,255,255,0.4);border-radius:4px;margin-bottom:8px;"></div>
+                                    <div style="width:64px;height:20px;background:rgba(255,255,255,0.2);border-radius:6px;display:flex;align-items:center;justify-content:center;">
+                                        <span style="font-size:7px;color:#fff;font-weight:700;">Ver más →</span>
+                                    </div>
                                 </div>
-                                <div>
-                                    <div class="w-16 h-1.5 bg-slate-200 rounded"></div>
-                                    <div class="w-24 h-1.5 bg-slate-200 rounded mt-1"></div>
+                                {{-- Productos mock --}}
+                                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;margin-bottom:8px;">
+                                    @foreach(['#fef3c7','#fce7f3','#dbeafe'] as $bg)
+                                    <div style="background:#fff;border-radius:6px;padding:5px;border:1px solid #e2e8f0;">
+                                        <div style="height:28px;background:{{ $bg }};border-radius:4px;margin-bottom:4px;"></div>
+                                        <div style="width:80%;height:4px;background:#e2e8f0;border-radius:2px;margin-bottom:2px;"></div>
+                                        <div style="width:50%;height:4px;background:#bbf7d0;border-radius:2px;"></div>
+                                    </div>
+                                    @endforeach
+                                </div>
+                                {{-- WhatsApp CTA --}}
+                                <div style="background:#25d366;border-radius:8px;padding:7px 10px;display:flex;align-items:center;gap:6px;">
+                                    <span class="iconify tabler--brand-whatsapp" style="color:#fff;font-size:14px;"></span>
+                                    <span style="font-size:8px;font-weight:700;color:#fff;">Escribir al negocio</span>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                {{-- Floating accent cards --}}
-                <div class="absolute -top-4 -right-4 bg-white rounded-xl shadow-xl p-3 flex items-center gap-2 mkt-float" style="animation-delay: -2s;">
+
+                {{-- Floating cards --}}
+                <div class="absolute -top-4 -right-6 bg-white rounded-xl shadow-xl p-3 flex items-center gap-2 mkt-float" style="animation-delay:-2s;">
                     <div class="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center">
                         <span class="iconify tabler--search size-4 text-emerald-600"></span>
                     </div>
@@ -124,7 +123,7 @@
                         <div class="text-[10px] text-emerald-600 font-medium">Posición #1</div>
                     </div>
                 </div>
-                <div class="absolute -bottom-2 -left-6 bg-white rounded-xl shadow-xl p-3 flex items-center gap-2 mkt-float" style="animation-delay: -4s;">
+                <div class="absolute -bottom-2 -left-6 bg-white rounded-xl shadow-xl p-3 flex items-center gap-2 mkt-float" style="animation-delay:-4s;">
                     <div class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
                         <span class="iconify tabler--eye size-4 text-blue-600"></span>
                     </div>
@@ -132,6 +131,10 @@
                         <div class="text-xs font-bold text-slate-800">Visible 24/7</div>
                         <div class="text-[10px] text-blue-600 font-medium">Siempre online</div>
                     </div>
+                </div>
+                {{-- Badge URL --}}
+                <div class="absolute top-1/2 -right-8 -translate-y-1/2 bg-slate-800 rounded-lg px-3 py-1.5 mkt-float" style="animation-delay:-3s;">
+                    <span class="text-[9px] font-mono text-slate-400">tubarberia.<span class="text-blue-400">syntiweb.com</span></span>
                 </div>
             </div>
         </div>
