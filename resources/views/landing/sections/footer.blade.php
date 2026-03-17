@@ -91,7 +91,7 @@
     $showLegalLinks = (bool) data_get($customization->content_blocks ?? [], 'legal_links.enabled', false);
 @endphp
 
-<footer id="footer" class="relative overflow-hidden bg-footer border-t border-base-200">
+<footer id="footer" class="relative overflow-hidden bg-footer border-t border-border">
 
     {{-- Líneas decorativas (estilo Preline) --}}
     <div class="pointer-events-none absolute inset-0" aria-hidden="true">
@@ -174,7 +174,7 @@
 
         {{-- ── Métodos de pago CAT y Food ── --}}
         @if(in_array($blueprint ?? '', ['cat', 'food']) && !empty($visiblePay))
-        <div class="border-t border-base-200 py-4">
+        <div class="border-t border-border py-4">
             <p class="text-[10px] font-black uppercase tracking-widest text-muted-foreground-1 mb-3 text-center">Métodos de pago</p>
             <div class="flex flex-wrap items-center justify-center gap-2">
                 @foreach($visiblePay as $key => $pm)
@@ -188,7 +188,7 @@
         @endif
 
         {{-- ── Barra de copyright ── --}}
-        <div class="flex flex-col items-center justify-between gap-2 border-t border-base-200 py-3 sm:flex-row">
+        <div class="flex flex-col items-center justify-between gap-2 border-t border-border py-3 sm:flex-row">
             <p class="text-xs text-muted-foreground-1">
                 &copy; {{ date('Y') }} {{ $tenant->business_name }}. Todos los derechos reservados.
             </p>

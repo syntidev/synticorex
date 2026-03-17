@@ -33,8 +33,8 @@
             const tabIcon  = document.getElementById('svc-tab-icon');
             const tabImg   = document.getElementById('svc-tab-image');
 
-            if (iconSect) iconSect.style.display = (mode === 'icon')  ? '' : 'none';
-            if (imgSect)  imgSect.style.display  = (mode === 'image') ? '' : 'none';
+            if (iconSect) iconSect.style.display = (PLAN_ID === 1 || mode === 'icon')  ? '' : 'none';
+            if (imgSect)  imgSect.style.display  = (PLAN_ID !== 1 && mode === 'image') ? '' : 'none';
 
             if (tabIcon) tabIcon.classList.toggle('seg-active', mode === 'icon');
             if (tabImg)  tabImg.classList.toggle('seg-active',  mode === 'image');

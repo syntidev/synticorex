@@ -1,5 +1,5 @@
 <header id="main-nav" 
-        class="sticky top-0 z-50 w-full border-b border-base-200 bg-background">
+        class="sticky top-0 z-50 w-full border-b border-border bg-background">
     <div class="container mx-auto flex items-center justify-between px-6 py-3">
         {{-- Logo Dinámico --}}
         <div class="flex items-center gap-3">
@@ -67,7 +67,7 @@
             {{-- Toggle de Moneda — un solo toggle según el modo elegido por el tenant --}}
             @php $currencyMode = $savedDisplayMode ?? $displayMode ?? 'reference_only'; @endphp
             @if($currencyMode === 'both_toggle')
-            <div id="currency-toggle-btn" class="hidden sm:flex items-center bg-surface p-1 rounded-xl border border-base-300">
+            <div id="currency-toggle-btn" class="hidden sm:flex items-center bg-surface p-1 rounded-xl border border-border">
                 <button
                     onclick="setCurrency('ref')"
                     data-currency="ref"
@@ -80,7 +80,7 @@
                 >Bs.</button>
             </div>
             @elseif($currencyMode === 'euro_toggle')
-            <div id="currency-toggle-btn" class="hidden sm:flex items-center bg-surface p-1 rounded-xl border border-base-300">
+            <div id="currency-toggle-btn" class="hidden sm:flex items-center bg-surface p-1 rounded-xl border border-border">
                 <button
                     onclick="setCurrency('eur')"
                     data-currency="eur"
@@ -117,7 +117,7 @@
         </div>
     </div>
     {{-- Mobile menu dropdown --}}
-    <div id="mobile-menu" class="hidden lg:hidden border-t border-base-200 bg-background px-4 py-3 space-y-2">
+    <div id="mobile-menu" class="hidden lg:hidden border-t border-border bg-background px-4 py-3 space-y-2">
       <a href="#home" data-nav-link="home" class="nav-link block rounded-lg px-3 py-2 text-sm font-semibold text-foreground/70 hover:bg-primary/10 hover:text-primary transition-colors"
          onclick="document.getElementById('mobile-menu').classList.add('hidden')">Inicio</a>
       @foreach($visibleNavLinks as $link)

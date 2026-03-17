@@ -57,28 +57,18 @@
                         </a>
                     </div>
 
-                    {{-- Social proof --}}
-                    @if($tenant->city)
-                    <div class="flex items-center gap-3 max-lg:justify-center pt-2">
-                        <div class="flex -space-x-2">
-                            @foreach(['A','B','C'] as $l)
-                            <div class="size-8 rounded-full bg-primary/10 border-2 border-background flex items-center justify-center text-xs font-bold text-primary">{{ $l }}</div>
-                            @endforeach
-                        </div>
-                        <p class="text-sm text-muted-foreground-1">Clientes satisfechos en <span class="font-semibold text-foreground">{{ $tenant->city }}</span></p>
-                    </div>
-                    @endif
+                    
                 </div>
 
                 {{-- Imagen --}}
-                <div class="relative max-lg:order-first">
+                <div class="relative max-lg:order-first overflow-hidden">
                     {{-- Sombra decorativa detr�s --}}
-                    <div class="absolute inset-4 bg-primary/10 rounded-3xl blur-2xl -z-10"></div>
+                    {{-- sombra decorativa eliminada --}}
                     <img src="{{ $customization->hero_main_filename
                         ? asset('storage/tenants/'.$tenant->id.'/'.$customization->hero_main_filename)
                         : 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200' }}"
                          alt="{{ $tenant->business_name }}"
-                         class="relative w-full h-[400px] lg:h-[500px] object-cover rounded-3xl shadow-[0_32px_64px_-12px_rgba(0,0,0,0.25)] ring-1 ring-white/10"
+                         class="relative w-full h-[400px] lg:h-[500px] object-cover rounded-3xl ring-1 ring-white/10"
                          loading="lazy">
                 </div>
 

@@ -63,7 +63,7 @@
                         @else
                             <div class="relative h-52 flex items-center justify-center bg-surface/50">
                                 <span class="inline-flex items-center justify-center p-5 rounded-full bg-primary/10 text-primary group-hover:bg-primary/20 transition-colors duration-300">
-                                    <span class="iconify tabler--{{ $iconName }} size-14"></span>
+                                    <iconify-icon icon="tabler:{{ str_replace('--', '-', $iconName) }}" width="56" height="56"></iconify-icon>
                                 </span>
                             </div>
                         @endif

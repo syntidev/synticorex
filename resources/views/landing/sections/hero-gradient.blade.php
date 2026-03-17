@@ -57,6 +57,6 @@
              alt="{{ $tenant->business_name }}"
              class="absolute inset-0 w-full h-full object-cover">
         {{-- Overlay sutil con acento primario --}}
-        <div class="absolute inset-0 bg-primary/10 pointer-events-none"></div>
+        {{-- overlay eliminado --}}
     </div>
 </section>

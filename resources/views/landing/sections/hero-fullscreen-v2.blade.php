@@ -55,7 +55,7 @@
              class="absolute inset-0 w-full h-full object-cover"
              loading="lazy">
         {{-- Overlay sutil con acento primario --}}
-        <div class="absolute inset-0 bg-primary/10 pointer-events-none"></div>
+        {{-- overlay eliminado --}}
         {{-- Gradiente transición izquierda --}}
         <div class="absolute inset-y-0 left-0 w-24 pointer-events-none"
              style="background:linear-gradient(to right, var(--color-background, #fff) 0%, transparent 100%)"></div>
