@@ -10,6 +10,8 @@
     <meta property="og:type" content="article">
     @if($post->featured_image)
     <meta property="og:image" content="{{ asset('storage/' . $post->featured_image) }}">
+    @elseif($post->image_url)
+    <meta property="og:image" content="{{ $post->image_url }}">
     @endif
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -55,6 +57,10 @@
             @if($post->featured_image)
             <div class="aspect-[21/9] max-h-[420px] w-full overflow-hidden">
                 <img src="{{ asset('storage/' . $post->featured_image) }}" alt="{{ $post->title }}" class="h-full w-full object-cover">
+            </div>
+            @elseif($post->image_url)
+            <div class="aspect-[21/9] max-h-[420px] w-full overflow-hidden">
+                <img src="{{ $post->image_url }}" alt="{{ $post->title }}" class="h-full w-full object-cover">
             </div>
             @else
             <div class="h-48 bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-800"></div>
@@ -119,6 +125,10 @@
                     @if($relPost->featured_image)
                     <div class="aspect-video overflow-hidden">
                         <img src="{{ asset('storage/' . $relPost->featured_image) }}" alt="{{ $relPost->title }}" class="h-full w-full object-cover" loading="lazy">
+                    </div>
+                    @elseif($relPost->image_url)
+                    <div class="aspect-video overflow-hidden">
+                        <img src="{{ $relPost->image_url }}" alt="{{ $relPost->title }}" class="h-full w-full object-cover" loading="lazy">
                     </div>
                     @endif
                     <div class="flex flex-1 flex-col p-5">

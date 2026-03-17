@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SYNTIweb — Propuesta Comercial & Estratégica 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #fafaf8;
+  --bg2: #f0efe9;
+  --bg3: #e8e7de;
+  --ink: #1a1a14;
+  --ink2: #4a4a3a;
+  --ink3: #8a8a7a;
+  --studio: #1a3a8a;
+  --studio-light: #e8eef8;
+  --food: #8a2a0a;
+  --food-light: #f8ece8;
+  --cat: #0a6a3a;
+  --cat-light: #e8f4ee;
+  --gold: #b8860a;
+  --gold-light: #fdf4e0;
+  --red: #c0392b;
+  --red-light: #fdf0ee;
+  --border: #d8d8cc;
+  --border2: #c8c8bc;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:var(--bg); color:var(--ink); font-family:'Syne',sans-serif; font-size:15px; line-height:1.6; }
+
+.doc-header {
+  padding: 60px 48px 40px;
+  border-bottom: 2px solid var(--ink);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+.doc-title { font-size: 42px; font-weight: 800; line-height: 1; letter-spacing: -1px; }
+.doc-title span { color: var(--studio); }
+.doc-meta { text-align: right; font-family:'DM Mono',monospace; font-size: 11px; color: var(--ink3); line-height: 1.8; }
+
+.alert-bar {
+  background: var(--ink);
+  color: #fff;
+  padding: 10px 48px;
+  font-size: 12px;
+  font-family: 'DM Mono', monospace;
+  display: flex;
+  gap: 32px;
+  overflow-x: auto;
+}
+.alert-item { white-space: nowrap; }
+.alert-item strong { color: #f0c040; }
+
+.container { max-width: 1200px; margin: 0 auto; padding: 0 48px; }
+.section { padding: 56px 0; border-bottom: 1px solid var(--border); }
+.section:last-child { border-bottom: none; }
+
+.section-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  color: var(--ink3);
+  margin-bottom: 6px;
+}
+.section-title { font-size: 28px; font-weight: 800; letter-spacing: -.5px; margin-bottom: 24px; }
+
+.strategy-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); margin-bottom: 40px; }
+.strategy-card { background: var(--bg); padding: 24px; }
+.strategy-card-label { font-size: 10px; font-family: 'DM Mono', monospace; text-transform: uppercase; letter-spacing: .1em; color: var(--ink3); margin-bottom: 8px; }
+.strategy-card-value { font-size: 20px; font-weight: 700; line-height: 1.3; }
+.strategy-card-sub { font-size: 12px; color: var(--ink3); margin-top: 4px; }
+
+.decision-box {
+  background: var(--gold-light);
+  border: 1px solid var(--gold);
+  border-left: 4px solid var(--gold);
+  padding: 16px 20px;
+  border-radius: 2px;
+  margin-bottom: 16px;
+}
+.decision-box .decision-label { font-size: 10px; font-family: 'DM Mono', monospace; text-transform: uppercase; letter-spacing: .1em; color: var(--gold); margin-bottom: 6px; font-weight: 600; }
+.decision-box p { font-size: 13px; color: var(--ink2); }
+
+.risk-box {
+  background: var(--red-light);
+  border: 1px solid #e8c8c4;
+  border-left: 4px solid var(--red);
+  padding: 16px 20px;
+  border-radius: 2px;
+  margin-bottom: 16px;
+}
+.risk-box .risk-label { font-size: 10px; font-family: 'DM Mono', monospace; text-transform: uppercase; letter-spacing: .1em; color: var(--red); margin-bottom: 6px; font-weight: 600; }
+.risk-box p { font-size: 13px; color: var(--ink2); }
+
+.product-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 32px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid currentColor;
+}
+.product-badge {
+  font-size: 11px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  padding: 4px 12px;
+  border-radius: 2px;
+}
+.badge-studio { background: var(--studio); color: #fff; }
+.badge-food { background: var(--food); color: #fff; }
+.badge-cat { background: var(--cat); color: #fff; }
+
+.product-name { font-size: 36px; font-weight: 800; letter-spacing: -1px; }
+.product-tagline { font-size: 14px; color: var(--ink3); margin-left: auto; text-align: right; max-width: 300px; }
+
+.plans-grid { display: grid; gap: 1px; background: var(--border); border: 1px solid var(--border); margin-bottom: 32px; }
+.plans-grid-2 { grid-template-columns: 1fr 1fr; }
+.plans-grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+.plan-card { background: var(--bg); padding: 28px 24px; position: relative; }
+.plan-card.highlighted { background: var(--ink); color: #fff; }
+.plan-card.highlighted .plan-price { color: #fff; }
+.plan-card.highlighted .plan-name { color: #f0c040; }
+.plan-card.highlighted .plan-desc { color: #aaa; }
+.plan-card.highlighted .feat-item { color: #ddd; border-color: rgba(255,255,255,.1); }
+.plan-card.highlighted .feat-item.yes::before { color: #4dcc8a; }
+.plan-card.highlighted .feat-item.no { color: rgba(255,255,255,.3); }
+.plan-card.highlighted .feat-item.no::before { content: '—'; color: rgba(255,255,255,.2); }
+
+.plan-pill {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 10px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  text-transform: uppercase;
+  padding: 3px 12px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+.pill-popular { background: #f0c040; color: var(--ink); }
+.pill-anchor { background: var(--bg3); color: var(--ink3); border: 1px solid var(--border); }
+.pill-decoy { background: var(--bg3); color: var(--ink3); border: 1px solid var(--border); }
+.pill-premium { background: var(--studio); color: #fff; }
+
+.plan-name { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 4px; }
+.plan-desc { font-size: 12px; color: var(--ink3); margin-bottom: 20px; }
+.plan-price { font-size: 44px; font-weight: 800; letter-spacing: -2px; line-height: 1; }
+.plan-price sup { font-size: 20px; vertical-align: super; letter-spacing: 0; font-weight: 600; }
+.plan-cycle { font-size: 12px; color: var(--ink3); font-family: 'DM Mono', monospace; margin-top: 4px; margin-bottom: 4px; }
+.plan-equiv { font-size: 11px; color: var(--ink3); font-family: 'DM Mono', monospace; margin-bottom: 24px; }
+.plan-equiv strong { color: var(--ink2); }
+
+.feat-list { list-style: none; display: flex; flex-direction: column; gap: 0; }
+.feat-item {
+  font-size: 12px;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+.feat-item:last-child { border-bottom: none; }
+.feat-item::before { content: '✓'; font-weight: 700; flex-shrink: 0; margin-top: 1px; font-size: 11px; }
+.feat-item.yes::before { color: var(--cat); }
+.feat-item.no { color: var(--ink3); }
+.feat-item.no::before { content: '—'; color: var(--ink3); }
+.feat-item.new::after { content: 'NUEVO'; font-size: 9px; font-family: 'DM Mono', monospace; background: var(--gold); color: #fff; padding: 1px 5px; border-radius: 2px; margin-left: auto; font-weight: 700; flex-shrink: 0; }
+
+.comp-table { width: 100%; border-collapse: collapse; margin-bottom: 24px; font-size: 12px; }
+.comp-table th {
+  padding: 10px 14px;
+  text-align: left;
+  font-size: 10px;
+  font-family: 'DM Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--ink3);
+  border-bottom: 2px solid var(--ink);
+  white-space: nowrap;
+}
+.comp-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+.comp-table tr:hover td { background: var(--bg2); }
+.comp-table tr.highlight-row td { background: var(--studio-light); font-weight: 600; }
+.comp-table tr.highlight-row.food-row td { background: var(--food-light); }
+.comp-table tr.highlight-row.cat-row td { background: var(--cat-light); }
+
+.win-badge { background: var(--cat); color: #fff; font-size: 10px; font-family: 'DM Mono', monospace; padding: 2px 7px; border-radius: 2px; font-weight: 700; }
+.lose-badge { background: var(--red); color: #fff; font-size: 10px; font-family: 'DM Mono', monospace; padding: 2px 7px; border-radius: 2px; }
+.neutral-badge { background: var(--bg3); color: var(--ink3); font-size: 10px; font-family: 'DM Mono', monospace; padding: 2px 7px; border-radius: 2px; border: 1px solid var(--border); }
+
+.limits-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); margin-bottom: 24px; }
+.limit-cell { background: var(--bg); padding: 16px 20px; }
+.limit-cell.header { background: var(--bg3); }
+.limit-label { font-size: 10px; font-family: 'DM Mono', monospace; text-transform: uppercase; letter-spacing: .08em; color: var(--ink3); margin-bottom: 6px; }
+.limit-value { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
+.limit-note { font-size: 11px; color: var(--ink3); margin-top: 2px; }
+
+/* LAUNCH SECTION */
+.launch-section {
+  background: var(--ink);
+  color: #fff;
+  padding: 56px 0;
+}
+.launch-title { font-size: 32px; font-weight: 800; letter-spacing: -1px; margin-bottom: 8px; }
+.launch-title span { color: #f0c040; }
+.launch-sub { color: #888; font-size: 13px; margin-bottom: 40px; line-height: 1.6; }
+
+/* STUDIO EARLY ACCESS */
+.early-access-box {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.1);
+  padding: 32px;
+  margin-bottom: 32px;
+}
+.ea-label { font-size: 10px; font-family: 'DM Mono', monospace; text-transform: uppercase; letter-spacing: .12em; color: #f0c040; margin-bottom: 12px; font-weight: 700; }
+.ea-title { font-size: 22px; font-weight: 800; margin-bottom: 8px; }
+.ea-sub { font-size: 13px; color: #aaa; margin-bottom: 24px; line-height: 1.6; }
+.ea-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.ea-card {
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.08);
+  padding: 20px;
+}
+.ea-product { font-size: 10px; font-family: 'DM Mono', monospace; text-transform: uppercase; color: #888; margin-bottom: 8px; }
+.ea-offer { font-size: 15px; font-weight: 700; color: #f0c040; margin-bottom: 12px; }
+.ea-mechanic { font-size: 12px; color: #aaa; line-height: 1.7; }
+.ea-mechanic strong { color: #fff; }
+.ea-urgency {
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 10px;
+  font-family: 'DM Mono', monospace;
+  background: rgba(240,192,64,.15);
+  color: #f0c040;
+  padding: 3px 10px;
+  border-radius: 2px;
+  border: 1px solid rgba(240,192,64,.3);
+}
+
+/* FOOD & CAT DISCOUNT */
+.discount-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.discount-card {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08);
+  padding: 24px;
+}
+.discount-product { font-size: 10px; font-family: 'DM Mono', monospace; text-transform: uppercase; color: #888; margin-bottom: 8px; }
+.discount-plan { font-size: 16px; font-weight: 700; margin-bottom: 12px; }
+.discount-price-row { display: flex; align-items: baseline; gap: 10px; margin-bottom: 4px; }
+.discount-original { font-size: 16px; text-decoration: line-through; color: #666; font-family: 'DM Mono', monospace; }
+.discount-final { font-size: 32px; font-weight: 800; font-family: 'DM Mono', monospace; color: #fff; }
+.discount-saving { font-size: 11px; color: #4dcc8a; font-family: 'DM Mono', monospace; margin-bottom: 12px; }
+.discount-arg { font-size: 12px; color: #aaa; line-height: 1.6; font-style: italic; }
+.discount-conditions { font-size: 10px; color: #666; margin-top: 10px; font-family: 'DM Mono', monospace; }
+
+.channels-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); }
+.channel-card { background: var(--bg); padding: 20px; }
+.channel-icon { font-size: 24px; margin-bottom: 10px; }
+.channel-name { font-size: 13px; font-weight: 700; margin-bottom: 6px; }
+.channel-desc { font-size: 12px; color: var(--ink3); line-height: 1.6; }
+.channel-tag { display: inline-block; margin-top: 8px; font-size: 10px; font-family: 'DM Mono', monospace; padding: 2px 7px; border-radius: 2px; }
+.tag-studio { background: var(--studio-light); color: var(--studio); }
+.tag-food { background: var(--food-light); color: var(--food); }
+.tag-cat { background: var(--cat-light); color: var(--cat); }
+.tag-all { background: var(--bg3); color: var(--ink3); border: 1px solid var(--border); }
+
+.argument-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 32px; }
+.argument-card { background: var(--bg2); padding: 20px; border: 1px solid var(--border); }
+.argument-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 10px; }
+.argument-body { font-size: 13px; color: var(--ink2); line-height: 1.7; }
+.argument-body strong { color: var(--ink); }
+
+.callout {
+  background: var(--bg2);
+  border-left: 3px solid var(--ink);
+  padding: 14px 18px;
+  font-size: 13px;
+  color: var(--ink2);
+  margin: 16px 0 28px;
+  line-height: 1.7;
+}
+.callout strong { color: var(--ink); }
+
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+
+.doc-footer {
+  padding: 32px 48px;
+  border-top: 2px solid var(--ink);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.footer-logo { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; }
+.footer-logo span { color: var(--studio); }
+.footer-meta { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--ink3); text-align: right; }
+</style>
+</head>
+<body>
+
+<div class="doc-header">
+  <div>
+    <div class="doc-title">SYNTI<span>web</span></div>
+    <div style="font-size:14px;color:var(--ink3);margin-top:8px;font-family:'DM Mono',monospace">Propuesta Comercial & Estratégica v2.0 — Núcleo de Producto</div>
+  </div>
+  <div class="doc-meta">
+    Versión 2.0 · Marzo 2026<br>
+    Confidencial — Uso interno<br>
+    Basado en análisis de 10+ competidores<br>
+    Todo en USD · Mercado Venezuela
+  </div>
+</div>
+
+<div class="alert-bar">
+  <div class="alert-item">Agencias VE: <strong>$50–$800 pago único · estático</strong></div>
+  <div class="alert-item">Cattaly anual: <strong>$97 sin carrito</strong></div>
+  <div class="alert-item">CatálogoHoy básico: <strong>$122/año</strong></div>
+  <div class="alert-item">Take App business: <strong>$450/año</strong></div>
+  <div class="alert-item">QR-ALO: <strong>REF 49 setup + REF 10/mes</strong></div>
+  <div class="alert-item">BCV: <strong>446 Bs/$</strong> · Paralelo: <strong>648 Bs/$</strong></div>
+</div>
+
+<!-- 01 DECISIONES -->
+<div class="section">
+  <div class="container">
+    <div class="section-label">01 — Marco estratégico</div>
+    <div class="section-title">Decisiones no negociables</div>
+    <div class="strategy-grid">
+      <div class="strategy-card">
+        <div class="strategy-card-label">Moneda base</div>
+        <div class="strategy-card-value">USD únicamente</div>
+        <div class="strategy-card-sub">Bolívares como referencia visual. Pago en efectivo, Zelle, Zinli o Pago Móvil a tasa paralelo.</div>
+      </div>
+      <div class="strategy-card">
+        <div class="strategy-card-label">Ciclo de facturación</div>
+        <div class="strategy-card-value">Anual como objetivo</div>
+        <div class="strategy-card-sub">Mensual solo como anzuelo de entrada. Semestral como DECOY que empuja al anual.</div>
+      </div>
+      <div class="strategy-card">
+        <div class="strategy-card-label">Freemium</div>
+        <div class="strategy-card-value">Descartado</div>
+        <div class="strategy-card-sub">Gratis infuncional daña la marca. Trial 15 días acceso completo sin tarjeta.</div>
+      </div>
+      <div class="strategy-card">
+        <div class="strategy-card-label">Límites de productos</div>
+        <div class="strategy-card-value">Generosos y reales</div>
+        <div class="strategy-card-sub">Nunca "ilimitado". Números que ningún pequeño negocio venezolano alcanza, pero protegen la plataforma.</div>
+      </div>
+      <div class="strategy-card">
+        <div class="strategy-card-label">Posicionamiento</div>
+        <div class="strategy-card-value">Más por menos</div>
+        <div class="strategy-card-sub">Lista de features más larga que el competidor más cercano, precio por debajo. No guerra de precios — guerra de valor percibido.</div>
+      </div>
+      <div class="strategy-card">
+        <div class="strategy-card-label">Arquitectura de planes</div>
+        <div class="strategy-card-value">3 planes · medio gana</div>
+        <div class="strategy-card-sub">Ancla baja + popular en el medio + premium arriba. El cliente no decide bien con 2 opciones. Con 3, el del medio se vende solo.</div>
+      </div>
+    </div>
+    <div class="decision-box">
+      <div class="decision-label">🎯 Argumento maestro por producto</div>
+      <p><strong>Studio:</strong> "Lo que una agencia cobra $180–$500 por hacerlo una vez y estático, SYNTIweb te lo da vivo y autogestionable por $99/año." &nbsp;·&nbsp; <strong>Food:</strong> "Tu menú con pedido a WhatsApp, actualizable desde el teléfono, por $5.75/mes." &nbsp;·&nbsp; <strong>Cat:</strong> "Cattaly cobra $97 sin carrito. Nosotros cobramos $69 con carrito y número de orden rastreable."</p>
+    </div>
+    <div class="risk-box">
+      <div class="risk-label">⚠️ Amenaza activa — Menuu (menuuapp.com)</div>
+      <p>Competidor directo 100% venezolano para SYNTIfood. Tiene impresión de tickets, gestión de mesas, delivery y crypto. Sin precio público. Cuando lancen precio, si superan $69/año SYNTIfood gana en precio; si no, SYNTIweb gana en ecosistema. <strong>Prioridad: lanzar antes que publiquen precios.</strong></p>
+    </div>
+  </div>
+</div>
+
+<!-- 02 STUDIO -->
+<div class="section">
+  <div class="container">
+    <div class="section-label">02 — Producto principal · Mayor volumen</div>
+    <div class="product-header" style="color:var(--studio); border-color:var(--studio)">
+      <span class="product-badge badge-studio">Studio</span>
+      <div class="product-name" style="color:var(--studio)">SYNTIstudio</div>
+      <div class="product-tagline">Presencia digital viva para cualquier negocio venezolano. Odontólogos, barberías, tiendas, consultoras — todos aterrizan aquí.</div>
+    </div>
+
+    <div class="callout">
+      <strong>Contexto:</strong> Studio no compite contra SaaS globales — compite contra agencias locales que cobran $50–$800 por algo estático que el cliente no puede tocar. La propuesta es radical: más barato, vivo, autogestionable, BCV automático.
+    </div>
+
+    <div class="plans-grid plans-grid-3">
+      <div class="plan-card">
+        <div class="plan-pill pill-anchor">Ancla de entrada</div>
+        <div class="plan-name" style="color:var(--studio)">Oportunidad</div>
+        <div class="plan-desc">Para emprendedores y negocios que arrancan su presencia digital</div>
+        <div class="plan-price" style="color:var(--studio)"><sup>$</sup>99</div>
+        <div class="plan-cycle">/ año · pago único</div>
+        <div class="plan-equiv"><strong>$8.25/mes</strong> — menos que datos móviles</div>
+        <ul class="feat-list">
+          <li class="feat-item yes">Sitio web vivo con subdominio propio</li>
+          <li class="feat-item yes">Hero + navbar + footer completo</li>
+          <li class="feat-item yes"><b>20 productos</b> con imagen y precio</li>
+          <li class="feat-item yes"><b>3 servicios</b> con icono Iconify</li>
+          <li class="feat-item yes">BCV automático (REF / $ / ambos)</li>
+          <li class="feat-item yes">QR descargable + shortlink</li>
+          <li class="feat-item yes">10 temas visuales</li>
+          <li class="feat-item yes">1 red social</li>
+          <li class="feat-item yes">WhatsApp directo por producto</li>
+          <li class="feat-item yes">Horario y estado abierto/cerrado</li>
+          <li class="feat-item yes">SEO básico automático</li>
+          <li class="feat-item yes">Analytics básico (clicks del mes)</li>
+          <li class="feat-item yes">Términos y Privacidad incluidos</li>
+          <li class="feat-item no">Sección About / Testimonios</li>
+          <li class="feat-item no">Medios de pago / Header-top</li>
+          <li class="feat-item no">FAQ / Sucursales / CTA especial</li>
+          <li class="feat-item no">Analytics avanzado</li>
+          <li class="feat-item no">Paleta personalizada</li>
+        </ul>
+      </div>
+
+      <div class="plan-card highlighted">
+        <div class="plan-pill pill-popular">⭐ El que más vende</div>
+        <div class="plan-name">Crecimiento</div>
+        <div class="plan-desc">Para negocios establecidos que quieren presencia completa y diferenciada</div>
+        <div class="plan-price"><sup>$</sup>149</div>
+        <div class="plan-cycle">/ año · pago único</div>
+        <div class="plan-equiv" style="color:#888"><strong style="color:#ddd">$12.42/mes</strong> — vs $180 que cobra KnoCreativo por algo estático</div>
+        <ul class="feat-list">
+          <li class="feat-item yes">Todo lo del plan Oportunidad</li>
+          <li class="feat-item yes"><b>50 productos</b> con galería</li>
+          <li class="feat-item yes"><b>6 servicios</b> con imagen o icono</li>
+          <li class="feat-item yes">17 temas + categorías por industria</li>
+          <li class="feat-item yes">Todas las redes sociales (7)</li>
+          <li class="feat-item yes">Medios de pago (9 métodos)</li>
+          <li class="feat-item yes">Sección About + imagen</li>
+          <li class="feat-item yes">Sección Testimonios</li>
+          <li class="feat-item yes">Header-top con mensaje</li>
+          <li class="feat-item yes">Widget tasa BCV visible</li>
+          <li class="feat-item yes">Analytics avanzado (tiempo real)</li>
+          <li class="feat-item yes">Schema.org automático</li>
+          <li class="feat-item yes">SEO avanzado (keywords + canonical)</li>
+          <li class="feat-item no">FAQ / Sucursales</li>
+          <li class="feat-item no">Paleta personalizada</li>
+          <li class="feat-item no">Reporte analytics por email</li>
+        </ul>
+      </div>
+
+      <div class="plan-card">
+        <div class="plan-pill pill-premium">Ancla premium</div>
+        <div class="plan-name" style="color:var(--studio)">Visión</div>
+        <div class="plan-desc">Para negocios con múltiples sucursales o que quieren máximo control de marca</div>
+        <div class="plan-price" style="color:var(--studio)"><sup>$</sup>199</div>
+        <div class="plan-cycle">/ año · pago único</div>
+        <div class="plan-equiv"><strong>$16.58/mes</strong> — hace que Crecimiento parezca obvio</div>
+        <ul class="feat-list">
+          <li class="feat-item yes">Todo lo del plan Crecimiento</li>
+          <li class="feat-item yes"><b>Ilimitado productos</b> <span style="font-size:10px;color:var(--ink3)">(límite técnico: 200)</span></li>
+          <li class="feat-item yes"><b>9 servicios</b></li>
+          <li class="feat-item yes">17 temas + <b>paleta personalizada</b> (4 colores libres)</li>
+          <li class="feat-item yes">FAQ (hasta 8 preguntas + Schema)</li>
+          <li class="feat-item yes"><b>Sucursales</b> (hasta 3 con WA propio)</li>
+          <li class="feat-item yes">CTA especial + banner marquee</li>
+          <li class="feat-item yes">Analytics full + reporte PDF email</li>
+          <li class="feat-item yes">Schema.org profundo (Product, FAQ)</li>
+          <li class="feat-item yes new">SYNTiA asistente IA incluida</li>
+          <li class="feat-item yes">Dominio personalizado (add-on $18)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="section-label" style="margin-bottom:12px">Studio vs. mercado Venezuela</div>
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th>Opción</th><th>Precio</th><th>Modelo</th><th>Autogestionable</th><th>BCV auto</th><th>Analytics</th><th>Veredicto</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="highlight-row">
+          <td><strong>SYNTIstudio Oportunidad</strong></td><td><strong>$99/año</strong></td><td>SaaS anual</td><td>✓ Total</td><td>✓ Auto</td><td>✓ Básico</td><td><span class="win-badge">Gana</span></td>
+        </tr>
+        <tr class="highlight-row">
+          <td><strong>SYNTIstudio Crecimiento</strong></td><td><strong>$149/año</strong></td><td>SaaS anual</td><td>✓ Total</td><td>✓ Auto</td><td>✓ Avanzado</td><td><span class="win-badge">Gana</span></td>
+        </tr>
+        <tr>
+          <td>KnoCreativo Landing Page</td><td>$180 único</td><td>Agencia, estática</td><td>✗</td><td>✗</td><td>✗</td><td><span class="win-badge">SYNTIweb</span></td>
+        </tr>
+        <tr>
+          <td>KnoCreativo Web Corporativa</td><td>$300 único</td><td>Agencia, estática</td><td>✗</td><td>✗</td><td>✗</td><td><span class="win-badge">SYNTIweb</span></td>
+        </tr>
+        <tr>
+          <td>Agencias VE promedio</td><td>$50–$500 único</td><td>Agencia</td><td>✗</td><td>✗</td><td>✗</td><td><span class="win-badge">SYNTIweb</span></td>
+        </tr>
+        <tr>
+          <td>Wix</td><td>$192/año+</td><td>SaaS global</td><td>✓</td><td>✗</td><td>✓</td><td><span class="neutral-badge">Precio similar</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="limits-grid">
+      <div class="limit-cell header"><div class="limit-label">Recurso</div></div>
+      <div class="limit-cell header"><div class="limit-label">Oportunidad</div></div>
+      <div class="limit-cell header"><div class="limit-label">Crecimiento</div></div>
+      <div class="limit-cell header"><div class="limit-label">Visión</div></div>
+      <div class="limit-cell"><div class="limit-label">Productos</div></div>
+      <div class="limit-cell"><div class="limit-value">20</div></div>
+      <div class="limit-cell"><div class="limit-value">50</div></div>
+      <div class="limit-cell"><div class="limit-value">200</div><div class="limit-note">"Ilimitado" real</div></div>
+      <div class="limit-cell"><div class="limit-label">Servicios</div></div>
+      <div class="limit-cell"><div class="limit-value">3</div></div>
+      <div class="limit-cell"><div class="limit-value">6</div></div>
+      <div class="limit-cell"><div class="limit-value">9</div></div>
+      <div class="limit-cell"><div class="limit-label">Hero slots</div></div>
+      <div class="limit-cell"><div class="limit-value">1</div></div>
+      <div class="limit-cell"><div class="limit-value">3</div></div>
+      <div class="limit-cell"><div class="limit-value">5</div></div>
+      <div class="limit-cell"><div class="limit-label">Temas</div></div>
+      <div class="limit-cell"><div class="limit-value">10</div></div>
+      <div class="limit-cell"><div class="limit-value">17</div></div>
+      <div class="limit-cell"><div class="limit-value">17+custom</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- 03 FOOD -->
+<div class="section">
+  <div class="container">
+    <div class="section-label">03 — Producto nicho alimentación · Ingresos diarios</div>
+    <div class="product-header" style="color:var(--food); border-color:var(--food)">
+      <span class="product-badge badge-food">Food</span>
+      <div class="product-name" style="color:var(--food)">SYNTIfood</div>
+      <div class="product-tagline">Menú digital venezolano con pedido directo a WhatsApp. El segmento que más crece.</div>
+    </div>
+
+    <div class="callout">
+      <strong>Contexto:</strong> QR-ALO cobra más y no da autogestión. Menuu es la amenaza real pero sin precio público. GoMenu y otros son chilenos o globales sin BCV. La ventana es ahora.
+    </div>
+
+    <div class="plans-grid plans-grid-3">
+      <div class="plan-card">
+        <div class="plan-pill pill-anchor">Anzuelo de entrada</div>
+        <div class="plan-name" style="color:var(--food)">Mensual</div>
+        <div class="plan-desc">Para probar. Matemática empuja al anual</div>
+        <div class="plan-price" style="color:var(--food)"><sup>$</sup>12</div>
+        <div class="plan-cycle">/ mes</div>
+        <div class="plan-equiv"><strong>$144/año</strong> si se queda → 2× el anual</div>
+        <ul class="feat-list">
+          <li class="feat-item yes">Menú digital con QR</li>
+          <li class="feat-item yes"><b>50 ítems</b> en lista</li>
+          <li class="feat-item yes"><b>6 fotos</b> de categoría</li>
+          <li class="feat-item yes">BCV automático</li>
+          <li class="feat-item yes">Estado abierto/cerrado</li>
+          <li class="feat-item yes">WhatsApp directo</li>
+          <li class="feat-item no">Categorías navegables</li>
+          <li class="feat-item no">Pedido Rápido → WhatsApp</li>
+          <li class="feat-item no">Sistema de Comandas</li>
+        </ul>
+      </div>
+      <div class="plan-card">
+        <div class="plan-pill pill-decoy">DECOY → anual</div>
+        <div class="plan-name" style="color:var(--food)">Semestral</div>
+        <div class="plan-desc">6 meses · hace que el anual parezca obvio</div>
+        <div class="plan-price" style="color:var(--food)"><sup>$</sup>45</div>
+        <div class="plan-cycle">/ 6 meses</div>
+        <div class="plan-equiv"><strong>$7.50/mes</strong> · anual sale a $5.75 → obvia</div>
+        <ul class="feat-list">
+          <li class="feat-item yes">Todo del Mensual</li>
+          <li class="feat-item yes"><b>100 ítems</b></li>
+          <li class="feat-item yes"><b>12 fotos</b> de categoría</li>
+          <li class="feat-item yes">Categorías navegables (sticky)</li>
+          <li class="feat-item yes">Badges por ítem</li>
+          <li class="feat-item yes">Filtro horario WhatsApp</li>
+          <li class="feat-item no">Pedido Rápido → WhatsApp</li>
+          <li class="feat-item no">Sistema de Comandas</li>
+        </ul>
+      </div>
+      <div class="plan-card highlighted">
+        <div class="plan-pill pill-popular">⭐ El objetivo real</div>
+        <div class="plan-name">Anual</div>
+        <div class="plan-desc">La experiencia completa. El argumento de venta se cierra solo</div>
+        <div class="plan-price"><sup>$</sup>69</div>
+        <div class="plan-cycle">/ año · pago único</div>
+        <div class="plan-equiv" style="color:#888"><strong style="color:#ddd">$5.75/mes</strong> · ahorra $75 vs quedarse mensual</div>
+        <ul class="feat-list">
+          <li class="feat-item yes">Todo del Semestral</li>
+          <li class="feat-item yes"><b>150 ítems</b></li>
+          <li class="feat-item yes"><b>18 fotos</b> de categoría</li>
+          <li class="feat-item yes"><b>Pedido Rápido → WhatsApp</b></li>
+          <li class="feat-item yes">Carrito flotante con resumen</li>
+          <li class="feat-item yes">Mensaje estructurado por WA</li>
+          <li class="feat-item yes"><b>Sistema de Comandas</b> (SF-XXXXXX)</li>
+          <li class="feat-item yes">Estados: nuevo→preparando→listo</li>
+          <li class="feat-item yes">Modalidades sitio/llevar/delivery</li>
+          <li class="feat-item yes">Analytics completo</li>
+          <li class="feat-item yes new">SYNTiA asistente IA</li>
+        </ul>
+      </div>
+    </div>
+
+    <table class="comp-table">
+      <thead>
+        <tr><th>Opción</th><th>Precio anual</th><th>Self-service</th><th>BCV auto</th><th>Pedido WA</th><th>Comandas</th><th>Venezolano</th><th>Veredicto</th></tr>
+      </thead>
+      <tbody>
+        <tr class="highlight-row food-row">
+          <td><strong>SYNTIfood Anual</strong></td><td><strong>$69/año</strong></td><td>✓</td><td>✓ Auto</td><td>✓ Estructurado</td><td>✓ SF-XXXXXX</td><td>✓ 100%</td><td><span class="win-badge">Gana</span></td>
+        </tr>
+        <tr>
+          <td>QR-ALO</td><td>~$169/año equiv.</td><td>✗ Agencia</td><td>✗</td><td>✗</td><td>✗</td><td>✓</td><td><span class="win-badge">SYNTIweb</span></td>
+        </tr>
+        <tr>
+          <td>Menuu</td><td>Sin precio público</td><td>✓</td><td>✓</td><td>✓</td><td>✓ + impresión</td><td>✓</td><td><span class="neutral-badge">Monitorear</span></td>
+        </tr>
+        <tr>
+          <td>GoMenu / Menuario</td><td>Pre-lanzamiento</td><td>✓</td><td>✗</td><td>✗</td><td>✗</td><td>✗ Chile</td><td><span class="win-badge">SYNTIweb</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- 04 CAT -->
+<div class="section">
+  <div class="container">
+    <div class="section-label">04 — Producto nicho comercio · Diferenciador único</div>
+    <div class="product-header" style="color:var(--cat); border-color:var(--cat)">
+      <span class="product-badge badge-cat">Cat</span>
+      <div class="product-name" style="color:var(--cat)">SYNTIcat</div>
+      <div class="product-tagline">El único catálogo venezolano con carrito + mini order rastreable. Nadie más lo tiene.</div>
+    </div>
+
+    <div class="callout">
+      <strong>Argumento de cierre:</strong> "Cattaly cobra $97/año y no tiene carrito. Nosotros cobramos $69 con carrito, variantes y número de orden SC-XXXX. Por $28 menos tienes más." Una frase. Venta cerrada.
+    </div>
+
+    <div class="plans-grid plans-grid-3">
+      <div class="plan-card">
+        <div class="plan-pill pill-anchor">Anzuelo de entrada</div>
+        <div class="plan-name" style="color:var(--cat)">Mensual</div>
+        <div class="plan-desc">Vitrina básica con botón WhatsApp directo</div>
+        <div class="plan-price" style="color:var(--cat)"><sup>$</sup>12</div>
+        <div class="plan-cycle">/ mes</div>
+        <div class="plan-equiv"><strong>$144/año</strong> acumulado → empuja al anual</div>
+        <ul class="feat-list">
+          <li class="feat-item yes"><b>50 productos</b></li>
+          <li class="feat-item yes"><b>1 imagen</b> por producto</li>
+          <li class="feat-item yes">BCV automático</li>
+          <li class="feat-item yes">Badges (popular/nuevo/promo)</li>
+          <li class="feat-item yes">Botón WhatsApp por producto</li>
+          <li class="feat-item yes">QR descargable</li>
+          <li class="feat-item no">Variantes (talla/color)</li>
+          <li class="feat-item no">Carrito de compras</li>
+          <li class="feat-item no">Mini Order SC-XXXX</li>
+        </ul>
+      </div>
+      <div class="plan-card">
+        <div class="plan-pill pill-decoy">DECOY → anual</div>
+        <div class="plan-name" style="color:var(--cat)">Semestral</div>
+        <div class="plan-desc">Con carrito y variantes. El anual gana por $24</div>
+        <div class="plan-price" style="color:var(--cat)"><sup>$</sup>45</div>
+        <div class="plan-cycle">/ 6 meses</div>
+        <div class="plan-equiv"><strong>$7.50/mes</strong> · anual = $5.75/mes → obvio</div>
+        <ul class="feat-list">
+          <li class="feat-item yes"><b>150 productos</b></li>
+          <li class="feat-item yes"><b>3 imágenes</b> por producto</li>
+          <li class="feat-item yes">Variantes talla + color</li>
+          <li class="feat-item yes">Carrito básico (drawer)</li>
+          <li class="feat-item yes">Checkout → WhatsApp</li>
+          <li class="feat-item yes">Precio comparativo tachado</li>
+          <li class="feat-item no">Mini Order SC-XXXX</li>
+          <li class="feat-item no">Sistema de Órdenes dashboard</li>
+        </ul>
+      </div>
+      <div class="plan-card highlighted">
+        <div class="plan-pill pill-popular">⭐ El objetivo real</div>
+        <div class="plan-name">Anual</div>
+        <div class="plan-desc">El catálogo más completo del mercado venezolano. Punto.</div>
+        <div class="plan-price"><sup>$</sup>69</div>
+        <div class="plan-cycle">/ año · pago único</div>
+        <div class="plan-equiv" style="color:#888"><strong style="color:#ddd">$5.75/mes</strong> · Cattaly Anual = $97 sin carrito</div>
+        <ul class="feat-list">
+          <li class="feat-item yes">Todo del Semestral</li>
+          <li class="feat-item yes"><b>250 productos</b></li>
+          <li class="feat-item yes"><b>6 imágenes</b> por producto</li>
+          <li class="feat-item yes">Variantes options libre</li>
+          <li class="feat-item yes"><b>Mini Order SC-XXXX</b> rastreable</li>
+          <li class="feat-item yes">Pantalla confirmación post-orden</li>
+          <li class="feat-item yes">Sistema Órdenes en dashboard</li>
+          <li class="feat-item yes">Estados: pendiente→confirmado→entregado</li>
+          <li class="feat-item yes">Analytics de catálogo</li>
+          <li class="feat-item yes new">SYNTiA asistente IA</li>
+        </ul>
+      </div>
+    </div>
+
+    <table class="comp-table">
+      <thead>
+        <tr><th>Opción</th><th>Precio anual</th><th>Carrito WA</th><th>Mini Order ID</th><th>BCV auto</th><th>Venezolano</th><th>Veredicto</th></tr>
+      </thead>
+      <tbody>
+        <tr class="highlight-row cat-row">
+          <td><strong>SYNTIcat Anual</strong></td><td><strong>$69/año</strong></td><td>✓ + checkout</td><td>✓ SC-XXXX</td><td>✓ Auto</td><td>✓ 100%</td><td><span class="win-badge">Gana</span></td>
+        </tr>
+        <tr>
+          <td>Cattaly Anual</td><td>$97/año</td><td>✗ Solo catálogo</td><td>✗</td><td>✓</td><td>✓</td><td><span class="win-badge">SYNTIweb</span></td>
+        </tr>
+        <tr>
+          <td>CatálogoHoy Básico</td><td>$122/año</td><td>✗</td><td>✗</td><td>✗</td><td>✓ VE</td><td><span class="win-badge">SYNTIweb</span></td>
+        </tr>
+        <tr>
+          <td>Take App Business</td><td>$450/año</td><td>✓ Avanzado</td><td>✓</td><td>✗</td><td>✗ Global</td><td><span class="win-badge">Precio 6.5×</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- 05 ESTRATEGIA DE LANZAMIENTO -->
+<div class="launch-section">
+  <div class="container">
+    <div class="section-label" style="color:#888">05 — Estrategia de lanzamiento</div>
+    <div class="launch-title">Studio: Acceso <span>Anticipado</span> · Food & Cat: Descuento directo</div>
+    <div class="launch-sub">
+      Studio no necesita descuento de precio — ya es la oferta más barata del mercado. Bajar el precio envía la señal equivocada.<br>
+      Food y Cat sí compiten contra precios conocidos — ahí el descuento clásico funciona y cierra comparativas.
+    </div>
+
+    <!-- STUDIO EARLY ACCESS -->
+    <div class="early-access-box">
+      <div class="ea-label">SYNTIstudio — Acceso Anticipado (no es descuento de precio)</div>
+      <div class="ea-title">Plan Crecimiento al precio del Plan Oportunidad</div>
+      <div class="ea-sub">Los primeros 30 clientes de Studio obtienen el plan del medio ($149/año) pagando el precio de entrada ($99/año). El precio base no se toca — se regala el upgrade. Esto preserva el ancla de precios y crea urgencia sin devaluar el producto.</div>
+      <div class="ea-grid">
+        <div class="ea-card">
+          <div class="ea-product">Mecánica de la oferta</div>
+          <div class="ea-offer">Crecimiento ($149) por $99 — primeros 30 clientes</div>
+          <div class="ea-mechanic">
+            El cliente paga <strong>$99</strong> y recibe el plan Crecimiento completo (50 productos, 6 servicios, todas las secciones, analytics avanzado). Al renovar el año siguiente paga <strong>$149</strong> — la tarifa normal. Se anuncia como "acceso anticipado de fundadores", no como descuento.
+          </div>
+          <span class="ea-urgency">⏱ Límite: 30 clientes o 60 días desde apertura pública</span>
+        </div>
+        <div class="ea-card">
+          <div class="ea-product">Copy de lanzamiento Studio</div>
+          <div class="ea-offer">Argumento que cierra la venta</div>
+          <div class="ea-mechanic">
+            <strong>"¿Cuánto te cobra una agencia por una página web en Venezuela?"</strong><br><br>
+            KnoCreativo: $180. BigRedes: $167. Y no la puedes tocar.<br><br>
+            SYNTIstudio: <strong>$99/año</strong>. Viva. Autogestionable. Con BCV automático. Actualizable desde tu teléfono. Con QR, analytics y WhatsApp directo.<br><br>
+            <em>Primeros 30 clientes acceden al plan Crecimiento por el precio de Oportunidad.</em>
+          </div>
+          <span class="ea-urgency">📣 Canal principal: Instagram · Segmento: dueños de negocio VE</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOD & CAT DISCOUNT -->
+    <div class="section-label" style="color:#888;margin-bottom:16px">Food & Cat — Descuento directo de lanzamiento (-25%) · primeros 50 clientes por producto · 60 días</div>
+    <div class="discount-grid">
+      <div class="discount-card">
+        <div class="discount-product">SYNTIfood · Plan Anual</div>
+        <div class="discount-plan">El objetivo: $69 → $52</div>
+        <div class="discount-price-row">
+          <div class="discount-original">$69</div>
+          <div class="discount-final">$52</div>
+        </div>
+        <div class="discount-saving">Ahorras $17 · precio normaliza al año siguiente</div>
+        <div class="discount-arg">"Tu menú digital con pedido a WhatsApp, por menos de $5/mes. QR-ALO cobra casi $170 al año y no te deja editarlo solo."</div>
+        <div class="discount-conditions">⚡ Solo plan Anual · No aplica a Mensual ni Semestral · Primeros 50 clientes</div>
+      </div>
+      <div class="discount-card">
+        <div class="discount-product">SYNTIcat · Plan Anual</div>
+        <div class="discount-plan">El cierre de ventas: $69 → $52</div>
+        <div class="discount-price-row">
+          <div class="discount-original">$69</div>
+          <div class="discount-final">$52</div>
+        </div>
+        <div class="discount-saving">Ahorras $17 · Cattaly Anual $97 sin carrito · tú $52 con carrito</div>
+        <div class="discount-arg">"Cattaly cobra $97 sin carrito. Nosotros cobramos $52 ahora, con carrito y número de orden. Después sube a $69. Sigue siendo más barato."</div>
+        <div class="discount-conditions">⚡ Solo plan Anual · No aplica a Mensual ni Semestral · Primeros 50 clientes</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 06 CANALES -->
+<div class="section">
+  <div class="container">
+    <div class="section-label">06 — Adquisición de clientes</div>
+    <div class="section-title">Canales por producto</div>
+    <div class="channels-grid">
+      <div class="channel-card">
+        <div class="channel-icon">📱</div>
+        <div class="channel-name">Instagram Ads segmentado</div>
+        <div class="channel-desc">Cada producto tiene su audiencia. Restaurantes ven Food. Tiendas de ropa ven Cat. Consultorios y barberías ven Studio. El algoritmo ya sabe dónde están — solo hay que darle el creativo correcto.</div>
+        <span class="channel-tag tag-all">Todos</span>
+      </div>
+      <div class="channel-card">
+        <div class="channel-icon">🤝</div>
+        <div class="channel-name">Programa de Aliados</div>
+        <div class="channel-desc">Standard: 12%/15%/18% años 1/2/3+. Pro: 15%/18%/22%. Pago por Pago Móvil, 72h post-cobro. Código de referido único. El aliado recomienda — SYNTIweb cierra y cobra.</div>
+        <span class="channel-tag tag-studio">Studio</span><span class="channel-tag tag-food">Food</span><span class="channel-tag tag-cat">Cat</span>
+      </div>
+      <div class="channel-card">
+        <div class="channel-icon">🔍</div>
+        <div class="channel-name">SEO local venezolano</div>
+        <div class="channel-desc">"Menú digital restaurante Maracaibo" · "catálogo digital tienda Valencia" · "página web peluquería Caracas". Tráfico orgánico gratuito con intención de compra clara.</div>
+        <span class="channel-tag tag-studio">Studio</span><span class="channel-tag tag-food">Food</span>
+      </div>
+      <div class="channel-card">
+        <div class="channel-icon">📝</div>
+        <div class="channel-name">SYNTIBlog como SEO</div>
+        <div class="channel-desc">"Cuánto cobra una agencia web en Venezuela 2026" · "Cómo crear menú digital gratis" · "Alternativas a Wix en Venezuela". Captura búsquedas y convierte en trials.</div>
+        <span class="channel-tag tag-studio">Studio</span>
+      </div>
+      <div class="channel-card">
+        <div class="channel-icon">🍔</div>
+        <div class="channel-name">Alianzas verticales</div>
+        <div class="channel-desc">Proveedores de empaques → recomiendan Food a sus clientes restauranteros. Mayoristas de ropa → recomiendan Cat. Mutualismo comercial: ellos venden más, tú creces.</div>
+        <span class="channel-tag tag-food">Food</span><span class="channel-tag tag-cat">Cat</span>
+      </div>
+      <div class="channel-card">
+        <div class="channel-icon">🎯</div>
+        <div class="channel-name">5 betas como prueba social</div>
+        <div class="channel-desc">Los betas activos son el argumento más poderoso en Venezuela. El venezolano no compra lo que no puede ver. Cada demo que funciona es un vendedor silencioso 24/7.</div>
+        <span class="channel-tag tag-all">Todos</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 07 RESUMEN -->
+<div class="section">
+  <div class="container">
+    <div class="section-label">07 — Resumen ejecutivo</div>
+    <div class="section-title">La apuesta en números</div>
+    <div class="two-col">
+      <div class="argument-grid">
+        <div class="argument-card">
+          <div class="argument-title" style="color:var(--studio)">Studio · Por qué $99/$149/$199 es correcto</div>
+          <div class="argument-body">El mercado paga <strong>$180–$500 por algo estático</strong>. $99 ya es la oferta más barata del mercado sin descuento. El acceso anticipado (Crecimiento a precio Oportunidad) no devalúa — regala upgrade y crea urgencia.</div>
+        </div>
+        <div class="argument-card">
+          <div class="argument-title" style="color:var(--food)">Food · La ventana es ahora</div>
+          <div class="argument-body">Menuu no tiene precio. GoMenu no está en VE. QR-ALO cuesta más y es una agencia. <strong>$69/año = $5.75/mes</strong> con pedido WhatsApp estructurado y comandas. Cada día sin lanzar es terreno que puede perder.</div>
+        </div>
+        <div class="argument-card">
+          <div class="argument-title" style="color:var(--cat)">Cat · Una frase cierra la venta</div>
+          <div class="argument-body"><strong>"Cattaly $97 sin carrito. Nosotros $69 con carrito."</strong> El SC-XXXX es único en Venezuela — ningún competidor tiene número de orden rastreable sin pasarela de pago.</div>
+        </div>
+        <div class="argument-card">
+          <div class="argument-title">El ecosistema como foso defensivo</div>
+          <div class="argument-body">Nadie más en Venezuela ofrece Studio + Food + Cat. Cuando un cliente de Food crece y quiere web completa, <strong>ya sabe a dónde ir</strong>. El ecosistema retiene.</div>
+        </div>
+      </div>
+      <div style="background:var(--bg2);border:1px solid var(--border);padding:28px">
+        <div class="section-label" style="margin-bottom:16px">Tabla consolidada de precios</div>
+        <table style="width:100%;font-size:12px;border-collapse:collapse">
+          <tr style="border-bottom:2px solid var(--ink)">
+            <th style="padding:8px 0;text-align:left;font-family:'DM Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink3)">Producto / Plan</th>
+            <th style="padding:8px 0;text-align:right;font-family:'DM Mono',monospace;font-size:10px;text-transform:uppercase;color:var(--ink3)">Normal</th>
+            <th style="padding:8px 0;text-align:right;font-family:'DM Mono',monospace;font-size:10px;text-transform:uppercase;color:var(--cat)">Lanzamiento</th>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border)">
+            <td style="padding:9px 0;color:var(--studio);font-weight:600">Studio Oportunidad</td>
+            <td style="padding:9px 0;text-align:right;font-family:'DM Mono',monospace">$99/año</td>
+            <td style="padding:9px 0;text-align:right;font-family:'DM Mono',monospace;color:var(--studio)">EA: Crecimiento×$99</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border)">
+            <td style="padding:9px 0;color:var(--studio);font-weight:600">Studio Crecimiento ⭐</td>
+            <td style="padding:9px 0;text-align:right;font-family:'DM Mono',monospace">$149/año</td>
+            <td style="padding:9px 0;text-align:right;font-family:'DM Mono',monospace;color:var(--studio)">EA: incluido arriba</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border)">
+            <td style="padding:9px 0;color:var(--studio);font-weight:600">Studio Visión</td>
+            <td style="padding:9px 0;text-align:right;font-family:'DM Mono',monospace">$199/año</td>
+            <td style="padding:9px 0;text-align:right;font-family:'DM Mono',monospace;color:var(--ink3)">Sin descuento</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border)">
+            <td style="padding:9px 0;color:var(--food);font-weight:600">Food Mensual</td>
+            <td style="padding:9px 0;text-align:right;font-family:'DM Mono',monospace">$12/mes</td>
+            <td style="padding:9px 0;text-align:right;font-family:'DM Mono',monospace;color:var(--ink3)">Sin descuento</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border)">
+            <td style="padding:9px 0;color:var(--food);font-weight:600">Food Semestral</td>
+            <td style="padding:9px 0;text-align:right;font-family:'DM Mono',monospace">$45/sem.</td>
+            <td style="padding:9px 0;text-align:right;font-family:'DM Mono',monospace;color:var(--ink3)">Sin descuento</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border)">
+            <td style="padding:9px 0;color:var(--food);font-weight:600">Food Anual ⭐</td>
+            <td style="padding:9px 0;text-align:right;font-family:'DM Mono',monospace">$69/año</td>
+            <td style="padding:9px 0;text-align:right;font-family:'DM Mono',monospace;color:var(--cat)">$52 (primeros 50)</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border)">
+            <td style="padding:9px 0;color:var(--cat);font-weight:600">Cat Mensual</td>
+            <td style="padding:9px 0;text-align:right;font-family:'DM Mono',monospace">$12/mes</td>
+            <td style="padding:9px 0;text-align:right;font-family:'DM Mono',monospace;color:var(--ink3)">Sin descuento</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border)">
+            <td style="padding:9px 0;color:var(--cat);font-weight:600">Cat Semestral</td>
+            <td style="padding:9px 0;text-align:right;font-family:'DM Mono',monospace">$45/sem.</td>
+            <td style="padding:9px 0;text-align:right;font-family:'DM Mono',monospace;color:var(--ink3)">Sin descuento</td>
+          </tr>
+          <tr>
+            <td style="padding:9px 0;color:var(--cat);font-weight:600">Cat Anual ⭐</td>
+            <td style="padding:9px 0;text-align:right;font-family:'DM Mono',monospace">$69/año</td>
+            <td style="padding:9px 0;text-align:right;font-family:'DM Mono',monospace;color:var(--cat)">$52 (primeros 50)</td>
+          </tr>
+        </table>
+        <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border)">
+          <div class="section-label" style="margin-bottom:10px">Add-ons (sin descuento de lanzamiento)</div>
+          <div style="font-size:12px;color:var(--ink3);line-height:2;font-family:'DM Mono',monospace">
+            Setup asistido: +$30 · Dominio propio: +$18/año<br>
+            Fotos profesionales: +$15 · Copy IA: +$20<br>
+            PDF Analytics extra: +$10/mes · Sucursal extra: +$49/año
+          </div>
+        </div>
+        <div style="margin-top:20px;padding:16px;background:var(--gold-light);border:1px solid var(--gold)">
+          <div style="font-size:10px;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.1em;color:var(--gold);margin-bottom:8px;font-weight:700">Camino al primer $1,000</div>
+          <div style="font-size:12px;color:var(--ink2);line-height:1.8">
+            5 × Studio Crecimiento EA ($99) = <strong>$495</strong><br>
+            8 × Food Anual lanzamiento ($52) = <strong>$416</strong><br>
+            5 × Cat Anual lanzamiento ($52) = <strong>$260</strong><br>
+            <strong style="color:var(--ink)">18 clientes = $1,171 · primer mes</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="doc-footer">
+  <div class="footer-logo">SYNTI<span>web</span></div>
+  <div class="footer-meta">
+    Propuesta Comercial v2.0 · Marzo 2026<br>
+    3 planes Studio restaurados · Acceso Anticipado para lanzamiento<br>
+    Próxima revisión: al conocer precio de Menuu
+  </div>
+</div>
+
+</body>
+</html>

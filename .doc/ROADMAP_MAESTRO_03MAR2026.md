@@ -448,6 +448,34 @@ para reducir carga durante desarrollo.
 
 ---
 
+## SESIÓN 15 MAR 2026 (tarde) — Commits: fdfba9f → c26fe04
+
+### Completado:
+- D.22 — Módulo dominios completo (tablas, modelos, Filament v5, crons, notificaciones)
+- Fix: DomainResource API Filament v5 (Schemas, Actions correctos)
+- Fix: AdminPanelProvider — DomainResource registrado, homeUrl, duplicados eliminados
+- Fix: getHeaderActions()+CreateAction en 6 List pages
+- Fix: BlogPost published_at auto al publicar
+- Fix: blog tags is_array()
+- Fix: UsersTable syntax error coma
+- Fix: polling null en 5 widgets (⚠️ reactivar antes de Fase E)
+- Fix: BlogPost FileUpload featured_image + ImageColumn
+- Fix: ver_post en EditBlogPost
+- Fix: colores panel #4A80E4
+
+### Pendiente próxima sesión:
+1. Blog imágenes — soporte dual featured_image + image_url fallback en blades
+2. Colores panel — theme.css Filament v5 no aplica #4A80E4 visualmente
+3. UserResource — campos Pago Móvil formato venezolano
+4. D.4 Charts Dashboard — fix static → instancia Filament v5
+5. Fase E — producción Hostinger
+
+### ⚠️ ROLLBACK ANTES DE FASE E:
+- Polling widgets: StatsOverview→30s, LatestTenants→60s, CurrencyRates→60s
+- Charts (Donut, Revenue) → mantener null
+
+---
+
 ### FASE F — CRECIMIENTO (POST-LANZAMIENTO)
 **Fechas:** Mayo 2026 en adelante
 **Objetivo:** Escalar, retener, monetizar mejor.

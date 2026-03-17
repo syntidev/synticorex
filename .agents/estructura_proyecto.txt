@@ -1,0 +1,65 @@
+ESTRUCTURA DEL PROYECTO 
+================================================ 
+Fecha: lun 16/03/2026 16:15:58,78 
+Ruta: C:\laragon\www\synticorex\.agents 
+================================================ 
+ 
+[ARBOL DE DIRECTORIOS] 
+ 
+Listado de rutas de carpetas para el volumen OS
+El número de serie del volumen es 92E8-531C
+C:.
+|   estructura_proyecto.txt
+|   generar.bat
+|   
+\---skills
+    \---preline-theme-generator
+        |   examples.md
+        |   output_template.md
+        |   qa.md
+        |   SKILL.md
+        |   
+        +---docs
+        |       palette-guidance.md
+        |       step-1.md
+        |       step-2.md
+        |       step-3.md
+        |       step-4.md
+        |       step-5.md
+        |       step-6.md
+        |       step-7.md
+        |       token-reference.md
+        |       validation-checklist.md
+        |       
+        \---scripts
+                example-config.json
+                example-config.yaml
+                generate-theme.js
+                
+ 
+================================================ 
+[LISTA COMPLETA DE RUTAS] 
+================================================ 
+C:\laragon\www\synticorex\.agents\estructura_proyecto.txt
+C:\laragon\www\synticorex\.agents\generar.bat
+C:\laragon\www\synticorex\.agents\skills
+C:\laragon\www\synticorex\.agents\skills\preline-theme-generator
+C:\laragon\www\synticorex\.agents\skills\preline-theme-generator\docs
+C:\laragon\www\synticorex\.agents\skills\preline-theme-generator\examples.md
+C:\laragon\www\synticorex\.agents\skills\preline-theme-generator\output_template.md
+C:\laragon\www\synticorex\.agents\skills\preline-theme-generator\qa.md
+C:\laragon\www\synticorex\.agents\skills\preline-theme-generator\scripts
+C:\laragon\www\synticorex\.agents\skills\preline-theme-generator\SKILL.md
+C:\laragon\www\synticorex\.agents\skills\preline-theme-generator\docs\palette-guidance.md
+C:\laragon\www\synticorex\.agents\skills\preline-theme-generator\docs\step-1.md
+C:\laragon\www\synticorex\.agents\skills\preline-theme-generator\docs\step-2.md
+C:\laragon\www\synticorex\.agents\skills\preline-theme-generator\docs\step-3.md
+C:\laragon\www\synticorex\.agents\skills\preline-theme-generator\docs\step-4.md
+C:\laragon\www\synticorex\.agents\skills\preline-theme-generator\docs\step-5.md
+C:\laragon\www\synticorex\.agents\skills\preline-theme-generator\docs\step-6.md
+C:\laragon\www\synticorex\.agents\skills\preline-theme-generator\docs\step-7.md
+C:\laragon\www\synticorex\.agents\skills\preline-theme-generator\docs\token-reference.md
+C:\laragon\www\synticorex\.agents\skills\preline-theme-generator\docs\validation-checklist.md
+C:\laragon\www\synticorex\.agents\skills\preline-theme-generator\scripts\example-config.json
+C:\laragon\www\synticorex\.agents\skills\preline-theme-generator\scripts\example-config.yaml
+C:\laragon\www\synticorex\.agents\skills\preline-theme-generator\scripts\generate-theme.js

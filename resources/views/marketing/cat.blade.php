@@ -59,6 +59,9 @@
                 Catálogo visual con carrito para tiendas, proveedores y comercios.<br class="hidden sm:block">
                 El cliente elige, arma su pedido y te escribe directo.
             </p>
+            <p class="mt-2 text-sm text-muted-foreground-1">
+                Catálogo visual con carrito incluido. Mini Order SC-XXXX rastreable. Desde $5.75/mes.
+            </p>
             <div class="mt-8 flex flex-wrap justify-center gap-3">
                 <a class="py-3 px-5 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg bg-primary border border-primary-line text-primary-foreground hover:bg-primary-hover focus:outline-hidden focus:bg-primary-focus disabled:opacity-50 disabled:pointer-events-none" href="{{ route('onboarding.cat') }}">
                     Empezar gratis 15 días
@@ -158,7 +161,7 @@
             <ul class="mt-7 space-y-2.5 text-sm">
                 <li class="flex gap-x-2">
                     <svg class="shrink-0 mt-0.5 size-4 text-primary" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                    <span class="text-foreground">Productos ilimitados</span>
+                    <span class="text-foreground">250 productos</span>
                 </li>
                 <li class="flex gap-x-2">
                     <svg class="shrink-0 mt-0.5 size-4 text-primary" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
@@ -243,7 +246,7 @@
                 <li class="col-span-1 py-1.5 lg:py-3 border-b border-line-2">
                     <div class="grid grid-cols-2 md:grid-cols-6 lg:block">
                         <span class="lg:hidden md:col-span-2 text-sm text-foreground">ANUAL</span>
-                        <span class="text-sm text-foreground">Ilimitados</span>
+                        <span class="text-sm text-foreground">250</span>
                     </div>
                 </li>
             </ul>

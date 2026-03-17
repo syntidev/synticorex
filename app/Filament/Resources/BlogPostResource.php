@@ -54,48 +54,53 @@ class BlogPostResource extends Resource
     {
         return $schema
             ->components([
-                Section::make('Contenido principal')->schema([
-                    TextInput::make('title')
-                        ->label('Título')
-                        ->required()
-                        ->maxLength(255)
-                        ->live(onBlur: true)
-                        ->afterStateUpdated(fn ($state, callable $set) => $set('slug', Str::slug((string) $state))),
-                    TextInput::make('slug')
-                        ->required()
-                        ->unique(ignoreRecord: true)
-                        ->maxLength(255),
-                    Textarea::make('excerpt')
-                        ->label('Extracto')
-                        ->maxLength(500)
-                        ->rows(3),
-                    RichEditor::make('content')
-                        ->label('Contenido')
-                        ->toolbarButtons([
-                            'bold', 'italic', 'underline', 'strike', 'link',
-                            'h2', 'h3', 'bulletList', 'orderedList', 'blockquote',
-                            'codeBlock', 'redo', 'undo',
-                        ])
-                        ->columnSpanFull(),
-                ]),
-
-                Section::make('Metadatos')
-                    ->collapsible()
+                Section::make('Contenido')
                     ->schema([
-                        TextInput::make('meta_title')
-                            ->label('Meta título')
+                        TextInput::make('title')
+                            ->label('Título')
+                            ->required()
+                            ->maxLength(255)
+                            ->live(onBlur: true)
+                            ->afterStateUpdated(fn ($state, callable $set) => $set('slug', Str::slug((string) $state))),
+                        TextInput::make('slug')
+                            ->required()
+                            ->unique(ignoreRecord: true)
                             ->maxLength(255),
-                        Textarea::make('meta_description')
-                            ->label('Meta descripción')
-                            ->maxLength(320)
-                            ->rows(3),
+                        Textarea::make('excerpt')
+                            ->label('Extracto')
+                            ->maxLength(500)
+                            ->rows(2),
+                        RichEditor::make('content')
+                            ->label('Contenido')
+                            ->toolbarButtons([
+                                'bold', 'italic', 'underline', 'strike', 'link',
+                                'h2', 'h3', 'bulletList', 'orderedList', 'blockquote',
+                                'codeBlock', 'redo', 'undo',
+                            ]),
                     ]),
 
-                Section::make('Imagen y categoría')
-                    ->columns(2)
+                Section::make('Detalles del post')
+                    ->columns(3)
                     ->schema([
+                        Select::make('status')
+                            ->label('Estado')
+                            ->options([
+                                'draft'     => 'Borrador',
+                                'published' => 'Publicado',
+                            ])
+                            ->default('draft')
+                            ->required(),
+                        DatePicker::make('published_at')
+                            ->label('Fecha de publicación'),
+                        Toggle::make('featured')
+                            ->label('Post destacado')
+                            ->afterStateUpdated(function (bool $state): void {
+                                if ($state) {
+                                    BlogPost::where('featured', true)->update(['featured' => false]);
+                                }
+                            }),
                         FileUpload::make('featured_image')
-                            ->label('Imagen destacada')
+                            ->label('Imagen 16:9')
                             ->image()
                             ->disk('public')
                             ->directory('blog')
@@ -116,29 +121,21 @@ class BlogPostResource extends Resource
                             ->default('5 min'),
                     ]),
 
-                Section::make('Publicación')
+                Section::make('SEO')
                     ->columns(2)
+                    ->collapsed()
                     ->schema([
-                        Select::make('status')
-                            ->label('Estado')
-                            ->options([
-                                'draft'     => 'Borrador',
-                                'published' => 'Publicado',
-                            ])
-                            ->default('draft')
-                            ->required(),
-                        DatePicker::make('published_at')
-                            ->label('Fecha de publicación'),
-                        Toggle::make('featured')
-                            ->label('Post destacado')
-                            ->afterStateUpdated(function (bool $state): void {
-                                if ($state) {
-                                    BlogPost::where('featured', true)->update(['featured' => false]);
-                                }
-                            }),
+                        TextInput::make('meta_title')
+                            ->label('Meta título')
+                            ->maxLength(255),
+                        Textarea::make('meta_description')
+                            ->label('Meta descripción')
+                            ->maxLength(320)
+                            ->rows(2),
                         TagsInput::make('tags')
                             ->label('Tags SEO')
-                            ->separator(','),
+                            ->separator(',')
+                            ->columnSpanFull(),
                     ]),
             ]);
     }

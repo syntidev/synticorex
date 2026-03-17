@@ -1,0 +1,225 @@
+ESTRUCTURA DEL PROYECTO 
+================================================ 
+Fecha: lun 16/03/2026 16:05:34,62 
+Ruta: C:\laragon\www\synticorex\database 
+================================================ 
+ 
+[ARBOL DE DIRECTORIOS] 
+ 
+Listado de rutas de carpetas para el volumen OS
+El número de serie del volumen es 92E8-531C
+C:.
+|   .gitignore
+|   database.sqlite
+|   estructura_proyecto.txt
+|   generar.bat
+|   
++---factories
+|       UserFactory.php
+|       
++---migrations
+|       0001_01_01_000000_create_users_table.php
+|       0001_01_01_000001_create_cache_table.php
+|       0001_01_01_000002_create_jobs_table.php
+|       2025_02_11_000003_create_plans_table.php
+|       2025_02_11_000004_create_tenants_table.php
+|       2025_02_11_000005_create_products_table.php
+|       2025_02_11_000006_create_services_table.php
+|       2025_02_11_000007_create_tenant_customization_table.php
+|       2025_02_11_000008_create_analytics_events_table.php
+|       2025_02_11_000009_create_dollar_rates_table.php
+|       2025_02_11_000010_create_invoices_table.php
+|       2025_02_11_000011_create_color_palettes_table.php
+|       2025_02_11_000012_add_missing_columns_to_tenants_table.php
+|       2025_02_11_000013_create_product_images_table.php
+|       2025_02_11_000014_create_tenant_branches_table.php
+|       2026_02_18_013841_add_settings_column_to_tenants_table.php
+|       2026_02_18_044200_add_extended_columns_to_color_palettes.php
+|       2026_02_20_120000_add_hero_system_to_customizations.php
+|       2026_02_21_060130_add_theme_slug_to_tenant_customization.php
+|       2026_02_23_010332_add_plan_lifecycle_to_tenants_table.php
+|       2026_02_23_012137_update_plan_pricing_and_limits.php
+|       2026_02_23_020000_init_visual_effects_block_builder.php
+|       2026_02_24_235503_make_color_palette_color_fields_nullable.php
+|       2026_02_25_000000_fix_sections_order_in_customizations.php
+|       2026_02_28_063417_add_industry_segment_to_tenants_table.php
+|       2026_02_28_100000_add_about_text_to_tenant_customization.php
+|       2026_03_01_000001_add_image_url_to_products_table.php
+|       2026_03_01_100000_add_currency_type_to_dollar_rates.php
+|       2026_03_01_120000_add_content_blocks_to_tenant_customization.php
+|       2026_03_04_061935_add_about_image_to_tenant_customizations.php
+|       2026_03_04_071709_add_whatsapp_active_to_tenants.php
+|       2026_03_06_222950_add_header_message_to_tenant_customization.php
+|       2026_03_07_100000_add_blueprint_to_plans_table.php
+|       2026_03_07_100001_insert_food_and_cat_plans.php
+|       2026_03_08_000001_create_ai_docs_table.php
+|       2026_03_08_053924_fix_plans_limits_nullable.php
+|       2026_03_10_000001_add_hero_images_4_5_to_tenant_customization.php
+|       2026_03_11_000001_add_google_id_to_users_table.php
+|       2026_03_12_000002_cleanup_duplicate_studio_plans.php
+|       2026_03_12_100000_add_compare_price_usd_to_products.php
+|       2026_03_12_232336_add_billing_fields_to_invoices_table.php
+|       2026_03_12_233230_add_is_admin_to_users_table.php
+|       2026_03_14_120000_unify_food_cat_plan_names.php
+|       2026_03_14_150000_add_category_fields_to_products_table.php
+|       2026_03_15_000000_add_vendor_fields_to_users_table.php
+|       2026_03_15_000001_add_demo_fields_to_tenants_table.php
+|       2026_03_15_000001_create_domains_table.php
+|       2026_03_15_000002_create_domain_events_table.php
+|       2026_03_15_074710_create_copilot_conversations_table.php
+|       2026_03_15_074711_create_copilot_messages_table.php
+|       2026_03_15_074712_create_copilot_tool_calls_table.php
+|       2026_03_15_074713_create_copilot_audit_logs_table.php
+|       2026_03_15_074714_create_copilot_rate_limits_table.php
+|       2026_03_15_074715_create_copilot_token_usages_table.php
+|       2026_03_15_074716_create_copilot_agent_memories_table.php
+|       2026_03_15_200000_create_blog_categories_table.php
+|       2026_03_15_200000_create_support_tickets_table.php
+|       2026_03_15_200001_create_blog_posts_table.php
+|       2026_03_15_210000_create_mail_settings_table.php
+|       2026_03_15_210000_normalize_plan_slugs_and_names.php
+|       2026_03_15_210100_create_company_settings_table.php
+|       2026_03_15_232250_create_notifications_table.php
+|       2026_03_15_300000_create_media_table.php
+|       2026_03_15_400000_create_landing_sections_table.php
+|       2026_03_16_014918_add_featured_image_to_blog_posts_table.php
+|       2026_04_05_000000_fix_sections_order_for_plan2_testimonials.php
+|       2026_04_06_000000_add_role_to_users_table.php
+|       
++---schema
+|       mysql-schema.sql
+|       
++---scripts
+|       inject_premium_products.php
+|       
+\---seeders
+        AiDocSeeder.php
+        BlogSeeder.php
+        CloneTortasToSintiburguerSeeder.php
+        ColorPalettesSeeder.php
+        DatabaseSeeder.php
+        DemoDataSeeder.php
+        DemosCustomizationSeeder.php
+        DemoTenantsSeeder.php
+        DollarRatesSeeder.php
+        DonazProductsSeeder.php
+        FixDemoSettingsSeeder.php
+        GenerateDonazMenuJson.php
+        GenerateSintiburguerMenuJson.php
+        LandingSectionSeeder.php
+        PlansSeeder.php
+        SintiburguerHeroImagesSeeder.php
+        SintiburguerHeroSeeder.php
+        SyntiBurguerContentSeeder.php
+        SyntiBurguerProductsSeeder.php
+        TecnoFixServicesSeeder.php
+        TestingSeeder.php
+        TortasDemoSeeder.php
+        UrbanStoreProductsSeeder.php
+        
+ 
+================================================ 
+[LISTA COMPLETA DE RUTAS] 
+================================================ 
+C:\laragon\www\synticorex\database\.gitignore
+C:\laragon\www\synticorex\database\database.sqlite
+C:\laragon\www\synticorex\database\estructura_proyecto.txt
+C:\laragon\www\synticorex\database\factories
+C:\laragon\www\synticorex\database\generar.bat
+C:\laragon\www\synticorex\database\migrations
+C:\laragon\www\synticorex\database\schema
+C:\laragon\www\synticorex\database\scripts
+C:\laragon\www\synticorex\database\seeders
+C:\laragon\www\synticorex\database\factories\UserFactory.php
+C:\laragon\www\synticorex\database\migrations\0001_01_01_000000_create_users_table.php
+C:\laragon\www\synticorex\database\migrations\0001_01_01_000001_create_cache_table.php
+C:\laragon\www\synticorex\database\migrations\0001_01_01_000002_create_jobs_table.php
+C:\laragon\www\synticorex\database\migrations\2025_02_11_000003_create_plans_table.php
+C:\laragon\www\synticorex\database\migrations\2025_02_11_000004_create_tenants_table.php
+C:\laragon\www\synticorex\database\migrations\2025_02_11_000005_create_products_table.php
+C:\laragon\www\synticorex\database\migrations\2025_02_11_000006_create_services_table.php
+C:\laragon\www\synticorex\database\migrations\2025_02_11_000007_create_tenant_customization_table.php
+C:\laragon\www\synticorex\database\migrations\2025_02_11_000008_create_analytics_events_table.php
+C:\laragon\www\synticorex\database\migrations\2025_02_11_000009_create_dollar_rates_table.php
+C:\laragon\www\synticorex\database\migrations\2025_02_11_000010_create_invoices_table.php
+C:\laragon\www\synticorex\database\migrations\2025_02_11_000011_create_color_palettes_table.php
+C:\laragon\www\synticorex\database\migrations\2025_02_11_000012_add_missing_columns_to_tenants_table.php
+C:\laragon\www\synticorex\database\migrations\2025_02_11_000013_create_product_images_table.php
+C:\laragon\www\synticorex\database\migrations\2025_02_11_000014_create_tenant_branches_table.php
+C:\laragon\www\synticorex\database\migrations\2026_02_18_013841_add_settings_column_to_tenants_table.php
+C:\laragon\www\synticorex\database\migrations\2026_02_18_044200_add_extended_columns_to_color_palettes.php
+C:\laragon\www\synticorex\database\migrations\2026_02_20_120000_add_hero_system_to_customizations.php
+C:\laragon\www\synticorex\database\migrations\2026_02_21_060130_add_theme_slug_to_tenant_customization.php
+C:\laragon\www\synticorex\database\migrations\2026_02_23_010332_add_plan_lifecycle_to_tenants_table.php
+C:\laragon\www\synticorex\database\migrations\2026_02_23_012137_update_plan_pricing_and_limits.php
+C:\laragon\www\synticorex\database\migrations\2026_02_23_020000_init_visual_effects_block_builder.php
+C:\laragon\www\synticorex\database\migrations\2026_02_24_235503_make_color_palette_color_fields_nullable.php
+C:\laragon\www\synticorex\database\migrations\2026_02_25_000000_fix_sections_order_in_customizations.php
+C:\laragon\www\synticorex\database\migrations\2026_02_28_063417_add_industry_segment_to_tenants_table.php
+C:\laragon\www\synticorex\database\migrations\2026_02_28_100000_add_about_text_to_tenant_customization.php
+C:\laragon\www\synticorex\database\migrations\2026_03_01_000001_add_image_url_to_products_table.php
+C:\laragon\www\synticorex\database\migrations\2026_03_01_100000_add_currency_type_to_dollar_rates.php
+C:\laragon\www\synticorex\database\migrations\2026_03_01_120000_add_content_blocks_to_tenant_customization.php
+C:\laragon\www\synticorex\database\migrations\2026_03_04_061935_add_about_image_to_tenant_customizations.php
+C:\laragon\www\synticorex\database\migrations\2026_03_04_071709_add_whatsapp_active_to_tenants.php
+C:\laragon\www\synticorex\database\migrations\2026_03_06_222950_add_header_message_to_tenant_customization.php
+C:\laragon\www\synticorex\database\migrations\2026_03_07_100000_add_blueprint_to_plans_table.php
+C:\laragon\www\synticorex\database\migrations\2026_03_07_100001_insert_food_and_cat_plans.php
+C:\laragon\www\synticorex\database\migrations\2026_03_08_000001_create_ai_docs_table.php
+C:\laragon\www\synticorex\database\migrations\2026_03_08_053924_fix_plans_limits_nullable.php
+C:\laragon\www\synticorex\database\migrations\2026_03_10_000001_add_hero_images_4_5_to_tenant_customization.php
+C:\laragon\www\synticorex\database\migrations\2026_03_11_000001_add_google_id_to_users_table.php
+C:\laragon\www\synticorex\database\migrations\2026_03_12_000002_cleanup_duplicate_studio_plans.php
+C:\laragon\www\synticorex\database\migrations\2026_03_12_100000_add_compare_price_usd_to_products.php
+C:\laragon\www\synticorex\database\migrations\2026_03_12_232336_add_billing_fields_to_invoices_table.php
+C:\laragon\www\synticorex\database\migrations\2026_03_12_233230_add_is_admin_to_users_table.php
+C:\laragon\www\synticorex\database\migrations\2026_03_14_120000_unify_food_cat_plan_names.php
+C:\laragon\www\synticorex\database\migrations\2026_03_14_150000_add_category_fields_to_products_table.php
+C:\laragon\www\synticorex\database\migrations\2026_03_15_000000_add_vendor_fields_to_users_table.php
+C:\laragon\www\synticorex\database\migrations\2026_03_15_000001_add_demo_fields_to_tenants_table.php
+C:\laragon\www\synticorex\database\migrations\2026_03_15_000001_create_domains_table.php
+C:\laragon\www\synticorex\database\migrations\2026_03_15_000002_create_domain_events_table.php
+C:\laragon\www\synticorex\database\migrations\2026_03_15_074710_create_copilot_conversations_table.php
+C:\laragon\www\synticorex\database\migrations\2026_03_15_074711_create_copilot_messages_table.php
+C:\laragon\www\synticorex\database\migrations\2026_03_15_074712_create_copilot_tool_calls_table.php
+C:\laragon\www\synticorex\database\migrations\2026_03_15_074713_create_copilot_audit_logs_table.php
+C:\laragon\www\synticorex\database\migrations\2026_03_15_074714_create_copilot_rate_limits_table.php
+C:\laragon\www\synticorex\database\migrations\2026_03_15_074715_create_copilot_token_usages_table.php
+C:\laragon\www\synticorex\database\migrations\2026_03_15_074716_create_copilot_agent_memories_table.php
+C:\laragon\www\synticorex\database\migrations\2026_03_15_200000_create_blog_categories_table.php
+C:\laragon\www\synticorex\database\migrations\2026_03_15_200000_create_support_tickets_table.php
+C:\laragon\www\synticorex\database\migrations\2026_03_15_200001_create_blog_posts_table.php
+C:\laragon\www\synticorex\database\migrations\2026_03_15_210000_create_mail_settings_table.php
+C:\laragon\www\synticorex\database\migrations\2026_03_15_210000_normalize_plan_slugs_and_names.php
+C:\laragon\www\synticorex\database\migrations\2026_03_15_210100_create_company_settings_table.php
+C:\laragon\www\synticorex\database\migrations\2026_03_15_232250_create_notifications_table.php
+C:\laragon\www\synticorex\database\migrations\2026_03_15_300000_create_media_table.php
+C:\laragon\www\synticorex\database\migrations\2026_03_15_400000_create_landing_sections_table.php
+C:\laragon\www\synticorex\database\migrations\2026_03_16_014918_add_featured_image_to_blog_posts_table.php
+C:\laragon\www\synticorex\database\migrations\2026_04_05_000000_fix_sections_order_for_plan2_testimonials.php
+C:\laragon\www\synticorex\database\migrations\2026_04_06_000000_add_role_to_users_table.php
+C:\laragon\www\synticorex\database\schema\mysql-schema.sql
+C:\laragon\www\synticorex\database\scripts\inject_premium_products.php
+C:\laragon\www\synticorex\database\seeders\AiDocSeeder.php
+C:\laragon\www\synticorex\database\seeders\BlogSeeder.php
+C:\laragon\www\synticorex\database\seeders\CloneTortasToSintiburguerSeeder.php
+C:\laragon\www\synticorex\database\seeders\ColorPalettesSeeder.php
+C:\laragon\www\synticorex\database\seeders\DatabaseSeeder.php
+C:\laragon\www\synticorex\database\seeders\DemoDataSeeder.php
+C:\laragon\www\synticorex\database\seeders\DemosCustomizationSeeder.php
+C:\laragon\www\synticorex\database\seeders\DemoTenantsSeeder.php
+C:\laragon\www\synticorex\database\seeders\DollarRatesSeeder.php
+C:\laragon\www\synticorex\database\seeders\DonazProductsSeeder.php
+C:\laragon\www\synticorex\database\seeders\FixDemoSettingsSeeder.php
+C:\laragon\www\synticorex\database\seeders\GenerateDonazMenuJson.php
+C:\laragon\www\synticorex\database\seeders\GenerateSintiburguerMenuJson.php
+C:\laragon\www\synticorex\database\seeders\LandingSectionSeeder.php
+C:\laragon\www\synticorex\database\seeders\PlansSeeder.php
+C:\laragon\www\synticorex\database\seeders\SintiburguerHeroImagesSeeder.php
+C:\laragon\www\synticorex\database\seeders\SintiburguerHeroSeeder.php
+C:\laragon\www\synticorex\database\seeders\SyntiBurguerContentSeeder.php
+C:\laragon\www\synticorex\database\seeders\SyntiBurguerProductsSeeder.php
+C:\laragon\www\synticorex\database\seeders\TecnoFixServicesSeeder.php
+C:\laragon\www\synticorex\database\seeders\TestingSeeder.php
+C:\laragon\www\synticorex\database\seeders\TortasDemoSeeder.php
+C:\laragon\www\synticorex\database\seeders\UrbanStoreProductsSeeder.php

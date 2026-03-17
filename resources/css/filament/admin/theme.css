@@ -1,171 +1,134 @@
-@import '../../../../vendor/filament/filament/resources/css/theme.css';
+﻿@import '../../../../vendor/filament/filament/resources/css/theme.css';
 
-/* ── SIDEBAR ─────────────────────────── */
+/* ══════════════════════════════════════════════════════
+   SIDEBAR — siempre dark navy independiente del modo
+══════════════════════════════════════════════════════ */
 .fi-sidebar {
     background-color: #0F172A !important;
     border-right: 1px solid #1E293B !important;
 }
 
 .fi-sidebar-item-label {
-    color: #E2E8F0 !important;
+    color: #CBD5E1 !important;
     font-size: 0.875rem !important;
     font-weight: 500 !important;
     opacity: 1 !important;
 }
 
 .fi-sidebar-group-label {
-    color: #94A3B8 !important;
-    font-size: 0.65rem !important;
+    color: #64748B !important;
+    font-size: 0.625rem !important;
     letter-spacing: 0.1em !important;
     text-transform: uppercase !important;
     font-weight: 700 !important;
     opacity: 1 !important;
 }
 
-.fi-sidebar-item-button:hover .fi-sidebar-item-label {
-    color: #FFFFFF !important;
+.fi-sidebar-item-btn:hover .fi-sidebar-item-label {
+    color: #F1F5F9 !important;
 }
 
-.fi-sidebar-item-button[aria-current="page"] {
-    background: linear-gradient(90deg, #4A80E420, #4A80E405) !important;
+.fi-sidebar-item.fi-active > .fi-sidebar-item-btn {
+    background: rgba(74, 128, 228, 0.12) !important;
     border-left: 3px solid #4A80E4 !important;
+    border-radius: 0 !important;
 }
 
-.fi-sidebar-item-button[aria-current="page"] .fi-sidebar-item-label {
-    color: #4A80E4 !important;
+.fi-sidebar-item.fi-active > .fi-sidebar-item-btn .fi-sidebar-item-label {
+    color: #7BABF0 !important;
     font-weight: 600 !important;
 }
 
-.fi-sidebar-item-icon {
-    color: #94A3B8 !important;
+.fi-sidebar-item-btn > .fi-icon {
+    color: #475569 !important;
     opacity: 1 !important;
 }
 
-.fi-sidebar-item-button[aria-current="page"] .fi-sidebar-item-icon {
-    color: #4A80E4 !important;
+.fi-sidebar-item.fi-active > .fi-sidebar-item-btn > .fi-icon {
+    color: #7BABF0 !important;
 }
 
-/* Badge navegación */
 .fi-sidebar-item-badge {
     background-color: #4A80E4 !important;
-    color: white !important;
-    font-size: 0.65rem !important;
+    color: #FFFFFF !important;
+    font-size: 0.6rem !important;
     font-weight: 700 !important;
 }
 
-/* ── TOPBAR ──────────────────────────── */
+/* ══════════════════════════════════════════════════════
+   TOPBAR — siempre dark navy
+══════════════════════════════════════════════════════ */
 .fi-topbar {
     background-color: #0F172A !important;
     border-bottom: 1px solid #1E293B !important;
 }
 
-.fi-topbar-breadcrumbs {
-    color: #94A3B8 !important;
-}
-
-/* ── BRAND ───────────────────────────── */
-.fi-brand-name {
-    background: linear-gradient(135deg, #4A80E4, #818CF8) !important;
+/* ══════════════════════════════════════════════════════
+   LOGO / BRAND
+══════════════════════════════════════════════════════ */
+.fi-logo {
+    background: linear-gradient(135deg, #7BABF0, #818CF8) !important;
     -webkit-background-clip: text !important;
     -webkit-text-fill-color: transparent !important;
     font-weight: 800 !important;
-    font-size: 1.1rem !important;
+    font-size: 1.05rem !important;
+    letter-spacing: -0.02em !important;
 }
 
-/* ── CONTENIDO PRINCIPAL ─────────────── */
-.fi-main {
-    background-color: #F1F5F9 !important;
+/* ══════════════════════════════════════════════════════
+   HEADING DE PAGINA
+══════════════════════════════════════════════════════ */
+.fi-header-heading {
+    font-weight: 700 !important;
+    font-size: 1.2rem !important;
 }
 
-.fi-page-header-heading {
-    color: #0F172A !important;
-    font-weight: 800 !important;
-    font-size: 1.5rem !important;
-}
-
-/* ── STATS CARDS ─────────────────────── */
-.fi-stats-overview-stat {
-    border-radius: 0.75rem !important;
-    border: 1px solid #E2E8F0 !important;
-    transition: transform 0.2s ease, box-shadow 0.2s ease !important;
-    background: white !important;
-}
-
-.fi-stats-overview-stat:hover {
-    transform: translateY(-3px) !important;
-    box-shadow: 0 12px 30px rgba(74,128,228,0.12) !important;
-}
-
-.fi-stats-overview-stat-label {
-    color: #64748B !important;
-    font-size: 0.8rem !important;
-    font-weight: 500 !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.05em !important;
-}
-
-.fi-stats-overview-stat-value {
-    color: #0F172A !important;
-    font-size: 2rem !important;
-    font-weight: 800 !important;
-}
-
-/* ── CHARTS ──────────────────────────── */
-.fi-widget {
-    border-radius: 0.75rem !important;
-    border: 1px solid #E2E8F0 !important;
-    background: white !important;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
-}
-
-/* ── TABLES ──────────────────────────── */
-.fi-ta-header-cell-label {
-    color: #374151 !important;
-    font-weight: 600 !important;
-    font-size: 0.75rem !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.05em !important;
-}
-
-.fi-ta-cell {
-    color: #1E293B !important;
-}
-
-/* ── BUTTONS ─────────────────────────── */
-.fi-btn-primary {
-    background: linear-gradient(135deg, #4A80E4, #6366F1) !important;
-    border: none !important;
-    font-weight: 600 !important;
-    transition: opacity 0.2s, transform 0.1s !important;
-}
-
-.fi-btn-primary:hover {
-    opacity: 0.9 !important;
-    transform: translateY(-1px) !important;
-}
-
-/* ── WIDGETS ─────────────────────────── */
-/* Forzar fondo blanco en área de contenido */
-.fi-main-ctn {
-    background-color: #F1F5F9 !important;
-}
-
-/* Widgets fondo blanco explícito */
+/* ══════════════════════════════════════════════════════
+   STATS OVERVIEW — solo tamanios/hover, sin override de color
+   Filament maneja fondo/color segun el modo activo
+══════════════════════════════════════════════════════ */
 .fi-wi-stats-overview-stat {
-    background-color: #FFFFFF !important;
-    border: 1px solid #E2E8F0 !important;
+    border-radius: 0.5rem !important;
+    transition: transform 0.15s ease, box-shadow 0.15s ease !important;
 }
 
-.fi-wi-stats-overview-stat-value {
-    color: #0F172A !important;
+.fi-wi-stats-overview-stat:hover {
+    transform: translateY(-2px) !important;
 }
 
 .fi-wi-stats-overview-stat-label {
-    color: #64748B !important;
+    font-size: 0.7rem !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.07em !important;
 }
 
-/* Chart widgets */
+.fi-wi-stats-overview-stat-value {
+    font-size: 1.6rem !important;
+    font-weight: 700 !important;
+    line-height: 1.1 !important;
+}
+
+/* ══════════════════════════════════════════════════════
+   CHART WIDGETS — solo radio, sin override de color
+══════════════════════════════════════════════════════ */
 .fi-wi-chart {
-    background-color: #FFFFFF !important;
-    border: 1px solid #E2E8F0 !important;
+    border-radius: 0.5rem !important;
+}
+
+/* ══════════════════════════════════════════════════════
+   TABLE HEADERS — solo tipografia
+══════════════════════════════════════════════════════ */
+.fi-ta-header-cell-label {
+    font-weight: 600 !important;
+    font-size: 0.7rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.06em !important;
+}
+
+/* ══════════════════════════════════════════════════════
+   BUTTONS — solo peso de fuente
+══════════════════════════════════════════════════════ */
+.fi-btn.fi-color-primary {
+    font-weight: 600 !important;
 }

@@ -59,6 +59,9 @@
                 Menú con fotos, precios actualizados y pedido por WhatsApp.<br class="hidden sm:block">
                 Tú nos dices qué ofreces. Nosotros hacemos el resto.
             </p>
+            <p class="mt-2 text-sm text-muted-foreground-1">
+                Menú digital con pedido directo a WhatsApp. Autogestionable desde tu teléfono. BCV automático incluido.
+            </p>
             <div class="mt-8 flex flex-wrap justify-center gap-3">
                 <a class="py-3 px-5 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg bg-primary border border-primary-line text-primary-foreground hover:bg-primary-hover focus:outline-hidden focus:bg-primary-focus disabled:opacity-50 disabled:pointer-events-none" href="{{ route('onboarding.food') }}">
                     Empezar gratis 15 días
@@ -97,7 +100,7 @@
             <ul class="mt-7 space-y-2.5 text-sm">
                 <li class="flex gap-x-2">
                     <svg class="shrink-0 mt-0.5 size-4 text-primary" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                    <span class="text-foreground">Hasta 20 platos</span>
+                    <span class="text-foreground">Hasta 50 platos</span>
                 </li>
                 <li class="flex gap-x-2">
                     <svg class="shrink-0 mt-0.5 size-4 text-primary" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
@@ -128,7 +131,7 @@
             <ul class="mt-7 space-y-2.5 text-sm">
                 <li class="flex gap-x-2">
                     <svg class="shrink-0 mt-0.5 size-4 text-primary" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                    <span class="text-foreground">Hasta 40 platos</span>
+                    <span class="text-foreground">Hasta 100 platos</span>
                 </li>
                 <li class="flex gap-x-2">
                     <svg class="shrink-0 mt-0.5 size-4 text-primary" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
@@ -158,19 +161,27 @@
             <ul class="mt-7 space-y-2.5 text-sm">
                 <li class="flex gap-x-2">
                     <svg class="shrink-0 mt-0.5 size-4 text-primary" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                    <span class="text-foreground">Platos ilimitados</span>
+                    <span class="text-foreground">Hasta 150 platos &middot; 18 fotos de categoría</span>
                 </li>
                 <li class="flex gap-x-2">
                     <svg class="shrink-0 mt-0.5 size-4 text-primary" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                    <span class="text-foreground">QR para mesa y delivery</span>
+                    <span class="text-foreground">Pedido Rápido → WhatsApp (acumula ítems, envía al instante)</span>
                 </li>
                 <li class="flex gap-x-2">
                     <svg class="shrink-0 mt-0.5 size-4 text-primary" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                    <span class="text-foreground">Analytics de platos</span>
+                    <span class="text-foreground">Comandas con número SF-XXXXXX rastreable</span>
                 </li>
                 <li class="flex gap-x-2">
                     <svg class="shrink-0 mt-0.5 size-4 text-primary" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                    <span class="text-foreground">Soporte prioritario 24h</span>
+                    <span class="text-foreground">Modalidades: comer aquí · para llevar · delivery</span>
+                </li>
+                <li class="flex gap-x-2">
+                    <svg class="shrink-0 mt-0.5 size-4 text-primary" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span class="text-foreground">Analytics completo de platos y visitas</span>
+                </li>
+                <li class="flex gap-x-2">
+                    <svg class="shrink-0 mt-0.5 size-4 text-primary" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span class="text-foreground">BCV automático · badges por ítem</span>
                 </li>
             </ul>
 
@@ -230,20 +241,17 @@
                 </li>
                 <li class="col-span-1 py-1.5 lg:py-3 border-b border-line-2">
                     <div class="grid grid-cols-2 md:grid-cols-6 lg:block">
-                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">BÁSICO</span>
-                        <span class="text-sm text-foreground">20</span>
+                        <span class="text-sm text-foreground">50</span>
                     </div>
                 </li>
                 <li class="col-span-1 py-1.5 lg:py-3 border-b border-line-2">
                     <div class="grid grid-cols-2 md:grid-cols-6 lg:block">
-                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">SEMESTRAL</span>
-                        <span class="text-sm text-foreground">40</span>
+                        <span class="text-sm text-foreground">100</span>
                     </div>
                 </li>
                 <li class="col-span-1 py-1.5 lg:py-3 border-b border-line-2">
                     <div class="grid grid-cols-2 md:grid-cols-6 lg:block">
-                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">ANUAL</span>
-                        <span class="text-sm text-foreground">Ilimitados</span>
+                        <span class="text-sm text-foreground">150</span>
                     </div>
                 </li>
             </ul>

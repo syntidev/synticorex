@@ -1,0 +1,474 @@
+ESTRUCTURA DEL PROYECTO 
+================================================ 
+Fecha: lun 16/03/2026 16:04:44,54 
+Ruta: C:\laragon\www\synticorex\app 
+================================================ 
+ 
+[ARBOL DE DIRECTORIOS] 
+ 
+Listado de rutas de carpetas para el volumen OS
+El número de serie del volumen es 92E8-531C
+C:.
+|   estructura_proyecto.txt
+|   generar.bat
+|   
++---Console
+|   \---Commands
+|           CheckSections.php
+|           CheckTenantExpiry.php
+|           FixDemoTenants.php
+|           IndexDocs.php
+|           ProcessDomainExpirations.php
+|           RegenerateProductImages.php
+|           RenameImagesToStandardPattern.php
+|           RunAlertChecks.php
+|           SeedTesting.php
+|           SendAnalyticsReports.php
+|           SuspendExpiredTenants.php
+|           UpdateDollarRate.php
+|           VerifyDomainDns.php
+|           
++---Filament
+|   |   generar.bat
+|   |   
+|   +---Pages
+|   |       AdminToolsPage.php
+|   |       CompanySettingsPage.php
+|   |       Dashboard.php
+|   |       MailSettingsPage.php
+|   |       PlatformAnalyticsPage.php
+|   |       SystemHealthPage.php
+|   |       
+|   +---Resources
+|   |   |   BlogPostResource.php
+|   |   |   DomainResource.php
+|   |   |   LandingSectionResource.php
+|   |   |   MediaResource.php
+|   |   |   SupportTicketResource.php
+|   |   |   
+|   |   +---BlogPostResource
+|   |   |   \---Pages
+|   |   |           CreateBlogPost.php
+|   |   |           EditBlogPost.php
+|   |   |           ListBlogPosts.php
+|   |   |           
+|   |   +---DomainResource
+|   |   |   +---Pages
+|   |   |   |       CreateDomain.php
+|   |   |   |       EditDomain.php
+|   |   |   |       ListDomains.php
+|   |   |   |       
+|   |   |   \---RelationManagers
+|   |   |           EventsRelationManager.php
+|   |   |           
+|   |   +---Invoices
+|   |   |   |   InvoiceResource.php
+|   |   |   |   
+|   |   |   \---Pages
+|   |   |           ListInvoices.php
+|   |   |           ViewInvoice.php
+|   |   |           
+|   |   +---LandingSectionResource
+|   |   |   \---Pages
+|   |   |           EditLandingSection.php
+|   |   |           ListLandingSections.php
+|   |   |           
+|   |   +---MediaResource
+|   |   |   \---Pages
+|   |   |           ListMedia.php
+|   |   |           
+|   |   +---Plans
+|   |   |   |   PlanResource.php
+|   |   |   |   
+|   |   |   +---Pages
+|   |   |   |       EditPlan.php
+|   |   |   |       ListPlans.php
+|   |   |   |       
+|   |   |   \---Tables
+|   |   |           PlansTable.php
+|   |   |           
+|   |   +---SupportTicketResource
+|   |   |   \---Pages
+|   |   |           ListSupportTickets.php
+|   |   |           ViewSupportTicket.php
+|   |   |           
+|   |   +---Tenants
+|   |   |   |   TenantResource.php
+|   |   |   |   
+|   |   |   +---CopilotTools
+|   |   |   |       ListTenantsTool.php
+|   |   |   |       RestoreTenantTool.php
+|   |   |   |       SearchTenantsTool.php
+|   |   |   |       SuspendTenantTool.php
+|   |   |   |       
+|   |   |   +---Pages
+|   |   |   |       CreateTenant.php
+|   |   |   |       EditTenant.php
+|   |   |   |       ListTenants.php
+|   |   |   |       
+|   |   |   +---Schemas
+|   |   |   |       TenantForm.php
+|   |   |   |       
+|   |   |   \---Tables
+|   |   |           TenantsTable.php
+|   |   |           
+|   |   \---Users
+|   |       |   UserResource.php
+|   |       |   
+|   |       +---Pages
+|   |       |       EditUser.php
+|   |       |       ListUsers.php
+|   |       |       
+|   |       \---Tables
+|   |               UsersTable.php
+|   |               
+|   \---Widgets
+|           BlueprintDonutChart.php
+|           CurrencyRatesWidget.php
+|           LatestTenantsWidget.php
+|           RevenueLineChart.php
+|           StatsOverviewWidget.php
+|           
++---Http
+|   +---Controllers
+|   |   |   AnalyticsController.php
+|   |   |   BillingController.php
+|   |   |   CheckoutController.php
+|   |   |   Controller.php
+|   |   |   DashboardController.php
+|   |   |   ImageUploadController.php
+|   |   |   MarketingController.php
+|   |   |   old_SyntiHelpController.php
+|   |   |   OnboardingController.php
+|   |   |   OrdersController.php
+|   |   |   ProductController.php
+|   |   |   ProfileController.php
+|   |   |   QRTrackingController.php
+|   |   |   ServiceController.php
+|   |   |   SyntiHelpController.php
+|   |   |   TenantController.php
+|   |   |   TenantRendererController.php
+|   |   |   TenantsController.php
+|   |   |   
+|   |   +---Admin
+|   |   |       AdminToolsController.php
+|   |   |       HealthCheckController.php
+|   |   |       
+|   |   +---Auth
+|   |   |       AuthenticatedSessionController.php
+|   |   |       ConfirmablePasswordController.php
+|   |   |       EmailVerificationNotificationController.php
+|   |   |       EmailVerificationPromptController.php
+|   |   |       NewPasswordController.php
+|   |   |       PasswordController.php
+|   |   |       PasswordResetLinkController.php
+|   |   |       RegisteredUserController.php
+|   |   |       SocialAuthController.php
+|   |   |       VerifyEmailController.php
+|   |   |       
+|   |   \---Food
+|   |           CategoriesController.php
+|   |           ComandaController.php
+|   |           ItemsController.php
+|   |           MenuController.php
+|   |           
+|   +---Middleware
+|   |       ContentSecurityPolicy.php
+|   |       EnsureAdmin.php
+|   |       EnsureTenantOwnership.php
+|   |       IdentifyTenant.php
+|   |       
+|   \---Requests
+|       |   ProfileUpdateRequest.php
+|       |   
+|       \---Auth
+|               LoginRequest.php
+|               
++---Models
+|       AiChatLog.php
+|       AiDoc.php
+|       AnalyticsEvent.php
+|       BlogCategory.php
+|       BlogPost.php
+|       ColorPalette.php
+|       CompanySetting.php
+|       DollarRate.php
+|       Domain.php
+|       DomainEvent.php
+|       Invoice.php
+|       LandingSection.php
+|       MailSetting.php
+|       MediaFile.php
+|       Plan.php
+|       Product.php
+|       ProductImage.php
+|       Service.php
+|       SupportTicket.php
+|       Tenant.php
+|       TenantBranch.php
+|       TenantCustomization.php
+|       User.php
+|       
++---Notifications
+|       AlertNotification.php
+|       DomainExpiringNotification.php
+|       NewTicketNotification.php
+|       PaymentApprovedNotification.php
+|       PaymentRejectedNotification.php
+|       TenantAnalyticsReportNotification.php
+|       TicketAnsweredNotification.php
+|       
++---Observers
+|       SupportTicketObserver.php
+|       
++---Providers
+|   |   AppServiceProvider.php
+|   |   ViewServiceProvider.php
+|   |   
+|   \---Filament
+|           AdminPanelProvider.php
+|           
++---Services
+|   |   BusinessHoursService.php
+|   |   ComandaService.php
+|   |   DollarRateService.php
+|   |   HealthCheckService.php
+|   |   ImageUploadService.php
+|   |   MenuService.php
+|   |   OrderService.php
+|   |   PlatformAnalyticsService.php
+|   |   PrelineThemeService.php
+|   |   ProductImageGeneratorService.php
+|   |   QRService.php
+|   |   ServiceImageGeneratorService.php
+|   |   TenantBootstrapCat.php
+|   |   TenantBootstrapFood.php
+|   |   WhatsappMessageBuilder.php
+|   |   
+|   \---AI
+|           AIServiceSwitcher.php
+|           BytezProvider.php
+|           GeminiProvider.php
+|           
++---Traits
+|       HasBlueprint.php
+|       
+\---View
+    \---Components
+            AppLayout.php
+            FeatureGate.php
+            GuestLayout.php
+            
+ 
+================================================ 
+[LISTA COMPLETA DE RUTAS] 
+================================================ 
+C:\laragon\www\synticorex\app\Console
+C:\laragon\www\synticorex\app\estructura_proyecto.txt
+C:\laragon\www\synticorex\app\Filament
+C:\laragon\www\synticorex\app\generar.bat
+C:\laragon\www\synticorex\app\Http
+C:\laragon\www\synticorex\app\Models
+C:\laragon\www\synticorex\app\Notifications
+C:\laragon\www\synticorex\app\Observers
+C:\laragon\www\synticorex\app\Providers
+C:\laragon\www\synticorex\app\Services
+C:\laragon\www\synticorex\app\Traits
+C:\laragon\www\synticorex\app\View
+C:\laragon\www\synticorex\app\Console\Commands
+C:\laragon\www\synticorex\app\Console\Commands\CheckSections.php
+C:\laragon\www\synticorex\app\Console\Commands\CheckTenantExpiry.php
+C:\laragon\www\synticorex\app\Console\Commands\FixDemoTenants.php
+C:\laragon\www\synticorex\app\Console\Commands\IndexDocs.php
+C:\laragon\www\synticorex\app\Console\Commands\ProcessDomainExpirations.php
+C:\laragon\www\synticorex\app\Console\Commands\RegenerateProductImages.php
+C:\laragon\www\synticorex\app\Console\Commands\RenameImagesToStandardPattern.php
+C:\laragon\www\synticorex\app\Console\Commands\RunAlertChecks.php
+C:\laragon\www\synticorex\app\Console\Commands\SeedTesting.php
+C:\laragon\www\synticorex\app\Console\Commands\SendAnalyticsReports.php
+C:\laragon\www\synticorex\app\Console\Commands\SuspendExpiredTenants.php
+C:\laragon\www\synticorex\app\Console\Commands\UpdateDollarRate.php
+C:\laragon\www\synticorex\app\Console\Commands\VerifyDomainDns.php
+C:\laragon\www\synticorex\app\Filament\generar.bat
+C:\laragon\www\synticorex\app\Filament\Pages
+C:\laragon\www\synticorex\app\Filament\Resources
+C:\laragon\www\synticorex\app\Filament\Widgets
+C:\laragon\www\synticorex\app\Filament\Pages\AdminToolsPage.php
+C:\laragon\www\synticorex\app\Filament\Pages\CompanySettingsPage.php
+C:\laragon\www\synticorex\app\Filament\Pages\Dashboard.php
+C:\laragon\www\synticorex\app\Filament\Pages\MailSettingsPage.php
+C:\laragon\www\synticorex\app\Filament\Pages\PlatformAnalyticsPage.php
+C:\laragon\www\synticorex\app\Filament\Pages\SystemHealthPage.php
+C:\laragon\www\synticorex\app\Filament\Resources\BlogPostResource
+C:\laragon\www\synticorex\app\Filament\Resources\BlogPostResource.php
+C:\laragon\www\synticorex\app\Filament\Resources\DomainResource
+C:\laragon\www\synticorex\app\Filament\Resources\DomainResource.php
+C:\laragon\www\synticorex\app\Filament\Resources\Invoices
+C:\laragon\www\synticorex\app\Filament\Resources\LandingSectionResource
+C:\laragon\www\synticorex\app\Filament\Resources\LandingSectionResource.php
+C:\laragon\www\synticorex\app\Filament\Resources\MediaResource
+C:\laragon\www\synticorex\app\Filament\Resources\MediaResource.php
+C:\laragon\www\synticorex\app\Filament\Resources\Plans
+C:\laragon\www\synticorex\app\Filament\Resources\SupportTicketResource
+C:\laragon\www\synticorex\app\Filament\Resources\SupportTicketResource.php
+C:\laragon\www\synticorex\app\Filament\Resources\Tenants
+C:\laragon\www\synticorex\app\Filament\Resources\Users
+C:\laragon\www\synticorex\app\Filament\Resources\BlogPostResource\Pages
+C:\laragon\www\synticorex\app\Filament\Resources\BlogPostResource\Pages\CreateBlogPost.php
+C:\laragon\www\synticorex\app\Filament\Resources\BlogPostResource\Pages\EditBlogPost.php
+C:\laragon\www\synticorex\app\Filament\Resources\BlogPostResource\Pages\ListBlogPosts.php
+C:\laragon\www\synticorex\app\Filament\Resources\DomainResource\Pages
+C:\laragon\www\synticorex\app\Filament\Resources\DomainResource\RelationManagers
+C:\laragon\www\synticorex\app\Filament\Resources\DomainResource\Pages\CreateDomain.php
+C:\laragon\www\synticorex\app\Filament\Resources\DomainResource\Pages\EditDomain.php
+C:\laragon\www\synticorex\app\Filament\Resources\DomainResource\Pages\ListDomains.php
+C:\laragon\www\synticorex\app\Filament\Resources\DomainResource\RelationManagers\EventsRelationManager.php
+C:\laragon\www\synticorex\app\Filament\Resources\Invoices\InvoiceResource.php
+C:\laragon\www\synticorex\app\Filament\Resources\Invoices\Pages
+C:\laragon\www\synticorex\app\Filament\Resources\Invoices\Pages\ListInvoices.php
+C:\laragon\www\synticorex\app\Filament\Resources\Invoices\Pages\ViewInvoice.php
+C:\laragon\www\synticorex\app\Filament\Resources\LandingSectionResource\Pages
+C:\laragon\www\synticorex\app\Filament\Resources\LandingSectionResource\Pages\EditLandingSection.php
+C:\laragon\www\synticorex\app\Filament\Resources\LandingSectionResource\Pages\ListLandingSections.php
+C:\laragon\www\synticorex\app\Filament\Resources\MediaResource\Pages
+C:\laragon\www\synticorex\app\Filament\Resources\MediaResource\Pages\ListMedia.php
+C:\laragon\www\synticorex\app\Filament\Resources\Plans\Pages
+C:\laragon\www\synticorex\app\Filament\Resources\Plans\PlanResource.php
+C:\laragon\www\synticorex\app\Filament\Resources\Plans\Tables
+C:\laragon\www\synticorex\app\Filament\Resources\Plans\Pages\EditPlan.php
+C:\laragon\www\synticorex\app\Filament\Resources\Plans\Pages\ListPlans.php
+C:\laragon\www\synticorex\app\Filament\Resources\Plans\Tables\PlansTable.php
+C:\laragon\www\synticorex\app\Filament\Resources\SupportTicketResource\Pages
+C:\laragon\www\synticorex\app\Filament\Resources\SupportTicketResource\Pages\ListSupportTickets.php
+C:\laragon\www\synticorex\app\Filament\Resources\SupportTicketResource\Pages\ViewSupportTicket.php
+C:\laragon\www\synticorex\app\Filament\Resources\Tenants\CopilotTools
+C:\laragon\www\synticorex\app\Filament\Resources\Tenants\Pages
+C:\laragon\www\synticorex\app\Filament\Resources\Tenants\Schemas
+C:\laragon\www\synticorex\app\Filament\Resources\Tenants\Tables
+C:\laragon\www\synticorex\app\Filament\Resources\Tenants\TenantResource.php
+C:\laragon\www\synticorex\app\Filament\Resources\Tenants\CopilotTools\ListTenantsTool.php
+C:\laragon\www\synticorex\app\Filament\Resources\Tenants\CopilotTools\RestoreTenantTool.php
+C:\laragon\www\synticorex\app\Filament\Resources\Tenants\CopilotTools\SearchTenantsTool.php
+C:\laragon\www\synticorex\app\Filament\Resources\Tenants\CopilotTools\SuspendTenantTool.php
+C:\laragon\www\synticorex\app\Filament\Resources\Tenants\Pages\CreateTenant.php
+C:\laragon\www\synticorex\app\Filament\Resources\Tenants\Pages\EditTenant.php
+C:\laragon\www\synticorex\app\Filament\Resources\Tenants\Pages\ListTenants.php
+C:\laragon\www\synticorex\app\Filament\Resources\Tenants\Schemas\TenantForm.php
+C:\laragon\www\synticorex\app\Filament\Resources\Tenants\Tables\TenantsTable.php
+C:\laragon\www\synticorex\app\Filament\Resources\Users\Pages
+C:\laragon\www\synticorex\app\Filament\Resources\Users\Tables
+C:\laragon\www\synticorex\app\Filament\Resources\Users\UserResource.php
+C:\laragon\www\synticorex\app\Filament\Resources\Users\Pages\EditUser.php
+C:\laragon\www\synticorex\app\Filament\Resources\Users\Pages\ListUsers.php
+C:\laragon\www\synticorex\app\Filament\Resources\Users\Tables\UsersTable.php
+C:\laragon\www\synticorex\app\Filament\Widgets\BlueprintDonutChart.php
+C:\laragon\www\synticorex\app\Filament\Widgets\CurrencyRatesWidget.php
+C:\laragon\www\synticorex\app\Filament\Widgets\LatestTenantsWidget.php
+C:\laragon\www\synticorex\app\Filament\Widgets\RevenueLineChart.php
+C:\laragon\www\synticorex\app\Filament\Widgets\StatsOverviewWidget.php
+C:\laragon\www\synticorex\app\Http\Controllers
+C:\laragon\www\synticorex\app\Http\Middleware
+C:\laragon\www\synticorex\app\Http\Requests
+C:\laragon\www\synticorex\app\Http\Controllers\Admin
+C:\laragon\www\synticorex\app\Http\Controllers\AnalyticsController.php
+C:\laragon\www\synticorex\app\Http\Controllers\Auth
+C:\laragon\www\synticorex\app\Http\Controllers\BillingController.php
+C:\laragon\www\synticorex\app\Http\Controllers\CheckoutController.php
+C:\laragon\www\synticorex\app\Http\Controllers\Controller.php
+C:\laragon\www\synticorex\app\Http\Controllers\DashboardController.php
+C:\laragon\www\synticorex\app\Http\Controllers\Food
+C:\laragon\www\synticorex\app\Http\Controllers\ImageUploadController.php
+C:\laragon\www\synticorex\app\Http\Controllers\MarketingController.php
+C:\laragon\www\synticorex\app\Http\Controllers\old_SyntiHelpController.php
+C:\laragon\www\synticorex\app\Http\Controllers\OnboardingController.php
+C:\laragon\www\synticorex\app\Http\Controllers\OrdersController.php
+C:\laragon\www\synticorex\app\Http\Controllers\ProductController.php
+C:\laragon\www\synticorex\app\Http\Controllers\ProfileController.php
+C:\laragon\www\synticorex\app\Http\Controllers\QRTrackingController.php
+C:\laragon\www\synticorex\app\Http\Controllers\ServiceController.php
+C:\laragon\www\synticorex\app\Http\Controllers\SyntiHelpController.php
+C:\laragon\www\synticorex\app\Http\Controllers\TenantController.php
+C:\laragon\www\synticorex\app\Http\Controllers\TenantRendererController.php
+C:\laragon\www\synticorex\app\Http\Controllers\TenantsController.php
+C:\laragon\www\synticorex\app\Http\Controllers\Admin\AdminToolsController.php
+C:\laragon\www\synticorex\app\Http\Controllers\Admin\HealthCheckController.php
+C:\laragon\www\synticorex\app\Http\Controllers\Auth\AuthenticatedSessionController.php
+C:\laragon\www\synticorex\app\Http\Controllers\Auth\ConfirmablePasswordController.php
+C:\laragon\www\synticorex\app\Http\Controllers\Auth\EmailVerificationNotificationController.php
+C:\laragon\www\synticorex\app\Http\Controllers\Auth\EmailVerificationPromptController.php
+C:\laragon\www\synticorex\app\Http\Controllers\Auth\NewPasswordController.php
+C:\laragon\www\synticorex\app\Http\Controllers\Auth\PasswordController.php
+C:\laragon\www\synticorex\app\Http\Controllers\Auth\PasswordResetLinkController.php
+C:\laragon\www\synticorex\app\Http\Controllers\Auth\RegisteredUserController.php
+C:\laragon\www\synticorex\app\Http\Controllers\Auth\SocialAuthController.php
+C:\laragon\www\synticorex\app\Http\Controllers\Auth\VerifyEmailController.php
+C:\laragon\www\synticorex\app\Http\Controllers\Food\CategoriesController.php
+C:\laragon\www\synticorex\app\Http\Controllers\Food\ComandaController.php
+C:\laragon\www\synticorex\app\Http\Controllers\Food\ItemsController.php
+C:\laragon\www\synticorex\app\Http\Controllers\Food\MenuController.php
+C:\laragon\www\synticorex\app\Http\Middleware\ContentSecurityPolicy.php
+C:\laragon\www\synticorex\app\Http\Middleware\EnsureAdmin.php
+C:\laragon\www\synticorex\app\Http\Middleware\EnsureTenantOwnership.php
+C:\laragon\www\synticorex\app\Http\Middleware\IdentifyTenant.php
+C:\laragon\www\synticorex\app\Http\Requests\Auth
+C:\laragon\www\synticorex\app\Http\Requests\ProfileUpdateRequest.php
+C:\laragon\www\synticorex\app\Http\Requests\Auth\LoginRequest.php
+C:\laragon\www\synticorex\app\Models\AiChatLog.php
+C:\laragon\www\synticorex\app\Models\AiDoc.php
+C:\laragon\www\synticorex\app\Models\AnalyticsEvent.php
+C:\laragon\www\synticorex\app\Models\BlogCategory.php
+C:\laragon\www\synticorex\app\Models\BlogPost.php
+C:\laragon\www\synticorex\app\Models\ColorPalette.php
+C:\laragon\www\synticorex\app\Models\CompanySetting.php
+C:\laragon\www\synticorex\app\Models\DollarRate.php
+C:\laragon\www\synticorex\app\Models\Domain.php
+C:\laragon\www\synticorex\app\Models\DomainEvent.php
+C:\laragon\www\synticorex\app\Models\Invoice.php
+C:\laragon\www\synticorex\app\Models\LandingSection.php
+C:\laragon\www\synticorex\app\Models\MailSetting.php
+C:\laragon\www\synticorex\app\Models\MediaFile.php
+C:\laragon\www\synticorex\app\Models\Plan.php
+C:\laragon\www\synticorex\app\Models\Product.php
+C:\laragon\www\synticorex\app\Models\ProductImage.php
+C:\laragon\www\synticorex\app\Models\Service.php
+C:\laragon\www\synticorex\app\Models\SupportTicket.php
+C:\laragon\www\synticorex\app\Models\Tenant.php
+C:\laragon\www\synticorex\app\Models\TenantBranch.php
+C:\laragon\www\synticorex\app\Models\TenantCustomization.php
+C:\laragon\www\synticorex\app\Models\User.php
+C:\laragon\www\synticorex\app\Notifications\AlertNotification.php
+C:\laragon\www\synticorex\app\Notifications\DomainExpiringNotification.php
+C:\laragon\www\synticorex\app\Notifications\NewTicketNotification.php
+C:\laragon\www\synticorex\app\Notifications\PaymentApprovedNotification.php
+C:\laragon\www\synticorex\app\Notifications\PaymentRejectedNotification.php
+C:\laragon\www\synticorex\app\Notifications\TenantAnalyticsReportNotification.php
+C:\laragon\www\synticorex\app\Notifications\TicketAnsweredNotification.php
+C:\laragon\www\synticorex\app\Observers\SupportTicketObserver.php
+C:\laragon\www\synticorex\app\Providers\AppServiceProvider.php
+C:\laragon\www\synticorex\app\Providers\Filament
+C:\laragon\www\synticorex\app\Providers\ViewServiceProvider.php
+C:\laragon\www\synticorex\app\Providers\Filament\AdminPanelProvider.php
+C:\laragon\www\synticorex\app\Services\AI
+C:\laragon\www\synticorex\app\Services\BusinessHoursService.php
+C:\laragon\www\synticorex\app\Services\ComandaService.php
+C:\laragon\www\synticorex\app\Services\DollarRateService.php
+C:\laragon\www\synticorex\app\Services\HealthCheckService.php
+C:\laragon\www\synticorex\app\Services\ImageUploadService.php
+C:\laragon\www\synticorex\app\Services\MenuService.php
+C:\laragon\www\synticorex\app\Services\OrderService.php
+C:\laragon\www\synticorex\app\Services\PlatformAnalyticsService.php
+C:\laragon\www\synticorex\app\Services\PrelineThemeService.php
+C:\laragon\www\synticorex\app\Services\ProductImageGeneratorService.php
+C:\laragon\www\synticorex\app\Services\QRService.php
+C:\laragon\www\synticorex\app\Services\ServiceImageGeneratorService.php
+C:\laragon\www\synticorex\app\Services\TenantBootstrapCat.php
+C:\laragon\www\synticorex\app\Services\TenantBootstrapFood.php
+C:\laragon\www\synticorex\app\Services\WhatsappMessageBuilder.php
+C:\laragon\www\synticorex\app\Services\AI\AIServiceSwitcher.php
+C:\laragon\www\synticorex\app\Services\AI\BytezProvider.php
+C:\laragon\www\synticorex\app\Services\AI\GeminiProvider.php
+C:\laragon\www\synticorex\app\Traits\HasBlueprint.php
+C:\laragon\www\synticorex\app\View\Components
+C:\laragon\www\synticorex\app\View\Components\AppLayout.php
+C:\laragon\www\synticorex\app\View\Components\FeatureGate.php
+C:\laragon\www\synticorex\app\View\Components\GuestLayout.php

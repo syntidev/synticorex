@@ -57,7 +57,7 @@
             </h1>
             <p class="mt-4 lg:text-lg text-foreground">
                 Landing profesional para marcas, servicios y negocios locales.<br class="hidden sm:block">
-                Tú nos dices qué vendes. Nosotros hacemos el resto.
+                Lo que una agencia cobra $180–$500 por hacerlo una vez, aquí lo tienes vivo y autogestionable.
             </p>
             <div class="mt-8 flex flex-wrap justify-center gap-3">
                 <a class="py-3 px-5 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg bg-primary border border-primary-line text-primary-foreground hover:bg-primary-hover focus:outline-hidden focus:bg-primary-focus disabled:opacity-50 disabled:pointer-events-none" href="{{ route('onboarding.studio') }}">
@@ -83,7 +83,7 @@
 <div class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
     <div class="max-w-2xl mx-auto text-center mb-10">
         <h2 class="text-2xl font-bold md:text-3xl md:leading-tight text-foreground">El plan perfecto para tu negocio</h2>
-        <p class="mt-2 lg:text-lg text-foreground">Precios anuales. Sin sorpresas.</p>
+        <p class="mt-2 lg:text-lg text-foreground">Precios anuales. Sin agencias. Sin tecnicismos.</p>
     </div>
 
     <div class="mt-6 md:mt-12 grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:items-center max-w-5xl mx-auto">
@@ -97,7 +97,7 @@
             <ul class="mt-7 space-y-2.5 text-sm">
                 <li class="flex gap-x-2">
                     <svg class="shrink-0 mt-0.5 size-4 text-primary" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                    <span class="text-foreground">6 productos &middot; 3 servicios</span>
+                    <span class="text-foreground">20 productos &middot; 3 servicios</span>
                 </li>
                 <li class="flex gap-x-2">
                     <svg class="shrink-0 mt-0.5 size-4 text-primary" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
@@ -109,7 +109,7 @@
                 </li>
                 <li class="flex gap-x-2">
                     <svg class="shrink-0 mt-0.5 size-4 text-primary" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                    <span class="text-foreground">Analytics básico</span>
+                    <span class="text-foreground">Analytics básico · BCV automático</span>
                 </li>
             </ul>
 
@@ -128,7 +128,7 @@
             <ul class="mt-7 space-y-2.5 text-sm">
                 <li class="flex gap-x-2">
                     <svg class="shrink-0 mt-0.5 size-4 text-primary" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                    <span class="text-foreground">12 productos &middot; 6 servicios</span>
+                    <span class="text-foreground">50 productos &middot; 6 servicios</span>
                 </li>
                 <li class="flex gap-x-2">
                     <svg class="shrink-0 mt-0.5 size-4 text-primary" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
@@ -141,6 +141,10 @@
                 <li class="flex gap-x-2">
                     <svg class="shrink-0 mt-0.5 size-4 text-primary" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                     <span class="text-foreground">Soporte WhatsApp Lun-Vie</span>
+                </li>
+                <li class="flex gap-x-2">
+                    <svg class="shrink-0 mt-0.5 size-4 text-primary" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span class="text-foreground">Sección About · Testimonios · FAQ</span>
                 </li>
             </ul>
 
@@ -158,7 +162,7 @@
             <ul class="mt-7 space-y-2.5 text-sm">
                 <li class="flex gap-x-2">
                     <svg class="shrink-0 mt-0.5 size-4 text-primary" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                    <span class="text-foreground">18 productos &middot; 9 servicios</span>
+                    <span class="text-foreground">200 productos &middot; 9 servicios</span>
                 </li>
                 <li class="flex gap-x-2">
                     <svg class="shrink-0 mt-0.5 size-4 text-primary" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
@@ -237,13 +241,13 @@
                 <li class="col-span-1 py-1.5 lg:py-3 border-b border-line-2">
                     <div class="grid grid-cols-2 md:grid-cols-6 lg:block">
                         <span class="lg:hidden md:col-span-2 text-sm text-foreground">CRECIMIENTO</span>
-                        <span class="text-sm text-foreground">12</span>
+                        <span class="text-sm text-foreground">50</span>
                     </div>
                 </li>
                 <li class="col-span-1 py-1.5 lg:py-3 border-b border-line-2">
                     <div class="grid grid-cols-2 md:grid-cols-6 lg:block">
                         <span class="lg:hidden md:col-span-2 text-sm text-foreground">VISIÓN</span>
-                        <span class="text-sm text-foreground">18</span>
+                        <span class="text-sm text-foreground">200</span>
                     </div>
                 </li>
             </ul>

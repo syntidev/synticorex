@@ -86,6 +86,14 @@
 
     <div class="fixed inset-0 z-[9999] opacity-[0.02] pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"></div>
 
+    @if($tenant->is_demo)
+    <div class="w-full bg-primary text-primary-foreground text-center text-sm py-2 px-4">
+        🧪 Este es un sitio demo de 
+        <a href="https://syntiweb.com" target="_blank" class="underline font-semibold">SYNTIweb</a>
+        — <a href="https://syntiweb.com" target="_blank" class="underline">Crea el tuyo gratis</a>
+    </div>
+    @endif
+
     @yield('content')
 
     @if(isset($tenant, $customization) && $tenant->isAtLeastCrecimiento() && $customization->header_message)

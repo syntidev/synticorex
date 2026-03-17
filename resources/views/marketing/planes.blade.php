@@ -91,7 +91,7 @@
 
                 <div class="text-center mb-10">
                     <h2 class="text-xl font-semibold md:text-2xl text-foreground">Tu web completa. Tu negocio en Google.</h2>
-                    <p class="mt-2 text-foreground/60">Compite con Wix ($192/año) a precio venezolano.</p>
+                    <p class="mt-2 text-foreground/60">Lo que una agencia cobra $180–$500 estático, aquí lo tienes vivo por $99/año.</p>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 max-w-5xl mx-auto">
@@ -100,8 +100,8 @@
                         $isPopular  = $plan->slug === 'crecimiento';
                         $accent     = '#4A80E4';
                         $tagline    = match($plan->slug) {
-                            'oportunidad' => 'Para validar. Cero riesgo.',
-                            'crecimiento' => 'Para crecer. Tu competencia está aquí.',
+                            'oportunidad' => 'Para validar. Menos que datos móviles.',
+                            'crecimiento' => 'El más vendido. Tu competencia está aquí.',
                             'vision'      => 'Para dominar. Eres líder local.',
                             default       => '',
                         };
@@ -109,29 +109,31 @@
                             'oportunidad' => [
                                 'Landing profesional completa',
                                 'Apareces en Google (SEO básico)',
-                                'WhatsApp integrado',
-                                'Visible en celular',
-                                'Horarios y ubicación',
-                                'Código QR para compartir',
+                                'WhatsApp integrado por producto',
+                                'Horarios y estado abierto/cerrado',
+                                'Código QR descargable',
                                 '20 productos · 3 servicios',
                                 '10 paletas de color',
+                                'BCV automático ($ / REF / ambos)',
                             ],
                             'crecimiento' => [
                                 'Todo de Oportunidad +',
-                                'Sección Acerca de',
-                                'Testimonios de clientes',
-                                'Analytics en tiempo real',
-                                'Redes sociales conectadas',
+                                'Sección Acerca de + Testimonios',
+                                'Medios de pago (9 métodos)',
+                                'Todas las redes sociales',
+                                'Analytics tiempo real',
+                                'FAQ (preguntas frecuentes)',
                                 '50 productos · 6 servicios',
-                                '17 paletas de color',
+                                '17 paletas · Widget tasa BCV',
                             ],
                             'vision' => [
                                 'Todo de Crecimiento +',
-                                'Preguntas frecuentes (FAQ)',
                                 'Sucursales múltiples (hasta 3)',
-                                'Galería de fotos por producto',
-                                'Colores personalizados ilimitados',
-                                'Productos ilimitados · 9 servicios',
+                                'Paleta de colores personalizada',
+                                'Reporte analytics por email',
+                                'Schema.org avanzado (SEO profundo)',
+                                'SYNTiA asistente IA incluida',
+                                '200 productos · 9 servicios',
                             ],
                             default => [],
                         };
@@ -321,7 +323,7 @@
                             'cat-anual' => [
                                 'Todo de Semestral +',
                                 'Mini Order ID SC-XXXX ⭐',
-                                'Productos ilimitados',
+                                '250 productos · 6 fotos c/u',
                                 '6 fotos por producto',
                                 'Todas las variantes + opciones',
                             ],

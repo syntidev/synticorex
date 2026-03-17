@@ -51,6 +51,8 @@ class Tenant extends Model
         'plan_activated_at',
         'settings',
         'whatsapp_active',
+        'is_demo',
+        'demo_product',
     ];
 
     /**
@@ -68,6 +70,7 @@ class Tenant extends Model
             'trial_ends_at' => 'datetime',
             'subscription_ends_at' => 'datetime',
             'plan_activated_at' => 'datetime',
+            'is_demo'    => 'boolean',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
         ];
@@ -338,5 +341,31 @@ class Tenant extends Model
     public function domains(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Domain::class);
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════
+    // SCOPES
+    // ═══════════════════════════════════════════════════════════════════════
+
+    /**
+     * Scope: only demo tenants (is_demo = true).
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder<static>  $query
+     * @return \Illuminate\Database\Eloquent\Builder<static>
+     */
+    public function scopeDemo(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
+    {
+        return $query->where('is_demo', true);
+    }
+
+    /**
+     * Scope: only real (non-demo) tenants (is_demo = false).
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder<static>  $query
+     * @return \Illuminate\Database\Eloquent\Builder<static>
+     */
+    public function scopeReal(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
+    {
+        return $query->where('is_demo', false);
     }
 }
