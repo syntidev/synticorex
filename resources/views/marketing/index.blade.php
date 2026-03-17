@@ -1,195 +1,9 @@
-<!DOCTYPE html>
-<html lang="es" data-theme="light" class="scroll-smooth">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+﻿@extends('marketing.layout')
 
-    <title>SYNTIweb — Tu Negocio Visible en Google en 5 Minutos</title>
-    <meta name="description" content="SYNTIweb genera tu presencia digital automáticamente. Landing profesional, SEO automático, WhatsApp integrado. Para restaurantes, mecánicos, abogados y más.">
-    <meta name="keywords" content="landing page Venezuela, presencia digital, negocio en Google, SYNTIweb, página web para negocios">
+@section('content')
+<div x-data="marketingApp()">
 
-    <meta property="og:title" content="SYNTIweb — Tu Negocio Visible en Google">
-    <meta property="og:description" content="Genera tu presencia digital automáticamente. En 5 minutos. Sin diseñador. Sin programador.">
-    <meta property="og:type" content="website">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-
-    <style>
-        :root {
-            --mkt-blue: #1e40af;
-            --mkt-indigo: #4f46e5;
-            --mkt-purple: #7c3aed;
-        }
-        body { font-family: 'Inter', system-ui, sans-serif; }
-        .mkt-gradient-text {
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .mkt-gradient-hero {
-            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 40%, #1e3a5f 100%);
-        }
-        .mkt-gradient-cta {
-            background: linear-gradient(135deg, #1e40af 0%, #4f46e5 50%, #7c3aed 100%);
-        }
-        .mkt-card {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .mkt-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 20px 40px -12px rgba(0,0,0,0.15);
-        }
-        .mkt-fade-in {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.7s ease, transform 0.7s ease;
-        }
-        .mkt-fade-in.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        .mkt-blob {
-            border-radius: 42% 58% 36% 64% / 45% 55% 45% 55%;
-            animation: mkt-morph 8s ease-in-out infinite;
-        }
-        @keyframes mkt-morph {
-            0%,100% { border-radius: 42% 58% 36% 64% / 45% 55% 45% 55%; }
-            33% { border-radius: 55% 45% 60% 40% / 35% 65% 35% 65%; }
-            66% { border-radius: 35% 65% 45% 55% / 55% 45% 55% 45%; }
-        }
-        .mkt-float { animation: mkt-float 6s ease-in-out infinite; }
-        @keyframes mkt-float {
-            0%,100% { transform: translateY(0); }
-            50% { transform: translateY(-12px); }
-        }
-        .mkt-mockup {
-            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
-            border: 1px solid rgba(0,0,0,0.08);
-        }
-
-    </style>
-</head>
-<body class="bg-white text-slate-800 antialiased" x-data="marketingApp()">
-
-    {{-- ═══ NAVBAR ═══════════════════════════════════════════════════════ --}}
-    <header class="flex flex-wrap lg:justify-start lg:flex-nowrap z-50 w-full bg-white border-b border-border sticky top-0">
-        <nav class="relative max-w-7xl w-full mx-auto flex flex-wrap basis-full items-center justify-between px-4 sm:px-6 lg:px-8 py-3">
-
-            {{-- Logo --}}
-            <a href="/" class="flex items-center gap-2">
-                <img src="{{ asset('brand/syntiweb-logo-positive.svg') }}" alt="SYNTIweb" width="34" height="34">
-                <span class="text-xl font-extrabold tracking-tight">
-                    <span style="color:#1a1a1a">SYNTI</span><span style="color:#4A80E4">web</span>
-                </span>
-            </a>
-
-            {{-- Mobile toggle --}}
-            <div class="flex items-center gap-2 lg:hidden">
-                <a href="{{ route('register') }}" class="inline-flex items-center text-xs py-1.5 px-3 rounded-lg font-semibold bg-[#4A80E4] text-white">
-                    Crear gratis
-                </a>
-                <button type="button"
-                    class="hs-collapse-toggle p-2 rounded-lg text-slate-600 hover:bg-slate-100 transition"
-                    data-hs-collapse="#mkt-navbar-collapse"
-                    aria-controls="mkt-navbar-collapse"
-                    aria-label="Toggle navigation">
-                    <span class="iconify tabler--menu-2 size-5 hs-collapse-open:hidden"></span>
-                    <span class="iconify tabler--x size-5 hidden hs-collapse-open:block"></span>
-                </button>
-            </div>
-
-            {{-- Desktop + Collapse container --}}
-            <div id="mkt-navbar-collapse"
-                 class="hs-collapse hidden overflow-hidden transition-all duration-300 basis-full lg:block lg:basis-auto lg:overflow-visible">
-                <div class="flex flex-col gap-1 mt-4 lg:mt-0 lg:flex-row lg:items-center lg:gap-1">
-
-                    {{-- Mega Productos --}}
-                    <div class="hs-dropdown [--strategy:absolute] [--adaptive:none]">
-                        <button type="button"
-                            class="hs-dropdown-toggle flex items-center gap-1 text-sm font-medium text-slate-700 hover:bg-slate-100 px-3 py-2 rounded-lg transition cursor-pointer">
-                            Productos
-                            <span class="iconify tabler--chevron-down size-4 transition hs-dropdown-open:rotate-180"></span>
-                        </button>
-                        <div class="hs-dropdown-menu hs-dropdown-open:opacity-100 hidden opacity-0 z-10 mt-2 min-w-[320px] bg-white border border-border rounded-xl shadow-lg p-2 transition-[opacity,margin]">
-                            <a href="{{ route('marketing.studio') }}"
-                               class="flex items-start gap-3 p-3 rounded-lg hover:bg-slate-50 transition group">
-                                <div class="mt-0.5 flex-shrink-0 w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center">
-                                    <iconify-icon icon="tabler:layout-dashboard" width="18" height="18" class="text-blue-600"></iconify-icon>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-semibold text-slate-800">SYNTIstudio</p>
-                                    <p class="text-xs text-slate-500">Web profesional con SEO automático</p>
-                                </div>
-                            </a>
-                            <a href="{{ route('marketing.food') }}"
-                               class="flex items-start gap-3 p-3 rounded-lg hover:bg-slate-50 transition group">
-                                <div class="mt-0.5 flex-shrink-0 w-9 h-9 rounded-lg bg-orange-50 flex items-center justify-center">
-                                    <iconify-icon icon="tabler:tools-kitchen-2" width="18" height="18" class="text-orange-500"></iconify-icon>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-semibold text-slate-800">SYNTIfood</p>
-                                    <p class="text-xs text-slate-500">Menú digital con pedido a WhatsApp</p>
-                                </div>
-                            </a>
-                            <a href="{{ route('marketing.cat') }}"
-                               class="flex items-start gap-3 p-3 rounded-lg hover:bg-slate-50 transition group">
-                                <div class="mt-0.5 flex-shrink-0 w-9 h-9 rounded-lg bg-emerald-50 flex items-center justify-center">
-                                    <iconify-icon icon="tabler:shopping-bag" width="18" height="18" class="text-emerald-600"></iconify-icon>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-semibold text-slate-800">SYNTIcat</p>
-                                    <p class="text-xs text-slate-500">Catálogo visual con carrito WhatsApp</p>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-
-                    <a href="{{ route('marketing.planes') }}" class="text-sm font-medium text-slate-700 hover:bg-slate-100 px-3 py-2 rounded-lg transition">Planes</a>
-                    <a href="{{ route('blog.index') }}" class="text-sm font-medium text-slate-700 hover:bg-slate-100 px-3 py-2 rounded-lg transition">Blog</a>
-                    <a href="/docs" class="text-sm font-medium text-slate-700 hover:bg-slate-100 px-3 py-2 rounded-lg transition">Docs</a>
-
-                    {{-- Mobile: productos expandidos --}}
-                    <div class="lg:hidden border-t border-border mt-2 pt-2 space-y-1">
-                        <p class="px-3 py-1 text-xs font-semibold text-slate-400 uppercase tracking-wider">Productos</p>
-                        <a href="{{ route('marketing.studio') }}" class="flex items-center gap-2 px-3 py-2 text-sm text-slate-700 rounded-lg hover:bg-slate-50">
-                            <iconify-icon icon="tabler:layout-dashboard" width="16" height="16"></iconify-icon> SYNTIstudio
-                        </a>
-                        <a href="{{ route('marketing.food') }}" class="flex items-center gap-2 px-3 py-2 text-sm text-slate-700 rounded-lg hover:bg-slate-50">
-                            <iconify-icon icon="tabler:tools-kitchen-2" width="16" height="16"></iconify-icon> SYNTIfood
-                        </a>
-                        <a href="{{ route('marketing.cat') }}" class="flex items-center gap-2 px-3 py-2 text-sm text-slate-700 rounded-lg hover:bg-slate-50">
-                            <iconify-icon icon="tabler:shopping-bag" width="16" height="16"></iconify-icon> SYNTIcat
-                        </a>
-                    </div>
-
-                    {{-- Divider + CTA (desktop) --}}
-                    <div class="hidden lg:flex items-center gap-2 ml-2 pl-4 border-l border-border">
-                        <a href="{{ route('login') }}" class="text-sm font-medium text-slate-600 hover:bg-slate-100 px-3 py-2 rounded-lg transition">
-                            Iniciar sesión
-                        </a>
-                        <a href="{{ route('register') }}" class="inline-flex items-center text-sm py-2 px-4 rounded-lg font-semibold bg-[#4A80E4] text-white hover:bg-[#3a6fd4] transition shadow-sm shadow-blue-500/20">
-                            Crear gratis
-                        </a>
-                    </div>
-
-                    {{-- Mobile CTA --}}
-                    <div class="lg:hidden border-t border-border mt-2 pt-3 flex flex-col gap-2">
-                        <a href="{{ route('login') }}" class="block px-3 py-2.5 text-sm font-medium text-slate-600 rounded-lg hover:bg-slate-50 text-center">Iniciar sesión</a>
-                        <a href="{{ route('register') }}" class="block px-3 py-2.5 text-sm font-bold text-white bg-[#4A80E4] rounded-lg text-center">Crear gratis →</a>
-                    </div>
-
-                </div>
-            </div>
-        </nav>
-    </header>
-
-    {{-- ═══ SECTIONS ════════════════════════════════════════════════════ --}}
+    {{-- â•â•â• SECTIONS â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
     @include('marketing.sections.hero')
     @include('marketing.sections.syntia')
     @include('marketing.sections.problema')
@@ -239,47 +53,10 @@
             </div>
         </div>
     </div>
-    {{-- ═══ FOOTER ══════════════════════════════════════════════════════ --}}
-    <footer class="bg-[var(--sw-navy)] text-[var(--sw-text-muted)]">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
-                {{-- Brand --}}
-                <div class="md:col-span-2">
-                    <div class="flex items-center gap-2 mb-4">
-                        <img src="{{ asset('brand/syntiweb-logo-negative.svg') }}" 
-                             alt="SYNTIweb" width="32" height="32">
-                        <span class="text-xl font-extrabold text-white"><span style="color:#4A80E4">SYNTI</span><span style="color:#FFFFFF">web</span></span>
-                    </div>
-                    <p class="text-sm leading-relaxed max-w-sm">Tu negocio merece estar en Google. SYNTIweb genera tu presencia digital automáticamente, para que tú te enfoques en lo que mejor haces.</p>
-                </div>
-                {{-- Links --}}
-                <div>
-                    <h4 class="text-white font-semibold text-sm mb-4">Producto</h4>
-                    <ul class="space-y-2 text-sm">
-                        <li><a href="#solucion" class="hover:text-white transition-colors">Cómo funciona</a></li>
-                        <li><a href="#segmentos" class="hover:text-white transition-colors">Segmentos</a></li>
-                        <li><a href="#planes" class="hover:text-white transition-colors">Planes</a></li>
-                        <li><a href="{{ route('marketing.about') }}" class="hover:text-white transition-colors">Nosotros</a></li>
-                    </ul>
-                </div>
-                {{-- Legal --}}
-                <div>
-                    <h4 class="text-white font-semibold text-sm mb-4">Legal</h4>
-                    <ul class="space-y-2 text-sm">
-                        <li><a href="{{ route('marketing.privacy') }}" class="hover:text-white transition-colors">Privacidad</a></li>
-                        <li><a href="{{ route('marketing.terms') }}" class="hover:text-white transition-colors">Términos</a></li>
-                        <li><a href="mailto:soporte@syntiweb.com" class="hover:text-white transition-colors">soporte@syntiweb.com</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="border-t border-white/10 mt-12 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-                <p class="text-xs">&copy; {{ date('Y') }} SYNTIweb — Todos los derechos reservados.</p>
-                <p class="text-xs">Hecho con <span class="text-red-400">&#10084;</span> en Venezuela</p>
-            </div>
-        </div>
-    </footer>
+</div>
+@endsection
 
-    {{-- ═══ SCRIPTS ═════════════════════════════════════════════════════ --}}
+@push('scripts')
     <script>
         function marketingApp() {
             return {
@@ -303,7 +80,4 @@
             };
         }
     </script>
-    <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js" defer></script>
-<x-syntia-widget />
-</body>
-</html>
+@endpush

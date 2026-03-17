@@ -1,4 +1,4 @@
-{{-- ═══ Tab: Tu Menú (SYNTIfood) ═══ --}}
+﻿{{-- ═══ Tab: Tu Menú (SYNTIfood) ═══ --}}
 <div id="tab-productos" class="tab-content">
     @php
         $planId      = (int) ($plan->id ?? 1);
@@ -278,7 +278,7 @@
                     {{-- EXTRAS / OPTIONS SECTION --}}
                     @php 
                         $plan = $tenant->plan ?? null;
-                        $canUseExtras = $plan && \Illuminate\Support\Str::contains($plan->slug ?? '', ['food-semestral', 'food-anual']);
+                        $canUseExtras = $plan && \Illuminate\Support\Str::contains($plan->slug ?? '', ['food-crecimiento', 'food-vision']);
                     @endphp
 
                     @if($canUseExtras)

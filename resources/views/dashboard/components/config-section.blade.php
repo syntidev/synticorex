@@ -1,4 +1,4 @@
-        <!-- Tab: Configuración -->
+﻿        <!-- Tab: Configuración -->
         <div id="tab-config" class="tab-content">
             <div class="p-6">
             {{-- ── Section header ──────────────────────────────── --}}
@@ -15,9 +15,9 @@
 @php
     // $allPayMeta y $allCurrencyMeta vienen del Controller (fuente única de verdad)
     $planSlug = (string) ($plan->slug ?? 'studio-oportunidad');
-    $isPlan1 = in_array($planSlug, ['studio-oportunidad', 'food-basico', 'cat-basico'], true);
-    $isPlan2 = in_array($planSlug, ['studio-crecimiento', 'food-semestral', 'cat-semestral'], true);
-    $isPlan3 = in_array($planSlug, ['studio-vision', 'food-anual', 'cat-anual'], true);
+    $isPlan1 = in_array($planSlug, ['studio-oportunidad', 'food-oportunidad', 'cat-oportunidad'], true);
+    $isPlan2 = in_array($planSlug, ['studio-crecimiento', 'food-crecimiento', 'cat-crecimiento'], true);
+    $isPlan3 = in_array($planSlug, ['studio-vision', 'food-vision', 'cat-vision'], true);
     $payMethods      = $customization->payment_methods ?? [];
     $globalEnabled   = $payMethods['global'] ?? [];
     $currencyEnabled = $payMethods['currency'] ?? [];

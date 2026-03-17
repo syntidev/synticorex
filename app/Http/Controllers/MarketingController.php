@@ -149,9 +149,9 @@ class MarketingController extends Controller
 
     public function planes(): View
     {
-        $studioPlans = Plan::where('blueprint', 'studio')->orderBy('price_usd')->get();
-        $foodPlans   = Plan::where('blueprint', 'food')->orderBy('price_usd')->get();
-        $catPlans    = Plan::where('blueprint', 'cat')->orderBy('price_usd')->get();
+        $studioPlans  = Plan::where('blueprint', 'studio')->orderBy('price_usd')->get();
+        $foodPlans    = Plan::where('blueprint', 'food')->orderBy('price_usd')->get();
+        $catPlans     = Plan::where('blueprint', 'cat')->orderBy('price_usd')->get();
 
         return view('marketing.planes', compact('studioPlans', 'foodPlans', 'catPlans'));
     }
@@ -187,6 +187,11 @@ class MarketingController extends Controller
     public function about(): View
     {
         return view('marketing.about');
+    }
+
+    public function contacto(): View
+    {
+        return view('marketing.contacto');
     }
 
     public function blog(Request $request): View

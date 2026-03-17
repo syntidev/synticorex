@@ -41,6 +41,7 @@ Route::get('/cat',    [MarketingController::class, 'cat'])->name('marketing.cat'
 Route::get('/terminos', [MarketingController::class, 'terms'])->name('marketing.terms');
 Route::get('/privacidad', [MarketingController::class, 'privacy'])->name('marketing.privacy');
 Route::get('/nosotros', [MarketingController::class, 'about'])->name('marketing.about');
+Route::get('/contacto', [MarketingController::class, 'contacto'])->name('marketing.contacto');
 
 // ═══ Google OAuth ═════════════════════════════════════════════════════════════
 Route::get('/auth/google',          [SocialAuthController::class, 'redirectToGoogle'])->name('auth.google');

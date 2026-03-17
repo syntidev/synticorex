@@ -1,4 +1,4 @@
-        <!-- Tab: Tu Información -->
+﻿        <!-- Tab: Tu Información -->
         <div id="tab-info" class="tab-content active">
 
             {{-- ══ Sub-tab nav ═══════════════════════════════════════════════ --}}
@@ -674,7 +674,7 @@
             <div class="bg-surface rounded-xl shadow-sm border border-border mb-6">
                 @php
                     $planSlug      = (string) ($plan->slug ?? 'studio-oportunidad');
-                    $isPlan1       = in_array($planSlug, ['studio-oportunidad', 'food-basico', 'cat-basico'], true);
+                    $isPlan1       = in_array($planSlug, ['studio-oportunidad', 'food-oportunidad', 'cat-oportunidad'], true);
                     $rawSocial      = $customization->social_networks ?? [];
                     $socialNetworks = is_array($rawSocial) ? $rawSocial : [];
                     $allNetworksMeta = [

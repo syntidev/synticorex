@@ -50,7 +50,7 @@
 
                 <section>
                     <h2 class="text-xl font-extrabold text-slate-900">8. Contacto</h2>
-                    <p class="mt-2 text-slate-700">Para consultas legales o administrativas: <a class="font-semibold text-[#4A80E4] hover:opacity-80" href="mailto:soporte@syntiweb.com">soporte@syntiweb.com</a>.</p>
+                    <p class="mt-2 text-slate-700">Para consultas legales o administrativas: <a class="font-semibold text-[#4A80E4] hover:opacity-80" href="mailto:impulso@syntiweb.com">impulso@syntiweb.com</a>.</p>
                 </section>
             </article>
         </section>

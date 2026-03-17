@@ -1,4 +1,4 @@
-        function downloadQRSVG() {
+﻿        function downloadQRSVG() {
             const qrContainer = document.getElementById('qr-display');
             if (!qrContainer) return;
             const svgEl = qrContainer.querySelector('svg');
@@ -374,7 +374,7 @@
         @php
             $plan1NetworksList = ['instagram', 'facebook', 'tiktok', 'linkedin'];
             $allNetworksList   = ['instagram', 'facebook', 'tiktok', 'linkedin', 'youtube', 'x'];
-            $isPlan1Social = in_array(($plan->slug ?? ''), ['studio-oportunidad', 'food-basico', 'cat-basico'], true);
+            $isPlan1Social = in_array(($plan->slug ?? ''), ['studio-oportunidad', 'food-oportunidad', 'cat-oportunidad'], true);
         @endphp
         let selectedSocialNetwork = '{{ $plan1Selected ?? '' }}';
 
@@ -455,7 +455,7 @@
         // ── End Social Networks ─────────────────────────────────────
 
         // ── Payment Methods ──────────────────────────────────────────
-        @if(!in_array(($plan->slug ?? ''), ['studio-oportunidad', 'food-basico', 'cat-basico'], true))
+        @if(!in_array(($plan->slug ?? ''), ['studio-oportunidad', 'food-oportunidad', 'cat-oportunidad'], true))
         const payAllKeys  = @json(array_keys($allPayMeta));
         const currAllKeys = @json(array_keys($allCurrencyMeta));
         const allPayMetaData  = @json($allPayMeta);
@@ -591,7 +591,7 @@
             syncPaymentDetailCards();
         });
 
-        @if(in_array(($plan->slug ?? ''), ['studio-vision', 'food-anual', 'cat-anual'], true))
+        @if(in_array(($plan->slug ?? ''), ['studio-vision', 'food-vision', 'cat-vision'], true))
         function toggleBranchPayMethod(branchId, key) {
             const check = document.getElementById('pay-branch-check-' + branchId + '-' + key);
             const label = document.getElementById('pay-branch-label-' + branchId + '-' + key);
@@ -661,7 +661,7 @@
             payload.show_legal_links = !!(legalToggle && legalToggle.checked);
             @endif
 
-            @if(in_array(($plan->slug ?? ''), ['studio-vision', 'food-anual', 'cat-anual'], true))
+            @if(in_array(($plan->slug ?? ''), ['studio-vision', 'food-vision', 'cat-vision'], true))
             const branchData = {};
             @foreach($activeBranchList as $branch)
             const bMethods_{{ $branch->id }} = payAllKeys.filter(k => {
@@ -767,7 +767,7 @@
         // ── End Payment Methods ──────────────────────────────────────
 
         // ── Branches (Plan 3 / VISIÓN) ──────────────────────────────
-        @if(in_array(($plan->slug ?? ''), ['studio-vision', 'food-anual', 'cat-anual'], true))
+        @if(in_array(($plan->slug ?? ''), ['studio-vision', 'food-vision', 'cat-vision'], true))
         let branchCount = {{ $branches->count() }};
 
         async function toggleBranchesSection() {

@@ -292,15 +292,15 @@
                         }
 
                         $planTier = match($plan->slug ?? '') {
-                            'studio-oportunidad', 'food-basico', 'cat-basico' => 'Plan 1',
-                            'studio-crecimiento', 'food-semestral', 'cat-semestral' => 'Plan 2',
-                            'studio-vision', 'food-anual', 'cat-anual' => 'Plan 3',
+                            'studio-oportunidad', 'food-oportunidad', 'cat-oportunidad' => 'Plan 1',
+                            'studio-crecimiento', 'food-crecimiento', 'cat-crecimiento' => 'Plan 2',
+                            'studio-vision',      'food-vision',      'cat-vision'      => 'Plan 3',
                             default => 'Plan',
                         };
 
                         $planTone = match($plan->slug ?? '') {
-                            'studio-oportunidad', 'food-basico', 'cat-basico' => 'bg-amber-100 text-amber-700',
-                            'studio-crecimiento', 'food-semestral', 'cat-semestral' => 'bg-emerald-100 text-emerald-700',
+                            'studio-oportunidad', 'food-oportunidad', 'cat-oportunidad' => 'bg-amber-100 text-amber-700',
+                            'studio-crecimiento', 'food-crecimiento', 'cat-crecimiento' => 'bg-emerald-100 text-emerald-700',
                             default => 'bg-sky-100 text-sky-700',
                         };
                     @endphp
@@ -518,7 +518,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="mailto:soporte@synticorex.com"
+                        <a href="mailto:impulso@syntiweb.com"
                            class="w-full flex items-center gap-x-2 py-2 px-2.5 text-sm text-gray-600 dark:text-neutral-400 rounded-lg hover:bg-gray-100 dark:hover:bg-neutral-700 focus:outline-hidden focus:bg-gray-100 dark:focus:bg-neutral-700">
                             <span class="iconify tabler--help size-4 shrink-0"></span>
                             Soporte

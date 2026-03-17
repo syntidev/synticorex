@@ -1,374 +1,301 @@
-﻿@extends('marketing.layout')
+@extends('marketing.layout')
 
 @section('content')
+<style>
+    :root {
+        --studio: #4A80E4;
+        --food:   #f97316;
+        --cat:    #10b981;
+    }
+    .plan-card {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .plan-card:hover {
+        transform: translateY(-4px);
+    }
+    .plan-card--highlight {
+        transform: translateY(-8px);
+        position: relative;
+        z-index: 2;
+    }
+    .plan-card--highlight:hover {
+        transform: translateY(-12px);
+    }
+    .btn-primary-studio  { background: var(--studio); color: #fff; box-shadow: 0 4px 16px color-mix(in oklch, var(--studio) 40%, transparent); }
+    .btn-primary-food    { background: var(--food);   color: #fff; box-shadow: 0 4px 16px color-mix(in oklch, var(--food)   40%, transparent); }
+    .btn-primary-cat     { background: var(--cat);    color: #fff; box-shadow: 0 4px 16px color-mix(in oklch, var(--cat)    40%, transparent); }
+    .btn-ghost-studio    { background: color-mix(in oklch, var(--studio) 10%, transparent); color: var(--studio); border: 1.5px solid color-mix(in oklch, var(--studio) 30%, transparent); }
+    .btn-ghost-food      { background: color-mix(in oklch, var(--food)   10%, transparent); color: var(--food);   border: 1.5px solid color-mix(in oklch, var(--food)   30%, transparent); }
+    .btn-ghost-cat       { background: color-mix(in oklch, var(--cat)    10%, transparent); color: var(--cat);    border: 1.5px solid color-mix(in oklch, var(--cat)    30%, transparent); }
+    .tab-active-studio   { background: var(--studio); color: #fff; }
+    .tab-active-food     { background: var(--food);   color: #fff; }
+    .tab-active-cat      { background: var(--cat);    color: #fff; }
+    .check-studio { color: var(--studio); }
+    .check-food   { color: var(--food); }
+    .check-cat    { color: var(--cat); }
+    .badge-studio { background: var(--studio); }
+    .badge-food   { background: var(--food); }
+    .badge-cat    { background: var(--cat); }
+    .ring-studio  { box-shadow: 0 0 0 2px var(--studio), 0 20px 60px color-mix(in oklch, var(--studio) 20%, transparent); }
+    .ring-food    { box-shadow: 0 0 0 2px var(--food),   0 20px 60px color-mix(in oklch, var(--food)   20%, transparent); }
+    .ring-cat     { box-shadow: 0 0 0 2px var(--cat),    0 20px 60px color-mix(in oklch, var(--cat)    20%, transparent); }
+</style>
 
-    {{-- â•â•â• HEADER â•â•â• --}}
-    <header class="bg-surface border-b border-border/40">
-        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
-            <a href="{{ url('/') }}" class="flex items-center gap-2">
-                <img src="{{ asset('brand/syntiweb-logo-positive.svg') }}" width="32" height="32" alt="SYNTIweb">
-                <span class="text-lg font-bold tracking-tight">
-                    <span style="color:#1a1a1a">SYNTI</span><span style="color:#4A80E4">web</span>
-                </span>
-            </a>
-            <a href="{{ url('/') }}"
-               class="text-sm font-medium text-foreground/60 hover:text-foreground transition-colors">
-                &larr; Volver al inicio
-            </a>
-        </div>
-    </header>
+{{-- Hero --}}
+<section class="bg-white pt-16 pb-8 text-center border-b border-slate-100">
+    <div class="max-w-2xl mx-auto px-4">
+        <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-3">Precios claros · Sin letra pequeña</p>
+        <h1 class="text-4xl sm:text-5xl font-extrabold text-slate-900 leading-tight mb-4">
+            Elige tu plan
+        </h1>
+        <p class="text-lg text-slate-500">Para negocios venezolanos que quieren crecer de verdad.</p>
+    </div>
+</section>
 
-    {{-- â•â•â• HERO â•â•â• --}}
-    <section class="bg-surface py-16 lg:py-24 text-center">
-        <div class="mx-auto max-w-3xl px-4">
-            <h1 class="text-3xl font-bold md:text-4xl lg:text-5xl text-foreground"
-                style="text-shadow: 0 4px 24px color-mix(in oklch, var(--color-foreground) 15%, transparent), 0 1px 4px color-mix(in oklch, var(--color-foreground) 8%, transparent);">
-                Elige tu plan
-            </h1>
-            <p class="mt-4 text-lg text-foreground/70 max-w-xl mx-auto">
-                Precios claros. Sin letra pequeÃ±a. Para negocios venezolanos.
-            </p>
-        </div>
-    </section>
+{{-- Tabs + Panels --}}
+<section class="bg-slate-50 py-12 lg:py-20" x-data="{ tab: 'studio' }">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
 
-    {{-- â•â•â• TABS + PANELS â•â•â• --}}
-    <section class="pb-20 lg:pb-32" x-data="{ tab: 'studio' }">
-        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-
-            {{-- Tab buttons --}}
-            <div class="flex justify-center gap-2 mb-12">
-                <button @click="tab = 'studio'"
-                        :class="tab === 'studio'
-                            ? 'text-white shadow-lg'
-                            : 'bg-surface border border-border text-foreground/60 hover:text-foreground'"
-                        :style="tab === 'studio' ? 'background:var(--sw-studio)' : ''"
-                        class="px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200">
-                    <span class="iconify tabler--world size-4"></span> SYNTIstudio
+        {{-- Tabs --}}
+        <div class="flex justify-center mb-12 overflow-x-auto pb-1">
+            <div class="flex gap-2 bg-white border border-slate-200 rounded-full p-1 shadow-sm">
+                <button @click="tab='studio'"
+                    :class="tab==='studio' ? 'tab-active-studio' : 'text-slate-500 hover:text-slate-800'"
+                    class="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 whitespace-nowrap">
+                    <iconify-icon icon="tabler:layout-dashboard" width="16"></iconify-icon>
+                    SYNTIstudio
                 </button>
-                <button @click="tab = 'food'"
-                        :class="tab === 'food'
-                            ? 'text-white shadow-lg'
-                            : 'bg-surface border border-border text-foreground/60 hover:text-foreground'"
-                        :style="tab === 'food' ? 'background:var(--sw-food)' : ''"
-                        class="px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200">
-                    <span class="iconify tabler--tools-kitchen-2 size-4"></span> SYNTIfood
+                <button @click="tab='food'"
+                    :class="tab==='food' ? 'tab-active-food' : 'text-slate-500 hover:text-slate-800'"
+                    class="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 whitespace-nowrap">
+                    <iconify-icon icon="tabler:tools-kitchen-2" width="16"></iconify-icon>
+                    SYNTIfood
                 </button>
-                <button @click="tab = 'cat'"
-                        :class="tab === 'cat'
-                            ? 'text-white shadow-lg'
-                            : 'bg-surface border border-border text-foreground/60 hover:text-foreground'"
-                        :style="tab === 'cat' ? 'background:var(--sw-cat)' : ''"
-                        class="px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200">
-                    <span class="iconify tabler--shopping-bag size-4"></span> SYNTIcat
+                <button @click="tab='cat'"
+                    :class="tab==='cat' ? 'tab-active-cat' : 'text-slate-500 hover:text-slate-800'"
+                    class="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 whitespace-nowrap">
+                    <iconify-icon icon="tabler:shopping-bag" width="16"></iconify-icon>
+                    SYNTIcat
                 </button>
             </div>
-
-            {{-- â•â•â• PANEL STUDIO â•â•â• --}}
-            <div x-show="tab === 'studio'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0">
-
-                <div class="text-center mb-10">
-                    <h2 class="text-xl font-semibold md:text-2xl text-foreground">Tu web completa. Tu negocio en Google.</h2>
-                    <p class="mt-2 text-foreground/60">Lo que una agencia cobra $180â€“$500 estÃ¡tico, aquÃ­ lo tienes vivo por $99/aÃ±o.</p>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 max-w-5xl mx-auto">
-                    @foreach($studioPlans as $plan)
-                    @php
-                        $isPopular  = $plan->slug === 'crecimiento';
-                        $accent     = '#4A80E4';
-                        $tagline    = match($plan->slug) {
-                            'oportunidad' => 'Para validar. Menos que datos mÃ³viles.',
-                            'crecimiento' => 'El plan que mÃ¡s negocios eligen.',
-                            'vision'      => 'Para dominar. Eres lÃ­der local.',
-                            default       => '',
-                        };
-                        $features = match($plan->slug) {
-                            'oportunidad' => [
-                                'Landing profesional completa',
-                                'Apareces en Google (SEO bÃ¡sico)',
-                                'WhatsApp integrado por producto',
-                                'Horarios y estado abierto/cerrado',
-                                'CÃ³digo QR descargable',
-                                '20 productos Â· 3 servicios',
-                                '10 paletas de color',
-                                'BCV automÃ¡tico ($ / REF / ambos)',
-                            ],
-                            'crecimiento' => [
-                                'Todo de Oportunidad +',
-                                'SecciÃ³n Acerca de + Testimonios',
-                                'Medios de pago (9 mÃ©todos)',
-                                'Todas las redes sociales',
-                                'Analytics tiempo real',
-                                'FAQ (preguntas frecuentes)',
-                                '50 productos Â· 6 servicios',
-                                '17 paletas Â· Widget tasa BCV',
-                            ],
-                            'vision' => [
-                                'Todo de Crecimiento +',
-                                'Sucursales mÃºltiples (hasta 3)',
-                                'Paleta de colores personalizada',
-                                'Reporte analytics por email',
-                                'Schema.org avanzado (SEO profundo)',
-                                'SYNTiA asistente IA incluida',
-                                '200 productos Â· 9 servicios',
-                            ],
-                            default => [],
-                        };
-                    @endphp
-                    <div class="relative bg-white border rounded-2xl shadow-sm p-6 lg:p-8 flex flex-col hover:shadow-[0_8px_30px_rgba(0,0,0,0.10)] hover:-translate-y-1 transition-all duration-300
-                                {{ $isPopular ? 'border-transparent' : 'border-border' }}"
-                         @if($isPopular) style="box-shadow:0 0 0 2px {{ $accent }}" @endif>
-
-                        @if($isPopular)
-                        <span class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 inline-flex items-center px-3 py-1 rounded-full text-xs font-bold text-white"
-                              style="background:{{ $accent }}">
-                            MÃ¡s popular
-                        </span>
-                        @endif
-
-                        <div class="mb-6">
-                            <h3 class="text-sm font-bold uppercase tracking-wider text-foreground/50">{{ $plan->name }}</h3>
-                            <div class="mt-2 flex items-baseline gap-1">
-                                <span class="text-4xl font-bold"
-                                      style="color:{{ $accent }};text-shadow:0 4px 24px color-mix(in oklch, {{ $accent }} 20%, transparent)">
-                                    ${{ intval($plan->price_usd) }}
-                                </span>
-                                <span class="text-foreground/50 text-sm">/aÃ±o</span>
-                            </div>
-                            <p class="mt-2 text-sm text-foreground/60">{{ $tagline }}</p>
-                        </div>
-
-                        <div class="border-t border-border/50 pt-5 mb-6 flex-1">
-                            <ul class="space-y-3">
-                                @foreach($features as $feat)
-                                <li class="flex items-start gap-2 text-sm text-foreground/80">
-                                    <span class="mt-0.5 shrink-0" style="color:{{ $accent }}">âœ“</span>
-                                    {{ $feat }}
-                                </li>
-                                @endforeach
-                            </ul>
-                        </div>
-
-                        <a href="{{ route('onboarding.studio', ['plan_id' => $plan->id]) }}"
-                           class="block w-full text-center py-3 px-4 rounded-lg font-semibold text-white transition-all duration-200 hover:-translate-y-0.5"
-                           style="background:{{ $accent }};box-shadow:0 4px 14px 0 color-mix(in oklch, {{ $accent }} 40%, transparent)"
-                           onmouseover="this.style.boxShadow='0 6px 20px 0 color-mix(in oklch, {{ $accent }} 50%, transparent)'"
-                           onmouseout="this.style.boxShadow='0 4px 14px 0 color-mix(in oklch, {{ $accent }} 40%, transparent)'">
-                            Empezar con {{ $plan->name }}
-                        </a>
-                    </div>
-                    @endforeach
-                </div>
-            </div>
-
-            {{-- â•â•â• PANEL FOOD â•â•â• --}}
-            <div x-show="tab === 'food'" x-cloak x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0">
-
-                <div class="text-center mb-10">
-                    <h2 class="text-xl font-semibold md:text-2xl text-foreground">Tu menÃº digital. Pedidos por WhatsApp.</h2>
-                    <p class="mt-2 text-foreground/60">Sin imprimir cartas. Sin apps complicadas.</p>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 max-w-5xl mx-auto">
-                    @foreach($foodPlans as $plan)
-                    @php
-                        $isRecommended = $plan->slug === 'food-anual';
-                        $accent        = '#f97316';
-                        $tagline       = match($plan->slug) {
-                            'food-basico'    => 'Para empezar. Tu carta en digital.',
-                            'food-semestral' => 'Para crecer. OrganizaciÃ³n total.',
-                            'food-anual'     => 'Para dominar. Pedidos directos.',
-                            default          => '',
-                        };
-                        $period = match($plan->slug) {
-                            'food-basico'    => '/mes',
-                            'food-semestral' => '/semestre',
-                            'food-anual'     => '/aÃ±o',
-                            default          => '/aÃ±o',
-                        };
-                        $features = match($plan->slug) {
-                            'food-basico' => [
-                                'MenÃº digital activo 24/7',
-                                'Lista de platos con precio',
-                                'Enlace para compartir',
-                                'Hasta 50 Ã­tems en menÃº',
-                                '6 fotos de categorÃ­as',
-                            ],
-                            'food-semestral' => [
-                                'Todo de BÃ¡sico +',
-                                'CategorÃ­as organizadas',
-                                'Tasa BCV automÃ¡tica',
-                                'Horarios de atenciÃ³n',
-                                'Hasta 100 Ã­tems Â· 12 fotos',
-                            ],
-                            'food-anual' => [
-                                'Todo de Semestral +',
-                                'Pedido RÃ¡pido â†’ WhatsApp â­',
-                                'Acumulador de Ã­tems',
-                                'String de pedido estructurado',
-                                'Hasta 150 Ã­tems Â· 18 fotos',
-                            ],
-                            default => [],
-                        };
-                    @endphp
-                    <div class="relative bg-white border rounded-2xl shadow-sm p-6 lg:p-8 flex flex-col hover:shadow-[0_8px_30px_rgba(0,0,0,0.10)] hover:-translate-y-1 transition-all duration-300
-                                {{ $isRecommended ? 'border-transparent' : 'border-border' }}"
-                         @if($isRecommended) style="box-shadow:0 0 0 2px {{ $accent }}" @endif>
-
-                        @if($isRecommended)
-                        <span class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 inline-flex items-center px-3 py-1 rounded-full text-xs font-bold text-white"
-                              style="background:{{ $accent }}">
-                            Recomendado
-                        </span>
-                        @endif
-
-                        <div class="mb-6">
-                            <h3 class="text-sm font-bold uppercase tracking-wider text-foreground/50">{{ $plan->name }}</h3>
-                            <div class="mt-2 flex items-baseline gap-1">
-                                <span class="text-4xl font-bold"
-                                      style="color:{{ $accent }};text-shadow:0 4px 24px color-mix(in oklch, {{ $accent }} 20%, transparent)">
-                                    ${{ intval($plan->price_usd) }}
-                                </span>
-                                <span class="text-foreground/50 text-sm">{{ $period }}</span>
-                            </div>
-                            <p class="mt-2 text-sm text-foreground/60">{{ $tagline }}</p>
-                        </div>
-
-                        <div class="border-t border-border/50 pt-5 mb-6 flex-1">
-                            <ul class="space-y-3">
-                                @foreach($features as $feat)
-                                <li class="flex items-start gap-2 text-sm text-foreground/80">
-                                    <span class="mt-0.5 shrink-0" style="color:{{ $accent }}">âœ“</span>
-                                    {{ $feat }}
-                                </li>
-                                @endforeach
-                            </ul>
-                        </div>
-
-                        <a href="{{ route('onboarding.food', ['plan_id' => $plan->id]) }}"
-                           class="block w-full text-center py-3 px-4 rounded-lg font-semibold text-white transition-all duration-200 hover:-translate-y-0.5"
-                           style="background:{{ $accent }};box-shadow:0 4px 14px 0 color-mix(in oklch, {{ $accent }} 40%, transparent)"
-                           onmouseover="this.style.boxShadow='0 6px 20px 0 color-mix(in oklch, {{ $accent }} 50%, transparent)'"
-                           onmouseout="this.style.boxShadow='0 4px 14px 0 color-mix(in oklch, {{ $accent }} 40%, transparent)'">
-                            Empezar con {{ $plan->name }}
-                        </a>
-                    </div>
-                    @endforeach
-                </div>
-            </div>
-
-            {{-- â•â•â• PANEL CAT â•â•â• --}}
-            <div x-show="tab === 'cat'" x-cloak x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0">
-
-                <div class="text-center mb-10">
-                    <h2 class="text-xl font-semibold md:text-2xl text-foreground">Tu catÃ¡logo con carrito. Vende mÃ¡s.</h2>
-                    <p class="mt-2 text-foreground/60">CatÃ¡logo visual con carrito incluido. Tus clientes escogen y te compran por WhatsApp.</p>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 max-w-5xl mx-auto">
-                    @foreach($catPlans as $plan)
-                    @php
-                        $isRecommended = $plan->slug === 'cat-anual';
-                        $accent        = '#10b981';
-                        $tagline       = match($plan->slug) {
-                            'cat-basico'    => 'Para empezar. Tu vitrina digital.',
-                            'cat-semestral' => 'Para vender. Carrito incluido.',
-                            'cat-anual'     => 'Para escalar. Sin lÃ­mites.',
-                            default         => '',
-                        };
-                        $period = match($plan->slug) {
-                            'cat-basico'    => '/mes',
-                            'cat-semestral' => '/semestre',
-                            'cat-anual'     => '/aÃ±o',
-                            default         => '/aÃ±o',
-                        };
-                        $features = match($plan->slug) {
-                            'cat-basico' => [
-                                'CatÃ¡logo visual activo 24/7',
-                                'Hasta 20 productos',
-                                '1 foto por producto',
-                                'BotÃ³n WhatsApp directo',
-                                'Sin carrito (plan entrada)',
-                            ],
-                            'cat-semestral' => [
-                                'Todo de BÃ¡sico +',
-                                'Carrito bÃ¡sico incluido âœ…',
-                                'Hasta 100 productos',
-                                '3 fotos por producto',
-                                'Variantes: talla y color',
-                            ],
-                            'cat-anual' => [
-                                'Todo de Semestral +',
-                                'Mini Order ID SC-XXXX â­',
-                                '250 productos Â· 6 fotos c/u',
-                                '6 fotos por producto',
-                                'Todas las variantes + opciones',
-                            ],
-                            default => [],
-                        };
-                    @endphp
-                    <div class="relative bg-white border rounded-2xl shadow-sm p-6 lg:p-8 flex flex-col hover:shadow-[0_8px_30px_rgba(0,0,0,0.10)] hover:-translate-y-1 transition-all duration-300
-                                {{ $isRecommended ? 'border-transparent' : 'border-border' }}"
-                         @if($isRecommended) style="box-shadow:0 0 0 2px {{ $accent }}" @endif>
-
-                        @if($isRecommended)
-                        <span class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 inline-flex items-center px-3 py-1 rounded-full text-xs font-bold text-white"
-                              style="background:{{ $accent }}">
-                            Recomendado
-                        </span>
-                        @endif
-
-                        <div class="mb-6">
-                            <h3 class="text-sm font-bold uppercase tracking-wider text-foreground/50">{{ $plan->name }}</h3>
-                            <div class="mt-2 flex items-baseline gap-1">
-                                <span class="text-4xl font-bold"
-                                      style="color:{{ $accent }};text-shadow:0 4px 24px color-mix(in oklch, {{ $accent }} 20%, transparent)">
-                                    ${{ intval($plan->price_usd) }}
-                                </span>
-                                <span class="text-foreground/50 text-sm">{{ $period }}</span>
-                            </div>
-                            <p class="mt-2 text-sm text-foreground/60">{{ $tagline }}</p>
-                        </div>
-
-                        <div class="border-t border-border/50 pt-5 mb-6 flex-1">
-                            <ul class="space-y-3">
-                                @foreach($features as $feat)
-                                <li class="flex items-start gap-2 text-sm text-foreground/80">
-                                    <span class="mt-0.5 shrink-0" style="color:{{ $accent }}">âœ“</span>
-                                    {{ $feat }}
-                                </li>
-                                @endforeach
-                            </ul>
-                        </div>
-
-                        <a href="{{ route('onboarding.cat', ['plan_id' => $plan->id]) }}"
-                           class="block w-full text-center py-3 px-4 rounded-lg font-semibold text-white transition-all duration-200 hover:-translate-y-0.5"
-                           style="background:{{ $accent }};box-shadow:0 4px 14px 0 color-mix(in oklch, {{ $accent }} 40%, transparent)"
-                           onmouseover="this.style.boxShadow='0 6px 20px 0 color-mix(in oklch, {{ $accent }} 50%, transparent)'"
-                           onmouseout="this.style.boxShadow='0 4px 14px 0 color-mix(in oklch, {{ $accent }} 40%, transparent)'">
-                            Empezar con {{ $plan->name }}
-                        </a>
-                    </div>
-                    @endforeach
-                </div>
-            </div>
-
         </div>
-    </section>
 
-    {{-- â•â•â• COMPARATIVA / AYUDA â•â•â• --}}
-    <section class="py-12 bg-background border-t border-border/30">
-        <div class="mx-auto max-w-2xl px-4 text-center">
-            <p class="text-lg font-semibold text-foreground mb-2">Â¿No sabes cuÃ¡l elegir?</p>
-            <p class="text-foreground/60 mb-6">Te ayudamos a encontrar el plan perfecto para tu negocio.</p>
-            <a href="https://wa.me/584120000000?text={{ urlencode('Hola, necesito ayuda para elegir mi plan SYNTIweb') }}"
-               target="_blank" rel="noopener noreferrer"
-               class="inline-flex items-center gap-2 py-3 px-6 rounded-lg font-semibold text-white transition-all duration-200 hover:-translate-y-0.5"
-               style="background:#25d366;box-shadow:0 4px 14px 0 rgba(37,211,102,0.35)">
-                <span class="iconify tabler--brand-whatsapp size-5" aria-hidden="true"></span>
-                EscrÃ­benos por WhatsApp
-            </a>
+        {{-- ═══ PANEL STUDIO ═══ --}}
+        <div x-show="tab==='studio'"
+             x-transition:enter="transition ease-out duration-200"
+             x-transition:enter-start="opacity-0 translate-y-2"
+             x-transition:enter-end="opacity-100 translate-y-0">
+
+            <div class="text-center mb-10">
+                <h2 class="text-2xl font-bold text-slate-800">Tu web completa. Tu negocio en Google.</h2>
+                <p class="mt-2 text-slate-500 text-sm">Lo que una agencia cobra $180–$500 estático, aquí lo tienes vivo.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6 items-end max-w-5xl mx-auto">
+                @foreach($studioPlans as $plan)
+                @php
+                    $isPopular = str_contains($plan->slug, 'crecimiento');
+                    $tagline = match(true) {
+                        str_contains($plan->slug, 'oportunidad') => 'Para validar. Cero riesgo.',
+                        str_contains($plan->slug, 'crecimiento') => 'Para crecer. Tu competencia está aquí.',
+                        str_contains($plan->slug, 'vision')      => 'Para dominar. Eres líder local.',
+                        default => '',
+                    };
+                    $features = match(true) {
+                        str_contains($plan->slug, 'oportunidad') => ['Landing profesional completa','Apareces en Google (SEO)','WhatsApp integrado por producto','Visible en celular y desktop','Horarios y ubicación en mapa','QR permanente incluido','BCV automático ($ / REF)','20 productos · 3 servicios','10 paletas de color'],
+                        str_contains($plan->slug, 'crecimiento') => ['Todo de Oportunidad +','Sección Acerca de + imagen','Testimonios de clientes','Analytics en tiempo real','Redes sociales conectadas','Header con mensaje promocional','50 productos · 6 servicios','17 paletas de color'],
+                        str_contains($plan->slug, 'vision')      => ['Todo de Crecimiento +','Preguntas frecuentes (FAQ)','Sucursales múltiples (hasta 3)','Colores personalizados ilimitados','Productos ilimitados · 9 servicios','SEO profundo + schema.org','Reporte analytics PDF email','Dominio personalizado (add-on)'],
+                        default => [],
+                    };
+                @endphp
+                <div class="plan-card bg-white rounded-2xl p-6 lg:p-8 flex flex-col
+                    {{ $isPopular ? 'plan-card--highlight ring-studio shadow-2xl' : 'border border-slate-200 shadow-sm' }}">
+
+                    @if($isPopular)
+                    <div class="text-center mb-4">
+                        <span class="inline-flex items-center gap-1 badge-studio text-white text-xs font-bold px-3 py-1 rounded-full">
+                            El que más se vende ⭐
+                        </span>
+                    </div>
+                    @endif
+
+                    <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">{{ $plan->name }}</p>
+                    <div class="flex items-baseline gap-1 mb-1">
+                        <span class="text-5xl font-extrabold check-studio">${{ intval($plan->price_usd) }}</span>
+                        <span class="text-slate-400 text-sm">/año</span>
+                    </div>
+                    <p class="text-sm text-slate-500 mb-6">{{ $tagline }}</p>
+
+                    <ul class="space-y-2.5 flex-1 mb-8">
+                        @foreach($features as $feat)
+                        <li class="flex items-start gap-2 text-sm text-slate-700">
+                            <iconify-icon icon="tabler:check" class="check-studio mt-0.5 shrink-0" width="16"></iconify-icon>
+                            {{ $feat }}
+                        </li>
+                        @endforeach
+                    </ul>
+
+                    <a href="{{ route('onboarding.studio', ['plan_id' => $plan->id]) }}"
+                       class="block w-full text-center py-3 px-4 rounded-xl font-bold text-sm transition-all hover:-translate-y-0.5
+                       {{ $isPopular ? 'btn-primary-studio' : 'btn-ghost-studio' }}">
+                        {{ $isPopular ? 'Crecer ahora' : ($plan->name === 'VISIÓN' || str_contains($plan->slug,'vision') ? 'Dominar mi zona' : 'Empezar gratis') }}
+                    </a>
+                </div>
+                @endforeach
+            </div>
         </div>
-    </section>
 
+        {{-- ═══ PANEL FOOD ═══ --}}
+        <div x-show="tab==='food'"
+             x-transition:enter="transition ease-out duration-200"
+             x-transition:enter-start="opacity-0 translate-y-2"
+             x-transition:enter-end="opacity-100 translate-y-0">
+
+            <div class="text-center mb-10">
+                <h2 class="text-2xl font-bold text-slate-800">Tu menú digital. Pedidos por WhatsApp.</h2>
+                <p class="mt-2 text-slate-500 text-sm">Sin imprimir cartas. Sin apps complicadas.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6 items-end max-w-5xl mx-auto">
+                @foreach($foodPlans as $plan)
+                @php
+                    $isPopular = str_contains($plan->slug, 'vision');
+                    $tagline = match(true) {
+                        str_contains($plan->slug, 'oportunidad') => 'Para empezar. Tu carta digital en minutos.',
+                        str_contains($plan->slug, 'crecimiento') => 'Para crecer. Más ítems, más categorías.',
+                        str_contains($plan->slug, 'vision')      => 'Para dominar. Pedidos directos por WhatsApp.',
+                        default => '',
+                    };
+                    $features = match(true) {
+                        str_contains($plan->slug, 'oportunidad') => ['Menú digital activo 24/7','Lista de platos con precio','Enlace y QR para compartir','Hasta 50 ítems · 6 fotos de categoría','BCV automático ($ / REF / ambos)','WhatsApp directo'],
+                        str_contains($plan->slug, 'crecimiento') => ['Todo de Oportunidad +','Categorías navegables (sticky)','Badges por ítem (nuevo/promo)','Hasta 100 ítems · 12 fotos','Analytics avanzado','SEO y Schema Restaurant'],
+                        str_contains($plan->slug, 'vision')      => ['Todo de Crecimiento +','Pedido Rápido → WhatsApp','Carrito flotante con resumen','Sistema de Comandas SF-XXXX','Hasta 150 ítems · 18 fotos','Analytics completo + reporte PDF'],
+                        default => [],
+                    };
+                @endphp
+                <div class="plan-card bg-white rounded-2xl p-6 lg:p-8 flex flex-col
+                    {{ $isPopular ? 'plan-card--highlight ring-food shadow-2xl' : 'border border-slate-200 shadow-sm' }}">
+
+                    @if($isPopular)
+                    <div class="text-center mb-4">
+                        <span class="inline-flex items-center gap-1 badge-food text-white text-xs font-bold px-3 py-1 rounded-full">
+                            El más popular ⭐
+                        </span>
+                    </div>
+                    @endif
+
+                    <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">{{ $plan->name }}</p>
+                    <div class="flex items-baseline gap-1 mb-1">
+                        <span class="text-5xl font-extrabold check-food">${{ intval($plan->price_usd) }}</span>
+                        <span class="text-slate-400 text-sm">/{{ str_contains($plan->slug,'basico') ? 'mes' : (str_contains($plan->slug,'semestral') ? '6 meses' : 'año') }}</span>
+                    </div>
+                    <p class="text-sm text-slate-500 mb-6">{{ $tagline }}</p>
+
+                    <ul class="space-y-2.5 flex-1 mb-8">
+                        @foreach($features as $feat)
+                        <li class="flex items-start gap-2 text-sm text-slate-700">
+                            <iconify-icon icon="tabler:check" class="check-food mt-0.5 shrink-0" width="16"></iconify-icon>
+                            {{ $feat }}
+                        </li>
+                        @endforeach
+                    </ul>
+
+                    <a href="{{ route('onboarding.food', ['plan_id' => $plan->id]) }}"
+                       class="block w-full text-center py-3 px-4 rounded-xl font-bold text-sm transition-all hover:-translate-y-0.5
+                       {{ $isPopular ? 'btn-primary-food' : 'btn-ghost-food' }}">
+                        {{ $isPopular ? 'Máximo ahorro' : (str_contains($plan->slug,'semestral') ? 'Abonar semestral' : 'Empezar gratis') }}
+                    </a>
+                </div>
+                @endforeach
+            </div>
+        </div>
+
+        {{-- ═══ PANEL CAT ═══ --}}
+        <div x-show="tab==='cat'"
+             x-transition:enter="transition ease-out duration-200"
+             x-transition:enter-start="opacity-0 translate-y-2"
+             x-transition:enter-end="opacity-100 translate-y-0">
+
+            <div class="text-center mb-10">
+                <h2 class="text-2xl font-bold text-slate-800">Tu catálogo con carrito. Ventas por WhatsApp.</h2>
+                <p class="mt-2 text-slate-500 text-sm">Para tiendas, boutiques y proveedores venezolanos.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6 items-end max-w-5xl mx-auto">
+                @foreach($catPlans as $plan)
+                @php
+                    $isPopular = str_contains($plan->slug, 'vision');
+                    $tagline = match(true) {
+                        str_contains($plan->slug, 'oportunidad') => 'Para empezar. Tu catálogo en minutos.',
+                        str_contains($plan->slug, 'crecimiento') => 'Para crecer. Carrito básico incluido.',
+                        str_contains($plan->slug, 'vision')      => 'Para dominar. Mini Order rastreable.',
+                        default => '',
+                    };
+                    $features = match(true) {
+                        str_contains($plan->slug, 'oportunidad') => ['Catálogo visual con grid','Hasta 20 productos · 1 foto c/u','Botón WhatsApp por producto','BCV automático','QR permanente','Enlace directo al catálogo'],
+                        str_contains($plan->slug, 'crecimiento') => ['Todo de Oportunidad +','Carrito básico incluido','Hasta 100 productos · 3 fotos c/u','Variantes: talla + color','Checkout directo WhatsApp','Analytics básico'],
+                        str_contains($plan->slug, 'vision')      => ['Todo de Crecimiento +','Mini Order SC-XXXX rastreable','Productos ilimitados · 6 fotos c/u','Todas las variantes + opciones','Precio tachado (oferta)','Analytics completo + BCV'],
+                        default => [],
+                    };
+                @endphp
+                <div class="plan-card bg-white rounded-2xl p-6 lg:p-8 flex flex-col
+                    {{ $isPopular ? 'plan-card--highlight ring-cat shadow-2xl' : 'border border-slate-200 shadow-sm' }}">
+
+                    @if($isPopular)
+                    <div class="text-center mb-4">
+                        <span class="inline-flex items-center gap-1 badge-cat text-white text-xs font-bold px-3 py-1 rounded-full">
+                            El más popular ⭐
+                        </span>
+                    </div>
+                    @endif
+
+                    <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">{{ $plan->name }}</p>
+                    <div class="flex items-baseline gap-1 mb-1">
+                        <span class="text-5xl font-extrabold check-cat">${{ intval($plan->price_usd) }}</span>
+                        <span class="text-slate-400 text-sm">/{{ str_contains($plan->slug,'basico') ? 'mes' : (str_contains($plan->slug,'semestral') ? '6 meses' : 'año') }}</span>
+                    </div>
+                    <p class="text-sm text-slate-500 mb-6">{{ $tagline }}</p>
+
+                    <ul class="space-y-2.5 flex-1 mb-8">
+                        @foreach($features as $feat)
+                        <li class="flex items-start gap-2 text-sm text-slate-700">
+                            <iconify-icon icon="tabler:check" class="check-cat mt-0.5 shrink-0" width="16"></iconify-icon>
+                            {{ $feat }}
+                        </li>
+                        @endforeach
+                    </ul>
+
+                    <a href="{{ route('onboarding.cat', ['plan_id' => $plan->id]) }}"
+                       class="block w-full text-center py-3 px-4 rounded-xl font-bold text-sm transition-all hover:-translate-y-0.5
+                       {{ $isPopular ? 'btn-primary-cat' : 'btn-ghost-cat' }}">
+                        {{ $isPopular ? 'Máximo ahorro' : (str_contains($plan->slug,'semestral') ? 'Abonar semestral' : 'Empezar gratis') }}
+                    </a>
+                </div>
+                @endforeach
+            </div>
+        </div>
+
+    </div>
+</section>
+
+{{-- Footer CTA --}}
+<section class="py-12 bg-white border-t border-slate-100">
+    <div class="max-w-xl mx-auto px-4 text-center">
+        <p class="text-lg font-semibold text-slate-800 mb-2">¿No sabes cuál elegir?</p>
+        <p class="text-slate-500 text-sm mb-6">Te ayudamos a encontrar el plan perfecto para tu negocio.</p>
+        <a href="https://wa.me/584243244788?text={{ urlencode('Hola, necesito ayuda para elegir mi plan SYNTIweb') }}"
+           target="_blank" rel="noopener noreferrer"
+           class="inline-flex items-center gap-2 py-3 px-6 rounded-xl font-semibold text-white transition-all hover:-translate-y-0.5"
+           style="background:#25d366;box-shadow:0 4px 14px 0 rgba(37,211,102,0.35)">
+            <iconify-icon icon="tabler:brand-whatsapp" width="20"></iconify-icon>
+            Escríbenos por WhatsApp
+        </a>
+    </div>
+</section>
 @endsection
+
+@push('scripts')
+<script>
+// Alpine ya inicializado por el layout
+</script>
+@endpush

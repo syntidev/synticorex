@@ -68,9 +68,6 @@
 
             {{-- Mobile toggle --}}
             <div class="flex items-center gap-2 lg:hidden">
-                <a href="{{ route('register') }}" class="inline-flex items-center text-xs py-1.5 px-3 rounded-lg font-semibold bg-[#4A80E4] text-white">
-                    Crear gratis
-                </a>
                 <button type="button"
                     class="hs-collapse-toggle p-2 rounded-lg text-slate-600 hover:bg-slate-100 transition"
                     data-hs-collapse="#mkt-layout-navbar-collapse"
@@ -130,20 +127,7 @@
                     <a href="{{ route('marketing.planes') }}" class="text-sm font-medium text-slate-700 hover:bg-slate-100 px-3 py-2 rounded-lg transition">Planes</a>
                     <a href="{{ route('blog.index') }}" class="text-sm font-medium text-slate-700 hover:bg-slate-100 px-3 py-2 rounded-lg transition">Blog</a>
                     <a href="/docs" class="text-sm font-medium text-slate-700 hover:bg-slate-100 px-3 py-2 rounded-lg transition">Docs</a>
-
-                    {{-- Mobile: productos expandidos --}}
-                    <div class="lg:hidden border-t border-border mt-2 pt-2 space-y-1">
-                        <p class="px-3 py-1 text-xs font-semibold text-slate-400 uppercase tracking-wider">Productos</p>
-                        <a href="{{ route('marketing.studio') }}" class="flex items-center gap-2 px-3 py-2 text-sm text-slate-700 rounded-lg hover:bg-slate-50">
-                            <iconify-icon icon="tabler:layout-dashboard" width="16" height="16"></iconify-icon> SYNTIstudio
-                        </a>
-                        <a href="{{ route('marketing.food') }}" class="flex items-center gap-2 px-3 py-2 text-sm text-slate-700 rounded-lg hover:bg-slate-50">
-                            <iconify-icon icon="tabler:tools-kitchen-2" width="16" height="16"></iconify-icon> SYNTIfood
-                        </a>
-                        <a href="{{ route('marketing.cat') }}" class="flex items-center gap-2 px-3 py-2 text-sm text-slate-700 rounded-lg hover:bg-slate-50">
-                            <iconify-icon icon="tabler:shopping-bag" width="16" height="16"></iconify-icon> SYNTIcat
-                        </a>
-                    </div>
+                    <a href="{{ route('marketing.contacto') }}" class="text-sm font-medium text-slate-700 hover:bg-slate-100 px-3 py-2 rounded-lg transition">Contacto</a>
 
                     {{-- Divider + CTA (desktop) --}}
                     <div class="hidden lg:flex items-center gap-2 ml-2 pl-4 border-l border-border">

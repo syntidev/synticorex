@@ -1,4 +1,4 @@
-        <!-- Tab: Catálogo de Productos (SYNTIcat) -->
+﻿        <!-- Tab: Catálogo de Productos (SYNTIcat) -->
         <div id="tab-productos" class="tab-content">
             @php
                 $maxProducts = $maxItems ?? (int) ($plan->products_limit ?? 20);
@@ -6,8 +6,8 @@
                 $dynLabel = 'Productos';
                 $dynSingular = 'Producto';
                 $maxImages = match($plan->slug ?? '') {
-                    'cat-semestral' => 3,
-                    'cat-anual'     => 6,
+                    'cat-crecimiento' => 3,
+                    'cat-vision'     => 6,
                     default         => 1,
                 };
             @endphp

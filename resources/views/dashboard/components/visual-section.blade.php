@@ -1,4 +1,4 @@
-        <!-- Tab: Visual — Imágenes, Logo, QR -->
+﻿        <!-- Tab: Visual — Imágenes, Logo, QR -->
         <div id="tab-visual" class="tab-content">
             <div class="px-6 pb-6 pt-2">
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -124,7 +124,7 @@
                                 <h3 class="font-semibold text-foreground">Fotos de portada</h3>
                                 <p class="text-xs text-muted-foreground-1">
                                     @php
-                                        $catMaxHeroSlots = in_array($tenant->plan->slug ?? '', ['cat-semestral', 'cat-anual']) ? 3 : 1;
+                                        $catMaxHeroSlots = in_array($tenant->plan->slug ?? '', ['cat-crecimiento', 'cat-vision']) ? 3 : 1;
                                         $heroSlots = array_slice([
                                             1 => 'hero_main_filename',
                                             2 => 'hero_secondary_filename',
