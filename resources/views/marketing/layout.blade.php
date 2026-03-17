@@ -126,7 +126,7 @@
 
                     <a href="{{ route('marketing.planes') }}" class="text-sm font-medium text-slate-700 hover:bg-slate-100 px-3 py-2 rounded-lg transition">Planes</a>
                     <a href="{{ route('blog.index') }}" class="text-sm font-medium text-slate-700 hover:bg-slate-100 px-3 py-2 rounded-lg transition">Blog</a>
-                    <a href="/docs" class="text-sm font-medium text-slate-700 hover:bg-slate-100 px-3 py-2 rounded-lg transition">Docs</a>
+                    <a href="https://docs.syntiweb.com" target="_blank" rel="noopener" class="text-sm font-medium text-slate-700 hover:bg-slate-100 px-3 py-2 rounded-lg transition">Docs</a>
                     <a href="{{ route('marketing.contacto') }}" class="text-sm font-medium text-slate-700 hover:bg-slate-100 px-3 py-2 rounded-lg transition">Contacto</a>
 
                     {{-- Divider + CTA (desktop) --}}
