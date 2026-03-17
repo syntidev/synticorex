@@ -59,7 +59,7 @@
                     <div class="flex items-center gap-2 text-sm text-slate-600"><span class="iconify tabler--circle-check-filled size-4 text-blue-500"></span>WhatsApp directo por producto</div>
                 </div>
                 <div class="px-6 pb-6">
-                    <a href="{{ route('onboarding.studio') }}" class="inline-flex items-center justify-center py-2 px-4 rounded-lg font-bold transition-all w-full border border-blue-200 text-blue-600 hover:bg-blue-50 hover:scale-[1.02]">
+                    <a href="{{ route('onboarding.studio') }}" class="block w-full text-center py-3 px-4 rounded-lg font-semibold text-white transition-all bg-[#4A80E4] hover:opacity-90">
                         Ver planes Studio →
                     </a>
                 </div>
@@ -131,7 +131,7 @@
                     <div class="flex items-center gap-2 text-sm text-slate-600"><span class="iconify tabler--circle-check-filled size-4 text-emerald-500"></span>Variantes · precio tachado · BCV</div>
                 </div>
                 <div class="px-6 pb-6">
-                    <a href="{{ route('onboarding.cat') }}" class="inline-flex items-center justify-center py-2 px-4 rounded-lg font-bold transition-all w-full border border-emerald-200 text-emerald-600 hover:bg-emerald-50 hover:scale-[1.02]">
+                    <a href="{{ route('onboarding.cat') }}" class="block w-full text-center py-3 px-4 rounded-lg font-semibold text-white transition-all bg-[#10b981] hover:opacity-90">
                         Ver planes Cat →
                     </a>
                 </div>
