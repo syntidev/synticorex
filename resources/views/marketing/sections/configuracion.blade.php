@@ -9,58 +9,47 @@
                     <div class="absolute -inset-4 bg-gradient-to-br from-purple-100 to-indigo-100 rounded-3xl blur-2xl opacity-40"></div>
 
                     {{-- Phone mockup --}}
-                    <div class="relative max-w-[260px] mx-auto">
-                        <div class="rounded-[2rem] overflow-hidden shadow-2xl border-4 border-slate-800 bg-slate-800">
-                            {{-- Status bar --}}
-                            <div class="bg-slate-800 px-4 py-1.5 flex items-center justify-between">
-                                <span class="text-[10px] text-white/60 font-medium">9:41</span>
-                                <div class="w-16 h-4 bg-slate-700 rounded-full"></div>
-                                <div class="flex gap-1">
-                                    <div class="w-3 h-3 bg-white/30 rounded-sm"></div>
-                                    <div class="w-3 h-3 bg-white/30 rounded-sm"></div>
-                                </div>
-                            </div>
-                            {{-- App content --}}
-                            <div class="bg-slate-50 p-3 space-y-3">
-                                {{-- Nav --}}
-                                <div class="bg-white rounded-xl p-2.5 flex items-center justify-between shadow-sm">
-                                    <span class="text-[10px] font-bold text-slate-800">Dashboard</span>
-                                    <div class="w-10 h-4 bg-blue-500 rounded text-[8px] text-white font-bold flex items-center justify-center">
-                                        Guardar
-                                    </div>
-                                </div>
-                                {{-- Edit form mock --}}
-                                <div class="bg-white rounded-xl p-3 shadow-sm space-y-2">
-                                    <div class="text-[9px] font-bold text-slate-600 uppercase tracking-wide">Editar producto</div>
-                                    <div class="space-y-1.5">
-                                        <div>
-                                            <div class="text-[8px] text-slate-400 mb-0.5">Nombre</div>
-                                            <div class="h-4 bg-blue-50 border border-blue-200 rounded px-1.5 flex items-center">
-                                                <span class="text-[8px] text-slate-700">Hamburguesa Especial</span>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <div class="text-[8px] text-slate-400 mb-0.5">Precio</div>
-                                            <div class="h-4 bg-blue-50 border border-blue-200 rounded px-1.5 flex items-center">
-                                                <span class="text-[8px] text-emerald-600 font-bold">REF 8.50</span>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <div class="text-[8px] text-slate-400 mb-0.5">Foto</div>
-                                            <div class="h-10 bg-amber-50 border border-amber-200 rounded flex items-center justify-center">
-                                                <span class="iconify tabler--camera size-4 text-amber-400"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                {{-- Success toast --}}
-                                <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-2 flex items-center gap-2">
-                                    <span class="iconify tabler--check size-3.5 text-emerald-500"></span>
-                                    <span class="text-[9px] text-emerald-700 font-medium">¡Producto actualizado!</span>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="relative mx-auto" style="width:190px;filter:drop-shadow(0 20px 40px rgba(0,0,0,0.18));">
+    <div style="background:#1a1a2e;border-radius:38px;padding:5px;border:1px solid rgba(255,255,255,0.08);">
+        <div style="background:#f8fafc;border-radius:33px;overflow:hidden;">
+            {{-- Top bar con isla dinámica --}}
+            <div style="background:#1a1a2e;height:42px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;position:relative;">
+                <span style="font-size:10px;font-weight:600;color:#fff;">9:41</span>
+                <div style="width:72px;height:20px;background:#000;border-radius:10px;position:absolute;top:11px;left:50%;transform:translateX(-50%);"></div>
+                <div style="display:flex;gap:3px;align-items:flex-end;">
+                    <div style="width:2px;height:4px;background:#fff;border-radius:1px;"></div>
+                    <div style="width:2px;height:6px;background:#fff;border-radius:1px;"></div>
+                    <div style="width:2px;height:8px;background:#fff;border-radius:1px;"></div>
+                    <div style="width:2px;height:10px;background:#fff;border-radius:1px;"></div>
+                </div>
+            </div>
+            {{-- Screen --}}
+            <div style="padding:10px;">
+                <div style="background:#fff;border-radius:8px;padding:7px 9px;display:flex;align-items:center;justify-content:space-between;margin-bottom:7px;box-shadow:0 1px 3px rgba(0,0,0,0.06);">
+                    <span style="font-size:9px;font-weight:700;color:#1e293b;">Dashboard</span>
+                    <div style="background:#2B6FFF;color:#fff;font-size:7px;font-weight:700;padding:3px 7px;border-radius:5px;">Guardar</div>
+                </div>
+                <div style="background:#fff;border-radius:8px;padding:9px;box-shadow:0 1px 3px rgba(0,0,0,0.06);margin-bottom:7px;">
+                    <div style="font-size:8px;font-weight:800;color:#334155;text-transform:uppercase;letter-spacing:.06em;margin-bottom:7px;">Editar producto</div>
+                    <div style="font-size:7px;color:#94a3b8;margin-bottom:2px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;">Nombre</div>
+                    <div style="background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:3px 6px;font-size:8px;color:#334155;font-weight:600;margin-bottom:5px;">Hamburguesa Especial</div>
+                    <div style="font-size:7px;color:#94a3b8;margin-bottom:2px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;">Precio</div>
+                    <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:4px;padding:3px 6px;font-size:8px;color:#1d4ed8;font-weight:600;margin-bottom:5px;">REF 8.50</div>
+                    <div style="font-size:7px;color:#94a3b8;margin-bottom:2px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;">Foto</div>
+                    <div style="background:#fefce8;border:1px solid #fef08a;border-radius:4px;height:28px;display:flex;align-items:center;justify-content:center;">
+                        <span class="iconify tabler--camera size-3.5 text-amber-400"></span>
                     </div>
+                </div>
+                <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:7px;padding:5px 8px;display:flex;align-items:center;gap:4px;">
+                    <div style="width:11px;height:11px;background:#22c55e;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                        <svg width="7" height="7" viewBox="0 0 10 10" fill="none"><path d="M2 5l2 2 4-4" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </div>
+                    <span style="font-size:8px;font-weight:700;color:#166534;">¡Producto actualizado!</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
                     {{-- Floating badges --}}
                     <div class="absolute -top-2 -right-2 bg-white rounded-xl shadow-xl p-2 flex items-center gap-1.5 mkt-float">

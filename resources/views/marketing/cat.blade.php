@@ -689,66 +689,6 @@
 {{-- FOOTER                                             --}}
 {{-- ═══════════════════════════════════════════════════ --}}
 @include('marketing.sections.footer-mkt')
-<!-- SYNTiA Pública -->
-<div id="syntia-widget" style="position:fixed;bottom:24px;right:24px;z-index:9999;font-family:sans-serif;">
-  <div id="syntia-box" style="display:none;width:320px;background:#fff;border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,.15);overflow:hidden;margin-bottom:12px;">
-    <div style="background:#4A80E4;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;">
-      <span style="color:#fff;font-weight:700;font-size:15px;">SYNTiA</span>
-      <span onclick="toggleSyntia()" style="color:#fff;cursor:pointer;font-size:18px;">✕</span>
-    </div>
-    <div id="syntia-messages" style="height:260px;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px;">
-      <div style="background:#f1f5f9;border-radius:10px;padding:10px;font-size:13px;color:#334155;">
-        👋 Hola, soy SYNTiA. ¿Tienes dudas sobre SYNTIweb?
-      </div>
-    </div>
-    <div style="padding:10px;border-top:1px solid #e2e8f0;display:flex;gap:8px;">
-      <input id="syntia-input" type="text" placeholder="Escribe tu pregunta..."
-        style="flex:1;border:1px solid #e2e8f0;border-radius:8px;padding:8px 10px;font-size:13px;outline:none;"
-        onkeydown="if(event.key==='Enter')sendSyntia()">
-      <button onclick="sendSyntia()"
-        style="background:#4A80E4;color:#fff;border:none;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:13px;">
-        →
-      </button>
-    </div>
-  </div>
-  <button onclick="toggleSyntia()"
-    style="background:#4A80E4;color:#fff;border:none;border-radius:50%;width:52px;height:52px;font-size:22px;cursor:pointer;box-shadow:0 4px 16px rgba(74,128,228,.4);display:flex;align-items:center;justify-content:center;">
-    💬
-  </button>
-</div>
-
-<script>
-function toggleSyntia() {
-  const box = document.getElementById('syntia-box');
-  box.style.display = box.style.display === 'none' ? 'block' : 'none';
-}
-
-async function sendSyntia() {
-  const input = document.getElementById('syntia-input');
-  const msgs  = document.getElementById('syntia-messages');
-  const q     = input.value.trim();
-  if (!q) return;
-
-  msgs.innerHTML += `<div style="background:#4A80E4;color:#fff;border-radius:10px;padding:10px;font-size:13px;align-self:flex-end;">${q}</div>`;
-  msgs.innerHTML += `<div id="typing" style="background:#f1f5f9;border-radius:10px;padding:10px;font-size:13px;color:#94a3b8;">SYNTiA está escribiendo...</div>`;
-  input.value = '';
-  msgs.scrollTop = msgs.scrollHeight;
-
-  try {
-    const res  = await fetch('/api/synti/public-ask', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
-      body: JSON.stringify({ question: q })
-    });
-    const data = await res.json();
-    document.getElementById('typing').remove();
-    msgs.innerHTML += `<div style="background:#f1f5f9;border-radius:10px;padding:10px;font-size:13px;color:#334155;">${data.answer}</div>`;
-  } catch(e) {
-    document.getElementById('typing').remove();
-    msgs.innerHTML += `<div style="background:#fee2e2;border-radius:10px;padding:10px;font-size:13px;color:#991b1b;">Error al conectar con SYNTiA.</div>`;
-  }
-  msgs.scrollTop = msgs.scrollHeight;
-}
-</script>
+<x-syntia-widget />
 </body>
 </html>

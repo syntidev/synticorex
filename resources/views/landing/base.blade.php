@@ -38,6 +38,7 @@
     <link rel="manifest" href="/manifest/{{ $tenant->subdomain }}.json">
     @endif
 
+    <link rel="icon" type="image/svg+xml" href="{{ asset('brand/syntiweb-logo-positive.svg') }}">
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon-16x16.png') }}">
@@ -200,6 +201,14 @@
     <script>window.__tenantIsOpen = true; window.showClosedToast = function(){};</script>
     @endif
 
+    <script>
+(function(){
+    const original = document.title;
+    document.addEventListener('visibilitychange', function(){
+        document.title = document.hidden ? '✦ ¡Vuelve pronto! — SYNTIweb' : original;
+    });
+})();
+</script>
     <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js" defer></script>
     @stack('scripts')
 </body>

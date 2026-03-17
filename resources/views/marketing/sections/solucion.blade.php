@@ -16,95 +16,64 @@
         </div>
 
         {{-- Steps --}}
-        <div class="grid lg:grid-cols-3 gap-8 lg:gap-6 relative">
-            {{-- Connecting line (desktop only) --}}
-            <div class="hidden lg:block absolute top-24 left-[20%] right-[20%] h-0.5 bg-gradient-to-r from-blue-200 via-indigo-200 to-purple-200"></div>
+        <div class="max-w-3xl mx-auto">
+    <div class="flex items-start gap-0">
 
-            {{-- Step 1 --}}
-            <div class="mkt-fade-in relative">
-                <div class="mkt-card rounded-2xl bg-white border border-slate-100 p-8 shadow-sm text-center relative z-10">
-                    <div class="w-12 h-12 mx-auto mb-6 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white font-extrabold text-lg shadow-lg shadow-blue-500/25">1</div>
-                    <div class="w-16 h-16 mx-auto mb-5 rounded-2xl bg-blue-50 flex items-center justify-center">
-                        <span class="iconify tabler--layout-grid size-8 text-blue-500"></span>
-                    </div>
-                    <h3 class="text-xl font-bold text-slate-900 mb-3">Elige tu tipo de negocio</h3>
-                    <p class="text-slate-500 text-sm leading-relaxed">
-                        Restaurante, peluquería, taller mecánico, consultorio, tienda... Selecciona tu segmento y SYNTIweb se adapta automáticamente.
-                    </p>
-                    {{-- Segment pills --}}
-                    <div class="flex flex-wrap gap-1.5 justify-center mt-5">
-                        <span class="inline-flex items-center py-0.5 px-2 rounded-full text-sm font-medium bg-orange-50 text-orange-600 border border-orange-200">Restaurante</span>
-                        <span class="inline-flex items-center py-0.5 px-2 rounded-full text-sm font-medium bg-blue-50 text-blue-600 border border-blue-200">Mecánico</span>
-                        <span class="inline-flex items-center py-0.5 px-2 rounded-full text-sm font-medium bg-pink-50 text-pink-600 border border-pink-200">Salón</span>
-                        <span class="inline-flex items-center py-0.5 px-2 rounded-full text-sm font-medium bg-indigo-50 text-indigo-600 border border-indigo-200">Abogado</span>
-                        <span class="inline-flex items-center py-0.5 px-2 rounded-full text-sm font-medium bg-emerald-50 text-emerald-600 border border-emerald-200">Tienda</span>
-                    </div>
+        {{-- Step 1 --}}
+        <div class="flex-1 flex flex-col items-center relative">
+            <div class="flex items-center w-full">
+                <div class="flex-1"></div>
+                <div class="w-10 h-10 rounded-full bg-[#2B6FFF] border-2 border-[#2B6FFF] flex items-center justify-center font-bold text-white text-sm z-10 shrink-0">
+                    <span class="iconify tabler--check size-5"></span>
                 </div>
+                <div class="flex-1 h-px bg-[#2B6FFF]"></div>
             </div>
-
-            {{-- Step 2 --}}
-            <div class="mkt-fade-in relative" style="transition-delay: 0.15s;">
-                <div class="mkt-card rounded-2xl bg-white border border-slate-100 p-8 shadow-sm text-center relative z-10">
-                    <div class="w-12 h-12 mx-auto mb-6 rounded-full bg-gradient-to-br from-indigo-500 to-indigo-600 flex items-center justify-center text-white font-extrabold text-lg shadow-lg shadow-indigo-500/25">2</div>
-                    <div class="w-16 h-16 mx-auto mb-5 rounded-2xl bg-indigo-50 flex items-center justify-center">
-                        <span class="iconify tabler--forms size-8 text-indigo-500"></span>
-                    </div>
-                    <h3 class="text-xl font-bold text-slate-900 mb-3">Llena 5 campos</h3>
-                    <p class="text-slate-500 text-sm leading-relaxed">
-                        Nombre, teléfono, dirección, horario y descripción. Es todo lo que necesitamos para generar tu presencia digital completa.
-                    </p>
-                    {{-- Fields mock --}}
-                    <div class="mt-5 space-y-2 text-left max-w-[200px] mx-auto">
-                        <div class="flex items-center gap-2">
-                            <span class="iconify tabler--check size-3.5 text-emerald-500"></span>
-                            <div class="h-2 flex-1 bg-indigo-100 rounded"></div>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <span class="iconify tabler--check size-3.5 text-emerald-500"></span>
-                            <div class="h-2 flex-1 bg-indigo-100 rounded"></div>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <span class="iconify tabler--check size-3.5 text-emerald-500"></span>
-                            <div class="h-2 w-3/4 bg-indigo-100 rounded"></div>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <span class="iconify tabler--check size-3.5 text-emerald-500"></span>
-                            <div class="h-2 w-4/5 bg-indigo-100 rounded"></div>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <span class="iconify tabler--check size-3.5 text-emerald-500"></span>
-                            <div class="h-2 w-2/3 bg-indigo-100 rounded"></div>
-                        </div>
-                    </div>
+            <div class="mt-4 text-center px-2">
+                <div class="text-xs font-bold uppercase tracking-wider text-[#2B6FFF] mb-1">Paso 01</div>
+                <div class="w-12 h-12 mx-auto mb-3 rounded-xl bg-blue-50 flex items-center justify-center">
+                    <span class="iconify tabler--layout-grid size-6 text-blue-500"></span>
                 </div>
-            </div>
-
-            {{-- Step 3 --}}
-            <div class="mkt-fade-in relative" style="transition-delay: 0.3s;">
-                <div class="mkt-card rounded-2xl bg-white border border-slate-100 p-8 shadow-sm text-center relative z-10">
-                    <div class="w-12 h-12 mx-auto mb-6 rounded-full bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center text-white font-extrabold text-lg shadow-lg shadow-purple-500/25">3</div>
-                    <div class="w-16 h-16 mx-auto mb-5 rounded-2xl bg-purple-50 flex items-center justify-center">
-                        <span class="iconify tabler--rocket size-8 text-purple-500"></span>
-                    </div>
-                    <h3 class="text-xl font-bold text-slate-900 mb-3">¡Tu página está lista!</h3>
-                    <p class="text-slate-500 text-sm leading-relaxed">
-                        Landing profesional, SEO automático, código QR listo para imprimir, WhatsApp integrado. Todo en tu propio subdominio.
-                    </p>
-                    {{-- Features --}}
-                    <div class="flex flex-wrap gap-1.5 justify-center mt-5">
-                        <span class="inline-flex items-center py-0.5 px-2 rounded-full text-sm font-medium bg-purple-50 text-purple-600 border border-purple-200">
-                            <span class="iconify tabler--search size-3 mr-0.5"></span> SEO
-                        </span>
-                        <span class="inline-flex items-center py-0.5 px-2 rounded-full text-sm font-medium bg-purple-50 text-purple-600 border border-purple-200">
-                            <span class="iconify tabler--qrcode size-3 mr-0.5"></span> QR
-                        </span>
-                        <span class="inline-flex items-center py-0.5 px-2 rounded-full text-sm font-medium bg-purple-50 text-purple-600 border border-purple-200">
-                            <span class="iconify tabler--brand-whatsapp size-3 mr-0.5"></span> WhatsApp
-                        </span>
-                    </div>
-                </div>
+                <h3 class="text-base font-bold text-slate-900 mb-2">Elige tu tipo de negocio</h3>
+                <p class="text-sm text-slate-500 leading-relaxed">Restaurante, peluquería, taller, consultorio, tienda... SYNTIweb se adapta automáticamente.</p>
             </div>
         </div>
+
+        {{-- Step 2 --}}
+        <div class="flex-1 flex flex-col items-center relative">
+            <div class="flex items-center w-full">
+                <div class="flex-1 h-px bg-[#2B6FFF]"></div>
+                <div class="w-10 h-10 rounded-full bg-white border-2 border-[#2B6FFF] flex items-center justify-center font-bold text-[#2B6FFF] text-sm z-10 shrink-0 shadow-[0_0_0_4px_rgba(43,111,255,0.12)]">2</div>
+                <div class="flex-1 h-px bg-slate-200"></div>
+            </div>
+            <div class="mt-4 text-center px-2">
+                <div class="text-xs font-bold uppercase tracking-wider text-[#2B6FFF] mb-1">Paso 02</div>
+                <div class="w-12 h-12 mx-auto mb-3 rounded-xl bg-indigo-50 flex items-center justify-center">
+                    <span class="iconify tabler--forms size-6 text-indigo-500"></span>
+                </div>
+                <h3 class="text-base font-bold text-slate-900 mb-2">Llena 5 campos</h3>
+                <p class="text-sm text-slate-500 leading-relaxed">Nombre, teléfono, dirección, horario y descripción. En 5 minutos ya está todo enviado.</p>
+            </div>
+        </div>
+
+        {{-- Step 3 --}}
+        <div class="flex-1 flex flex-col items-center relative">
+            <div class="flex items-center w-full">
+                <div class="flex-1 h-px bg-slate-200"></div>
+                <div class="w-10 h-10 rounded-full bg-white border-2 border-slate-200 flex items-center justify-center font-bold text-slate-400 text-sm z-10 shrink-0">3</div>
+                <div class="flex-1"></div>
+            </div>
+            <div class="mt-4 text-center px-2">
+                <div class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Paso 03</div>
+                <div class="w-12 h-12 mx-auto mb-3 rounded-xl bg-purple-50 flex items-center justify-center">
+                    <span class="iconify tabler--rocket size-6 text-purple-500"></span>
+                </div>
+                <h3 class="text-base font-bold text-slate-900 mb-2">¡Tu página está lista!</h3>
+                <p class="text-sm text-slate-500 leading-relaxed">Landing profesional, SEO automático, QR listo para imprimir y WhatsApp integrado.</p>
+            </div>
+        </div>
+
+    </div>
+</div>
 
         {{-- Bottom CTA --}}
         <div class="text-center mt-14 mkt-fade-in">

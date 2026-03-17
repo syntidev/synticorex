@@ -60,6 +60,19 @@
                     </div>
                 </div>
             @endforeach
+
+            {{-- Card 6 — segmento personalizado --}}
+            <div class="mkt-card mkt-fade-in rounded-2xl bg-white border border-dashed border-slate-200 overflow-hidden shadow-sm flex flex-col items-center justify-center text-center p-8 min-h-[200px]">
+                <div class="w-14 h-14 mx-auto mb-4 rounded-2xl bg-slate-50 flex items-center justify-center">
+                    <span class="iconify tabler--user-question size-7 text-slate-400"></span>
+                </div>
+                <h3 class="text-lg font-bold text-slate-800 mb-2">¿Tu negocio no aparece aquí?</h3>
+                <p class="text-sm text-slate-400 leading-relaxed mb-5">Cada negocio es único. Cuéntanos qué haces y construimos algo hecho exactamente para ti.</p>
+                <a href="{{ route('register') }}" class="inline-flex items-center gap-1.5 text-sm font-semibold text-blue-600 hover:text-blue-700 transition-colors">
+                    Háblanos de tu negocio
+                    <span class="iconify tabler--arrow-right size-4"></span>
+                </a>
+            </div>
         </div>
 
         {{-- "Y muchos más" --}}

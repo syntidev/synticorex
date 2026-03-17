@@ -66,12 +66,7 @@
             </div>
 
             {{-- FOOD --}}
-            <div class="mkt-fade-in lg:-mt-4 lg:mb-4 mkt-card rounded-2xl border bg-white border-orange-200 shadow-xl shadow-orange-500/10 ring-1 ring-orange-100 overflow-hidden relative">
-                <div class="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
-                    <div class="px-4 py-1 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 text-white text-xs font-bold shadow-lg">
-                        Más pedidos
-                    </div>
-                </div>
+            <div class="mkt-fade-in mkt-card rounded-2xl border bg-white border-slate-100 shadow-sm overflow-hidden">
                 <div class="h-1 bg-[#F97316]"></div>
                 <div class="p-6 pb-4 bg-gradient-to-b from-orange-50 to-white">
                     <div class="flex items-center gap-2 mb-3">
@@ -164,40 +159,31 @@
     </div>
 
     <script>
-    function currencyToggle() {
-        return {
-            currency: 'usd',
-            rate: 0,
-            async init() {
-                try {
-                    const res = await fetch('/api/parallel-rate');
-                    const data = await res.json();
-                    this.rate = data.rate ?? 0;
-                } catch(e) { this.rate = 0; }
-            },
-            toggleCurrency() {
-                this.currency = this.currency === 'usd' ? 'bs' : 'usd';
-            },
-            formatBs(usd) {
-                if (!this.rate) return '...';
-                const bs = usd * this.rate;
-                return 'Bs. ' + bs.toLocaleString('es-VE', {maximumFractionDigits: 0});
-            },
-            formatBsMes(usd) {
-                if (!this.rate) return '...';
-                const bs = (usd / 12) * this.rate;
-                return '~Bs. ' + bs.toLocaleString('es-VE', {maximumFractionDigits: 0}) + '/mes';
-            }
-        }
-    }
-    </script>
-</section>
+function currencyToggle() {
+    return {
+        currency: 'usd',
+        rate: 0,
+        async init() {
+            try {
+                const res = await fetch('/api/parallel-rate');
+                const data = await res.json();
+                this.rate = data.rate ?? 0;
+            } catch(e) { this.rate = 0; }
+        },
+        toggleCurrency() {
+            this.currency = this.currency === 'usd' ? 'bs' : 'usd';
+        },
+        formatBs(usd) {
+            if (!this.rate) return '...';
+            const bs = usd * this.rate;
+            return 'Bs. ' + Math.round(bs).toLocaleString('es-VE');
+        },
         formatBsMes(usd) {
             if (!this.rate) return '...';
-            const bs = (usd / 12) * this.rate;
-            return '~Bs. ' + bs.toLocaleString('es-VE', {maximumFractionDigits: 0}) + '/mes';
+            const bs = Math.round((usd / 12) * this.rate);
+            return '~Bs. ' + bs.toLocaleString('es-VE') + '/mes';
         }
     }
 }
-</script>
+    </script>
 </section>
