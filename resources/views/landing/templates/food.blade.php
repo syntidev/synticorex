@@ -209,20 +209,6 @@
                     class="size-10 flex items-center justify-center rounded-lg border border-foreground/10 hover:bg-surface/50 transition-colors text-foreground/50 cursor-pointer">
                 <span class="iconify tabler--menu-2 size-5"></span>
             </button>
-            <div id="sf-cat-dropdown" class="absolute left-0 top-full mt-1 w-56 bg-background rounded-xl shadow-xl border border-foreground/5 z-[200] overflow-hidden" style="display:none">
-                @if(!empty($featuredItems) && count($featuredItems) > 0)
-                <button onclick="sfScrollToCategory('featured');sfToggleCatMenu()"
-                        class="w-full text-left px-4 py-3 text-sm font-semibold text-foreground/70 hover:bg-surface hover:text-foreground transition-colors border-b border-foreground/5">
-                    ⭐ Destacados
-                </button>
-                @endif
-                @foreach($activeCats as $catIdx => $cat)
-                <button onclick="sfScrollToCategory({{ $catIdx }});sfToggleCatMenu()"
-                        class="w-full text-left px-4 py-3 text-sm font-semibold text-foreground/70 hover:bg-surface hover:text-foreground transition-colors border-b border-foreground/5 last:border-0">
-                    {{ $cat['nombre'] }}
-                </button>
-                @endforeach
-            </div>
         </div>
 
         {{-- Tabs categorías --}}
@@ -252,6 +238,22 @@
     </div>
     {{-- Dropdown backdrop --}}
     <div id="sf-cat-backdrop" onclick="sfToggleCatMenu()" style="display:none;position:fixed;inset:0;z-index:199"></div>
+</div>
+
+{{-- Dropdown categorías (fixed, compartido) --}}
+<div id="sf-cat-dropdown" class="fixed w-56 bg-background rounded-xl shadow-xl border border-foreground/5 z-[200] overflow-hidden" style="display:none;top:0;left:0">
+    @if(!empty($featuredItems) && count($featuredItems) > 0)
+    <button onclick="sfScrollToCategory('featured');sfToggleCatMenu()"
+            class="w-full text-left px-4 py-3 text-sm font-semibold text-foreground/70 hover:bg-surface hover:text-foreground transition-colors border-b border-foreground/5">
+        ⭐ Destacados
+    </button>
+    @endif
+    @foreach($activeCats as $catIdx => $cat)
+    <button onclick="sfScrollToCategory({{ $catIdx }});sfToggleCatMenu()"
+            class="w-full text-left px-4 py-3 text-sm font-semibold text-foreground/70 hover:bg-surface hover:text-foreground transition-colors border-b border-foreground/5 last:border-0">
+        {{ $cat['nombre'] }}
+    </button>
+    @endforeach
 </div>
 
 {{-- MODAL INFORMACIÓN --}}
@@ -1557,9 +1559,17 @@
     function sfToggleCatMenu() {
         var dd = document.getElementById('sf-cat-dropdown');
         var bd = document.getElementById('sf-cat-backdrop');
-        var open = dd.style.display === 'none';
-        dd.style.display = open ? 'block' : 'none';
-        bd.style.display = open ? 'block' : 'none';
+        var open = dd.style.display !== 'none';
+        if (!open) {
+            var trigger = document.getElementById('sf-cat-menu-btn');
+            if (trigger) {
+                var rect = trigger.getBoundingClientRect();
+                dd.style.top  = (rect.bottom + 4) + 'px';
+                dd.style.left = Math.max(4, Math.min(rect.left, window.innerWidth - 228)) + 'px';
+            }
+        }
+        dd.style.display = open ? 'none' : 'block';
+        bd.style.display = open ? 'none' : 'block';
     }
 
     // ── Inline product search ────────────────────────────────────────────────
@@ -1681,6 +1691,20 @@
     });
 (function(){
     var el = document.getElementById('synti-food-trigger');
+    if(!el) return;
+    var t = null;
+    el.addEventListener('touchstart', function(){
+        t = setTimeout(function(){
+            if(typeof openSyntiPanel==='function') openSyntiPanel();
+            if(navigator.vibrate) navigator.vibrate(60);
+        }, 800);
+    }, {passive:true});
+    el.addEventListener('touchend',   function(){ clearTimeout(t); }, {passive:true});
+    el.addEventListener('touchmove',  function(){ clearTimeout(t); }, {passive:true});
+    el.addEventListener('touchcancel',function(){ clearTimeout(t); }, {passive:true});
+})();
+(function(){
+    var el = document.getElementById('sf-cat-menu-btn');
     if(!el) return;
     var t = null;
     el.addEventListener('touchstart', function(){
