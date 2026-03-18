@@ -185,7 +185,7 @@
                        oninput="searchProducts(this.value)">
             </div>
             <div class="relative flex-shrink-0">
-                <button onclick="scToggleCatMenu()"
+                <button id="synti-hamburger-trigger-m" onclick="scToggleCatMenu()"
                         class="size-10 flex items-center justify-center rounded-lg border border-foreground/10 hover:bg-surface/50 transition-colors text-foreground/50 cursor-pointer">
                     <span class="iconify tabler--menu-2 size-5"></span>
                 </button>
@@ -246,38 +246,6 @@
         </div>
     </div>
 
-    {{-- Dropdown categorías (compartido) --}}
-    <div id="sc-cat-dropdown"
-         class="absolute right-3 sm:left-auto top-full mt-1 w-64 bg-background rounded-xl shadow-xl border border-foreground/5 z-[200] overflow-hidden"
-         style="display:none">
-        <div class="px-4 py-2.5 border-b border-foreground/5">
-            <p class="text-xs font-black uppercase tracking-widest text-foreground/40">Categorías</p>
-        </div>
-        <button onclick="filterCategory('all');scToggleCatMenu()" class="w-full text-left px-4 py-3 text-sm font-semibold text-foreground/70 hover:bg-surface hover:text-foreground transition-colors flex items-center gap-3 cursor-pointer">
-            <span class="iconify tabler--layout-grid size-4 text-primary/60"></span>Todos los productos
-        </button>
-        @foreach($scCatCategories as $cat)
-        @php $hasSubs = !empty($cat['subcategories']); @endphp
-        <div>
-            <button onclick="filterCategory('{{ $cat['name'] }}');{{ !$hasSubs ? 'scToggleCatMenu()' : '' }}"
-                    class="w-full text-left px-4 py-3 text-sm font-semibold text-foreground/70 hover:bg-surface hover:text-foreground transition-colors flex items-center gap-3 border-t border-foreground/4 cursor-pointer">
-                <span class="iconify tabler--chevron-right size-3.5 text-primary/70"></span>
-                <span class="flex-1">{{ $cat['name'] }}</span>
-                @if($hasSubs)<span class="iconify tabler--chevron-right size-3 text-foreground/30"></span>@endif
-            </button>
-            @if($hasSubs)
-            @foreach($cat['subcategories'] as $sub)
-            <button onclick="filterCategory('{{ $cat['name'] }}','{{ $sub['name'] }}');scToggleCatMenu()"
-                    class="w-full text-left pl-12 pr-4 py-2 text-xs text-foreground/55 hover:bg-surface hover:text-foreground transition-colors flex items-center gap-2 border-t border-foreground/4 cursor-pointer">
-                <span class="iconify tabler--minus size-3 text-foreground/30"></span>{{ $sub['name'] }}
-            </button>
-            @endforeach
-            @endif
-        </div>
-        @endforeach
-    </div>
-    <div id="sc-cat-backdrop" onclick="scToggleCatMenu()" style="display:none;position:fixed;inset:0;z-index:199"></div>
-
     {{-- Tabs categorías (compartido) --}}
     @if(!empty($scCatCategories))
     <div class="border-t border-foreground/5">
@@ -298,7 +266,37 @@
 
 </div>
 
-
+{{-- Dropdown categorías (compartido, fixed) --}}
+<div id="sc-cat-dropdown"
+     class="fixed w-64 bg-background rounded-xl shadow-xl border border-foreground/5 z-[200] overflow-hidden"
+     style="display:none;top:0;left:0">
+    <div class="px-4 py-2.5 border-b border-foreground/5">
+        <p class="text-xs font-black uppercase tracking-widest text-foreground/40">Categorías</p>
+    </div>
+    <button onclick="filterCategory('all');scToggleCatMenu()" class="w-full text-left px-4 py-3 text-sm font-semibold text-foreground/70 hover:bg-surface hover:text-foreground transition-colors flex items-center gap-3 cursor-pointer">
+        <span class="iconify tabler--layout-grid size-4 text-primary/60"></span>Todos los productos
+    </button>
+    @foreach($scCatCategories as $cat)
+    @php $hasSubs = !empty($cat['subcategories']); @endphp
+    <div>
+        <button onclick="filterCategory('{{ $cat['name'] }}');{{ !$hasSubs ? 'scToggleCatMenu()' : '' }}"
+                class="w-full text-left px-4 py-3 text-sm font-semibold text-foreground/70 hover:bg-surface hover:text-foreground transition-colors flex items-center gap-3 border-t border-foreground/4 cursor-pointer">
+            <span class="iconify tabler--chevron-right size-3.5 text-primary/70"></span>
+            <span class="flex-1">{{ $cat['name'] }}</span>
+            @if($hasSubs)<span class="iconify tabler--chevron-right size-3 text-foreground/30"></span>@endif
+        </button>
+        @if($hasSubs)
+        @foreach($cat['subcategories'] as $sub)
+        <button onclick="filterCategory('{{ $cat['name'] }}','{{ $sub['name'] }}');scToggleCatMenu()"
+                class="w-full text-left pl-12 pr-4 py-2 text-xs text-foreground/55 hover:bg-surface hover:text-foreground transition-colors flex items-center gap-2 border-t border-foreground/4 cursor-pointer">
+            <span class="iconify tabler--minus size-3 text-foreground/30"></span>{{ $sub['name'] }}
+        </button>
+        @endforeach
+        @endif
+    </div>
+    @endforeach
+</div>
+<div id="sc-cat-backdrop" onclick="scToggleCatMenu()" style="display:none;position:fixed;inset:0;z-index:199"></div>
 
 {{-- MODAL INFORMACIÓN --}}
 <div id="sc-info-modal" class="sc-modal-overlay" onclick="if(event.target===this)this.style.display='none'">
@@ -1248,14 +1246,14 @@
         document.getElementById('sc-total-label').textContent = currentCurrency;
     }
 
-    function openDataModal() {
+    window.openDataModal = function() {
         const modal = document.getElementById('sc-data-modal');
         if (modal) modal.style.display = 'flex';
-    }
-    function closeDataModal() {
+    };
+    window.closeDataModal = function() {
         const modal = document.getElementById('sc-data-modal');
         if (modal) modal.style.display = 'none';
-    }
+    };
 
     async function buildAndSend(name, phone, loc) {
         const subdomain = @json($tenant->subdomain);
@@ -1724,16 +1722,19 @@ function heroNav(catId) {
 {{-- Long press hamburger → abre panel oculto --}}
 <script>
 (function(){
-    var el = document.getElementById('synti-hamburger-trigger');
-    if (!el) return;
-    var timer;
-    el.addEventListener('touchstart', function() {
-        timer = setTimeout(function() {
-            if (typeof openSyntiPanel === 'function') openSyntiPanel();
-        }, 800);
-    }, { passive: true });
-    el.addEventListener('touchend',    function() { clearTimeout(timer); });
-    el.addEventListener('touchcancel', function() { clearTimeout(timer); });
+    function attachLongPress(el) {
+        if (!el) return;
+        var timer;
+        el.addEventListener('touchstart', function() {
+            timer = setTimeout(function() {
+                if (typeof openSyntiPanel === 'function') openSyntiPanel();
+            }, 800);
+        }, { passive: true });
+        el.addEventListener('touchend',    function() { clearTimeout(timer); });
+        el.addEventListener('touchcancel', function() { clearTimeout(timer); });
+    }
+    attachLongPress(document.getElementById('synti-hamburger-trigger'));
+    attachLongPress(document.getElementById('synti-hamburger-trigger-m'));
 })();
 </script>
 <script>
@@ -1741,6 +1742,16 @@ window.scToggleCatMenu = function() {
     var d = document.getElementById('sc-cat-dropdown');
     var b = document.getElementById('sc-cat-backdrop');
     var open = d.style.display !== 'none';
+    if (!open) {
+        var mTrigger = document.getElementById('synti-hamburger-trigger-m');
+        var dTrigger = document.getElementById('synti-hamburger-trigger');
+        var trigger = (mTrigger && mTrigger.offsetParent !== null) ? mTrigger : dTrigger;
+        if (trigger) {
+            var rect = trigger.getBoundingClientRect();
+            d.style.top  = (rect.bottom + 4) + 'px';
+            d.style.left = Math.max(4, Math.min(rect.left, window.innerWidth - 264)) + 'px';
+        }
+    }
     d.style.display = open ? 'none' : 'block';
     b.style.display = open ? 'none' : 'block';
 };
