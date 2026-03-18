@@ -126,16 +126,16 @@
     .sc-field-error{border-color:#ef4444!important;background:#fff5f5!important}
     .sc-field-error:focus{box-shadow:0 0 0 3px rgba(239,68,68,.15)!important}
     /* ── Modal producto (bottom sheet) ── */
-    .sc-pm-overlay{position:fixed;inset:0;z-index:310;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);display:none;align-items:flex-end;justify-content:center}
+    .sc-pm-overlay{position:fixed;inset:0;z-index:310;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:16px}
     .sc-pm-overlay.open{display:flex}
-    .sc-pm-sheet{background:var(--background);width:100%;max-width:460px;border-radius:28px 28px 0 0;max-height:86vh;overflow-y:auto;overflow-x:hidden;position:relative;padding-bottom:env(safe-area-inset-bottom,16px);scrollbar-width:none}
+    .sc-pm-sheet{background:var(--background);width:100%;max-width:460px;border-radius:28px;max-height:90vh;overflow-y:auto;overflow-x:hidden;position:relative;scrollbar-width:none}
     .sc-pm-sheet::-webkit-scrollbar{width:0;height:0}
     @media(min-width:640px){.sc-pm-sheet{border-radius:28px;margin:24px;max-height:88vh}}
     .sc-pm-img-wrap{position:relative;overflow:hidden;border-radius:20px;margin:10px 10px 0;background:var(--surface)}
     .sc-pm-img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}
     .sc-pm-close{position:absolute;top:10px;right:10px;z-index:20;width:32px;height:32px;border-radius:50%;background:rgba(0,0,0,.45);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff}
     @media(max-width:639px){
-        .sc-pm-sheet{max-height:92dvh;border-radius:20px 20px 0 0}
+        .sc-pm-sheet{max-height:90dvh;border-radius:20px}
         .sc-pm-img-wrap{margin:8px 8px 0}
         .sc-pm-img{aspect-ratio:16/10}
     }

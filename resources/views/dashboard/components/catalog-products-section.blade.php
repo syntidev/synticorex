@@ -105,6 +105,28 @@
                     </button>
                 </div>
                 <div class="border-t border-border"></div>
+                {{-- Barra búsqueda + toggle vista --}}
+                <div class="px-6 pt-4 pb-2 flex items-center gap-2 flex-wrap">
+                    <div class="relative flex-1 min-w-[180px]">
+                        <span class="iconify tabler--search size-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground-1 pointer-events-none"></span>
+                        <input type="text" id="cat-search-input"
+                               placeholder="Buscar producto..."
+                               class="pl-9 pr-3 py-1.5 text-sm w-full bg-layer border border-layer-line rounded-lg text-foreground placeholder:text-muted-foreground-1 focus:border-primary-focus focus:ring-primary-focus"
+                               oninput="catFilterProducts(this.value)">
+                    </div>
+                    <div class="flex rounded-lg border border-layer-line overflow-hidden">
+                        <button id="cat-view-grid" onclick="catSetView('grid')"
+                                class="px-2.5 py-1.5 bg-primary text-primary-foreground transition-colors cursor-pointer"
+                                title="Vista cuadrícula">
+                            <span class="iconify tabler--layout-grid size-4"></span>
+                        </button>
+                        <button id="cat-view-list" onclick="catSetView('list')"
+                                class="px-2.5 py-1.5 bg-layer text-muted-foreground-1 hover:bg-layer-hover transition-colors cursor-pointer"
+                                title="Vista lista">
+                            <span class="iconify tabler--list size-4"></span>
+                        </button>
+                    </div>
+                </div>
                 <div class="px-6 pb-6">
                 @if($currentCount >= $maxProducts)
                 <div class="flex p-4 rounded-lg border bg-blue-50 border-blue-200 text-blue-800 mb-4 items-center justify-between gap-4 flex-wrap">
@@ -121,7 +143,7 @@
                 @endif
 
                 @if($products->count() > 0)
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div id="cat-products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     @foreach($products as $product)
                     <div class="group relative rounded-xl border border-border bg-surface overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300">
                         {{-- Imagen thumbnail con overlay --}}
@@ -186,6 +208,17 @@
                         </div>
                     </div>
                     @endforeach
+                </div>
+                {{-- Paginación --}}
+                <div id="cat-pagination" class="flex items-center justify-between gap-3 mt-4 flex-wrap">
+                    <p id="cat-page-info" class="text-xs text-muted-foreground-1"></p>
+                    <div class="flex items-center gap-1">
+                        <button id="cat-prev-btn" onclick="catChangePage(-1)"
+                                class="px-3 py-1.5 text-xs rounded-lg border border-layer-line bg-layer text-foreground hover:bg-layer-hover disabled:opacity-40 cursor-pointer">← Anterior</button>
+                        <span id="cat-page-num" class="px-3 py-1.5 text-xs font-bold text-foreground"></span>
+                        <button id="cat-next-btn" onclick="catChangePage(1)"
+                                class="px-3 py-1.5 text-xs rounded-lg border border-layer-line bg-layer text-foreground hover:bg-layer-hover disabled:opacity-40 cursor-pointer">Siguiente →</button>
+                    </div>
                 </div>
                 @else
                 <x-dashboard.empty-state
@@ -869,5 +902,102 @@
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') closeCatProductModal();
     });
+
+    // ── Vista lista/grid + paginación + búsqueda ────────────
+    var _catView = localStorage.getItem('cat-view') || 'grid';
+    var _catPage = 1;
+    var _catPerPage = 25;
+    var _catSearch = '';
+    var _catAllCards = [];
+
+    function catInitProducts() {
+        _catAllCards = Array.from(document.querySelectorAll('#cat-products-grid > .group'));
+        catSetView(_catView, false);
+        catRenderPage();
+    }
+
+    window.catSetView = function(view, save) {
+        _catView = view;
+        if (save !== false) localStorage.setItem('cat-view', view);
+        var grid = document.getElementById('cat-products-grid');
+        var btnG = document.getElementById('cat-view-grid');
+        var btnL = document.getElementById('cat-view-list');
+        if (view === 'list') {
+            grid.className = 'flex flex-col gap-2';
+            _catAllCards.forEach(function(c) {
+                c.className = c.className.replace('rounded-xl','rounded-lg');
+                var fig = c.querySelector('figure');
+                if (fig) fig.style.cssText = 'width:72px;height:72px;min-width:72px;border-radius:8px;overflow:hidden';
+                c.style.flexDirection = 'row';
+                c.style.alignItems = 'center';
+            });
+            btnG.className = btnG.className.replace('bg-primary text-primary-foreground','bg-layer text-muted-foreground-1 hover:bg-layer-hover');
+            btnL.className = btnL.className.replace('bg-layer text-muted-foreground-1 hover:bg-layer-hover','bg-primary text-primary-foreground');
+        } else {
+            grid.className = 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4';
+            _catAllCards.forEach(function(c) {
+                var fig = c.querySelector('figure');
+                if (fig) fig.style.cssText = '';
+                c.style.flexDirection = '';
+                c.style.alignItems = '';
+            });
+            btnG.className = btnG.className.replace('bg-layer text-muted-foreground-1 hover:bg-layer-hover','bg-primary text-primary-foreground');
+            btnL.className = btnL.className.replace('bg-primary text-primary-foreground','bg-layer text-muted-foreground-1 hover:bg-layer-hover');
+        }
+        _catPage = 1;
+        catRenderPage();
+    };
+
+    window.catFilterProducts = function(q) {
+        _catSearch = q.toLowerCase();
+        _catPage = 1;
+        catRenderPage();
+    };
+
+    window.catChangePage = function(dir) {
+        var filtered = _catAllCards.filter(function(c) {
+            return !_catSearch || c.querySelector('h4').textContent.toLowerCase().includes(_catSearch);
+        });
+        var total = Math.ceil(filtered.length / _catPerPage) || 1;
+        _catPage = Math.min(Math.max(_catPage + dir, 1), total);
+        catRenderPage();
+    };
+
+    function catRenderPage() {
+        var filtered = _catAllCards.filter(function(c) {
+            return !_catSearch || c.querySelector('h4').textContent.toLowerCase().includes(_catSearch);
+        });
+        var total = Math.ceil(filtered.length / _catPerPage) || 1;
+        var start = (_catPage - 1) * _catPerPage;
+        var end = start + _catPerPage;
+        _catAllCards.forEach(function(c) { c.style.display = 'none'; });
+        filtered.slice(start, end).forEach(function(c) { c.style.display = ''; });
+        var info = document.getElementById('cat-page-info');
+        var num = document.getElementById('cat-page-num');
+        var prev = document.getElementById('cat-prev-btn');
+        var next = document.getElementById('cat-next-btn');
+        if (info) info.textContent = 'Mostrando ' + (Math.min(start+1,filtered.length)) + '-' + Math.min(end,filtered.length) + ' de ' + filtered.length;
+        if (num) num.textContent = _catPage + ' / ' + total;
+        if (prev) prev.disabled = _catPage <= 1;
+        if (next) next.disabled = _catPage >= total;
+        var pag = document.getElementById('cat-pagination');
+        if (pag) pag.style.display = filtered.length <= _catPerPage ? 'none' : 'flex';
+    }
+
+    // Inicializar cuando el tab productos es visible
+    (function() {
+        var _initialized = false;
+        function tryInit() {
+            var tab = document.getElementById('tab-productos');
+            if (!tab || tab.classList.contains('hidden') || (!tab.classList.contains('active') && tab.offsetParent === null)) return;
+            if (_initialized) return;
+            _initialized = true;
+            catInitProducts();
+        }
+        // Intentar inmediato + observer para cuando el tab se activa
+        setTimeout(tryInit, 100);
+        var observer = new MutationObserver(tryInit);
+        observer.observe(document.body, { attributes: true, subtree: true, attributeFilter: ['style','class'] });
+    })();
 })();
 </script>
