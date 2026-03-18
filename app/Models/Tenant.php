@@ -289,7 +289,7 @@ class Tenant extends Model
      */
     public function isVision(): bool
     {
-        $topTierSlugs = ['vision', 'studio-vision', 'food-anual', 'cat-anual'];
+        $topTierSlugs = ['vision', 'studio-vision', 'food-vision', 'cat-vision', 'food-anual', 'cat-anual'];
 
         $slug = $this->plan?->slug;
         if (is_string($slug) && in_array($slug, $topTierSlugs, true)) {

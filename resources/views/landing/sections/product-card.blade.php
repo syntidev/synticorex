@@ -3,7 +3,7 @@
 <div class="group">
 
     @php
-        $isPlan3 = isset($plan) && (int) $plan->id === 3;
+        $isPlan3 = isset($plan) && str_contains($plan->slug ?? '', 'vision');
         $galleryImages = $product->relationLoaded('galleryImages') ? $product->galleryImages : collect();
         $hasGallery = $isPlan3 && $galleryImages->isNotEmpty();
         $allImages = collect();
@@ -15,10 +15,18 @@
 
         if ($hasGallery && isset($tenant)) {
             if ($product->image_filename) {
-                $allImages->push(asset('storage/tenants/' . $tenant->id . '/' . $product->image_filename));
+                $allImages->push(
+                    str_starts_with($product->image_filename, 'http')
+                        ? $product->image_filename
+                        : asset('storage/tenants/' . $tenant->id . '/' . $product->image_filename)
+                );
             }
             foreach ($galleryImages as $gi) {
-                $allImages->push(asset('storage/tenants/' . $tenant->id . '/' . $gi->image_filename));
+                $allImages->push(
+                    str_starts_with($gi->image_filename, 'http')
+                        ? $gi->image_filename
+                        : asset('storage/tenants/' . $tenant->id . '/' . $gi->image_filename)
+                );
             }
         }
         $sliderId = 'slider-' . ($product->id ?? uniqid());
@@ -66,7 +74,7 @@
         {{-- Imagen única --}}
         @else
             @if($product->image_filename)
-                <img src="{{ asset('storage/tenants/' . ($tenant->id ?? '') . '/' . $product->image_filename) }}"
+                <img src="{{ str_starts_with($product->image_filename, 'http') ? $product->image_filename : asset('storage/tenants/' . ($tenant->id ?? '') . '/' . $product->image_filename) }}"
                      class="h-full w-full object-cover object-center transition duration-200 group-hover:scale-110"
                      alt="{{ $product->name }}"
                      onerror="this.style.display='none'; this.parentElement.style.display='none';">

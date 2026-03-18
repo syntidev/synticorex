@@ -99,7 +99,7 @@
 </section>
 
 {{-- Product Slider JS (Plan 3 / VISIÓN) --}}
-@if(isset($plan) && (int) $plan->id === 3)
+@if(isset($plan) && str_contains($plan->slug ?? '', 'vision'))
 @push('scripts')
 <script>
     // Track current slide per slider

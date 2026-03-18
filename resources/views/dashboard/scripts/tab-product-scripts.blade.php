@@ -564,8 +564,8 @@
             if (zone) zone.style.display = '';
         }
 
-        // ── Gallery Functions (Plan 3 / VISIÓN) ──────────────────────
-        @if($plan->id === 3)
+        // ── Gallery Functions (Plan VISIÓN) ─────────────────────────
+        @if($tenant->isVision())
         /**
          * Reset gallery UI to clean state.
          */
@@ -783,8 +783,8 @@
                         });
                     }
 
-                    // Handle gallery image uploads (Plan 3 only)
-                    @if($plan->id === 3)
+                    // Handle gallery image uploads (Plan Visión)
+                    @if($tenant->isVision())
                     await uploadPendingGalleryImages(savedProductId);
                     @endif
                     

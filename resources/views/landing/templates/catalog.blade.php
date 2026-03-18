@@ -53,7 +53,9 @@
     $visiblePay        = array_merge($visibleMethods, $visibleCurrencies);
 
     $heroFilename = $customization->hero_main_filename ?? $customization->hero_filename ?? null;
-    $heroUrl = $heroFilename ? asset('storage/tenants/' . $tenant->id . '/' . $heroFilename) : null;
+    $heroUrl = $heroFilename 
+        ? (str_starts_with($heroFilename, 'http') ? $heroFilename : asset('storage/tenants/' . $tenant->id . '/' . $heroFilename))
+        : null;
 
     $showcase = $products->where('featured', true)->take(3)->values();
     if ($showcase->count() < 3) {
@@ -70,6 +72,25 @@
     $needsPhone    = true;
     $needsLocation = in_array('location', (array) $customerFields);
     $showCart      = $tenant->plan && $tenant->plan->slug !== 'cat-basico';
+
+    // Mapa de galería por producto para el modal
+    $productGalleryMap = [];
+    foreach ($products as $p) {
+        $imgs = [];
+        if ($p->image_url) {
+            $imgs[] = $p->image_url;
+        } elseif ($p->image_filename) {
+            $imgs[] = str_starts_with($p->image_filename, 'http')
+                ? $p->image_filename
+                : asset('storage/tenants/' . $tenant->id . '/' . $p->image_filename);
+        }
+        foreach ($p->galleryImages ?? [] as $gi) {
+            $imgs[] = str_starts_with($gi->image_filename, 'http')
+                ? $gi->image_filename
+                : asset('storage/tenants/' . $tenant->id . '/' . $gi->image_filename);
+        }
+        $productGalleryMap[$p->id] = $imgs;
+    }
 @endphp
 
 @push('styles')
@@ -451,7 +472,8 @@
 <div id="sc-hero-slider" class="relative w-full bg-surface" style="height:200px;overflow:hidden;">
     @foreach($scHeroImages as $hIdx => $hImg)
     <div class="sc-slide absolute inset-0 transition-opacity duration-700" style="opacity:{{ $hIdx === 0 ? '1' : '0' }}">
-        <img src="{{ asset('storage/tenants/' . $tenant->id . '/' . $hImg) }}"
+        @php $hImgUrl = str_starts_with($hImg, 'http') ? $hImg : asset('storage/tenants/' . $tenant->id . '/' . $hImg); @endphp
+        <img src="{{ $hImgUrl }}"
              alt="{{ $tenant->business_name }}"
              class="w-full h-full object-cover object-center"
              loading="{{ $hIdx === 0 ? 'eager' : 'lazy' }}">
@@ -1455,6 +1477,9 @@
 
 {{-- Acento por categoría --}}
 <script>
+    const SC_GALLERY = @json($productGalleryMap);
+</script>
+<script>
 // ── Modal de Producto ──
 var _pmCurrent = {};
 var _pmSelections = {};
@@ -1469,7 +1494,10 @@ function openPM(id, name, price, img, desc, comparePrice, isFeatured, variants, 
         desc: desc,
         comparePrice: comparePrice,
         variants: variants || [],
-        images: (images && images.length ? [images[0]] : (img ? [img] : [])),
+        images: (SC_GALLERY[id] && SC_GALLERY[id].length > 1
+            ? SC_GALLERY[id]
+            : (images && images.length ? images : (img ? [img] : []))),
+
         currentImageIndex: 0
     };
 
@@ -1500,6 +1528,18 @@ function openPM(id, name, price, img, desc, comparePrice, isFeatured, variants, 
     if (thumbsWrap) {
         thumbsWrap.innerHTML = '';
         thumbsWrap.style.display = 'none';
+        if (_pmCurrent.images.length > 1) {
+            thumbsWrap.style.display = 'flex';
+            _pmCurrent.images.forEach(function(url, i) {
+                var thumb = document.createElement('img');
+                thumb.src = url;
+                thumb.className = 'sc-pm-thumb w-16 h-16 object-cover rounded-lg cursor-pointer border-2';
+                thumb.style.opacity = i === 0 ? '1' : '.55';
+                thumb.style.borderColor = i === 0 ? 'var(--primary)' : 'rgba(0,0,0,.08)';
+                thumb.onclick = function() { setPMImage(i); };
+                thumbsWrap.appendChild(thumb);
+            });
+        }
     }
     setPMImage(0);
 

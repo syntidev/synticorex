@@ -249,7 +249,7 @@
                             <label class="inline-flex items-center gap-1.5 text-xs font-semibold text-muted-foreground-1 uppercase tracking-wide mb-1.5">
                                 <span class="iconify tabler--photo-scan size-3.5 text-primary" aria-hidden="true"></span>
                                 Imágenes adicionales
-                                <span class="font-normal normal-case">(hasta {{ $maxImages - 1 }} extra)</span>
+                                <span id="cat-gallery-counter" class="font-normal normal-case">0 / {{ $maxImages - 1 }} en galería</span>
                             </label>
                             <div class="flex gap-2 flex-wrap" id="cat-extra-images-area">
                                 @for($i = 2; $i <= $maxImages; $i++)
@@ -377,6 +377,8 @@
     var _catMaxProducts = {{ $maxProducts }};
     var _catCurrentCount = {{ $currentCount }};
     var _catVariantRowIdx = 0;
+    var catGalleryStaging = {}; // stage files at preview-time, not read-time
+    var _catGalleryCount  = 0;
 
     // ── Categorías ──────────────────────────────────────────
     window.updateSubcategorySelect = function() {
@@ -557,6 +559,8 @@
             '<span class="iconify tabler--shopping-bag size-4 opacity-80"></span> Agregar Producto';
         document.getElementById('cat-product-id').value = '';
         document.getElementById('cat-product-form').reset();
+        catGalleryStaging = {}; // clear staged files for new product
+        @if($tenant->isVision()) updateCatGalleryCounter(0); @endif
         document.getElementById('cat-product-image-preview').style.display = 'none';
         document.getElementById('cat-product-upload-zone').style.display = '';
         document.getElementById('cat-variants-list').innerHTML = '';
@@ -598,6 +602,7 @@
     window.previewCatExtraImage = function(e, slot) {
         var file = e.target.files[0];
         if (!file) return;
+        catGalleryStaging[slot] = file; // stage immediately at select-time
         var reader = new FileReader();
         reader.onload = function(ev) {
             var wrap = document.getElementById('cat-img-preview-' + slot);
@@ -662,6 +667,10 @@
             document.getElementById('cat-product-modal-title').innerHTML =
                 '<span class="iconify tabler--pencil size-4 opacity-80"></span> Editar Producto';
             document.getElementById('cat-product-id').value = p.id;
+            catGalleryStaging = {}; // clear staged files when opening edit mode
+            @if($tenant->isVision())
+            updateCatGalleryCounter((p.gallery_images || []).length || p.gallery_count || 0);
+            @endif
             document.getElementById('cat-product-name').value = p.name || '';
             document.getElementById('cat-product-category').value = p.category_name || '';
             updateSubcategorySelect();
@@ -701,6 +710,67 @@
         })
         .catch(function(e) { console.error('editCatProduct error', e); });
     };
+
+    // ── Galería extra (solo Plan Visión) ───────────────────
+    @if($tenant->isVision())
+    function updateCatGalleryCounter(count) {
+        _catGalleryCount = count;
+        var maxGallery = {{ $maxImages - 1 }};
+        var counter = document.getElementById('cat-gallery-counter');
+        var area    = document.getElementById('cat-extra-images-area');
+        if (counter) {
+            if (count >= maxGallery) {
+                counter.textContent = 'Límite alcanzado (' + maxGallery + '/' + maxGallery + ')';
+                counter.classList.add('text-amber-600');
+                counter.classList.remove('text-muted-foreground-1');
+            } else {
+                counter.textContent = count + ' / ' + maxGallery + ' en galería';
+                counter.classList.remove('text-amber-600');
+            }
+        }
+        if (area) {
+            area.querySelectorAll('input[type="file"]').forEach(function(inp) {
+                inp.disabled = (count >= maxGallery);
+                var wrap = inp.closest('div.flex.flex-col');
+                if (wrap) wrap.style.opacity = (count >= maxGallery) ? '0.4' : '';
+            });
+        }
+    }
+
+    async function uploadCatGalleryImages(productId) {
+        console.log('[CAT gallery] uploadCatGalleryImages called — productId:', productId, '| staged slots:', Object.keys(catGalleryStaging));
+        var csrf = document.querySelector('meta[name="csrf-token"]').content;
+        @for($i = 2; $i <= $maxImages; $i++)
+        var _file{{ $i }} = catGalleryStaging[{{ $i }}] || null;
+        console.log('[CAT gallery] slot {{ $i }} staged file:', _file{{ $i }} ? _file{{ $i }}.name + ' (' + _file{{ $i }}.size + ' bytes)' : 'none');
+        if (_file{{ $i }}) {
+            var _fd{{ $i }} = new FormData();
+            _fd{{ $i }}.append('image', _file{{ $i }});
+            var _url{{ $i }} = '/tenant/{{ $tenant->id }}/upload/product/' + productId + '/gallery';
+            try {
+                var _res{{ $i }} = await fetch(_url{{ $i }}, {
+                    method: 'POST',
+                    headers: { 'X-CSRF-TOKEN': csrf },
+                    body: _fd{{ $i }}
+                });
+                var _result{{ $i }} = await _res{{ $i }}.json();
+                console.log('[CAT gallery] slot {{ $i }}:', _res{{ $i }}.status, _result{{ $i }});
+                if (_result{{ $i }}.success) {
+                    if (typeof _result{{ $i }}.gallery_count !== 'undefined') {
+                        updateCatGalleryCounter(_result{{ $i }}.gallery_count);
+                    }
+                } else {
+                    console.warn('CAT gallery upload failed slot {{ $i }}:', _result{{ $i }}.error);
+                }
+            } catch (_err{{ $i }}) {
+                console.error('CAT gallery upload error slot {{ $i }}:', _err{{ $i }});
+            }
+        }
+        @endfor
+        catGalleryStaging = {}; // clear after upload
+        console.log('[CAT gallery] uploadCatGalleryImages done');
+    }
+    @endif
 
     // ── Guardar (create/update) ──────────────────────────────
     window.saveCatProduct = function(e) {
@@ -751,8 +821,16 @@
         })
         .then(function(data) {
             if (data.success) {
+                @if($tenant->isVision())
+                var _savedId = (data.product && data.product.id) ? data.product.id : parseInt(id);
+                uploadCatGalleryImages(_savedId).then(function() {
+                    closeCatProductModal();
+                    dashboardReload ? dashboardReload() : location.reload();
+                });
+                @else
                 closeCatProductModal();
                 dashboardReload ? dashboardReload() : location.reload();
+                @endif
             } else {
                 alert(data.message || 'Error al guardar');
                 btn.disabled = false;

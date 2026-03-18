@@ -37,8 +37,8 @@
                             <input type="file" id="product-image" accept="image/*" capture="environment" class="hidden" onchange="previewProductImage(event)">
                         </div>
 
-                        {{-- Gallery Section — Plan 3 (VISIÓN) only --}}
-                        @if($plan->id === 3)
+                        {{-- Gallery Section — Plan VISIÓN only --}}
+                        @if($tenant->isVision())
                         <div id="product-gallery-section">
                             <label class="inline-flex items-center gap-1.5 text-xs font-semibold text-muted-foreground-1 uppercase tracking-wide mb-1.5">
                                 <span class="iconify tabler--photo-scan size-3.5 text-primary" aria-hidden="true"></span>
