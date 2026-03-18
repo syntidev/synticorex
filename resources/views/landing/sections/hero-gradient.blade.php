@@ -51,9 +51,12 @@
 
     {{-- DERECHA: Imagen a pantalla completa --}}
     <div class="relative min-h-[50vh] lg:min-h-full">
-        <img src="{{ $customization->hero_main_filename
-            ? asset('storage/tenants/'.$tenant->id.'/'.$customization->hero_main_filename)
-            : 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&q=80' }}"
+        @php
+            $heroSrc = !empty($customization->hero_main_filename)
+                ? (str_starts_with($customization->hero_main_filename, 'http') ? $customization->hero_main_filename : asset('storage/tenants/'.$tenant->id.'/'.$customization->hero_main_filename))
+                : 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&q=80';
+        @endphp
+        <img src="{{ $heroSrc }}"
              alt="{{ $tenant->business_name }}"
              class="absolute inset-0 w-full h-full object-cover">
         {{-- Overlay sutil con acento primario --}}

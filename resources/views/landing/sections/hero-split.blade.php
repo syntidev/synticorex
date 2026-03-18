@@ -64,9 +64,12 @@
                 <div class="relative max-lg:order-first overflow-hidden">
                     {{-- Sombra decorativa detr�s --}}
                     {{-- sombra decorativa eliminada --}}
-                    <img src="{{ $customization->hero_main_filename
-                        ? asset('storage/tenants/'.$tenant->id.'/'.$customization->hero_main_filename)
-                        : 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200' }}"
+                    @php
+                        $heroSrc = !empty($customization->hero_main_filename)
+                            ? (str_starts_with($customization->hero_main_filename, 'http') ? $customization->hero_main_filename : asset('storage/tenants/'.$tenant->id.'/'.$customization->hero_main_filename))
+                            : 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200';
+                    @endphp
+                    <img src="{{ $heroSrc }}"
                          alt="{{ $tenant->business_name }}"
                          class="relative w-full h-[400px] lg:h-[500px] object-cover rounded-3xl ring-1 ring-white/10"
                          loading="lazy">
