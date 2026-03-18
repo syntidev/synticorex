@@ -5,9 +5,11 @@
 
     $businessImage = null;
     if (!empty($customization->about_image_filename)) {
-        $businessImage = asset('storage/tenants/' . $tenant->id . '/' . $customization->about_image_filename);
+        $url = $customization->about_image_filename;
+        $businessImage = str_starts_with($url, 'http') ? $url : asset('storage/tenants/' . $tenant->id . '/' . $url);
     } elseif (!empty($customization->hero_main_filename)) {
-        $businessImage = asset('storage/tenants/' . $tenant->id . '/' . $customization->hero_main_filename);
+        $url = $customization->hero_main_filename;
+        $businessImage = str_starts_with($url, 'http') ? $url : asset('storage/tenants/' . $tenant->id . '/' . $url);
     }
 
     $logoImage = !empty($customization->logo_filename)
