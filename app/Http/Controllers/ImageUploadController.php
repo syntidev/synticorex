@@ -259,12 +259,12 @@ class ImageUploadController extends Controller
                 ->where('tenant_id', $tenantId)
                 ->firstOrFail();
 
-            // Check gallery limit (max 2 additional images)
+            // Check gallery limit (max 5 additional images)
             $currentGalleryCount = ProductImage::where('product_id', $productId)->count();
-            if ($currentGalleryCount >= 2) {
+            if ($currentGalleryCount >= 5) {
                 return response()->json([
                     'success' => false,
-                    'error' => 'Máximo 2 imágenes adicionales por producto (3 total con la principal)'
+                    'error' => 'Máximo 5 imágenes adicionales por producto (6 total con la principal)'
                 ], 422);
             }
 

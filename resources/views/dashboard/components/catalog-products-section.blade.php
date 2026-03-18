@@ -686,6 +686,10 @@
             if (p.image_filename) {
                 document.getElementById('cat-product-image-preview-img').src =
                     '/storage/tenants/{{ $tenant->id }}/' + p.image_filename;
+                document.getElementById('cat-product-image-preview-img').style.cursor = 'pointer';
+                document.getElementById('cat-product-image-preview-img').onclick = function() {
+                    document.getElementById('cat-product-image').click();
+                };
                 document.getElementById('cat-product-image-preview').style.display = '';
                 document.getElementById('cat-product-upload-zone').style.display = 'none';
             } else {
@@ -819,15 +823,37 @@
                 return data;
             });
         })
-        .then(function(data) {
+        .then(async function(data) {
             if (data.success) {
                 @if($tenant->isVision())
                 var _savedId = (data.product && data.product.id) ? data.product.id : parseInt(id);
+                // Upload imagen principal si hay archivo nuevo
+                var _mainImg = document.getElementById('cat-product-image');
+                if (_mainImg && _mainImg.files[0]) {
+                    var _mainFd = new FormData();
+                    _mainFd.append('image', _mainImg.files[0]);
+                    _mainFd.append('_token', document.querySelector('meta[name="csrf-token"]').content);
+                    await fetch('/tenant/{{ $tenant->id }}/upload/product/' + _savedId, {
+                        method: 'POST',
+                        body: _mainFd
+                    });
+                }
                 uploadCatGalleryImages(_savedId).then(function() {
                     closeCatProductModal();
                     dashboardReload ? dashboardReload() : location.reload();
                 });
                 @else
+                var _savedId = (data.product && data.product.id) ? data.product.id : parseInt(id);
+                var _mainImg = document.getElementById('cat-product-image');
+                if (_mainImg && _mainImg.files[0]) {
+                    var _mainFd = new FormData();
+                    _mainFd.append('image', _mainImg.files[0]);
+                    _mainFd.append('_token', document.querySelector('meta[name="csrf-token"]').content);
+                    await fetch('/tenant/{{ $tenant->id }}/upload/product/' + _savedId, {
+                        method: 'POST',
+                        body: _mainFd
+                    });
+                }
                 closeCatProductModal();
                 dashboardReload ? dashboardReload() : location.reload();
                 @endif

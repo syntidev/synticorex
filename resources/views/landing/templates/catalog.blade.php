@@ -1753,7 +1753,7 @@ function heroNav(catId) {
         if (e.target.closest('a[href*="wa.me"]')) track('click_whatsapp');
         if (e.target.closest('a[href^="tel:"]')) track('click_call');
     });
-    setInterval(() => track('time_on_page'), 30000);
+    setInterval(() => track('time_on_page'), 5000);
 })();
 </script>
 {{-- Long press hamburger → abre panel oculto --}}
