@@ -5,8 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>@yield('title', 'SYNTIweb — Tu Negocio Visible en Google')</title>
-    <meta name="description" content="@yield('description', 'SYNTIweb genera tu presencia digital automáticamente. Landing profesional, SEO automático, WhatsApp integrado.')">
+    {{-- SEO Stack --}}
+    @stack('seo')
+
+    {{-- Meta bases SEO --}}
+    <meta property="og:locale" content="es_VE">
+    <meta property="og:site_name" content="SYNTIweb">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="canonical" href="{{ url()->current() }}">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

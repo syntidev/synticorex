@@ -75,7 +75,8 @@
 <div id="sf-hero-slider" class="relative w-full overflow-visible bg-surface" style="height:220px">
     @foreach($heroImages as $hIdx => $hImg)
     <div class="sf-slide absolute inset-0 transition-opacity duration-700" style="opacity:{{ $hIdx === 0 ? '1' : '0' }}">
-        <img src="{{ asset('storage/tenants/' . $tenant->id . '/' . $hImg) }}" alt="{{ $tenant->business_name }}" class="w-full h-full object-cover" loading="{{ $hIdx === 0 ? 'eager' : 'lazy' }}">
+        @php $hImgUrl = str_starts_with($hImg, 'http') ? $hImg : asset('storage/tenants/' . $tenant->id . '/' . $hImg); @endphp
+        <img src="{{ $hImgUrl }}" alt="{{ $tenant->business_name }}" class="w-full h-full object-cover" loading="{{ $hIdx === 0 ? 'eager' : 'lazy' }}">
     </div>
     @endforeach
     @if(count($heroImages) > 1)
@@ -153,9 +154,9 @@
                 @if(!empty($customization->logo_filename))
                     <img src="{{ asset('storage/tenants/' . $tenant->id . '/' . $customization->logo_filename) }}"
                          alt="{{ $tenant->business_name }}"
-                         class="size-12 rounded-full object-cover shrink-0">
+                         class="size-8 rounded-full object-cover shrink-0">
                 @else
-                    <div class="size-12 bg-primary rounded-full flex items-center justify-center shrink-0">
+                    <div class="size-8 bg-primary rounded-full flex items-center justify-center shrink-0">
                         <span class="text-primary-foreground font-black text-sm">{{ mb_substr($tenant->business_name, 0, 1) }}</span>
                     </div>
                 @endif
@@ -1478,7 +1479,7 @@
             if (dots[cur]) { dots[cur].style.background = '#fff'; dots[cur].style.width = '16px'; }
         }
         if (dots.length) dots.forEach(function(d) { d.addEventListener('click', function() { goTo(+this.dataset.slide); }); });
-        setInterval(function() { goTo(cur + 1); }, 4000);
+        setInterval(function() { goTo(cur + 1); }, 7000);
     })();
 })();
 </script>

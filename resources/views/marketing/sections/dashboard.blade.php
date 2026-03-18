@@ -1,7 +1,7 @@
 {{-- ═══ DASHBOARD — "Tu negocio se administra solo" ═══════════════════ --}}
 <section id="dashboard" class="relative py-20 lg:py-28 bg-white overflow-hidden">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
             {{-- ── Text ─────────────────────────────────── --}}
             <div class="mkt-fade-in">
                 <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 text-blue-600 text-sm font-semibold mb-4">
@@ -87,7 +87,7 @@
                                     </div>
                                 </div>
                                 {{-- Product grid mock --}}
-                                <div class="p-3 grid grid-cols-2 gap-2">
+                                <div class="p-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
                                     @foreach(['bg-amber-100', 'bg-rose-100', 'bg-emerald-100', 'bg-blue-100'] as $cardColor)
                                         <div class="bg-white rounded-lg p-2 border border-slate-100 shadow-sm">
                                             <div class="w-full h-12 {{ $cardColor }} rounded mb-1.5"></div>

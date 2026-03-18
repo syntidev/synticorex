@@ -27,7 +27,7 @@
             </div>
         </div>
 
-        <div class="grid lg:grid-cols-3 gap-6 lg:gap-8 items-start max-w-5xl mx-auto">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 items-start max-w-5xl mx-auto">
 
             {{-- STUDIO --}}
             <div class="mkt-fade-in mkt-card rounded-2xl border bg-white border-slate-100 shadow-sm overflow-hidden">

@@ -123,7 +123,7 @@
         {{-- Emotional pull --}}
         <div class="mkt-fade-in max-w-3xl mx-auto text-center">
             <div class="rounded-2xl bg-gradient-to-r from-slate-900 to-slate-800 p-8 lg:p-12 text-white relative overflow-hidden">
-                <div class="absolute top-0 right-0 w-40 h-40 bg-blue-500/10 rounded-full blur-3xl"></div>
+
                 <span class="iconify tabler--quote size-10 text-blue-400/30 mb-4 block"></span>
                 <p class="text-lg lg:text-xl font-medium leading-relaxed mb-4 relative">
                     Imagina que alguien busca <span class="text-blue-400 font-bold">"panadería cerca de mí"</span> y tu negocio

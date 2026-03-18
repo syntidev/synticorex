@@ -1,5 +1,15 @@
 ﻿@extends('marketing.layout')
 
+@push('seo')
+<title>Presencia digital para negocios venezolanos | SYNTIweb</title>
+<meta name="description" content="Crea tu landing, menú digital o catálogo en minutos. Sin técnicos. Desde $49/año.">
+<meta property="og:title" content="Presencia digital para negocios venezolanos | SYNTIweb">
+<meta property="og:description" content="Crea tu landing, menú digital o catálogo en minutos. Sin técnicos. Desde $49/año.">
+<meta property="og:url" content="{{ url()->current() }}">
+<meta property="og:image" content="{{ asset('brand/syntiweb-og.png') }}">
+<meta property="og:type" content="website">
+@endpush
+
 @section('content')
 <div x-data="marketingApp()">
 

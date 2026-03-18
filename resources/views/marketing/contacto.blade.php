@@ -1,7 +1,14 @@
 @extends('marketing.layout')
 
-@section('title', 'Contacto — SYNTIweb')
-@section('description', 'Estamos para ayudarte a dar el primer paso. Escríbenos por email o WhatsApp.')
+@push('seo')
+<title>Contacto | SYNTIweb</title>
+<meta name="description" content="Escríbenos por WhatsApp o formulario. Respondemos en menos de 24 horas.">
+<meta property="og:title" content="Contacto | SYNTIweb">
+<meta property="og:description" content="Escríbenos por WhatsApp o formulario. Respondemos en menos de 24 horas.">
+<meta property="og:url" content="{{ url()->current() }}">
+<meta property="og:image" content="{{ asset('brand/syntiweb-og.png') }}">
+<meta property="og:type" content="website">
+@endpush
 
 @section('content')
 {{-- ══ Ícono decorativo emergente (mobile: sobresale del borde superior) ══ --}}

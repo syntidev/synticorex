@@ -3,15 +3,12 @@
 <section id="hero" class="relative min-h-screen flex items-center overflow-hidden mkt-gradient-hero">
     {{-- Decorative blobs --}}
     <div class="absolute inset-0 overflow-hidden pointer-events-none">
-        <div class="absolute top-20 -left-20 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl mkt-blob"></div>
-        <div class="absolute bottom-10 right-0 w-96 h-96 bg-indigo-500/8 rounded-full blur-3xl mkt-blob" style="animation-delay: -3s;"></div>
-        <div class="absolute top-1/3 right-1/4 w-64 h-64 bg-purple-500/5 rounded-full blur-3xl mkt-blob" style="animation-delay: -5s;"></div>
         {{-- Grid pattern --}}
         <div class="absolute inset-0 opacity-5" style="background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.3) 1px, transparent 0); background-size: 40px 40px;"></div>
     </div>
 
     <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16 lg:pt-32 lg:pb-24">
-        <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
             {{-- ── Copy ──────────────────────────────────── --}}
             <div class="text-center lg:text-left">
                 {{-- Badge --}}

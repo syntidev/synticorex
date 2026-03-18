@@ -311,3 +311,6 @@ Route::middleware(['auth', 'throttle:30,1'])->prefix('api/synti')->group(functio
     Route::post('/feedback', [SyntiHelpController::class, 'feedback']);
 });
 
+// ═══ SEO — Sitemap y Robots ═══════════════════════════════════════════════════
+Route::get('/sitemap.xml', [\App\Http\Controllers\SitemapController::class, 'index'])->name('sitemap');
+

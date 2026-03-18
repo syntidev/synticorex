@@ -1,5 +1,15 @@
 ﻿@extends('marketing.layout')
 
+@push('seo')
+<title>SYNTIstudio — Landing profesional para tu negocio | SYNTIweb</title>
+<meta name="description" content="Landing page profesional para marcas, servicios y proyectos venezolanos. Desde $99/año.">
+<meta property="og:title" content="SYNTIstudio — Landing profesional para tu negocio | SYNTIweb">
+<meta property="og:description" content="Landing page profesional para marcas, servicios y proyectos venezolanos. Desde $99/año.">
+<meta property="og:url" content="{{ url()->current() }}">
+<meta property="og:image" content="{{ asset('brand/syntiweb-og.png') }}">
+<meta property="og:type" content="website">
+@endpush
+
 @section('content')
 
 {{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}

@@ -1,5 +1,15 @@
 ﻿@extends('marketing.layout')
 
+@push('seo')
+<title>SYNTIfood — Menú digital con WhatsApp | SYNTIweb</title>
+<meta name="description" content="Menú digital para restaurantes y negocios de comida. Pedidos directos por WhatsApp.">
+<meta property="og:title" content="SYNTIfood — Menú digital con WhatsApp | SYNTIweb">
+<meta property="og:description" content="Menú digital para restaurantes y negocios de comida. Pedidos directos por WhatsApp.">
+<meta property="og:url" content="{{ url()->current() }}">
+<meta property="og:image" content="{{ asset('brand/syntiweb-og.png') }}">
+<meta property="og:type" content="website">
+@endpush
+
 @section('content')
 
 {{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}

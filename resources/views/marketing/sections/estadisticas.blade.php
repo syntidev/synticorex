@@ -2,8 +2,6 @@
 <section id="estadisticas" class="relative py-20 lg:py-28 overflow-hidden mkt-gradient-hero">
     {{-- Background effects --}}
     <div class="absolute inset-0 overflow-hidden pointer-events-none">
-        <div class="absolute top-10 right-0 w-80 h-80 bg-blue-500/8 rounded-full blur-3xl"></div>
-        <div class="absolute bottom-0 left-10 w-64 h-64 bg-indigo-500/8 rounded-full blur-3xl"></div>
         <div class="absolute inset-0 opacity-5" style="background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.3) 1px, transparent 0); background-size: 40px 40px;"></div>
     </div>
 

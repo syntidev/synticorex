@@ -16,7 +16,7 @@
         </div>
 
         {{-- Before/After comparison --}}
-        <div class="grid lg:grid-cols-2 gap-8 mb-16">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
             {{-- BEFORE --}}
             <div class="mkt-fade-in mkt-card rounded-2xl bg-white border border-red-100 p-8 relative overflow-hidden">
                 <div class="absolute top-0 right-0 w-32 h-32 bg-red-50 rounded-full -translate-y-1/2 translate-x-1/2"></div>

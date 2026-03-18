@@ -1,5 +1,15 @@
 @extends('marketing.layout')
 
+@push('seo')
+<title>Nosotros — Hechos en Venezuela para Venezuela | SYNTIweb</title>
+<meta name="description" content="SYNTIweb es una plataforma venezolana para ayudar a pequeños negocios a tener presencia digital.">
+<meta property="og:title" content="Nosotros — Hechos en Venezuela para Venezuela | SYNTIweb">
+<meta property="og:description" content="SYNTIweb es una plataforma venezolana para ayudar a pequeños negocios a tener presencia digital.">
+<meta property="og:url" content="{{ url()->current() }}">
+<meta property="og:image" content="{{ asset('brand/syntiweb-og.png') }}">
+<meta property="og:type" content="website">
+@endpush
+
 @section('content')
     <main class="min-h-screen">
         <section class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">

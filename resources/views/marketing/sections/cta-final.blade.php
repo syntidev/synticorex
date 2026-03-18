@@ -5,9 +5,6 @@
     <div class="absolute inset-0 mkt-gradient-cta"></div>
     {{-- Pattern --}}
     <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.4) 1px, transparent 0); background-size: 32px 32px;"></div>
-    {{-- Blobs --}}
-    <div class="absolute top-10 left-10 w-64 h-64 bg-white/5 rounded-full blur-3xl mkt-blob"></div>
-    <div class="absolute bottom-10 right-10 w-80 h-80 bg-white/5 rounded-full blur-3xl mkt-blob" style="animation-delay: -4s;"></div>
 
     <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <div class="mkt-fade-in">

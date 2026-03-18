@@ -1,7 +1,7 @@
 {{-- ═══ CONFIGURACIÓN — "Editar es tan fácil como un WhatsApp" ═════════ --}}
 <section id="configuracion" class="relative py-20 lg:py-28 bg-white overflow-hidden">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
             {{-- ── Mockup ────────────────────────────────── --}}
             <div class="mkt-fade-in relative order-2 lg:order-1">
                 <div class="relative">

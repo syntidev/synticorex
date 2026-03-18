@@ -1,5 +1,15 @@
 @extends('marketing.layout')
 
+@push('seo')
+<title>Planes y Precios — Sin letra pequeña | SYNTIweb</title>
+<meta name="description" content="Elige tu plan SYNTIweb. Landing, menú o catálogo desde $49/año. 15 días de prueba gratis.">
+<meta property="og:title" content="Planes y Precios — Sin letra pequeña | SYNTIweb">
+<meta property="og:description" content="Elige tu plan SYNTIweb. Landing, menú o catálogo desde $49/año. 15 días de prueba gratis.">
+<meta property="og:url" content="{{ url()->current() }}">
+<meta property="og:image" content="{{ asset('brand/syntiweb-og.png') }}">
+<meta property="og:type" content="website">
+@endpush
+
 @section('content')
 <style>
     :root {

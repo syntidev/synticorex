@@ -1,5 +1,15 @@
 ﻿@extends('marketing.layout')
 
+@push('seo')
+<title>SYNTIcat — Catálogo visual con WhatsApp | SYNTIweb</title>
+<meta name="description" content="Catálogo visual de productos con botón WhatsApp. Para tiendas y emprendedores venezolanos.">
+<meta property="og:title" content="SYNTIcat — Catálogo visual con WhatsApp | SYNTIweb">
+<meta property="og:description" content="Catálogo visual de productos con botón WhatsApp. Para tiendas y emprendedores venezolanos.">
+<meta property="og:url" content="{{ url()->current() }}">
+<meta property="og:image" content="{{ asset('brand/syntiweb-og.png') }}">
+<meta property="og:type" content="website">
+@endpush
+
 @section('content')
 
 {{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
