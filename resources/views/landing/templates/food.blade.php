@@ -846,65 +846,8 @@
 </div>
 @endif
 
-{{-- 5. MEDIOS DE PAGO --}}
-@php
-    $fpMethods  = $customization->payment_methods ?? [];
-    $fpGlobal   = $fpMethods['global'] ?? [];
-    $fpCurrency = $fpMethods['currency'] ?? [];
-    if ($planSlug === 'food-basico' && empty($fpGlobal)) {
-        $fpGlobal = ['pagoMovil', 'cash'];
-    }
-    $fpAllMeta = [
-        'pagoMovil'  => ['label' => 'Pago Móvil',    'icon' => 'tabler--device-mobile'],
-        'cash'       => ['label' => 'Efectivo',       'icon' => 'tabler--cash'],
-        'puntoventa' => ['label' => 'Punto de Venta', 'icon' => 'tabler--credit-card'],
-        'biopago'    => ['label' => 'Biopago',        'icon' => 'tabler--fingerprint'],
-        'cashea'     => ['label' => 'Cashea',         'icon' => 'tabler--wallet'],
-        'krece'      => ['label' => 'Krece',          'icon' => 'tabler--trending-up'],
-        'wepa'       => ['label' => 'Wepa',           'icon' => 'tabler--shopping-cart'],
-        'lysto'      => ['label' => 'Lysto',          'icon' => 'tabler--calendar-dollar'],
-        'chollo'     => ['label' => 'Chollo',         'icon' => 'tabler--discount-2'],
-        'wally'      => ['label' => 'Wally',          'icon' => 'tabler--send-2'],
-        'kontigo'    => ['label' => 'Kontigo',        'icon' => 'tabler--file-invoice'],
-        'zelle'      => ['label' => 'Zelle',          'icon' => 'tabler--bolt'],
-        'paypal'     => ['label' => 'PayPal',         'icon' => 'tabler--brand-paypal'],
-        'zinli'      => ['label' => 'Zinli',          'icon' => 'tabler--moneybag'],
-        'airtm'      => ['label' => 'AirTM',          'icon' => 'tabler--exchange'],
-        'reserve'    => ['label' => 'Reserve (RSV)',  'icon' => 'tabler--shield-dollar'],
-        'binancepay' => ['label' => 'Binance Pay',    'icon' => 'tabler--currency-bitcoin'],
-        'usdt'       => ['label' => 'USDT',           'icon' => 'tabler--coin'],
-        'usd'        => ['label' => 'Dólares USD',    'icon' => 'tabler--currency-dollar'],
-        'eur'        => ['label' => 'Euros',          'icon' => 'tabler--currency-euro'],
-    ];
-    $fpVisible = array_filter($fpAllMeta, fn($k) => in_array($k, array_merge($fpGlobal, $fpCurrency)), ARRAY_FILTER_USE_KEY);
-    $showLegalLinks = (bool) data_get($customization->content_blocks ?? [], 'legal_links.enabled', false);
-@endphp
-@if(!empty($fpVisible))
-<div class="mx-auto max-w-7xl px-4 py-5 border-t border-foreground/5">
-    <p class="text-xs font-bold text-foreground/40 uppercase tracking-widest mb-3 text-center">Métodos de pago</p>
-    <div class="flex flex-wrap justify-center gap-2">
-        @foreach($fpVisible as $fpItem)
-        <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface border border-foreground/8 text-xs font-medium text-foreground/70 whitespace-nowrap">
-            <span class="iconify {{ $fpItem['icon'] }} size-3.5"></span>
-            {{ $fpItem['label'] }}
-        </span>
-        @endforeach
-    </div>
-</div>
-@endif
-
-{{-- 6. FOOTER --}}
-<footer class="text-center py-6 text-xs text-gray-400 border-t border-gray-100">
-    <p>© {{ date('Y') }} {{ $tenant->business_name }}. Todos los derechos reservados.</p>
-    @if($showLegalLinks)
-    <p class="mt-2 flex items-center justify-center gap-3">
-        <a href="{{ route('marketing.privacy') }}" target="_blank" rel="noopener noreferrer" class="hover:text-foreground transition-colors">Privacidad</a>
-        <span aria-hidden="true">•</span>
-        <a href="{{ route('marketing.terms') }}" target="_blank" rel="noopener noreferrer" class="hover:text-foreground transition-colors">Términos</a>
-    </p>
-    @endif
-    <p class="mt-1">Potenciado por <a href="https://syntiweb.com" target="_blank" rel="noopener"><strong>SYNTIweb</strong></a></p>
-</footer>
+{{-- 5. FOOTER STOREFRONT --}}
+@include('landing.sections.footer-storefront')
 
 @endsection
 

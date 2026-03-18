@@ -884,13 +884,8 @@
     </div>
 </div>
 
-{{-- 6. FOOTER (shared component — same as Studio) --}}
-    @include('landing.sections.footer', [
-        'sConfig'    => $customization->getSectionConfig('footer'),
-        'blueprint'  => 'cat',
-        'categories' => $catCategories ?? [],
-        'visiblePay' => $visiblePay ?? [],
-    ])
+{{-- 6. FOOTER STOREFRONT --}}
+    @include('landing.sections.footer-storefront')
 
 
 

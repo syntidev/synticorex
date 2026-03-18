@@ -18,7 +18,7 @@
         'payment_methods' => ['label' => 'Pagos',       'anchor' => '#payment_methods'],
     ];
     $allowedFooterSections = match ($blueprint) {
-        'cat' => ['products'],
+        'cat' => [],
         'food' => ['products', 'payment_methods'],
         default => array_keys($footerNavMap),
     };
