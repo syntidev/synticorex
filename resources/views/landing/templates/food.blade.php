@@ -17,7 +17,7 @@
     $categories  = $menu ?? [];
     $plan        = $tenant->plan ?? null;
     $planSlug    = (string) ($plan->slug ?? 'food-basico');
-    $isPlanAnual = $planSlug === 'food-anual';
+    $isPlanAnual = in_array($planSlug, ['food-anual', 'food-vision', 'food-crecimiento']);
 
     $customerFields = $customization->customer_required_fields
         ?? ($tenant->settings['food_settings']['customer_fields'] ?? ['name']);
