@@ -58,6 +58,18 @@
             // Bind click events to all sidebar nav buttons
             tabs.forEach((tab, index) => {
                 tab.addEventListener('click', function() {
+                    // Cerrar sidebar en mobile (Preline HS Overlay)
+                    if (window.innerWidth < 1024) {
+                        const sidebar = document.querySelector('#hs-application-sidebar');
+                        if (sidebar && window.HSOverlay) {
+                            window.HSOverlay.close(sidebar);
+                        } else if (sidebar) {
+                            sidebar.classList.remove('hs-overlay-open');
+                            document.body.classList.remove('hs-overlay-body-open');
+                            const backdrop = document.querySelector('.hs-overlay-backdrop');
+                            if (backdrop) backdrop.remove();
+                        }
+                    }
                     switchTab(this.getAttribute('data-tab'));
                 });
 
