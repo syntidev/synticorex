@@ -938,10 +938,10 @@
         renderDrawer();
     };
 
-    window.addToCart = function(id, name, price) {
+    window.addToCart = function(id, name, price, img) {
         if (!window.__tenantIsOpen) showClosedToast();
         var isNew = !cart[id];
-        if (cart[id]) { cart[id].qty++; } else { cart[id] = { name: name, price: parseFloat(price) || 0, qty: 1, options: [] }; }
+        if (cart[id]) { cart[id].qty++; } else { cart[id] = { name: name, price: parseFloat(price) || 0, qty: 1, options: [], img: img || '' }; }
         updateBadge();
         renderDrawer();
         var addBtn = document.getElementById('sf-add-' + id);
@@ -1069,12 +1069,15 @@
                 optionsHtml += '</p>';
             }
             
-            div.innerHTML = '<div style="flex:1;min-width:0">'
+            div.innerHTML = '<div style="width:56px;height:56px;border-radius:14px;overflow:hidden;background:var(--surface,#e5e7eb);flex-shrink:0">'
+                + '<img style="width:100%;height:100%;object-fit:cover" src="' + (item.img || '') + '">'
+                + '</div>'
+                + '<div style="flex:1;min-width:0">'
                 + '<p style="font-weight:800;font-size:.875rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-bottom:2px">' + item.name + '</p>'
                 + '<p style="font-size:.75rem;font-weight:700;opacity:.45">' + item.qty + ' × ' + formatPrice(itemTotalPrice, true) + '</p>'
                 + optionsHtml
                 + '</div>'
-                + '<div style="display:flex;align-items:center;gap:6px">'
+                + '<div style="display:flex;align-items:center;gap:6px;flex-shrink:0">'
                 + '<button onclick="changeQty(\'' + id + '\', -1)" style="width:28px;height:28px;border-radius:50%;border:none;cursor:pointer;background:var(--surface,#f3f4f6);font-weight:900;font-size:.8rem;line-height:1">−</button>'
                 + '<span style="font-size:.8rem;font-weight:900;min-width:14px;text-align:center">' + item.qty + '</span>'
                 + '<button onclick="changeQty(\'' + id + '\', 1)" style="width:28px;height:28px;border-radius:50%;border:none;cursor:pointer;background:var(--primary);color:var(--primary-foreground);font-weight:900;font-size:.8rem;line-height:1">+</button>'
@@ -1094,13 +1097,15 @@
 
     window.sfOpenDetail = function(item, siblings) {
         var precioParaCarrito = parseFloat(item.precio || 0);
-        sfDetail = { id: item.id || '', name: item.nombre || '', price: precioParaCarrito, qty: 1 };
+        sfDetail = { id: item.id || '', name: item.nombre || '', price: precioParaCarrito, qty: 1, img: '' };
 
         // Foto
         var img = document.getElementById('sf-detail-img');
         var ph  = document.getElementById('sf-detail-placeholder');
         if (item.image_path) {
-            img.src = item.image_path.startsWith('http') ? item.image_path : '/storage/tenants/{{ $tenant->id }}/' + item.image_path;
+            var imgSrc = item.image_path.startsWith('http') ? item.image_path : '/storage/tenants/{{ $tenant->id }}/' + item.image_path;
+            sfDetail.img = imgSrc;
+            img.src = imgSrc;
             img.classList.remove('hidden');
             ph.classList.add('hidden');
         } else {
@@ -1242,7 +1247,7 @@
     window.sfDetailAdd = function() {
         if (!sfDetail.id) return;
         for (var i = 0; i < sfDetail.qty; i++) {
-            addToCart(sfDetail.id, sfDetail.name, sfDetail.price);
+            addToCart(sfDetail.id, sfDetail.name, sfDetail.price, sfDetail.img);
         }
         sfCloseDetail();
     };

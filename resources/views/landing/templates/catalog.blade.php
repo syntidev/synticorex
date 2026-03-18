@@ -1236,9 +1236,11 @@
                     ${item.variant ? `<p style="font-size:.68rem;opacity:.55;margin-bottom:2px">${item.variant}</p>` : ''}
                     <p style="font-size:.75rem;font-weight:700;opacity:.45">${item.qty} × ${formatPrice(item.price, true)}</p>
                 </div>
-                <button onclick="changeQty('${id}', -1)"
-                        style="width:32px;height:32px;border-radius:10px;border:none;cursor:pointer;background:transparent;color:#ef4444;font-size:1.25rem;font-weight:900;line-height:1;flex-shrink:0"
-                        title="Quitar">×</button>
+                <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
+                    <button onclick="changeQty('${id}', -1)" style="width:28px;height:28px;border-radius:50%;border:none;cursor:pointer;background:var(--surface,#f3f4f6);font-weight:900;font-size:.8rem;line-height:1">−</button>
+                    <span style="font-size:.8rem;font-weight:900;min-width:14px;text-align:center">${item.qty}</span>
+                    <button onclick="changeQty('${id}', 1)" style="width:28px;height:28px;border-radius:50%;border:none;cursor:pointer;background:var(--primary);color:var(--primary-foreground);font-weight:900;font-size:.8rem;line-height:1">+</button>
+                </div>
             `;
             body.appendChild(div);
         });
