@@ -183,10 +183,24 @@ class TenantRendererController extends Controller
                 ->values()
                 ->all();
 
-            // CAT categories for catalog landing
+            // CAT categories for catalog landing (reads from DB table, not settings)
             $catCategories = [];
             if ($tenant->getBlueprintSlug() === 'cat') {
-                $catCategories = array_values(data_get($tenant->settings ?? [], 'cat_categories', []));
+                $catCategories = \DB::table('cat_categories')
+                    ->where('tenant_id', $tenant->id)
+                    ->whereNull('parent_id')
+                    ->orderBy('id')
+                    ->get()
+                    ->map(function ($cat) use ($tenant) {
+                        $subs = \DB::table('cat_categories')
+                            ->where('tenant_id', $tenant->id)
+                            ->where('parent_id', $cat->id)
+                            ->orderBy('id')
+                            ->get(['id', 'name'])
+                            ->toArray();
+                        return ['id' => $cat->id, 'name' => $cat->name, 'subcategories' => $subs];
+                    })
+                    ->toArray();
             }
 
             return view($this->resolveTemplate($tenant), compact('tenant', 'plan', 'products', 'services', 'dollarRate', 'euroRate', 'themeSlug', 'meta', 'customization', 'currencySettings', 'displayMode', 'savedDisplayMode', 'showReference', 'showBolivares', 'showEuro', 'hidePrice', 'trackingQRSmall', 'trackingShortlink', 'showHoursIndicator', 'isOpen', 'closedMessage', 'blueprint', 'schema', 'menu', 'featuredItems', 'catCategories'));
@@ -292,10 +306,24 @@ class TenantRendererController extends Controller
                 ->values()
                 ->all();
 
-            // CAT categories for catalog landing
+            // CAT categories for catalog landing (reads from DB table, not settings)
             $viewData['catCategories'] = [];
             if ($tenant->getBlueprintSlug() === 'cat') {
-                $viewData['catCategories'] = array_values(data_get($tenant->settings ?? [], 'cat_categories', []));
+                $viewData['catCategories'] = \DB::table('cat_categories')
+                    ->where('tenant_id', $tenant->id)
+                    ->whereNull('parent_id')
+                    ->orderBy('id')
+                    ->get()
+                    ->map(function ($cat) use ($tenant) {
+                        $subs = \DB::table('cat_categories')
+                            ->where('tenant_id', $tenant->id)
+                            ->where('parent_id', $cat->id)
+                            ->orderBy('id')
+                            ->get(['id', 'name'])
+                            ->toArray();
+                        return ['id' => $cat->id, 'name' => $cat->name, 'subcategories' => $subs];
+                    })
+                    ->toArray();
             }
 
             Log::info('TenantRendererController: Rendering by custom domain', [
@@ -386,10 +414,24 @@ class TenantRendererController extends Controller
                 ->values()
                 ->all();
 
-            // CAT categories for catalog landing
+            // CAT categories for catalog landing (reads from DB table, not settings)
             $viewData['catCategories'] = [];
             if ($tenant->getBlueprintSlug() === 'cat') {
-                $viewData['catCategories'] = array_values(data_get($tenant->settings ?? [], 'cat_categories', []));
+                $viewData['catCategories'] = \DB::table('cat_categories')
+                    ->where('tenant_id', $tenant->id)
+                    ->whereNull('parent_id')
+                    ->orderBy('id')
+                    ->get()
+                    ->map(function ($cat) use ($tenant) {
+                        $subs = \DB::table('cat_categories')
+                            ->where('tenant_id', $tenant->id)
+                            ->where('parent_id', $cat->id)
+                            ->orderBy('id')
+                            ->get(['id', 'name'])
+                            ->toArray();
+                        return ['id' => $cat->id, 'name' => $cat->name, 'subcategories' => $subs];
+                    })
+                    ->toArray();
             }
 
             Log::debug('TenantRendererController: Preview mode', [

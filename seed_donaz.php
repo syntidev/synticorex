@@ -1,0 +1,153 @@
+<?php
+use App\Models\Tenant;
+use App\Models\Plan;
+use Illuminate\Support\Facades\DB;
+
+// ── Plan food-vision ──────────────────────────────────────
+$plan = Plan::where('slug', 'food-vision')->first();
+if (!$plan) { echo "ERROR: plan food-vision no encontrado\n"; return; }
+
+// ── Tenant ────────────────────────────────────────────────
+$existing = Tenant::where('subdomain', 'donaz')->first();
+if ($existing) {
+    echo "Ya existe ID {$existing->id}\n";
+    $tenant = $existing;
+} else {
+    $tenant = Tenant::create([
+        'user_id'          => 1,
+        'business_name'    => 'Donaz',
+        'subdomain'        => 'donaz',
+        'business_segment' => 'Pastelería & Bebidas',
+        'slogan'           => 'La zona de la dona. La número uno.',
+        'phone'            => '+584241234567',
+        'city'             => 'Caracas',
+        'country'          => 'Venezuela',
+        'address'          => 'C.C. Sambil, Local 42, Caracas',
+        'plan_id'          => $plan->id,
+        'edit_pin'         => '123456',
+        'status'           => 'active',
+        'settings'         => json_encode([
+            'engine_settings' => ['currency' => ['exchange_rate' => 36.50]]
+        ]),
+    ]);
+    echo "Tenant creado: ID {$tenant->id}\n";
+}
+
+// ── Customization ─────────────────────────────────────────
+DB::table('tenant_customization')->updateOrInsert(
+    ['tenant_id' => $tenant->id],
+    [
+        'hero_main_filename'      => 'https://images.unsplash.com/photo-1551024601-bec78aea704b?w=1200&q=80',
+        'hero_secondary_filename' => 'https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=1200&q=80',
+        'hero_tertiary_filename'  => 'https://images.unsplash.com/photo-1582716401301-b2407dc7563d?w=1200&q=80',
+        'about_text'              => 'Somos la donutería artesanal número uno de Caracas. Cada dona es hecha a mano con ingredientes frescos. Clásicas, rellenas, largas y más — todas irresistibles.',
+        'payment_methods'         => json_encode([
+            'global'   => ['pagoMovil', 'zelle', 'cash', 'zinli'],
+            'currency' => ['usd'],
+        ]),
+        'social_networks' => json_encode([
+            'instagram' => '@donaz.one',
+            'tiktok'    => '@donaz.one',
+        ]),
+        'updated_at' => now(),
+        'created_at' => now(),
+    ]
+);
+
+// ── Menú ──────────────────────────────────────────────────
+// Estructura: categorías con items anidados en settings
+$menu = [
+    [
+        'id'     => 'cat-1',
+        'nombre' => 'Donas Clásicas',
+        'activo' => true,
+        'items'  => [
+            ['id'=>'i-01','nombre'=>'Glaseada Original',      'precio'=>2.50,'badge'=>'popular',  'is_featured'=>true,
+             'descripcion'=>'La clásica de todas las clásicas. Masa suave con glaseado brillante.',
+             'image_path'=>'https://images.unsplash.com/photo-1551024601-bec78aea704b?w=600&q=80'],
+            ['id'=>'i-02','nombre'=>'Chocolate Intenso',       'precio'=>3.00,'badge'=>'popular',  'is_featured'=>true,
+             'descripcion'=>'Cubierta de ganache de chocolate negro belga. Irresistible.',
+             'image_path'=>'https://images.unsplash.com/photo-1508737027454-e6454ef45afd?w=600&q=80'],
+            ['id'=>'i-03','nombre'=>'Fresa con Sprinkles',     'precio'=>3.00,'badge'=>'nuevo',    'is_featured'=>false,
+             'descripcion'=>'Glaseado rosa de fresa natural con confites de colores.',
+             'image_path'=>'https://images.unsplash.com/photo-1556913396-7a3c459ef68e?w=600&q=80'],
+            ['id'=>'i-04','nombre'=>'Maple con Tocineta',      'precio'=>3.50,'badge'=>'destacado','is_featured'=>true,
+             'descripcion'=>'El combo perfecto: glaseado de maple y tocineta crujiente.',
+             'image_path'=>'https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=600&q=80'],
+            ['id'=>'i-05','nombre'=>'Vainilla Clásica',        'precio'=>2.50,'badge'=>null,       'is_featured'=>false,
+             'descripcion'=>'Suave, esponjosa, con glaseado de vainilla bourbon.',
+             'image_path'=>'https://images.unsplash.com/photo-1551024601-bec78aea704b?w=600&q=80'],
+            ['id'=>'i-06','nombre'=>'Glazed Canela',           'precio'=>2.75,'badge'=>'promo',    'is_featured'=>false,
+             'descripcion'=>'Glaseado de azúcar con toque de canela. Perfecta para el desayuno.',
+             'image_path'=>'https://images.unsplash.com/photo-1551024601-bec78aea704b?w=600&q=80'],
+        ]
+    ],
+    [
+        'id'     => 'cat-2',
+        'nombre' => 'Donas Rellenas',
+        'activo' => true,
+        'items'  => [
+            ['id'=>'i-07','nombre'=>'Rellena de Nutella',      'precio'=>4.00,'badge'=>'popular',  'is_featured'=>true,
+             'descripcion'=>'Masa brioche rellena al tope de Nutella. Sin hueco, puro relleno.',
+             'image_path'=>'https://images.unsplash.com/photo-1582716401301-b2407dc7563d?w=600&q=80'],
+            ['id'=>'i-08','nombre'=>'Crema Pastelera Limón',   'precio'=>3.75,'badge'=>'nuevo',    'is_featured'=>false,
+             'descripcion'=>'Rellena de crema pastelera de limón con azúcar glass por encima.',
+             'image_path'=>'https://images.unsplash.com/photo-1582716401301-b2407dc7563d?w=600&q=80'],
+            ['id'=>'i-09','nombre'=>'Dulce de Leche',          'precio'=>4.00,'badge'=>'popular',  'is_featured'=>true,
+             'descripcion'=>'Rellena con dulce de leche artesanal venezolano. Un clásico local.',
+             'image_path'=>'https://images.unsplash.com/photo-1582716401301-b2407dc7563d?w=600&q=80'],
+            ['id'=>'i-10','nombre'=>'Frambuesa y Crema',       'precio'=>4.25,'badge'=>'destacado','is_featured'=>false,
+             'descripcion'=>'Mermelada de frambuesa + crema chantilly. Cubierta de azúcar glass.',
+             'image_path'=>'https://images.unsplash.com/photo-1582716401301-b2407dc7563d?w=600&q=80'],
+        ]
+    ],
+    [
+        'id'     => 'cat-3',
+        'nombre' => 'Donas Largas',
+        'activo' => true,
+        'items'  => [
+            ['id'=>'i-11','nombre'=>'Long John Chocolate',     'precio'=>3.50,'badge'=>'popular',  'is_featured'=>true,
+             'descripcion'=>'Dona larga con cobertura de chocolate y relleno de crema.',
+             'image_path'=>'https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=600&q=80'],
+            ['id'=>'i-12','nombre'=>'Long John Vainilla',      'precio'=>3.25,'badge'=>null,       'is_featured'=>false,
+             'descripcion'=>'Clásica dona larga con glaseado de vainilla suave.',
+             'image_path'=>'https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=600&q=80'],
+            ['id'=>'i-13','nombre'=>'Long John Arcoíris',      'precio'=>3.75,'badge'=>'nuevo',    'is_featured'=>false,
+             'descripcion'=>'Glaseado multicolor con sprinkles. La favorita de los niños.',
+             'image_path'=>'https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=600&q=80'],
+        ]
+    ],
+    [
+        'id'     => 'cat-4',
+        'nombre' => 'Bebidas',
+        'activo' => true,
+        'items'  => [
+            ['id'=>'i-14','nombre'=>'Café Americano',          'precio'=>2.00,'badge'=>null,       'is_featured'=>false,
+             'descripcion'=>'Espresso doble con agua caliente. El compañero perfecto.',
+             'image_path'=>'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=600&q=80'],
+            ['id'=>'i-15','nombre'=>'Cappuccino',              'precio'=>2.75,'badge'=>'popular',  'is_featured'=>false,
+             'descripcion'=>'Espresso + leche vaporizada + espuma. Arte latte opcional.',
+             'image_path'=>'https://images.unsplash.com/photo-1572442388796-11668a67e53d?w=600&q=80'],
+            ['id'=>'i-16','nombre'=>'Chocolate Caliente',      'precio'=>2.50,'badge'=>'popular',  'is_featured'=>true,
+             'descripcion'=>'Chocolate artesanal venezolano con leche entera. Cremoso y espeso.',
+             'image_path'=>'https://images.unsplash.com/photo-1542990253-0d0f5be5f0ed?w=600&q=80'],
+            ['id'=>'i-17','nombre'=>'Limonada Fría',           'precio'=>2.25,'badge'=>null,       'is_featured'=>false,
+             'descripcion'=>'Limonada natural con menta fresca. Refrescante y sin colorantes.',
+             'image_path'=>'https://images.unsplash.com/photo-1621263764928-df1444c5e859?w=600&q=80'],
+            ['id'=>'i-18','nombre'=>'Frappé de Caramelo',      'precio'=>3.50,'badge'=>'nuevo',    'is_featured'=>false,
+             'descripcion'=>'Café frío blended con caramelo, leche y crema batida.',
+             'image_path'=>'https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=600&q=80'],
+        ]
+    ],
+];
+
+// Guardar menú en settings del tenant
+$settings = json_decode($tenant->settings ?? '{}', true);
+$settings['menu'] = $menu;
+$tenant->settings = json_encode($settings);
+$tenant->save();
+
+$totalItems = array_sum(array_map(fn($c) => count($c['items']), $menu));
+echo "✅ Donaz lista — tenant_id: {$tenant->id}\n";
+echo "   " . count($menu) . " categorías, {$totalItems} items\n";
+echo "URL: http://127.0.0.1:8000/donaz\n";

@@ -143,7 +143,8 @@
                 @endif
 
                 @if($products->count() > 0)
-                <div id="cat-products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {{-- Vista grid --}}
+                <div id="cat-grid-view" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     @foreach($products as $product)
                     <div class="group relative rounded-xl border border-border bg-surface overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300">
                         {{-- Imagen thumbnail con overlay --}}
@@ -209,6 +210,53 @@
                     </div>
                     @endforeach
                 </div>
+
+                {{-- Vista lista (server-side) --}}
+                <div id="cat-list-view" style="display:none" class="border border-border rounded-xl overflow-hidden divide-y divide-border">
+                    @foreach($products as $product)
+                    <div class="px-4 py-2.5 flex items-center justify-between gap-3 hover:bg-layer/30 transition-colors">
+                        <div class="flex items-center gap-3 min-w-0 flex-1">
+                            @if($product->image_filename)
+                                <img src="{{ asset('storage/tenants/' . $tenant->id . '/' . $product->image_filename) }}"
+                                     alt="{{ $product->name }}"
+                                     class="size-10 rounded-lg object-cover shrink-0 border border-border">
+                            @else
+                                <span class="inline-flex items-center justify-center size-10 rounded-lg bg-layer shrink-0">
+                                    <span class="iconify tabler--shopping-bag size-5 text-muted-foreground-1"></span>
+                                </span>
+                            @endif
+                            <div class="min-w-0">
+                                <div class="flex items-center gap-1.5">
+                                    @if($product->is_featured)
+                                        <span class="text-yellow-500 shrink-0">⭐</span>
+                                    @endif
+                                    <span class="text-sm text-foreground truncate font-medium">{{ $product->name }}</span>
+                                </div>
+                                <div class="flex items-center gap-1.5 mt-0.5">
+                                    @if($product->category_name)
+                                        <span class="text-xs text-muted-foreground-1">{{ $product->category_name }}</span>
+                                    @endif
+                                    @if($product->badge)
+                                        <span class="inline-flex items-center gap-1 py-0.5 px-1.5 rounded-full text-[10px] font-semibold bg-primary/10 text-primary">{{ ucfirst($product->badge) }}</span>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3 shrink-0">
+                            <span class="text-sm font-bold text-primary">REF {{ number_format($product->price_usd, 2) }}</span>
+                            <button onclick="editCatProduct({{ $product->id }})"
+                                    class="inline-flex items-center justify-center size-8 rounded-lg text-blue-600 hover:bg-blue-50 transition-colors cursor-pointer">
+                                <span class="iconify tabler--pencil size-4"></span>
+                            </button>
+                            <button onclick="deleteProduct({{ $product->id }})"
+                                    class="inline-flex items-center justify-center size-8 rounded-lg text-red-500 hover:bg-red-50 transition-colors cursor-pointer">
+                                <span class="iconify tabler--trash size-4"></span>
+                            </button>
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+
                 {{-- Paginación --}}
                 <div id="cat-pagination" class="flex items-center justify-between gap-3 mt-4 flex-wrap">
                     <p id="cat-page-info" class="text-xs text-muted-foreground-1"></p>
@@ -911,7 +959,7 @@
     var _catAllCards = [];
 
     function catInitProducts() {
-        _catAllCards = Array.from(document.querySelectorAll('#cat-products-grid > .group'));
+        _catAllCards = Array.from(document.querySelectorAll('#cat-grid-view > .group'));
         catSetView(_catView, false);
         catRenderPage();
     }
@@ -919,30 +967,20 @@
     window.catSetView = function(view, save) {
         _catView = view;
         if (save !== false) localStorage.setItem('cat-view', view);
-        var grid = document.getElementById('cat-products-grid');
+        var gridView = document.getElementById('cat-grid-view');
+        var listView = document.getElementById('cat-list-view');
         var btnG = document.getElementById('cat-view-grid');
         var btnL = document.getElementById('cat-view-list');
         if (view === 'list') {
-            grid.className = 'flex flex-col gap-2';
-            _catAllCards.forEach(function(c) {
-                c.className = c.className.replace('rounded-xl','rounded-lg');
-                var fig = c.querySelector('figure');
-                if (fig) fig.style.cssText = 'width:72px;height:72px;min-width:72px;border-radius:8px;overflow:hidden';
-                c.style.flexDirection = 'row';
-                c.style.alignItems = 'center';
-            });
-            btnG.className = btnG.className.replace('bg-primary text-primary-foreground','bg-layer text-muted-foreground-1 hover:bg-layer-hover');
-            btnL.className = btnL.className.replace('bg-layer text-muted-foreground-1 hover:bg-layer-hover','bg-primary text-primary-foreground');
+            if (gridView) gridView.style.display = 'none';
+            if (listView) listView.style.display = '';
+            if (btnG) btnG.className = btnG.className.replace('bg-primary text-primary-foreground', 'bg-layer text-muted-foreground-1 hover:bg-layer-hover');
+            if (btnL) btnL.className = btnL.className.replace('bg-layer text-muted-foreground-1 hover:bg-layer-hover', 'bg-primary text-primary-foreground');
         } else {
-            grid.className = 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4';
-            _catAllCards.forEach(function(c) {
-                var fig = c.querySelector('figure');
-                if (fig) fig.style.cssText = '';
-                c.style.flexDirection = '';
-                c.style.alignItems = '';
-            });
-            btnG.className = btnG.className.replace('bg-layer text-muted-foreground-1 hover:bg-layer-hover','bg-primary text-primary-foreground');
-            btnL.className = btnL.className.replace('bg-primary text-primary-foreground','bg-layer text-muted-foreground-1 hover:bg-layer-hover');
+            if (gridView) gridView.style.display = '';
+            if (listView) listView.style.display = 'none';
+            if (btnG) btnG.className = btnG.className.replace('bg-layer text-muted-foreground-1 hover:bg-layer-hover', 'bg-primary text-primary-foreground');
+            if (btnL) btnL.className = btnL.className.replace('bg-primary text-primary-foreground', 'bg-layer text-muted-foreground-1 hover:bg-layer-hover');
         }
         _catPage = 1;
         catRenderPage();
@@ -955,8 +993,14 @@
     };
 
     window.catChangePage = function(dir) {
-        var filtered = _catAllCards.filter(function(c) {
-            return !_catSearch || c.querySelector('h4').textContent.toLowerCase().includes(_catSearch);
+        var isGrid = _catView !== 'list';
+        var cards = isGrid
+            ? Array.from(document.querySelectorAll('#cat-grid-view > .group'))
+            : Array.from(document.querySelectorAll('#cat-list-view > div'));
+        var filtered = cards.filter(function(c) {
+            if (!_catSearch) return true;
+            var nameEl = c.querySelector('span.text-sm, h4');
+            return nameEl && nameEl.textContent.toLowerCase().includes(_catSearch);
         });
         var total = Math.ceil(filtered.length / _catPerPage) || 1;
         _catPage = Math.min(Math.max(_catPage + dir, 1), total);
@@ -964,20 +1008,25 @@
     };
 
     function catRenderPage() {
-        var filtered = _catAllCards.filter(function(c) {
-            return !_catSearch || c.querySelector('h4').textContent.toLowerCase().includes(_catSearch);
+        var isGrid = _catView !== 'list';
+        var cards = isGrid
+            ? Array.from(document.querySelectorAll('#cat-grid-view > .group'))
+            : Array.from(document.querySelectorAll('#cat-list-view > div'));
+        var filtered = cards.filter(function(c) {
+            if (!_catSearch) return true;
+            var nameEl = c.querySelector('span.text-sm, h4');
+            return nameEl && nameEl.textContent.toLowerCase().includes(_catSearch);
         });
         var total = Math.ceil(filtered.length / _catPerPage) || 1;
         var start = (_catPage - 1) * _catPerPage;
-        var end = start + _catPerPage;
-        _catAllCards.forEach(function(c) { c.style.display = 'none'; });
-        filtered.slice(start, end).forEach(function(c) { c.style.display = ''; });
+        cards.forEach(function(c) { c.style.display = 'none'; });
+        filtered.slice(start, start + _catPerPage).forEach(function(c) { c.style.display = ''; });
         var info = document.getElementById('cat-page-info');
-        var num = document.getElementById('cat-page-num');
+        var num  = document.getElementById('cat-page-num');
         var prev = document.getElementById('cat-prev-btn');
         var next = document.getElementById('cat-next-btn');
-        if (info) info.textContent = 'Mostrando ' + (Math.min(start+1,filtered.length)) + '-' + Math.min(end,filtered.length) + ' de ' + filtered.length;
-        if (num) num.textContent = _catPage + ' / ' + total;
+        if (info) info.textContent = 'Mostrando ' + Math.min(start+1, filtered.length) + '-' + Math.min(start+_catPerPage, filtered.length) + ' de ' + filtered.length;
+        if (num)  num.textContent  = _catPage + ' / ' + total;
         if (prev) prev.disabled = _catPage <= 1;
         if (next) next.disabled = _catPage >= total;
         var pag = document.getElementById('cat-pagination');
