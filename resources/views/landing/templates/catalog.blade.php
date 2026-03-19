@@ -105,6 +105,10 @@
     @keyframes bump{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
     .bump{animation:bump .25s ease-out}
     /* ── Category tabs ── */
+    /* ── Hero Slider Ken Burns ── */
+    @keyframes sc-kenburns{0%{transform:scale(1) translateZ(0)}100%{transform:scale(1.07) translateZ(0)}}
+    .sc-slide{transition:opacity 1s ease-in-out}
+    .sc-slide.active img{animation:sc-kenburns 6s ease-out forwards;will-change:transform}
     .sc-cat-tab.active{color:var(--foreground);border-color:var(--primary)}
     /* ── Card editorial ── */
     .sc-product-card{position:relative;background:var(--background);border-radius:14px;overflow:hidden;border:1px solid rgba(var(--foreground-rgb,0 0 0)/.06);transition:transform .2s,box-shadow .2s;display:flex;flex-direction:column}
@@ -470,7 +474,7 @@
 @if(count($scHeroImages) > 0)
 <div id="sc-hero-slider" class="relative w-full bg-surface" style="height:200px;overflow:hidden;">
     @foreach($scHeroImages as $hIdx => $hImg)
-    <div class="sc-slide absolute inset-0 transition-opacity duration-700" style="opacity:{{ $hIdx === 0 ? '1' : '0' }}">
+    <div class="sc-slide absolute inset-0{{ $hIdx === 0 ? ' active' : '' }}" style="opacity:{{ $hIdx === 0 ? '1' : '0' }}">
         @php $hImgUrl = str_starts_with($hImg, 'http') ? $hImg : asset('storage/tenants/' . $tenant->id . '/' . $hImg); @endphp
         <img src="{{ $hImgUrl }}"
              alt="{{ $tenant->business_name }}"
@@ -1816,10 +1820,14 @@ window.scToggleCatMenu = function() {
     var cur = 0;
     function goTo(n){
         slides[cur].style.opacity = '0';
-        dots[cur].classList.replace('bg-white','bg-white/40');
+        slides[cur].classList.remove('active');
+        if(dots[cur]) dots[cur].classList.replace('bg-white','bg-white/40');
         cur = n;
         slides[cur].style.opacity = '1';
-        dots[cur].classList.replace('bg-white/40','bg-white');
+        slides[cur].classList.add('active');
+        var img = slides[cur].querySelector('img');
+        if(img){ img.style.animation='none'; img.offsetHeight; img.style.animation=''; }
+        if(dots[cur]) dots[cur].classList.replace('bg-white/40','bg-white');
     }
     dots.forEach(function(d,i){ d.addEventListener('click', function(){ goTo(i); }); });
     setInterval(function(){ goTo((cur+1) % slides.length); }, 6000);

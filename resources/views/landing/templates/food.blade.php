@@ -35,6 +35,8 @@
     @keyframes bump{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
     .bump{animation:bump .25s ease-out}
     .sf-dot { cursor: pointer; transition: all .3s; }
+    /* ── Hero Slider horizontal slide ── */
+    .sf-slide{transition:opacity .8s ease-in-out, transform .8s ease-in-out;will-change:transform,opacity}
     .sf-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);z-index:300;display:none;align-items:center;justify-content:center;padding:16px}
     .sf-modal{max-width:420px;width:100%;background:var(--background,#fff);border-radius:24px;box-shadow:0 30px 80px rgba(0,0,0,.25);border:1px solid rgba(0,0,0,.05)}
     .sf-field{position:relative}
@@ -74,7 +76,7 @@
 @if(count($heroImages) > 0)
 <div id="sf-hero-slider" class="relative w-full overflow-visible bg-surface" style="height:220px">
     @foreach($heroImages as $hIdx => $hImg)
-    <div class="sf-slide absolute inset-0 transition-opacity duration-700" style="opacity:{{ $hIdx === 0 ? '1' : '0' }}">
+    <div class="sf-slide absolute inset-0" style="opacity:{{ $hIdx === 0 ? '1' : '0' }};transform:translateX(0)">
         @php $hImgUrl = str_starts_with($hImg, 'http') ? $hImg : asset('storage/tenants/' . $tenant->id . '/' . $hImg); @endphp
         <img src="{{ $hImgUrl }}" alt="{{ $tenant->business_name }}" class="w-full h-full object-cover" loading="{{ $hIdx === 0 ? 'eager' : 'lazy' }}">
     </div>
@@ -1472,10 +1474,19 @@
         if (slides.length <= 1) return;
         var cur = 0;
         function goTo(n) {
-            slides[cur].style.opacity = '0';
+            var outSlide = slides[cur];
+            outSlide.style.opacity = '0';
+            outSlide.style.transform = 'translateX(-40px)';
             if (dots[cur]) { dots[cur].style.background = 'rgba(255,255,255,0.4)'; dots[cur].style.width = '8px'; }
             cur = n % slides.length;
-            slides[cur].style.opacity = '1';
+            var inSlide = slides[cur];
+            inSlide.style.transition = 'none';
+            inSlide.style.transform = 'translateX(40px)';
+            inSlide.style.opacity = '0';
+            inSlide.offsetHeight; /* reflow */
+            inSlide.style.transition = '';
+            inSlide.style.transform = 'translateX(0)';
+            inSlide.style.opacity = '1';
             if (dots[cur]) { dots[cur].style.background = '#fff'; dots[cur].style.width = '16px'; }
         }
         if (dots.length) dots.forEach(function(d) { d.addEventListener('click', function() { goTo(+this.dataset.slide); }); });
