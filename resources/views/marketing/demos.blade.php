@@ -73,7 +73,37 @@
         .dg-lg-start3  { grid-column-start: 3; }
     }
 
-    /* ── Demo card hover ─────────────────────────────────────────── */
+    /* ── Demo card image styling: dark border + overlay ──────────── */
+    .demo-card .aspect-\[12\/7\] {
+        border: 4px solid #1a1a1a;
+        border-radius: 0.75rem;
+        position: relative;
+        box-shadow: inset 0 0 0 4px #1a1a1a;
+    }
+    .demo-card .aspect-\[12\/7\]::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(0,0,0,0.3) 100%);
+        border-radius: 0.75rem;
+        pointer-events: none;
+    }
+
+    /* ── Demo card title box: dark background for strong contrast ──– */
+    .demo-card .bg-layer {
+        background: rgba(26, 26, 26, 0.92) !important;
+        color: #ffffff !important;
+        backdrop-filter: blur(8px);
+        border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    .demo-card .text-layer-foreground {
+        color: #ffffff !important;
+    }
+    .demo-card .text-slate-500 {
+        color: rgba(255,255,255,0.65) !important;
+    }
+
+    /* ── Improved hover effect ────────────────────────────────────── */
     .demo-card img  { transition: transform 0.5s ease-in-out; }
     .demo-card:hover img,
     .demo-card:focus img { transform: scale(1.05); }
@@ -88,13 +118,13 @@
  * Using inline styles avoids Tailwind purge issues with dynamic class names.
  */
 $badgeStyles = [
-    'blue'    => 'background:#dbeafe;color:#1d4ed8',
-    'pink'    => 'background:#fce7f3;color:#be185d',
-    'cyan'    => 'background:#cffafe;color:#0e7490',
-    'indigo'  => 'background:#e0e7ff;color:#4338ca',
-    'orange'  => 'background:#ffedd5;color:#c2410c',
-    'amber'   => 'background:#fef3c7;color:#b45309',
-    'emerald' => 'background:#d1fae5;color:#065f46',
+    'blue'    => 'background:rgba(59,130,246,0.15);color:#60a5fa;border:1px solid rgba(59,130,246,0.3)',
+    'pink'    => 'background:rgba(236,72,153,0.15);color:#f472b6;border:1px solid rgba(236,72,153,0.3)',
+    'cyan'    => 'background:rgba(34,211,238,0.15);color:#67e8f9;border:1px solid rgba(34,211,238,0.3)',
+    'indigo'  => 'background:rgba(99,102,241,0.15);color:#a5b4fc;border:1px solid rgba(99,102,241,0.3)',
+    'orange'  => 'background:rgba(249,115,22,0.15);color:#fb923c;border:1px solid rgba(249,115,22,0.3)',
+    'amber'   => 'background:rgba(217,119,6,0.15);color:#fcd34d;border:1px solid rgba(217,119,6,0.3)',
+    'emerald' => 'background:rgba(16,185,129,0.15);color:#6ee7b7;border:1px solid rgba(16,185,129,0.3)',
 ];
 @endphp
 
