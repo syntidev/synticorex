@@ -59,7 +59,32 @@
     .check-cat { color: #10b981; }
     .btn-primary-cat { background: #10b981; color: #fff; box-shadow: 0 4px 16px color-mix(in oklch, #10b981 40%, transparent); }
     .btn-ghost-cat   { background: color-mix(in oklch, #10b981 10%, transparent); color: #10b981; border: 1.5px solid color-mix(in oklch, #10b981 30%, transparent); }
+    /* Mobile: show only active plan card + table column */
+    @media (max-width: 767px) {
+        .plan-hidden-mobile { display: none !important; }
+        [data-active-plan="1"] .compare-table ul > li:nth-child(3),
+        [data-active-plan="1"] .compare-table ul > li:nth-child(4),
+        [data-active-plan="2"] .compare-table ul > li:nth-child(2),
+        [data-active-plan="2"] .compare-table ul > li:nth-child(4),
+        [data-active-plan="3"] .compare-table ul > li:nth-child(2),
+        [data-active-plan="3"] .compare-table ul > li:nth-child(3) { display: none; }
+    }
 </style>
+
+<div x-data="{ plan: 1 }" :data-active-plan="plan">
+
+{{-- Mobile tab selector (md:hidden) --}}
+<div class="md:hidden sticky top-0 z-30 bg-white/90 backdrop-blur-sm border-b border-slate-100 -mx-4 px-4 py-2">
+    <div class="flex rounded-xl border border-slate-200 overflow-hidden max-w-xs mx-auto">
+        @foreach($planData['plans'] as $p)
+        <button @click="plan = {{ $loop->index + 1 }}" type="button"
+            :class="plan === {{ $loop->index + 1 }} ? 'bg-[#10b981] text-white' : 'bg-white text-slate-500'"
+            class="flex-1 py-2.5 text-xs font-semibold transition-colors cursor-pointer text-center">
+            {{ $p['name'] }}
+        </button>
+        @endforeach
+    </div>
+</div>
 
 <div class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
     <div class="max-w-2xl mx-auto text-center mb-10">
@@ -70,9 +95,10 @@
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6 items-end max-w-5xl mx-auto">
 
         @foreach($planData['plans'] as $plan)
-        @php $isHighlighted = $plan['highlighted'] ?? false; @endphp
+        @php $isHighlighted = $plan['highlighted'] ?? false; $planIdx = $loop->index + 1; @endphp
         <div class="plan-card bg-white rounded-2xl p-6 lg:p-8 flex flex-col
-            {{ $isHighlighted ? 'plan-card--highlight ring-cat shadow-2xl' : 'border border-slate-200 shadow-sm' }}">
+            {{ $isHighlighted ? 'plan-card--highlight ring-cat shadow-2xl' : 'border border-slate-200 shadow-sm' }}"
+            :class="plan === {{ $planIdx }} ? '' : 'plan-hidden-mobile'">
 
             @if(!empty($plan['pill']))
             <div class="text-center mb-4">
@@ -113,7 +139,7 @@
 {{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
 {{-- 3. TABLA COMPARATIVA                               --}}
 {{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
-<div class="relative">
+<div class="relative compare-table">
     <div class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 md:py-14 lg:py-20 mx-auto">
         <div class="max-w-2xl mx-auto text-center mb-10 lg:mb-14">
             <h2 class="text-2xl font-bold md:text-3xl md:leading-tight text-foreground">Compara los planes</h2>
@@ -499,6 +525,7 @@
         </div>
     </div>
 </div>
+</div>{{-- /x-data plan selector --}}
 
 {{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
 {{-- 4. FAQ                                             --}}
