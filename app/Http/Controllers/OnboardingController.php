@@ -56,6 +56,11 @@ class OnboardingController extends Controller
     public function checkSubdomain(Request $request): JsonResponse
     {
         $subdomain = Str::slug($request->string('subdomain')->toString(), '-');
+
+        if (strlen($subdomain) < 5 || !preg_match('/^[a-z0-9][a-z0-9-]{3,}[a-z0-9]$/', $subdomain)) {
+            return response()->json(['available' => false, 'message' => 'El subdominio debe tener al menos 5 caracteres. Solo letras minúsculas, números y guiones.']);
+        }
+
         $taken     = Tenant::where('subdomain', $subdomain)->exists();
 
         return response()->json([
@@ -76,7 +81,7 @@ class OnboardingController extends Controller
                 'required',
                 Rule::exists('plans', 'id')->where(static fn ($query) => $query->where('blueprint', 'studio')),
             ],
-            'subdomain'                        => 'required|alpha_dash|unique:tenants,subdomain',
+            'subdomain'                        => ['required', 'min:5', 'regex:/^[a-z0-9][a-z0-9-]{3,}[a-z0-9]$/', 'unique:tenants,subdomain'],
             'slogan'                           => 'nullable|string|max:255',
             'description'                      => 'nullable|string|max:500',
             'content_blocks'                   => 'nullable|array',
@@ -91,6 +96,9 @@ class OnboardingController extends Controller
             'value_prop_1'                     => 'nullable|string|max:100',
             'value_prop_2'                     => 'nullable|string|max:100',
             'value_prop_3'                     => 'nullable|string|max:100',
+        ], [
+            'subdomain.min'   => 'El subdominio debe tener al menos 5 caracteres.',
+            'subdomain.regex' => 'El subdominio solo puede contener letras minúsculas, números y guiones, sin empezar ni terminar en guión.',
         ]);
 
         $whatsappSales = $this->normalizePhoneOrFail($validated['whatsapp_sales'] ?? null, 'whatsapp_sales');
@@ -206,10 +214,13 @@ class OnboardingController extends Controller
                 'required',
                 Rule::exists('plans', 'id')->where(static fn ($query) => $query->where('blueprint', 'food')),
             ],
-            'subdomain'      => 'required|alpha_dash|unique:tenants,subdomain',
+            'subdomain'      => ['required', 'min:5', 'regex:/^[a-z0-9][a-z0-9-]{3,}[a-z0-9]$/', 'unique:tenants,subdomain'],
             'whatsapp_sales' => 'required|string|max:20',
             'first_category' => 'required|string|max:100',
             'items'          => 'required|string',
+        ], [
+            'subdomain.min'   => 'El subdominio debe tener al menos 5 caracteres.',
+            'subdomain.regex' => 'El subdominio solo puede contener letras minúsculas, números y guiones, sin empezar ni terminar en guión.',
         ]);
 
         $whatsappSales = $this->normalizePhoneOrFail($validated['whatsapp_sales'] ?? null, 'whatsapp_sales');
@@ -277,11 +288,14 @@ class OnboardingController extends Controller
                 'required',
                 Rule::exists('plans', 'id')->where(static fn ($query) => $query->where('blueprint', 'cat')),
             ],
-            'subdomain'                 => 'required|alpha_dash|unique:tenants,subdomain',
+            'subdomain'                 => ['required', 'min:5', 'regex:/^[a-z0-9][a-z0-9-]{3,}[a-z0-9]$/', 'unique:tenants,subdomain'],
             'whatsapp_sales'            => 'required|string|max:20',
             'first_product_name'        => 'required|string|max:255',
             'first_product_price'       => 'required|numeric|min:0',
             'first_product_description' => 'nullable|string|max:500',
+        ], [
+            'subdomain.min'   => 'El subdominio debe tener al menos 5 caracteres.',
+            'subdomain.regex' => 'El subdominio solo puede contener letras minúsculas, números y guiones, sin empezar ni terminar en guión.',
         ]);
 
         $whatsappSales = $this->normalizePhoneOrFail($validated['whatsapp_sales'] ?? null, 'whatsapp_sales');

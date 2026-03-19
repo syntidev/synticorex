@@ -1,0 +1,578 @@
+ESTRUCTURA DEL PROYECTO 
+================================================ 
+Fecha: jue 19/03/2026  2:07:25,96 
+Ruta: C:\laragon\www\synticorex\public 
+================================================ 
+ 
+[ARBOL DE DIRECTORIOS] 
+ 
+Listado de rutas de carpetas para el volumen OS
+El número de serie del volumen es 92E8-531C
+C:.
+|   .htaccess
+|   android-chrome-192x192.png
+|   android-chrome-512x512.png
+|   apple-touch-icon.png
+|   estructura_proyecto.txt
+|   favicon-16x16.png
+|   favicon-32x32.png
+|   favicon.ico
+|   generar.bat
+|   hot
+|   index.php
+|   monitor.php
+|   robots.txt
+|   test-icons.html
+|   
++---admin_assets
+|       banner-bg-gray.svg
+|       hero-gradient.svg
+|       hyperdrive.svg
+|       rounded-lines.svg
+|       
++---brand
+|       404.svg
+|       android-chrome-192x192.png
+|       android-chrome-512x512.png
+|       apple-touch-icon.png
+|       demo_phone.png
+|       favicon-16x16.png
+|       favicon-32x32.png
+|       favicon-html-snippet.html
+|       favicon.ico
+|       site.webmanifest
+|       syntiweb-logo-adaptive.svg
+|       syntiweb-logo-flat-negative.svg
+|       syntiweb-logo-flat-positive.svg
+|       syntiweb-logo-monochrome.svg
+|       syntiweb-logo-negative.svg
+|       syntiweb-logo-positive.svg
+|       
++---build
+|   |   manifest.json
+|   |   
+|   \---assets
+|           app-C5DB3ex3.js
+|           app-Cjz24-vS.css
+|           theme-E37bnicO.css
+|           
++---css
+|   \---filament
+|       \---filament
+|               app.css
+|               
++---demo
+|       Bellestore.png
+|       Donaz.png
+|       Fitzonepro.png
+|       Gestoria360.png
+|       Medicenter.png
+|       Novastore.png
+|       Urbanmenu.png
+|       
++---fonts
+|   \---filament
+|       \---filament
+|           \---inter
+|                   index.css
+|                   inter-cyrillic-ext-wght-normal-ASVAGXXE.woff2
+|                   inter-cyrillic-ext-wght-normal-IYF56FF6.woff2
+|                   inter-cyrillic-ext-wght-normal-XKHXBTUO.woff2
+|                   inter-cyrillic-wght-normal-EWLSKVKN.woff2
+|                   inter-cyrillic-wght-normal-JEOLYBOO.woff2
+|                   inter-cyrillic-wght-normal-R5CMSONN.woff2
+|                   inter-greek-ext-wght-normal-7GGTF7EK.woff2
+|                   inter-greek-ext-wght-normal-EOVOK2B5.woff2
+|                   inter-greek-ext-wght-normal-ZEVLMORV.woff2
+|                   inter-greek-wght-normal-AXVTPQD5.woff2
+|                   inter-greek-wght-normal-IRE366VL.woff2
+|                   inter-greek-wght-normal-N43DBLU2.woff2
+|                   inter-latin-ext-wght-normal-5SRY4DMZ.woff2
+|                   inter-latin-ext-wght-normal-GZCIV3NH.woff2
+|                   inter-latin-ext-wght-normal-HA22NDSG.woff2
+|                   inter-latin-wght-normal-NRMW37G5.woff2
+|                   inter-latin-wght-normal-O25CN4JL.woff2
+|                   inter-latin-wght-normal-OPIJAQLS.woff2
+|                   inter-vietnamese-wght-normal-CE5GGD3W.woff2
+|                   inter-vietnamese-wght-normal-TWG5UU7E.woff2
+|                   
++---js
+|   \---filament
+|       +---actions
+|       |       actions.js
+|       |       
+|       +---filament
+|       |       app.js
+|       |       echo.js
+|       |       
+|       +---forms
+|       |   \---components
+|       |           checkbox-list.js
+|       |           code-editor.js
+|       |           color-picker.js
+|       |           date-time-picker.js
+|       |           file-upload.js
+|       |           key-value.js
+|       |           markdown-editor.js
+|       |           rich-editor.js
+|       |           select.js
+|       |           slider.js
+|       |           tags-input.js
+|       |           textarea.js
+|       |           
+|       +---notifications
+|       |       notifications.js
+|       |       
+|       +---schemas
+|       |   |   schemas.js
+|       |   |   
+|       |   \---components
+|       |           actions.js
+|       |           tabs.js
+|       |           wizard.js
+|       |           
+|       +---support
+|       |       support.js
+|       |       
+|       +---tables
+|       |   |   tables.js
+|       |   |   
+|       |   \---components
+|       |       \---columns
+|       |               checkbox.js
+|       |               select.js
+|       |               text-input.js
+|       |               toggle.js
+|       |               
+|       \---widgets
+|           \---components
+|               |   chart.js
+|               |   
+|               \---stats-overview
+|                   \---stat
+|                           chart.js
+|                           
++---storage
+|   |   .gitignore
+|   |   
+|   +---blog
+|   |       01KKT41JETDR6QZVH3ZKTP20XP.png
+|   |       01KKT69DKMR17T6YG09VPYE9JW.png
+|   |       01KKT6EJVWG911YTEHSN4JB85N.png
+|   |       01KKT6NQBDBYJBC3GDAT88WWTN.png
+|   |       01KKT6RZ3HKTQX0MSAMA2CD3BA.png
+|   |       01KKT6TKXKV81YZ66TF2JTPV94.png
+|   |       01KKT8BWKVJ4CTH4DY6HB9H91M.png
+|   |       
+|   \---tenants
+|       +---1
+|       |       about.webp
+|       |       hero.webp
+|       |       logo.webp
+|       |       product_01.webp
+|       |       product_02.webp
+|       |       product_03.webp
+|       |       product_04.webp
+|       |       product_05.webp
+|       |       service_01.webp
+|       |       service_02.webp
+|       |       service_03.webp
+|       |       service_04.webp
+|       |       service_05.webp
+|       |       service_06.webp
+|       |       service_07.webp
+|       |       service_08.webp
+|       |       service_09.webp
+|       |       service_10.webp
+|       |       
+|       +---13
+|       |       cat_bebidasc.webp
+|       |       cat_bebidasfrias.webp
+|       |       cat_hamburguesas.webp
+|       |       cat_licores.webp
+|       |       cat_pepitos.webp
+|       |       cat_pizza.webp
+|       |       cat_postres.webp
+|       |       hero_slot_1.webp
+|       |       hero_slot_2.webp
+|       |       hero_slot_3.webp
+|       |       
+|       +---14
+|       |       cat_bebidas.webp
+|       |       cat_donas.webp
+|       |       cat_galletas.webp
+|       |       cat_quesillo.webp
+|       |       cat_tortas.webp
+|       |       hero_slot_1.webp
+|       |       
+|       +---17
+|       |       logo.webp
+|       |       product_12.webp
+|       |       product_12_gallery_3.webp
+|       |       product_12_gallery_4.webp
+|       |       product_12_gallery_5.webp
+|       |       
+|       +---18
+|       |       logo.webp
+|       |       
+|       +---19
+|       |       logo.webp
+|       |       
+|       +---2
+|       |       hero.webp
+|       |       logo.webp
+|       |       product_01.webp
+|       |       product_02.webp
+|       |       product_03.webp
+|       |       product_04.webp
+|       |       product_05.webp
+|       |       service_01.webp
+|       |       service_02.webp
+|       |       service_03.webp
+|       |       service_04.webp
+|       |       service_05.webp
+|       |       service_06.webp
+|       |       service_07.webp
+|       |       service_08.webp
+|       |       service_09.webp
+|       |       service_10.webp
+|       |       
+|       +---20
+|       |       logo.webp
+|       |       
+|       +---21
+|       |       logo.webp
+|       |       
+|       +---22
+|       |       logo.webp
+|       |       
+|       +---25
+|       |       logo.webp
+|       |       
+|       +---3
+|       |       about.webp
+|       |       hero.webp
+|       |       logo.webp
+|       |       product_01.webp
+|       |       product_02.webp
+|       |       product_03.webp
+|       |       product_04.webp
+|       |       product_05.webp
+|       |       product_18.webp
+|       |       product_18_gallery_1.webp
+|       |       product_18_gallery_2.webp
+|       |       service_01.webp
+|       |       service_02.webp
+|       |       service_03.webp
+|       |       service_04.webp
+|       |       service_06.webp
+|       |       service_07.webp
+|       |       service_08.webp
+|       |       service_09.webp
+|       |       service_10.webp
+|       |       service_11.webp
+|       |       service_12.webp
+|       |       service_13.webp
+|       |       service_14.webp
+|       |       service_15.webp
+|       |       service_16.webp
+|       |       service_17.webp
+|       |       
+|       +---4
+|       |       logo.webp
+|       |       
+|       +---7
+|       |   |   01.jpg
+|       |   |   02.jpg
+|       |   |   03.jpg
+|       |   |   
+|       |   +---items
+|       |   \---menu
+|       |       \---items
+|       |               item-EUSE.webp
+|       |               
+|       \---9
+|           |   hero_slot_1.webp
+|           |   hero_slot_2.webp
+|           |   hero_slot_3.webp
+|           |   hero_slot_4.webp
+|           |   hero_slot_5.webp
+|           |   logo.webp
+|           |   
+|           \---menu
+|               \---items
+|                       item-D7TD.webp
+|                       item-FXUW.webp
+|                       item-G2ED.webp
+|                       
+\---vendor
+    \---filament-copilot
+            filament-copilot.css
+            filament-copilot.js
+            
+ 
+================================================ 
+[LISTA COMPLETA DE RUTAS] 
+================================================ 
+C:\laragon\www\synticorex\public\.htaccess
+C:\laragon\www\synticorex\public\admin_assets
+C:\laragon\www\synticorex\public\android-chrome-192x192.png
+C:\laragon\www\synticorex\public\android-chrome-512x512.png
+C:\laragon\www\synticorex\public\apple-touch-icon.png
+C:\laragon\www\synticorex\public\brand
+C:\laragon\www\synticorex\public\build
+C:\laragon\www\synticorex\public\css
+C:\laragon\www\synticorex\public\demo
+C:\laragon\www\synticorex\public\estructura_proyecto.txt
+C:\laragon\www\synticorex\public\favicon-16x16.png
+C:\laragon\www\synticorex\public\favicon-32x32.png
+C:\laragon\www\synticorex\public\favicon.ico
+C:\laragon\www\synticorex\public\fonts
+C:\laragon\www\synticorex\public\generar.bat
+C:\laragon\www\synticorex\public\hot
+C:\laragon\www\synticorex\public\index.php
+C:\laragon\www\synticorex\public\js
+C:\laragon\www\synticorex\public\monitor.php
+C:\laragon\www\synticorex\public\robots.txt
+C:\laragon\www\synticorex\public\storage
+C:\laragon\www\synticorex\public\test-icons.html
+C:\laragon\www\synticorex\public\vendor
+C:\laragon\www\synticorex\public\admin_assets\banner-bg-gray.svg
+C:\laragon\www\synticorex\public\admin_assets\hero-gradient.svg
+C:\laragon\www\synticorex\public\admin_assets\hyperdrive.svg
+C:\laragon\www\synticorex\public\admin_assets\rounded-lines.svg
+C:\laragon\www\synticorex\public\brand\404.svg
+C:\laragon\www\synticorex\public\brand\android-chrome-192x192.png
+C:\laragon\www\synticorex\public\brand\android-chrome-512x512.png
+C:\laragon\www\synticorex\public\brand\apple-touch-icon.png
+C:\laragon\www\synticorex\public\brand\demo_phone.png
+C:\laragon\www\synticorex\public\brand\favicon-16x16.png
+C:\laragon\www\synticorex\public\brand\favicon-32x32.png
+C:\laragon\www\synticorex\public\brand\favicon-html-snippet.html
+C:\laragon\www\synticorex\public\brand\favicon.ico
+C:\laragon\www\synticorex\public\brand\site.webmanifest
+C:\laragon\www\synticorex\public\brand\syntiweb-logo-adaptive.svg
+C:\laragon\www\synticorex\public\brand\syntiweb-logo-flat-negative.svg
+C:\laragon\www\synticorex\public\brand\syntiweb-logo-flat-positive.svg
+C:\laragon\www\synticorex\public\brand\syntiweb-logo-monochrome.svg
+C:\laragon\www\synticorex\public\brand\syntiweb-logo-negative.svg
+C:\laragon\www\synticorex\public\brand\syntiweb-logo-positive.svg
+C:\laragon\www\synticorex\public\build\assets
+C:\laragon\www\synticorex\public\build\manifest.json
+C:\laragon\www\synticorex\public\build\assets\app-C5DB3ex3.js
+C:\laragon\www\synticorex\public\build\assets\app-Cjz24-vS.css
+C:\laragon\www\synticorex\public\build\assets\theme-E37bnicO.css
+C:\laragon\www\synticorex\public\css\filament
+C:\laragon\www\synticorex\public\css\filament\filament
+C:\laragon\www\synticorex\public\css\filament\filament\app.css
+C:\laragon\www\synticorex\public\demo\Bellestore.png
+C:\laragon\www\synticorex\public\demo\Donaz.png
+C:\laragon\www\synticorex\public\demo\Fitzonepro.png
+C:\laragon\www\synticorex\public\demo\Gestoria360.png
+C:\laragon\www\synticorex\public\demo\Medicenter.png
+C:\laragon\www\synticorex\public\demo\Novastore.png
+C:\laragon\www\synticorex\public\demo\Urbanmenu.png
+C:\laragon\www\synticorex\public\fonts\filament
+C:\laragon\www\synticorex\public\fonts\filament\filament
+C:\laragon\www\synticorex\public\fonts\filament\filament\inter
+C:\laragon\www\synticorex\public\fonts\filament\filament\inter\index.css
+C:\laragon\www\synticorex\public\fonts\filament\filament\inter\inter-cyrillic-ext-wght-normal-ASVAGXXE.woff2
+C:\laragon\www\synticorex\public\fonts\filament\filament\inter\inter-cyrillic-ext-wght-normal-IYF56FF6.woff2
+C:\laragon\www\synticorex\public\fonts\filament\filament\inter\inter-cyrillic-ext-wght-normal-XKHXBTUO.woff2
+C:\laragon\www\synticorex\public\fonts\filament\filament\inter\inter-cyrillic-wght-normal-EWLSKVKN.woff2
+C:\laragon\www\synticorex\public\fonts\filament\filament\inter\inter-cyrillic-wght-normal-JEOLYBOO.woff2
+C:\laragon\www\synticorex\public\fonts\filament\filament\inter\inter-cyrillic-wght-normal-R5CMSONN.woff2
+C:\laragon\www\synticorex\public\fonts\filament\filament\inter\inter-greek-ext-wght-normal-7GGTF7EK.woff2
+C:\laragon\www\synticorex\public\fonts\filament\filament\inter\inter-greek-ext-wght-normal-EOVOK2B5.woff2
+C:\laragon\www\synticorex\public\fonts\filament\filament\inter\inter-greek-ext-wght-normal-ZEVLMORV.woff2
+C:\laragon\www\synticorex\public\fonts\filament\filament\inter\inter-greek-wght-normal-AXVTPQD5.woff2
+C:\laragon\www\synticorex\public\fonts\filament\filament\inter\inter-greek-wght-normal-IRE366VL.woff2
+C:\laragon\www\synticorex\public\fonts\filament\filament\inter\inter-greek-wght-normal-N43DBLU2.woff2
+C:\laragon\www\synticorex\public\fonts\filament\filament\inter\inter-latin-ext-wght-normal-5SRY4DMZ.woff2
+C:\laragon\www\synticorex\public\fonts\filament\filament\inter\inter-latin-ext-wght-normal-GZCIV3NH.woff2
+C:\laragon\www\synticorex\public\fonts\filament\filament\inter\inter-latin-ext-wght-normal-HA22NDSG.woff2
+C:\laragon\www\synticorex\public\fonts\filament\filament\inter\inter-latin-wght-normal-NRMW37G5.woff2
+C:\laragon\www\synticorex\public\fonts\filament\filament\inter\inter-latin-wght-normal-O25CN4JL.woff2
+C:\laragon\www\synticorex\public\fonts\filament\filament\inter\inter-latin-wght-normal-OPIJAQLS.woff2
+C:\laragon\www\synticorex\public\fonts\filament\filament\inter\inter-vietnamese-wght-normal-CE5GGD3W.woff2
+C:\laragon\www\synticorex\public\fonts\filament\filament\inter\inter-vietnamese-wght-normal-TWG5UU7E.woff2
+C:\laragon\www\synticorex\public\js\filament
+C:\laragon\www\synticorex\public\js\filament\actions
+C:\laragon\www\synticorex\public\js\filament\filament
+C:\laragon\www\synticorex\public\js\filament\forms
+C:\laragon\www\synticorex\public\js\filament\notifications
+C:\laragon\www\synticorex\public\js\filament\schemas
+C:\laragon\www\synticorex\public\js\filament\support
+C:\laragon\www\synticorex\public\js\filament\tables
+C:\laragon\www\synticorex\public\js\filament\widgets
+C:\laragon\www\synticorex\public\js\filament\actions\actions.js
+C:\laragon\www\synticorex\public\js\filament\filament\app.js
+C:\laragon\www\synticorex\public\js\filament\filament\echo.js
+C:\laragon\www\synticorex\public\js\filament\forms\components
+C:\laragon\www\synticorex\public\js\filament\forms\components\checkbox-list.js
+C:\laragon\www\synticorex\public\js\filament\forms\components\code-editor.js
+C:\laragon\www\synticorex\public\js\filament\forms\components\color-picker.js
+C:\laragon\www\synticorex\public\js\filament\forms\components\date-time-picker.js
+C:\laragon\www\synticorex\public\js\filament\forms\components\file-upload.js
+C:\laragon\www\synticorex\public\js\filament\forms\components\key-value.js
+C:\laragon\www\synticorex\public\js\filament\forms\components\markdown-editor.js
+C:\laragon\www\synticorex\public\js\filament\forms\components\rich-editor.js
+C:\laragon\www\synticorex\public\js\filament\forms\components\select.js
+C:\laragon\www\synticorex\public\js\filament\forms\components\slider.js
+C:\laragon\www\synticorex\public\js\filament\forms\components\tags-input.js
+C:\laragon\www\synticorex\public\js\filament\forms\components\textarea.js
+C:\laragon\www\synticorex\public\js\filament\notifications\notifications.js
+C:\laragon\www\synticorex\public\js\filament\schemas\components
+C:\laragon\www\synticorex\public\js\filament\schemas\schemas.js
+C:\laragon\www\synticorex\public\js\filament\schemas\components\actions.js
+C:\laragon\www\synticorex\public\js\filament\schemas\components\tabs.js
+C:\laragon\www\synticorex\public\js\filament\schemas\components\wizard.js
+C:\laragon\www\synticorex\public\js\filament\support\support.js
+C:\laragon\www\synticorex\public\js\filament\tables\components
+C:\laragon\www\synticorex\public\js\filament\tables\tables.js
+C:\laragon\www\synticorex\public\js\filament\tables\components\columns
+C:\laragon\www\synticorex\public\js\filament\tables\components\columns\checkbox.js
+C:\laragon\www\synticorex\public\js\filament\tables\components\columns\select.js
+C:\laragon\www\synticorex\public\js\filament\tables\components\columns\text-input.js
+C:\laragon\www\synticorex\public\js\filament\tables\components\columns\toggle.js
+C:\laragon\www\synticorex\public\js\filament\widgets\components
+C:\laragon\www\synticorex\public\js\filament\widgets\components\chart.js
+C:\laragon\www\synticorex\public\js\filament\widgets\components\stats-overview
+C:\laragon\www\synticorex\public\js\filament\widgets\components\stats-overview\stat
+C:\laragon\www\synticorex\public\js\filament\widgets\components\stats-overview\stat\chart.js
+C:\laragon\www\synticorex\public\storage\.gitignore
+C:\laragon\www\synticorex\public\storage\blog
+C:\laragon\www\synticorex\public\storage\tenants
+C:\laragon\www\synticorex\public\storage\blog\01KKT41JETDR6QZVH3ZKTP20XP.png
+C:\laragon\www\synticorex\public\storage\blog\01KKT69DKMR17T6YG09VPYE9JW.png
+C:\laragon\www\synticorex\public\storage\blog\01KKT6EJVWG911YTEHSN4JB85N.png
+C:\laragon\www\synticorex\public\storage\blog\01KKT6NQBDBYJBC3GDAT88WWTN.png
+C:\laragon\www\synticorex\public\storage\blog\01KKT6RZ3HKTQX0MSAMA2CD3BA.png
+C:\laragon\www\synticorex\public\storage\blog\01KKT6TKXKV81YZ66TF2JTPV94.png
+C:\laragon\www\synticorex\public\storage\blog\01KKT8BWKVJ4CTH4DY6HB9H91M.png
+C:\laragon\www\synticorex\public\storage\tenants\1
+C:\laragon\www\synticorex\public\storage\tenants\13
+C:\laragon\www\synticorex\public\storage\tenants\14
+C:\laragon\www\synticorex\public\storage\tenants\17
+C:\laragon\www\synticorex\public\storage\tenants\18
+C:\laragon\www\synticorex\public\storage\tenants\19
+C:\laragon\www\synticorex\public\storage\tenants\2
+C:\laragon\www\synticorex\public\storage\tenants\20
+C:\laragon\www\synticorex\public\storage\tenants\21
+C:\laragon\www\synticorex\public\storage\tenants\22
+C:\laragon\www\synticorex\public\storage\tenants\25
+C:\laragon\www\synticorex\public\storage\tenants\3
+C:\laragon\www\synticorex\public\storage\tenants\4
+C:\laragon\www\synticorex\public\storage\tenants\7
+C:\laragon\www\synticorex\public\storage\tenants\9
+C:\laragon\www\synticorex\public\storage\tenants\1\about.webp
+C:\laragon\www\synticorex\public\storage\tenants\1\hero.webp
+C:\laragon\www\synticorex\public\storage\tenants\1\logo.webp
+C:\laragon\www\synticorex\public\storage\tenants\1\product_01.webp
+C:\laragon\www\synticorex\public\storage\tenants\1\product_02.webp
+C:\laragon\www\synticorex\public\storage\tenants\1\product_03.webp
+C:\laragon\www\synticorex\public\storage\tenants\1\product_04.webp
+C:\laragon\www\synticorex\public\storage\tenants\1\product_05.webp
+C:\laragon\www\synticorex\public\storage\tenants\1\service_01.webp
+C:\laragon\www\synticorex\public\storage\tenants\1\service_02.webp
+C:\laragon\www\synticorex\public\storage\tenants\1\service_03.webp
+C:\laragon\www\synticorex\public\storage\tenants\1\service_04.webp
+C:\laragon\www\synticorex\public\storage\tenants\1\service_05.webp
+C:\laragon\www\synticorex\public\storage\tenants\1\service_06.webp
+C:\laragon\www\synticorex\public\storage\tenants\1\service_07.webp
+C:\laragon\www\synticorex\public\storage\tenants\1\service_08.webp
+C:\laragon\www\synticorex\public\storage\tenants\1\service_09.webp
+C:\laragon\www\synticorex\public\storage\tenants\1\service_10.webp
+C:\laragon\www\synticorex\public\storage\tenants\13\cat_bebidasc.webp
+C:\laragon\www\synticorex\public\storage\tenants\13\cat_bebidasfrias.webp
+C:\laragon\www\synticorex\public\storage\tenants\13\cat_hamburguesas.webp
+C:\laragon\www\synticorex\public\storage\tenants\13\cat_licores.webp
+C:\laragon\www\synticorex\public\storage\tenants\13\cat_pepitos.webp
+C:\laragon\www\synticorex\public\storage\tenants\13\cat_pizza.webp
+C:\laragon\www\synticorex\public\storage\tenants\13\cat_postres.webp
+C:\laragon\www\synticorex\public\storage\tenants\13\hero_slot_1.webp
+C:\laragon\www\synticorex\public\storage\tenants\13\hero_slot_2.webp
+C:\laragon\www\synticorex\public\storage\tenants\13\hero_slot_3.webp
+C:\laragon\www\synticorex\public\storage\tenants\14\cat_bebidas.webp
+C:\laragon\www\synticorex\public\storage\tenants\14\cat_donas.webp
+C:\laragon\www\synticorex\public\storage\tenants\14\cat_galletas.webp
+C:\laragon\www\synticorex\public\storage\tenants\14\cat_quesillo.webp
+C:\laragon\www\synticorex\public\storage\tenants\14\cat_tortas.webp
+C:\laragon\www\synticorex\public\storage\tenants\14\hero_slot_1.webp
+C:\laragon\www\synticorex\public\storage\tenants\17\logo.webp
+C:\laragon\www\synticorex\public\storage\tenants\17\product_12.webp
+C:\laragon\www\synticorex\public\storage\tenants\17\product_12_gallery_3.webp
+C:\laragon\www\synticorex\public\storage\tenants\17\product_12_gallery_4.webp
+C:\laragon\www\synticorex\public\storage\tenants\17\product_12_gallery_5.webp
+C:\laragon\www\synticorex\public\storage\tenants\18\logo.webp
+C:\laragon\www\synticorex\public\storage\tenants\19\logo.webp
+C:\laragon\www\synticorex\public\storage\tenants\2\hero.webp
+C:\laragon\www\synticorex\public\storage\tenants\2\logo.webp
+C:\laragon\www\synticorex\public\storage\tenants\2\product_01.webp
+C:\laragon\www\synticorex\public\storage\tenants\2\product_02.webp
+C:\laragon\www\synticorex\public\storage\tenants\2\product_03.webp
+C:\laragon\www\synticorex\public\storage\tenants\2\product_04.webp
+C:\laragon\www\synticorex\public\storage\tenants\2\product_05.webp
+C:\laragon\www\synticorex\public\storage\tenants\2\service_01.webp
+C:\laragon\www\synticorex\public\storage\tenants\2\service_02.webp
+C:\laragon\www\synticorex\public\storage\tenants\2\service_03.webp
+C:\laragon\www\synticorex\public\storage\tenants\2\service_04.webp
+C:\laragon\www\synticorex\public\storage\tenants\2\service_05.webp
+C:\laragon\www\synticorex\public\storage\tenants\2\service_06.webp
+C:\laragon\www\synticorex\public\storage\tenants\2\service_07.webp
+C:\laragon\www\synticorex\public\storage\tenants\2\service_08.webp
+C:\laragon\www\synticorex\public\storage\tenants\2\service_09.webp
+C:\laragon\www\synticorex\public\storage\tenants\2\service_10.webp
+C:\laragon\www\synticorex\public\storage\tenants\20\logo.webp
+C:\laragon\www\synticorex\public\storage\tenants\21\logo.webp
+C:\laragon\www\synticorex\public\storage\tenants\22\logo.webp
+C:\laragon\www\synticorex\public\storage\tenants\25\logo.webp
+C:\laragon\www\synticorex\public\storage\tenants\3\about.webp
+C:\laragon\www\synticorex\public\storage\tenants\3\hero.webp
+C:\laragon\www\synticorex\public\storage\tenants\3\logo.webp
+C:\laragon\www\synticorex\public\storage\tenants\3\product_01.webp
+C:\laragon\www\synticorex\public\storage\tenants\3\product_02.webp
+C:\laragon\www\synticorex\public\storage\tenants\3\product_03.webp
+C:\laragon\www\synticorex\public\storage\tenants\3\product_04.webp
+C:\laragon\www\synticorex\public\storage\tenants\3\product_05.webp
+C:\laragon\www\synticorex\public\storage\tenants\3\product_18.webp
+C:\laragon\www\synticorex\public\storage\tenants\3\product_18_gallery_1.webp
+C:\laragon\www\synticorex\public\storage\tenants\3\product_18_gallery_2.webp
+C:\laragon\www\synticorex\public\storage\tenants\3\service_01.webp
+C:\laragon\www\synticorex\public\storage\tenants\3\service_02.webp
+C:\laragon\www\synticorex\public\storage\tenants\3\service_03.webp
+C:\laragon\www\synticorex\public\storage\tenants\3\service_04.webp
+C:\laragon\www\synticorex\public\storage\tenants\3\service_06.webp
+C:\laragon\www\synticorex\public\storage\tenants\3\service_07.webp
+C:\laragon\www\synticorex\public\storage\tenants\3\service_08.webp
+C:\laragon\www\synticorex\public\storage\tenants\3\service_09.webp
+C:\laragon\www\synticorex\public\storage\tenants\3\service_10.webp
+C:\laragon\www\synticorex\public\storage\tenants\3\service_11.webp
+C:\laragon\www\synticorex\public\storage\tenants\3\service_12.webp
+C:\laragon\www\synticorex\public\storage\tenants\3\service_13.webp
+C:\laragon\www\synticorex\public\storage\tenants\3\service_14.webp
+C:\laragon\www\synticorex\public\storage\tenants\3\service_15.webp
+C:\laragon\www\synticorex\public\storage\tenants\3\service_16.webp
+C:\laragon\www\synticorex\public\storage\tenants\3\service_17.webp
+C:\laragon\www\synticorex\public\storage\tenants\4\logo.webp
+C:\laragon\www\synticorex\public\storage\tenants\7\01.jpg
+C:\laragon\www\synticorex\public\storage\tenants\7\02.jpg
+C:\laragon\www\synticorex\public\storage\tenants\7\03.jpg
+C:\laragon\www\synticorex\public\storage\tenants\7\items
+C:\laragon\www\synticorex\public\storage\tenants\7\menu
+C:\laragon\www\synticorex\public\storage\tenants\7\menu\items
+C:\laragon\www\synticorex\public\storage\tenants\7\menu\items\item-EUSE.webp
+C:\laragon\www\synticorex\public\storage\tenants\9\hero_slot_1.webp
+C:\laragon\www\synticorex\public\storage\tenants\9\hero_slot_2.webp
+C:\laragon\www\synticorex\public\storage\tenants\9\hero_slot_3.webp
+C:\laragon\www\synticorex\public\storage\tenants\9\hero_slot_4.webp
+C:\laragon\www\synticorex\public\storage\tenants\9\hero_slot_5.webp
+C:\laragon\www\synticorex\public\storage\tenants\9\logo.webp
+C:\laragon\www\synticorex\public\storage\tenants\9\menu
+C:\laragon\www\synticorex\public\storage\tenants\9\menu\items
+C:\laragon\www\synticorex\public\storage\tenants\9\menu\items\item-D7TD.webp
+C:\laragon\www\synticorex\public\storage\tenants\9\menu\items\item-FXUW.webp
+C:\laragon\www\synticorex\public\storage\tenants\9\menu\items\item-G2ED.webp
+C:\laragon\www\synticorex\public\vendor\filament-copilot
+C:\laragon\www\synticorex\public\vendor\filament-copilot\filament-copilot.css
+C:\laragon\www\synticorex\public\vendor\filament-copilot\filament-copilot.js

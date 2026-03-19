@@ -166,7 +166,7 @@
               <!-- Card 1: Donaz -->
               <a href="/donaz" class="group relative block rounded-xl overflow-hidden focus:outline-none">
                 <img class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out" 
-                     src="https://images.unsplash.com/photo-1606868306217-dbf5046868d2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=560&q=80" alt="Donaz">
+                     src="/demo/Donaz.png" alt="Donaz">
                 <div class="absolute bottom-0 start-0 end-0 p-2 sm:p-4">
                   <div class="text-sm font-semibold bg-layer text-layer-foreground rounded-lg p-3">Donaz</div>
                 </div>
@@ -175,7 +175,7 @@
               <!-- Card 2: Belle Store -->
               <a href="/bellestore" class="group relative block rounded-xl overflow-hidden focus:outline-none">
                 <img class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out" 
-                     src="https://images.unsplash.com/photo-1605629921711-2f6b00c6bbf4?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=560&q=80" alt="Belle Store">
+                     src="/demo/Bellestore.png" alt="Belle Store">
                 <div class="absolute bottom-0 start-0 end-0 p-2 sm:p-4">
                   <div class="text-sm font-semibold bg-layer text-layer-foreground rounded-lg p-3">Belle Store</div>
                 </div>
@@ -184,7 +184,7 @@
               <!-- Card 3: MediCenter -->
               <a href="/medicenter" class="group relative block rounded-xl overflow-hidden focus:outline-none">
                 <img class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out" 
-                     src="https://images.unsplash.com/photo-1606836576983-8b458e75221d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=560&q=80" alt="MediCenter">
+                     src="/demo/Medicenter.png" alt="MediCenter">
                 <div class="absolute bottom-0 start-0 end-0 p-2 sm:p-4">
                   <div class="text-sm font-semibold bg-layer text-layer-foreground rounded-lg p-3">MediCenter</div>
                 </div>
@@ -196,7 +196,7 @@
               <!-- Card 4: Gestoría 360 -->
               <a href="/gestoria360" class="group relative block rounded-xl overflow-hidden focus:outline-none">
                 <img class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out" 
-                     src="https://images.unsplash.com/photo-1598929438701-ef29ab0bb61a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=560&q=80" alt="Gestoría 360">
+                     src="/demo/Gestoria360.png" alt="Gestoría 360">
                 <div class="absolute bottom-0 start-0 end-0 p-2 sm:p-4">
                   <div class="text-sm font-semibold bg-layer text-layer-foreground rounded-lg p-3">Gestoría 360</div>
                 </div>
@@ -205,7 +205,7 @@
               <!-- Card 5: FitZone Pro -->
               <a href="/fitzonepro" class="group relative block rounded-xl overflow-hidden focus:outline-none">
                 <img class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out" 
-                     src="https://images.unsplash.com/photo-1467043153537-a4fba2cd39ef?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=560&q=80" alt="FitZone Pro">
+                     src="/demo/Fitzonepro.png" alt="FitZone Pro">
                 <div class="absolute bottom-0 start-0 end-0 p-2 sm:p-4">
                   <div class="text-sm font-semibold bg-layer text-layer-foreground rounded-lg p-3">FitZone Pro</div>
                 </div>
@@ -217,7 +217,7 @@
               <!-- Card 6: Urban Menu -->
               <a href="/urbanmenu" class="group relative block rounded-xl overflow-hidden focus:outline-none">
                 <img class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out" 
-                     src="https://images.unsplash.com/photo-1495521821757-a1efb6729352?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=560&q=80" alt="Urban Menu">
+                     src="/demo/Urbanmenu.png" alt="Urban Menu">
                 <div class="absolute bottom-0 start-0 end-0 p-2 sm:p-4">
                   <div class="text-sm font-semibold bg-layer text-layer-foreground rounded-lg p-3">Urban Menu</div>
                 </div>
@@ -226,7 +226,7 @@
               <!-- Card 7: Nova Store -->
               <a href="/novastore" class="group relative block rounded-xl overflow-hidden focus:outline-none">
                 <img class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out" 
-                     src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=560&q=80" alt="Nova Store">
+                     src="/demo/Novastore.png" alt="Nova Store">
                 <div class="absolute bottom-0 start-0 end-0 p-2 sm:p-4">
                   <div class="text-sm font-semibold bg-layer text-layer-foreground rounded-lg p-3">Nova Store</div>
                 </div>

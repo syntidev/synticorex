@@ -194,6 +194,84 @@ class MarketingController extends Controller
         return view('marketing.contacto');
     }
 
+    public function demos(): View
+    {
+        $demos = [
+            [
+                'name'        => 'Donaz',
+                'slug'        => 'donaz',
+                'tagline'     => 'Plataforma de donaciones y ONGs',
+                'product'     => 'SYNTIstudio',
+                'product_color' => 'blue',
+                'url'         => '#', // Reemplazar con subdominio real del tenant demo
+                'image'       => 'https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?w=800&auto=format&fit=crop&q=80',
+                'arc_image'   => 'https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?w=400&auto=format&fit=crop&q=80',
+            ],
+            [
+                'name'        => 'Belle Store',
+                'slug'        => 'belle-store',
+                'tagline'     => 'Tienda de belleza y cosméticos',
+                'product'     => 'SYNTIcat',
+                'product_color' => 'pink',
+                'url'         => '#',
+                'image'       => 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=800&auto=format&fit=crop&q=80',
+                'arc_image'   => 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=400&auto=format&fit=crop&q=80',
+            ],
+            [
+                'name'        => 'MediCenter',
+                'slug'        => 'medicenter',
+                'tagline'     => 'Centro médico y salud',
+                'product'     => 'SYNTIstudio',
+                'product_color' => 'cyan',
+                'url'         => '#',
+                'image'       => 'https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?w=800&auto=format&fit=crop&q=80',
+                'arc_image'   => 'https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?w=400&auto=format&fit=crop&q=80',
+            ],
+            [
+                'name'        => 'Gestoría 360',
+                'slug'        => 'gestoria-360',
+                'tagline'     => 'Servicios legales y consultoría',
+                'product'     => 'SYNTIstudio',
+                'product_color' => 'indigo',
+                'url'         => '#',
+                'image'       => 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=800&auto=format&fit=crop&q=80',
+                'arc_image'   => 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=400&auto=format&fit=crop&q=80',
+            ],
+            [
+                'name'        => 'FitZone Pro',
+                'slug'        => 'fitzone-pro',
+                'tagline'     => 'Gym y entrenamiento funcional',
+                'product'     => 'SYNTIstudio',
+                'product_color' => 'orange',
+                'url'         => '#',
+                'image'       => 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&auto=format&fit=crop&q=80',
+                'arc_image'   => 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&auto=format&fit=crop&q=80',
+            ],
+            [
+                'name'        => 'Urban Menu',
+                'slug'        => 'urban-menu',
+                'tagline'     => 'Restaurante con menú digital',
+                'product'     => 'SYNTIfood',
+                'product_color' => 'amber',
+                'url'         => '#',
+                'image'       => 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&auto=format&fit=crop&q=80',
+                'arc_image'   => 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&auto=format&fit=crop&q=80',
+            ],
+            [
+                'name'        => 'Nova Store',
+                'slug'        => 'nova-store',
+                'tagline'     => 'Catálogo con carrito WhatsApp',
+                'product'     => 'SYNTIcat',
+                'product_color' => 'emerald',
+                'url'         => '#',
+                'image'       => 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&auto=format&fit=crop&q=80',
+                'arc_image'   => 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&auto=format&fit=crop&q=80',
+            ],
+        ];
+
+        return view('marketing.demos', compact('demos'));
+    }
+
     public function blog(Request $request): View
     {
         $categories = BlogCategory::orderBy('sort_order')->get();

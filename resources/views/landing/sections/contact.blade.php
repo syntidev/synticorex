@@ -29,7 +29,15 @@
 
 <section id="contact" class="relative bg-surface py-10 sm:py-16 lg:py-20 overflow-hidden">
 
-  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+  {{-- Decorativo --}}
+  <div class="pointer-events-none absolute inset-0" aria-hidden="true">
+    <div class="absolute -top-24 -right-24 size-80 rounded-full"
+         style="background: var(--color-primary); opacity: 0.05; filter: blur(60px);"></div>
+    <div class="absolute -bottom-16 -left-16 size-56 rounded-full"
+         style="background: var(--color-primary); opacity: 0.03; filter: blur(48px);"></div>
+  </div>
+
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
     <div class="text-center mb-12 space-y-3">
       <h2 class="text-foreground text-2xl font-semibold md:text-3xl lg:text-4xl"
           style="text-shadow: 0 4px 24px color-mix(in oklch, var(--color-foreground) 15%, transparent), 0 1px 4px color-mix(in oklch, var(--color-foreground) 8%, transparent);">
@@ -66,10 +74,14 @@
         <div class="grid gap-4 sm:grid-cols-2 flex-1">
           
           {{-- Card: Horario --}}
-          <div class="bg-card border border-card-line rounded-2xl overflow-hidden p-4 shadow-sm">
-            <div class="flex flex-col items-center text-center gap-2">
-              <span class="iconify tabler--clock size-8 text-primary"></span>
-              <h4 class="text-foreground font-semibold text-sm">Horario</h4>
+          <div class="bg-card border border-card-line rounded-2xl overflow-hidden shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
+            <div class="h-1.5" style="background: linear-gradient(90deg, var(--color-primary), color-mix(in oklch, var(--color-primary) 35%, transparent))"></div>
+            <div class="p-4 flex flex-col items-center text-center gap-3">
+              <div class="size-11 rounded-xl flex items-center justify-center"
+                   style="background: color-mix(in oklch, var(--color-primary) 10%, transparent);">
+                <span class="iconify tabler--clock size-5 text-primary"></span>
+              </div>
+              <p class="text-[11px] font-bold uppercase tracking-[0.12em]" style="color: var(--color-primary)">Horario</p>
               <div class="text-foreground/70 text-xs space-y-1">
                 @php
                   $days = ['monday'=>'Lun','tuesday'=>'Mar','wednesday'=>'Mié',
@@ -107,10 +119,14 @@
           </div>
 
           {{-- Card: Dirección --}}
-          <div class="bg-card border border-card-line rounded-2xl overflow-hidden p-4 shadow-sm">
-            <div class="flex flex-col items-center text-center gap-2">
-              <span class="iconify tabler--map-pin size-8 text-primary"></span>
-              <h4 class="text-foreground font-semibold text-sm">Dirección</h4>
+          <div class="bg-card border border-card-line rounded-2xl overflow-hidden shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
+            <div class="h-1.5" style="background: linear-gradient(90deg, var(--color-primary), color-mix(in oklch, var(--color-primary) 35%, transparent))"></div>
+            <div class="p-4 flex flex-col items-center text-center gap-3">
+              <div class="size-11 rounded-xl flex items-center justify-center"
+                   style="background: color-mix(in oklch, var(--color-primary) 10%, transparent);">
+                <span class="iconify tabler--map-pin size-5 text-primary"></span>
+              </div>
+              <p class="text-[11px] font-bold uppercase tracking-[0.12em]" style="color: var(--color-primary)">Dirección</p>
               <address class="text-foreground/70 text-xs not-italic leading-snug">
                 {{ $address }}<br>
                 {{ $city }}{{ $tenant->state ? ', ' . $tenant->state : '' }}
@@ -119,10 +135,14 @@
           </div>
 
           {{-- Card: WhatsApp --}}
-          <div class="bg-card border border-card-line rounded-2xl overflow-hidden p-4 shadow-sm">
-            <div class="flex flex-col items-center text-center gap-2">
-              <span class="iconify tabler--brand-whatsapp size-8 text-primary"></span>
-              <h4 class="text-foreground font-semibold text-sm">WhatsApp</h4>
+          <div class="bg-card border border-card-line rounded-2xl overflow-hidden shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
+            <div class="h-1.5" style="background: linear-gradient(90deg, var(--color-primary), color-mix(in oklch, var(--color-primary) 35%, transparent))"></div>
+            <div class="p-4 flex flex-col items-center text-center gap-3">
+              <div class="size-11 rounded-xl flex items-center justify-center"
+                   style="background: color-mix(in oklch, var(--color-primary) 10%, transparent);">
+                <span class="iconify tabler--brand-whatsapp size-5 text-primary"></span>
+              </div>
+              <p class="text-[11px] font-bold uppercase tracking-[0.12em]" style="color: var(--color-primary)">WhatsApp</p>
               @if($whatsappMainClean)
                 <a href="https://wa.me/{{ $whatsappMainClean }}"
                    target="_blank" rel="noopener noreferrer"
@@ -136,10 +156,14 @@
           </div>
 
           {{-- Card: Email + Soporte --}}
-          <div class="bg-card border border-card-line rounded-2xl overflow-hidden p-4 shadow-sm">
-            <div class="flex flex-col items-center text-center gap-2">
-              <span class="iconify tabler--mail size-8 text-primary"></span>
-              <h4 class="text-foreground font-semibold text-sm">Contacto</h4>
+          <div class="bg-card border border-card-line rounded-2xl overflow-hidden shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
+            <div class="h-1.5" style="background: linear-gradient(90deg, var(--color-primary), color-mix(in oklch, var(--color-primary) 35%, transparent))"></div>
+            <div class="p-4 flex flex-col items-center text-center gap-3">
+              <div class="size-11 rounded-xl flex items-center justify-center"
+                   style="background: color-mix(in oklch, var(--color-primary) 10%, transparent);">
+                <span class="iconify tabler--mail size-5 text-primary"></span>
+              </div>
+              <p class="text-[11px] font-bold uppercase tracking-[0.12em]" style="color: var(--color-primary)">Contacto</p>
               <div class="text-foreground/70 text-xs space-y-1">
                 @if($email)
                   <p>{{ $email }}</p>
@@ -180,10 +204,14 @@
     <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
 
           {{-- Card: Horario --}}
-          <div class="bg-card border border-card-line rounded-2xl overflow-hidden p-5 shadow-sm">
-            <div class="flex flex-col items-center text-center gap-2">
-              <span class="iconify tabler--clock size-8 text-primary"></span>
-              <h4 class="text-foreground font-semibold text-sm">Horario</h4>
+          <div class="bg-card border border-card-line rounded-2xl overflow-hidden shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
+            <div class="h-1.5" style="background: linear-gradient(90deg, var(--color-primary), color-mix(in oklch, var(--color-primary) 35%, transparent))"></div>
+            <div class="p-5 flex flex-col items-center text-center gap-3">
+              <div class="size-11 rounded-xl flex items-center justify-center"
+                   style="background: color-mix(in oklch, var(--color-primary) 10%, transparent);">
+                <span class="iconify tabler--clock size-5 text-primary"></span>
+              </div>
+              <p class="text-[11px] font-bold uppercase tracking-[0.12em]" style="color: var(--color-primary)">Horario</p>
               <div class="text-foreground/70 text-xs space-y-1">
                 @php
                   $days2 = ['monday'=>'Lun','tuesday'=>'Mar','wednesday'=>'Mié',
@@ -221,10 +249,14 @@
           </div>
 
           {{-- Card: Dirección --}}
-          <div class="bg-card border border-card-line rounded-2xl overflow-hidden p-5 shadow-sm">
-            <div class="flex flex-col items-center text-center gap-2">
-              <span class="iconify tabler--map-pin size-8 text-primary"></span>
-              <h4 class="text-foreground font-semibold text-sm">Dirección</h4>
+          <div class="bg-card border border-card-line rounded-2xl overflow-hidden shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
+            <div class="h-1.5" style="background: linear-gradient(90deg, var(--color-primary), color-mix(in oklch, var(--color-primary) 35%, transparent))"></div>
+            <div class="p-5 flex flex-col items-center text-center gap-3">
+              <div class="size-11 rounded-xl flex items-center justify-center"
+                   style="background: color-mix(in oklch, var(--color-primary) 10%, transparent);">
+                <span class="iconify tabler--map-pin size-5 text-primary"></span>
+              </div>
+              <p class="text-[11px] font-bold uppercase tracking-[0.12em]" style="color: var(--color-primary)">Dirección</p>
               <address class="text-foreground/70 text-xs not-italic leading-snug">
                 {{ $address }}<br>
                 {{ $city }}{{ $tenant->state ? ', ' . $tenant->state : '' }}
@@ -233,10 +265,14 @@
           </div>
 
           {{-- Card: WhatsApp --}}
-          <div class="bg-card border border-card-line rounded-2xl overflow-hidden p-5 shadow-sm">
-            <div class="flex flex-col items-center text-center gap-2">
-              <span class="iconify tabler--brand-whatsapp size-8 text-primary"></span>
-              <h4 class="text-foreground font-semibold text-sm">WhatsApp</h4>
+          <div class="bg-card border border-card-line rounded-2xl overflow-hidden shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
+            <div class="h-1.5" style="background: linear-gradient(90deg, var(--color-primary), color-mix(in oklch, var(--color-primary) 35%, transparent))"></div>
+            <div class="p-5 flex flex-col items-center text-center gap-3">
+              <div class="size-11 rounded-xl flex items-center justify-center"
+                   style="background: color-mix(in oklch, var(--color-primary) 10%, transparent);">
+                <span class="iconify tabler--brand-whatsapp size-5 text-primary"></span>
+              </div>
+              <p class="text-[11px] font-bold uppercase tracking-[0.12em]" style="color: var(--color-primary)">WhatsApp</p>
               @if($whatsappMainClean)
                 <a href="https://wa.me/{{ $whatsappMainClean }}"
                    target="_blank" rel="noopener noreferrer"
@@ -250,10 +286,14 @@
           </div>
 
           {{-- Card: Email / Teléfono --}}
-          <div class="bg-card border border-card-line rounded-2xl overflow-hidden p-5 shadow-sm">
-            <div class="flex flex-col items-center text-center gap-2">
-              <span class="iconify tabler--mail size-8 text-primary"></span>
-              <h4 class="text-foreground font-semibold text-sm">Contacto</h4>
+          <div class="bg-card border border-card-line rounded-2xl overflow-hidden shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
+            <div class="h-1.5" style="background: linear-gradient(90deg, var(--color-primary), color-mix(in oklch, var(--color-primary) 35%, transparent))"></div>
+            <div class="p-5 flex flex-col items-center text-center gap-3">
+              <div class="size-11 rounded-xl flex items-center justify-center"
+                   style="background: color-mix(in oklch, var(--color-primary) 10%, transparent);">
+                <span class="iconify tabler--mail size-5 text-primary"></span>
+              </div>
+              <p class="text-[11px] font-bold uppercase tracking-[0.12em]" style="color: var(--color-primary)">Contacto</p>
               <div class="text-foreground/70 text-xs space-y-1">
                 @if($email)
                   <p>{{ $email }}</p>

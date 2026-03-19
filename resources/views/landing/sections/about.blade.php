@@ -55,9 +55,17 @@
                     <div class="absolute inset-0 translate-x-3 translate-y-3 bg-primary/10 rounded-2xl -z-10"></div>
                     <div class="absolute -top-3 -left-3 w-10 h-10 border-t-2 border-l-2 border-primary/50 rounded-tl-xl pointer-events-none"></div>
                     <div class="absolute -bottom-3 -right-3 w-10 h-10 border-b-2 border-r-2 border-primary/50 rounded-br-xl pointer-events-none"></div>
-                    <div class="relative z-10 bg-muted border border-border rounded-2xl flex items-center justify-center py-20 shadow-sm">
-                        <img src="{{ $logoImage }}" alt="{{ $tenant->business_name }}"
-                             class="max-h-40 w-auto object-contain opacity-90">
+                    <div class="relative z-10 rounded-2xl overflow-hidden shadow-sm border border-card-line"
+                         style="background: linear-gradient(145deg, color-mix(in oklch, var(--color-primary) 6%, var(--color-surface)), color-mix(in oklch, var(--color-primary) 2%, var(--color-background)));">
+                        {{-- Dot-grid texture --}}
+                        <div class="absolute inset-0 pointer-events-none"
+                             style="background-image: radial-gradient(circle, color-mix(in oklch, var(--color-primary) 18%, transparent) 1.2px, transparent 1.2px); background-size: 20px 20px; opacity: 0.45;"></div>
+                        {{-- Decorative glow --}}
+                        <div class="absolute -bottom-10 -right-10 size-44 rounded-full pointer-events-none"
+                             style="background: var(--color-primary); opacity: 0.05;"></div>
+                        <div class="relative z-10 flex items-center justify-center py-24 px-8">
+                            <span class="iconify tabler--building size-16 text-primary/20"></span>
+                        </div>
                     </div>
 
                 @else
