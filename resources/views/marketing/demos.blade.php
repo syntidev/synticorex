@@ -217,7 +217,7 @@
               <!-- Card 6: Urban Menu -->
               <a href="#" class="group relative block rounded-xl overflow-hidden focus:outline-none">
                 <img class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out" 
-                     src="https://images.unsplash.com/photo-1514306688699-36149c7cbbe2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=560&q=80" alt="Urban Menu">
+                     src="https://images.unsplash.com/photo-1495521821757-a1efb6729352?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=560&q=80" alt="Urban Menu">
                 <div class="absolute bottom-0 start-0 end-0 p-2 sm:p-4">
                   <div class="text-sm font-semibold bg-layer text-layer-foreground rounded-lg p-3">Urban Menu</div>
                 </div>
