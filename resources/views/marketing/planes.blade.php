@@ -67,24 +67,24 @@
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {{-- Tabs --}}
-        <div class="flex justify-center mb-12 overflow-x-auto pb-1">
-            <div class="flex gap-2 bg-white border border-slate-200 rounded-full p-1 shadow-sm">
+        <div class="flex justify-center mb-12 px-4">
+            <div class="flex gap-1 bg-white border border-slate-200 rounded-full p-1 shadow-sm w-full max-w-sm sm:w-auto sm:max-w-none">
                 <button @click="tab='studio'"
                     :class="tab==='studio' ? 'tab-active-studio' : 'text-slate-500 hover:text-slate-800'"
-                    class="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 whitespace-nowrap">
-                    <iconify-icon icon="tabler:layout-dashboard" width="16"></iconify-icon>
+                    class="flex flex-1 sm:flex-none items-center justify-center gap-1.5 px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200 whitespace-nowrap">
+                    <iconify-icon icon="tabler:layout-dashboard" width="14"></iconify-icon>
                     SYNTIstudio
                 </button>
                 <button @click="tab='food'"
                     :class="tab==='food' ? 'tab-active-food' : 'text-slate-500 hover:text-slate-800'"
-                    class="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 whitespace-nowrap">
-                    <iconify-icon icon="tabler:tools-kitchen-2" width="16"></iconify-icon>
+                    class="flex flex-1 sm:flex-none items-center justify-center gap-1.5 px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200 whitespace-nowrap">
+                    <iconify-icon icon="tabler:tools-kitchen-2" width="14"></iconify-icon>
                     SYNTIfood
                 </button>
                 <button @click="tab='cat'"
                     :class="tab==='cat' ? 'tab-active-cat' : 'text-slate-500 hover:text-slate-800'"
-                    class="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 whitespace-nowrap">
-                    <iconify-icon icon="tabler:shopping-bag" width="16"></iconify-icon>
+                    class="flex flex-1 sm:flex-none items-center justify-center gap-1.5 px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200 whitespace-nowrap">
+                    <iconify-icon icon="tabler:shopping-bag" width="14"></iconify-icon>
                     SYNTIcat
                 </button>
             </div>
