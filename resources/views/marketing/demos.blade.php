@@ -164,7 +164,7 @@
             <!-- Columna 1 -->
             <div class="space-y-4">
               <!-- Card 1: Donaz -->
-              <a href="#" class="group relative block rounded-xl overflow-hidden focus:outline-none">
+              <a href="/donaz" class="group relative block rounded-xl overflow-hidden focus:outline-none">
                 <img class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out" 
                      src="https://images.unsplash.com/photo-1606868306217-dbf5046868d2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=560&q=80" alt="Donaz">
                 <div class="absolute bottom-0 start-0 end-0 p-2 sm:p-4">
@@ -173,7 +173,7 @@
               </a>
 
               <!-- Card 2: Belle Store -->
-              <a href="#" class="group relative block rounded-xl overflow-hidden focus:outline-none">
+              <a href="/bellestore" class="group relative block rounded-xl overflow-hidden focus:outline-none">
                 <img class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out" 
                      src="https://images.unsplash.com/photo-1605629921711-2f6b00c6bbf4?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=560&q=80" alt="Belle Store">
                 <div class="absolute bottom-0 start-0 end-0 p-2 sm:p-4">
@@ -182,7 +182,7 @@
               </a>
 
               <!-- Card 3: MediCenter -->
-              <a href="#" class="group relative block rounded-xl overflow-hidden focus:outline-none">
+              <a href="/medicenter" class="group relative block rounded-xl overflow-hidden focus:outline-none">
                 <img class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out" 
                      src="https://images.unsplash.com/photo-1606836576983-8b458e75221d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=560&q=80" alt="MediCenter">
                 <div class="absolute bottom-0 start-0 end-0 p-2 sm:p-4">
@@ -194,7 +194,7 @@
             <!-- Columna 2 -->
             <div class="space-y-4">
               <!-- Card 4: Gestoría 360 -->
-              <a href="#" class="group relative block rounded-xl overflow-hidden focus:outline-none">
+              <a href="/gestoria360" class="group relative block rounded-xl overflow-hidden focus:outline-none">
                 <img class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out" 
                      src="https://images.unsplash.com/photo-1598929438701-ef29ab0bb61a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=560&q=80" alt="Gestoría 360">
                 <div class="absolute bottom-0 start-0 end-0 p-2 sm:p-4">
@@ -203,7 +203,7 @@
               </a>
 
               <!-- Card 5: FitZone Pro -->
-              <a href="#" class="group relative block rounded-xl overflow-hidden focus:outline-none">
+              <a href="/fitzonepro" class="group relative block rounded-xl overflow-hidden focus:outline-none">
                 <img class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out" 
                      src="https://images.unsplash.com/photo-1467043153537-a4fba2cd39ef?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=560&q=80" alt="FitZone Pro">
                 <div class="absolute bottom-0 start-0 end-0 p-2 sm:p-4">
@@ -215,7 +215,7 @@
             <!-- Columna 3 -->
             <div class="space-y-4">
               <!-- Card 6: Urban Menu -->
-              <a href="#" class="group relative block rounded-xl overflow-hidden focus:outline-none">
+              <a href="/urbanmenu" class="group relative block rounded-xl overflow-hidden focus:outline-none">
                 <img class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out" 
                      src="https://images.unsplash.com/photo-1495521821757-a1efb6729352?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=560&q=80" alt="Urban Menu">
                 <div class="absolute bottom-0 start-0 end-0 p-2 sm:p-4">
@@ -224,7 +224,7 @@
               </a>
 
               <!-- Card 7: Nova Store -->
-              <a href="#" class="group relative block rounded-xl overflow-hidden focus:outline-none">
+              <a href="/novastore" class="group relative block rounded-xl overflow-hidden focus:outline-none">
                 <img class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out" 
                      src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=560&q=80" alt="Nova Store">
                 <div class="absolute bottom-0 start-0 end-0 p-2 sm:p-4">
