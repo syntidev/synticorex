@@ -1,4 +1,4 @@
-﻿@extends('marketing.layout')
+@extends('marketing.layout')
 
 @push('seo')
 <title>SYNTIstudio — Landing profesional para tu negocio | SYNTIweb</title>
@@ -19,11 +19,11 @@
     <div class="max-w-[85rem] px-4 pt-10 sm:px-6 lg:px-8 lg:pt-20 mx-auto">
         <div class="max-w-2xl mx-auto text-center mb-10">
             <h1 class="text-3xl leading-tight font-bold md:text-4xl md:leading-tight lg:text-5xl lg:leading-tight text-foreground">
-                Tu negocio en internet.<br>Esta semana.
+                Tu presencia profesional<br>en internet. Esta semana.
             </h1>
             <p class="mt-4 lg:text-lg text-foreground">
-                Landing profesional para marcas, servicios y negocios locales.<br class="hidden sm:block">
-                Lo que una agencia cobra $180—$500 por hacerlo una vez, aquí lo tienes vivo y autogestionable.
+                Lo que una agencia cobra $180–$500 por hacerlo <em>una sola vez</em>,<br class="hidden sm:block">
+                aquí lo tienes vivo, autogestionable y siempre actualizado.
             </p>
             <div class="mt-8 flex flex-wrap justify-center gap-3">
                 <a class="py-3 px-5 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg bg-primary border border-primary-line text-primary-foreground hover:bg-primary-hover focus:outline-hidden focus:bg-primary-focus disabled:opacity-50 disabled:pointer-events-none" href="{{ route('onboarding.studio') }}">
@@ -34,6 +34,25 @@
                     Ver demo
                 </a>
             </div>
+            {{-- Trust badges --}}
+            <div class="mt-6 flex flex-wrap justify-center gap-x-5 gap-y-2">
+                <span class="flex items-center gap-1.5 text-sm text-slate-500">
+                    <iconify-icon icon="tabler:circle-check-filled" style="color:#16a34a" width="15"></iconify-icon>
+                    15 días gratis
+                </span>
+                <span class="flex items-center gap-1.5 text-sm text-slate-500">
+                    <iconify-icon icon="tabler:circle-check-filled" style="color:#16a34a" width="15"></iconify-icon>
+                    Sin tarjeta
+                </span>
+                <span class="flex items-center gap-1.5 text-sm text-slate-500">
+                    <iconify-icon icon="tabler:circle-check-filled" style="color:#16a34a" width="15"></iconify-icon>
+                    Sin contrato
+                </span>
+                <span class="flex items-center gap-1.5 text-sm text-slate-500">
+                    <iconify-icon icon="tabler:circle-check-filled" style="color:#16a34a" width="15"></iconify-icon>
+                    BCV automático incluido
+                </span>
+            </div>
         </div>
     </div>
 
@@ -41,6 +60,14 @@
     <div class="absolute top-1/2 start-1/2 -z-1 transform -translate-y-1/2 -translate-x-1/2 w-85 h-85 border border-dashed border-primary-200 rounded-full dark:border-primary-900/60"></div>
     <div class="absolute top-1/2 start-1/2 -z-1 transform -translate-y-1/2 -translate-x-1/2 w-[575px] h-[575px] border border-dashed border-primary-200 rounded-full opacity-80 dark:border-primary-900/60 hidden sm:block"></div>
     <div class="absolute top-1/2 start-1/2 -z-1 transform -translate-y-1/2 -translate-x-1/2 w-[840px] h-[840px] border border-dashed border-primary-200 rounded-full opacity-60 dark:border-primary-900/60 hidden sm:block"></div>
+</div>
+
+{{-- Promo Banner --}}
+<div class="max-w-3xl mx-auto px-4 sm:px-6 pt-6 pb-2">
+    <div class="flex items-center justify-center gap-3 bg-[#4A80E4]/8 border border-[#4A80E4]/20 rounded-2xl py-4 px-6">
+        <iconify-icon icon="tabler:flame" width="20" style="color:#4A80E4;flex-shrink:0;"></iconify-icon>
+        <p class="text-sm text-slate-700 text-center"><strong class="text-slate-900">15 días de prueba gratis</strong> — Sin tarjeta de crédito. Sin compromisos. Cancela cuando quieras.</p>
+    </div>
 </div>
 
 {{-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• --}}
@@ -56,6 +83,10 @@
     .check-studio { color: #4A80E4; }
     .btn-primary-studio { background: #4A80E4; color: #fff; box-shadow: 0 4px 16px color-mix(in oklch, #4A80E4 40%, transparent); }
     .btn-ghost-studio   { background: color-mix(in oklch, #4A80E4 10%, transparent); color: #4A80E4; border: 1.5px solid color-mix(in oklch, #4A80E4 30%, transparent); }
+    /* Conversion elements */
+    .promo-strip-studio { background: linear-gradient(90deg, #3564c8, #4A80E4); color: #fff; }
+    .savings-badge      { background: #dc2626; color: #fff; font-size: 0.65rem; font-weight: 800; padding: 0.15rem 0.6rem; border-radius: 9999px; white-space: nowrap; letter-spacing: 0.03em; }
+    .price-strike       { text-decoration: line-through; color: #94a3b8; font-size: 0.875rem; }
     /* Mobile: show only active plan card + table column */
     @media (max-width: 767px) {
         .plan-hidden-mobile { display: none !important; }
@@ -93,40 +124,73 @@
 
         @foreach($planData['plans'] as $plan)
         @php $isHighlighted = $plan['highlighted'] ?? false; $planIdx = $loop->index + 1; @endphp
-        <div class="plan-card bg-white rounded-2xl p-6 lg:p-8 flex flex-col
+        <div class="plan-card rounded-2xl flex flex-col overflow-hidden
             {{ $isHighlighted ? 'plan-card--highlight ring-studio shadow-2xl' : 'border border-slate-200 shadow-sm' }}"
             :class="plan === {{ $planIdx }} ? '' : 'plan-hidden-mobile'">
 
-            @if(!empty($plan['pill']))
-            <div class="text-center mb-4">
-                <span class="inline-flex items-center gap-1 {{ $isHighlighted ? 'badge-studio text-white' : 'bg-slate-100 text-slate-500' }} text-xs font-bold px-3 py-1 rounded-full">
-                    {{ $plan['pill'] }}
-                </span>
+            {{-- Promo header strip --}}
+            @if(!empty($plan['promo_header']))
+            <div class="promo-strip-studio px-6 py-3 text-center">
+                <span class="text-xs font-black uppercase tracking-[0.12em]">{{ $plan['promo_header'] }}</span>
             </div>
             @endif
 
-            <h4 class="font-bold uppercase tracking-widest text-xs text-slate-400 mb-1">{{ $plan['name'] }}</h4>
-            <div class="flex items-baseline gap-1 mb-4">
-                <span class="text-5xl font-extrabold check-studio">${{ $plan['price'] }}</span>
-                <span class="text-slate-400 text-sm">{{ $plan['billing'] }}</span>
-            </div>
-
-            <ul class="space-y-2.5 flex-1 mb-8">
-                @foreach($plan['features'] as $feature)
-                @php $val = $feature['p' . ($loop->parent->index + 1)]; @endphp
-                @if($val !== false)
-                <li class="flex items-start gap-2 text-sm text-slate-700">
-                    <iconify-icon icon="tabler:check" class="check-studio mt-0.5 shrink-0" width="16"></iconify-icon>
-                    <span>{{ $feature['label'] }}@if($val !== true) &middot; {{ $val }}@endif</span>
-                </li>
+            <div class="p-6 lg:p-8 flex flex-col flex-1 bg-white">
+                {{-- Plan name + tagline --}}
+                <h4 class="font-black uppercase tracking-widest text-xs text-slate-400 mb-0.5">{{ $plan['name'] }}</h4>
+                @if(!empty($plan['pill']))
+                <p class="text-xs text-slate-400 italic mb-3">{{ $plan['pill'] }}</p>
+                @else
+                <div class="mb-3"></div>
                 @endif
-                @endforeach
-            </ul>
 
-            <a href="{{ route('onboarding.' . explode('-', $plan['slug'])[0]) }}"
-               class="block w-full text-center py-3 px-4 rounded-xl font-bold text-sm transition-all hover:-translate-y-0.5 {{ $isHighlighted ? 'btn-primary-studio' : 'btn-ghost-studio' }}">
-                {{ $plan['cta'] }}
-            </a>
+                {{-- Crossed price + savings badge --}}
+                @if(!empty($plan['price_original']))
+                <div class="flex items-center gap-2 mb-1">
+                    <span class="price-strike">${{ $plan['price_original'] }}{{ $plan['billing'] }}</span>
+                    @if(!empty($plan['savings_label']))
+                    <span class="savings-badge">{{ $plan['savings_label'] }}</span>
+                    @endif
+                </div>
+                @endif
+
+                {{-- Main price --}}
+                <div class="flex items-baseline gap-1 mb-1">
+                    <span class="text-5xl font-extrabold check-studio">${{ $plan['price'] }}</span>
+                    <span class="text-slate-400 text-sm">{{ $plan['billing'] }}</span>
+                </div>
+
+                {{-- Per-month equivalent --}}
+                @if(!empty($plan['per_month']))
+                <p class="text-xs text-slate-400 mb-5">Por solo <strong>{{ $plan['per_month'] }}</strong> · <span class="text-green-600 font-semibold">BCV incluido</span></p>
+                @else
+                <div class="mb-5"></div>
+                @endif
+
+                {{-- CTA --}}
+                <a href="{{ route('onboarding.' . explode('-', $plan['slug'])[0]) }}"
+                   class="flex items-center justify-center gap-2 w-full py-3 px-4 rounded-xl font-bold text-sm transition-all hover:-translate-y-0.5 cursor-pointer {{ $isHighlighted ? 'btn-primary-studio' : 'btn-ghost-studio' }}">
+                    {{ $plan['cta'] }}
+                    <iconify-icon icon="tabler:arrow-right" width="15" class="shrink-0"></iconify-icon>
+                </a>
+                <p class="text-center text-xs text-slate-400 mt-2">✓ 15 días gratis · Sin tarjeta</p>
+
+                {{-- Divider --}}
+                <div class="border-t border-slate-100 mt-5 mb-4"></div>
+
+                {{-- Features --}}
+                <ul class="space-y-2.5 flex-1">
+                    @foreach($plan['features'] as $feature)
+                    @php $val = $feature['p' . ($loop->parent->index + 1)]; @endphp
+                    @if($val !== false)
+                    <li class="flex items-start gap-2 text-sm text-slate-700">
+                        <iconify-icon icon="tabler:check" class="check-studio mt-0.5 shrink-0" width="16"></iconify-icon>
+                        <span>{{ $feature['label'] }}@if($val !== true) &middot; {{ $val }}@endif</span>
+                    </li>
+                    @endif
+                    @endforeach
+                </ul>
+            </div>
         </div>
         @endforeach
 
@@ -163,7 +227,7 @@
             </div>
         </div>
 
-        {{-- SECCIÁ"N: Tu catálogo --}}
+        {{-- SECCIÓN: Tu catálogo --}}
         <div class="space-y-4 lg:space-y-0">
             <ul class="grid lg:grid-cols-4 lg:gap-6">
                 <li class="lg:py-3">
@@ -193,7 +257,7 @@
                 </li>
                 <li class="col-span-1 py-1.5 lg:py-3 border-b border-line-2">
                     <div class="grid grid-cols-2 md:grid-cols-6 lg:block">
-                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">VISIÁ"N</span>
+                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">VISIÓN</span>
                         <span class="text-sm text-foreground">200</span>
                     </div>
                 </li>
@@ -218,7 +282,7 @@
                 </li>
                 <li class="col-span-1 py-1.5 lg:py-3 border-b border-line-2">
                     <div class="grid grid-cols-2 md:grid-cols-6 lg:block">
-                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">VISIÁ"N</span>
+                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">VISIÓN</span>
                         <span class="text-sm text-foreground">9</span>
                     </div>
                 </li>
@@ -243,7 +307,7 @@
                 </li>
                 <li class="col-span-1 py-1.5 lg:py-3 border-b border-line-2">
                     <div class="grid grid-cols-2 md:grid-cols-6 lg:block">
-                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">VISIÁ"N</span>
+                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">VISIÓN</span>
                         <svg class="shrink-0 size-5 text-primary" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                     </div>
                 </li>
@@ -268,14 +332,14 @@
                 </li>
                 <li class="col-span-1 py-1.5 lg:py-3 border-b border-line-2">
                     <div class="grid grid-cols-2 md:grid-cols-6 lg:block">
-                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">VISIÁ"N</span>
+                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">VISIÓN</span>
                         <span class="text-sm text-foreground">17 + custom</span>
                     </div>
                 </li>
             </ul>
         </div>
 
-        {{-- SECCIÁ"N: Presencia digital --}}
+        {{-- SECCIÓN: Presencia digital --}}
         <div class="mt-6 space-y-4 lg:space-y-0">
             <ul class="grid lg:grid-cols-4 lg:gap-6">
                 <li class="lg:py-3">
@@ -305,7 +369,7 @@
                 </li>
                 <li class="col-span-1 py-1.5 lg:py-3 border-b border-line-2">
                     <div class="grid grid-cols-2 md:grid-cols-6 lg:block">
-                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">VISIÁ"N</span>
+                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">VISIÓN</span>
                         <span class="text-sm text-foreground">2</span>
                     </div>
                 </li>
@@ -330,7 +394,7 @@
                 </li>
                 <li class="col-span-1 py-1.5 lg:py-3 border-b border-line-2">
                     <div class="grid grid-cols-2 md:grid-cols-6 lg:block">
-                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">VISIÁ"N</span>
+                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">VISIÓN</span>
                         <span class="text-sm text-foreground">Todas</span>
                     </div>
                 </li>
@@ -355,7 +419,7 @@
                 </li>
                 <li class="col-span-1 py-1.5 lg:py-3 border-b border-line-2">
                     <div class="grid grid-cols-2 md:grid-cols-6 lg:block">
-                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">VISIÁ"N</span>
+                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">VISIÓN</span>
                         <span class="text-sm text-foreground">Avanzado</span>
                     </div>
                 </li>
@@ -380,14 +444,14 @@
                 </li>
                 <li class="col-span-1 py-1.5 lg:py-3 border-b border-line-2">
                     <div class="grid grid-cols-2 md:grid-cols-6 lg:block">
-                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">VISIÁ"N</span>
+                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">VISIÓN</span>
                         <svg class="shrink-0 size-5 text-primary" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                     </div>
                 </li>
             </ul>
         </div>
 
-        {{-- SECCIÁ"N: Soporte incluido --}}
+        {{-- SECCIÓN: Soporte incluido --}}
         <div class="mt-6 space-y-4 lg:space-y-0">
             <ul class="grid lg:grid-cols-4 lg:gap-6">
                 <li class="lg:py-3">
@@ -417,7 +481,7 @@
                 </li>
                 <li class="col-span-1 py-1.5 lg:py-3 border-b border-line-2">
                     <div class="grid grid-cols-2 md:grid-cols-6 lg:block">
-                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">VISIÁ"N</span>
+                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">VISIÓN</span>
                         <svg class="shrink-0 size-5 text-primary" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                     </div>
                 </li>
@@ -442,7 +506,7 @@
                 </li>
                 <li class="col-span-1 py-1.5 lg:py-3 border-b border-line-2">
                     <div class="grid grid-cols-2 md:grid-cols-6 lg:block">
-                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">VISIÁ"N</span>
+                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">VISIÓN</span>
                         <svg class="shrink-0 size-5 text-primary" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                     </div>
                 </li>
@@ -467,7 +531,7 @@
                 </li>
                 <li class="col-span-1 py-1.5 lg:py-3 border-b border-line-2">
                     <div class="grid grid-cols-2 md:grid-cols-6 lg:block">
-                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">VISIÁ"N</span>
+                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">VISIÓN</span>
                         <svg class="shrink-0 size-5 text-primary" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                     </div>
                 </li>
@@ -492,7 +556,7 @@
                 </li>
                 <li class="col-span-1 py-1.5 lg:py-3 border-b border-line-2">
                     <div class="grid grid-cols-2 md:grid-cols-6 lg:block">
-                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">VISIÁ"N</span>
+                        <span class="lg:hidden md:col-span-2 text-sm text-foreground">VISIÓN</span>
                         <svg class="shrink-0 size-5 text-primary" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                     </div>
                 </li>
