@@ -159,126 +159,115 @@
             </p>
         </div>
 
-        {{-- Masonry Grid — Preline structure --}}
+        {{-- Masonry Cards - Preline Reference Design --}}
         <div class="grid sm:grid-cols-12 gap-6">
 
-            {{-- Row 1: Donaz (larger) + Belle (smaller) --}}
-            @php $d = $demos[0]; @endphp
+            {{-- Card 1 --}}
             <div class="sm:self-end col-span-12 sm:col-span-7 md:col-span-8 lg:col-span-5 lg:col-start-3">
-                <a class="group relative block rounded-xl overflow-hidden focus:outline-none" href="{{ $d['url'] }}" target="_blank" rel="noopener">
+                <a class="group relative block rounded-xl overflow-hidden focus:outline-none" href="#">
                     <div class="rounded-xl overflow-hidden">
-                        <img class="group-hover:scale-105 transition-transform duration-500 ease-in-out w-full object-cover" 
-                             src="/demo/Donaz.png" alt="{{ $d['name'] }}" loading="lazy" width="800" height="480">
+                        <img class="group-hover:scale-105 group-focus:scale-105 transition-transform duration-500 ease-in-out rounded-xl w-full object-cover" 
+                             src="https://images.unsplash.com/photo-1606868306217-dbf5046868d2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=560&q=80" alt="Demo 1">
                     </div>
-                    <div class="absolute bottom-0 start-0 end-0 p-3 sm:p-4">
-                        <div class="text-sm font-semibold rounded-lg p-3 md:text-lg" 
-                             style="background:rgba(26,26,26,0.92);color:#ffffff;backdrop-filter:blur(8px);border-top:1px solid rgba(255,255,255,0.1)">
-                            {{ $d['name'] }}
+                    <div class="absolute bottom-0 start-0 end-0 p-2 sm:p-4">
+                        <div class="text-sm font-semibold bg-layer text-layer-foreground rounded-lg p-4 md:text-xl">
+                            Donaz
                         </div>
                     </div>
                 </a>
             </div>
 
-            @php $d = $demos[1]; @endphp
+            {{-- Card 2 --}}
             <div class="sm:self-end col-span-12 sm:col-span-5 md:col-span-4 lg:col-span-3">
-                <a class="group relative block rounded-xl overflow-hidden focus:outline-none" href="{{ $d['url'] }}" target="_blank" rel="noopener">
+                <a class="group relative block rounded-xl overflow-hidden focus:outline-none" href="#">
                     <div class="rounded-xl overflow-hidden">
-                        <img class="group-hover:scale-105 transition-transform duration-500 ease-in-out w-full object-cover"
-                             src="/demo/Bellestore.png" alt="{{ $d['name'] }}" loading="lazy" width="600" height="360">
+                        <img class="group-hover:scale-105 group-focus:scale-105 transition-transform duration-500 ease-in-out rounded-xl w-full object-cover" 
+                             src="https://images.unsplash.com/photo-1605629921711-2f6b00c6bbf4?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=560&q=80" alt="Demo 2">
                     </div>
-                    <div class="absolute bottom-0 start-0 end-0 p-3 sm:p-4">
-                        <div class="text-sm font-semibold rounded-lg p-3 md:text-lg"
-                             style="background:rgba(26,26,26,0.92);color:#ffffff;backdrop-filter:blur(8px);border-top:1px solid rgba(255,255,255,0.1)">
-                            {{ $d['name'] }}
+                    <div class="absolute bottom-0 start-0 end-0 p-2 sm:p-4">
+                        <div class="text-sm font-semibold bg-layer text-layer-foreground rounded-lg p-4 md:text-xl">
+                            Belle Store
                         </div>
                     </div>
                 </a>
             </div>
 
-            {{-- Row 2: MediCenter + Gestoria + FitZone (3 equal) --}}
-            @php $d = $demos[2]; @endphp
+            {{-- Card 3 --}}
             <div class="col-span-12 md:col-span-4">
-                <a class="group relative block rounded-xl overflow-hidden focus:outline-none" href="{{ $d['url'] }}" target="_blank" rel="noopener">
+                <a class="group relative block rounded-xl overflow-hidden focus:outline-none" href="#">
                     <div class="rounded-xl overflow-hidden">
-                        <img class="group-hover:scale-105 transition-transform duration-500 ease-in-out w-full object-cover"
-                             src="/demo/Medicenter.png" alt="{{ $d['name'] }}" loading="lazy" width="600" height="360">
+                        <img class="group-hover:scale-105 group-focus:scale-105 transition-transform duration-500 ease-in-out rounded-xl w-full object-cover" 
+                             src="https://images.unsplash.com/photo-1606836576983-8b458e75221d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=560&q=80" alt="Demo 3">
                     </div>
-                    <div class="absolute bottom-0 start-0 end-0 p-3 sm:p-4">
-                        <div class="text-sm font-semibold rounded-lg p-3 md:text-lg"
-                             style="background:rgba(26,26,26,0.92);color:#ffffff;backdrop-filter:blur(8px);border-top:1px solid rgba(255,255,255,0.1)">
-                            {{ $d['name'] }}
+                    <div class="absolute bottom-0 start-0 end-0 p-2 sm:p-4">
+                        <div class="text-sm font-semibold bg-layer text-layer-foreground rounded-lg p-4 md:text-xl">
+                            MediCenter
                         </div>
                     </div>
                 </a>
             </div>
 
-            @php $d = $demos[3]; @endphp
+            {{-- Card 4 --}}
             <div class="col-span-12 sm:col-span-6 md:col-span-4">
-                <a class="group relative block rounded-xl overflow-hidden focus:outline-none" href="{{ $d['url'] }}" target="_blank" rel="noopener">
+                <a class="group relative block rounded-xl overflow-hidden focus:outline-none" href="#">
                     <div class="rounded-xl overflow-hidden">
-                        <img class="group-hover:scale-105 transition-transform duration-500 ease-in-out w-full object-cover"
-                             src="/demo/Gestoria360.png" alt="{{ $d['name'] }}" loading="lazy" width="600" height="360">
+                        <img class="group-hover:scale-105 group-focus:scale-105 transition-transform duration-500 ease-in-out rounded-xl w-full object-cover" 
+                             src="https://images.unsplash.com/photo-1598929438701-ef29ab0bb61a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=560&q=80" alt="Demo 4">
                     </div>
-                    <div class="absolute bottom-0 start-0 end-0 p-3 sm:p-4">
-                        <div class="text-sm font-semibold rounded-lg p-3 md:text-lg"
-                             style="background:rgba(26,26,26,0.92);color:#ffffff;backdrop-filter:blur(8px);border-top:1px solid rgba(255,255,255,0.1)">
-                            {{ $d['name'] }}
+                    <div class="absolute bottom-0 start-0 end-0 p-2 sm:p-4">
+                        <div class="text-sm font-semibold bg-layer text-layer-foreground rounded-lg p-4 md:text-xl">
+                            Gestoría 360
                         </div>
                     </div>
                 </a>
             </div>
 
-            @php $d = $demos[4]; @endphp
+            {{-- Card 5 --}}
             <div class="col-span-12 sm:col-span-6 md:col-span-4">
-                <a class="group relative block rounded-xl overflow-hidden focus:outline-none" href="{{ $d['url'] }}" target="_blank" rel="noopener">
+                <a class="group relative block rounded-xl overflow-hidden focus:outline-none" href="#">
                     <div class="rounded-xl overflow-hidden">
-                        <img class="group-hover:scale-105 transition-transform duration-500 ease-in-out w-full object-cover"
-                             src="/demo/Fitzonepro.png" alt="{{ $d['name'] }}" loading="lazy" width="600" height="360">
+                        <img class="group-hover:scale-105 group-focus:scale-105 transition-transform duration-500 ease-in-out rounded-xl w-full object-cover" 
+                             src="https://images.unsplash.com/photo-1467043153537-a4fba2cd39ef?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=560&q=80" alt="Demo 5">
                     </div>
-                    <div class="absolute bottom-0 start-0 end-0 p-3 sm:p-4">
-                        <div class="text-sm font-semibold rounded-lg p-3 md:text-lg"
-                             style="background:rgba(26,26,26,0.92);color:#ffffff;backdrop-filter:blur(8px);border-top:1px solid rgba(255,255,255,0.1)">
-                            {{ $d['name'] }}
+                    <div class="absolute bottom-0 start-0 end-0 p-2 sm:p-4">
+                        <div class="text-sm font-semibold bg-layer text-layer-foreground rounded-lg p-4 md:text-xl">
+                            FitZone Pro
                         </div>
                     </div>
                 </a>
             </div>
 
-            {{-- Row 3: Urban Menu + Nova Store (2 equal) --}}
-            @php $d = $demos[5]; @endphp
+            {{-- Card 6 --}}
             <div class="col-span-12 sm:col-span-6">
-                <a class="group relative block rounded-xl overflow-hidden focus:outline-none" href="{{ $d['url'] }}" target="_blank" rel="noopener">
+                <a class="group relative block rounded-xl overflow-hidden focus:outline-none" href="#">
                     <div class="rounded-xl overflow-hidden">
-                        <img class="group-hover:scale-105 transition-transform duration-500 ease-in-out w-full object-cover"
-                             src="/demo/Urbanmenu.png" alt="{{ $d['name'] }}" loading="lazy" width="600" height="360">
+                        <img class="group-hover:scale-105 group-focus:scale-105 transition-transform duration-500 ease-in-out rounded-xl w-full object-cover" 
+                             src="https://images.unsplash.com/photo-1514306688699-36149c7cbbe2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=560&q=80" alt="Demo 6">
                     </div>
-                    <div class="absolute bottom-0 start-0 end-0 p-3 sm:p-4">
-                        <div class="text-sm font-semibold rounded-lg p-3 md:text-lg"
-                             style="background:rgba(26,26,26,0.92);color:#ffffff;backdrop-filter:blur(8px);border-top:1px solid rgba(255,255,255,0.1)">
-                            {{ $d['name'] }}
+                    <div class="absolute bottom-0 start-0 end-0 p-2 sm:p-4">
+                        <div class="text-sm font-semibold bg-layer text-layer-foreground rounded-lg p-4 md:text-xl">
+                            Urban Menu
                         </div>
                     </div>
                 </a>
             </div>
 
-            @php $d = $demos[6]; @endphp
+            {{-- Card 7 --}}
             <div class="col-span-12 sm:col-span-6">
-                <a class="group relative block rounded-xl overflow-hidden focus:outline-none" href="{{ $d['url'] }}" target="_blank" rel="noopener">
+                <a class="group relative block rounded-xl overflow-hidden focus:outline-none" href="#">
                     <div class="rounded-xl overflow-hidden">
-                        <img class="group-hover:scale-105 transition-transform duration-500 ease-in-out w-full object-cover"
-                             src="/demo/Novastore.png" alt="{{ $d['name'] }}" loading="lazy" width="600" height="360">
+                        <img class="group-hover:scale-105 group-focus:scale-105 transition-transform duration-500 ease-in-out rounded-xl w-full object-cover" 
+                             src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=560&q=80" alt="Demo 7">
                     </div>
-                    <div class="absolute bottom-0 start-0 end-0 p-3 sm:p-4">
-                        <div class="text-sm font-semibold rounded-lg p-3 md:text-lg"
-                             style="background:rgba(26,26,26,0.92);color:#ffffff;backdrop-filter:blur(8px);border-top:1px solid rgba(255,255,255,0.1)">
-                            {{ $d['name'] }}
+                    <div class="absolute bottom-0 start-0 end-0 p-2 sm:p-4">
+                        <div class="text-sm font-semibold bg-layer text-layer-foreground rounded-lg p-4 md:text-xl">
+                            Nova Store
                         </div>
                     </div>
                 </a>
             </div>
 
         </div>
-        {{-- END Grid --}}
 
     </div>
 </section>
