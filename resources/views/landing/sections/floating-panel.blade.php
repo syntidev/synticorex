@@ -272,11 +272,10 @@ $canSeeProductsKpi = in_array($planSlug, ['studio-vision', 'vision']);
     transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
     overflow-y: auto;
     overflow-x: hidden;
-    box-shadow: -8px 0 32px rgba(0,0,0,0.5);
     scrollbar-width: thin;
     scrollbar-color: rgba(255,255,255,0.08) transparent;
 }
-.synti-panel.open { transform: translateX(-360px); }
+.synti-panel.open { transform: translateX(-360px); box-shadow: -8px 0 32px rgba(0,0,0,0.5); }
 
 /* ── Header ── */
 .synti-panel-header {

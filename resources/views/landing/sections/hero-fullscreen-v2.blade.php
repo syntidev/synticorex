@@ -4,8 +4,6 @@
     <div class="relative bg-background flex items-center px-8 py-16 lg:px-16 lg:py-24">
         {{-- Fondo decorativo --}}
         <div class="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
-            <div class="absolute -top-32 -right-32 size-[500px] rounded-full opacity-[0.05] blur-3xl"
-                 style="background:var(--color-primary)"></div>
             <div class="absolute inset-0 opacity-[0.015]"
                  style="background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22><filter id=%22n%22><feTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/></filter><rect width=%22200%22 height=%22200%22 filter=%22url(%23n)%22 opacity=%221%22/></svg>');background-size:200px"></div>
         </div>

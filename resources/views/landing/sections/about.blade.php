@@ -20,10 +20,6 @@
 <section id="about" class="relative py-10 sm:py-16 lg:py-24 bg-background overflow-hidden">
 
     {{-- ░░ ADORNOS GEOMÉTRICOS ░░ --}}
-    {{-- Círculo grande top-right --}}
-    <div class="pointer-events-none absolute -top-24 -right-24 w-96 h-96 rounded-full"
-         style="background: radial-gradient(circle, var(--color-primary, #4A80E4) 0%, transparent 70%); opacity: 0.07;"></div>
-
     {{-- Círculo pequeño bottom-left --}}
     <div class="pointer-events-none absolute -bottom-16 -left-16 w-64 h-64 rounded-full"
          style="background: radial-gradient(circle, var(--color-primary, #4A80E4) 0%, transparent 70%); opacity: 0.05;"></div>

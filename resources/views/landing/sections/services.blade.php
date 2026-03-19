@@ -12,7 +12,6 @@
 
     {{-- Fondo decorativo --}}
     <div class="pointer-events-none absolute inset-0" aria-hidden="true">
-        <div class="absolute -top-40 -right-40 size-[600px] rounded-full bg-primary opacity-[0.04] blur-3xl"></div>
         <div class="absolute bottom-0 left-0 w-[180px] h-[180px] opacity-[0.04]"
              style="background-image:radial-gradient(circle, var(--color-primary) 1px, transparent 1px);background-size:20px 20px"></div>
     </div>

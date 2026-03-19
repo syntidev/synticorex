@@ -95,13 +95,12 @@
 
 @push('styles')
 <style>
-    html { overflow-x: hidden; }
-    body { overflow-x: clip; }
+    html, body { overflow-x: hidden; }
     .no-scrollbar::-webkit-scrollbar{display:none}
     .no-scrollbar{-ms-overflow-style:none;scrollbar-width:none}
     .sc-drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);z-index:200;opacity:0;pointer-events:none;transition:opacity .3s ease}
     .sc-drawer-overlay.open{opacity:1;pointer-events:auto}
-    .sc-drawer{position:fixed;right:0;top:0;bottom:0;width:min(420px,95vw);z-index:201;transform:translateX(105%);transition:transform .4s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;box-shadow:-20px 0 60px rgba(0,0,0,.12);border-top-left-radius:2rem;border-bottom-left-radius:2rem}
+    .sc-drawer{position:fixed;right:0;top:0;bottom:0;width:min(420px,95vw);z-index:201;transform:translateX(110%);transition:transform .4s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;border-top-left-radius:2rem;border-bottom-left-radius:2rem}
     .sc-drawer.open{transform:translateX(0)}
     @keyframes bump{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
     .bump{animation:bump .25s ease-out}
@@ -109,15 +108,15 @@
     .sc-cat-tab.active{color:var(--foreground);border-color:var(--primary)}
     /* ── Card editorial ── */
     .sc-product-card{position:relative;background:var(--background);border-radius:14px;overflow:hidden;border:1px solid rgba(var(--foreground-rgb,0 0 0)/.06);transition:transform .2s,box-shadow .2s;display:flex;flex-direction:column}
-    .sc-product-card:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(0,0,0,.1)}
+    .sc-product-card:hover{transform:translateY(-2px)}
     .sc-card-accent{position:absolute;top:0;left:0;right:0;height:2.5px;background:var(--accent-cat,var(--primary));z-index:2;transform:scaleX(0);transform-origin:left;transition:transform .35s cubic-bezier(.4,0,.2,1)}
     .sc-product-card:hover .sc-card-accent{transform:scaleX(1)}
-    .sc-add-btn{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:none;cursor:pointer;flex-shrink:0;transition:transform .2s,box-shadow .2s;box-shadow:0 3px 12px rgba(0,0,0,.2)}
+    .sc-add-btn{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:none;cursor:pointer;flex-shrink:0;transition:transform .2s}
     .sc-add-btn:hover{transform:scale(1.1)}
     .sc-badge{display:inline-flex;align-items:center;gap:3px;padding:3px 7px;border-radius:5px;font-size:9px;font-weight:700;letter-spacing:.05em;line-height:1.4}
     @media(hover:none){.sc-card-accent{transform:scaleX(1)}}
     .sc-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);z-index:300;display:none;align-items:center;justify-content:center;padding:16px;}
-    .sc-modal{max-width:420px;width:100%;background:var(--background,#fff);border-radius:24px;box-shadow:0 30px 80px rgba(0,0,0,.25);border:1px solid rgba(0,0,0,.05);}
+    .sc-modal{max-width:420px;width:100%;background:var(--background,#fff);border-radius:24px;border:1px solid rgba(0,0,0,.05);}
     .sc-field{position:relative}
     .sc-field input{width:100%;padding:1.35rem 1rem .55rem;border-radius:1rem;border:1.5px solid rgba(0,0,0,.08);background:var(--surface,#f3f4f6);font-weight:700;font-size:.875rem;outline:none;transition:border-color .2s,background .2s,box-shadow .2s;color:inherit}
     .sc-field input:focus{border-color:var(--primary,#570DF8);background:var(--background,#fff);box-shadow:0 0 0 3px color-mix(in oklch,var(--primary,#570DF8) 15%,transparent)}
@@ -289,7 +288,7 @@
 
 {{-- Dropdown categorías (compartido, fixed) --}}
 <div id="sc-cat-dropdown"
-     class="fixed w-64 bg-background rounded-xl shadow-xl border border-foreground/5 z-[200] overflow-hidden"
+     class="fixed w-64 bg-background rounded-xl border border-foreground/5 z-[200] overflow-hidden"
      style="display:none;top:0;left:0">
     <div class="px-4 py-2.5 border-b border-foreground/5">
         <p class="text-xs font-black uppercase tracking-widest text-foreground/40">Categorías</p>
@@ -518,7 +517,7 @@
                     $catProdCount = $products->filter(fn($p) => ($p->category_name ?? '') === $cat['name'])->count();
                 @endphp
                 <button onclick="filterCategory('{{ $cat['name'] }}')"
-                        class="group relative overflow-hidden rounded-2xl aspect-square bg-surface border border-foreground/6 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 cursor-pointer text-left">
+                        class="group relative overflow-hidden rounded-2xl aspect-square bg-surface border border-foreground/6 transition-all duration-300 hover:-translate-y-1 cursor-pointer text-left">
                     @if($catImg)
                     <img src="{{ $catImg }}" alt="{{ $cat['name'] }}"
                          class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
@@ -793,7 +792,7 @@
         </div>
 
         @if($waClean)
-        <button onclick="sendWhatsApp()" class="flex items-center justify-center w-full h-14 rounded-[1.5rem] border-none font-black text-base gap-2.5 shadow-xl text-white transition-colors"
+        <button onclick="sendWhatsApp()" class="flex items-center justify-center w-full h-14 rounded-[1.5rem] border-none font-black text-base gap-2.5 text-white transition-colors"
                 style="background:#25D366;">
             <span class="iconify tabler--brand-whatsapp size-6"></span>
             Finalizar por WhatsApp

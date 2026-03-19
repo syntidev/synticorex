@@ -17,20 +17,6 @@
     {{-- Blobs de profundidad --}}
     <div class="absolute -top-20 -left-20 size-72 rounded-full opacity-[0.15] blur-3xl pointer-events-none"
          style="background:rgba(255,255,255,0.3)"></div>
-    <div class="absolute -bottom-20 -right-20 size-72 rounded-full opacity-[0.08] blur-3xl pointer-events-none"
-         style="background:rgba(255,255,255,0.2)"></div>
-
-    {{-- Forma decorativa — esquina superior derecha --}}
-    <div class="absolute -top-24 -right-24 pointer-events-none select-none" aria-hidden="true">
-        <svg width="360" height="360" viewBox="0 0 360 360" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="30" y="30" width="300" height="300" rx="48"
-                  transform="rotate(12 180 180)"
-                  fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
-            <rect x="80" y="80" width="200" height="200" rx="32"
-                  transform="rotate(22 180 180)"
-                  fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.09)" stroke-width="1"/>
-        </svg>
-    </div>
 
     {{-- Forma decorativa — esquina inferior izquierda --}}
     <div class="absolute -bottom-24 -left-24 pointer-events-none select-none" aria-hidden="true">

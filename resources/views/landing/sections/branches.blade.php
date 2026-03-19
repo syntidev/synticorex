@@ -28,10 +28,7 @@
 @if($activeBranches->isNotEmpty())
 <section id="branches" class="relative overflow-hidden py-12 sm:py-20 lg:py-28 bg-background">
 
-    <div class="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
-        <div class="absolute -top-20 -right-20 size-80 rounded-full opacity-[0.05] blur-3xl"
-             style="background:var(--color-primary)"></div>
-    </div>
+
 
     <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
 

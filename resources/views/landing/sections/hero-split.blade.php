@@ -4,11 +4,7 @@
 
         {{-- Fondo decorativo --}}
         <div class="pointer-events-none absolute inset-0" aria-hidden="true">
-            <div class="absolute -top-40 -right-40 size-[600px] rounded-full bg-primary opacity-[0.04] blur-3xl"></div>
             <div class="absolute -bottom-20 -left-20 size-96 rounded-full bg-primary opacity-[0.06] blur-2xl"></div>
-            {{-- Dot grid pattern esquina inferior derecha --}}
-            <div class="absolute bottom-0 right-0 w-[200px] h-[200px] opacity-[0.04]"
-                 style="background-image:radial-gradient(circle, var(--color-primary) 1px, transparent 1px);background-size:20px 20px"></div>
         </div>
 
         <div class="relative mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8">

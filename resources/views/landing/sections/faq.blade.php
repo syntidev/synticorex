@@ -17,7 +17,6 @@
 <section id="faq" class="py-8 sm:py-16 lg:py-24 bg-surface relative overflow-hidden">
 
     <div class="absolute -top-24 -left-24 w-96 h-96 bg-primary/5 blur-[100px] rounded-full pointer-events-none" aria-hidden="true"></div>
-    <div class="absolute -bottom-24 -right-24 w-80 h-80 bg-primary/5 blur-[100px] rounded-full pointer-events-none" aria-hidden="true"></div>
 
     <div class="mx-auto max-w-[85rem] px-4 sm:px-6 lg:px-8 relative z-10">
 
