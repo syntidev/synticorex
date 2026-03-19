@@ -21,7 +21,6 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use App\Filament\Pages\Dashboard;
-use EslamRedaDiv\FilamentCopilot\FilamentCopilotPlugin;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -93,20 +92,6 @@ class AdminPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
-            ])
-            ->plugin(
-                FilamentCopilotPlugin::make()
-                    ->provider('anthropic')
-                    ->model('claude-haiku-4-5-20251001')
-                    ->systemPrompt('Eres el asistente admin de SYNTIweb. Puedes gestionar tenants: listar, buscar, suspender, restaurar y cambiar planes. Responde siempre en español.')
-                    ->quickActions([
-                        'Tenants activos'   => 'Lista los 10 tenants con status activo más recientes.',
-                        'Tenants vencidos'  => 'Lista los tenants cuya suscripción ya venció.',
-                        'Tenants suspendidos' => 'Lista todos los tenants con status frozen.',
-                    ])
-                    ->managementEnabled()
-                    ->memoryEnabled()
-                    ->authorizeUsing(fn ($user) => $user->isAdmin())
-            );
+            ]);
     }
 }

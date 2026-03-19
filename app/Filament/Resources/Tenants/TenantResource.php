@@ -13,7 +13,6 @@ use App\Models\Tenant;
 use App\Models\User;
 use BackedEnum;
 use UnitEnum;
-use EslamRedaDiv\FilamentCopilot\Contracts\CopilotResource;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -24,7 +23,7 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 
-class TenantResource extends Resource implements CopilotResource
+class TenantResource extends Resource
 {
     protected static ?string $model = Tenant::class;
 
@@ -41,21 +40,6 @@ class TenantResource extends Resource implements CopilotResource
     protected static ?int $navigationSort = 1;
 
     protected static ?string $recordTitleAttribute = 'business_name';
-
-    public static function copilotResourceDescription(): ?string
-    {
-        return 'Gestiona los tenants (negocios clientes) de SYNTIweb. Cada tenant tiene un subdominio, plan, estado y fecha de vencimiento.';
-    }
-
-    public static function copilotTools(): array
-    {
-        return [
-            new \App\Filament\Resources\Tenants\CopilotTools\ListTenantsTool(),
-            new \App\Filament\Resources\Tenants\CopilotTools\SearchTenantsTool(),
-            new \App\Filament\Resources\Tenants\CopilotTools\SuspendTenantTool(),
-            new \App\Filament\Resources\Tenants\CopilotTools\RestoreTenantTool(),
-        ];
-    }
 
     public static function form(Schema $schema): Schema
     {
