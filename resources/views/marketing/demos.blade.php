@@ -73,12 +73,22 @@
         .dg-lg-start3  { grid-column-start: 3; }
     }
 
+    /* ── Normalize card sizes: same height for row 1/3, consistent for row 2 -- */
+    .demo-card {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+    .dg-c6 .demo-card { min-height: 340px; }
+    .dg-md-c4 .demo-card { min-height: 280px; }
+
     /* ── Demo card image styling: dark border + overlay ──────────── */
     .demo-card .aspect-\[12\/7\] {
         border: 4px solid #1a1a1a;
         border-radius: 0.75rem;
         position: relative;
         box-shadow: inset 0 0 0 4px #1a1a1a;
+        flex-shrink: 0;
     }
     .demo-card .aspect-\[12\/7\]::after {
         content: '';
