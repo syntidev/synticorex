@@ -139,28 +139,28 @@
 
 /* Fondo: gradiente oscuro con toque azul */
 .fi-simple-layout {
-    background: radial-gradient(ellipse at 60% 20%, rgba(74,128,228,0.12) 0%, transparent 60%),
-                radial-gradient(ellipse at 10% 80%, rgba(74,128,228,0.07) 0%, transparent 50%),
-                #0a0f1e !important;
+    background: radial-gradient(ellipse at 60% 20%, rgba(74,128,228,0.18) 0%, transparent 55%),
+                radial-gradient(ellipse at 10% 80%, rgba(74,128,228,0.10) 0%, transparent 50%),
+                #0d1526 !important;
     min-height: 100vh !important;
 }
 
-/* Card: borde iluminado + glow azul */
+/* Card: blanca, limpia, con borde azul sutil y sombra profunda */
 .fi-simple-main {
-    background: linear-gradient(145deg, #131c30 0%, #0f172a 100%) !important;
-    border: 1px solid rgba(74, 128, 228, 0.35) !important;
+    background: #ffffff !important;
+    border: 1px solid rgba(74, 128, 228, 0.25) !important;
     border-radius: 20px !important;
     box-shadow:
-        0 0 0 1px rgba(74, 128, 228, 0.15),
-        0 0 40px rgba(74, 128, 228, 0.12),
-        0 32px 64px rgba(0, 0, 0, 0.6) !important;
+        0 0 0 1px rgba(74, 128, 228, 0.10),
+        0 0 50px rgba(74, 128, 228, 0.15),
+        0 40px 80px rgba(0, 0, 0, 0.45) !important;
     padding: 2.5rem !important;
 }
 
 /* Título "Sign in" */
 .fi-simple-main h1,
 .fi-simple-main .fi-heading {
-    color: #f1f5f9 !important;
+    color: #0f172a !important;
     font-weight: 700 !important;
     font-size: 1.5rem !important;
     letter-spacing: -0.02em !important;
@@ -168,28 +168,29 @@
 
 /* Labels */
 .fi-simple-main label,
-.fi-fo-field-wrp-label {
-    color: #94a3b8 !important;
+.fi-fo-field-wrp-label,
+.fi-simple-main .fi-fo-field-wrp label {
+    color: #475569 !important;
     font-size: 0.8rem !important;
     font-weight: 500 !important;
-    letter-spacing: 0.02em !important;
 }
 
 /* Inputs */
 .fi-simple-main input[type="email"],
 .fi-simple-main input[type="password"],
 .fi-simple-main input[type="text"] {
-    background-color: rgba(255,255,255,0.04) !important;
-    border: 1px solid rgba(74,128,228,0.25) !important;
+    background-color: #f8fafc !important;
+    border: 1px solid #e2e8f0 !important;
     border-radius: 10px !important;
-    color: #f1f5f9 !important;
+    color: #0f172a !important;
     transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
 }
 .fi-simple-main input[type="email"]:focus,
 .fi-simple-main input[type="password"]:focus,
 .fi-simple-main input[type="text"]:focus {
     border-color: #4A80E4 !important;
-    box-shadow: 0 0 0 3px rgba(74,128,228,0.18) !important;
+    background-color: #fff !important;
+    box-shadow: 0 0 0 3px rgba(74,128,228,0.15) !important;
     outline: none !important;
 }
 
@@ -212,19 +213,22 @@
 
 /* Logo en login */
 .fi-simple-main .fi-logo {
-    background: linear-gradient(135deg, #4A80E4, #7BABF0) !important;
+    background: linear-gradient(135deg, #4A80E4, #3b6fd4) !important;
     -webkit-background-clip: text !important;
     -webkit-text-fill-color: transparent !important;
     font-size: 1.4rem !important;
     font-weight: 800 !important;
 }
 
-/* Checkbox "Remember me" */
-.fi-simple-main .fi-checkbox-input {
-    border-color: rgba(74,128,228,0.4) !important;
-    accent-color: #4A80E4 !important;
-}
-.fi-simple-main .fi-checkbox-label {
+/* "Remember me" */
+.fi-simple-main .fi-checkbox-label,
+.fi-simple-main .fi-fo-field-wrp span {
     color: #64748b !important;
     font-size: 0.85rem !important;
+}
+
+/* Mensajes de error */
+.fi-simple-main .fi-fo-field-wrp-error-message {
+    color: #ef4444 !important;
+    font-size: 0.78rem !important;
 }
