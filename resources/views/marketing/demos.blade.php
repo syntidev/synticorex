@@ -54,24 +54,7 @@
     .sw-arc-inner img   { display: block; width: 100%; height: 100%; object-fit: cover; }
 
     /* ── Masonry 12-col grid (Tailwind 4 doesn't scan arbitrary col counts) ─── */
-    .dg { display: grid; gap: 1.5rem; }
-    .dg > * { min-width: 0; }
-
-    @media (min-width: 640px) {
-        .dg            { grid-template-columns: repeat(12, minmax(0, 1fr)); }
-        .dg-c7         { grid-column: span 7 / span 7; align-self: end; }
-        .dg-c5         { grid-column: span 5 / span 5; align-self: end; }
-        .dg-c6         { grid-column: span 6 / span 6; }
-    }
-    @media (min-width: 768px) {
-        .dg-md-c8      { grid-column: span 8 / span 8; }
-        .dg-md-c4      { grid-column: span 4 / span 4; }
-    }
-    @media (min-width: 1024px) {
-        .dg-lg-c5      { grid-column: span 5 / span 5; }
-        .dg-lg-c3      { grid-column: span 3 / span 3; }
-        .dg-lg-start3  { grid-column-start: 3; }
-    }
+    /* DEPRECATED - using standard Tailwind grid sm:grid-cols-12 instead */
 
     /* ── Normalize card sizes: same height for row 1/3, consistent for row 2 -- */
     .demo-card {
@@ -81,42 +64,6 @@
     }
     .dg-c6 .demo-card { min-height: 340px; }
     .dg-md-c4 .demo-card { min-height: 280px; }
-
-    /* ── Demo card image styling: dark border + overlay ──────────── */
-    .demo-card .aspect-\[12\/7\] {
-        border: 4px solid #1a1a1a;
-        border-radius: 0.75rem;
-        position: relative;
-        box-shadow: inset 0 0 0 4px #1a1a1a;
-        flex-shrink: 0;
-    }
-    .demo-card .aspect-\[12\/7\]::after {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(0,0,0,0.3) 100%);
-        border-radius: 0.75rem;
-        pointer-events: none;
-    }
-
-    /* ── Demo card title box: dark background for strong contrast ──– */
-    .demo-card .bg-layer {
-        background: rgba(26, 26, 26, 0.92) !important;
-        color: #ffffff !important;
-        backdrop-filter: blur(8px);
-        border-top: 1px solid rgba(255,255,255,0.1);
-    }
-    .demo-card .text-layer-foreground {
-        color: #ffffff !important;
-    }
-    .demo-card .text-slate-500 {
-        color: rgba(255,255,255,0.65) !important;
-    }
-
-    /* ── Improved hover effect ────────────────────────────────────── */
-    .demo-card img  { transition: transform 0.5s ease-in-out; }
-    .demo-card:hover img,
-    .demo-card:focus img { transform: scale(1.05); }
 </style>
 @endpush
 
@@ -124,18 +71,9 @@
 
 @php
 /**
- * Badge background + text colors per product_color key.
- * Using inline styles avoids Tailwind purge issues with dynamic class names.
+ * Demo card styling is now handled via inline styles in the HTML.
+ * This keeps the template cleaner and easier to maintain.
  */
-$badgeStyles = [
-    'blue'    => 'background:rgba(59,130,246,0.15);color:#60a5fa;border:1px solid rgba(59,130,246,0.3)',
-    'pink'    => 'background:rgba(236,72,153,0.15);color:#f472b6;border:1px solid rgba(236,72,153,0.3)',
-    'cyan'    => 'background:rgba(34,211,238,0.15);color:#67e8f9;border:1px solid rgba(34,211,238,0.3)',
-    'indigo'  => 'background:rgba(99,102,241,0.15);color:#a5b4fc;border:1px solid rgba(99,102,241,0.3)',
-    'orange'  => 'background:rgba(249,115,22,0.15);color:#fb923c;border:1px solid rgba(249,115,22,0.3)',
-    'amber'   => 'background:rgba(217,119,6,0.15);color:#fcd34d;border:1px solid rgba(217,119,6,0.3)',
-    'emerald' => 'background:rgba(16,185,129,0.15);color:#6ee7b7;border:1px solid rgba(16,185,129,0.3)',
-];
 @endphp
 
 {{-- ══════════════════════════════════════════════════════════════ --}}
@@ -221,161 +159,126 @@ $badgeStyles = [
             </p>
         </div>
 
-        {{-- ── Masonry Grid — uses .dg / .dg-c* CSS classes from style block above --}}
-        <div class="dg">
+        {{-- Masonry Grid — Preline structure --}}
+        <div class="grid sm:grid-cols-12 gap-6">
 
-            {{-- Row 1: Donaz + Belle Store (2 equal halves at all sizes) --}}
+            {{-- Row 1: Donaz (larger) + Belle (smaller) --}}
             @php $d = $demos[0]; @endphp
-            <div class="dg-c6">
-                <a class="demo-card group relative block rounded-xl overflow-hidden focus:outline-none" href="{{ $d['url'] }}" target="_blank" rel="noopener">
-                    <div class="aspect-[12/7] rounded-xl overflow-hidden">
-                        <img class="w-full h-full object-cover" src="/demo/Donaz.png" alt="{{ $d['name'] }} — {{ $d['tagline'] }}" loading="lazy" width="600" height="350">
+            <div class="sm:self-end col-span-12 sm:col-span-7 md:col-span-8 lg:col-span-5 lg:col-start-3">
+                <a class="group relative block rounded-xl overflow-hidden focus:outline-none" href="{{ $d['url'] }}" target="_blank" rel="noopener">
+                    <div class="rounded-xl overflow-hidden">
+                        <img class="group-hover:scale-105 transition-transform duration-500 ease-in-out w-full object-cover" 
+                             src="/demo/Donaz.png" alt="{{ $d['name'] }}" loading="lazy" width="800" height="480">
                     </div>
-                    <div class="absolute bottom-0 start-0 end-0 p-2 sm:p-4">
-                        <div class="bg-layer text-layer-foreground rounded-lg p-4 flex items-center justify-between gap-3">
-                            <div class="min-w-0">
-                                <p class="text-sm font-semibold md:text-xl truncate">{{ $d['name'] }}</p>
-                                <p class="text-xs text-slate-500 mt-0.5 hidden sm:block">{{ $d['tagline'] }}</p>
-                            </div>
-                            <span class="shrink-0 text-xs font-semibold px-2.5 py-1 rounded-full whitespace-nowrap"
-                                  style="{{ $badgeStyles[$d['product_color']] ?? 'background:#f1f5f9;color:#475569' }}">
-                                {{ $d['product'] }}
-                            </span>
+                    <div class="absolute bottom-0 start-0 end-0 p-3 sm:p-4">
+                        <div class="text-sm font-semibold rounded-lg p-3 md:text-lg" 
+                             style="background:rgba(26,26,26,0.92);color:#ffffff;backdrop-filter:blur(8px);border-top:1px solid rgba(255,255,255,0.1)">
+                            {{ $d['name'] }}
                         </div>
                     </div>
                 </a>
             </div>
 
             @php $d = $demos[1]; @endphp
-            <div class="dg-c6">
-                <a class="demo-card group relative block rounded-xl overflow-hidden focus:outline-none" href="{{ $d['url'] }}" target="_blank" rel="noopener">
-                    <div class="aspect-[12/7] rounded-xl overflow-hidden">
-                        <img class="w-full h-full object-cover" src="/demo/Bellestore.png" alt="{{ $d['name'] }} — {{ $d['tagline'] }}" loading="lazy" width="600" height="350">
+            <div class="sm:self-end col-span-12 sm:col-span-5 md:col-span-4 lg:col-span-3">
+                <a class="group relative block rounded-xl overflow-hidden focus:outline-none" href="{{ $d['url'] }}" target="_blank" rel="noopener">
+                    <div class="rounded-xl overflow-hidden">
+                        <img class="group-hover:scale-105 transition-transform duration-500 ease-in-out w-full object-cover"
+                             src="/demo/Bellestore.png" alt="{{ $d['name'] }}" loading="lazy" width="600" height="360">
                     </div>
-                    <div class="absolute bottom-0 start-0 end-0 p-2 sm:p-4">
-                        <div class="bg-layer text-layer-foreground rounded-lg p-4 flex items-center justify-between gap-3">
-                            <div class="min-w-0">
-                                <p class="text-sm font-semibold md:text-xl truncate">{{ $d['name'] }}</p>
-                                <p class="text-xs text-slate-500 mt-0.5 hidden sm:block">{{ $d['tagline'] }}</p>
-                            </div>
-                            <span class="shrink-0 text-xs font-semibold px-2.5 py-1 rounded-full whitespace-nowrap"
-                                  style="{{ $badgeStyles[$d['product_color']] ?? 'background:#f1f5f9;color:#475569' }}">
-                                {{ $d['product'] }}
-                            </span>
+                    <div class="absolute bottom-0 start-0 end-0 p-3 sm:p-4">
+                        <div class="text-sm font-semibold rounded-lg p-3 md:text-lg"
+                             style="background:rgba(26,26,26,0.92);color:#ffffff;backdrop-filter:blur(8px);border-top:1px solid rgba(255,255,255,0.1)">
+                            {{ $d['name'] }}
                         </div>
                     </div>
                 </a>
             </div>
 
-            {{-- Row 2: MediCenter + Gestoría 360 + FitZone Pro (3 equal cols, 4/12 each) --}}
+            {{-- Row 2: MediCenter + Gestoria + FitZone (3 equal) --}}
             @php $d = $demos[2]; @endphp
-            <div class="dg-c6 dg-md-c4">
-                <a class="demo-card group relative block rounded-xl overflow-hidden focus:outline-none" href="{{ $d['url'] }}" target="_blank" rel="noopener">
-                    <div class="aspect-[12/7] rounded-xl overflow-hidden">
-                        <img class="w-full h-full object-cover" src="/demo/Medicenter.png" alt="{{ $d['name'] }} — {{ $d['tagline'] }}" loading="lazy" width="600" height="350">
+            <div class="col-span-12 md:col-span-4">
+                <a class="group relative block rounded-xl overflow-hidden focus:outline-none" href="{{ $d['url'] }}" target="_blank" rel="noopener">
+                    <div class="rounded-xl overflow-hidden">
+                        <img class="group-hover:scale-105 transition-transform duration-500 ease-in-out w-full object-cover"
+                             src="/demo/Medicenter.png" alt="{{ $d['name'] }}" loading="lazy" width="600" height="360">
                     </div>
-                    <div class="absolute bottom-0 start-0 end-0 p-2 sm:p-4">
-                        <div class="bg-layer text-layer-foreground rounded-lg p-4 flex items-center justify-between gap-3">
-                            <div class="min-w-0">
-                                <p class="text-sm font-semibold md:text-xl truncate">{{ $d['name'] }}</p>
-                                <p class="text-xs text-slate-500 mt-0.5 hidden sm:block">{{ $d['tagline'] }}</p>
-                            </div>
-                            <span class="shrink-0 text-xs font-semibold px-2.5 py-1 rounded-full whitespace-nowrap"
-                                  style="{{ $badgeStyles[$d['product_color']] ?? 'background:#f1f5f9;color:#475569' }}">
-                                {{ $d['product'] }}
-                            </span>
+                    <div class="absolute bottom-0 start-0 end-0 p-3 sm:p-4">
+                        <div class="text-sm font-semibold rounded-lg p-3 md:text-lg"
+                             style="background:rgba(26,26,26,0.92);color:#ffffff;backdrop-filter:blur(8px);border-top:1px solid rgba(255,255,255,0.1)">
+                            {{ $d['name'] }}
                         </div>
                     </div>
                 </a>
             </div>
 
             @php $d = $demos[3]; @endphp
-            <div class="dg-c6 dg-md-c4">
-                <a class="demo-card group relative block rounded-xl overflow-hidden focus:outline-none" href="{{ $d['url'] }}" target="_blank" rel="noopener">
-                    <div class="aspect-[12/7] rounded-xl overflow-hidden">
-                        <img class="w-full h-full object-cover" src="/demo/Gestoria360.png" alt="{{ $d['name'] }} — {{ $d['tagline'] }}" loading="lazy" width="600" height="350">
+            <div class="col-span-12 sm:col-span-6 md:col-span-4">
+                <a class="group relative block rounded-xl overflow-hidden focus:outline-none" href="{{ $d['url'] }}" target="_blank" rel="noopener">
+                    <div class="rounded-xl overflow-hidden">
+                        <img class="group-hover:scale-105 transition-transform duration-500 ease-in-out w-full object-cover"
+                             src="/demo/Gestoria360.png" alt="{{ $d['name'] }}" loading="lazy" width="600" height="360">
                     </div>
-                    <div class="absolute bottom-0 start-0 end-0 p-2 sm:p-4">
-                        <div class="bg-layer text-layer-foreground rounded-lg p-4 flex items-center justify-between gap-3">
-                            <div class="min-w-0">
-                                <p class="text-sm font-semibold md:text-xl truncate">{{ $d['name'] }}</p>
-                                <p class="text-xs text-slate-500 mt-0.5 hidden sm:block">{{ $d['tagline'] }}</p>
-                            </div>
-                            <span class="shrink-0 text-xs font-semibold px-2.5 py-1 rounded-full whitespace-nowrap"
-                                  style="{{ $badgeStyles[$d['product_color']] ?? 'background:#f1f5f9;color:#475569' }}">
-                                {{ $d['product'] }}
-                            </span>
+                    <div class="absolute bottom-0 start-0 end-0 p-3 sm:p-4">
+                        <div class="text-sm font-semibold rounded-lg p-3 md:text-lg"
+                             style="background:rgba(26,26,26,0.92);color:#ffffff;backdrop-filter:blur(8px);border-top:1px solid rgba(255,255,255,0.1)">
+                            {{ $d['name'] }}
                         </div>
                     </div>
                 </a>
             </div>
 
             @php $d = $demos[4]; @endphp
-            <div class="dg-c6 dg-md-c4">
-                <a class="demo-card group relative block rounded-xl overflow-hidden focus:outline-none" href="{{ $d['url'] }}" target="_blank" rel="noopener">
-                    <div class="aspect-[12/7] rounded-xl overflow-hidden">
-                        <img class="w-full h-full object-cover" src="/demo/Fitzonepro.png" alt="{{ $d['name'] }} — {{ $d['tagline'] }}" loading="lazy" width="600" height="350">
+            <div class="col-span-12 sm:col-span-6 md:col-span-4">
+                <a class="group relative block rounded-xl overflow-hidden focus:outline-none" href="{{ $d['url'] }}" target="_blank" rel="noopener">
+                    <div class="rounded-xl overflow-hidden">
+                        <img class="group-hover:scale-105 transition-transform duration-500 ease-in-out w-full object-cover"
+                             src="/demo/Fitzonepro.png" alt="{{ $d['name'] }}" loading="lazy" width="600" height="360">
                     </div>
-                    <div class="absolute bottom-0 start-0 end-0 p-2 sm:p-4">
-                        <div class="bg-layer text-layer-foreground rounded-lg p-4 flex items-center justify-between gap-3">
-                            <div class="min-w-0">
-                                <p class="text-sm font-semibold md:text-xl truncate">{{ $d['name'] }}</p>
-                                <p class="text-xs text-slate-500 mt-0.5 hidden sm:block">{{ $d['tagline'] }}</p>
-                            </div>
-                            <span class="shrink-0 text-xs font-semibold px-2.5 py-1 rounded-full whitespace-nowrap"
-                                  style="{{ $badgeStyles[$d['product_color']] ?? 'background:#f1f5f9;color:#475569' }}">
-                                {{ $d['product'] }}
-                            </span>
+                    <div class="absolute bottom-0 start-0 end-0 p-3 sm:p-4">
+                        <div class="text-sm font-semibold rounded-lg p-3 md:text-lg"
+                             style="background:rgba(26,26,26,0.92);color:#ffffff;backdrop-filter:blur(8px);border-top:1px solid rgba(255,255,255,0.1)">
+                            {{ $d['name'] }}
                         </div>
                     </div>
                 </a>
             </div>
 
-            {{-- Row 3: Urban Menu + Nova Store (2 equal halves) --}}
+            {{-- Row 3: Urban Menu + Nova Store (2 equal) --}}
             @php $d = $demos[5]; @endphp
-            <div class="dg-c6">
-                <a class="demo-card group relative block rounded-xl overflow-hidden focus:outline-none" href="{{ $d['url'] }}" target="_blank" rel="noopener">
-                    <div class="aspect-[12/7] rounded-xl overflow-hidden">
-                        <img class="w-full h-full object-cover" src="/demo/Urbanmenu.png" alt="{{ $d['name'] }} — {{ $d['tagline'] }}" loading="lazy" width="600" height="350">
+            <div class="col-span-12 sm:col-span-6">
+                <a class="group relative block rounded-xl overflow-hidden focus:outline-none" href="{{ $d['url'] }}" target="_blank" rel="noopener">
+                    <div class="rounded-xl overflow-hidden">
+                        <img class="group-hover:scale-105 transition-transform duration-500 ease-in-out w-full object-cover"
+                             src="/demo/Urbanmenu.png" alt="{{ $d['name'] }}" loading="lazy" width="600" height="360">
                     </div>
-                    <div class="absolute bottom-0 start-0 end-0 p-2 sm:p-4">
-                        <div class="bg-layer text-layer-foreground rounded-lg p-4 flex items-center justify-between gap-3">
-                            <div class="min-w-0">
-                                <p class="text-sm font-semibold md:text-xl truncate">{{ $d['name'] }}</p>
-                                <p class="text-xs text-slate-500 mt-0.5 hidden sm:block">{{ $d['tagline'] }}</p>
-                            </div>
-                            <span class="shrink-0 text-xs font-semibold px-2.5 py-1 rounded-full whitespace-nowrap"
-                                  style="{{ $badgeStyles[$d['product_color']] ?? 'background:#f1f5f9;color:#475569' }}">
-                                {{ $d['product'] }}
-                            </span>
+                    <div class="absolute bottom-0 start-0 end-0 p-3 sm:p-4">
+                        <div class="text-sm font-semibold rounded-lg p-3 md:text-lg"
+                             style="background:rgba(26,26,26,0.92);color:#ffffff;backdrop-filter:blur(8px);border-top:1px solid rgba(255,255,255,0.1)">
+                            {{ $d['name'] }}
                         </div>
                     </div>
                 </a>
             </div>
 
             @php $d = $demos[6]; @endphp
-            <div class="dg-c6">
-                <a class="demo-card group relative block rounded-xl overflow-hidden focus:outline-none" href="{{ $d['url'] }}" target="_blank" rel="noopener">
-                    <div class="aspect-[12/7] rounded-xl overflow-hidden">
-                        <img class="w-full h-full object-cover" src="/demo/Novastore.png" alt="{{ $d['name'] }} — {{ $d['tagline'] }}" loading="lazy" width="600" height="350">
+            <div class="col-span-12 sm:col-span-6">
+                <a class="group relative block rounded-xl overflow-hidden focus:outline-none" href="{{ $d['url'] }}" target="_blank" rel="noopener">
+                    <div class="rounded-xl overflow-hidden">
+                        <img class="group-hover:scale-105 transition-transform duration-500 ease-in-out w-full object-cover"
+                             src="/demo/Novastore.png" alt="{{ $d['name'] }}" loading="lazy" width="600" height="360">
                     </div>
-                    <div class="absolute bottom-0 start-0 end-0 p-2 sm:p-4">
-                        <div class="bg-layer text-layer-foreground rounded-lg p-4 flex items-center justify-between gap-3">
-                            <div class="min-w-0">
-                                <p class="text-sm font-semibold md:text-xl truncate">{{ $d['name'] }}</p>
-                                <p class="text-xs text-slate-500 mt-0.5 hidden sm:block">{{ $d['tagline'] }}</p>
-                            </div>
-                            <span class="shrink-0 text-xs font-semibold px-2.5 py-1 rounded-full whitespace-nowrap"
-                                  style="{{ $badgeStyles[$d['product_color']] ?? 'background:#f1f5f9;color:#475569' }}">
-                                {{ $d['product'] }}
-                            </span>
+                    <div class="absolute bottom-0 start-0 end-0 p-3 sm:p-4">
+                        <div class="text-sm font-semibold rounded-lg p-3 md:text-lg"
+                             style="background:rgba(26,26,26,0.92);color:#ffffff;backdrop-filter:blur(8px);border-top:1px solid rgba(255,255,255,0.1)">
+                            {{ $d['name'] }}
                         </div>
                     </div>
                 </a>
             </div>
 
         </div>
-        {{-- END Masonry Grid --}}
+        {{-- END Grid --}}
 
     </div>
 </section>
