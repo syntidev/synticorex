@@ -2,6 +2,8 @@
 set -e
 set -x
 
+rm -f /etc/nginx/sites-enabled/default
+
 cat > /etc/nginx/conf.d/default.conf << EOF
 server {
     listen ${PORT:-8080};
