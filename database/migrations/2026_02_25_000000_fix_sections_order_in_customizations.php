@@ -15,7 +15,7 @@ return new class extends Migration
     {
         // Obtener todos los tenant_customization que tienen sections_order
         $customizations = DB::table('tenant_customization')
-            ->whereRaw("JSON_EXTRACT(visual_effects, '$.sections_order') IS NOT NULL")
+            ->whereRaw("visual_effects::jsonb ? 'sections_order'")
             ->get();
 
         foreach ($customizations as $customization) {
