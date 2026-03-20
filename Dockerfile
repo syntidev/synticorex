@@ -1,12 +1,14 @@
 FROM php:8.3-apache
 
+RUN apt-get update && apt-get install -y libicu-dev && rm -rf /var/lib/apt/lists/*
+
 RUN docker-php-ext-install intl gd zip
 
 WORKDIR /app
 
 COPY . .
 
-RUN apt-get update && apt-get install -y composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 RUN composer install --optimize-autoloader --no-scripts --no-interaction
 
 RUN a2enmod rewrite
