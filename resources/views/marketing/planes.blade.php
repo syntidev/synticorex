@@ -166,7 +166,7 @@
                 <p class="mt-2 text-slate-500 text-sm">Sin imprimir cartas. Sin apps complicadas.</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6 items-end max-w-5xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6 items-stretch max-w-5xl mx-auto">
                 @foreach($foodPlans as $plan)
                 @php
                     $isPopular = str_contains($plan->slug, 'vision');
@@ -199,7 +199,7 @@
                         <span class="text-5xl font-extrabold check-food">${{ intval($plan->price_usd) }}</span>
                         <span class="text-slate-400 text-sm">/{{ str_contains($plan->slug,'basico') ? 'mes' : (str_contains($plan->slug,'semestral') ? '6 meses' : 'año') }}</span>
                     </div>
-                    <p class="text-sm text-slate-500 mb-6">{{ $tagline }}</p>
+                    <p class="text-sm text-slate-500 mb-6" style="min-height:2.75rem">{{ $tagline }}</p>
 
                     <ul class="space-y-2.5 flex-1 mb-8">
                         @foreach($features as $feat)
