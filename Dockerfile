@@ -1,25 +1,12 @@
-FROM php:8.3-fpm-bullseye
-
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    libicu-dev zlib1g-dev libjpeg-dev libfreetype6-dev libzip-dev libpq-dev \
-    && rm -rf /var/lib/apt/lists/*
-
-RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install intl gd zip pdo pdo_pgsql
-
+# Usamos Node 22 para que Tailwind 4 vuele
+FROM node:22-alpine AS build
 WORKDIR /app
-
-COPY composer.json composer.lock ./
-
-RUN curl -fsSL https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
-    && composer install --no-dev --optimize-autoloader --no-scripts --no-interaction \
-    && composer clear-cache
-
 COPY . .
+RUN npm install
+RUN npm run build
 
-RUN chown -R www-data:www-data /app/storage /app/bootstrap/cache
-
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-
-CMD ["/entrypoint.sh"]
+# Usamos la imagen oficial de PHP para Laravel
+FROM serversideup/php:8.3-fpm-apache
+WORKDIR /var/www/html
+COPY --from=build /app /var/www/html
+RUN composer install --no-dev --optimize-autoloader
