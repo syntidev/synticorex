@@ -1,4 +1,0 @@
-{
-  "builder": "nixpacks",
-  "buildCommand": "composer install --optimize-autoloader --no-scripts --no-interaction --no-dev"
-}
