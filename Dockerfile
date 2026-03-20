@@ -18,8 +18,3 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 RUN composer install --optimize-autoloader --no-scripts --no-interaction
 
 RUN a2enmod rewrite
-```
-```
-git add Dockerfile
-git commit -m "fix: add zlib and freetype for gd extension"
-git push
