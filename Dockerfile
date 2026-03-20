@@ -13,6 +13,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install intl gd zip pdo pdo_pgsql
 
+RUN a2dismod mpm_event && a2enmod mpm_prefork rewrite
+
 WORKDIR /app
 
 COPY composer.json composer.lock ./
@@ -22,8 +24,6 @@ RUN curl -fsSL https://getcomposer.org/installer | php -- --install-dir=/usr/loc
     && composer clear-cache
 
 COPY . .
-
-RUN a2enmod rewrite
 
 RUN echo '<VirtualHost *:80>\n\
     DocumentRoot /app/public\n\
