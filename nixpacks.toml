@@ -1,0 +1,5 @@
+[build]
+php-version = "8.3"
+
+[phases.setup]
+nixpkgs = ["php83-intl", "php83-gd", "php83-zip"]
