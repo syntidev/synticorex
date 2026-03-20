@@ -20,7 +20,7 @@ RUN curl -fsSL https://getcomposer.org/installer | php -- --install-dir=/usr/loc
 COPY . .
 
 RUN chown -R www-data:www-data /app/storage /app/bootstrap/cache
-
+RUN echo "listen = 127.0.0.1:9000" >> /usr/local/etc/php-fpm.d/www.conf
 EXPOSE 80
 
 CMD ["sh", "-c", "php-fpm -D && sleep 1 && nginx -g 'daemon off;'"]
