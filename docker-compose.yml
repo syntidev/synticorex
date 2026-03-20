@@ -1,0 +1,7 @@
+services:
+  synticorex:
+    build:
+      context: .
+      args:
+        - NODE_VERSION=20
+    image: 'node:20-alpine'
