@@ -1,10 +1,9 @@
 #!/bin/sh
 set -e
-set -x
 
 rm -f /etc/nginx/sites-enabled/default
 
-cat > /etc/nginx/conf.d/default.conf << EOF
+cat > /etc/nginx/conf.d/app.conf << NGINXCONF
 server {
     listen ${PORT:-8080};
     root /app/public;
@@ -18,9 +17,9 @@ server {
         include fastcgi_params;
     }
 }
-EOF
+NGINXCONF
 
 php artisan migrate --force
 php-fpm -D
 sleep 1
-nginx -g 'daemon off;'
+exec nginx -g 'daemon off;'
