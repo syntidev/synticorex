@@ -8,6 +8,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libzip-dev \
     && rm -rf /var/lib/apt/lists/*
 
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg && \
+    docker-php-ext-install intl gd zip
+
 WORKDIR /app
 COPY composer.json composer.lock ./
 
@@ -17,6 +20,4 @@ RUN curl -fsSL https://getcomposer.org/installer | php -- --install-dir=/usr/loc
 
 COPY . .
 
-RUN docker-php-ext-configure gd --with-freetype --with-jpeg && \
-    docker-php-ext-install intl gd zip && \
-    a2enmod rewrite
+RUN a2enmod rewrite
