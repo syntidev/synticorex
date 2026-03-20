@@ -1,5 +1,5 @@
 [build]
-php-version = "8.3"
+nixpkgs = ["php83", "php83-extensions.intl", "php83-extensions.gd", "php83-extensions.zip"]
 
 [phases.setup]
-nixpkgs = ["php83-intl", "php83-gd", "php83-zip"]
+cmds = ["composer install --optimize-autoloader --no-scripts --no-interaction"]
