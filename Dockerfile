@@ -24,3 +24,13 @@ RUN curl -fsSL https://getcomposer.org/installer | php -- --install-dir=/usr/loc
 COPY . .
 
 RUN a2enmod rewrite
+
+RUN echo '<VirtualHost *:80>\n\
+    DocumentRoot /app/public\n\
+    <Directory /app/public>\n\
+        AllowOverride All\n\
+        Require all granted\n\
+    </Directory>\n\
+</VirtualHost>' > /etc/apache2/sites-enabled/000-default.conf
+
+EXPOSE 80
