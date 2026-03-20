@@ -1,6 +1,6 @@
 FROM php:8.3-apache
 
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     libicu-dev \
     zlib1g-dev \
     libjpeg-dev \
@@ -8,14 +8,15 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     && rm -rf /var/lib/apt/lists/*
 
-RUN docker-php-ext-configure gd --with-freetype --with-jpeg
-RUN docker-php-ext-install intl gd zip
-
 WORKDIR /app
+COPY composer.json composer.lock ./
+
+RUN curl -fsSL https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
+    composer install --no-dev --optimize-autoloader --no-scripts --no-interaction && \
+    composer clear-cache
 
 COPY . .
 
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-RUN composer install --optimize-autoloader --no-scripts --no-interaction
-
-RUN a2enmod rewrite
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg && \
+    docker-php-ext-install intl gd zip && \
+    a2enmod rewrite
