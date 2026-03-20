@@ -5,6 +5,7 @@
 @source "../js/**/*.js";
 @source "preline/dist/*.js";
 
+/* Temas base */
 @import "preline/css/themes/theme.css";
 @import "preline/css/themes/harvest.css";
 @import "preline/css/themes/retro.css";
@@ -15,43 +16,29 @@
 @import "preline/css/themes/cashmere.css";
 @import "preline/css/themes/olive.css";
 
-/* ── Comida ─────────────────────────── */
+/* Temas específicos */
 @import "preline/css/themes/sabor-tradicional.css";
 @import "preline/css/themes/fuego-urbano.css";
 @import "preline/css/themes/parrilla-moderna.css";
 @import "preline/css/themes/casa-latina.css";
-
-/* ── Dulces ─────────────────────────── */
 @import "preline/css/themes/rosa-vainilla.css";
 @import "preline/css/themes/pistacho-suave.css";
 @import "preline/css/themes/cielo-dulce.css";
 @import "preline/css/themes/chocolate-caramelo.css";
-
-/* ── Salud ──────────────────────────── */
 @import "preline/css/themes/azul-confianza.css";
 @import "preline/css/themes/verde-calma.css";
-
-/* ── Autoridad ──────────────────────── */
 @import "preline/css/themes/azul-profesional.css";
 @import "preline/css/themes/ejecutivo-oscuro.css";
 @import "preline/css/themes/prestigio-clasico.css";
-
-/* ── Oficios ────────────────────────── */
 @import "preline/css/themes/industrial-pro.css";
 @import "preline/css/themes/negro-impacto.css";
 @import "preline/css/themes/metal-urbano.css";
-
-/* ── Belleza ────────────────────────── */
 @import "preline/css/themes/nude-elegante.css";
 @import "preline/css/themes/rosa-studio.css";
 @import "preline/css/themes/barber-clasico.css";
-
-/* ── Fitness ────────────────────────── */
 @import "preline/css/themes/fuerza-roja.css";
 @import "preline/css/themes/verde-potencia.css";
 @import "preline/css/themes/azul-electrico.css";
-
-/* ── Educacion ──────────────────────── */
 @import "preline/css/themes/azul-academico.css";
 @import "preline/css/themes/verde-progreso.css";
 @import "preline/css/themes/claro-simple.css";
@@ -83,11 +70,4 @@
     --success: #22c55e;
     --shadow-2xs: 0 1px 2px 0 rgba(0,0,0,0.05);
   }
-
-  button:not(:disabled),
-  [role="button"]:not(:disabled) {
-    cursor: pointer;
-  }
 }
-
-@custom-variant hover (&:hover);
