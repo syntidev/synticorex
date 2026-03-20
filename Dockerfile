@@ -19,6 +19,9 @@ RUN curl -fsSL https://getcomposer.org/installer | php -- --install-dir=/usr/loc
 
 COPY . .
 
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    nginx libicu-dev zlib1g-dev libjpeg-dev libfreetype6-dev libzip-dev libpq-dev gettext-base \
+    && rm -rf /var/lib/apt/lists/*
 RUN chown -R www-data:www-data /app/storage /app/bootstrap/cache
 RUN echo "listen = 127.0.0.1:9000" >> /usr/local/etc/php-fpm.d/www.conf
 EXPOSE 80
