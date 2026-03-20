@@ -1,50 +1,60 @@
 @import "tailwindcss";
-@import "../../node_modules/preline/variants.css";
+@import "preline/variants.css";
+
 @source "../views/**/*.blade.php";
 @source "../js/**/*.js";
-@source "../../node_modules/preline/dist/*.js";
-@import "../../node_modules/preline/css/themes/theme.css";
-@import "../../node_modules/preline/css/themes/harvest.css";
-@import "../../node_modules/preline/css/themes/retro.css";
-@import "../../node_modules/preline/css/themes/ocean.css";
-@import "../../node_modules/preline/css/themes/bubblegum.css";
-@import "../../node_modules/preline/css/themes/autumn.css";
-@import "../../node_modules/preline/css/themes/moon.css";
-@import "../../node_modules/preline/css/themes/cashmere.css";
-@import "../../node_modules/preline/css/themes/olive.css";
+@source "preline/dist/*.js";
+
+@import "preline/css/themes/theme.css";
+@import "preline/css/themes/harvest.css";
+@import "preline/css/themes/retro.css";
+@import "preline/css/themes/ocean.css";
+@import "preline/css/themes/bubblegum.css";
+@import "preline/css/themes/autumn.css";
+@import "preline/css/themes/moon.css";
+@import "preline/css/themes/cashmere.css";
+@import "preline/css/themes/olive.css";
+
 /* ── Comida ─────────────────────────── */
-@import "../../node_modules/preline/css/themes/sabor-tradicional.css";
-@import "../../node_modules/preline/css/themes/fuego-urbano.css";
-@import "../../node_modules/preline/css/themes/parrilla-moderna.css";
-@import "../../node_modules/preline/css/themes/casa-latina.css";
+@import "preline/css/themes/sabor-tradicional.css";
+@import "preline/css/themes/fuego-urbano.css";
+@import "preline/css/themes/parrilla-moderna.css";
+@import "preline/css/themes/casa-latina.css";
+
 /* ── Dulces ─────────────────────────── */
-@import "../../node_modules/preline/css/themes/rosa-vainilla.css";
-@import "../../node_modules/preline/css/themes/pistacho-suave.css";
-@import "../../node_modules/preline/css/themes/cielo-dulce.css";
-@import "../../node_modules/preline/css/themes/chocolate-caramelo.css";
+@import "preline/css/themes/rosa-vainilla.css";
+@import "preline/css/themes/pistacho-suave.css";
+@import "preline/css/themes/cielo-dulce.css";
+@import "preline/css/themes/chocolate-caramelo.css";
+
 /* ── Salud ──────────────────────────── */
-@import "../../node_modules/preline/css/themes/azul-confianza.css";
-@import "../../node_modules/preline/css/themes/verde-calma.css";
+@import "preline/css/themes/azul-confianza.css";
+@import "preline/css/themes/verde-calma.css";
+
 /* ── Autoridad ──────────────────────── */
-@import "../../node_modules/preline/css/themes/azul-profesional.css";
-@import "../../node_modules/preline/css/themes/ejecutivo-oscuro.css";
-@import "../../node_modules/preline/css/themes/prestigio-clasico.css";
+@import "preline/css/themes/azul-profesional.css";
+@import "preline/css/themes/ejecutivo-oscuro.css";
+@import "preline/css/themes/prestigio-clasico.css";
+
 /* ── Oficios ────────────────────────── */
-@import "../../node_modules/preline/css/themes/industrial-pro.css";
-@import "../../node_modules/preline/css/themes/negro-impacto.css";
-@import "../../node_modules/preline/css/themes/metal-urbano.css";
+@import "preline/css/themes/industrial-pro.css";
+@import "preline/css/themes/negro-impacto.css";
+@import "preline/css/themes/metal-urbano.css";
+
 /* ── Belleza ────────────────────────── */
-@import "../../node_modules/preline/css/themes/nude-elegante.css";
-@import "../../node_modules/preline/css/themes/rosa-studio.css";
-@import "../../node_modules/preline/css/themes/barber-clasico.css";
+@import "preline/css/themes/nude-elegante.css";
+@import "preline/css/themes/rosa-studio.css";
+@import "preline/css/themes/barber-clasico.css";
+
 /* ── Fitness ────────────────────────── */
-@import "../../node_modules/preline/css/themes/fuerza-roja.css";
-@import "../../node_modules/preline/css/themes/verde-potencia.css";
-@import "../../node_modules/preline/css/themes/azul-electrico.css";
+@import "preline/css/themes/fuerza-roja.css";
+@import "preline/css/themes/verde-potencia.css";
+@import "preline/css/themes/azul-electrico.css";
+
 /* ── Educacion ──────────────────────── */
-@import "../../node_modules/preline/css/themes/azul-academico.css";
-@import "../../node_modules/preline/css/themes/verde-progreso.css";
-@import "../../node_modules/preline/css/themes/claro-simple.css";
+@import "preline/css/themes/azul-academico.css";
+@import "preline/css/themes/verde-progreso.css";
+@import "preline/css/themes/claro-simple.css";
 
 @import "./syntiweb-brand.css";
 
