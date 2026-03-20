@@ -12,7 +12,7 @@ return new class extends Migration
         }
 
         $customizations = DB::table('tenant_customization')
-            ->whereRaw("visual_effects::jsonb ? 'sections_order'")
+            ->whereRaw("visual_effects::jsonb ?? 'sections_order'")
             ->get();
 
         foreach ($customizations as $customization) {
