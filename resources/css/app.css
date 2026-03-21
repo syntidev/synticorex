@@ -1,3 +1,83 @@
 @import "tailwindcss";
-@import "preline/variants.css";
+@import "../../node_modules/preline/variants.css";
+@source "../views/**/*.blade.php";
+@source "../js/**/*.js";
+@source "../../node_modules/preline/dist/*.js";
+@import "../../node_modules/preline/css/themes/theme.css";
+@import "../../node_modules/preline/css/themes/harvest.css";
+@import "../../node_modules/preline/css/themes/retro.css";
+@import "../../node_modules/preline/css/themes/ocean.css";
+@import "../../node_modules/preline/css/themes/bubblegum.css";
+@import "../../node_modules/preline/css/themes/autumn.css";
+@import "../../node_modules/preline/css/themes/moon.css";
+@import "../../node_modules/preline/css/themes/cashmere.css";
+@import "../../node_modules/preline/css/themes/olive.css";
+/* ── Comida ─────────────────────────── */
+@import "../../node_modules/preline/css/themes/sabor-tradicional.css";
+@import "../../node_modules/preline/css/themes/fuego-urbano.css";
+@import "../../node_modules/preline/css/themes/parrilla-moderna.css";
+@import "../../node_modules/preline/css/themes/casa-latina.css";
+/* ── Dulces ─────────────────────────── */
+@import "../../node_modules/preline/css/themes/rosa-vainilla.css";
+@import "../../node_modules/preline/css/themes/pistacho-suave.css";
+@import "../../node_modules/preline/css/themes/cielo-dulce.css";
+@import "../../node_modules/preline/css/themes/chocolate-caramelo.css";
+/* ── Salud ──────────────────────────── */
+@import "../../node_modules/preline/css/themes/azul-confianza.css";
+@import "../../node_modules/preline/css/themes/verde-calma.css";
+/* ── Autoridad ──────────────────────── */
+@import "../../node_modules/preline/css/themes/azul-profesional.css";
+@import "../../node_modules/preline/css/themes/ejecutivo-oscuro.css";
+@import "../../node_modules/preline/css/themes/prestigio-clasico.css";
+/* ── Oficios ────────────────────────── */
+@import "../../node_modules/preline/css/themes/industrial-pro.css";
+@import "../../node_modules/preline/css/themes/negro-impacto.css";
+@import "../../node_modules/preline/css/themes/metal-urbano.css";
+/* ── Belleza ────────────────────────── */
+@import "../../node_modules/preline/css/themes/nude-elegante.css";
+@import "../../node_modules/preline/css/themes/rosa-studio.css";
+@import "../../node_modules/preline/css/themes/barber-clasico.css";
+/* ── Fitness ────────────────────────── */
+@import "../../node_modules/preline/css/themes/fuerza-roja.css";
+@import "../../node_modules/preline/css/themes/verde-potencia.css";
+@import "../../node_modules/preline/css/themes/azul-electrico.css";
+/* ── Educacion ──────────────────────── */
+@import "../../node_modules/preline/css/themes/azul-academico.css";
+@import "../../node_modules/preline/css/themes/verde-progreso.css";
+@import "../../node_modules/preline/css/themes/claro-simple.css";
+
 @import "./syntiweb-brand.css";
+
+@plugin "@iconify/tailwind4" {
+    prefixes: tabler;
+}
+
+@layer base {
+  :root {
+    --layer: #ffffff;
+    --layer-hover: #f8fafc;
+    --layer-focus: #f1f5f9;
+    --layer-line: #e2e8f0;
+    --layer-foreground: #0f172a;
+    --primary-focus: #3b6fd4;
+    --primary-line: #3b6fd4;
+    --primary-hover: #3b6fd4;
+    --primary-foreground: #ffffff;
+    --muted: #f8fafc;
+    --muted-hover: #f1f5f9;
+    --muted-foreground-1: #64748b;
+    --muted-foreground-2: #94a3b8;
+    --surface: #ffffff;
+    --border: #e2e8f0;
+    --foreground: #0f172a;
+    --success: #22c55e;
+    --shadow-2xs: 0 1px 2px 0 rgba(0,0,0,0.05);
+  }
+
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+}
+
+@custom-variant hover (&:hover);
