@@ -3,48 +3,48 @@
 @source "../views/**/*.blade.php";
 @source "../js/**/*.js";
 @source "../../node_modules/preline/dist/*.js";
-@import "../../node_modules/preline/css/themes/theme.css";
-@import "../../node_modules/preline/css/themes/harvest.css";
-@import "../../node_modules/preline/css/themes/retro.css";
-@import "../../node_modules/preline/css/themes/ocean.css";
-@import "../../node_modules/preline/css/themes/bubblegum.css";
-@import "../../node_modules/preline/css/themes/autumn.css";
-@import "../../node_modules/preline/css/themes/moon.css";
-@import "../../node_modules/preline/css/themes/cashmere.css";
-@import "../../node_modules/preline/css/themes/olive.css";
+@import "./themes/theme.css";
+@import "./themes/harvest.css";
+@import "./themes/retro.css";
+@import "./themes/ocean.css";
+@import "./themes/bubblegum.css";
+@import "./themes/autumn.css";
+@import "./themes/moon.css";
+@import "./themes/cashmere.css";
+@import "./themes/olive.css";
 /* ── Comida ─────────────────────────── */
-@import "../../node_modules/preline/css/themes/sabor-tradicional.css";
-@import "../../node_modules/preline/css/themes/fuego-urbano.css";
-@import "../../node_modules/preline/css/themes/parrilla-moderna.css";
-@import "../../node_modules/preline/css/themes/casa-latina.css";
+@import "./themes/sabor-tradicional.css";
+@import "./themes/fuego-urbano.css";
+@import "./themes/parrilla-moderna.css";
+@import "./themes/casa-latina.css";
 /* ── Dulces ─────────────────────────── */
-@import "../../node_modules/preline/css/themes/rosa-vainilla.css";
-@import "../../node_modules/preline/css/themes/pistacho-suave.css";
-@import "../../node_modules/preline/css/themes/cielo-dulce.css";
-@import "../../node_modules/preline/css/themes/chocolate-caramelo.css";
+@import "./themes/rosa-vainilla.css";
+@import "./themes/pistacho-suave.css";
+@import "./themes/cielo-dulce.css";
+@import "./themes/chocolate-caramelo.css";
 /* ── Salud ──────────────────────────── */
-@import "../../node_modules/preline/css/themes/azul-confianza.css";
-@import "../../node_modules/preline/css/themes/verde-calma.css";
+@import "./themes/azul-confianza.css";
+@import "./themes/verde-calma.css";
 /* ── Autoridad ──────────────────────── */
-@import "../../node_modules/preline/css/themes/azul-profesional.css";
-@import "../../node_modules/preline/css/themes/ejecutivo-oscuro.css";
-@import "../../node_modules/preline/css/themes/prestigio-clasico.css";
+@import "./themes/azul-profesional.css";
+@import "./themes/ejecutivo-oscuro.css";
+@import "./themes/prestigio-clasico.css";
 /* ── Oficios ────────────────────────── */
-@import "../../node_modules/preline/css/themes/industrial-pro.css";
-@import "../../node_modules/preline/css/themes/negro-impacto.css";
-@import "../../node_modules/preline/css/themes/metal-urbano.css";
+@import "./themes/industrial-pro.css";
+@import "./themes/negro-impacto.css";
+@import "./themes/metal-urbano.css";
 /* ── Belleza ────────────────────────── */
-@import "../../node_modules/preline/css/themes/nude-elegante.css";
-@import "../../node_modules/preline/css/themes/rosa-studio.css";
-@import "../../node_modules/preline/css/themes/barber-clasico.css";
+@import "./themes/nude-elegante.css";
+@import "./themes/rosa-studio.css";
+@import "./themes/barber-clasico.css";
 /* ── Fitness ────────────────────────── */
-@import "../../node_modules/preline/css/themes/fuerza-roja.css";
-@import "../../node_modules/preline/css/themes/verde-potencia.css";
-@import "../../node_modules/preline/css/themes/azul-electrico.css";
+@import "./themes/fuerza-roja.css";
+@import "./themes/verde-potencia.css";
+@import "./themes/azul-electrico.css";
 /* ── Educacion ──────────────────────── */
-@import "../../node_modules/preline/css/themes/azul-academico.css";
-@import "../../node_modules/preline/css/themes/verde-progreso.css";
-@import "../../node_modules/preline/css/themes/claro-simple.css";
+@import "./themes/azul-academico.css";
+@import "./themes/verde-progreso.css";
+@import "./themes/claro-simple.css";
 
 @import "./syntiweb-brand.css";
 

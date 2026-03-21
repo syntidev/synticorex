@@ -1,0 +1,635 @@
+﻿@import "tailwindcss";
+@import "./theme.css";
+
+/* ============================================== */
+/* Theme: Industrial Pro                          */
+/* Generated: 2026-03-04                        */
+/* Hue: 212 | Style: vibrant                  */
+/* ============================================== */
+
+@theme theme-industrial-pro inline {
+  /* ============================================ */
+  /* CUSTOM COLOR PALETTES                        */
+  /* ============================================ */
+  
+  /* -------------------------------------------- */
+  /* BRAND PALETTE (vibrant)                     */
+  /* -------------------------------------------- */
+  
+  --color-industrial-pro-50: oklch(92.8% 0.08 212);
+  --color-industrial-pro-100: oklch(88.6% 0.1 212);
+  --color-industrial-pro-200: oklch(80.4% 0.12 212);
+  --color-industrial-pro-300: oklch(72.4% 0.14 212);
+  --color-industrial-pro-400: oklch(64.6% 0.16 212);
+  --color-industrial-pro-500: oklch(57% 0.14 212);
+  --color-industrial-pro-600: oklch(49.6% 0.12 212);
+  --color-industrial-pro-700: oklch(42.4% 0.1 212);
+  --color-industrial-pro-800: oklch(35.4% 0.08 212);
+  --color-industrial-pro-900: oklch(28.6% 0.06 212);
+  --color-industrial-pro-950: oklch(25.3% 0.05 212);
+  
+  /* -------------------------------------------- */
+  /* GRAY PALETTE (bell curve chroma)             */
+  /* -------------------------------------------- */
+  
+  --color-industrial-pro-gray-50: oklch(98% 0.002 212);
+  --color-industrial-pro-gray-100: oklch(95.5% 0.004 212);
+  --color-industrial-pro-gray-200: oklch(89.7% 0.008 212);
+  --color-industrial-pro-gray-300: oklch(82.7% 0.012 212);
+  --color-industrial-pro-gray-400: oklch(73% 0.018 212);
+  --color-industrial-pro-gray-500: oklch(62.5% 0.02 212);
+  --color-industrial-pro-gray-600: oklch(52.8% 0.016 212);
+  --color-industrial-pro-gray-700: oklch(41.4% 0.012 212);
+  --color-industrial-pro-gray-800: oklch(26.9% 0.006 212);
+  --color-industrial-pro-gray-900: oklch(20.5% 0.004 212);
+  --color-industrial-pro-gray-950: oklch(14.1% 0.002 212);
+}
+
+:root[data-theme="theme-industrial-pro"],
+[data-theme="theme-industrial-pro"] {
+
+  /* ============================================ */
+  /* GLOBAL SURFACES + TEXT                       */
+  /* ============================================ */
+  
+  --background: var(--color-white);
+  --background-1: var(--color-industrial-pro-gray-50);
+  --background-2: var(--color-industrial-pro-gray-100);
+  --background-plain: var(--color-white);
+  --foreground: var(--color-industrial-pro-gray-800);
+  --foreground-inverse: var(--color-white);
+  
+  --inverse: var(--color-industrial-pro-gray-800);
+  
+  /* ============================================ */
+  /* BORDERS (Full Scale)                         */
+  /* ============================================ */
+  
+    --border: #FF9100;
+  --border-line-inverse: var(--color-white);
+  --border-line-1: var(--color-industrial-pro-gray-100);
+  --border-line-2: var(--color-industrial-pro-gray-200);
+  --border-line-3: var(--color-industrial-pro-gray-300);
+  --border-line-4: var(--color-industrial-pro-gray-400);
+  --border-line-5: var(--color-industrial-pro-gray-500);
+  --border-line-6: var(--color-industrial-pro-gray-600);
+  --border-line-7: var(--color-industrial-pro-gray-700);
+  --border-line-8: var(--color-industrial-pro-gray-800);
+  
+  /* ============================================ */
+  /* PRIMARY RAMP (Full 11-shade scale)           */
+  /* ============================================ */
+  
+    --primary-50: #263238;
+  --primary-100: var(--color-industrial-pro-100);
+  --primary-200: var(--color-industrial-pro-200);
+  --primary-300: var(--color-industrial-pro-300);
+  --primary-400: var(--color-industrial-pro-400);
+    --primary-500: #1565C0;
+    --primary-600: #1565C0;
+    --primary-700: #135BAD;
+  --primary-800: var(--color-industrial-pro-800);
+  --primary-900: var(--color-industrial-pro-900);
+  --primary-950: var(--color-industrial-pro-950);
+  
+  /* PRIMARY STATES */
+  --primary: var(--color-primary-600);
+  --primary-line: transparent;
+  --primary-foreground: var(--color-white);
+  --primary-hover: var(--color-primary-700);
+  --primary-focus: var(--color-primary-700);
+  --primary-active: var(--color-primary-700);
+  --primary-checked: var(--color-primary-600);
+  
+  /* ============================================ */
+  /* SECONDARY                                    */
+  /* ============================================ */
+  
+    --secondary: #FF6F00;
+  --secondary-line: transparent;
+    --secondary-foreground: var(--color-white);
+  --secondary-hover: var(--color-industrial-pro-gray-800);
+  --secondary-focus: var(--color-industrial-pro-gray-800);
+  --secondary-active: var(--color-industrial-pro-gray-800);
+  
+  /* ============================================ */
+  /* LAYER                                        */
+  /* ============================================ */
+  
+  --layer: var(--color-white);
+  --layer-line: var(--color-industrial-pro-gray-200);
+  --layer-foreground: var(--color-industrial-pro-gray-800);
+  --layer-hover: var(--color-industrial-pro-gray-50);
+  --layer-focus: var(--color-industrial-pro-gray-50);
+  --layer-active: var(--color-industrial-pro-gray-50);
+  
+  /* ============================================ */
+  /* SURFACE                                      */
+  /* ============================================ */
+  
+  --surface: var(--color-industrial-pro-gray-100);
+  --surface-1: var(--color-industrial-pro-gray-200);
+  --surface-2: var(--color-industrial-pro-gray-300);
+  --surface-3: var(--color-industrial-pro-gray-400);
+  --surface-4: var(--color-industrial-pro-gray-500);
+  --surface-5: var(--color-industrial-pro-gray-600);
+  --surface-line: transparent;
+  --surface-foreground: var(--color-industrial-pro-gray-800);
+  --surface-hover: var(--color-industrial-pro-gray-200);
+  --surface-focus: var(--color-industrial-pro-gray-200);
+  --surface-active: var(--color-industrial-pro-gray-200);
+  
+  /* ============================================ */
+  /* MUTED                                        */
+  /* ============================================ */
+  
+  --muted: var(--color-industrial-pro-gray-50);
+  --muted-foreground: var(--color-industrial-pro-gray-500);
+  --muted-foreground-1: var(--color-industrial-pro-gray-600);
+  --muted-foreground-2: var(--color-industrial-pro-gray-700);
+  --muted-hover: var(--color-industrial-pro-gray-100);
+  --muted-focus: var(--color-industrial-pro-gray-100);
+  --muted-active: var(--color-industrial-pro-gray-100);
+  
+  /* ============================================ */
+  /* DESTRUCTIVE                                  */
+  /* ============================================ */
+  
+  --destructive: var(--color-red-500);
+  --destructive-foreground: var(--color-white);
+  --destructive-hover: var(--color-red-600);
+  --destructive-focus: var(--color-red-600);
+  
+  /* ============================================ */
+  /* NAVBAR                                       */
+  /* ============================================ */
+  
+  --navbar: var(--color-white);
+  --navbar-line: var(--color-industrial-pro-gray-200);
+  --navbar-divider: var(--color-industrial-pro-gray-200);
+  --navbar-nav-foreground: var(--color-industrial-pro-gray-800);
+  --navbar-nav-hover: var(--color-industrial-pro-gray-100);
+  --navbar-nav-focus: var(--color-industrial-pro-gray-100);
+  --navbar-nav-active: var(--color-industrial-pro-gray-100);
+  --navbar-nav-list-divider: var(--color-industrial-pro-gray-200);
+  --navbar-inverse: var(--color-primary-950);
+  
+  --navbar-1: var(--color-industrial-pro-gray-50);
+  --navbar-1-line: var(--color-industrial-pro-gray-200);
+  --navbar-1-divider: var(--color-industrial-pro-gray-200);
+  --navbar-1-nav-foreground: var(--color-industrial-pro-gray-800);
+  --navbar-1-nav-hover: var(--color-industrial-pro-gray-200);
+  --navbar-1-nav-focus: var(--color-industrial-pro-gray-200);
+  --navbar-1-nav-active: var(--color-industrial-pro-gray-200);
+  --navbar-1-nav-list-divider: var(--color-industrial-pro-gray-200);
+  
+  --navbar-2: var(--color-industrial-pro-gray-100);
+  --navbar-2-line: transparent;
+  --navbar-2-divider: var(--color-industrial-pro-gray-300);
+  --navbar-2-nav-foreground: var(--color-industrial-pro-gray-800);
+  --navbar-2-nav-hover: var(--color-industrial-pro-gray-200);
+  --navbar-2-nav-focus: var(--color-industrial-pro-gray-200);
+  --navbar-2-nav-active: var(--color-industrial-pro-gray-200);
+  --navbar-2-nav-list-divider: var(--color-industrial-pro-gray-200);
+  
+  /* ============================================ */
+  /* SIDEBAR                                      */
+  /* ============================================ */
+  
+  --sidebar: var(--color-white);
+  --sidebar-line: var(--color-industrial-pro-gray-200);
+  --sidebar-divider: var(--color-industrial-pro-gray-200);
+  --sidebar-nav-foreground: var(--color-industrial-pro-gray-800);
+  --sidebar-nav-hover: var(--color-industrial-pro-gray-100);
+  --sidebar-nav-focus: var(--color-industrial-pro-gray-100);
+  --sidebar-nav-active: var(--color-industrial-pro-gray-100);
+  --sidebar-nav-list-divider: var(--color-industrial-pro-gray-200);
+  --sidebar-inverse: var(--color-primary-950);
+  
+  --sidebar-1: var(--color-industrial-pro-gray-50);
+  --sidebar-1-line: var(--color-industrial-pro-gray-200);
+  --sidebar-1-divider: var(--color-industrial-pro-gray-200);
+  --sidebar-1-nav-foreground: var(--color-industrial-pro-gray-800);
+  --sidebar-1-nav-hover: var(--color-industrial-pro-gray-200);
+  --sidebar-1-nav-focus: var(--color-industrial-pro-gray-200);
+  --sidebar-1-nav-active: var(--color-industrial-pro-gray-200);
+  --sidebar-1-nav-list-divider: var(--color-industrial-pro-gray-200);
+  
+  --sidebar-2: var(--color-industrial-pro-gray-100);
+  --sidebar-2-line: transparent;
+  --sidebar-2-divider: var(--color-industrial-pro-gray-200);
+  --sidebar-2-nav-foreground: var(--color-industrial-pro-gray-800);
+  --sidebar-2-nav-hover: var(--color-industrial-pro-gray-200);
+  --sidebar-2-nav-focus: var(--color-industrial-pro-gray-200);
+  --sidebar-2-nav-active: var(--color-industrial-pro-gray-200);
+  --sidebar-2-nav-list-divider: var(--color-industrial-pro-gray-200);
+  
+  /* ============================================ */
+  /* CARD                                         */
+  /* ============================================ */
+  
+  --card: var(--color-white);
+  --card-line: var(--color-industrial-pro-gray-200);
+  --card-divider: var(--color-industrial-pro-gray-200);
+  --card-header: var(--color-industrial-pro-gray-200);
+  --card-footer: var(--color-industrial-pro-gray-200);
+  --card-inverse: var(--color-primary-950);
+  
+  /* ============================================ */
+  /* DROPDOWN                                     */
+  /* ============================================ */
+  
+  --dropdown: var(--color-white);
+  --dropdown-1: var(--color-white);
+  --dropdown-line: transparent;
+  --dropdown-divider: var(--color-industrial-pro-gray-200);
+  --dropdown-header: var(--color-industrial-pro-gray-200);
+  --dropdown-footer: var(--color-industrial-pro-gray-200);
+  --dropdown-item-foreground: var(--color-industrial-pro-gray-800);
+  --dropdown-item-hover: var(--color-industrial-pro-gray-100);
+  --dropdown-item-focus: var(--color-industrial-pro-gray-100);
+  --dropdown-item-active: var(--color-industrial-pro-gray-100);
+  --dropdown-inverse: var(--color-industrial-pro-gray-900);
+  
+  /* ============================================ */
+  /* SELECT                                       */
+  /* ============================================ */
+  
+  --select: var(--color-white);
+  --select-1: var(--color-white);
+  --select-line: transparent;
+  --select-item-foreground: var(--color-industrial-pro-gray-800);
+  --select-item-hover: var(--color-industrial-pro-gray-100);
+  --select-item-focus: var(--color-industrial-pro-gray-100);
+  --select-item-active: var(--color-industrial-pro-gray-100);
+  --select-inverse: var(--color-industrial-pro-gray-900);
+  
+  /* ============================================ */
+  /* OVERLAY                                      */
+  /* ============================================ */
+  
+  --overlay: var(--color-white);
+  --overlay-line: transparent;
+  --overlay-divider: var(--color-industrial-pro-gray-200);
+  --overlay-header: var(--color-industrial-pro-gray-200);
+  --overlay-footer: var(--color-industrial-pro-gray-200);
+  --overlay-inverse: var(--color-industrial-pro-gray-900);
+  
+  /* ============================================ */
+  /* POPOVER                                      */
+  /* ============================================ */
+  
+  --popover: var(--color-white);
+  --popover-line: var(--color-industrial-pro-gray-100);
+  
+  /* ============================================ */
+  /* TOOLTIP                                      */
+  /* ============================================ */
+  
+  --tooltip: var(--color-industrial-pro-gray-900);
+  --tooltip-foreground: var(--color-white);
+  --tooltip-line: transparent;
+  
+  /* ============================================ */
+  /* TABLE                                        */
+  /* ============================================ */
+  
+  --table-line: var(--color-industrial-pro-gray-200);
+  
+  /* ============================================ */
+  /* SWITCH                                       */
+  /* ============================================ */
+  
+  --switch: var(--color-white);
+  
+  /* ============================================ */
+  /* FOOTER                                       */
+  /* ============================================ */
+  
+  --footer: var(--color-white);
+  --footer-line: var(--color-industrial-pro-gray-200);
+  --footer-inverse: var(--color-industrial-pro-gray-900);
+  
+  /* ============================================ */
+  /* SCROLLBAR                                    */
+  /* ============================================ */
+  
+  --scrollbar-track: var(--color-industrial-pro-gray-100);
+  --scrollbar-thumb: var(--color-industrial-pro-gray-300);
+  --scrollbar-track-inverse: transparent;
+  --scrollbar-thumb-inverse: var(--color-white);
+  /* ============================================ */
+  /* CHARTS (Apexcharts)                          */
+  /* ============================================ */
+  /* NOTE: -hex tokens use valid hex for Apexcharts compatibility */
+  
+  --chart-colors-background-inverse: var(--color-industrial-pro-gray-900);
+  --chart-colors-foreground: var(--color-industrial-pro-gray-700);
+  
+  --chart-primary: var(--color-industrial-pro-500);
+  --chart-colors-primary: var(--color-industrial-pro-500);
+  --chart-colors-primary-inverse: var(--color-industrial-pro-300);
+  --chart-colors-primary-hex: #0085a1;
+  --chart-colors-primary-hex-inverse: #32c2da;
+
+  --chart-1: oklch(55% 0.14 212);
+  --chart-colors-chart-1: oklch(55% 0.14 212);
+  --chart-colors-chart-1-inverse: oklch(75% 0.12600000000000003 212);
+  --chart-colors-chart-1-hex: #0085a1;
+  --chart-colors-chart-1-hex-inverse: #1fc2dc;
+  --chart-2: oklch(60% 0.12 242);
+  --chart-colors-chart-2: oklch(60% 0.12 242);
+  --chart-colors-chart-2-inverse: oklch(80% 0.108 242);
+  --chart-colors-chart-2-hex: #3088c1;
+  --chart-colors-chart-2-hex-inverse: #7cc6fd;
+  --chart-3: oklch(58% 0.12 182);
+  --chart-colors-chart-3: oklch(58% 0.12 182);
+  --chart-colors-chart-3-inverse: oklch(78% 0.108 182);
+  --chart-colors-chart-3-hex: #009180;
+  --chart-colors-chart-3-hex-inverse: #5acebc;
+  --chart-4: oklch(55% 0.13 32);
+  --chart-colors-chart-4: oklch(55% 0.13 32);
+  --chart-colors-chart-4-inverse: oklch(75% 0.117 32);
+  --chart-colors-chart-4-hex: #b0503e;
+  --chart-colors-chart-4-hex-inverse: #ee917f;
+  --chart-5: oklch(60% 0.11 2);
+  --chart-colors-chart-5: oklch(60% 0.11 2);
+  --chart-colors-chart-5-inverse: oklch(80% 0.099 2);
+  --chart-colors-chart-5-hex: #b5627b;
+  --chart-colors-chart-5-hex-inverse: #f4a3b9;
+  --chart-6: oklch(58% 0.11 62);
+  --chart-colors-chart-6: oklch(58% 0.11 62);
+  --chart-colors-chart-6-inverse: oklch(78% 0.099 62);
+  --chart-colors-chart-6-hex: #a86a2c;
+  --chart-colors-chart-6-hex-inverse: #e5a974;
+  --chart-7: oklch(62% 0.1 272);
+  --chart-colors-chart-7: oklch(62% 0.1 272);
+  --chart-colors-chart-7-inverse: oklch(82% 0.09000000000000001 272);
+  --chart-colors-chart-7-hex: #7182c3;
+  --chart-colors-chart-7-hex-inverse: #afc1ff;
+  --chart-8: oklch(56% 0.1 152);
+  --chart-colors-chart-8: oklch(56% 0.1 152);
+  --chart-colors-chart-8-inverse: oklch(76% 0.09000000000000001 152);
+  --chart-colors-chart-8-hex: #428557;
+  --chart-colors-chart-8-hex-inverse: #85c295;
+  --chart-9: oklch(60% 0.09 302);
+  --chart-colors-chart-9: oklch(60% 0.09 302);
+  --chart-colors-chart-9-inverse: oklch(80% 0.081 302);
+  --chart-colors-chart-9-hex: #8a73ad;
+  --chart-colors-chart-9-hex-inverse: #c7b2ea;
+  --chart-10: oklch(58% 0.09 122);
+  --chart-colors-chart-10: oklch(58% 0.09 122);
+  --chart-colors-chart-10-inverse: oklch(78% 0.081 122);
+  --chart-colors-chart-10-hex: #718344;
+  --chart-colors-chart-10-hex-inverse: #aec086;
+  
+  --chart-colors-candlestick-upward: var(--color-green-500);
+  --chart-colors-candlestick-upward-inverse: var(--color-green-400);
+  --chart-colors-candlestick-downward: var(--color-red-500);
+  --chart-colors-candlestick-downward-inverse: var(--color-red-400);
+  
+  --chart-colors-labels: var(--color-industrial-pro-gray-600);
+  --chart-colors-labels-inverse: var(--color-industrial-pro-gray-400);
+  --chart-colors-xaxis-labels: var(--color-industrial-pro-gray-500);
+  --chart-colors-xaxis-labels-inverse: var(--color-industrial-pro-gray-400);
+  --chart-colors-yaxis-labels: var(--color-industrial-pro-gray-500);
+  --chart-colors-yaxis-labels-inverse: var(--color-industrial-pro-gray-400);
+  
+  --chart-colors-grid-border: var(--color-industrial-pro-gray-200);
+  --chart-colors-grid-border-inverse: var(--color-industrial-pro-gray-700);
+  --chart-colors-bar-ranges: var(--color-industrial-pro-gray-200);
+  --chart-colors-bar-ranges-inverse: var(--color-industrial-pro-gray-700);
+  /* ============================================ */
+  /* MAPS (jsvectormap)                           */
+  /* ============================================ */
+  
+  --map-colors-primary: var(--color-industrial-pro-500);
+  --map-colors-primary-inverse: var(--color-industrial-pro-400);
+  --map-colors-default: var(--color-industrial-pro-gray-200);
+  --map-colors-default-inverse: var(--color-industrial-pro-gray-700);
+  --map-colors-highlight: var(--color-industrial-pro-300);
+  --map-colors-highlight-inverse: var(--color-industrial-pro-500);
+  --map-colors-border: var(--color-industrial-pro-gray-300);
+  --map-colors-border-inverse: var(--color-industrial-pro-gray-600);
+}
+
+/* ============================================== */
+/* DARK MODE OVERRIDES                            */
+/* ============================================== */
+
+[data-theme="theme-industrial-pro"].dark {
+
+  /* ============================================ */
+  /* DARK MODE - Tailwind zinc */
+  /* ============================================ */
+  
+  /* BACKGROUNDS */
+  --background: var(--color-zinc-800);
+  --background-1: var(--color-zinc-900);
+  --background-2: var(--color-zinc-900);
+  --background-plain: var(--color-zinc-800);
+  
+  /* TEXT */
+  --foreground: var(--color-zinc-200);
+  
+  --inverse: var(--color-zinc-950);
+  
+  /* BORDERS */
+  --border: var(--color-zinc-700);
+  --border-line-inverse: var(--color-zinc-200);
+  --border-line-1: var(--color-zinc-800);
+  --border-line-2: var(--color-zinc-700);
+  --border-line-3: var(--color-zinc-600);
+  --border-line-4: var(--color-zinc-500);
+  --border-line-5: var(--color-zinc-400);
+  --border-line-6: var(--color-zinc-300);
+  --border-line-7: var(--color-zinc-200);
+  --border-line-8: var(--color-zinc-100);
+  
+  /* PRIMARY STATES */
+  --primary: var(--color-industrial-pro-400);
+  --primary-foreground: var(--color-white);
+  --primary-hover: var(--color-industrial-pro-500);
+  --primary-focus: var(--color-industrial-pro-500);
+  --primary-active: var(--color-industrial-pro-500);
+  --primary-checked: var(--color-industrial-pro-400);
+  
+  /* SECONDARY */
+  --secondary: var(--color-white);
+    --secondary-foreground: var(--color-white);
+  --secondary-hover: var(--color-zinc-100);
+  --secondary-focus: var(--color-zinc-100);
+  --secondary-active: var(--color-zinc-100);
+  
+  /* LAYER */
+  --layer: var(--color-zinc-800);
+  --layer-line: var(--color-zinc-700);
+  --layer-foreground: var(--color-white);
+  --layer-hover: var(--color-zinc-700);
+  --layer-focus: var(--color-zinc-700);
+  --layer-active: var(--color-zinc-700);
+  
+  /* SURFACE */
+  --surface: var(--color-zinc-700);
+  --surface-1: var(--color-zinc-600);
+  --surface-2: var(--color-zinc-500);
+  --surface-3: var(--color-zinc-600);
+  --surface-4: var(--color-zinc-500);
+  --surface-5: var(--color-zinc-400);
+  --surface-foreground: var(--color-zinc-200);
+  --surface-hover: var(--color-zinc-600);
+  --surface-focus: var(--color-zinc-600);
+  --surface-active: var(--color-zinc-600);
+  
+  /* MUTED */
+  --muted: var(--color-zinc-800);
+  --muted-foreground: var(--color-zinc-500);
+  --muted-foreground-1: var(--color-zinc-400);
+  --muted-foreground-2: var(--color-zinc-300);
+  --muted-hover: var(--color-zinc-700);
+  --muted-focus: var(--color-zinc-700);
+  --muted-active: var(--color-zinc-700);
+  
+  /* DESTRUCTIVE */
+  --destructive: var(--color-red-500);
+  --destructive-foreground: var(--color-white);
+  --destructive-hover: var(--color-red-600);
+  --destructive-focus: var(--color-red-600);
+  
+  /* NAVBAR */
+  --navbar: var(--color-zinc-800);
+  --navbar-line: var(--color-zinc-700);
+  --navbar-divider: var(--color-zinc-700);
+  --navbar-nav-foreground: var(--color-zinc-200);
+  --navbar-nav-hover: var(--color-zinc-700);
+  --navbar-nav-focus: var(--color-zinc-700);
+  --navbar-nav-active: var(--color-zinc-700);
+  --navbar-nav-list-divider: var(--color-zinc-700);
+  --navbar-inverse: var(--color-industrial-pro-950);
+  
+  --navbar-1: var(--color-zinc-900);
+  --navbar-1-line: var(--color-zinc-700);
+  --navbar-1-divider: var(--color-zinc-700);
+  --navbar-1-nav-foreground: var(--color-zinc-200);
+  --navbar-1-nav-hover: var(--color-zinc-700);
+  --navbar-1-nav-focus: var(--color-zinc-700);
+  --navbar-1-nav-active: var(--color-zinc-700);
+  --navbar-1-nav-list-divider: var(--color-zinc-700);
+  
+  --navbar-2: var(--color-zinc-900);
+  --navbar-2-line: transparent;
+  --navbar-2-divider: var(--color-zinc-700);
+  --navbar-2-nav-foreground: var(--color-zinc-200);
+  --navbar-2-nav-hover: var(--color-zinc-800);
+  --navbar-2-nav-focus: var(--color-zinc-800);
+  --navbar-2-nav-active: var(--color-zinc-800);
+  --navbar-2-nav-list-divider: var(--color-zinc-800);
+  
+  /* SIDEBAR */
+  --sidebar: var(--color-zinc-800);
+  --sidebar-line: var(--color-zinc-700);
+  --sidebar-divider: var(--color-zinc-700);
+  --sidebar-nav-foreground: var(--color-zinc-200);
+  --sidebar-nav-hover: var(--color-zinc-700);
+  --sidebar-nav-focus: var(--color-zinc-700);
+  --sidebar-nav-active: var(--color-zinc-700);
+  --sidebar-nav-list-divider: var(--color-zinc-700);
+  --sidebar-inverse: var(--color-industrial-pro-950);
+  
+  --sidebar-1: var(--color-zinc-900);
+  --sidebar-1-line: var(--color-zinc-700);
+  --sidebar-1-divider: var(--color-zinc-700);
+  --sidebar-1-nav-foreground: var(--color-zinc-200);
+  --sidebar-1-nav-hover: var(--color-zinc-700);
+  --sidebar-1-nav-focus: var(--color-zinc-700);
+  --sidebar-1-nav-active: var(--color-zinc-700);
+  --sidebar-1-nav-list-divider: var(--color-zinc-700);
+  
+  --sidebar-2: var(--color-zinc-900);
+  --sidebar-2-line: transparent;
+  --sidebar-2-divider: var(--color-zinc-800);
+  --sidebar-2-nav-foreground: var(--color-zinc-200);
+  --sidebar-2-nav-hover: var(--color-zinc-800);
+  --sidebar-2-nav-focus: var(--color-zinc-800);
+  --sidebar-2-nav-active: var(--color-zinc-800);
+  --sidebar-2-nav-list-divider: var(--color-zinc-800);
+  
+  /* CARD */
+  --card: var(--color-zinc-800);
+  --card-line: var(--color-zinc-700);
+  --card-divider: var(--color-zinc-700);
+  --card-header: var(--color-zinc-700);
+  --card-footer: var(--color-zinc-700);
+  --card-inverse: var(--color-zinc-900);
+  
+  /* DROPDOWN */
+  --dropdown: var(--color-zinc-900);
+  --dropdown-1: var(--color-zinc-950);
+  --dropdown-line: transparent;
+  --dropdown-divider: var(--color-zinc-800);
+  --dropdown-header: var(--color-zinc-700);
+  --dropdown-footer: var(--color-zinc-700);
+  --dropdown-item-foreground: var(--color-zinc-200);
+  --dropdown-item-hover: var(--color-zinc-800);
+  --dropdown-item-focus: var(--color-zinc-800);
+  --dropdown-item-active: var(--color-zinc-800);
+  --dropdown-inverse: var(--color-zinc-900);
+  
+  /* SELECT */
+  --select: var(--color-zinc-900);
+  --select-1: var(--color-zinc-950);
+  --select-line: transparent;
+  --select-item-foreground: var(--color-zinc-200);
+  --select-item-hover: var(--color-zinc-800);
+  --select-item-focus: var(--color-zinc-800);
+  --select-item-active: var(--color-zinc-800);
+  --select-inverse: var(--color-zinc-900);
+  
+  /* OVERLAY */
+  --overlay: var(--color-zinc-800);
+  --overlay-line: transparent;
+  --overlay-divider: var(--color-zinc-700);
+  --overlay-header: var(--color-zinc-700);
+  --overlay-footer: var(--color-zinc-700);
+  --overlay-inverse: var(--color-zinc-900);
+  
+  /* POPOVER */
+  --popover: var(--color-zinc-900);
+  --popover-line: var(--color-zinc-700);
+  
+  /* TOOLTIP */
+  --tooltip: var(--color-white);
+  --tooltip-foreground: var(--color-zinc-800);
+  --tooltip-line: transparent;
+  
+  /* TABLE */
+  --table-line: var(--color-zinc-700);
+  
+  /* SWITCH */
+  --switch: var(--color-white);
+  
+  /* FOOTER */
+  --footer: var(--color-zinc-800);
+  --footer-line: var(--color-zinc-700);
+  --footer-inverse: var(--color-zinc-900);
+  
+  /* SCROLLBAR */
+  --scrollbar-track: var(--color-zinc-700);
+  --scrollbar-thumb: var(--color-zinc-500);
+  --scrollbar-track-inverse: var(--color-zinc-500);
+  --scrollbar-thumb-inverse: var(--color-zinc-700);
+  
+  /* CHARTS - dark mode adjustments */
+  --chart-colors-background-inverse: var(--color-zinc-100);
+  --chart-colors-foreground: var(--color-zinc-300);
+  --chart-colors-labels: var(--color-zinc-400);
+  --chart-colors-xaxis-labels: var(--color-zinc-400);
+  --chart-colors-yaxis-labels: var(--color-zinc-400);
+  --chart-colors-grid-border: var(--color-zinc-700);
+  --chart-colors-bar-ranges: var(--color-zinc-700);
+  
+  /* MAPS - dark mode adjustments */
+  --map-colors-default: var(--color-zinc-700);
+  --map-colors-border: var(--color-zinc-600);
+}
+
