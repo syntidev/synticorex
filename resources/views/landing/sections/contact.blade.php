@@ -169,7 +169,7 @@
                   <p>{{ $email }}</p>
                 @endif
                 {{-- Mostrar soporte si Plan 2/3 y existe --}}
-                @if($whatsappSupportClean && $tenant->plan && in_array($tenant->plan->slug, ['crecimiento', 'vision']))
+                @if($whatsappSupportClean && $tenant->isAtLeastCrecimiento())
                   <p class="text-primary font-semibold">
                     <a href="https://wa.me/{{ $whatsappSupportClean }}" target="_blank" rel="noopener noreferrer" class="hover:underline">
                       Soporte: +{{ $whatsappSupportClean }}

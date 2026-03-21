@@ -275,6 +275,8 @@ class Tenant extends Model
     {
         if (!$this->plan) return false;
         return in_array($this->plan->slug, [
+            'studio-crecimiento',
+            'studio-vision',
             'crecimiento',
             'vision',
             'food-semestral',
