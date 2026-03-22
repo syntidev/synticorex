@@ -7,6 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/iconify-icon@1.0.8/dist/iconify-icon.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
     <style>
         *, *::before, *::after { box-sizing: border-box; }
         body {
@@ -326,6 +327,19 @@
     </iframe>
 
     <script>
+    /* ── Confetti de celebración ── */
+    (function launchConfetti() {
+        var duration = 4000;
+        var end      = Date.now() + duration;
+        var colors   = ['#f43f5e','#f97316','#facc15','#22c55e','#06b6d4','#8b5cf6','#ec4899','#3b82f6','#a3e635','#fb923c'];
+
+        (function frame() {
+            confetti({ particleCount: 5, angle:  60, spread: 60, origin: { x: 0, y: 0.65 }, colors: colors, zIndex: 9999 });
+            confetti({ particleCount: 5, angle: 120, spread: 60, origin: { x: 1, y: 0.65 }, colors: colors, zIndex: 9999 });
+            if (Date.now() < end) { requestAnimationFrame(frame); }
+        }());
+    }());
+
     function copyUrl(text, btn) {
         navigator.clipboard.writeText(text).then(() => {
             const orig = btn.textContent;
