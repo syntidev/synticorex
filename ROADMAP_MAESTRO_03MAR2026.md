@@ -1,0 +1,64 @@
+﻿
+### 22 MAR 2026
+- [x] Sistema tasas USD/EUR — CurrencyFetcherService creado (2 fuentes: dolarapi.com + brecha-cambiaria.com/api/prices)
+- [x] DollarRateService refactorizado — isStale(4h), getLastUpdate(), manual override via CompanySetting
+- [x] UpdateDollarRate — alerta email si >4h sin actualizar, siempre retorna Command::SUCCESS
+- [x] Validado: USD 455.25 Bs + EUR 527.79 Bs — 12 tenants propagados ✅
+- [x] Build vite corregido — app-v2.css → app.css
+- [x] AdminPanelProvider — discoverWidgets desactivado (eliminaba duplicación en dashboard)
+- [x] Dashboard.php — layout 2 cols: StatsOverview header (3cols) + 4 widgets footer
+- [ ] Dashboard — layout sigue siendo sábana. PENDIENTE: mover BlueprintDonut + RevenueChart a /admin/analytics
+- [ ] Migración company_settings: manual_rate_enabled, manual_usd_rate, manual_eur_rate
+- [ ] Email bienvenida — UserRegistered → WelcomeMail
+- [ ] Rollback polling widgets antes de deploy
+- [ ] Fase E — SSH Vultr pendiente habilitación por proveedor
+- [x] A.15 — Rediseño sección Acerca de en landing ✅
+- [x] A.17 — Secciones vacías no renderizan ✅
+- [x] A.6 — Responsividad (marcado como pendiente pero confirmado hecho)
+- [x] A.13 — Panel flotante móvil — validado ✅
+- [x] B.1 — /planes dinámica desde DB ✅
+- [x] B.4 — /nosotros ✅
+- [x] B.6 — Blog base ✅
+- [x] B.7 — Footer completo ✅
+- [x] B.8 — Formulario contacto ✅
+- [x] C.1 — Login + Registro ✅
+- [x] C.2 — Google OAuth ✅
+- [x] C.4 — Wizard onboarding ✅
+- [x] C.5 — Flujo pago/activación ✅
+- [x] D.8 — Límites Studio 20/50/ilimitado en DB ✅
+- [ ] B.5 — Comparativa vs competencia — PENDIENTE
+- [ ] C.3 — Hardening middleware rutas tenant — PENDIENTE
+- [ ] C.6 — Email bienvenida — PENDIENTE
+- [ ] D.4 — Charts dashboard fix Filament v5 — PENDIENTE
+
+### 22 MAR 2026
+- [x] Sistema tasas USD/EUR — CurrencyFetcherService creado (2 fuentes: dolarapi.com + brecha-cambiaria.com/api/prices)
+- [x] DollarRateService refactorizado — isStale(4h), getLastUpdate(), manual override via CompanySetting
+- [x] UpdateDollarRate — alerta email si >4h sin actualizar, siempre retorna Command::SUCCESS
+- [x] Validado: USD 455.25 Bs + EUR 527.79 Bs — 12 tenants propagados ✅
+- [x] Build vite corregido — app-v2.css → app.css
+- [x] AdminPanelProvider — discoverWidgets desactivado (eliminaba duplicación en dashboard)
+- [x] Dashboard.php — layout 2 cols: StatsOverview header (3cols) + 4 widgets footer
+- [ ] Dashboard — layout sigue siendo sábana. PENDIENTE: mover BlueprintDonut + RevenueChart a /admin/analytics
+- [ ] Migración company_settings: manual_rate_enabled, manual_usd_rate, manual_eur_rate
+- [ ] Email bienvenida — UserRegistered → WelcomeMail
+- [ ] Rollback polling widgets antes de deploy
+- [ ] Fase E — SSH Vultr pendiente habilitación por proveedor
+- [x] A.15 — Rediseño sección Acerca de en landing ✅
+- [x] A.17 — Secciones vacías no renderizan ✅
+- [x] A.6 — Responsividad (marcado como pendiente pero confirmado hecho)
+- [x] A.13 — Panel flotante móvil — validado ✅
+- [x] B.1 — /planes dinámica desde DB ✅
+- [x] B.4 — /nosotros ✅
+- [x] B.6 — Blog base ✅
+- [x] B.7 — Footer completo ✅
+- [x] B.8 — Formulario contacto ✅
+- [x] C.1 — Login + Registro ✅
+- [x] C.2 — Google OAuth ✅
+- [x] C.4 — Wizard onboarding ✅
+- [x] C.5 — Flujo pago/activación ✅
+- [x] D.8 — Límites Studio 20/50/ilimitado en DB ✅
+- [ ] B.5 — Comparativa vs competencia — PENDIENTE
+- [ ] C.3 — Hardening middleware rutas tenant — PENDIENTE
+- [ ] C.6 — Email bienvenida — PENDIENTE
+- [ ] D.4 — Charts dashboard fix Filament v5 — PENDIENTE
