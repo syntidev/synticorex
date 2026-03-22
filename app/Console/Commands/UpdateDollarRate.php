@@ -6,6 +6,7 @@ namespace App\Console\Commands;
 
 use App\Services\DollarRateService;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class UpdateDollarRate extends Command
 {
@@ -42,8 +43,6 @@ class UpdateDollarRate extends Command
      */
     public function handle(): int
     {
-        $exitCode = Command::SUCCESS;
-
         // ── USD ──────────────────────────────────────────────────
         $this->info('🔄 Fetching USD rate...');
         $usd = $this->dollarRateService->fetchAndPropagate();
@@ -53,7 +52,6 @@ class UpdateDollarRate extends Command
             $this->info("📊 Propagated to {$usd['updated_tenants']} tenants");
         } else {
             $this->error("❌ USD failed: {$usd['message']}");
-            $exitCode = Command::FAILURE;
         }
 
         // ── EUR ──────────────────────────────────────────────────
@@ -66,9 +64,24 @@ class UpdateDollarRate extends Command
             $this->info("📊 EUR propagated to {$propagated['updated_count']} tenants");
         } else {
             $this->error("❌ EUR failed: {$eur['message']}");
-            $exitCode = Command::FAILURE;
         }
 
-        return $exitCode;
+        // Alerta si la tasa lleva más de 4 horas sin actualizarse
+        if ($this->dollarRateService->isStale(4)) {
+            Log::error('[CurrencyAlert] Tasa USD no se actualiza hace más de 4 horas');
+            try {
+                \Illuminate\Support\Facades\Mail::raw(
+                    'ALERTA SYNTIweb: La tasa del dólar no se ha actualizado en más de 4 horas. Verifica las APIs o activa la tasa manual en el panel de administración.',
+                    function ($m) {
+                        $m->to(config('mail.from.address'))
+                          ->subject('[ALERTA] Tasa BCV sin actualizar — SYNTIweb');
+                    }
+                );
+            } catch (\Throwable $e) {
+                Log::warning('[CurrencyAlert] No se pudo enviar email de alerta: ' . $e->getMessage());
+            }
+        }
+
+        return Command::SUCCESS;
     }
 }

@@ -4,16 +4,23 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Models\CompanySetting;
 use App\Models\DollarRate;
 use App\Models\Tenant;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Carbon;
 use Throwable;
 
 class DollarRateService
 {
+    private CurrencyFetcherService $fetcher;
+
+    public function __construct(CurrencyFetcherService $fetcher)
+    {
+        $this->fetcher = $fetcher;
+    }
+
     /**
      * Cache key for the current rate.
      */
@@ -33,94 +40,6 @@ class DollarRateService
      * HTTP timeout in seconds.
      */
     private const HTTP_TIMEOUT = 5;
-
-    /**
-     * USD BCV sources in priority order.
-     * Each entry: url + extractor callable (array $data): ?float
-     */
-    private function usdSources(): array
-    {
-        return [
-            [
-                'name'    => 'dolarapi',
-                'url'     => 'https://ve.dolarapi.com/v1/dolares/oficial',
-                'extract' => static fn(array $d): ?float =>
-                    isset($d['promedio']) && is_numeric($d['promedio']) ? (float) $d['promedio'] : null,
-            ],
-            [
-                'name'    => 'pydolarve',
-                'url'     => 'https://pydolarve.org/api/v1/dollar?monitor=bcv',
-                'extract' => static fn(array $d): ?float =>
-                    isset($d['price']) && is_numeric($d['price']) ? (float) $d['price']
-                    : (isset($d['monitors']['bcv']['price']) && is_numeric($d['monitors']['bcv']['price'])
-                        ? (float) $d['monitors']['bcv']['price'] : null),
-            ],
-        ];
-    }
-
-    /**
-     * EUR BCV sources in priority order.
-     */
-    private function eurSources(): array
-    {
-        return [
-            [
-                'name'    => 'dolarapi',
-                'url'     => 'https://ve.dolarapi.com/v1/euros/oficial',
-                'extract' => static fn(array $d): ?float =>
-                    isset($d['promedio']) && is_numeric($d['promedio']) ? (float) $d['promedio'] : null,
-            ],
-            [
-                'name'    => 'pydolarve',
-                'url'     => 'https://pydolarve.org/api/v1/dollar?page=bcv&monitor=euro',
-                'extract' => static fn(array $d): ?float =>
-                    isset($d['monitors']['euro']['price']) && is_numeric($d['monitors']['euro']['price'])
-                        ? (float) $d['monitors']['euro']['price'] : null,
-            ],
-        ];
-    }
-
-    /**
-     * Try each source in order and return the first valid rate.
-     *
-     * @param  array<array{name: string, url: string, extract: callable}> $sources
-     * @return array{value: float, source: string}|null
-     */
-    private function fetchFromSources(array $sources): ?array
-    {
-        foreach ($sources as $src) {
-            try {
-                $response = Http::timeout(self::HTTP_TIMEOUT)->acceptJson()->get($src['url']);
-
-                if (!$response->successful()) {
-                    Log::warning('DollarRateService: Source failed, trying next', [
-                        'source' => $src['name'],
-                        'status' => $response->status(),
-                    ]);
-                    continue;
-                }
-
-                $value = ($src['extract'])($response->json() ?? []);
-
-                if ($value !== null && $value > 0) {
-                    Log::info('DollarRate source: ' . $src['name'], ['rate' => $value]);
-                    return ['value' => $value, 'source' => $src['name']];
-                }
-
-                Log::warning('DollarRateService: Source returned invalid value, trying next', [
-                    'source' => $src['name'],
-                    'value'  => $value,
-                ]);
-            } catch (Throwable $e) {
-                Log::warning('DollarRateService: Source threw exception, trying next', [
-                    'source' => $src['name'],
-                    'error'  => $e->getMessage(),
-                ]);
-            }
-        }
-
-        return null;
-    }
 
     /**
      * Maximum rate change percentage to trigger alert.
@@ -203,26 +122,38 @@ class DollarRateService
     }
 
     /**
-     * Fetch USD rate from all sources (fallback chain) and store in database.
+     * Fetch USD rate (manual override or multi-source) and store in database.
      *
      * @return array{success: bool, rate?: float, message: string, source?: string}
      */
     public function fetchAndStore(): array
     {
-        Log::info('DollarRateService: Starting USD rate fetch (multi-source)');
+        Log::info('DollarRateService: Starting USD rate fetch');
 
-        $fetched = $this->fetchFromSources($this->usdSources());
-
-        if ($fetched === null) {
-            Log::error('DollarRateService: All USD sources failed');
-            return ['success' => false, 'message' => 'All USD sources failed'];
+        // Tasa manual configurable desde el panel
+        $setting = CompanySetting::first();
+        if ($setting && $setting->getAttribute('manual_rate_enabled')) {
+            $newRate    = (float) ($setting->getAttribute('manual_usd_rate') ?? 0);
+            $sourceName = 'manual';
+            if ($newRate <= 0) {
+                return ['success' => false, 'message' => 'Tasa manual USD configurada pero valor inválido'];
+            }
+            Log::info('DollarRateService: Usando tasa USD manual', ['rate' => $newRate]);
+        } else {
+            $fetched = $this->fetcher->fetchUSD();
+            if (!$fetched['success']) {
+                Log::error('DollarRateService: All USD sources failed');
+                return [
+                    'success' => false,
+                    'message' => 'Todas las fuentes fallaron. Activa tasa manual en el panel.',
+                ];
+            }
+            $newRate    = (float) $fetched['rate'];
+            $sourceName = $fetched['source'];
         }
 
-        $newRate    = $fetched['value'];
-        $sourceName = $fetched['source'];
-
-        // Check for unusual rate changes
-        $previousRate = $this->getCurrentRate();
+        // Validar cambio excesivo (>20% → rechazar)
+        $previousRate  = $this->getCurrentRate();
         $changePercent = $previousRate > 0
             ? abs(($newRate - $previousRate) / $previousRate) * 100
             : 0;
@@ -280,23 +211,35 @@ class DollarRateService
     }
 
     /**
-     * Fetch EUR rate from all sources (fallback chain) and store in database.
+     * Fetch EUR rate (manual override or multi-source) and store in database.
      *
      * @return array{success: bool, rate?: float, message: string, source?: string}
      */
     public function fetchAndStoreEuro(): array
     {
-        Log::info('DollarRateService: Starting EUR rate fetch (multi-source)');
+        Log::info('DollarRateService: Starting EUR rate fetch');
 
-        $fetched = $this->fetchFromSources($this->eurSources());
-
-        if ($fetched === null) {
-            Log::error('DollarRateService: All EUR sources failed');
-            return ['success' => false, 'message' => 'All EUR sources failed'];
+        // Tasa manual configurable desde el panel
+        $setting = CompanySetting::first();
+        if ($setting && $setting->getAttribute('manual_rate_enabled')) {
+            $newRate    = (float) ($setting->getAttribute('manual_eur_rate') ?? 0);
+            $sourceName = 'manual';
+            if ($newRate <= 0) {
+                return ['success' => false, 'message' => 'Tasa manual EUR configurada pero valor inválido'];
+            }
+            Log::info('DollarRateService: Usando tasa EUR manual', ['rate' => $newRate]);
+        } else {
+            $fetched = $this->fetcher->fetchEUR();
+            if (!$fetched['success']) {
+                Log::error('DollarRateService: All EUR sources failed');
+                return [
+                    'success' => false,
+                    'message' => 'Todas las fuentes fallaron. Activa tasa EUR manual en el panel.',
+                ];
+            }
+            $newRate    = (float) $fetched['rate'];
+            $sourceName = $fetched['source'];
         }
-
-        $newRate    = $fetched['value'];
-        $sourceName = $fetched['source'];
 
         try {
             DollarRate::query()
@@ -572,19 +515,51 @@ class DollarRateService
     }
 
     /**
-     * Check if the current rate is stale (older than cache TTL).
-     *
-     * @return bool
+     * Check if the current USD rate is stale (older than given hours threshold).
      */
-    public function isRateStale(): bool
+    public function isStale(int $hoursThreshold = 4): bool
     {
-        $lastUpdate = $this->getLastUpdateTime();
+        $row = DollarRate::query()
+            ->where('currency_type', 'USD')
+            ->orderByDesc('effective_from')
+            ->first();
 
-        if ($lastUpdate === null) {
+        if ($row === null) {
             return true;
         }
 
-        return $lastUpdate->addSeconds(self::CACHE_TTL)->isPast();
+        return $row->effective_from->lt(Carbon::now()->subHours($hoursThreshold));
+    }
+
+    /**
+     * Get the last stored USD rate details.
+     *
+     * @return array{rate: float, source: string, fetched_at: string}|null
+     */
+    public function getLastUpdate(): ?array
+    {
+        $row = DollarRate::query()
+            ->where('currency_type', 'USD')
+            ->orderByDesc('effective_from')
+            ->first();
+
+        if ($row === null) {
+            return null;
+        }
+
+        return [
+            'rate'       => (float) $row->rate,
+            'source'     => $row->source,
+            'fetched_at' => $row->effective_from->toDateTimeString(),
+        ];
+    }
+
+    /**
+     * @deprecated Use isStale() instead.
+     */
+    public function isRateStale(): bool
+    {
+        return $this->isStale();
     }
 
     /**
